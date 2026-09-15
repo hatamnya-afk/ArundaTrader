@@ -1,5 +1,4 @@
 from dataclasses import FrozenInstanceError
-from enum import Enum
 from pathlib import Path
 import sys
 
@@ -37,7 +36,7 @@ def _base_kwargs():
 
 def test_all_cp37_fields_can_be_represented():
     obj = PortfolioRisk(
-        portfolio_id="portfolio-main",
+        **_base_kwargs(),
         capital_state=CapitalState.REAL_CAPITAL,
         portfolio_capital=1000.0,
         usable_capital=800.0,
@@ -71,7 +70,7 @@ def test_invalid_portfolio_identity_fails():
     data = _base_kwargs()
     data["portfolio_id"] = ""
     with pytest.raises((ValueError, TypeError)):
-        PortfolioRisk(**data)
+        PortfolioRisk(**data).validate()
 
 
 def test_invalid_portfolio_state_fails_closed():
@@ -82,12 +81,11 @@ def test_invalid_portfolio_state_fails_closed():
 
 
 def test_dynamic_arbitrary_portfolio_and_assets_pass():
-    obj = PortfolioRisk(
-        **_base_kwargs(),
-        portfolio_id="arbitrary-portfolio",
-        concentration={"AAA/USDT": 0.2, "ZZZ/USDT": 0.3},
-        correlation_exposure={"AAA/USDT|ZZZ/USDT": "OBSERVED"},
-    )
+    data = _base_kwargs()
+    data["portfolio_id"] = "arbitrary-portfolio"
+    data["concentration"] = {"AAA/USDT": 0.2, "ZZZ/USDT": 0.3}
+    data["correlation_exposure"] = {"AAA/USDT|ZZZ/USDT": "OBSERVED"}
+    obj = PortfolioRisk(**data)
     assert obj.validate() is True
     assert set(obj.concentration) == {"AAA/USDT", "ZZZ/USDT"}
 
@@ -127,12 +125,10 @@ def test_immutable_behavior():
 
 
 def test_contract_does_not_calculate_capacity_or_risk():
-    obj = PortfolioRisk(
-        **_base_kwargs(),
-        portfolio_id="portfolio-main",
-        portfolio_capital=1_000_000.0,
-        usable_capital=1_000_000.0,
-    )
+    data = _base_kwargs()
+    data["portfolio_capital"] = 1_000_000.0
+    data["usable_capital"] = 1_000_000.0
+    obj = PortfolioRisk(**data)
     assert obj.remaining_risk_capacity is None
     assert obj.remaining_exposure_capacity is None
     assert obj.allocated_risk is None
@@ -151,7 +147,9 @@ def test_contract_is_db_network_and_execution_semantics_free():
 
 
 def test_policy_fields_are_observation_only():
-    obj = PortfolioRisk(**_base_kwargs(), portfolio_id="portfolio-main", policy_version="UNVALIDATED")
+    data = _base_kwargs()
+    data["policy_version"] = "UNVALIDATED"
+    obj = PortfolioRisk(**data)
     assert obj.policy_version == "UNVALIDATED"
     assert obj.remaining_risk_capacity is None
     assert obj.remaining_exposure_capacity is None
