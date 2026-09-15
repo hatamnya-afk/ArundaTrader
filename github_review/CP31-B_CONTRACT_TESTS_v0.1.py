@@ -2,13 +2,13 @@
 from risk_context_contract import RiskContext
 from initial_risk_contract import InitialRisk
 from risk_allocation_contract import RiskAllocation
-from position_sizing_contract import PositionSizing, validate_runtime_invariants
-from trade_lifecycle_contract import TradeLifecycle, TradeLifecycleState
-from exit_evidence_contract import ExitEvidence, ExitEvidenceLevel
-from portfolio_risk_contract import PortfolioRisk
-from trade_outcome_contract import TradeOutcome
-from risk_policy_contract import RiskPolicy
-from calibration_observation_contract import CalibrationObservation, CalibrationEvidenceState
+from position_sizing_contract_v0_1 import PositionSizing, validate_runtime_invariants
+from trade_lifecycle_contract_v0_1 import TradeLifecycle, TradeLifecycleState
+from exit_evidence_contract_v0_1 import ExitEvidence, ExitEvidenceLevel
+from portfolio_risk_contract_v0_1 import PortfolioRisk
+from trade_outcome_contract_v0_1 import TradeOutcome
+from risk_policy_contract_v0_1 import RiskPolicy
+from calibration_observation_contract_v0_1 import CalibrationObservation, CalibrationEvidenceState
 from trade_management_contract_common import CapitalState
 
 
@@ -30,8 +30,9 @@ def test_basic_contract_validation():
     assert PortfolioRisk(None, None, None, None, None, 0, None, None, None).validate()
     assert TradeLifecycle(TradeLifecycleState.PRE_TRADE).validate()
     assert ExitEvidence(None, None, None, None, None, None, None, None, None, None, None, ExitEvidenceLevel.NONE).validate()
+    assert TradeOutcome("BTC/USDT", "BTC/USDT", "LONG", "t0", 100.0, "t1", None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None).validate()
     assert RiskPolicy("RISK_POLICY", "v0.1", None, None, None, None, {}, {}, {}, {}, {}, {}, {}).validate()
-    assert CalibrationObservation("v0.1", None, None, None, 0, None, None, None, None, None, None, None, None, None, None, CalibrationEvidenceState.PRIOR).validate()
+    assert CalibrationObservation("v0.1", None, None, None, 0, None, None, None, None, None, None, None, None, None, "t0", CalibrationEvidenceState.PRIOR).validate()
 
 
 def test_production_sizing_requires_real_capital():
@@ -63,6 +64,6 @@ def test_emergency_exit_is_terminal_and_separate():
 
 
 def test_calibration_does_not_auto_mutate_policy():
-    from calibration_observation_contract import AUTOMATIC_POLICY_MUTATION, VALIDATED_IS_NOT_AUTOMATIC_UPDATE
+    from calibration_observation_contract_v0_1 import AUTOMATIC_POLICY_MUTATION, VALIDATED_IS_NOT_AUTOMATIC_UPDATE
     assert AUTOMATIC_POLICY_MUTATION is False
     assert VALIDATED_IS_NOT_AUTOMATIC_UPDATE is True
