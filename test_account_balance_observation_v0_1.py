@@ -141,8 +141,10 @@ def test_provenance_preserved_when_available():
 
 def test_missing_provenance_is_explicitly_unavailable():
     observation = build_account_balance_observation(
-        _adapter([{"asset": "USDT", "free": 1, "locked": 0, "total": 1}]),
-        account={"account_type": "SPOT"},
+        _adapter(
+            [{"asset": "USDT", "free": 1, "locked": 0, "total": 1}],
+            account={"account_type": "SPOT"},
+        ),
         retrieved_at="2026-01-01T00:00:01+00:00",
     )
     row = observation.balances[0]
