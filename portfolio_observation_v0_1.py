@@ -183,10 +183,9 @@ def build_portfolio_observation(
         total_exposure = sum(float(position.notional) for position in positions)
         exposure_source = "POSITION_NOTIONAL"
     else:
-        total_exposure = 0.0 if not positions else None
-        exposure_source = "POSITION_NOTIONAL" if not positions else None
-        if positions:
-            gaps.append("EXPOSURE_NOT_AVAILABLE")
+        total_exposure = None
+        exposure_source = None
+        gaps.append("EXPOSURE_NOT_AVAILABLE")
 
     return PortfolioObservation(
         portfolio_id=normalized_portfolio_id,
