@@ -1614,10 +1614,36 @@ def build_runtime_quantity_bridge(
                     f"{asset}.{flag}"
                 )
 
-        runtime = _resolve_market_data_provenance(
+        _cp27c_candles = getattr(
             market_data_result,
-            asset,
+            "candles",
+            None,
         )
+
+        if not _cp27c_candles:
+            fail(
+                f"CP27-C REAL CANDLES MISSING: {asset}"
+            )
+
+        _cp27c_atr14 = market_data_engine.calculate_real_atr14(
+            _cp27c_candles
+        )
+
+        if _cp27c_atr14 is None:
+            fail(
+                f"CP27-C ATR14 UNAVAILABLE: {asset}"
+            )
+
+        _cp27c_stop_distance = (
+            market_data_engine.calculate_runtime_stop_distance(
+                _cp27c_atr14
+            )
+        )
+
+        if _cp27c_stop_distance is None:
+            fail(
+                f"CP27-C STOP_DISTANCE UNAVAILABLE: {asset}"
+            )
 
         risk_row["position_quantity"] = (
             position_size
@@ -1650,12 +1676,8 @@ def build_runtime_quantity_bridge(
             "real_candle_count": runtime[
                 "real_candle_count"
             ],
-            "atr14": runtime[
-                "atr14"
-            ],
-            "stop_distance": runtime[
-                "stop_distance"
-            ],
+            "atr14": _cp27c_atr14,
+            "stop_distance": _cp27c_stop_distance,
             "risk_budget": risk_budget,
             "entry_price": entry_price,
             "position_size": position_size,
@@ -3227,10 +3249,36 @@ def build_runtime_quantity_bridge(
                         f"{asset}.{flag}"
                     )
 
-            runtime = _resolve_market_data_provenance(
+            _cp27c_candles = getattr(
                 market_data_result,
-                asset,
+                "candles",
+                None,
             )
+
+            if not _cp27c_candles:
+                fail(
+                    f"CP27-C REAL CANDLES MISSING: {asset}"
+                )
+
+            _cp27c_atr14 = market_data_engine.calculate_real_atr14(
+                _cp27c_candles
+            )
+
+            if _cp27c_atr14 is None:
+                fail(
+                    f"CP27-C ATR14 UNAVAILABLE: {asset}"
+                )
+
+            _cp27c_stop_distance = (
+                market_data_engine.calculate_runtime_stop_distance(
+                    _cp27c_atr14
+                )
+            )
+
+            if _cp27c_stop_distance is None:
+                fail(
+                    f"CP27-C STOP_DISTANCE UNAVAILABLE: {asset}"
+                )
 
             risk_row["position_quantity"] = position_size
             risk_row["quantity_unit"] = POSITION_QUANTITY_UNIT
@@ -3253,8 +3301,8 @@ def build_runtime_quantity_bridge(
                 "real_candle_count": (
                     runtime["real_candle_count"]
                 ),
-                "atr14": runtime["atr14"],
-                "stop_distance": runtime["stop_distance"],
+                "atr14": _cp27c_atr14,
+                "stop_distance": _cp27c_stop_distance,
                 "risk_budget": risk_budget,
                 "entry_price": entry_price,
                 "position_size": position_size,
@@ -4740,6 +4788,7 @@ def main() -> int:
                 )
             )
 
+        # ========================================================================
         market_data_by_symbol = {
             str(getattr(result, "symbol", "")).strip().upper(): result
             for result in market_data_results
@@ -5316,6 +5365,8 @@ if __name__ == "__main__":
         print("=" * 90)
 
         raise
+
+
 
 
 
