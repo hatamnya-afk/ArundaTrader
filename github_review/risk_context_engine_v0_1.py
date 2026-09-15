@@ -29,13 +29,6 @@ def _value(primary: Mapping[str, Any], secondary: Mapping[str, Any], key: str) -
     return secondary.get(key, None)
 
 
-def _require_candidate_value(candidate: Mapping[str, Any], key: str) -> Any:
-    value = candidate.get(key)
-    if value is None:
-        raise ValueError(f"TradeReady candidate missing required field: {key}")
-    return value
-
-
 def build_risk_context(
     trade_ready_candidate: Mapping[str, Any],
     *,
@@ -51,9 +44,9 @@ def build_risk_context(
 ) -> RiskContext:
     """Build an immutable RiskContext from existing observations only.
 
-    The TradeReady candidate is authoritative for identity, direction, and
-    entry_price when those fields are explicitly present. No fallback from
-    ``price`` or ``latest_close`` is permitted for entry_price.
+    Identity and direction are observed from the TradeReady candidate. Entry
+    price is read only from an explicit ``entry_price`` field; ``price`` and
+    ``latest_close`` are intentionally not accepted as fallbacks.
     """
     candidate = _mapping(trade_ready_candidate)
     md = _mapping(market_data)
@@ -63,14 +56,12 @@ def build_risk_context(
     port = _mapping(portfolio)
     liq = _mapping(liquidity)
     corr = _mapping(correlation)
-    constraints = _mapping(trading_constraints)
+    _mapping(trading_constraints)
     prov = _mapping(provenance)
 
-    asset = _require_candidate_value(candidate, "asset")
-    symbol = candidate.get("symbol", asset)
-    direction = _require_candidate_value(candidate, "direction")
-
-    # Deliberately do not infer entry_price from price/latest_close.
+    asset = candidate.get("asset", NOT_AVAILABLE)
+    symbol = candidate.get("symbol", NOT_AVAILABLE)
+    direction = candidate.get("direction", NOT_AVAILABLE)
     entry_price = candidate.get("entry_price")
 
     context = RiskContext(
@@ -101,8 +92,4 @@ def build_risk_context(
     return context
 
 
-__all__ = [
-    "NOT_AVAILABLE",
-    "NOT_YET_AVAILABLE",
-    "build_risk_context",
-]
+__all__ = ["NOT_AVAILABLE", "NOT_YET_AVAILABLE", "build_risk_context"]
