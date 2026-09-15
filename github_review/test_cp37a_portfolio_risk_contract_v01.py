@@ -35,8 +35,8 @@ def _base_kwargs():
 
 
 def test_all_cp37_fields_can_be_represented():
-    obj = PortfolioRisk(
-        **_base_kwargs(),
+    data = _base_kwargs()
+    data.update(
         capital_state=CapitalState.REAL_CAPITAL,
         portfolio_capital=1000.0,
         usable_capital=800.0,
@@ -53,6 +53,7 @@ def test_all_cp37_fields_can_be_represented():
         portfolio_risk_state="OBSERVED",
         policy_version="UNVALIDATED",
     )
+    obj = PortfolioRisk(**data)
     assert obj.validate() is True
 
 
