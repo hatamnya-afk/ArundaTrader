@@ -67,11 +67,17 @@ def _result_data(result: Any) -> Mapping[str, Any]:
 
 
 def _provenance(data: Mapping[str, Any]) -> tuple[Optional[str], Optional[str], Optional[str]]:
-    return (
-        _text(data.get("source_id")),
-        _text(data.get("source_type")),
-        _text(data.get("source_timestamp")),
-    )
+    values = []
+    for key in ("source_id", "source_type", "source_timestamp"):
+        if key not in data:
+            values.append(None)
+            continue
+        value = data[key]
+        normalized = _text(value)
+        if normalized is None:
+            raise RuntimeError(f"Invalid provenance field: {key}")
+        values.append(normalized)
+    return tuple(values)  # type: ignore[return-value]
 
 
 def _valid_nonnegative_number(value: Any) -> bool:
@@ -95,12 +101,16 @@ def _require_read_capabilities(adapter: Any) -> None:
         raise RuntimeError("BALANCE_READ is unavailable")
 
 
-def build_account_balance_observation(adapter: Any) -> AccountBalanceObservation:
-    """Build one immutable observation from real adapter read results.
+def build_account_balance_observation(
+    adapter: Any,
+    *,
+    retrieved_at: Optional[str] = None,
+) -> AccountBalanceObservation:
+    """Build one immutable observation from adapter read results.
 
-    The adapter is the only source of external data. No provider name,
-    credential, network call, database access, capital inference, or
-    portfolio-risk calculation occurs here.
+    ``retrieved_at`` is injectable so the same adapter inputs can produce a
+    byte-for-byte equivalent observation during deterministic verification.
+    When omitted, the current UTC retrieval time is used for live observation.
     """
     _require_read_capabilities(adapter)
 
@@ -112,11 +122,14 @@ def build_account_balance_observation(adapter: Any) -> AccountBalanceObservation
     if balance_result is None or getattr(balance_result, "allowed", False) is not True:
         raise RuntimeError("Balance observation unavailable")
 
+    effective_retrieved_at = _utc_now() if retrieved_at is None else _text(retrieved_at)
+    if effective_retrieved_at is None:
+        raise RuntimeError("retrieved_at must be a non-empty string")
+
     account_data = _result_data(account_result)
     balance_data = _result_data(balance_result)
 
     account_source_id, account_source_type, account_source_timestamp = _provenance(account_data)
-    retrieved_at = _utc_now()
 
     account = AccountObservation(
         account_id=_text(account_data.get("account_id")),
@@ -125,7 +138,7 @@ def build_account_balance_observation(adapter: Any) -> AccountBalanceObservation
         source_id=account_source_id,
         source_type=account_source_type,
         source_timestamp=account_source_timestamp,
-        retrieved_at=retrieved_at,
+        retrieved_at=effective_retrieved_at,
         status=str(getattr(account_result, "status", "UNKNOWN")),
     )
 
@@ -162,7 +175,7 @@ def build_account_balance_observation(adapter: Any) -> AccountBalanceObservation
                     if source_timestamp is not None
                     else account_source_timestamp
                 ),
-                retrieved_at=retrieved_at,
+                retrieved_at=effective_retrieved_at,
             )
         )
 
