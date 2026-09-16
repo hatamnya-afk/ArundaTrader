@@ -45,6 +45,16 @@ Execution was not built or activated. No order submission occurred. No productio
 
 CP38-B remains DESIGN PASS only; it is not CLOSED/VERIFIED because no independent verification evidence was recorded.
 
+## CP39 — PRODUCTION SOURCE ESTABLISHMENT
+- Real Capital Source Contract — CLOSED / VERIFIED / PASS — 12 tests passed
+- Real Portfolio State Source Contract — CLOSED / VERIFIED / PASS — 13 tests passed
+- Validated Stop / Risk Policy Source Contract — CLOSED / VERIFIED / PASS — 15 tests passed
+- Other Required Production Observations Source Contract — CLOSED / VERIFIED / PASS — 11 tests passed
+
+CP39 source contracts are provider-neutral, production-bound, fail-closed, and have no runtime/DB/order/execution surface.
+
+The Other Required Production Observations contract covers validated Liquidity and Execution Adjustment / Constraints observations, rejects TEST/LEGACY/SIMULATED sources, and excludes execution artifacts.
+
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
 CP37-MA: -1022 confirmed; root cause not proven.
