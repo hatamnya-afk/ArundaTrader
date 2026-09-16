@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from datetime import datetime
+from numbers import Real
 from typing import Any
 
 from decision_contract_v0_1 import validate_sealed_decision_input
@@ -34,7 +36,13 @@ def build_decision(
 
     if evaluation_time is None:
         raise ValueError("DECISION_EVALUATION_TIME_REQUIRED")
-    if max_age_seconds is None or isinstance(max_age_seconds, bool) or max_age_seconds <= 0:
+    if (
+        max_age_seconds is None
+        or isinstance(max_age_seconds, bool)
+        or not isinstance(max_age_seconds, Real)
+        or not math.isfinite(float(max_age_seconds))
+        or max_age_seconds <= 0
+    ):
         raise ValueError("DECISION_MAX_AGE_INVALID")
 
     evaluation = _parse_aware_timestamp(
