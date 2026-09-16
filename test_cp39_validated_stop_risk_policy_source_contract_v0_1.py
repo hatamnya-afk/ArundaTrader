@@ -10,6 +10,7 @@ def valid_observation():
         "observation_source": "REAL_MARKET_RISK_POLICY",
         "provenance": "REAL_PRODUCTION_OBSERVATION",
         "asset": "BTCUSDT",
+        "direction": "LONG",
         "entry_price": 60000.0,
         "stop_price": 59000.0,
         "stop_distance": 1000.0,
@@ -79,7 +80,6 @@ def test_stop_distance_must_match_entry_and_stop():
 
 def test_stop_must_be_below_entry_for_long_direction():
     observation = valid_observation()
-    observation["direction"] = "LONG"
     observation["stop_price"] = 61000.0
     with pytest.raises(ValueError, match="STOP_DIRECTION_INVALID"):
         validate_stop_risk_policy_source(observation)
@@ -92,6 +92,13 @@ def test_short_direction_requires_explicit_direction_and_stop_above_entry():
     observation["stop_distance"] = 1000.0
     result = validate_stop_risk_policy_source(observation)
     assert result["direction"] == "SHORT"
+
+
+def test_invalid_direction_fails_closed():
+    observation = valid_observation()
+    observation["direction"] = ""
+    with pytest.raises(ValueError, match="STOP_DIRECTION_INVALID"):
+        validate_stop_risk_policy_source(observation)
 
 
 def test_risk_policy_must_be_valid_and_positive():
