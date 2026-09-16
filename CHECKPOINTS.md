@@ -24,21 +24,40 @@ Compact historical truth. Detailed forensic reports remain historical artifacts 
 - CP37-KA — Toobit Position Reader compatibility
 - REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — PASS
 
+## CP38 — SMART RISK / PRE-EXECUTION
+- CP38-A — CLOSED / VERIFIED / PASS
+- CP38-B — DESIGN PASS (no independent verification recorded)
+- CP38-C — CLOSED / VERIFIED / PASS
+- CP38-D — CLOSED / VERIFIED / PASS
+- CP38-E — CLOSED / VERIFIED / PASS
+- CP38-F — CLOSED / VERIFIED / PASS
+- CP38-G — CLOSED / VERIFIED / PASS
+- CP38-H — CLOSED / VERIFIED / PASS
+- CP38-I — CLOSED / VERIFIED / PASS
+- CP38-J — CLOSED / VERIFIED / PASS
+- CP38-K — CLOSED / VERIFIED / PASS
+- CP38-L — CLOSED / VERIFIED / PASS
+- CP38-N — CLOSED / VERIFIED / PASS
+
+CP38 Smart Risk through Pre-Execution is built and verified at the contract/boundary level. The architecture remains provider-neutral and fail-closed.
+
+Execution was not built or activated. No order submission occurred. No production DB mutation occurred. No execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL.
+
+CP38-B remains DESIGN PASS only; it is not CLOSED/VERIFIED because no independent verification evidence was recorded.
+
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
-
 CP37-MA: -1022 confirmed; root cause not proven.
-
 CP37-MB: local signing diagnostic PASS:
 - payload match
 - parameter order match
 - HMAC match
-
 CP37-MC: official Toobit signing contract reviewed; local construction found contract-compatible; root cause remained NOT_PROVEN.
+
+The Toobit -1022 INVALID_SIGNATURE remains an independent blocker on the Account/Real-Capital path. Do not reopen or repeat private diagnostics without explicit authorization.
 
 ## GOVERNANCE
 Closed/Verified checkpoints are historical state. They become current only if Management explicitly identifies a regression.
-
 No repeated runtime diagnostics merely to reproduce an already-known failure unless explicitly authorized.
 
 # END CHECKPOINTS
