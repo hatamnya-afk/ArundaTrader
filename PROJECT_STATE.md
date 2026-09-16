@@ -39,20 +39,23 @@ CP38-N = CLOSED / VERIFIED / PASS
 
 CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL. Smart Risk remains provider-neutral.
 
-## CP39 — PRODUCTION SOURCE ESTABLISHMENT
-CP39 Real Capital Source Contract = CLOSED / VERIFIED / PASS
-CP39 Real Portfolio State Source Contract = CLOSED / VERIFIED / PASS
-CP39 Validated Stop / Risk Policy Source Contract = CLOSED / VERIFIED / PASS
-CP39 Other Required Production Observations Source Contract = CLOSED / VERIFIED / PASS
+## CP39 STATE
+CP39 = CLOSED / VERIFIED / PASS
+Scope = Pre-Execution Readiness → Decision Handoff
+PRE-EXECUTION READINESS = SEALED
+DECISION = NOT STARTED
 
-Verified CP39 source contracts establish production-bound, provider-neutral, fail-closed boundaries for:
-- REAL ACCOUNT / REAL CAPITAL
-- REAL PORTFOLIO STATE
-- VALIDATED STOP / RISK POLICY
-- LIQUIDITY OBSERVATION
-- EXECUTION ADJUSTMENT / CONSTRAINTS OBSERVATION
+Verified CP39 chain:
+REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
 
-These contracts do not perform runtime calls, write the DB, submit orders, or enable execution. Toobit remains an independent blocker for authoritative real Account/Capital acquisition.
+The verified CP39 chain is provider-neutral, fail-closed, and contains no execution surface.
+
+## CURRENT PROJECT STATE
+CURRENT FRONTIER: CP40 — DECISION IMPLEMENTATION
+
+EXECUTION = NOT AUTHORIZED
+REAL TRADE = NOT EXECUTED
+TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39
 
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
@@ -77,16 +80,9 @@ These contracts do not perform runtime calls, write the DB, submit orders, or en
 
 Closed areas are not re-audited unless a real regression is demonstrated.
 
-## CURRENT PROJECT STATE
-CP39 — PRODUCTION SOURCE ESTABLISHMENT: SOURCE CONTRACTS VERIFIED
-REAL EXECUTION = NOT BUILT / NOT AUTHORIZED
-REAL CAPITAL = NOT YET PRODUCTION-AVAILABLE
-
-The next frontier is PRE-EXECUTION READINESS. It must consume only authoritative production-bound observations already established by CP39 and must remain provider-neutral and fail-closed.
-
 ## TOOBIT STATUS
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-CP37-M / MA / MB / MC established that the observed -1022 was real, local signing construction was contract-compatible, and root cause was not proven. This remains an independent Account/Real-Capital path blocker. No blind signing patch is justified. Do not repeat private Toobit diagnostics without explicit authorization.
+This remains an independent Account/Real-Capital path blocker and was not resolved by CP39. Do not repeat private Toobit diagnostics without explicit authorization.
 
 ## NON-NEGOTIABLE PROJECT RULES
 - Real data only.
