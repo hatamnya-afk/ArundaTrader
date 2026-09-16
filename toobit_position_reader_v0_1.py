@@ -1,21 +1,25 @@
 """ARUNDA TRADER — TOOBIT POSITION READER v0.1
 
 Provider-specific, read-only Position Source adapter.
-
-This module calls only the Toobit private futures Position endpoint through
-an injected adapter capability. It does not define or modify the global
-universe, perform writes, infer positions from balances/market data, or
-calculate risk/sizing/order state.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from math import isfinite
 from typing import Any, Mapping, Optional
 
 POSITION_ENDPOINT = "/api/v1/futures/positions"
 SOURCE_ID = "TOOBIT"
 SOURCE_TYPE = "CEX_PRIVATE_API"
+
+
+@dataclass(frozen=True)
+class PositionReaderResult:
+    allowed: bool
+    data: Any
+    status: str = "PASS"
+    reason: str = ""
 
 
 def _text(value: Any, field: str) -> str:
@@ -42,36 +46,41 @@ def _numeric(value: Any, field: str, *, nonnegative: bool = False) -> str:
     return str(value)
 
 
-def _payload_data(result: Any) -> Mapping[str, Any]:
+def _payload(result: Any) -> tuple[list[Mapping[str, Any]], Optional[str], Optional[str], Optional[str], Optional[str]]:
     if result is None or getattr(result, "allowed", False) is not True:
         raise RuntimeError("Toobit Position Source unavailable")
+
     data = getattr(result, "data", None)
-    if not isinstance(data, Mapping):
-        raise RuntimeError("Toobit Position payload is invalid")
-    return data
+    if isinstance(data, Mapping):
+        raw = data.get("positions")
+        if raw is None:
+            raw = data.get("data")
+        source_id = data.get("source_id", SOURCE_ID)
+        source_type = data.get("source_type", SOURCE_TYPE)
+        source_timestamp = data.get("source_timestamp")
+        retrieved_at = data.get("retrieved_at")
+    else:
+        # The official Toobit SDK returns the Position endpoint body as a list.
+        raw = data
+        source_id = SOURCE_ID
+        source_type = SOURCE_TYPE
+        source_timestamp = None
+        retrieved_at = None
 
-
-def _rows(data: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-    raw = data.get("positions")
-    if raw is None:
-        # Some API wrappers may return the endpoint list directly under data.
-        raw = data.get("data")
     if not isinstance(raw, list):
         raise RuntimeError("Toobit Position payload must contain a dynamic list")
+
     rows: list[Mapping[str, Any]] = []
     for row in raw:
         if not isinstance(row, Mapping):
             raise RuntimeError("Invalid Toobit Position row")
         rows.append(row)
-    return rows
 
-
-def _provenance(data: Mapping[str, Any]) -> tuple[str, str, Optional[str], Optional[str]]:
-    source_id = _text(data.get("source_id", SOURCE_ID), "source_id")
-    source_type = _text(data.get("source_type", SOURCE_TYPE), "source_type")
-    source_timestamp = _optional_text(data.get("source_timestamp"), "source_timestamp")
-    retrieved_at = _optional_text(data.get("retrieved_at"), "retrieved_at")
-    return source_id, source_type, source_timestamp, retrieved_at
+    source_id = _text(source_id, "source_id")
+    source_type = _text(source_type, "source_type")
+    source_timestamp = _optional_text(source_timestamp, "source_timestamp")
+    retrieved_at = _optional_text(retrieved_at, "retrieved_at")
+    return rows, source_id, source_type, source_timestamp, retrieved_at
 
 
 def _normalize_row(
@@ -91,9 +100,7 @@ def _normalize_row(
     mark_price = _numeric(row.get("markPrice"), "markPrice", nonnegative=True)
 
     position_value = row.get("positionValue")
-    notional = None
-    if position_value is not None:
-        notional = _numeric(position_value, "positionValue", nonnegative=True)
+    notional = None if position_value is None else _numeric(position_value, "positionValue", nonnegative=True)
 
     unrealized_pnl = row.get("unrealizedPnL")
     if unrealized_pnl is not None:
@@ -119,19 +126,13 @@ def _normalize_row(
 
 
 def build_toobit_position_reader(adapter: Any):
-    """Return a deterministic read-only reader over Toobit's Position API.
-
-    The adapter is expected to expose the existing private signed GET
-    capability. No network client is constructed here and no write method is
-    reachable from this reader.
-    """
+    """Return a deterministic read-only reader over Toobit's Position API."""
     if adapter is None or not callable(getattr(adapter, "_signed_get", None)):
         raise TypeError("adapter must provide _signed_get")
 
-    def read_positions() -> Any:
+    def read_positions() -> PositionReaderResult:
         result = adapter._signed_get(POSITION_ENDPOINT, params={})
-        data = _payload_data(result)
-        source_id, source_type, source_timestamp, retrieved_at = _provenance(data)
+        rows, source_id, source_type, source_timestamp, retrieved_at = _payload(result)
         normalized = [
             _normalize_row(
                 row,
@@ -139,22 +140,16 @@ def build_toobit_position_reader(adapter: Any):
                 source_type=source_type,
                 source_timestamp=source_timestamp,
             )
-            for row in _rows(data)
+            for row in rows
         ]
-
-        if retrieved_at is not None:
-            output_retrieved_at = retrieved_at
-        else:
-            output_retrieved_at = None
-
-        return type(result)(
+        return PositionReaderResult(
             allowed=True,
             data={
                 "positions": normalized,
                 "source_id": source_id,
                 "source_type": source_type,
                 "source_timestamp": source_timestamp,
-                "retrieved_at": output_retrieved_at,
+                "retrieved_at": retrieved_at,
             },
             status=getattr(result, "status", "PASS"),
             reason=getattr(result, "reason", ""),
