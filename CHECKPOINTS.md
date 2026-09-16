@@ -45,15 +45,36 @@ Execution was not built or activated. No order submission occurred. No productio
 
 CP38-B remains DESIGN PASS only; it is not CLOSED/VERIFIED because no independent verification evidence was recorded.
 
-## CP39 — PRODUCTION SOURCE ESTABLISHMENT
-- Real Capital Source Contract — CLOSED / VERIFIED / PASS — 12 tests passed
-- Real Portfolio State Source Contract — CLOSED / VERIFIED / PASS — 13 tests passed
-- Validated Stop / Risk Policy Source Contract — CLOSED / VERIFIED / PASS — 15 tests passed
-- Other Required Production Observations Source Contract — CLOSED / VERIFIED / PASS — 11 tests passed
+## CP39 — PRE-EXECUTION READINESS → DECISION HANDOFF
+- CP39 = CLOSED / VERIFIED / PASS
 
-CP39 source contracts are provider-neutral, production-bound, fail-closed, and have no runtime/DB/order/execution surface.
+Scope:
+Pre-Execution Readiness → Decision Handoff
 
-The Other Required Production Observations contract covers validated Liquidity and Execution Adjustment / Constraints observations, rejects TEST/LEGACY/SIMULATED sources, and excludes execution artifacts.
+Verified chain:
+Real Production Observations → Readiness Integration → Handoff → Integrity → Certification → Boundary Seal → Readiness-to-Decision Handoff
+
+Reported component verification:
+- Real Capital Source Contract — 12 tests passed
+- Real Portfolio State Source Contract — 13 tests passed
+- Validated Stop / Risk Policy Source Contract — 15 tests passed
+- Other Required Production Observations Source Contract — 11 tests passed
+- Pre-Execution Readiness Contract — 9 tests passed
+- Readiness Integration Boundary — 12 tests passed
+- Readiness Handoff — 8 tests passed
+- Readiness Integrity — 8 tests passed
+- Readiness Certification — 8 tests passed
+- Readiness Boundary Seal — 9 tests passed
+- Readiness-to-Decision Handoff — 10 tests passed
+
+CP39 establishes a sealed, provider-neutral, fail-closed readiness state for Decision input. The chain has no execution surface and does not authorize execution.
+
+Execution = NOT IMPLEMENTED
+Order Submission = NONE
+Exchange Write = NONE
+DB Mutation = NONE
+Toobit Signature = NOT RESOLVED BY CP39
+Decision Implementation = NOT STARTED
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
