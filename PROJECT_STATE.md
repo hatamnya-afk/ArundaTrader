@@ -39,6 +39,21 @@ CP38-N = CLOSED / VERIFIED / PASS
 
 CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL. Smart Risk remains provider-neutral.
 
+## CP39 — PRODUCTION SOURCE ESTABLISHMENT
+CP39 Real Capital Source Contract = CLOSED / VERIFIED / PASS
+CP39 Real Portfolio State Source Contract = CLOSED / VERIFIED / PASS
+CP39 Validated Stop / Risk Policy Source Contract = CLOSED / VERIFIED / PASS
+CP39 Other Required Production Observations Source Contract = CLOSED / VERIFIED / PASS
+
+Verified CP39 source contracts establish production-bound, provider-neutral, fail-closed boundaries for:
+- REAL ACCOUNT / REAL CAPITAL
+- REAL PORTFOLIO STATE
+- VALIDATED STOP / RISK POLICY
+- LIQUIDITY OBSERVATION
+- EXECUTION ADJUSTMENT / CONSTRAINTS OBSERVATION
+
+These contracts do not perform runtime calls, write the DB, submit orders, or enable execution. Toobit remains an independent blocker for authoritative real Account/Capital acquisition.
+
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
 - Dynamic Universe
@@ -63,11 +78,11 @@ CP38 establishes the provider-neutral Smart Risk through Pre-Execution architect
 Closed areas are not re-audited unless a real regression is demonstrated.
 
 ## CURRENT PROJECT STATE
-CP38 = PRE-EXECUTION ARCHITECTURE COMPLETE
+CP39 — PRODUCTION SOURCE ESTABLISHMENT: SOURCE CONTRACTS VERIFIED
 REAL EXECUTION = NOT BUILT / NOT AUTHORIZED
 REAL CAPITAL = NOT YET PRODUCTION-AVAILABLE
 
-Next work must first establish authoritative production-bound sources for real Account/Capital, Portfolio, validated Stop/Policy and other required observations. The path must not reopen with Test Capital.
+The next frontier is PRE-EXECUTION READINESS. It must consume only authoritative production-bound observations already established by CP39 and must remain provider-neutral and fail-closed.
 
 ## TOOBIT STATUS
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
