@@ -2,6 +2,7 @@
 import pytest
 
 from real_capital_observation_contract_v0_1 import RealCapitalObservation
+from smart_risk_capital_bridge_v0_1 import merge_real_capital_observation
 from smart_risk_engine_v0_1 import build_smart_risk
 
 
@@ -29,45 +30,36 @@ def _policy():
     }
 
 
-def _observation():
-    observation = _capital()
-    return {
-        "asset": "BTCUSDT",
-        "direction": "LONG",
-        "entry_price": 100.0,
-        "stop_distance": 10.0,
-        "capital_state": observation.capital_state,
-        "portfolio_capital": observation.portfolio_capital,
-        "usable_capital": observation.usable_capital,
-        "allocated_risk": observation.allocated_risk,
-        "concurrent_positions": observation.concurrent_positions,
-    }
+def _market():
+    return {"asset": "BTCUSDT", "direction": "LONG", "entry_price": 100.0, "stop_distance": 10.0}
 
 
-def test_validated_real_capital_observation_can_feed_smart_risk():
+def test_validated_capital_is_explicitly_mapped_to_smart_risk_inputs():
     capital = _capital()
-    assert capital.validate() is True
-    result = build_smart_risk(_observation(), _policy())
+    mapped = merge_real_capital_observation(_market(), capital)
+    result = build_smart_risk(mapped, _policy())
     assert result.risk_state == "APPROVED"
     assert result.risk_budget == pytest.approx(100.0)
 
 
-def test_capital_contract_does_not_require_provider_specific_fields():
-    fields = set(_capital().__dataclass_fields__)
-    assert not {"toobit", "api_key", "signature", "order"} & fields
-
-
-def test_smart_risk_rejects_non_real_capital_at_boundary():
-    observation = _observation()
-    observation["capital_state"] = "TEST_CAPITAL"
-    result = build_smart_risk(observation, _policy())
-    assert result.risk_state == "BLOCKED"
-    assert result.reason == "REAL_CAPITAL_NOT_AVAILABLE"
-
-
-def test_smart_risk_consumes_capital_values_without_mutating_contract():
+def test_bridge_requires_valid_real_capital():
     capital = _capital()
-    before = (capital.portfolio_capital, capital.usable_capital, capital.allocated_risk, capital.concurrent_positions)
-    build_smart_risk(_observation(), _policy())
-    after = (capital.portfolio_capital, capital.usable_capital, capital.allocated_risk, capital.concurrent_positions)
-    assert after == before
+    object.__setattr__(capital, "capital_state", "TEST_CAPITAL")
+    with pytest.raises(ValueError, match="REAL_CAPITAL"):
+        merge_real_capital_observation(_market(), capital)
+
+
+def test_bridge_does_not_mutate_source_or_market_observation():
+    capital = _capital()
+    market = _market()
+    before_capital = (capital.portfolio_capital, capital.usable_capital, capital.allocated_risk, capital.concurrent_positions)
+    before_market = dict(market)
+    mapped = merge_real_capital_observation(market, capital)
+    assert mapped is not market
+    assert (capital.portfolio_capital, capital.usable_capital, capital.allocated_risk, capital.concurrent_positions) == before_capital
+    assert market == before_market
+
+
+def test_bridge_has_no_provider_or_execution_surface():
+    mapped = merge_real_capital_observation(_market(), _capital())
+    assert not any(key in mapped for key in ("api_key", "signature", "order", "execution", "toobit"))
