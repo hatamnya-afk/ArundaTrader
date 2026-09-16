@@ -4,9 +4,17 @@
 ArundaTrader is exchange-agnostic and modular. Exchange providers are replaceable environments behind an adapter boundary.
 
 ## CORE
-CORE → MARKET INTELLIGENCE → OPPORTUNITY → SIGNAL → DECISION → SMART RISK MANAGEMENT → TRADE GATE
+CORE → MARKET INTELLIGENCE → OPPORTUNITY → SIGNAL → DECISION → SMART RISK MANAGEMENT → TRADE GATE → ORDER INTENT → EXCHANGE CONSTRAINTS → PRE-EXECUTION AUTHORIZATION
 
 The core produces exchange-neutral trading intent. Provider-specific API behavior must not define core logic.
+
+## CP38 PRE-EXECUTION ARCHITECTURE
+The verified provider-neutral pre-execution chain is:
+REAL CAPITAL OBSERVATION → VALIDATED ENTRY/STOP → VALIDATED RISK POLICY → PORTFOLIO OBSERVATION → SMART RISK → TRADE GATE → ORDER INTENT BOUNDARY → EXCHANGE CONSTRAINTS → CONSTRAINT EVALUATION → EXECUTION AUTHORIZATION BOUNDARY.
+
+CP38-B is DESIGN PASS only; it is not independently verified.
+
+Execution Authorization is a logical pre-execution boundary only. It does not enable execution or submit an order.
 
 ## EXCHANGE BOUNDARY
 Core → Exchange Adapter Boundary → Provider Adapter → Exchange API
@@ -50,7 +58,10 @@ No verified real capital → fail closed.
 The production database is stateful infrastructure. Database mutation requires explicit authorization.
 
 ## EXECUTION
-An adapter connection does not authorize execution. Order submission, cancellation, withdrawal and other exchange writes remain disabled unless explicitly authorized.
+Execution is NOT BUILT / NOT AUTHORIZED in the current state. An adapter connection or pre-execution authorization boundary does not authorize execution. Order submission, cancellation, withdrawal and other exchange writes remain disabled unless explicitly authorized.
+
+## TOOBIT ACCOUNT BLOCKER
+The observed Toobit Account path remains blocked by HTTP/API -1022 INVALID_SIGNATURE. This is an independent production Account/Real-Capital source blocker. No blind signing patch is justified without new evidence and explicit authorization.
 
 ## PROHIBITED DRIFT
 Do not:
