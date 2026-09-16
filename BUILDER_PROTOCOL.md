@@ -42,6 +42,8 @@ Before modifying anything:
 - verify that the change does not cross a protected boundary
 - preserve existing contracts unless the active checkpoint explicitly authorizes contract change
 
+After every completed checkpoint, update the canonical repository state so the next Builder can recover the state without relying on chat history.
+
 ## PROTECTED SURFACES
 Treat these as protected unless explicitly authorized:
 - production database
@@ -69,11 +71,17 @@ Toobit is not the architectural center of ArundaTrader.
 
 ## REPORTING RULE
 Do not flood Management with repeated audits or historical reports.
+Management may request a detailed report when needed; otherwise Builder should continue the authorized path without unsolicited full reports.
+Repository State maintenance is mandatory and is not replaced by reporting.
 When reporting is requested, provide only:
 - current state
 - evidence
 - blocker if any
 - next action
+
+## EVIDENCE RULE
+No checkpoint may be recorded as CLOSED / VERIFIED without appropriate evidence.
+A design-only result must remain DESIGN PASS until independently verified.
 
 ## FAILURE RULE
 When a problem is found:
@@ -92,5 +100,8 @@ A Builder joining the project must first establish:
 - exact authorized action
 
 If the documents and chat disagree, do not silently overwrite repository truth. Escalate the discrepancy to Management.
+
+## STATE HANDOFF RULE
+The repository state documents are the Builder handoff source of truth. Every closed checkpoint, verified evidence state, blocker, and current frontier must be reflected there. Reporting to Management does not substitute for updating the repository state.
 
 # END BUILDER PROTOCOL
