@@ -1,58 +1,84 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-ACTIVE — PRE-EXECUTION READINESS
+ACTIVE — CP40 DECISION IMPLEMENTATION
 
-## CURRENT STATE
-CP39 production source contracts are CLOSED / VERIFIED / PASS.
+## CURRENT FRONTIER
+CP40 — DECISION IMPLEMENTATION
 
-## VERIFIED CP39 SOURCE CHAIN
-REAL ACCOUNT / REAL CAPITAL → REAL PORTFOLIO STATE → VALIDATED STOP / RISK POLICY → OTHER REQUIRED PRODUCTION OBSERVATIONS
+## CP39 CLOSED STATE
+CP39 = CLOSED / VERIFIED / PASS
+PRE-EXECUTION READINESS = SEALED
 
-Verified source contracts:
-- Real Capital Source Contract — PASS
-- Real Portfolio State Source Contract — PASS
-- Validated Stop / Risk Policy Source Contract — PASS
-- Other Required Production Observations Source Contract — PASS
+Verified CP39 chain:
+REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
 
-The Other Required Production Observations contract covers production-bound Liquidity and Execution Adjustment / Constraints observations with explicit validation, provenance, and fail-closed behavior.
+The CP39 chain establishes a sealed, provider-neutral, fail-closed input boundary for Decision.
 
 ## FRONTIER OBJECTIVE
-Establish the provider-neutral PRE-EXECUTION READINESS contract that consumes the already-verified production-bound observations and determines whether the system has a complete, valid pre-execution state.
+Design and implement the Decision layer using only SEALED DECISION INPUT.
 
-Readiness must remain a logical boundary only. It must not submit orders, call exchange write APIs, enable execution, mutate the production DB, or bypass the Toobit Account/Capital blocker.
+Decision must be:
+- provider-neutral
+- dynamic
+- fail-closed
+- deterministic
+- independent of Execution
+- independent of Order Intent
+- independent of authorization
+
+Decision must not:
+- generate orders
+- call exchange APIs
+- write the database
+- produce execution_authorization
+- change execution_enabled
+
+## DECISION BOUNDARY
+DECISION ≠ EXECUTION
+DECISION ≠ ORDER INTENT
+DECISION ≠ AUTHORIZATION
+
+The Decision layer evaluates sealed decision input and produces a provider-neutral decision result only. Any later transition toward Order Intent or Execution requires its own explicit boundary and Management authorization.
 
 ## EXECUTION BOUNDARY
-REAL EXECUTION = NOT BUILT / NOT AUTHORIZED.
-Execution Authorization exists only as a provider-neutral pre-execution boundary. It does not enable execution, submit orders, or alter execution controls.
+EXECUTION = NOT AUTHORIZED
+REAL TRADE = NOT EXECUTED
+ORDER SUBMISSION = NONE
+EXCHANGE WRITE = NONE
+DB MUTATION = NONE
 
 ## TOOBIT
-Toobit remains an adapter concern only.
-TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE.
-This remains an independent blocker for authoritative real Account/Capital acquisition. No repeated private diagnostic or blind signing patch without explicit Management authorization.
+TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
+This remains an independent Account/Real-Capital blocker and was not resolved by CP39. It is outside CP40 Decision logic.
 
-## ALLOWED
-- Establish the PRE-EXECUTION READINESS contract only.
-- Consume verified production-bound observations through explicit contracts.
-- Verify completeness, provenance, validation, and fail-closed behavior.
-- Preserve provider-neutral core architecture.
+## ALLOWED — CP40
+- Design the Decision contract.
+- Implement the Decision layer against SEALED DECISION INPUT only.
+- Define explicit deterministic decision outputs.
+- Enforce provider-neutral and fail-closed behavior.
+- Test with contract fixtures only.
 - Maintain repository state.
 
-## FORBIDDEN
-- modify arunda_pipeline.py without explicit authorization
-- modify production DB without explicit authorization
-- enable execution or exchange writes
-- submit/cancel orders
-- use Test/Legacy/Simulated capital as production capital
-- repeat private Toobit diagnostics without explicit authorization
-- reopen closed checkpoints without proven regression
-- reset, clean, stash, delete, merge, rebase, or normalize repository artifacts without authorization
-- redesign the core architecture
+## FORBIDDEN — CP40
+- runtime execution
+- Toobit API calls
+- exchange writes
+- order creation/submission/cancellation
+- DB mutation
+- arunda_pipeline.py modification
+- execution authorization
+- changing execution_enabled
+- Risk modification
+- Portfolio modification
+- Adapter modification
+- reopening closed checkpoints
+- reset, clean, stash, delete, merge, rebase, or repository normalization without explicit authorization
 
 ## NEXT ACTION
-Implement PRE-EXECUTION READINESS contract using TDD. Test first; no runtime, DB, pipeline, order, or execution integration.
+CP40 is CURRENT FRONTIER / NOT STARTED. Begin only with Management authorization. Use TDD: test first, then minimal Decision implementation, with no runtime, DB, pipeline, order, exchange, or execution integration.
 
 ## STOP CONDITIONS
-Stop before runtime, DB mutation, execution, exchange write, pipeline modification, closed-contract modification, or architecture change unless explicitly authorized.
+Stop before runtime, DB mutation, exchange API, order surface, execution authorization, pipeline modification, closed-contract modification, or architecture drift unless explicitly authorized.
 
 # END CURRENT FRONTIER
