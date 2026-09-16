@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
-
 import pytest
 
 from decision_contract_v0_1 import validate_sealed_decision_input
@@ -25,8 +23,16 @@ SEALED_DECISION_INPUT = {
 }
 
 
+EVALUATION_TIME = "2026-09-17T00:01:00+00:00"
+MAX_AGE_SECONDS = 3600
+
+
 def test_valid_sealed_input_produces_deterministic_decision():
-    result = build_decision(SEALED_DECISION_INPUT, evaluation_time="2026-09-17T00:01:00+00:00")
+    result = build_decision(
+        SEALED_DECISION_INPUT,
+        evaluation_time=EVALUATION_TIME,
+        max_age_seconds=MAX_AGE_SECONDS,
+    )
     assert result == {
         "decision_state": "READY",
         "decision_validation": "VALID",
@@ -36,7 +42,9 @@ def test_valid_sealed_input_produces_deterministic_decision():
         "observed_at": "2026-09-17T00:00:00+00:00",
     }
     assert result == build_decision(
-        SEALED_DECISION_INPUT, evaluation_time="2026-09-17T00:01:00+00:00"
+        SEALED_DECISION_INPUT,
+        evaluation_time=EVALUATION_TIME,
+        max_age_seconds=MAX_AGE_SECONDS,
     )
 
 
@@ -82,20 +90,41 @@ def test_contract_rejects_execution_surface():
 
 
 def test_engine_produces_no_order_or_execution_fields():
-    result = build_decision(SEALED_DECISION_INPUT, evaluation_time="2026-09-17T00:01:00+00:00")
+    result = build_decision(
+        SEALED_DECISION_INPUT,
+        evaluation_time=EVALUATION_TIME,
+        max_age_seconds=MAX_AGE_SECONDS,
+    )
     assert not {"order_id", "order_intent", "execution_authorization", "execution_enabled"}.intersection(result)
 
 
 def test_engine_does_not_invent_capital_price_or_stop():
-    result = build_decision(SEALED_DECISION_INPUT, evaluation_time="2026-09-17T00:01:00+00:00")
+    result = build_decision(
+        SEALED_DECISION_INPUT,
+        evaluation_time=EVALUATION_TIME,
+        max_age_seconds=MAX_AGE_SECONDS,
+    )
     assert not {"capital", "price", "entry", "stop", "quantity"}.intersection(result)
 
 
 def test_evaluation_time_is_explicit_and_deterministic():
     with pytest.raises(ValueError, match="DECISION_EVALUATION_TIME_REQUIRED"):
-        build_decision(SEALED_DECISION_INPUT)
+        build_decision(SEALED_DECISION_INPUT, max_age_seconds=MAX_AGE_SECONDS)
 
 
 def test_evaluation_time_must_be_timezone_aware():
     with pytest.raises(ValueError, match="DECISION_EVALUATION_TIME_INVALID"):
-        build_decision(SEALED_DECISION_INPUT, evaluation_time="2026-09-17T00:01:00")
+        build_decision(
+            SEALED_DECISION_INPUT,
+            evaluation_time="2026-09-17T00:01:00",
+            max_age_seconds=MAX_AGE_SECONDS,
+        )
+
+
+def test_max_age_must_be_positive():
+    with pytest.raises(ValueError, match="DECISION_MAX_AGE_INVALID"):
+        build_decision(
+            SEALED_DECISION_INPUT,
+            evaluation_time=EVALUATION_TIME,
+            max_age_seconds=0,
+        )
