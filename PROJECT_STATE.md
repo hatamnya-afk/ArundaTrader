@@ -13,17 +13,31 @@ REAL DYNAMIC UNIVERSE → REAL MARKET DATA → REAL OPPORTUNITY → REAL SIGNAL 
 
 ## PRODUCTION BOUNDARY
 LAUNCH_TIMESTAMP = 2026-08-31T00:00:00+00:00
-
 Production analysis uses real post-launch data only.
 
 ## EXECUTION SAFETY
 Execution is disabled unless Management explicitly authorizes it.
-
 ORDER WRITE = FORBIDDEN
 WITHDRAW = FORBIDDEN
 DATABASE WRITE = FORBIDDEN unless explicitly authorized
-
 Credentials and secrets must never be exposed.
+
+## CP38 STATE — PRE-EXECUTION ARCHITECTURE COMPLETE
+CP38-A = CLOSED / VERIFIED / PASS
+CP38-B = DESIGN PASS
+CP38-C = CLOSED / VERIFIED / PASS
+CP38-D = CLOSED / VERIFIED / PASS
+CP38-E = CLOSED / VERIFIED / PASS
+CP38-F = CLOSED / VERIFIED / PASS
+CP38-G = CLOSED / VERIFIED / PASS
+CP38-H = CLOSED / VERIFIED / PASS
+CP38-I = CLOSED / VERIFIED / PASS
+CP38-J = CLOSED / VERIFIED / PASS
+CP38-K = CLOSED / VERIFIED / PASS
+CP38-L = CLOSED / VERIFIED / PASS
+CP38-N = CLOSED / VERIFIED / PASS
+
+CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL. Smart Risk remains provider-neutral.
 
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
@@ -48,19 +62,16 @@ Credentials and secrets must never be exposed.
 
 Closed areas are not re-audited unless a real regression is demonstrated.
 
-## CURRENT STRATEGIC DIRECTION
-Smart Risk Management is the next core development direction. It must remain provider-neutral and independent of Toobit.
+## CURRENT PROJECT STATE
+CP38 = PRE-EXECUTION ARCHITECTURE COMPLETE
+REAL EXECUTION = NOT BUILT / NOT AUTHORIZED
+REAL CAPITAL = NOT YET PRODUCTION-AVAILABLE
+
+Next work must first establish authoritative production-bound sources for real Account/Capital, Portfolio, validated Stop/Policy and other required observations. The path must not reopen with Test Capital.
 
 ## TOOBIT STATUS
-CP37-M / MA / MB / MC established that the observed -1022 INVALID_SIGNATURE was real, while the local signing construction was contract-compatible and the root cause was not proven. No blind signing patch is justified.
-
-Do not repeat private Toobit runtime diagnostics unless explicitly authorized.
-
-## REPOSITORY STATE AT LEDGER CREATION
-Local working branch reported by Builder: cp37-g-portfolio-observation
-Local HEAD reported by Builder: 6a280ff — CP37-G: normalize Toobit position reader result boundary
-
-The working tree contains substantial staged, modified and untracked artifacts. Do not clean, reset, stash, delete, or normalize them without explicit authorization.
+TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
+CP37-M / MA / MB / MC established that the observed -1022 was real, local signing construction was contract-compatible, and root cause was not proven. This remains an independent Account/Real-Capital path blocker. No blind signing patch is justified. Do not repeat private Toobit diagnostics without explicit authorization.
 
 ## NON-NEGOTIABLE PROJECT RULES
 - Real data only.
@@ -89,7 +100,6 @@ A new Builder session must read:
 - CHECKPOINTS.md
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
-
 Then continue only from CURRENT_FRONTIER.md.
 
 # END PROJECT STATE
