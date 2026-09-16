@@ -74,7 +74,33 @@ Order Submission = NONE
 Exchange Write = NONE
 DB Mutation = NONE
 Toobit Signature = NOT RESOLVED BY CP39
-Decision Implementation = NOT STARTED
+Decision Implementation = CLOSED / VERIFIED IN CP40
+
+## CP40 — DECISION IMPLEMENTATION
+- CP40 = CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
+
+Scope:
+SEALED DECISION INPUT → DECISION CONTRACT → DECISION ENGINE → DECISION OUTPUT
+
+Implementation:
+- decision_contract_v0_1.py
+- decision_engine_v0_1.py
+- test_cp40_decision_v0_1.py
+
+Verification evidence:
+- Focused CP40 suite — 12 passed in isolated verification environment
+- Static compile — PASS
+- Forbidden API/import scan — PASS
+- Dynamic asset — PASS
+- Provider-neutral — PASS
+- Real/production provenance — PASS
+- Fail-closed invalid/stale input — PASS
+- No test capital — PASS
+- No order / no execution authorization — PASS
+- No DB / no exchange API — PASS
+- No fixed-15 logic — PASS
+
+No production runtime, order, DB mutation, exchange write, or execution authorization occurred in CP40. Local Windows workspace execution is not directly accessible from this environment and is therefore not represented as a local-runtime verification claim.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
