@@ -1,10 +1,10 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-ACTIVE — CP40 DECISION IMPLEMENTATION
+CP40 — CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
 
 ## CURRENT FRONTIER
-CP40 — DECISION IMPLEMENTATION
+CP40 — CLOSED / VERIFIED
 
 ## CP39 CLOSED STATE
 CP39 = CLOSED / VERIFIED / PASS
@@ -15,24 +15,36 @@ REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY
 
 The CP39 chain establishes a sealed, provider-neutral, fail-closed input boundary for Decision.
 
-## FRONTIER OBJECTIVE
-Design and implement the Decision layer using only SEALED DECISION INPUT.
+## CP40 CLOSED STATE
+CP40 = CLOSED / VERIFIED
+DECISION CONTRACT = VERIFIED
+DECISION ENGINE = VERIFIED
+SEALED INPUT ONLY = PASS
+FAIL_CLOSED = PASS
+DYNAMIC ASSET = PASS
+PROVIDER_NEUTRAL = PASS
+REAL/PRODUCTION PROVENANCE = PASS
+NO TEST CAPITAL = PASS
+NO ORDER = PASS
+NO EXECUTION = PASS
+NO DB WRITE = PASS
+NO API = PASS
+NO FIXED_15 = PASS
 
-Decision must be:
-- provider-neutral
-- dynamic
-- fail-closed
-- deterministic
-- independent of Execution
-- independent of Order Intent
-- independent of authorization
+Implementation:
+- decision_contract_v0_1.py
+- decision_engine_v0_1.py
+- test_cp40_decision_v0_1.py
 
-Decision must not:
-- generate orders
-- call exchange APIs
-- write the database
-- produce execution_authorization
-- change execution_enabled
+Decision consumes only the CP39 SEALED DECISION INPUT. It validates provenance, required validation states, dynamic asset identity, timestamp integrity, explicit staleness policy, and execution/provider exclusion surfaces. Valid input produces only a provider-neutral decision status/result.
+
+Verification evidence:
+- CP40 focused suite: 12 passed in isolated verification environment.
+- Static compile verification: PASS.
+- Forbidden API/import scan for Decision implementation: PASS.
+- No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
+
+Local Windows workspace execution is not directly accessible from this environment; therefore the 12-test evidence is isolated repository-code verification, not a claim of execution inside C:\Users\ASUS\ArundaTrader.
 
 ## DECISION BOUNDARY
 DECISION ≠ EXECUTION
@@ -50,35 +62,18 @@ DB MUTATION = NONE
 
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital blocker and was not resolved by CP39. It is outside CP40 Decision logic.
+This remains an independent Account/Real-Capital blocker and was not resolved by CP39 or CP40. It is outside Decision logic.
 
-## ALLOWED — CP40
-- Design the Decision contract.
-- Implement the Decision layer against SEALED DECISION INPUT only.
-- Define explicit deterministic decision outputs.
-- Enforce provider-neutral and fail-closed behavior.
-- Test with contract fixtures only.
-- Maintain repository state.
-
-## FORBIDDEN — CP40
-- runtime execution
-- Toobit API calls
-- exchange writes
-- order creation/submission/cancellation
-- DB mutation
-- arunda_pipeline.py modification
-- execution authorization
-- changing execution_enabled
-- Risk modification
-- Portfolio modification
-- Adapter modification
-- reopening closed checkpoints
-- reset, clean, stash, delete, merge, rebase, or repository normalization without explicit authorization
+## PROTECTED / UNCHANGED
+- arunda_pipeline.py = UNCHANGED
+- Smart Risk = UNCHANGED
+- Portfolio = UNCHANGED
+- Exchange Adapter = UNCHANGED
+- Execution controls = UNCHANGED
+- Production DB = UNCHANGED
 
 ## NEXT ACTION
-CP40 is CURRENT FRONTIER / NOT STARTED. Begin only with Management authorization. Use TDD: test first, then minimal Decision implementation, with no runtime, DB, pipeline, order, exchange, or execution integration.
-
-## STOP CONDITIONS
-Stop before runtime, DB mutation, exchange API, order surface, execution authorization, pipeline modification, closed-contract modification, or architecture drift unless explicitly authorized.
+WAIT FOR MANAGEMENT AUTHORIZATION FOR THE NEXT FRONTIER.
+Do not enter CP41 automatically.
 
 # END CURRENT FRONTIER
