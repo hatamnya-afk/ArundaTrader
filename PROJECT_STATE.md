@@ -43,19 +43,38 @@ CP38 establishes the provider-neutral Smart Risk through Pre-Execution architect
 CP39 = CLOSED / VERIFIED / PASS
 Scope = Pre-Execution Readiness → Decision Handoff
 PRE-EXECUTION READINESS = SEALED
-DECISION = NOT STARTED
 
 Verified CP39 chain:
 REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
 
 The verified CP39 chain is provider-neutral, fail-closed, and contains no execution surface.
 
+## CP40 STATE
+CP40 = CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
+DECISION CONTRACT = VERIFIED
+DECISION ENGINE = VERIFIED
+DECISION INPUT = SEALED-INPUT ONLY
+
+Implementation:
+- decision_contract_v0_1.py
+- decision_engine_v0_1.py
+- test_cp40_decision_v0_1.py
+
+CP40 validates the CP39 sealed Decision input, rejects TEST/LEGACY/SIMULATED or otherwise unverified provenance, rejects provider/execution coupling, enforces dynamic asset identity, validates timezone-aware observation timestamps, and applies an explicit deterministic staleness window. Valid input produces only a provider-neutral Decision status/result.
+
+Verification evidence:
+- Focused CP40 suite: 12 passed in isolated verification environment.
+- Static compile verification: PASS.
+- Forbidden API/import scan for Decision implementation: PASS.
+- No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
+- Local Windows workspace is not directly accessible from this environment; isolated verification is not represented as a local C:\Users\ASUS\ArundaTrader runtime claim.
+
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP40 — DECISION IMPLEMENTATION
+CURRENT FRONTIER: CP40 — CLOSED / VERIFIED
 
 EXECUTION = NOT AUTHORIZED
 REAL TRADE = NOT EXECUTED
-TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39
+TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39 OR CP40
 
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
@@ -82,7 +101,7 @@ Closed areas are not re-audited unless a real regression is demonstrated.
 
 ## TOOBIT STATUS
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital path blocker and was not resolved by CP39. Do not repeat private Toobit diagnostics without explicit authorization.
+This remains an independent Account/Real-Capital path blocker and was not resolved by CP39 or CP40. Do not repeat private Toobit diagnostics without explicit authorization.
 
 ## NON-NEGOTIABLE PROJECT RULES
 - Real data only.
