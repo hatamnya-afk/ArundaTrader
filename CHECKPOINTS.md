@@ -48,6 +48,16 @@ Compact historical truth. Detailed forensic reports remain historical artifacts 
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
 - CP41 = CLOSED / VERIFIED / PASS
 
+Implementation:
+- `decision_trade_intent_boundary_v0_1.py`
+- `test_cp41_decision_trade_intent_boundary_v0_1.py`
+
+Verification evidence:
+- 12 focused CP41 tests passed.
+- Compile/static verification passed.
+- Scope/diff verification passed.
+- No order, execution, API write, or production DB write occurred.
+
 ## CP43 — PRE-EXECUTION READY PACKAGE
 - CP43 = CLOSED / VERIFIED / PASS
 
