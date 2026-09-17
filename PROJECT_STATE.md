@@ -67,7 +67,6 @@ CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
 CP44 is NOT VERIFIED or CLOSED yet.
 Repository consolidation is a temporary management gate and takes precedence over CP44 runtime execution until Canonical repository governance is finalized.
-
 CP44 runtime must not be executed during consolidation.
 
 ## CP44 ACCEPTANCE BOUNDARY
@@ -94,7 +93,7 @@ NO_DB_WRITE
 
 ## REPOSITORY CONSOLIDATION STATE
 CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
-CANONICAL GOVERNANCE HEAD = 207bfdf0f3bba0754859d31299537fca7a8e682d
+CANONICAL GOVERNANCE HEAD = 63453137fbb558a6b11f90c7808a7be73fbbc8bb
 CANONICAL BRANCH = main
 REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
 
