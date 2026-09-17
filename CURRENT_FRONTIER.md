@@ -4,7 +4,7 @@
 CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
 
 ## GOVERNANCE GATE
-Repository consolidation is currently the active management gate. CP44 runtime execution is forbidden until Canonical repository governance is finalized.
+Repository consolidation is the active management gate. CP44 runtime execution is forbidden until Canonical repository governance is finalized.
 
 ## CURRENT FRONTIER
 CP44 — REAL-MARKET CONTROLLED TEST
@@ -67,18 +67,22 @@ REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXE
 
 ## REPOSITORY GOVERNANCE
 Canonical branch is `main`.
-Canonical commit before governance synchronization = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`.
+Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`.
+Governance synchronization is recorded on the consolidation branch before promotion to remote `main`.
 
-No Builder or Manager may create a project branch merely for personal workflow, experimentation, or parallel project truth.
-No new branch is permitted unless Management has explicitly authorized it as part of the active roadmap/checkpoint and its purpose is recorded in repository state.
-No unapproved file may be added to Canonical. Temporary, generated, backup, quarantine, forensic, review, or unrelated files remain outside project truth.
-All work must map to the active roadmap and checkpoint scope.
+No Builder or Manager may create a project branch merely for personal workflow, experimentation, convenience, or parallel project truth.
+A new branch is permitted only when Management explicitly authorizes it as part of the active roadmap/checkpoint and records its purpose, source, target checkpoint, and relationship to Canonical.
+
+No unapproved file may be added to Canonical. A new file is permitted only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope.
+Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not project truth.
+
+All work must map to the active roadmap and checkpoint scope. When uncertain: STOP and escalate to Management.
 
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
 This remains an independent Account/Real-Capital blocker. CP44 does not authorize bypassing or repeating private diagnostics.
 
 ## NEXT ACTION
-Finish repository governance synchronization and remote verification. Only after the consolidation gate is closed may Management issue the explicit CP44 runtime command.
+After remote promotion is verified, Management may close the consolidation gate. Only then may Management issue the explicit CP44 runtime command.
 
 # END CURRENT FRONTIER
