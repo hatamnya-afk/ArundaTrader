@@ -73,9 +73,9 @@ Verification evidence:
 ## CURRENT PROJECT STATE
 CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
-CP44 is NOT VERIFIED or CLOSED yet.
-Repository consolidation is a temporary management gate and takes precedence over CP44 runtime execution until Canonical repository governance is finalized.
-CP44 runtime must not be executed during consolidation.
+CP44 is MANAGEMENT-AUTHORIZED but NOT VERIFIED or CLOSED yet.
+Repository consolidation is CLOSED by Management.
+The approved next action is the single controlled CP44 runtime from the established downstream eligibility boundary.
 
 ## CP44 ACCEPTANCE BOUNDARY
 REAL_MARKET_DATA
@@ -100,6 +100,7 @@ NO_API_WRITE
 NO_DB_WRITE
 
 ## REPOSITORY CONSOLIDATION STATE
+CONSOLIDATION GATE = CLOSED / MANAGEMENT-AUTHORIZED
 CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
 CANONICAL BRANCH = main
 CANONICAL GOVERNANCE STATE = maintained on main; exact commit provenance is preserved in Git history
