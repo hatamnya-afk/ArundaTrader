@@ -88,7 +88,7 @@ Verification evidence:
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
 - CP44 = CURRENT FRONTIER
-- CP44 = NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+- CP44 = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
 
 Required chain:
 REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT
@@ -115,7 +115,8 @@ NO_EXECUTION
 NO_API_WRITE
 NO_DB_WRITE
 
-CP44 runtime is gated until repository consolidation is closed by Management.
+Repository consolidation gate = CLOSED by Management.
+CP44 controlled-test runtime is now authorized to proceed within the stated safety boundary.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
