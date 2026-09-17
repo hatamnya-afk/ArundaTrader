@@ -3,6 +3,17 @@
 ## PURPOSE
 Compact historical truth. Detailed forensic reports remain historical artifacts and are not repeated in every Builder session.
 
+## FINAL PROJECT LIFECYCLE — MANDATORY
+The project goal is real trading, but completion must occur independently of any exchange.
+
+Mandatory order:
+1. Complete and close the exchange-agnostic ArundaTrader project/core according to the roadmap.
+2. Bind an exchange only after explicit project-completion closure.
+3. Perform final real-market exchange integration and controlled testing.
+4. Enable real trading only after final acceptance and explicit Management authorization.
+
+Exchange-specific work must remain outside the exchange-agnostic core until the binding stage is explicitly opened by Management.
+
 ## CLOSED / VERIFIED
 - Data Fabric
 - Dynamic Universe
@@ -114,13 +125,39 @@ CP37-MC: official Toobit signing contract reviewed; root cause remained NOT_PROV
 
 The Toobit -1022 INVALID_SIGNATURE remains an independent Account/Real-Capital path blocker. Do not reopen or repeat private diagnostics without explicit authorization.
 
-## GOVERNANCE
+## GOVERNANCE — MANDATORY FOR ALL BUILDERS / MANAGERS / IMPLEMENTATION AGENTS
 Closed/Verified checkpoints are historical state. They become current only if Management explicitly identifies a regression.
 No repeated runtime diagnostics merely to reproduce an already-known failure unless explicitly authorized.
-No Builder or Manager may create a new project branch outside an explicitly authorized checkpoint/roadmap scope.
+
+### ROADMAP IS THE ONLY PATH
+All work must map to MANAGEMENT_ROADMAP.md and the active checkpoint. No Builder, Manager, coding agent, or future implementation agent may create a parallel project truth.
+
+### BRANCH RULE
+No Builder, Manager, or implementation agent may create a project branch for personal workflow, experimentation, convenience, or an unapproved parallel path.
+A branch may exist for project work only when Management explicitly authorizes it and its purpose, source, target checkpoint, and relationship to Canonical are recorded in repository state before use.
+
+### FILE RULE
 No unapproved file may enter Canonical project truth.
+A new file is allowed only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope.
 Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts are not project truth.
-Every branch and file added to the project must have a documented purpose tied to the active roadmap/checkpoint.
+
+### CHECKPOINT CLOSURE GATE
+At the end of EVERY checkpoint, the responsible Builder/Manager MUST synchronize:
+1. PROJECT_STATE.md
+2. CURRENT_FRONTIER.md
+3. CHECKPOINTS.md
+4. MANAGEMENT_ROADMAP.md
+
+The synchronization MUST record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker if any, CURRENT FRONTIER, NEXT ACTION, and any authorized branch/file scope change.
+A checkpoint is NOT governance-complete until these state documents are synchronized and internally consistent.
+
+### ROUTE-CHANGE GATE
+Any change of route, frontier, architecture boundary, or checkpoint sequence requires immediate update of the roadmap and repository state, including the reason and Management authorization.
+No next-frontier implementation may begin while the route/state update is missing.
+
+### REPORTING DOES NOT SUBSTITUTE FOR STATE
+A message or report to Management never substitutes for updating the repository state documents.
+
 The roadmap is the only path for project advancement.
 
 # END CHECKPOINTS
