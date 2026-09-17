@@ -38,10 +38,8 @@ Implementation:
 - decision_trade_intent_boundary_v0_1.py
 - test_cp41_decision_trade_intent_boundary_v0_1.py
 
-Verified requirements include provider-neutrality, dynamic asset identity, provenance validation, fail-closed behavior, semantic consistency of direction/entry/stop/quantity/exposure/policy, and rejection of execution/API/order surfaces.
-
-Verification evidence recorded for CP41:
-- 12 focused tests passed.
+Verification evidence:
+- 12 focused CP41 tests passed.
 - Compile/static verification passed.
 - Scope/diff verification passed.
 - No order, execution, API write, or production DB write occurred.
@@ -85,6 +83,7 @@ TRADE_INTENT_CONSISTENCY
 CONSTRAINT_READINESS
 PROVENANCE
 FAIL_CLOSED
+DYNAMIC_ASSET
 NO_TEST_DATA
 NO_FIXED_15
 NO_ORDER
@@ -94,12 +93,12 @@ NO_API_WRITE
 NO_DB_WRITE
 
 ## REPOSITORY CONSOLIDATION STATE
-CANONICAL COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
+CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
+CANONICAL GOVERNANCE HEAD = 207bfdf0f3bba0754859d31299537fca7a8e682d
 CANONICAL BRANCH = main
 REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
 
 CP42 is preserved as historical/source-binding lineage and is NOT merged into Canonical core. Historical branches remain preserved until provenance is explicitly safe.
-
 Generated artifacts, backups, quarantine trees, forensic/review outputs, and unrelated temporary files are not project truth and must not enter Canonical.
 
 ## PROTECTED SURFACES
