@@ -63,17 +63,34 @@ Closed checkpoints are historical truth. They must not be reopened or re-audited
 ## CURRENT PROJECT STATE
 CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
-CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED.
+CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED.
+
+## CP44 IMPLEMENTATION VERIFICATION
+The authorized CP44 downstream implementation is present on branch `sync/local-project-20260917` at HEAD `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
+Verified implementation surfaces:
+- `dynamic_smart_risk_contract_boundary_v0_1.py`
+- `entry_invalidation_boundary_v0_1.py`
+- `smart_risk_contract_v0_1.py`
+- `smart_risk_engine_v0_1.py`
+- `test_smart_risk_engine_v0_1.py`
+
+Evidence:
+- All five CP44 surfaces compiled successfully with Python 3.13.15.
+- Existing Smart Risk test exited `0`.
+- Corrected Dynamic Smart Risk boundary test exited `0` and emitted `CP44_DYNAMIC_BOUNDARY_PASS`.
+- Verified dynamic asset `BTC/USDT`, LONG direction, explicit entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`, APPROVED risk state, and snapshot cardinality `1 → 1`.
+- No order, execution, API write, or production DB write occurred.
+- Generated `__pycache__` is temporary and is not project truth.
+
+This is contract/boundary verification evidence only. It does not constitute CP44 real-market closure.
 
 ## CP44 RUNTIME OBSERVATION
-A controlled real-market runtime was executed from the established downstream eligibility boundary.
+A controlled real-market runtime was previously executed from the established downstream eligibility boundary.
 Observed result: **6 assets reached ELIGIBLE**.
 
 This is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
 
 `15` is legacy test-universe history and is not a production cardinality contract.
-
-The established upstream ELIGIBLE path remains accepted as the operational boundary for forward work. No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
 
 ## CP44 ACCEPTANCE BOUNDARY
 REAL_MARKET_DATA
@@ -171,10 +188,9 @@ Before acting, read:
 Continue only from the active frontier recorded in the repository. If repository documents and chat disagree, stop and escalate to Management.
 
 ## NEXT ACTION
-1. Trace exact production Entry + Invalidation/Stop into Smart Risk.
-2. Preserve dynamic `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]`.
-3. Define and verify opportunity-driven capital allocation that scales across valid capital amounts.
-4. Keep all pre-boundary logic exchange-agnostic.
-5. Synchronize all four governance documents at CP44 completion before closure.
+1. Run the single authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
+2. Verify production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic N.
+3. Preserve all safety boundaries: no order, execution, API write, or DB write.
+4. Synchronize all four governance documents again at CP44 completion before closure.
 
 # END PROJECT STATE
