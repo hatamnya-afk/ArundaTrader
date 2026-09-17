@@ -1,0 +1,56 @@
+# CP43 TEST FILES MUST BE CREATED NOW
+
+Create exactly these two files:
+
+1. test_cp43_pre_execution_readiness_v0_1.py
+2. test_cp43_execution_ready_package_v0_1.py
+
+Write the tests FIRST, according to the approved CP43 contract:
+
+PRE-EXECUTION READINESS:
+- valid Trade Intent -> VALID readiness certificate
+- LONG and SHORT
+- dynamic asset
+- missing required field -> reject
+- invalid Decision -> reject
+- invalid Risk -> reject
+- invalid Trade Gate -> reject
+- invalid provenance TEST/LEGACY/SIMULATED -> reject
+- invalid stop geometry/direction -> reject
+- invalid quantity/exposure -> reject
+- execution/API/order fields -> reject
+- account/balance/capital fields -> reject
+- no calculation/inference/repair
+
+EXECUTION-READY PACKAGE:
+- accepts only VALID readiness certificate
+- rejects invalid certificate
+- package_state = EXECUTION_READY_PACKAGE
+- package_validation = VALID
+- execution_authorized = false
+- execution_submitted = false
+- provider_binding = DEFERRED
+- no exchange/account/balance/capital dependency
+- no API/order/execution/authorization
+- no DB write
+
+Do NOT create production implementation files yet.
+Do NOT modify:
+- arunda_pipeline.py
+- decision_trade_intent_boundary_v0_1.py
+- any database
+- Toobit/API files
+- execution/order code
+
+After creating ONLY the two test files, run:
+
+python -m pytest -q .\test_cp43_pre_execution_readiness_v0_1.py .\test_cp43_execution_ready_package_v0_1.py
+
+The expected result at this stage is collection/import failure because the two production modules do not exist yet.
+
+Then report:
+1. files created
+2. exact pytest result
+3. git status --short
+
+STOP. Do not implement production code yet.
