@@ -1,13 +1,16 @@
 """ARUNDA DYNAMIC SMART-RISK CONTRACT BOUNDARY v0.1.
 
-Provider-neutral boundary between dynamic Decision and Smart Risk.
-No exchange, database, order, or execution dependency.
+Provider-neutral boundary between dynamic Decision, explicit Entry /
+Invalidation, and Smart Risk. No exchange, database, order, or execution
+ dependency.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any
 
+from entry_invalidation_boundary_v0_1 import normalize_entry_invalidation
+from smart_risk_contract_v0_1 import SmartRiskDecision
 from smart_risk_engine_v0_1 import build_smart_risk
 
 
@@ -26,13 +29,36 @@ def normalize_asset(asset: Any) -> str:
     return f"{parts[0]}/{parts[1]}"
 
 
+def _blocked_from_entry(asset: str, direction: str, reason: str, policy_version: Any):
+    result = SmartRiskDecision(
+        asset,
+        direction if direction in ("LONG", "SHORT") else None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        "BLOCKED",
+        reason,
+        policy_version if isinstance(policy_version, str) else None,
+    )
+    result.validate()
+    return result
+
+
 def build_dynamic_smart_risk(
     asset: str,
     decision: Mapping[str, Any],
     observation: Mapping[str, Any],
     policy: Mapping[str, Any],
 ):
-    """Apply Smart Risk to one dynamic decision without fixed-universe logic."""
+    """Apply explicit Entry/Invalidation then Smart Risk for one dynamic asset."""
     dynamic_asset = normalize_asset(asset)
 
     if not isinstance(decision, Mapping):
@@ -49,9 +75,24 @@ def build_dynamic_smart_risk(
     if direction not in ("LONG", "SHORT"):
         raise ValueError("ACTIONABLE decision requires LONG or SHORT direction")
 
+    entry_boundary = normalize_entry_invalidation(
+        dynamic_asset,
+        decision,
+        observation,
+    )
+    if entry_boundary.state != "READY":
+        return _blocked_from_entry(
+            dynamic_asset,
+            direction,
+            entry_boundary.reason,
+            policy.get("policy_version"),
+        )
+
     risk_observation = dict(observation)
     risk_observation["asset"] = dynamic_asset
     risk_observation["direction"] = direction
+    risk_observation["entry_price"] = entry_boundary.entry_price
+    risk_observation["invalidation_price"] = entry_boundary.invalidation_price
 
     result = build_smart_risk(risk_observation, policy)
 
