@@ -22,8 +22,26 @@ Management controls:
 - execution
 - architecture changes
 - changes to protected files/contracts
+- creation of project branches
+- addition of project files
 
 Builder executes the authorized scope. Builder does not promote a task to a new frontier by itself.
+
+## ROADMAP DISCIPLINE — NON-NEGOTIABLE
+The roadmap is the only path for project advancement.
+
+No Builder, coding agent, or Manager may:
+- create a new project branch for personal workflow, experimentation, convenience, or an unapproved parallel path;
+- create or introduce a file that is outside the explicitly authorized checkpoint scope;
+- add generated output, temporary files, backups, quarantine copies, forensic artifacts, review dumps, or unrelated code to Canonical project truth;
+- start a new checkpoint, change the active frontier, redesign an architecture boundary, or create a parallel implementation without an explicit Management decision recorded in repository state;
+- treat a personal branch or unrecorded file as project truth.
+
+A new branch is permitted only when Management explicitly authorizes it as part of the active roadmap/checkpoint. Its purpose, source, target checkpoint, and relationship to Canonical must be recorded before it is treated as project work.
+
+A new file is permitted only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope. If a file is not needed by the roadmap, it does not enter Canonical.
+
+When uncertain: STOP. Do not improvise. Escalate to Management.
 
 ## STATE LANGUAGE
 Use:
@@ -40,6 +58,7 @@ Before modifying anything:
 - identify the active frontier
 - identify the exact file/surface in scope
 - verify that the change does not cross a protected boundary
+- verify that the change is required by the active roadmap/checkpoint
 - preserve existing contracts unless the active checkpoint explicitly authorizes contract change
 
 After every completed checkpoint, update the canonical repository state so the next Builder can recover the state without relying on chat history.
@@ -98,10 +117,16 @@ A Builder joining the project must first establish:
 - active frontier from CURRENT_FRONTIER.md
 - protected boundaries
 - exact authorized action
+- authorized branch/file scope, if any
 
 If the documents and chat disagree, do not silently overwrite repository truth. Escalate the discrepancy to Management.
 
 ## STATE HANDOFF RULE
 The repository state documents are the Builder handoff source of truth. Every closed checkpoint, verified evidence state, blocker, and current frontier must be reflected there. Reporting to Management does not substitute for updating the repository state.
+
+## CANONICAL INTEGRITY RULE
+Canonical is one controlled project truth.
+Historical branches may be preserved for provenance, but they do not become active project truth without Management authorization.
+No one is permitted to "dance around" the roadmap by creating side branches, duplicate implementations, or extra files.
 
 # END BUILDER PROTOCOL
