@@ -6,13 +6,15 @@ The exchange-agnostic Core must be completed before exchange binding and real-ca
 Authoritative roadmap: `MANAGEMENT_ROADMAP.md`
 
 ## CURRENT FRONTIER
-Continue the Core toward:
+**CP44 — PROJECT VERIFICATION / FULL CORE INTEGRITY → CLEANUP → PACKAGE → SERIOUS PORTABLE BACKUP**
+
+Completed Core boundary:
 
 TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
 
 Then:
 
-PROJECT VERIFICATION → FULL TEST / CLEANUP → PACKAGE → SERIOUS PORTABLE BACKUP
+PROJECT VERIFICATION → FULL TEST / CLEANUP → CONTRACT / BOUNDARY REVIEW → DOCUMENTATION SYNC → PACKAGE → SERIOUS PORTABLE BACKUP
 
 Only after that:
 
@@ -23,17 +25,29 @@ CP38 = CLOSED / VERIFIED / PASS (with CP38-B = DESIGN PASS as previously recorde
 CP39 = CLOSED / VERIFIED / PASS
 CP40 = CLOSED / VERIFIED
 CP41 = CLOSED / VERIFIED / PASS
+CP42 = CLOSED / SUPERSEDED BY MANAGEMENT CORRECTION
+CP43 = IMPLEMENTED / VERIFICATION PENDING LOCAL EXECUTION
 
 Closed checkpoints are historical truth and are not to be re-audited without a demonstrated regression.
 
-## CP42 — CORRECTED INTERPRETATION
-CP42 inspected production-source binding requirements. Its earlier conclusion treated absence of a live exchange Account/Balance producer as a blocker for the Core. Management has now explicitly corrected that interpretation.
+## CP42 CORRECTION
+The earlier CP42 interpretation treated absence of a live exchange Account/Balance producer as a blocker for the Core. Management corrected this: the Core uses provider-neutral Capital/Portfolio abstractions where needed; actual exchange Account/Balance binding belongs to the later Exchange Binding phase.
 
-The Core does NOT require a live exchange account, exchange balance, private API, signature, or real capital in order to progress through the exchange-agnostic Trade-Ready path.
+The known Toobit `-1022 INVALID_SIGNATURE` condition remains a future exchange-binding issue and is not the current Core frontier.
 
-Capital/portfolio requirements inside Core must be represented through provider-neutral abstractions/contracts. Exchange-specific Account/Balance binding belongs to the later Exchange Binding phase.
+## CP43 COMPLETION
+CP43 implemented the provider-neutral boundary:
 
-Therefore the known Toobit `-1022 INVALID_SIGNATURE` condition is NOT the current Core frontier. It remains a future exchange-binding issue.
+TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
+
+Files:
+- `pre_execution_readiness_v0_1.py`
+- `test_cp43_pre_execution_readiness_v0_1.py`
+- `execution_ready_package_v0_1.py`
+- `test_cp43_execution_ready_package_v0_1.py`
+- `CP43_PRE_EXECUTION_READY_STATUS.md`
+
+The implementation is exchange-neutral and fail-closed. It does not calculate new trading values, require live account/balance data, request capital, call APIs, write the database, authorize execution, sign, submit, or execute orders.
 
 ## CAPITAL RULE
 Real capital is intentionally deferred until the exchange-binding phase has been implemented and tested.
@@ -45,18 +59,6 @@ During Core development:
 - do not use synthetic/fabricated/fallback capital
 - do not hardcode fixed-15 capital/sizing
 
-When exchange binding becomes current, Account/Balance and related exchange constraints are implemented and tested at that stage.
-
-## CORE BOUNDARY
-The following remain provider-neutral and must remain exchange-agnostic:
-
-REAL MARKET DATA → ANALYSIS → OPPORTUNITY → SIGNAL → SCORE → DECISION → RISK → POSITION SIZE → TRADE GATE → TRADE INTENT → PRE-EXECUTION READY
-
-No Toobit/private API, signature, order write, execution authorization, order submission, real trade, or production DB write is part of this Core frontier.
-
-## CURRENT STRATEGIC OBJECTIVE
-Build the complete independent trading engine to a verified Trade-Ready / Pre-Execution boundary, then prepare a clean portable release package and serious backup before connecting any exchange.
-
 ## BUILDER INSTRUCTION
 Every new Builder/Manager session must read `MANAGEMENT_ROADMAP.md` first as the strategic routing document, together with:
 - PROJECT_STATE.md
@@ -65,6 +67,6 @@ Every new Builder/Manager session must read `MANAGEMENT_ROADMAP.md` first as the
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
 
-The Builder must follow the roadmap literally. Do not reinterpret deferred real capital as a current blocker. Do not start exchange binding before Core completion, verification, cleanup, packaging, and backup.
+The Builder must follow the roadmap literally. Complete CP44 verification/cleanup/package/backup before exchange binding. If local verification has not been run, do not mark CP43 VERIFIED/PASS.
 
 # END CURRENT FRONTIER
