@@ -19,7 +19,7 @@ Compact historical truth. Detailed forensic reports remain historical artifacts 
 - Trade Lifecycle
 - Exit Evidence
 - PortfolioRisk Contract
-- Account/Balance Producer
+- Account/Balance Producer contract layer
 - CP37-J — Toobit Position Wiring
 - CP37-KA — Toobit Position Reader compatibility
 - REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — PASS
@@ -79,49 +79,94 @@ Verification evidence:
 No production runtime, order, DB mutation, exchange write, or execution authorization occurred in CP40.
 
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
-- CP41 = ACTIVE / IMPLEMENTED / VERIFICATION PENDING
+- CP41 = CLOSED / VERIFIED / PASS
 
 Scope:
 DECISION OUTPUT → TRADE INTENT
 
-Implementation present:
+Implementation:
 - `decision_trade_intent_boundary_v0_1.py`
 - `test_cp41_decision_trade_intent_boundary_v0_1.py`
 
-Boundary intent:
-- Consume independently validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs.
-- Require Decision `READY` + `VALID`.
-- Preserve dynamic asset identity and cross-check semantic identity across upstream sources.
-- Require valid provider-neutral provenance; reject TEST / LEGACY / SIMULATED provenance.
-- Require approved Trade Gate and Risk state.
-- Cross-check direction, entry price, stop price/distance, quantity, exposure, and policy version from upstream.
-- Reject execution/API/order surfaces.
-- Produce only a provider-neutral Trade Intent-shaped downstream payload.
-- Do not calculate, infer, fabricate, repair, authorize, submit, execute, call API, or write DB.
+Fresh local verification evidence:
+- Focused CP41 suite — 12 passed in 0.09s
+- Static compile — PASS
+- `git diff --check` — PASS
+- Forbidden operation/write/runtime scans — PASS
+- Fixed-15 / capital / synthetic scan — PASS
+- Standard-library-only imports
+- GitHub CP40 → CP41 scope comparison — six changed files, with no runtime/Risk/execution modification
 
-Current verification status:
-- Implementation file present.
-- Focused test file present.
-- Final management verification is pending.
-- Local Windows runtime verification has not been claimed from this environment.
+CP41 established the provider-neutral Decision → Trade Intent boundary and remains historical truth. It is not to be re-audited unless a regression is identified.
 
-CP41 MUST NOT be marked CLOSED / VERIFIED until fresh verification evidence covers:
-compile, focused tests, static inspection, git diff --check, scope, contamination, and all required CP41 safety assertions.
+## CP42 — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
+- CP42 = BLOCKED — REAL CAPITAL SOURCE GAP
 
-Required CP41 evidence:
-DECISION_TO_INTENT
-FAIL_CLOSED
-DYNAMIC_ASSET
-PROVIDER_NEUTRAL
-PROVENANCE
-NO_TEST_DATA
-NO_FIXED_15
-NO_CAPITAL_FABRICATION
-NO_ORDER
-NO_EXECUTION
-NO_AUTHORIZATION
-NO_API
-NO_DB_WRITE
+Scope:
+REAL PRODUCTION SOURCES → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT
+
+Repository evidence:
+- Real Capital Observation and Real Capital Source contracts exist.
+- Real Portfolio State source contract exists.
+- Validated Entry/Stop/Risk Policy source contract exists.
+- Smart Risk engine exists and derives position size/exposure from upstream inputs.
+- Trade Gate and Decision → Trade Intent boundaries exist.
+- These are provider-neutral contracts/boundaries; they do not by themselves prove a live real account/balance producer is bound into the production path.
+
+Required CP42 field trace status:
+- asset — upstream fields exist; complete real producer lineage not established
+- direction — upstream fields exist; complete real producer lineage not established
+- entry — validated contract exists; production producer binding not established
+- stop — validated contract exists; production producer binding not established
+- quantity — derived by Smart Risk from upstream inputs; production-bound source chain not established
+- exposure — derived by Smart Risk from upstream inputs; production-bound source chain not established
+- risk_state — validated Smart Risk/Trade Gate state exists; production-bound end-to-end binding not established
+- decision_state — supplied by verified CP41 Decision boundary; no regression audit performed
+- policy_version — carried/cross-checked by existing contracts; production-source lineage not established
+- provenance — validated fields exist; complete real producer lineage not established
+- timestamp/snapshot identity — observations carry timestamps, but complete source/snapshot lineage into Trade Intent is not demonstrated
+
+### REAL CAPITAL BLOCKER
+Production capital must come from REAL ACCOUNT / BALANCE OBSERVATION.
+`capital_config.py` remains TEST / LEGACY / NON-PRODUCTION.
+The existing Toobit Account path remains blocked by HTTP 400 / API `-1022 INVALID_SIGNATURE`, and no alternative verified real-account producer is established in the inspected CP42 branch.
+
+Therefore:
+**BLOCKED — REAL CAPITAL SOURCE GAP**
+
+No test capital, fixed-15 sizing, fabricated source, or workaround is permitted.
+
+### ENTRY / STOP
+Validated source contracts exist, but a complete real production producer binding is not established. No latest-price fallback, ATR inference, interpolation, padding, or fabricated value is permitted.
+
+### QUANTITY / EXPOSURE
+Smart Risk calculates `position_size` and `exposure` deterministically from upstream capital, entry, stop distance, risk policy, and portfolio state. This is not a production source by itself. Without verified production-bound upstream inputs, CP42 cannot certify quantity/exposure readiness.
+
+### IMPLEMENTATION RESULT
+No Production Code changed in CP42.
+No new producer, workaround, synthetic source, or redesign was introduced.
+CP42 correctly stops at the smallest proven production-source gap.
+
+### ACCEPTANCE EVIDENCE
+REAL_SOURCE_BINDING = BLOCKED
+TRADE_INTENT_INPUTS = BLOCKED
+REAL_CAPITAL_FIREWALL = PASS (contract-level)
+ENTRY_SOURCE = BLOCKED
+STOP_SOURCE = BLOCKED
+QUANTITY_SOURCE = BLOCKED
+EXPOSURE_SOURCE = BLOCKED
+PROVENANCE = PASS (contract-level)
+DECISION_CONSISTENCY = PASS (existing CP41 boundary; not re-audited)
+FAIL_CLOSED = PASS (existing boundaries)
+DYNAMIC_ASSET = PASS (existing CP41 boundary)
+PROVIDER_NEUTRAL = PASS
+NO_TEST_DATA = PASS
+NO_FIXED_15 = PASS
+NO_ORDER = PASS
+NO_AUTHORIZATION = PASS
+NO_EXECUTION = PASS
+NO_API = PASS
+NO_DB_WRITE = PASS
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
