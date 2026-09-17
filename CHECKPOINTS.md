@@ -48,16 +48,6 @@ Compact historical truth. Detailed forensic reports remain historical artifacts 
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
 - CP41 = CLOSED / VERIFIED / PASS
 
-Implementation:
-- `decision_trade_intent_boundary_v0_1.py`
-- `test_cp41_decision_trade_intent_boundary_v0_1.py`
-
-Verification evidence:
-- 12 focused CP41 tests passed.
-- Compile/static verification passed.
-- Scope/diff verification passed.
-- No order, execution, API write, or production DB write occurred.
-
 ## CP43 — PRE-EXECUTION READY PACKAGE
 - CP43 = CLOSED / VERIFIED / PASS
 
@@ -68,7 +58,7 @@ Implementation:
 - `test_cp43_execution_ready_package_v0_1.py`
 
 Verification evidence:
-- 77/77 focused tests passed.
+- 77/77 focused CP43 tests passed.
 - Compile verification — PASS
 - git diff --check — PASS
 - Worktree clean at closure.
@@ -104,7 +94,7 @@ NO_EXECUTION
 NO_API_WRITE
 NO_DB_WRITE
 
-CP44 runtime is temporarily gated by repository consolidation. No runtime is authorized during this gate.
+CP44 runtime is gated until repository consolidation is closed by Management.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
@@ -121,5 +111,6 @@ No Builder or Manager may create a new project branch outside an explicitly auth
 No unapproved file may enter Canonical project truth.
 Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts are not project truth.
 Every branch and file added to the project must have a documented purpose tied to the active roadmap/checkpoint.
+The roadmap is the only path for project advancement.
 
 # END CHECKPOINTS
