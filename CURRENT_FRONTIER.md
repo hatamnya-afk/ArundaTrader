@@ -11,7 +11,7 @@ CP44 — REAL-MARKET CONTROLLED TEST
 
 CP41 = CLOSED / VERIFIED / PASS
 CP43 = CLOSED / VERIFIED / PASS
-CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST EXECUTED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ## CP44 IMPLEMENTATION VERIFICATION
 The authorized CP44 implementation is present on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
@@ -26,14 +26,22 @@ Verified:
 - dynamic snapshot preserves cardinality `1 → 1`;
 - no order, execution, API write, or production DB write occurred.
 
-The test used a controlled fixture. It verifies the boundary implementation, not the CP44 real-market closure.
+The test used a controlled fixture. It verifies the boundary implementation, not CP44 real-market closure.
 
-## CP44 RUNTIME OBSERVATION
-A controlled real-market runtime was previously executed from the established downstream eligibility boundary.
-Observed result: **6 assets reached ELIGIBLE**.
+## CP44 REAL-MARKET CONTROLLED RUNTIME
+The single authorized CP44 real-market controlled runtime was executed from the established downstream eligibility boundary.
 
-This observation is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
-No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
+Observed blocker:
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`
+
+Required minimum context:
+`MIN_CONTEXT = 21`
+
+The runtime failed closed because the required real contiguous context was not available. Consequently, production-compatible Entry + Invalidation/Stop → Smart Risk → Trade Gate → Trade Ready was not proven for CP44.
+
+This is the authoritative CP44 runtime result. No second runtime is authorized until the blocker is resolved and Management explicitly authorizes readiness.
+
+No upstream rebuild, redesign, or re-audit is authorized merely to reproduce the prior runtime.
 
 `15` is legacy test-universe history and is not a production cardinality contract.
 
@@ -86,11 +94,14 @@ The optimization objective is maximum validated profit-opportunity capture. Risk
 - NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ## CP44 CURRENT BLOCKER
-The implementation boundary is verified, but production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk authority for dynamic `ELIGIBLE[N]` during the authorized real-market runtime.
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7` with `MIN_CONTEXT = 21`.
 
-The active route must also establish opportunity-driven capital allocation semantics. The legacy fixed-15 `market_entry_stop_adapter.py` snapshot path must not become the production route.
+Required next condition: naturally accumulated, real, contiguous post-launch market context for MHA/USDT, with no synthetic data, interpolation, fill, padding, fabricated fallback, or backfill.
 
-## CP44 FORBIDDEN DURING TEST
+The legacy fixed-15 `market_entry_stop_adapter.py` snapshot path must not become the production route.
+
+## CP44 FORBIDDEN
+- second CP44 runtime before blocker resolution and explicit readiness
 - order submission/cancellation
 - execution authorization
 - signature work
@@ -130,9 +141,10 @@ This remains an independent Account/Real-Capital blocker. CP44 does not authoriz
 Toobit is not part of the Core Risk/Allocation architecture.
 
 ## NEXT ACTION
-1. Execute the single authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
-2. Verify production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic N.
-3. Preserve all execution, order, API-write, and DB-write prohibitions.
-4. Synchronize all four governance documents at CP44 completion before any VERIFIED/PASS/CLOSED claim.
+1. Resolve the real-data continuity blocker for `MHA/USDT` without fabricating, interpolating, filling, padding, or backfilling production context.
+2. Do not execute a second CP44 runtime merely to retrieve metrics.
+3. After blocker resolution and explicit Management readiness, execute the single next authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
+4. Preserve all execution, order, API-write, and DB-write prohibitions.
+5. Synchronize all four governance documents at CP44 completion before any VERIFIED/PASS/CLOSED claim.
 
 # END CURRENT FRONTIER
