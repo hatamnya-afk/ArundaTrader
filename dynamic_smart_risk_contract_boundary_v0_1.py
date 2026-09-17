@@ -2,7 +2,7 @@
 
 Provider-neutral boundary between dynamic Decision, explicit Entry /
 Invalidation, and Smart Risk. No exchange, database, order, or execution
- dependency.
+dependency.
 """
 from __future__ import annotations
 
@@ -33,11 +33,6 @@ def _blocked_from_entry(asset: str, direction: str, reason: str, policy_version:
     result = SmartRiskDecision(
         asset,
         direction if direction in ("LONG", "SHORT") else None,
-        None,
-        None,
-        None,
-        None,
-        None,
         None,
         None,
         None,
@@ -93,6 +88,7 @@ def build_dynamic_smart_risk(
     risk_observation["direction"] = direction
     risk_observation["entry_price"] = entry_boundary.entry_price
     risk_observation["invalidation_price"] = entry_boundary.invalidation_price
+    risk_observation["stop_distance"] = entry_boundary.stop_distance
 
     result = build_smart_risk(risk_observation, policy)
 
