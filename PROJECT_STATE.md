@@ -69,7 +69,7 @@ Verification evidence:
 - No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
 
 ## CP41 STATE — DECISION → TRADE INTENT
-CP41 = ACTIVE / IMPLEMENTED / VERIFICATION PENDING
+CP41 = CLOSED / VERIFIED / PASS
 
 Scope = DECISION OUTPUT → TRADE INTENT
 
@@ -77,28 +77,55 @@ Implementation:
 - decision_trade_intent_boundary_v0_1.py
 - test_cp41_decision_trade_intent_boundary_v0_1.py
 
-The CP41 implementation is a provider-neutral boundary/validation layer. It consumes independently validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs. It requires Decision `READY` + `VALID`, dynamic asset identity, valid non-forbidden provenance, approved Trade Gate/Risk state, and semantic agreement for direction, entry, stop, quantity, exposure, and policy version. It rejects execution/API/order surfaces.
+CP41 established a provider-neutral boundary/validation layer consuming validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs. It requires Decision READY + VALID, dynamic asset identity, valid provenance, approved Trade Gate/Risk state, and semantic agreement for direction, entry, stop, quantity, exposure, and policy version. It rejects execution/API/order surfaces.
+
+Fresh local verification evidence recorded by Management:
+- focused CP41 suite: 12 passed in 0.09s
+- py_compile: PASS
+- git diff --check: PASS
+- forbidden operation/write/runtime scans: PASS
+- fixed-15 / capital / synthetic scan: PASS
+- imports limited to standard-library modules
+- GitHub scope comparison: six CP41 files changed from the CP40 base; no runtime/Risk/execution modification
 
 CP41 does not calculate or invent price, stop, quantity, exposure, capital, portfolio state, risk policy, exchange constraints, or execution authorization. It does not submit orders, call APIs, execute trades, or write the database.
 
-The existing CP38-I Trade Gate → Order Intent boundary remains a separate downstream contract and is not duplicated or modified by CP41. CP41 is specifically the Decision → Trade Intent boundary.
+## CP42 STATE — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
+CP42 = BLOCKED — REAL CAPITAL SOURCE GAP
 
-Verification status:
-- CP41 implementation present.
-- Focused CP41 test file present.
-- Final fresh verification has not yet been recorded in this repository state.
-- Local Windows runtime verification is not claimed from this environment.
+Scope = REAL PRODUCTION SOURCES → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT
 
-CP41 closure requires fresh evidence for compile, focused tests, static inspection, diff-check, scope, contamination, and all CP41 safety assertions. Until then CP41 remains ACTIVE / IMPLEMENTED / VERIFICATION PENDING.
+Repository inspection established that provider-neutral contracts and bridges exist for Real Capital Observation, Real Portfolio State, validated Entry/Stop/Risk Policy, Smart Risk, Trade Gate, and Decision → Trade Intent. However, the inspected branch does not establish a complete verified production-source binding from a real account/balance producer through the required upstream chain into Trade Intent.
+
+Real Capital:
+- production capital must originate from REAL ACCOUNT / BALANCE OBSERVATION
+- `capital_config.py` remains TEST / LEGACY / NON-PRODUCTION
+- existing real-capital contracts are present and fail closed on invalid/forbidden sources
+- Toobit Account remains blocked by HTTP 400 / API -1022 INVALID_SIGNATURE
+- no alternative verified real-account producer is established in the inspected CP42 state
+
+Entry / Stop:
+- validated contracts/bridges exist
+- complete real producer binding into the CP42 production path is not established
+- no latest-price fallback, ATR inference, interpolation, padding, or fabricated value is permitted
+
+Quantity / Exposure:
+- Smart Risk deterministically derives `position_size` and `exposure` from upstream capital, entry, stop distance, risk policy, and portfolio state
+- this calculation is not itself a production source
+- without verified production-bound upstream inputs, quantity/exposure production readiness cannot be certified
+
+Therefore CP42 stops at the source gap and introduces no workaround, synthetic producer, or redesign.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP41 — DECISION → TRADE INTENT BOUNDARY
+CURRENT FRONTIER: CP42 — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
 CP40 = CLOSED / VERIFIED
-CP41 = IMPLEMENTED / VERIFICATION PENDING
+CP41 = CLOSED / VERIFIED / PASS
+CP42 = BLOCKED — REAL CAPITAL SOURCE GAP
 
 EXECUTION = NOT AUTHORIZED
-REAL TRADE = NOT EXECUTED
-TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39 OR CP40
+REAL ORDER = NONE
+REAL TRADE = NONE
+TOOBIT -1022 = INDEPENDENT ACCOUNT / REAL-CAPITAL BLOCKER
 
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
@@ -116,10 +143,14 @@ TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39 OR CP40
 - Trade Lifecycle
 - Exit Evidence
 - PortfolioRisk Contract
-- Account/Balance Producer
+- Account/Balance Producer contract layer
 - CP37-J — Toobit Position Wiring
 - CP37-KA — Toobit Position Reader compatibility
 - REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — CLOSED / VERIFIED / PASS
+- CP38 — Smart Risk / Pre-Execution contract architecture
+- CP39 — Pre-Execution Readiness → Decision Handoff
+- CP40 — Decision Implementation
+- CP41 — Decision → Trade Intent Boundary
 
 Closed areas are not re-audited unless a real regression is demonstrated.
 
