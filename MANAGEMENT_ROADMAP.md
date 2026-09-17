@@ -78,7 +78,7 @@ Rules:
 Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
-- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
+- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED
 
 ### PHASE B — EXCHANGE BINDING
 May begin only after Phase A completion is explicitly closed and recorded in all four governance documents.
@@ -90,13 +90,21 @@ After Phase B authorization, integrate the selected exchange through the exchang
 Requires Phase A/B/C closure, satisfied execution/risk/constraint gates, and explicit Management authorization.
 
 ## CP44 MANAGEMENT STATE
-A controlled real-market runtime has been executed from the established downstream ELIGIBLE boundary.
+The authorized CP44 implementation has now been verified on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
 
-**Observed result: 6 assets reached ELIGIBLE.**
+Verified evidence:
+- five CP44 Smart Risk/Entry surfaces compile successfully with Python 3.13.15;
+- existing Smart Risk test exits `0`;
+- corrected Dynamic Smart Risk boundary test exits `0` with `CP44_DYNAMIC_BOUNDARY_PASS`;
+- explicit `BTC/USDT` LONG entry/invalidation geometry is accepted;
+- entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`;
+- Smart Risk result `APPROVED`;
+- dynamic snapshot cardinality `1 → 1`;
+- no order, execution, API write, or production DB write occurred.
 
-This is runtime evidence only. It does not define cardinality and does not close or verify CP44.
+The earlier controlled real-market runtime observed **6 assets reaching ELIGIBLE**. That remains runtime evidence only and is not a cardinality target or closure proof.
 
-### CP44 FORWARD CHAIN
+## CP44 FORWARD CHAIN
 ```text
 ELIGIBLE[N]
    ↓
@@ -120,7 +128,9 @@ ORDER INTENT
 Do not rebuild or redesign Opportunity / Signal / Score / Fusion / Decision merely to reproduce the observed ELIGIBLE state.
 
 ## CP44 CURRENT BLOCKER
-The active blocker is the production-compatible connection of real Entry + Invalidation/Stop into the Smart Risk authority, with intelligent capital allocation semantics and no legacy fixed-15 path.
+The implementation boundary is verified, but production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk authority during the authorized real-market runtime.
+
+The active route must also establish opportunity-driven capital allocation semantics and prove dynamic `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]` without legacy fixed-15 assumptions.
 
 The legacy `market_entry_stop_adapter.py` fixed-15 snapshot path must not become the production route.
 
@@ -163,10 +173,9 @@ Repository consolidation is CLOSED by Management.
 CP44 remains the active frontier.
 
 ## CURRENT NEXT ACTION
-1. Trace the exact production Entry + Invalidation/Stop source into Smart Risk.
-2. Remove/avoid legacy fixed-15 assumptions from the active downstream route without reopening closed upstream stages.
-3. Define and verify opportunity-driven capital allocation semantics.
-4. Verify `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]` with dynamic N.
-5. At CP44 completion, synchronize all four governance documents before closure.
+1. Execute the single authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
+2. Verify production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic N.
+3. Preserve all execution, order, API-write, and DB-write prohibitions.
+4. Synchronize all four governance documents again at CP44 completion before closure.
 
 # END MANAGEMENT ROADMAP
