@@ -4,7 +4,7 @@
 CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
 
 ## GOVERNANCE GATE
-Repository consolidation is the active management gate. CP44 runtime execution is forbidden until Canonical repository governance is finalized.
+Repository consolidation is CLOSED by Management. CP44 controlled-test runtime is authorized within the existing safety boundary.
 
 ## FINAL PROJECT LIFECYCLE
 PROJECT COMPLETION MUST PRECEDE EXCHANGE BINDING.
@@ -23,7 +23,7 @@ CP44 — REAL-MARKET CONTROLLED TEST
 
 CP41 = CLOSED / VERIFIED / PASS
 CP43 = CLOSED / VERIFIED / PASS
-CP44 = NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
 
 ## CP43 CLOSED STATE
 CP43 = CLOSED / VERIFIED / PASS
@@ -64,18 +64,16 @@ REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXE
 - NO_API_WRITE
 - NO_DB_WRITE
 
-## CP44 FORBIDDEN DURING CONSOLIDATION
-- runtime execution
-- real API calls
-- DB writes
+## CP44 FORBIDDEN DURING TEST
 - order submission/cancellation
 - execution authorization
 - signature work
 - exchange writes
 - test capital
-- modification of `arunda_pipeline.py`
+- modification of `arunda_pipeline.py` without explicit separate authorization
 - architecture redesign
 - reopening closed checkpoints
+- upstream rebuild of the established ELIGIBLE path
 
 ## REPOSITORY GOVERNANCE
 Canonical branch is `main`.
@@ -100,13 +98,13 @@ The synchronization must record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, ev
 
 For every route/frontier change, the roadmap and state documents must be updated immediately, with the reason and Management authorization.
 
-A checkpoint is not governance-complete until these documents are synchronized and internally consistent. Reporting to Management does not substitute for state maintenance. The next frontier must not start while the synchronization gate is incomplete.
+A checkpoint is not governance-complete until these documents are synchronized and internally consistent. The next frontier must not start while the synchronization gate is incomplete.
 
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
 This remains an independent Account/Real-Capital blocker. CP44 does not authorize bypassing or repeating private diagnostics.
 
 ## NEXT ACTION
-After remote promotion is verified, Management may close the consolidation gate. Only then may Management issue the explicit CP44 runtime command.
+Execute the single controlled CP44 runtime from the established downstream eligibility boundary, with all fail-closed and no-write constraints enforced.
 
 # END CURRENT FRONTIER
