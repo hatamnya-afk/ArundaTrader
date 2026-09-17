@@ -4,25 +4,62 @@
 Canonical repository-level source of truth for ArundaTrader. Chat memory is not authoritative when these documents are available.
 
 ## PROJECT IDENTITY
-ArundaTrader is a modular, layered, exchange-agnostic real-market analysis and trading-decision system.
-Toobit is an exchange adapter/environment, not the project core.
+ArundaTrader is a modular, layered, real-market analysis and trading-decision system. The Core remains exchange-agnostic until project completion is explicitly closed.
 
-## FINAL PROJECT OBJECTIVE
-The project goal is real trading, but the project must first reach completion as an exchange-agnostic system.
-The mandatory lifecycle is:
-1. COMPLETE the exchange-agnostic project/core according to the roadmap.
-2. Only after explicit project-completion closure, BIND an exchange through an adapter/environment boundary.
-3. Perform final real-market exchange integration and controlled testing.
-4. Only after final acceptance and explicit Management authorization may real trading be enabled.
+Toobit is the execution exchange/environment and is kept outside Core through a replaceable adapter boundary.
+KuCoin, Bybit, Gate, and other authorized providers belong to the Market Information Arm. They are market-information sources, not the execution exchange. Their observations are normalized/provider-neutral before entering Core.
+News and Social are established information arms and are not current work unless direct, provable regression is identified.
 
-No Builder, Manager, or future implementation agent may move these stages earlier, merge them, or introduce exchange-specific architecture into the core merely to accelerate the path to trading.
+## FINAL OBJECTIVE
+Reach the first real trade through a controlled lifecycle, then capture the real fill, real outcome, observation, and empirical calibration.
 
-## CORE FLOW
-REAL DYNAMIC UNIVERSE → REAL MARKET DATA → REAL OPPORTUNITY → REAL SIGNAL → REAL DECISION → SMART RISK MANAGEMENT → TRADE GATE → ORDER INTENT → EXECUTION → REAL TRADE → REAL OUTCOME → REAL OBSERVATION → CALIBRATION
+The intended intelligence objective is maximum validated profit-opportunity capture through intelligent capital allocation and disciplined invalidation/exposure control. Capital allocation is an output of validated opportunity and constraints, not a universal hardcoded ceiling.
+
+## MASTER LIFECYCLE
+1. REAL WORLD INFORMATION
+2. MARKET INFORMATION ARM — KuCoin / Bybit / Gate / other providers
+3. NEWS ARM
+4. SOCIAL ARM
+5. NORMALIZED / PROVIDER-NEUTRAL MARKET & INFORMATION OBSERVATIONS
+6. DATA FABRIC / PRODUCTION BOUNDARY
+7. DYNAMIC UNIVERSE
+8. OPPORTUNITY
+9. SIGNAL
+10. VALIDATION
+11. FUSION
+12. SCORE
+13. DECISION
+14. ENTRY / INVALIDATION
+15. SMART RISK / CAPITAL ALLOCATION / POSITION SIZING
+16. TRADE GATE
+17. TRADE READY
+18. ORDER INTENT
+19. EXCHANGE CONSTRAINTS
+20. PRE-EXECUTION READY
+21. EXCHANGE-AGNOSTIC BOUNDARY
+22. PROJECT COMPLETION GATE
+23. TOOBIT EXCHANGE BINDING
+24. FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+25. EXPLICIT EXECUTION AUTHORIZATION
+26. FIRST REAL ORDER
+27. FIRST REAL FILL
+28. REAL OUTCOME
+29. OBSERVATION
+30. CALIBRATION
 
 ## PRODUCTION BOUNDARY
 LAUNCH_TIMESTAMP = 2026-08-31T00:00:00+00:00
 Production analysis uses real post-launch data only.
+
+## DATA / CARDINALITY RULES
+- Real data only.
+- No synthetic data, interpolation, forward-fill, back-fill, padding, fabrication, or silent source blending.
+- One candle/observation = one attributable source; provenance is mandatory.
+- Fail closed when required real data cannot be verified.
+- Production flow is dynamic: `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`.
+- Legacy `15` is test-era cardinality, not production truth.
+- Observed `6` is runtime cardinality only, not a target or fixed universe.
+- Global Universe is not the Toobit Universe.
 
 ## EXECUTION SAFETY
 EXECUTION AUTHORIZATION = FALSE
@@ -31,58 +68,50 @@ WITHDRAW = FORBIDDEN
 DATABASE WRITE = FORBIDDEN unless explicitly authorized
 Credentials and secrets must never be exposed.
 
-## CLOSED / VERIFIED CHECKPOINTS
-CP38 = CLOSED / VERIFIED / PASS
-CP39 = CLOSED / VERIFIED / PASS
-CP40 = CLOSED / VERIFIED / PASS
-CP41 = CLOSED / VERIFIED / PASS
-CP43 = CLOSED / VERIFIED / PASS
+## HISTORICAL COMPLETION — CLOSED / VERIFIED
+The following are historical truth and must not be reopened or re-audited without direct, provable regression:
+- Data Fabric
+- Dynamic Universe
+- Real Market
+- Dynamic Signal
+- Opportunity
+- Fusion
+- Score
+- Decision
+- Risk
+- Trade Gate
+- Risk Contracts
+- RiskContext
+- Trade Lifecycle
+- Exit Evidence
+- PortfolioRisk Contract
+- Account/Balance Producer
+- CP37-J — Toobit Position Wiring
+- CP37-KA — Toobit Position Reader compatibility
+- REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — PASS
+- CP38-A, C, D, E, F, G, H, I, J, K, L, N — CLOSED / VERIFIED / PASS
+- CP38-B — DESIGN PASS
+- CP39 — CLOSED / VERIFIED / PASS
+- CP40 — CLOSED / VERIFIED / PASS
+- CP41 — CLOSED / VERIFIED / PASS
+- CP43 — CLOSED / VERIFIED / PASS
 
-Closed checkpoints are historical truth. They must not be reopened or re-audited unless Management identifies a direct, provable regression.
+CP41 evidence: 12 focused tests passed; compile/static and scope/diff verification passed; no order, execution, API write, or production DB write.
+CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` passed; worktree clean at closure; execution authorization false; no runtime order, execution, API write, or DB mutation.
 
-## CP41 STATE — DECISION → TRADE INTENT
-CP41 = CLOSED / VERIFIED / PASS
+## CURRENT FRONTIER
+CP44 — REAL-MARKET CONTROLLED TEST
+Status = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
 
-Implementation:
-- decision_trade_intent_boundary_v0_1.py
-- test_cp41_decision_trade_intent_boundary_v0_1.py
+Current path:
+`ELIGIBLE[N] → REAL/VALIDATED ENTRY → REAL/VALIDATED INVALIDATION → SMART RISK → RISK[N] → TRADE_GATE[N] → TRADE_READY[N] → ORDER INTENT → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY`
 
-Verification evidence:
-- 12 focused CP41 tests passed.
-- Compile/static verification passed.
-- Scope/diff verification passed.
-- No order, execution, API write, or production DB write occurred.
-
-## CP43 STATE — PRE-EXECUTION READY PACKAGE
-CP43 = CLOSED / VERIFIED / PASS
-
-Implementation:
-- pre_execution_readiness_v0_1.py
-- execution_ready_package_v0_1.py
-- test_cp43_pre_execution_readiness_v0_1.py
-- test_cp43_execution_ready_package_v0_1.py
-
-Verification evidence:
-- 77/77 focused tests passed.
-- Compile verification passed.
-- Diff-check passed.
-- Worktree clean at closure.
-- EXECUTION AUTHORIZATION = FALSE.
-- No runtime order, API write, execution, or DB mutation occurred.
-
-## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
-
-CP44 is MANAGEMENT-AUTHORIZED but NOT VERIFIED or CLOSED yet.
-Repository consolidation is CLOSED by Management.
-The approved next action is the single controlled CP44 runtime from the established downstream eligibility boundary.
-
-## CP44 ACCEPTANCE BOUNDARY
+CP44 acceptance boundary:
 REAL_MARKET_DATA
 VALIDATED_OBSERVATIONS
 REAL_CAPITAL_BOUNDARY
 VALID_ENTRY
-VALID_STOP
+VALID_STOP / INVALIDATION
 VALID_QUANTITY
 VALID_EXPOSURE
 DECISION_CONSISTENCY
@@ -99,18 +128,29 @@ NO_EXECUTION
 NO_API_WRITE
 NO_DB_WRITE
 
-## REPOSITORY CONSOLIDATION STATE
-CONSOLIDATION GATE = CLOSED / MANAGEMENT-AUTHORIZED
-CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
-CANONICAL BRANCH = main
-CANONICAL GOVERNANCE STATE = maintained on main; exact commit provenance is preserved in Git history
-REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
+CP44 operating rule: use the established downstream ELIGIBLE boundary. Do not rebuild Opportunity, Signal, Fusion, Score, or Decision merely to reach CP44. One controlled runtime only; no retry/second runtime.
 
-CP42 is preserved as historical/source-binding lineage and is NOT merged into Canonical core. Historical branches remain preserved until provenance is explicitly safe.
-Generated artifacts, backups, quarantine trees, forensic/review outputs, and unrelated temporary files are not project truth and must not enter Canonical.
+## FORWARD FRONTIER
+CP45 = EXECUTION AUTHORIZATION BOUNDARY
+Then:
+PROJECT COMPLETION GATE → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED INTEGRATION → CP46 FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
+
+Project completion must be explicitly closed before exchange binding.
+Real execution requires explicit Management authorization after all gates are closed and verified.
+
+## TOOBIT STATUS
+TOOBIT ACCOUNT SIGNATURE = BLOCKED / HTTP 400 / -1022 INVALID_SIGNATURE
+This is an independent Account/Real-Capital path blocker. Previous diagnostics are historical and must not be repeated or bypassed without explicit authorization.
+
+## REPOSITORY GOVERNANCE
+Canonical branch = `main`
+Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`
+Repository consolidation gate = CLOSED / MANAGEMENT-AUTHORIZED
+
+No unauthorized branch or file may become project truth. Branches are permitted only when explicitly authorized for an active roadmap/checkpoint. New files require defined responsibility, active-checkpoint necessity, and recorded scope.
 
 ## PROTECTED SURFACES
-- arunda_pipeline.py
+- `arunda_pipeline.py`
 - production database
 - execution controls
 - order submission/cancellation
@@ -118,49 +158,14 @@ Generated artifacts, backups, quarantine trees, forensic/review outputs, and unr
 - closed/verified contracts
 - backup/quarantine artifacts
 
-## NON-NEGOTIABLE PROJECT RULES
-- Real data only.
-- No synthetic data, interpolation, forward-fill, back-fill, padding, fabricated fallback, or silent source blending.
-- One candle = one source; provenance is required.
-- Fail closed when required real data cannot be verified.
-- Global Universe is not Toobit Universe.
-- Legacy test capital is not production capital.
-- No real capital → fail closed.
-- Core remains exchange-agnostic.
-- Read-only layers remain read-only unless a writer is explicitly authorized.
-- Do not modify arunda_pipeline.py without explicit authorization.
-- Do not modify the production DB without explicit authorization.
-- Do not reopen closed checkpoints without proven regression.
-- No Builder, Manager, or implementation agent may create a new project branch outside an explicitly authorized roadmap/checkpoint scope.
-- No Builder, Manager, or implementation agent may introduce files outside the authorized scope.
-- No personal/experimental branch, temporary file, backup, quarantine, forensic artifact, generated output, review dump, or unrelated code may become project truth.
-- Every authorized branch or new file must have a documented purpose and be connected to the active roadmap/frontier before use as project work.
-- The roadmap is the only path for project advancement.
-- At the end of every checkpoint, the repository state MUST be synchronized before the checkpoint can be treated as CLOSED.
-- At every route/frontier change, the roadmap and repository state MUST be updated before the new route is treated as active.
-- Reporting to Management does not substitute for repository state synchronization.
-- If the required state update is missing, the checkpoint remains open/incomplete for governance purposes and the next frontier must not start.
+## MANDATORY GOVERNANCE SYNCHRONIZATION
+At the end of every checkpoint, synchronize:
+1. `PROJECT_STATE.md`
+2. `CURRENT_FRONTIER.md`
+3. `CHECKPOINTS.md`
+4. `MANAGEMENT_ROADMAP.md`
 
-## MANDATORY CHECKPOINT / ROUTE SYNCHRONIZATION
-At the end of every checkpoint, the responsible Builder/Manager must update, as applicable:
-1. PROJECT_STATE.md
-2. CURRENT_FRONTIER.md
-3. CHECKPOINTS.md
-4. MANAGEMENT_ROADMAP.md
-
-The update must record:
-- BUILT
-- VERIFIED
-- CLOSED / BLOCKED / NOT VERIFIED as applicable
-- evidence and verification result
-- blocker, if any
-- CURRENT FRONTIER
-- NEXT ACTION
-- authorized branch/file scope, if changed
-
-For any route change, the same synchronization is mandatory immediately, including the reason for the route change and its Management authorization.
-
-Until synchronization is complete and internally consistent, the work is NOT a valid completed checkpoint and no next-frontier implementation may begin.
+Record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT FRONTIER, NEXT ACTION, and authorized scope. A checkpoint is not governance-complete until these documents are internally consistent.
 
 ## SOURCE-OF-TRUTH ORDER
 1. Repository state documents
@@ -168,15 +173,9 @@ Until synchronization is complete and internally consistent, the work is NOT a v
 3. Git history
 4. Chat context
 
-## BUILDER / MANAGEMENT START RULE
-Before acting, read:
-- PROJECT_STATE.md
-- ARCHITECTURE.md
-- CHECKPOINTS.md
-- CURRENT_FRONTIER.md
-- BUILDER_PROTOCOL.md
-- MANAGEMENT_ROADMAP.md
+## MANAGEMENT COMMAND
+No restart. No redesign. No reopening closed checkpoints without proven regression. No modification of approved information arms without regression. No Fixed-15/Fixed-6 production assumptions. No test capital as production capital. No guessing of Entry/Invalidation/Quantity/Exposure/Authorization. No order/execution before explicit authorization. No extra branches/files.
 
-Continue only from the active frontier recorded in CURRENT_FRONTIER.md and MANAGEMENT_ROADMAP.md. If repository documents and chat disagree, stop and escalate to Management; do not silently create a parallel truth.
+The roadmap is the only path.
 
 # END PROJECT STATE
