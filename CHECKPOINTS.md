@@ -39,51 +39,18 @@ Compact historical truth. Detailed forensic reports remain historical artifacts 
 - CP38-L — CLOSED / VERIFIED / PASS
 - CP38-N — CLOSED / VERIFIED / PASS
 
-CP38 Smart Risk through Pre-Execution is built and verified at the contract/boundary level. Execution was not built or activated. No order submission or production DB mutation occurred.
-
 ## CP39 — PRE-EXECUTION READINESS → DECISION HANDOFF
 - CP39 = CLOSED / VERIFIED / PASS
-
-Verified chain:
-Real Production Observations → Readiness Integration → Handoff → Integrity → Certification → Boundary Seal → Readiness-to-Decision Handoff
 
 ## CP40 — DECISION IMPLEMENTATION
 - CP40 = CLOSED / VERIFIED / PASS
 
-Scope:
-SEALED DECISION INPUT → DECISION CONTRACT → DECISION ENGINE → DECISION OUTPUT
-
-Verification evidence:
-- Focused CP40 suite — 12 passed
-- Static compile — PASS
-- Forbidden API/import scan — PASS
-- Dynamic asset — PASS
-- Provider-neutral — PASS
-- Real/production provenance — PASS
-- Fail-closed invalid/stale input — PASS
-- No test capital — PASS
-- No order / no execution authorization — PASS
-- No DB / no exchange API — PASS
-- No fixed-15 logic — PASS
-
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
 - CP41 = CLOSED / VERIFIED / PASS
-
-Scope:
-DECISION OUTPUT → TRADE INTENT
 
 Implementation:
 - `decision_trade_intent_boundary_v0_1.py`
 - `test_cp41_decision_trade_intent_boundary_v0_1.py`
-
-Verified boundary requirements:
-- Decision `READY` + `VALID` required.
-- Dynamic asset identity preserved and cross-checked.
-- Valid provider-neutral provenance required; TEST / LEGACY / SIMULATED rejected.
-- Approved Trade Gate and Risk state required.
-- Direction, entry, stop, quantity, exposure, and policy values are sourced from upstream and cross-checked.
-- Execution/API/order surfaces rejected.
-- No calculation, invention, repair, authorization, submission, execution, API call, or DB write.
 
 Verification evidence:
 - 12 focused CP41 tests passed.
@@ -93,9 +60,6 @@ Verification evidence:
 
 ## CP43 — PRE-EXECUTION READY PACKAGE
 - CP43 = CLOSED / VERIFIED / PASS
-
-Scope:
-PRE-EXECUTION READINESS → EXECUTION-READY PACKAGE
 
 Implementation:
 - `pre_execution_readiness_v0_1.py`
