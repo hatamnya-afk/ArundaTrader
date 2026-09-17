@@ -69,7 +69,7 @@ Implementation:
 - `decision_engine_v0_1.py`
 - `test_cp40_decision_v0_1.py`
 
-Verification: focused suite 12 passed; static compile PASS; forbidden API/import scan PASS; dynamic asset PASS; provider-neutral PASS; real/production provenance PASS; fail-closed invalid/stale input PASS; no test capital; no order/execution authorization; no DB/exchange API; no fixed-15.
+Verification: focused suite 12 passed; static compile PASS; forbidden API/import scan PASS; dynamic asset PASS; real/production provenance PASS; fail-closed invalid/stale input PASS; no test capital; no order/execution authorization; no DB/exchange API; no fixed-15.
 
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
 - CP41 = CLOSED / VERIFIED / PASS
@@ -83,13 +83,38 @@ Fresh local verification evidence: focused suite 12 passed in 0.09s; py_compile 
 CP41 is historical truth and is not re-audited without regression.
 
 ## CP42 — PRODUCTION SOURCE BINDING / MANAGEMENT CORRECTION
-- Initial CP42 inspection: BLOCKED on absence of a live exchange Account/Balance producer.
+- Initial inspection identified the lack of a live exchange Account/Balance producer.
 - Management correction: this is NOT a blocker for the exchange-agnostic Core.
-- CP42 source-binding concerns must be handled through provider-neutral Core abstractions where required; actual exchange Account/Balance binding belongs to the later Exchange Binding phase.
-- No user capital is required or requested for the current Core path.
-- No test capital, synthetic capital, fixed-15, fabricated values, or exchange-specific workaround is permitted.
+- CP42 is therefore closed as a superseded interpretation, not as a live-account verification pass.
+- Provider-neutral Capital/Portfolio abstractions remain the Core requirement; exchange-specific Account/Balance binding belongs to the later Exchange Binding phase.
+- No user capital is required during the Core path.
 
-The previous CP42 live-account blocker interpretation is superseded by this Management directive. Do not use it to stop Core progress.
+## CP43 — PRE-EXECUTION READY / EXECUTION-READY PACKAGE
+- CP43 = IMPLEMENTED / VERIFICATION PENDING LOCAL EXECUTION
+
+Implementation:
+- `pre_execution_readiness_v0_1.py`
+- `test_cp43_pre_execution_readiness_v0_1.py`
+- `execution_ready_package_v0_1.py`
+- `test_cp43_execution_ready_package_v0_1.py`
+- `CP43_PRE_EXECUTION_READY_STATUS.md`
+
+Boundary:
+TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
+
+Properties:
+- provider-neutral
+- dynamic asset
+- fail-closed
+- explicit decision/risk/gate validation
+- stop geometry validation
+- production provenance rejection for TEST/LEGACY/SIMULATED
+- no exchange/account/balance/capital fields
+- no API/signature/order/authorization/execution surface
+- no database write
+- no new trading value calculation
+
+Local pytest and static compile are required before CP43 is declared VERIFIED/PASS.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
@@ -104,5 +129,8 @@ Closed/Verified checkpoints are historical state. They become current only if Ma
 Do not request user capital during Core development.
 Do not start exchange binding before Core completion, verification, cleanup, packaging, and backup.
 Do not reinterpret deferred exchange capital as a current Core blocker.
+
+## CURRENT FRONTIER
+CP44 — PROJECT VERIFICATION / FULL CORE INTEGRITY → CLEANUP → PACKAGE → SERIOUS PORTABLE BACKUP
 
 # END CHECKPOINTS
