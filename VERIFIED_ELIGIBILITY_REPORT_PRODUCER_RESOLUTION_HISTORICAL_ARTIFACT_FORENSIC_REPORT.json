@@ -1,0 +1,1428 @@
+{
+  "script": "ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+  "version": "v0.1",
+  "mode": "READ_ONLY_FORENSIC",
+  "timestamp_started_utc": "2026-08-24T17:31:47.859109+00:00",
+  "timestamp_finished_utc": "2026-08-24T17:31:52.120346+00:00",
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "target_producer_name": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "downstream_frontier": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+  "downstream_frontier_sha256_before": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9",
+  "downstream_frontier_sha256_after": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9",
+  "production_source_invariant": true,
+  "exact_report_artifacts": [],
+  "producer_candidates": [
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "size": 21139,
+      "modified_time": "2026-08-23T16:54:08.642490+00:00",
+      "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+      "name_match": true,
+      "python_parse": true,
+      "target_report_references": [
+        {
+          "line": 698,
+          "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+        }
+      ],
+      "report_write_references": []
+    }
+  ],
+  "producer_resolution": {
+    "status": "RESOLVED",
+    "method": "EXACT_PRODUCER_FILENAME",
+    "candidate": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "size": 21139,
+      "modified_time": "2026-08-23T16:54:08.642490+00:00",
+      "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+      "name_match": true,
+      "python_parse": true,
+      "target_report_references": [
+        {
+          "line": 698,
+          "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+        }
+      ],
+      "report_write_references": []
+    }
+  },
+  "all_references": [
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+      "line": 132,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+      "line": 367,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "\"eligible_pool\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+      "line": 228,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "report.get(\"eligible_pool\"),"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+      "line": 118,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+      "line": 127,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "\"eligible_pool\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+      "line": 228,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "\"eligible_pool\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "line": 381,
+      "matches": [
+        "PRODUCER_PATTERN:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"frontier\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "line": 698,
+      "matches": [
+        "EXACT_REPORT_NAME",
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+      "line": 22,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "BASE_DIR / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_v0.1.py\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+      "line": 23,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "BASE_DIR / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+      "line": 27,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+      "line": 529,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "/ \"LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 221,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "def locate_eligibility_report(capture_dir):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 225,
+      "matches": [
+        "EXACT_REPORT_NAME",
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 234,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "def load_eligibility_report(path):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 489,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "eligibility_report_path,"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 499,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 511,
+      "matches": [
+        "PRODUCER_PATTERN:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 513,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "\"eligibility_report\":"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 514,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "eligibility_report_path,"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 556,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "\"eligible_pool\":"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 692,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "eligibility_report = locate_eligibility_report("
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 696,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "if not eligibility_report:"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 710,
+      "matches": [
+        "PRODUCER_PATTERN:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:ELIGIBILITY_NO_TRADE_GATE",
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 714,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "f\"Report : {eligibility_report}\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 717,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "report = load_eligibility_report("
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 718,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "eligibility_report"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 944,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "eligibility_report,"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 953,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"LIVE_TRADE_CANDIDATE_RANKING_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "line": 982,
+      "matches": [
+        "CONSUMER_PATTERN:UPSTREAM_ELIGIBILITY_CONSUMED"
+      ],
+      "text": "\"UPSTREAM_ELIGIBILITY_CONSUMED : PASS\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 8,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 51,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "/ \"LIVE_TRADE_CANDIDATE_RANKING_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 62,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 184,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool        : list"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 189,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "2. eligible_pool"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 198,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool = report.get(\"eligible_pool\", [])"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 203,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "if eligible_pool is None:"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 204,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool = []"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 211,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "if not isinstance(eligible_pool, list):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 213,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "\"Upstream 'eligible_pool' field must be a list.\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "line": 220,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "candidates = eligible_pool"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 28,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING + MULTI-ASSET DECISION GATE v0.1"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 61,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "UPSTREAM_REPORT_NAME = \"LIVE_TRADE_CANDIDATE_RANKING_REPORT.json\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 252,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool = report.get(\"eligible_pool\")"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 254,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "if isinstance(eligible_pool, (dict, list)):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 301,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "eligible_pool = report.get(\"eligible_pool\")"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 303,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "if isinstance(eligible_pool, list):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 305,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "x for x in eligible_pool"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 309,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "if isinstance(eligible_pool, dict):"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "line": 316,
+      "matches": [
+        "CONSUMER_PATTERN:eligible_pool"
+      ],
+      "text": "value = eligible_pool.get(field)"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 51,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "/ \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 57,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "\"PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY\""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 85,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "\"eligibility_report\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 89,
+      "matches": [
+        "PRODUCER_PATTERN:SIGNAL_ELIGIBILITY"
+      ],
+      "text": "\"signal_eligibility\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 159,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "\"eligibility_report_references\": [],"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 201,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "result[\"eligibility_report_references\"].append(value)"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 246,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "result[\"eligibility_report_references\"] = list("
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 247,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "dict.fromkeys(result[\"eligibility_report_references\"])"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "line": 764,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py \""
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "line": 2,
+      "matches": [
+        "CONSUMER_PATTERN:eligibility_report"
+      ],
+      "text": "\"script\": \"ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py\","
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "line": 7,
+      "matches": [
+        "CONSUMER_PATTERN:LIVE_TRADE_CANDIDATE_RANKING"
+      ],
+      "text": "\"target_frontier\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\","
+    }
+  ],
+  "historical_artifacts": [
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "name": "PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "size": 2554,
+      "modified_time": "2026-08-24T17:28:02.847892+00:00",
+      "sha256": "420101ee4acd13577fc391dd0eece0d1c19a97e3f32faa0dd90ea3ea6201b7d9",
+      "historical_path_hints": [
+        "_report",
+        "report"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "name": "ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "size": 21641,
+      "modified_time": "2026-08-24T17:27:52.966150+00:00",
+      "sha256": "e3ae7debd2a1a085fb1cfb0f2f3ed29058bc15d7d4cecc167686726b5bb51fbf",
+      "historical_path_hints": [
+        "_report",
+        "report"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py",
+      "size": 15640,
+      "modified_time": "2026-08-24T15:46:02.515686+00:00",
+      "sha256": "1a95cd8721aa4d48d8c0f556d6dee3993c02c27071de8618b2c0e5cd9252a86c",
+      "historical_path_hints": [
+        "state"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+      "size": 13532,
+      "modified_time": "2026-08-24T15:44:01.023154+00:00",
+      "sha256": "a439e6a019d495a80e9a3cc9e85ea89ac9da59ee182318bb7817c62aa79afb59",
+      "historical_path_hints": [
+        "state"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py",
+      "size": 29016,
+      "modified_time": "2026-08-24T15:34:09.563403+00:00",
+      "sha256": "0977d101e7258da4873f8b40ed417c38019085b15804fc422d3edb3cdaa26eda",
+      "historical_path_hints": [
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py",
+      "size": 19724,
+      "modified_time": "2026-08-24T15:30:48.714853+00:00",
+      "sha256": "1c7b2abfea8d445355c458ca918151ee9af0606f73634dc53fe1f75e4095252d",
+      "historical_path_hints": [
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py",
+      "size": 30119,
+      "modified_time": "2026-08-23T20:35:43.143519+00:00",
+      "sha256": "a250fcb2d7e3d1536a8bf07a889d654370424f0a52ad22dfdeb150a4aa05b3c7",
+      "historical_path_hints": [
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py",
+      "size": 36716,
+      "modified_time": "2026-08-23T20:16:54.117822+00:00",
+      "sha256": "8801537a8ae2bd0e0bba45ca8596630e6dbf60e8a1cd986019baf6beed92fabd",
+      "historical_path_hints": [
+        "state",
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+      "size": 26038,
+      "modified_time": "2026-08-23T20:09:03.422911+00:00",
+      "sha256": "2ab2ba3337fad82db290738993339ef04e7fc43b1e38de060b9a135dfbcce05c",
+      "historical_path_hints": [
+        "state"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_RUNTIME_ARTIFACT_TEMPORAL_CORRELATION_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_RUNTIME_ARTIFACT_TEMPORAL_CORRELATION_FORENSIC_v0.1.py",
+      "size": 28063,
+      "modified_time": "2026-08-23T15:33:52.438536+00:00",
+      "sha256": "e9c86e4955fdd9cac0d54b91d8ecc40a2f857ca9c74dabc37b83bbec42460f07",
+      "historical_path_hints": [
+        "artifact",
+        "runtime",
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_ARTIFACT_CORRELATION_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_ARTIFACT_CORRELATION_FORENSIC_v0.1.py",
+      "size": 30337,
+      "modified_time": "2026-08-23T15:31:42.810393+00:00",
+      "sha256": "e0025251f699443d22c6a3bb39f5557c0c0774925d1db52aaec3fd821d9751b6",
+      "historical_path_hints": [
+        "artifact",
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_FILESYSTEM_PROVENANCE_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_FILESYSTEM_PROVENANCE_FORENSIC_v0.1.py",
+      "size": 26582,
+      "modified_time": "2026-08-23T15:29:49.962884+00:00",
+      "sha256": "787d2db82c20fa390a6cd707b5a85fd5a183e929a8fa86c0ebe421a8d780d69c",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ACTUAL_RUNTIME_INVOCATION_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ACTUAL_RUNTIME_INVOCATION_FORENSIC_v0.1.py",
+      "size": 40621,
+      "modified_time": "2026-08-23T15:23:54.351515+00:00",
+      "sha256": "a6bf25cf7bc6115a413fef42e6ad9595aca929132a4e7075265894423f2c5e37",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ISOLATED_RUNTIME_INSTRUMENTATION_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ISOLATED_RUNTIME_INSTRUMENTATION_FORENSIC_v0.1.py",
+      "size": 29018,
+      "modified_time": "2026-08-23T15:15:14.234868+00:00",
+      "sha256": "24825c61681ddb9f71a8d10202573f5aa2a1a14fd4b55b7cae9dde500d70bd5f",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_INVOCATION_TRACE_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_INVOCATION_TRACE_FORENSIC_v0.1.py",
+      "size": 35998,
+      "modified_time": "2026-08-23T15:10:04.762452+00:00",
+      "sha256": "a5b06a0eac5bf790174cad52d57670271ba4b8174f394de80e18af8eb5c45c3e",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+      "size": 42916,
+      "modified_time": "2026-08-23T15:07:54.319837+00:00",
+      "sha256": "7cc7f76ed1a6548453205e7fdf6bc597f407eb573e198d6d333174b6f1aee280",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py",
+      "name": "OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py",
+      "size": 18383,
+      "modified_time": "2026-08-23T14:45:59.147969+00:00",
+      "sha256": "670deb8888e1c883d4216ba2f231117959db3961f28db46f7d31857420061806",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+      "size": 23595,
+      "modified_time": "2026-08-21T22:54:27.596873+00:00",
+      "sha256": "b3c7c8979be6d46bf1f6623a41644c71ff4dbaf2beb44e760637b979ddfd808c",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "size": 26061,
+      "modified_time": "2026-08-21T22:30:58.172695+00:00",
+      "sha256": "20cdeecaee3b274aa249751a64c2dde6b19783fa59c8da21dad3d37d8440d435",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "size": 33072,
+      "modified_time": "2026-08-21T22:18:43.773819+00:00",
+      "sha256": "15171a73bfe1fa4e53de7ccf6189ab6e9f7857ef1a169a0e32a2dc9185ed9e25",
+      "historical_path_hints": [
+        "runtime"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+      "name": "step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+      "size": 34201,
+      "modified_time": "2026-08-19T18:00:13.290786+00:00",
+      "sha256": "8f5c8b4b06241a3060901941ea193fe7953f525b31a88d135195d93934f56a19",
+      "historical_path_hints": [
+        "temp"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15i_signal_state_transition_lifecycle_audit.py",
+      "name": "step15i_signal_state_transition_lifecycle_audit.py",
+      "size": 32266,
+      "modified_time": "2026-08-19T17:56:50.966303+00:00",
+      "sha256": "e7faa6fab0734c37a4a161f20ac8529ebe0d3fd5e843a2caf3c8186b1ca2e286",
+      "historical_path_hints": [
+        "state"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15e_signal_output_consistency_cross_asset_contract_audit.py",
+      "name": "step15e_signal_output_consistency_cross_asset_contract_audit.py",
+      "size": 29557,
+      "modified_time": "2026-08-19T17:38:43.520594+00:00",
+      "sha256": "26ebdf9324c2fe931318663f010c60fe305c2a8bb9e38d643f45cfdb7dea0816",
+      "historical_path_hints": [
+        "output"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_logic.py",
+      "name": "signal_logic.py",
+      "size": 4372,
+      "modified_time": "2026-08-19T16:38:10.029725+00:00",
+      "sha256": "161a525a3cb23d415806f1cd7df0150900ea2bc1a755e42679c55a063d645380",
+      "historical_path_hints": [
+        "log"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_BACKUP_20260818_003611.zip",
+      "name": "ArundaTrader_BACKUP_20260818_003611.zip",
+      "size": 25860838,
+      "modified_time": "2026-08-17T21:06:17.038665+00:00",
+      "sha256": "f5bb98f81d07e2589c313cac2a2647bd73473df329f9dce38b06976d83f88678",
+      "historical_path_hints": [
+        "backup",
+        "backups"
+      ]
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\_report_block.txt",
+      "name": "_report_block.txt",
+      "size": 1640,
+      "modified_time": "2026-08-15T20:19:52.438803+00:00",
+      "sha256": "391b7ceff0c92f5e8a69cea083ea9608f48f94a5a0598a299402a0a0a6c2b3fc",
+      "historical_path_hints": [
+        "_report",
+        "report"
+      ]
+    }
+  ],
+  "possible_report_artifacts": [
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "size": 21139,
+      "modified_time": "2026-08-23T16:54:08.642490+00:00",
+      "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+      "score": 91,
+      "reasons": [
+        "filename:SIGNAL_ELIGIBILITY",
+        "filename:ELIGIBILITY_NO_TRADE",
+        "filename_fragment:live_signal",
+        "filename_fragment:eligibility",
+        "filename_fragment:no_trade",
+        "filename_fragment:signal",
+        "content:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+        "content:SIGNAL_ELIGIBILITY",
+        "content:ELIGIBILITY_NO_TRADE",
+        "content:eligibility gate"
+      ],
+      "content_size": 20363
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "size": 24552,
+      "modified_time": "2026-08-23T17:02:52.416966+00:00",
+      "sha256": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9",
+      "score": 55,
+      "reasons": [
+        "content:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+        "content:SIGNAL_ELIGIBILITY",
+        "content:ELIGIBILITY_NO_TRADE",
+        "content:eligible pool",
+        "content:already eligible",
+        "content:eligibility source",
+        "content:no eligible signals",
+        "content:eligibility gate"
+      ],
+      "content_size": 23489
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_ELIGIBLE_SIGNAL_SET_RECONCILIATION_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_ELIGIBLE_SIGNAL_SET_RECONCILIATION_FORENSIC_v0.1.py",
+      "size": 40063,
+      "modified_time": "2026-08-23T14:57:26.329764+00:00",
+      "sha256": "57c5f36e3a1494712795dce647477e52ff2d3aaf2edf32030e5963ff91073c4e",
+      "score": 33,
+      "reasons": [
+        "filename:ELIGIBLE_SIGNAL",
+        "filename_fragment:eligible",
+        "filename_fragment:signal",
+        "content:eligibility source"
+      ],
+      "content_size": 38340
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "name": "ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+      "size": 21641,
+      "modified_time": "2026-08-24T17:27:52.966150+00:00",
+      "sha256": "e3ae7debd2a1a085fb1cfb0f2f3ed29058bc15d7d4cecc167686726b5bb51fbf",
+      "score": 28,
+      "reasons": [
+        "filename_fragment:eligibility",
+        "filename_fragment:report",
+        "content:SIGNAL_ELIGIBILITY",
+        "content:ELIGIBLE_SIGNAL"
+      ],
+      "content_size": 20851
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUTURE_ONLY_HORIZON_ELIGIBILITY_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_FUTURE_ONLY_HORIZON_ELIGIBILITY_FORENSIC_v0.1.py",
+      "size": 27683,
+      "modified_time": "2026-08-23T14:52:19.806594+00:00",
+      "sha256": "f48a01541be0f9e2adcc3146ec083cd2bf0e5b36a04fe52284adc6fce8fd9412",
+      "score": 14,
+      "reasons": [
+        "filename_fragment:eligibility",
+        "content:ELIGIBLE_SIGNAL"
+      ],
+      "content_size": 26666
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "size": 31036,
+      "modified_time": "2026-08-23T17:06:56.582399+00:00",
+      "sha256": "d092875e186471ad0a5d2a901fb6a0e54f01993caaafa627847344b84a9481d4",
+      "score": 10,
+      "reasons": [
+        "content:upstream eligibility",
+        "content:eligibility gate"
+      ],
+      "content_size": 29876
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+      "size": 19764,
+      "modified_time": "2026-08-24T17:24:34.040841+00:00",
+      "sha256": "b95df60d3fb56c6906d850999977bb688678542c0cbbf592d3087e96187a60b0",
+      "score": 9,
+      "reasons": [
+        "filename_fragment:eligibility",
+        "content:upstream eligibility"
+      ],
+      "content_size": 19044
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_HORIZON_ELIGIBILITY_FORENSIC_v0.1.py",
+      "name": "OUTCOME_HORIZON_ELIGIBILITY_FORENSIC_v0.1.py",
+      "size": 25539,
+      "modified_time": "2026-08-23T14:50:08.470782+00:00",
+      "sha256": "8082aed8d1fe56e545ff8692b6e9b92fd8633038b40eb4a4e20751299cf89649",
+      "score": 9,
+      "reasons": [
+        "filename_fragment:eligibility",
+        "content:no eligible signals"
+      ],
+      "content_size": 24430
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "name": "PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "size": 2554,
+      "modified_time": "2026-08-24T17:28:02.847892+00:00",
+      "sha256": "420101ee4acd13577fc391dd0eece0d1c19a97e3f32faa0dd90ea3ea6201b7d9",
+      "score": 8,
+      "reasons": [
+        "filename_fragment:eligibility",
+        "filename_fragment:report"
+      ],
+      "content_size": 2480
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+      "size": 20422,
+      "modified_time": "2026-08-23T20:07:09.750281+00:00",
+      "sha256": "6a6b1a66a3cae4f98f43c71840b8c616d06ed1cce07c6e64d368748c2c63ef32",
+      "score": 5,
+      "reasons": [
+        "content:no trade"
+      ],
+      "content_size": 19608
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "name": "ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "size": 26243,
+      "modified_time": "2026-08-23T17:11:27.493837+00:00",
+      "sha256": "782081a46f9bbb1d78271b45ec036396981007772979c676d707a14a252acc2d",
+      "score": 5,
+      "reasons": [
+        "content:no trade"
+      ],
+      "content_size": 25211
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\_report_block.txt",
+      "name": "_report_block.txt",
+      "size": 1640,
+      "modified_time": "2026-08-15T20:19:52.438803+00:00",
+      "sha256": "391b7ceff0c92f5e8a69cea083ea9608f48f94a5a0598a299402a0a0a6c2b3fc",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:report"
+      ],
+      "content_size": 1637
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\check_signals.py",
+      "name": "check_signals.py",
+      "size": 331,
+      "modified_time": "2026-08-14T21:31:43.832146+00:00",
+      "sha256": "398eecaa6431786bc4ce1455ec44e72b02a031ebc4b3ea1327ebc731c94d743e",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 308
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_MAIN_TO_PROCESS_SIGNALS_EXECUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "name": "FIND_FUTURE_PRICE_MAIN_TO_PROCESS_SIGNALS_EXECUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "size": 17990,
+      "modified_time": "2026-08-22T23:43:04.435322+00:00",
+      "sha256": "60760223fcc97b272f98efca2412faaa9751efc13e80063cf64493359cecec85",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 17178
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\fix_signals_db.py",
+      "name": "fix_signals_db.py",
+      "size": 816,
+      "modified_time": "2026-08-14T21:22:00.908655+00:00",
+      "sha256": "4492e08fa025ee33702b61154576159f43881954b7c52ab9a1c6cd55db1f61c3",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 774
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_DIRECTION_ELIGIBILITY_ROOT_CAUSE_FORENSIC_v0.1.py",
+      "name": "OUTCOME_v0.3_DIRECTION_ELIGIBILITY_ROOT_CAUSE_FORENSIC_v0.1.py",
+      "size": 26359,
+      "modified_time": "2026-08-23T14:58:49.182303+00:00",
+      "sha256": "01f2667d9f39462fc626a9d6f6804557493c2df5712fbb47f6315e0819fcec58",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:eligibility"
+      ],
+      "content_size": 25187
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_contract.py",
+      "name": "signal_contract.py",
+      "size": 16648,
+      "modified_time": "2026-08-19T18:16:16.152689+00:00",
+      "sha256": "c0510077d19aaa296f12330fcfdea5a82c91f3985aa4bfda8ee2914e71bf53bc",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 15910
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_engine.py",
+      "name": "signal_engine.py",
+      "size": 10471,
+      "modified_time": "2026-08-19T16:45:31.212485+00:00",
+      "sha256": "f08c8f3e168174b4ce23039133489dc3c1a3cd0549a8d5280c17f362eedc1c04",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 9961
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_logic.py",
+      "name": "signal_logic.py",
+      "size": 4372,
+      "modified_time": "2026-08-19T16:38:10.029725+00:00",
+      "sha256": "161a525a3cb23d415806f1cd7df0150900ea2bc1a755e42679c55a063d645380",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 4191
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_CALL_GRAPH_DEEP_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_CALL_GRAPH_DEEP_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "size": 37479,
+      "modified_time": "2026-08-21T22:26:27.490977+00:00",
+      "sha256": "9b25b2c0eb83a2072292355474368e241574e888ab667ad3755f64d4ee9be336",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 35634
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "size": 33072,
+      "modified_time": "2026-08-21T22:18:43.773819+00:00",
+      "sha256": "15171a73bfe1fa4e53de7ccf6189ab6e9f7857ef1a169a0e32a2dc9185ed9e25",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 31391
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_outcome_engine.py",
+      "name": "signal_outcome_engine.py",
+      "size": 29790,
+      "modified_time": "2026-08-23T14:47:45.759750+00:00",
+      "sha256": "f833bee7abfdd192428fca47a98088f3aadbb532c24746acf20dcd85d1755704",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 28403
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_PRODUCTION_CALLER_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_PRODUCTION_CALLER_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "size": 36326,
+      "modified_time": "2026-08-21T22:24:08.549737+00:00",
+      "sha256": "c9575b4279b2f49cddfb8c1339d5e52abc148abaa183a2a4485f39f1e7cc47c4",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 34426
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "size": 26061,
+      "modified_time": "2026-08-21T22:30:58.172695+00:00",
+      "sha256": "20cdeecaee3b274aa249751a64c2dde6b19783fa59c8da21dad3d37d8440d435",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 24763
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+      "name": "SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+      "size": 23595,
+      "modified_time": "2026-08-21T22:54:27.596873+00:00",
+      "sha256": "b3c7c8979be6d46bf1f6623a41644c71ff4dbaf2beb44e760637b979ddfd808c",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 22367
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_performance.py",
+      "name": "signal_performance.py",
+      "size": 4821,
+      "modified_time": "2026-08-14T22:51:17.743643+00:00",
+      "sha256": "9319298d1580c039004febff53735c20e2c335fe46af9d32499ad03e9dd13d8c",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 4590
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_score_contract.py",
+      "name": "signal_score_contract.py",
+      "size": 7059,
+      "modified_time": "2026-08-16T14:33:10.633846+00:00",
+      "sha256": "7c047a1fcbf55960aa6d8a35798e876f8a11f4dbf4b72a14641d425f8a56bfa4",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 6762
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_scorer.py",
+      "name": "signal_scorer.py",
+      "size": 20418,
+      "modified_time": "2026-08-19T18:56:07.557192+00:00",
+      "sha256": "2b35c1dd01d2a04209e609a8e0020a7415101d25901c8b97fe1c7e7e45806d54",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 19431
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_scorer_pre_step18_fix.py",
+      "name": "signal_scorer_pre_step18_fix.py",
+      "size": 20418,
+      "modified_time": "2026-08-19T18:56:07.557192+00:00",
+      "sha256": "2b35c1dd01d2a04209e609a8e0020a7415101d25901c8b97fe1c7e7e45806d54",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 19431
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_semantic_boundary_audit.py",
+      "name": "signal_semantic_boundary_audit.py",
+      "size": 27473,
+      "modified_time": "2026-08-19T17:05:55.278475+00:00",
+      "sha256": "21765baa3562b2b3d90f7a69067788b9e572d47be438b8e7947f4816935154bc",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 26253
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\signal_validator.py",
+      "name": "signal_validator.py",
+      "size": 7935,
+      "modified_time": "2026-08-16T14:00:17.301135+00:00",
+      "sha256": "74c45b1105bdb5455e17bdfec16301292658961240e7a07414c4eaacf500bb47",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 7522
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15a_signal_engine_contract_audit.py",
+      "name": "step15a_signal_engine_contract_audit.py",
+      "size": 40646,
+      "modified_time": "2026-08-19T16:21:16.723004+00:00",
+      "sha256": "33d32b3cf99c9221ba65c181860f7fda7ecb278e2d9af2ffcaa9de2858445bc0",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 38720
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15c_signal_dependency_information_flow_audit.py",
+      "name": "step15c_signal_dependency_information_flow_audit.py",
+      "size": 41976,
+      "modified_time": "2026-08-19T17:18:34.398340+00:00",
+      "sha256": "afe99349d9fa38db0b9da6af04b9fb615fece47b047981a62c34b6f6720b6607",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 40029
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15d_signal_adversarial_integrity_audit.py",
+      "name": "step15d_signal_adversarial_integrity_audit.py",
+      "size": 32572,
+      "modified_time": "2026-08-19T17:31:00.073414+00:00",
+      "sha256": "8cb6b4ddf9d35423757ddd7fb521ea5747bdca967256149343ad85cefa3e9f41",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 32566
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15e_signal_output_consistency_cross_asset_contract_audit.py",
+      "name": "step15e_signal_output_consistency_cross_asset_contract_audit.py",
+      "size": 29557,
+      "modified_time": "2026-08-19T17:38:43.520594+00:00",
+      "sha256": "26ebdf9324c2fe931318663f010c60fe305c2a8bb9e38d643f45cfdb7dea0816",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 28216
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15f_signal_failure_mode_recovery_audit.py",
+      "name": "step15f_signal_failure_mode_recovery_audit.py",
+      "size": 33156,
+      "modified_time": "2026-08-19T17:44:13.951040+00:00",
+      "sha256": "1c18853374a61ccd175978a0a3ca971a4bca0f5aa97223aaf9d5b00e27f7cbac",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 31645
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15g_signal_contract_engine_integration_audit.py",
+      "name": "step15g_signal_contract_engine_integration_audit.py",
+      "size": 29904,
+      "modified_time": "2026-08-19T17:46:50.475022+00:00",
+      "sha256": "8f0b2a3cb8c6c593063a4e3cd6cc6097d6f56995328239e937b3ef67ec027dd2",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 28474
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15h_signal_end_to_end_behavioral_audit.py",
+      "name": "step15h_signal_end_to_end_behavioral_audit.py",
+      "size": 31949,
+      "modified_time": "2026-08-19T17:55:06.980505+00:00",
+      "sha256": "30fec3f3b6819aa65c15bf972b736bbe6585596cd0a0683bea858bfa1338f1cc",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 30509
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15i_signal_state_transition_lifecycle_audit.py",
+      "name": "step15i_signal_state_transition_lifecycle_audit.py",
+      "size": 32266,
+      "modified_time": "2026-08-19T17:56:50.966303+00:00",
+      "sha256": "e7faa6fab0734c37a4a161f20ac8529ebe0d3fd5e843a2caf3c8186b1ca2e286",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 32259
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+      "name": "step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+      "size": 34201,
+      "modified_time": "2026-08-19T18:00:13.290786+00:00",
+      "sha256": "8f5c8b4b06241a3060901941ea193fe7953f525b31a88d135195d93934f56a19",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 32599
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15k_signal_determinism_reproducibility_audit.py",
+      "name": "step15k_signal_determinism_reproducibility_audit.py",
+      "size": 32467,
+      "modified_time": "2026-08-19T18:01:54.596056+00:00",
+      "sha256": "60362a3de7e82a7b12def9fe5dd698f13e6cec5b897f00f3db2014bf551e98b4",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 30989
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15l_signal_contract_immutability_boundary_hardening_audit.py",
+      "name": "step15l_signal_contract_immutability_boundary_hardening_audit.py",
+      "size": 22799,
+      "modified_time": "2026-08-19T18:05:23.066124+00:00",
+      "sha256": "66d7960452dd87ac036ffddba306c86f426f1f89d29a24145d75b12eaa6762eb",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 22792
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15m_signal_contract_engine_stress_resilience_audit.py",
+      "name": "step15m_signal_contract_engine_stress_resilience_audit.py",
+      "size": 33290,
+      "modified_time": "2026-08-19T18:08:17.152858+00:00",
+      "sha256": "667d40d7b5be5092bf6fa4421eee2e15eea3277115817a0382c19b9cb0e917f6",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 31835
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step15n_signal_final_architectural_consistency_audit.py",
+      "name": "step15n_signal_final_architectural_consistency_audit.py",
+      "size": 34601,
+      "modified_time": "2026-08-19T18:14:12.659987+00:00",
+      "sha256": "8a562b1082bc49c06c0710b21e8bf87e6a3cf145fb15ab925e5593921a163ff3",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 33048
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step16_signal_validator_audit.py",
+      "name": "step16_signal_validator_audit.py",
+      "size": 34774,
+      "modified_time": "2026-08-19T18:47:33.474478+00:00",
+      "sha256": "42a11f292c37c4adc0f51b1a38bbabbf7e5d276787fd450824ba1465b35242d5",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 33069
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step17_signal_scoring_audit.py",
+      "name": "step17_signal_scoring_audit.py",
+      "size": 36575,
+      "modified_time": "2026-08-19T22:20:07.974056+00:00",
+      "sha256": "2275304e2d8b7427e960ae84b53a30a90467d78fe8b1593488c44f45ecacd8bf",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 35026
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\step18_signal_score_contract_audit.py",
+      "name": "step18_signal_score_contract_audit.py",
+      "size": 10697,
+      "modified_time": "2026-08-19T22:35:25.969042+00:00",
+      "sha256": "7e78c2ec96287ee25e129cf25bc6c6312c503600743ae6b36ff0ebe69dd58e6f",
+      "score": 4,
+      "reasons": [
+        "filename_fragment:signal"
+      ],
+      "content_size": 10690
+    }
+  ],
+  "final_status": "PRODUCER_RESOLVED_ARTIFACT_MISSING",
+  "final_reason": "The producer of the required report was resolved, but the historical report artifact itself was not found. The report must not be reconstructed or regenerated in this forensic stage.",
+  "safety": {
+    "production_db_write": false,
+    "production_source_modification": false,
+    "eligibility_execution": false,
+    "eligibility_rebuild": false,
+    "candidate_creation": false,
+    "synthetic_report": false,
+    "direction_inference": false,
+    "score_reconstruction": false,
+    "network_access": false
+  },
+  "next_action": "If EXACT_ARTIFACT_RESOLVED: stage the exact artifact into an isolated runtime without modification. If PRODUCER_RESOLVED_ARTIFACT_MISSING: perform a producer execution-boundary forensic audit before any regeneration is considered."
+}

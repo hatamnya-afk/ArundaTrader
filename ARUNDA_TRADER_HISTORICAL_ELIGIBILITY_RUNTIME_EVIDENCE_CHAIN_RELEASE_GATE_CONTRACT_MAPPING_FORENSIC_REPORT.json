@@ -1,0 +1,149 @@
+{
+  "final_verdict": "SEAL_RELEASE_GATE_MAPPING_READY",
+  "forensic_version": "v0.1",
+  "identity": {
+    "artifact_identity": true,
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "producer_identity": true,
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "release_verifier_sha256": "d33e65759d566ad4dcd385c1a4f4302dd0c0ed42d42cb58632597940f336cada",
+    "seal_report_sha256": "e27e78b702a5055652576d34a4ac7800aeb5fdb38b96c2e30bbd228ce60a5a60"
+  },
+  "mapping_state": "SEAL_SCHEMA_MAPPING_PRESENT",
+  "mode": "READ_ONLY_CONTRACT_MAPPING_FORENSIC",
+  "release_gate": {
+    "relevant_field_access": [
+      {
+        "expression": "hashlib.sha256",
+        "line": 61
+      },
+      {
+        "expression": "hashlib.sha256(payload).hexdigest",
+        "line": 92
+      },
+      {
+        "expression": "SEAL_REPORT.is_file",
+        "line": 145
+      },
+      {
+        "expression": "seal.get",
+        "line": 458
+      },
+      {
+        "expression": "seal.get",
+        "line": 460
+      },
+      {
+        "expression": "seal.get",
+        "line": 461
+      },
+      {
+        "expression": "evidence_hashes[name]",
+        "line": 432
+      },
+      {
+        "expression": "hashlib.sha256",
+        "line": 92
+      },
+      {
+        "expression": "seal.get",
+        "line": 464
+      },
+      {
+        "expression": "seal.get('chain_seal', {}).get",
+        "line": 465
+      },
+      {
+        "expression": "seal.get",
+        "line": 466
+      },
+      {
+        "expression": "seal.get",
+        "line": 465
+      }
+    ],
+    "verifier_syntax_valid": true
+  },
+  "repair_required": false,
+  "safety": {
+    "artifact_delete": false,
+    "artifact_modified": false,
+    "artifact_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "producer_modified": false,
+    "production_db_write": false,
+    "release_verifier_modified": false,
+    "seal_modified": false
+  },
+  "seal": {
+    "chain_hash_present": true,
+    "expected_chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "matching_chain_fields": [
+      {
+        "key": "chain_sha256",
+        "path": "chain_seal.chain_sha256",
+        "reasons": [
+          "hash/seal semantic",
+          "64-char SHA256"
+        ],
+        "score": 6,
+        "type": "str",
+        "value": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4"
+      }
+    ],
+    "true_verification_candidates": [
+      {
+        "key": "producer_syntax_valid",
+        "path": "identity.producer_syntax_valid",
+        "reasons": [
+          "verification semantic",
+          "boolean"
+        ],
+        "score": 3,
+        "type": "bool",
+        "value": true
+      },
+      {
+        "key": "verified",
+        "path": "verification.verified",
+        "reasons": [
+          "verification semantic",
+          "boolean"
+        ],
+        "score": 3,
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "verification_candidates": [
+      {
+        "key": "producer_syntax_valid",
+        "path": "identity.producer_syntax_valid",
+        "reasons": [
+          "verification semantic",
+          "boolean"
+        ],
+        "score": 3,
+        "type": "bool",
+        "value": true
+      },
+      {
+        "key": "verified",
+        "path": "verification.verified",
+        "reasons": [
+          "verification semantic",
+          "boolean"
+        ],
+        "score": 3,
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "verified_flag_present": true
+  },
+  "timestamp_utc": "2026-08-24T19:04:41.623678+00:00"
+}

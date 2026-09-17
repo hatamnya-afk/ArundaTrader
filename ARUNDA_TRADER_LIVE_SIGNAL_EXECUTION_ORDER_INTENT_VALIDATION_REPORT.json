@@ -1,0 +1,92 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL EXECUTION ORDER-INTENT VALIDATION",
+  "version": "v0.3",
+  "timestamp_utc": "2026-08-24T22:12:17.006072+00:00",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false,
+    "operational_safety": true
+  },
+  "project_paths": {
+    "runtime": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_REPORT.json",
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "output": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_ORDER_INTENT_VALIDATION_REPORT.json"
+  },
+  "runtime_contract": {
+    "contract": true,
+    "runtime_ready": true,
+    "operational_safety": true,
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "verdict_verified": true,
+    "verdict": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY",
+    "reason": "RUNTIME_CONTRACT_VERIFIED"
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "reason": "ARTIFACT_CONTRACT_VERIFIED"
+  },
+  "order_intent_validation": {
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "validated_intents": 0,
+    "invalid_intents": 0,
+    "intents": [],
+    "invalid_details": []
+  },
+  "order_intent_safety": {
+    "network_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "production_db_write": false
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "final_verdict": "LIVE_SIGNAL_ORDER_INTENT_VALIDATION_READY",
+  "next_stage": "WAIT_FOR_ELIGIBLE_SIGNAL",
+  "forensic_basis": {
+    "runtime_contract_source": "RUNTIME_CONTRACT_FORENSICS_v0.1",
+    "runtime_root_paths": [
+      "$.safety",
+      "$.upstream_gate",
+      "$.identity",
+      "$.artifact",
+      "$.runtime",
+      "$.execution",
+      "$.final_verdict",
+      "$.next_stage"
+    ],
+    "automatic_runtime_repair": false,
+    "automatic_contract_selection": false
+  }
+}

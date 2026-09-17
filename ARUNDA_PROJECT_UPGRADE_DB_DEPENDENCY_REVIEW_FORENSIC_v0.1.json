@@ -1,0 +1,185 @@
+{
+  "version": "v0.1",
+  "frontier": "UPGRADE_DB_DEPENDENCY_REVIEW",
+  "started_utc": "2026-08-27T00:15:32.534635+00:00",
+  "finished_utc": "2026-08-27T00:15:41.423711+00:00",
+  "project_directory": "C:\\Users\\ASUS\\ArundaTrader",
+  "target": "upgrade_db.py",
+  "target_exists": true,
+  "target_sha256": "8bc0eb6c90236a47b7d90a62e9baed645d950a48a551fbdcb2f1793be5907727",
+  "syntax_pass": true,
+  "syntax_error": null,
+  "syntax_line": null,
+  "syntax_column": null,
+  "functions": [],
+  "imports": [
+    "sqlite3"
+  ],
+  "main_function": false,
+  "main_guard": false,
+  "db_paths": [],
+  "db_connect_calls": [
+    {
+      "line": 5,
+      "source": "sqlite3.connect(DB)"
+    }
+  ],
+  "write_operations": [
+    {
+      "line": 17,
+      "type": "CREATE",
+      "sql_term": "CREATE TABLE",
+      "source": "CREATE TABLE IF NOT EXISTS social_metrics ("
+    },
+    {
+      "line": 43,
+      "type": "CREATE",
+      "sql_term": "CREATE TABLE",
+      "source": "CREATE TABLE IF NOT EXISTS hunter_signals ("
+    },
+    {
+      "line": 70,
+      "type": "CREATE",
+      "sql_term": "CREATE TABLE",
+      "source": "CREATE TABLE IF NOT EXISTS signal_outcomes ("
+    },
+    {
+      "line": 104,
+      "type": "CREATE",
+      "sql_term": "CREATE INDEX",
+      "source": "CREATE INDEX IF NOT EXISTS idx_market_records_market_time"
+    },
+    {
+      "line": 109,
+      "type": "CREATE",
+      "sql_term": "CREATE INDEX",
+      "source": "CREATE INDEX IF NOT EXISTS idx_social_asset_time"
+    },
+    {
+      "line": 114,
+      "type": "CREATE",
+      "sql_term": "CREATE INDEX",
+      "source": "CREATE INDEX IF NOT EXISTS idx_signals_market_time"
+    },
+    {
+      "line": 119,
+      "type": "CREATE",
+      "sql_term": "CREATE INDEX",
+      "source": "CREATE INDEX IF NOT EXISTS idx_outcomes_market_time"
+    }
+  ],
+  "production_markers": [
+    {
+      "line": 3,
+      "term": "arunda.db",
+      "source": "DB = \"arunda.db\""
+    }
+  ],
+  "launch_markers": [
+    {
+      "line": 133,
+      "term": "order",
+      "source": "ORDER BY name"
+    }
+  ],
+  "production_path_candidates": [],
+  "direct_project_references": [
+    {
+      "file": "ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.py",
+      "sha256": "655229cbd9cfac5b1c2aef284f8d8eb1ef2c45bb8ff2c5864adec7546f0ce0fe",
+      "references": [
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 12,
+          "column": 16,
+          "target": "upgrade_db.py",
+          "source": "TARGET_NAME = \"upgrade_db.py\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 18,
+          "column": 23,
+          "target": "upgrade_db",
+          "source": "/ \"ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.json\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 23,
+          "column": 23,
+          "target": "upgrade_db",
+          "source": "/ \"ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.txt\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 327,
+          "column": 13,
+          "target": "upgrade_db",
+          "source": "def collect_upgrade_db_structure("
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 490,
+          "column": 15,
+          "target": "upgrade_db.py",
+          "source": "[\"upgrade_db.py_not_found\"],"
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 617,
+          "column": 18,
+          "target": "upgrade_db",
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 639,
+          "column": 18,
+          "target": "upgrade_db",
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 661,
+          "column": 25,
+          "target": "upgrade_db",
+          "source": "structure = collect_upgrade_db_structure("
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 739,
+          "column": 14,
+          "target": "upgrade_db",
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "kind": "TEXT_REFERENCE",
+          "line": 1084,
+          "column": 41,
+          "target": "upgrade_db.py",
+          "source": "\"This artifact does NOT execute upgrade_db.py.\""
+        },
+        {
+          "kind": "CALL_REFERENCE",
+          "line": 1083,
+          "column": 5,
+          "source": "lines.append('This artifact does NOT execute upgrade_db.py.')"
+        }
+      ]
+    }
+  ],
+  "direct_reference_count": 1,
+  "classification": "LAUNCH_REACHABLE_UNRESOLVED",
+  "classification_reasons": [
+    "direct_project_reference_found",
+    "database_write_operations_present",
+    "production_markers_present"
+  ],
+  "forensic_status": "DEPENDENCY_REVIEW_COMPLETE",
+  "predictive_claim": "NOT_ESTABLISHED",
+  "database_used": false,
+  "network_used": false,
+  "execution_performed": false,
+  "file_modification": false,
+  "deletion_performed": false,
+  "quarantine_performed": false
+}

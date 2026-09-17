@@ -1,0 +1,84 @@
+{
+  "forensic": {
+    "name": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_SEMANTIC_BINDING_FORENSIC_v0.1",
+    "mode": "READ_ONLY"
+  },
+  "identity": {
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "expected_producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "seal_report_sha256": "e27e78b702a5055652576d34a4ac7800aeb5fdb38b96c2e30bbd228ce60a5a60",
+    "producer_identity": true,
+    "artifact_identity": true
+  },
+  "real_schema_binding": {
+    "chain_sha256_path": "chain_seal.chain_sha256",
+    "verified_path": "verification.verified",
+    "runtime_identity_path": "verification.runtime_identity",
+    "artifact_contract_path": "verification.artifact_contract",
+    "evidence_contract_path": "verification.evidence_chain_contract",
+    "evidence_presence_path": "evidence_chain.all_expected_reports_present"
+  },
+  "chain": {
+    "expected_chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "actual_chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "chain_hash_match": true,
+    "producer_seal_match": true,
+    "artifact_seal_match": true
+  },
+  "verification": {
+    "verified": true,
+    "runtime_identity": true,
+    "artifact_contract": true,
+    "evidence_chain_contract": true,
+    "evidence_files_contract": true,
+    "semantic_binding": true
+  },
+  "evidence": [
+    {
+      "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_REPORT.json",
+      "exists": true,
+      "valid_json": true,
+      "sha256": "66abccbeee0b2a05654b1f3a7b763ad9fddf91fe74657ca70b3cf0b5ec673c97"
+    },
+    {
+      "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_REPORT.json",
+      "exists": true,
+      "valid_json": true,
+      "sha256": "497c9c53d43652a6316db964b6247f4dbc2d9e8f736da22f4daab1a7de93b265"
+    },
+    {
+      "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_REPORT.json",
+      "exists": true,
+      "valid_json": true,
+      "sha256": "54461245e1efb94141cae03872d8b7fb789440dfc2ada8b33cbe52668acce4ee"
+    },
+    {
+      "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_REPORT.json",
+      "exists": true,
+      "valid_json": true,
+      "sha256": "6a4351b92ebeb874cafa46a571b4d3aad907824239053d69bec43eef4248e7ab"
+    },
+    {
+      "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_FORENSIC_REPORT.json",
+      "exists": true,
+      "valid_json": true,
+      "sha256": "1d2971383d7ba10256654a5194fd6fc414902ef5903707ad0086863e12649893"
+    }
+  ],
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "artifact_modified": false,
+    "artifact_deleted": false,
+    "seal_report_modified": false,
+    "production_db_written": false,
+    "network_access": false
+  },
+  "mapping": {
+    "state": "SEMANTIC_BINDING_VERIFIED",
+    "repair_required": false
+  },
+  "verdict": "RELEASE_GATE_SEMANTIC_BINDING_VERIFIED"
+}

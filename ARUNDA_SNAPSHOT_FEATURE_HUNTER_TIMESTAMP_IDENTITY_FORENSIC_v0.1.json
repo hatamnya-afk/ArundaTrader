@@ -1,0 +1,470 @@
+{
+  "analyses": [
+    {
+      "asset_symbol": "AAVE",
+      "asset_symbol_raw": "AAVE",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "AAVE",
+        "delta_seconds": null,
+        "hunter_id": 15,
+        "timestamp": "2026-08-15T00:29:54.110870",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:54.110870",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "ADA",
+      "asset_symbol_raw": "ADA",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "ADA",
+        "delta_seconds": null,
+        "hunter_id": 8,
+        "timestamp": "2026-08-15T00:29:50.411446",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.411446",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "AVAX",
+      "asset_symbol_raw": "AVAX",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "AVAX",
+        "delta_seconds": null,
+        "hunter_id": 19,
+        "timestamp": "2026-08-15T00:29:50.508921",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.508921",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "BTC",
+      "asset_symbol_raw": "BTC",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "BTC",
+        "delta_seconds": null,
+        "hunter_id": 12,
+        "timestamp": "2026-08-15T00:29:50.318095",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.318095",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 121,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "DOGE",
+      "asset_symbol_raw": "DOGE",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "DOGE",
+        "delta_seconds": null,
+        "hunter_id": 9,
+        "timestamp": "2026-08-15T00:29:51.184250",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:51.184250",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "DOT",
+      "asset_symbol_raw": "DOT",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "DOT",
+        "delta_seconds": null,
+        "hunter_id": 34,
+        "timestamp": "2026-08-15T00:29:51.900559",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:51.900559",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "ETH",
+      "asset_symbol_raw": "ETH",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "ETH",
+        "delta_seconds": null,
+        "hunter_id": 13,
+        "timestamp": "2026-08-15T00:29:50.416166",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.416166",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 121,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "LINK",
+      "asset_symbol_raw": "LINK",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "LINK",
+        "delta_seconds": null,
+        "hunter_id": 10,
+        "timestamp": "2026-08-15T00:29:51.197130",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:51.197130",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "LTC",
+      "asset_symbol_raw": "LTC",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "LTC",
+        "delta_seconds": null,
+        "hunter_id": 17,
+        "timestamp": "2026-08-15T00:29:50.082879",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.082879",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "NEAR",
+      "asset_symbol_raw": "NEAR",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "NEAR",
+        "delta_seconds": null,
+        "hunter_id": 28,
+        "timestamp": "2026-08-15T00:29:51.922309",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:51.922309",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SHIB",
+      "asset_symbol_raw": "SHIB",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "SHIB",
+        "delta_seconds": null,
+        "hunter_id": 5,
+        "timestamp": "2026-08-15T00:29:52.353078",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:52.353078",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SOL",
+      "asset_symbol_raw": "SOL",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "SOL",
+        "delta_seconds": null,
+        "hunter_id": 7,
+        "timestamp": "2026-08-15T00:29:50.090036",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.090036",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 121,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SUI",
+      "asset_symbol_raw": "SUI",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "SUI",
+        "delta_seconds": null,
+        "hunter_id": 25,
+        "timestamp": "2026-08-15T00:29:53.823728",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:53.823728",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "UNI",
+      "asset_symbol_raw": "UNI",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "UNI",
+        "delta_seconds": null,
+        "hunter_id": 36,
+        "timestamp": "2026-08-15T00:29:52.334492",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:52.334492",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 113,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "XRP",
+      "asset_symbol_raw": "XRP",
+      "classification": "SAME_SYMBOL_TIMESTAMP_MISMATCH",
+      "exact_matches": [],
+      "feature_timestamp": {
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "utc": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol": {
+        "asset": "XRP",
+        "delta_seconds": null,
+        "hunter_id": 6,
+        "timestamp": "2026-08-15T00:29:50.035769",
+        "timestamp_metadata": {
+          "parseable": true,
+          "raw": "2026-08-15T00:29:50.035769",
+          "timezone_aware": false,
+          "utc": null
+        },
+        "within_tolerance": false
+      },
+      "nearest_timestamp_candidates": [],
+      "observation_count": 121,
+      "same_symbol_candidate_count": 1,
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    }
+  ],
+  "artifact_sha256": "fa879c23bf29324d8ca3a114b1a7509f35ed5a4b9b2060757ef8ba496c2fde77",
+  "comparison_rule": "hunter_signals.asset + hunter_signals.timestamp",
+  "database_modified": false,
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_contract_modified": false,
+  "forensic": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_TIMESTAMP_IDENTITY_FORENSIC_v0.1",
+  "identity_rule": "asset_symbol + snapshot_timestamp",
+  "match_tolerance_seconds": 120,
+  "mode": "READ_ONLY",
+  "network": false,
+  "outcome_calculation": false,
+  "prediction": false,
+  "signal_generation": false,
+  "summary": {
+    "exact_matches": 0,
+    "feature_identities": 15,
+    "hunter_rows": 50,
+    "nearby_different_symbol": 0,
+    "no_comparable_timestamp": 0,
+    "same_symbol_timestamp_mismatch": 15,
+    "same_symbol_within_tolerance": 0,
+    "unmatched": 0
+  },
+  "timestamp_policy": {
+    "aware_vs_aware": "UTC_COMPARISON",
+    "aware_vs_naive": "NOT_COMPARABLE",
+    "naive_vs_naive": "DIRECT_COMPARISON",
+    "normalization_for_matching": false,
+    "raw_values_preserved": true
+  },
+  "trading_decision": false
+}

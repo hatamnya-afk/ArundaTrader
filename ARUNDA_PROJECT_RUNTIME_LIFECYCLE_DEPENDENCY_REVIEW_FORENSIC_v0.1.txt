@@ -1,0 +1,81 @@
+==========================================================================================
+ARUNDA PROJECT RUNTIME LIFECYCLE DEPENDENCY REVIEW FORENSIC v0.1
+==========================================================================================
+Project Directory : C:\Users\ASUS\ArundaTrader
+Target            : ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py
+Started UTC       : 2026-08-26T20:53:33.323719+00:00
+Finished UTC      : 2026-08-26T20:53:33.436302+00:00
+Mode              : READ ONLY
+Database          : NOT USED
+Network           : FORBIDDEN
+File Modification : FORBIDDEN
+Execution         : STATIC ANALYSIS ONLY
+------------------------------------------------------------------------------------------
+
+==========================================================================================
+TARGET FILE
+==========================================================================================
+EXISTS            : True
+SYNTAX PASS       : False
+SHA256            : 778ce10bcb280cdd28f9ca89d06276ce502e42b36e8d04dff7dd413cccb6f409
+CLASSIFICATION    : SYNTAX_FAILURE_REQUIRES_REPAIR_OR_QUARANTINE
+ERROR TYPE        : IndentationError
+ERROR MESSAGE     : expected an indented block after function definition on line 26 (<unknown>, line 27)
+ERROR LINE        : 27
+
+IMPORTS
+  - None
+
+FUNCTIONS
+  - None
+
+SQLITE / DATABASE MARKERS
+  - SQLITE3_IMPORT
+  - SQLITE_CONNECT
+  - SQLITE_DATABASE_REFERENCE
+  - SQL_SELECT
+
+RUNTIME MARKERS
+  - LIVE
+  - PAPER
+  - EXECUTION
+  - PRODUCTION
+  - ORDER
+  - TRADE
+
+==========================================================================================
+DIRECT PROJECT REFERENCES
+==========================================================================================
+FILE           : ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.py
+MATCHED TOKEN  : ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py
+------------------------------------------------------------
+FILE           : ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py
+MATCHED TOKEN  : ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py
+------------------------------------------------------------
+
+==========================================================================================
+DEPENDENCY ASSESSMENT
+==========================================================================================
+DIRECT REFERENCE FOUND : True
+SQLITE USAGE PRESENT  : True
+RUNTIME MARKERS       : True
+ASSESSMENT : DIRECT_PROJECT_DEPENDENCY_REQUIRES_REVIEW
+
+==========================================================================================
+FORENSIC STATUS
+==========================================================================================
+FORENSIC STATUS : DIRECT_RUNTIME_DEPENDENCY_REVIEW_REQUIRED
+PREDICTIVE CLAIM : NOT ESTABLISHED
+DATABASE WRITE   : NOT PERFORMED
+NETWORK          : NOT USED
+PRODUCTION RUN   : NOT PERFORMED
+FILE MODIFICATION: NOT PERFORMED
+QUARANTINE       : NOT PERFORMED
+DELETION         : NOT PERFORMED
+
+==========================================================================================
+ARTIFACT
+==========================================================================================
+Artifact : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.json
+Report   : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.txt
+SHA256   : cb6ed42cfb8d9e55c16cd9f830bbe13f9cb0d397f691a8c3b45f9d9b59dded7e

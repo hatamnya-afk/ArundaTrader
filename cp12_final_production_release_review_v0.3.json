@@ -1,0 +1,224 @@
+{
+  "checkpoint": "CP12",
+  "version": "v0.3",
+  "mode": "READ_ONLY",
+  "result": "BLOCKED",
+  "status": "BLOCKED",
+  "execution_enabled": false,
+  "release_authorization": "NOT GRANTED",
+  "next_checkpoint": "MINIMAL ACTION FOR REAL BLOCKER(S)",
+  "cp13": "NONE",
+  "project_dir": "C:\\Users\\ASUS\\ArundaTrader",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "pipeline": "C:\\Users\\ASUS\\ArundaTrader\\arunda_pipeline.py",
+  "launch_timestamp": "2026-08-31T00:00:00+00:00",
+  "expected_assets": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "XRP",
+    "ADA",
+    "DOGE",
+    "SHIB",
+    "LINK",
+    "AVAX",
+    "DOT",
+    "LTC",
+    "UNI",
+    "AAVE",
+    "SUI",
+    "NEAR"
+  ],
+  "pipeline_exit_code": 0,
+  "execution_scan": {
+    "execution_enabled": false,
+    "execution_names": [],
+    "exchange_names": [],
+    "legacy_references": [],
+    "pass": true
+  },
+  "snapshot": {
+    "present": false,
+    "id": null,
+    "sha256": false,
+    "sha256_matches_payload": null,
+    "deterministic": true,
+    "random": false,
+    "uuid": false,
+    "timestamp_as_id": false,
+    "pass": false
+  },
+  "snapshot_parser_source": "CURRENT_RUNTIME_SNAPSHOT",
+  "opportunity_contract": {
+    "exists": true,
+    "max_candidates": 15,
+    "min_history_points": 60,
+    "engine_version": "OPPORTUNITY_v0.3",
+    "pass": true
+  },
+  "opportunity_coverage": {
+    "expected": 15,
+    "actual": 15,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "pass": true
+  },
+  "opportunity_actual": 15,
+  "opportunity_eligible": 0,
+  "opportunity_no_trade": 15,
+  "signal_score_decision": {
+    "signal_coverage": {
+      "expected": 15,
+      "actual": 15,
+      "unique": 15,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "pass": true
+    },
+    "score_coverage": {
+      "expected": 15,
+      "actual": 15,
+      "unique": 15,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "pass": true
+    },
+    "decision_coverage": {
+      "expected": 15,
+      "actual": 15,
+      "unique": 15,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "pass": true
+    },
+    "mismatches": [],
+    "pass": true
+  },
+  "risk_coverage": {
+    "expected": 15,
+    "actual": 15,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "pass": true
+  },
+  "trade_gate_coverage": {
+    "expected": 15,
+    "actual": 15,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "pass": true
+  },
+  "trade_ready": 0,
+  "order_intent": {
+    "coverage": {
+      "expected": 15,
+      "actual": 0,
+      "unique": 0,
+      "missing": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "extra": [],
+      "duplicates": [],
+      "pass": false
+    },
+    "rows": 0,
+    "forbidden_fields": [],
+    "invalid_keys": [],
+    "required_missing": [],
+    "pass": true
+  },
+  "identity": {
+    "snapshot": {
+      "present": false,
+      "id": null,
+      "sha256": false,
+      "sha256_matches_payload": null,
+      "deterministic": true,
+      "random": false,
+      "uuid": false,
+      "timestamp_as_id": false,
+      "pass": false
+    },
+    "snapshot_source": "CURRENT_RUNTIME_SNAPSHOT",
+    "stages": {
+      "opportunity": [],
+      "trade_gate": [],
+      "order_intent": []
+    },
+    "mismatches": [],
+    "missing_authoritative_ids": [
+      "opportunity",
+      "trade_gate"
+    ],
+    "pass": false
+  },
+  "data_purity": {
+    "positive_safety_violations": [],
+    "pass": true
+  },
+  "launch_boundary": {
+    "launch_boundary_reference": true,
+    "legacy_isolation_reference": true,
+    "legacy_mentions": [
+      "market_technical",
+      "legacy"
+    ],
+    "pass": true
+  },
+  "write_safety": {
+    "order_submission_hits": [
+      "\\border_submission\\s*[:=]\\s*(?!none\\b)(?!0\\b)"
+    ],
+    "exchange_write_hits": [
+      "\\bexchange_write\\s*[:=]\\s*(?!none\\b)(?!0\\b)"
+    ],
+    "execution_bypass_hits": [],
+    "execution_db_write_hits": [],
+    "operational_db_writes_allowed": true,
+    "pass": false
+  },
+  "warnings": [],
+  "blockers": [
+    {
+      "control": "CP12-04",
+      "blocker": "Current runtime snapshot identity failed.",
+      "boundary": "Current Runtime Snapshot",
+      "provenance": "CURRENT_RUNTIME_SNAPSHOT"
+    },
+    {
+      "control": "CP12-09",
+      "blocker": "Current runtime identity propagation failed.",
+      "boundary": "Snapshot → Opportunity → Trade Gate → Order Intent",
+      "provenance": "CURRENT_RUNTIME_IDENTITY"
+    },
+    {
+      "control": "CP12-11",
+      "blocker": "Execution/order/exchange write safety failed.",
+      "boundary": "Execution Boundary",
+      "provenance": "CURRENT_PRODUCTION_RUNTIME"
+    }
+  ]
+}

@@ -1,0 +1,641 @@
+"""
+ARUNDA TRADER
+TECHNICAL CONTRACT VALIDATOR INTEGRATION v0.1
+
+PURPOSE
+-------
+Read-only forensic integration test between:
+
+    TECHNICAL CONTRACT SCOPE
+            +
+        VALIDATOR
+
+The validator MUST receive only the trusted 987 records.
+
+EXPECTED:
+    TOTAL        = 6909
+    IN-SCOPE     = 987
+    OUT-OF-SCOPE = 5922
+    INVALID      = 0
+
+IMPORTANT
+---------
+This script DOES NOT modify the production validator.
+This script DOES NOT modify the database.
+
+NO:
+    INSERT
+    UPDATE
+    DELETE
+    ALTER
+    CREATE
+    DROP
+    COMMIT
+    VACUUM
+    REINDEX
+    NETWORK
+    PRODUCTION MODULE EXECUTION
+"""
+
+from __future__ import annotations
+
+import sqlite3
+from pathlib import Path
+from collections import Counter
+
+
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
+
+DB_PATH = Path(r"C:\Users\ASUS\ArundaTrader\arunda.db")
+
+TABLE = "market_technical"
+
+# Trusted contract population
+EXPECTED_TOTAL = 6909
+EXPECTED_IN_SCOPE = 987
+EXPECTED_OUT_OF_SCOPE = 5922
+EXPECTED_INVALID = 0
+
+TRUSTED_HISTORY_POINTS = 200
+TRUSTED_SOURCE = "REAL_MARKET_HISTORY"
+TRUSTED_TECHNICAL_VERSION = "TECHNICAL_v0.5"
+TRUSTED_ENGINE_VERSION = "TECHNICAL_v0.5"
+
+
+# =============================================================================
+# READ-ONLY DATABASE
+# =============================================================================
+
+def connect_read_only() -> sqlite3.Connection:
+    """
+    Open SQLite database strictly in read-only mode.
+    """
+    uri = f"file:{DB_PATH.as_posix()}?mode=ro"
+    return sqlite3.connect(uri, uri=True)
+
+
+# =============================================================================
+# TECHNICAL CONTRACT SCOPE
+# =============================================================================
+
+def contract_scope_predicate() -> tuple[str, tuple]:
+    """
+    Exact trusted population predicate.
+
+    This MUST remain identical to the predicate verified by:
+        ARUNDA_TECHNICAL_CONTRACT_SCOPE_FORENSIC_v0.1.py
+    """
+
+    sql = """
+        symbol IS NOT NULL
+        AND TRIM(symbol) <> ''
+        AND history_points = ?
+        AND price IS NOT NULL
+        AND close IS NOT NULL
+        AND volatility IS NOT NULL
+        AND volatility_20 IS NOT NULL
+        AND regime IS NOT NULL
+        AND technical_available IS NOT NULL
+        AND technical_completeness IS NOT NULL
+        AND technical_version = ?
+        AND engine_version = ?
+        AND source = ?
+    """
+
+    params = (
+        TRUSTED_HISTORY_POINTS,
+        TRUSTED_TECHNICAL_VERSION,
+        TRUSTED_ENGINE_VERSION,
+        TRUSTED_SOURCE,
+    )
+
+    return sql, params
+
+
+# =============================================================================
+# VALIDATOR CONTRACT
+# =============================================================================
+
+def validate_record(row: sqlite3.Row) -> tuple[bool, list[str]]:
+    """
+    Minimal contract-level validator.
+
+    This is NOT a replacement for the production technical validator.
+
+    It verifies only the conditions required for a record already admitted
+    into the trusted contract scope.
+    """
+
+    flags: list[str] = []
+
+    # -------------------------------------------------------------------------
+    # Identity
+    # -------------------------------------------------------------------------
+
+    if row["symbol"] is None or str(row["symbol"]).strip() == "":
+        flags.append("MISSING_SYMBOL")
+
+    # -------------------------------------------------------------------------
+    # History
+    # -------------------------------------------------------------------------
+
+    if row["history_points"] != TRUSTED_HISTORY_POINTS:
+        flags.append("INVALID_HISTORY_POINTS")
+
+    # -------------------------------------------------------------------------
+    # Price
+    # -------------------------------------------------------------------------
+
+    price = row["price"]
+
+    if price is None:
+        flags.append("MISSING_PRICE")
+    elif price <= 0:
+        flags.append("INVALID_PRICE")
+
+    close = row["close"]
+
+    if close is None:
+        flags.append("MISSING_CLOSE")
+    elif close <= 0:
+        flags.append("INVALID_CLOSE")
+
+    # -------------------------------------------------------------------------
+    # Volatility
+    # -------------------------------------------------------------------------
+
+    volatility = row["volatility"]
+
+    if volatility is None:
+        flags.append("MISSING_VOLATILITY")
+    elif volatility < 0:
+        flags.append("INVALID_VOLATILITY")
+
+    volatility_20 = row["volatility_20"]
+
+    if volatility_20 is None:
+        flags.append("MISSING_VOLATILITY_20")
+    elif volatility_20 < 0:
+        flags.append("INVALID_VOLATILITY_20")
+
+    # -------------------------------------------------------------------------
+    # Regime
+    # -------------------------------------------------------------------------
+
+    if row["regime"] is None:
+        flags.append("MISSING_REGIME")
+
+    # -------------------------------------------------------------------------
+    # Technical availability
+    # -------------------------------------------------------------------------
+
+    technical_available = row["technical_available"]
+
+    if technical_available not in (0, 1):
+        flags.append("INVALID_TECHNICAL_AVAILABLE")
+
+    # -------------------------------------------------------------------------
+    # Completeness
+    # -------------------------------------------------------------------------
+
+    completeness = row["technical_completeness"]
+
+    if completeness is None:
+        flags.append("MISSING_TECHNICAL_COMPLETENESS")
+    elif not 0 <= completeness <= 1:
+        flags.append("INVALID_TECHNICAL_COMPLETENESS")
+
+    # -------------------------------------------------------------------------
+    # Provenance
+    # -------------------------------------------------------------------------
+
+    if row["technical_version"] != TRUSTED_TECHNICAL_VERSION:
+        flags.append("INVALID_TECHNICAL_VERSION")
+
+    if row["engine_version"] != TRUSTED_ENGINE_VERSION:
+        flags.append("INVALID_ENGINE_VERSION")
+
+    if row["source"] != TRUSTED_SOURCE:
+        flags.append("INVALID_SOURCE")
+
+    return len(flags) == 0, flags
+
+
+# =============================================================================
+# MAIN FORENSIC
+# =============================================================================
+
+def main() -> None:
+
+    print("=" * 100)
+    print("TECHNICAL CONTRACT VALIDATOR INTEGRATION v0.1")
+    print("=" * 100)
+
+    print("MODE                 : READ ONLY")
+    print(f"DATABASE             : {DB_PATH}")
+    print("WRITE OPERATIONS     : NONE")
+    print("PRODUCTION EXECUTION : NONE")
+    print("NETWORK              : NONE")
+    print()
+
+    conn = connect_read_only()
+    conn.row_factory = sqlite3.Row
+
+    try:
+
+        # =====================================================================
+        # TABLE CHECK
+        # =====================================================================
+
+        table_exists = conn.execute(
+            """
+            SELECT 1
+            FROM sqlite_master
+            WHERE type = 'table'
+              AND name = ?
+            """,
+            (TABLE,),
+        ).fetchone()
+
+        if table_exists is None:
+            raise RuntimeError(f"{TABLE} does not exist")
+
+        print("[PASS] market_technical exists")
+        print()
+
+        # =====================================================================
+        # TOTAL
+        # =====================================================================
+
+        total = conn.execute(
+            f"SELECT COUNT(*) FROM {TABLE}"
+        ).fetchone()[0]
+
+        total_status = total == EXPECTED_TOTAL
+
+        print("DATABASE TOTAL")
+        print(f"  ACTUAL   : {total}")
+        print(f"  EXPECTED : {EXPECTED_TOTAL}")
+        print(f"  STATUS   : {'PASS' if total_status else 'FAIL'}")
+        print()
+
+        # =====================================================================
+        # CONTRACT SCOPE
+        # =====================================================================
+
+        scope_sql, scope_params = contract_scope_predicate()
+
+        in_scope = conn.execute(
+            f"""
+            SELECT COUNT(*)
+            FROM {TABLE}
+            WHERE {scope_sql}
+            """,
+            scope_params,
+        ).fetchone()[0]
+
+        out_scope = total - in_scope
+
+        scope_status = in_scope == EXPECTED_IN_SCOPE
+        out_scope_status = out_scope == EXPECTED_OUT_OF_SCOPE
+
+        print("CONTRACT SCOPE")
+        print(f"  IN-SCOPE ACTUAL     : {in_scope}")
+        print(f"  IN-SCOPE EXPECTED   : {EXPECTED_IN_SCOPE}")
+        print(f"  IN-SCOPE STATUS     : {'PASS' if scope_status else 'FAIL'}")
+        print()
+        print(f"  OUT-SCOPE ACTUAL    : {out_scope}")
+        print(f"  OUT-SCOPE EXPECTED  : {EXPECTED_OUT_OF_SCOPE}")
+        print(f"  OUT-SCOPE STATUS    : {'PASS' if out_scope_status else 'FAIL'}")
+        print()
+
+        # =====================================================================
+        # SIMULATED VALIDATOR INPUT
+        #
+        # IMPORTANT:
+        # The validator input is constructed ONLY from the contract predicate.
+        # =====================================================================
+
+        rows = conn.execute(
+            f"""
+            SELECT
+                id,
+                symbol,
+                history_points,
+                price,
+                close,
+                volatility,
+                volatility_20,
+                regime,
+                technical_available,
+                technical_completeness,
+                technical_version,
+                engine_version,
+                source
+            FROM {TABLE}
+            WHERE {scope_sql}
+            ORDER BY id
+            """,
+            scope_params,
+        ).fetchall()
+
+        validator_input_count = len(rows)
+
+        validator_input_status = (
+            validator_input_count == EXPECTED_IN_SCOPE
+        )
+
+        print("-" * 100)
+        print("VALIDATOR INPUT")
+        print("-" * 100)
+
+        print(f"ROWS SENT TO VALIDATOR : {validator_input_count}")
+        print(f"EXPECTED                : {EXPECTED_IN_SCOPE}")
+        print(
+            f"STATUS                  : "
+            f"{'PASS' if validator_input_status else 'FAIL'}"
+        )
+        print()
+
+        # =====================================================================
+        # VERIFY INPUT IDENTITY
+        #
+        # Every validator input MUST satisfy the contract predicate.
+        # =====================================================================
+
+        leakage = []
+
+        for row in rows:
+
+            # Re-check identity in Python.
+            if row["history_points"] != TRUSTED_HISTORY_POINTS:
+                leakage.append((row["id"], "history_points"))
+
+            if row["technical_version"] != TRUSTED_TECHNICAL_VERSION:
+                leakage.append((row["id"], "technical_version"))
+
+            if row["engine_version"] != TRUSTED_ENGINE_VERSION:
+                leakage.append((row["id"], "engine_version"))
+
+            if row["source"] != TRUSTED_SOURCE:
+                leakage.append((row["id"], "source"))
+
+            if row["price"] is None:
+                leakage.append((row["id"], "price"))
+
+            if row["close"] is None:
+                leakage.append((row["id"], "close"))
+
+        input_integrity_status = len(leakage) == 0
+
+        print("VALIDATOR INPUT INTEGRITY")
+        print(f"LEAKAGE / CONTRACT VIOLATIONS : {len(leakage)}")
+        print(
+            f"STATUS                         : "
+            f"{'PASS' if input_integrity_status else 'FAIL'}"
+        )
+
+        if leakage:
+            print()
+            print("FIRST VIOLATIONS:")
+            for item in leakage[:20]:
+                print(f"  id={item[0]} field={item[1]}")
+
+        print()
+
+        # =====================================================================
+        # RUN CONTRACT VALIDATOR
+        # =====================================================================
+
+        valid_count = 0
+        invalid_count = 0
+        invalid_records = []
+
+        flag_counter: Counter[str] = Counter()
+
+        for row in rows:
+
+            valid, flags = validate_record(row)
+
+            if valid:
+                valid_count += 1
+            else:
+                invalid_count += 1
+
+                invalid_records.append(
+                    {
+                        "id": row["id"],
+                        "symbol": row["symbol"],
+                        "flags": flags,
+                    }
+                )
+
+                flag_counter.update(flags)
+
+        # =====================================================================
+        # VALIDATOR RESULT
+        # =====================================================================
+
+        validator_status = invalid_count == EXPECTED_INVALID
+
+        print("-" * 100)
+        print("VALIDATOR RESULT")
+        print("-" * 100)
+
+        print(f"VALID RECORDS   : {valid_count}")
+        print(f"INVALID RECORDS : {invalid_count}")
+        print(f"EXPECTED INVALID: {EXPECTED_INVALID}")
+        print(
+            f"STATUS          : "
+            f"{'PASS' if validator_status else 'FAIL'}"
+        )
+        print()
+
+        # =====================================================================
+        # INVALID DETAILS
+        # =====================================================================
+
+        if invalid_records:
+
+            print("INVALID RECORD DETAILS")
+            print("-" * 100)
+
+            for record in invalid_records[:30]:
+
+                print(
+                    f"id={record['id']} "
+                    f"symbol={record['symbol']} "
+                    f"flags={','.join(record['flags'])}"
+                )
+
+            print()
+
+            print("INVALID FLAG DISTRIBUTION")
+
+            for flag, count in flag_counter.most_common():
+                print(f"  {flag:<40}: {count}")
+
+            print()
+
+        # =====================================================================
+        # OUT-OF-SCOPE NON-INTERFERENCE
+        #
+        # We verify that the validator input count is exactly equal to scope.
+        # No out-of-scope row can enter through this integration boundary.
+        # =====================================================================
+
+        print("-" * 100)
+        print("OUT-OF-SCOPE NON-INTERFERENCE")
+        print("-" * 100)
+
+        non_interference = (
+            validator_input_count == in_scope
+            and in_scope + out_scope == total
+        )
+
+        print(f"TOTAL DATABASE ROWS : {total}")
+        print(f"CONTRACT INPUT       : {validator_input_count}")
+        print(f"EXCLUDED             : {out_scope}")
+        print(
+            f"STATUS               : "
+            f"{'PASS' if non_interference else 'FAIL'}"
+        )
+        print()
+
+        # =====================================================================
+        # TRUSTED POPULATION FINGERPRINT
+        # =====================================================================
+
+        print("-" * 100)
+        print("TRUSTED POPULATION FINGERPRINT")
+        print("-" * 100)
+
+        if rows:
+
+            ids = [row["id"] for row in rows]
+
+            symbols = [row["symbol"] for row in rows]
+
+            print(f"MIN ID              : {min(ids)}")
+            print(f"MAX ID              : {max(ids)}")
+            print(f"DISTINCT IDs        : {len(set(ids))}")
+            print(f"DISTINCT SYMBOLS    : {len(set(symbols))}")
+            print(
+                f"HISTORY POINTS      : "
+                f"{Counter(row['history_points'] for row in rows)}"
+            )
+            print(
+                f"SOURCE              : "
+                f"{Counter(row['source'] for row in rows)}"
+            )
+            print(
+                f"TECHNICAL VERSION   : "
+                f"{Counter(row['technical_version'] for row in rows)}"
+            )
+            print(
+                f"ENGINE VERSION      : "
+                f"{Counter(row['engine_version'] for row in rows)}"
+            )
+
+        print()
+
+        # =====================================================================
+        # CONSERVATION
+        # =====================================================================
+
+        conservation_status = (
+            total == EXPECTED_TOTAL
+            and in_scope == EXPECTED_IN_SCOPE
+            and out_scope == EXPECTED_OUT_OF_SCOPE
+            and in_scope + out_scope == total
+        )
+
+        print("-" * 100)
+        print("SCOPE CONSERVATION")
+        print("-" * 100)
+
+        print(
+            f"{in_scope} + {out_scope} = "
+            f"{in_scope + out_scope}"
+        )
+
+        print(f"EXPECTED TOTAL : {EXPECTED_TOTAL}")
+
+        print(
+            f"STATUS         : "
+            f"{'PASS' if conservation_status else 'FAIL'}"
+        )
+
+        print()
+
+        # =====================================================================
+        # FINAL
+        # =====================================================================
+
+        checks = {
+            "DATABASE_TOTAL": total_status,
+            "IN_SCOPE": scope_status,
+            "OUT_OF_SCOPE": out_scope_status,
+            "VALIDATOR_INPUT_COUNT": validator_input_status,
+            "INPUT_INTEGRITY": input_integrity_status,
+            "VALIDATOR_RESULT": validator_status,
+            "NON_INTERFERENCE": non_interference,
+            "CONSERVATION": conservation_status,
+        }
+
+        print("=" * 100)
+        print("FINAL CONTRACT → VALIDATOR INTEGRATION")
+        print("=" * 100)
+
+        for name, status in checks.items():
+            print(
+                f"{name:<30}: "
+                f"{'PASS' if status else 'FAIL'}"
+            )
+
+        final_status = all(checks.values())
+
+        print()
+        print(
+            f"FINAL STATUS                 : "
+            f"{'PASS' if final_status else 'FAIL'}"
+        )
+
+        print()
+
+        if final_status:
+
+            print("TECHNICAL CONTRACT → VALIDATOR")
+            print("INTEGRATION VERIFIED")
+
+            print()
+            print("VALIDATOR INPUT              = 987")
+            print("OUT-OF-SCOPE EXCLUDED        = 5922")
+            print("TRUE INVALID                 = 0")
+            print()
+            print("THE 5922 HISTORICAL RECORDS")
+            print("WERE NOT VALIDATED.")
+
+        else:
+
+            print("INTEGRATION NOT VERIFIED")
+            print("DO NOT MODIFY PRODUCTION VALIDATOR.")
+
+    finally:
+
+        conn.close()
+
+    print()
+    print("=" * 100)
+    print("READ-ONLY INTEGRATION FORENSIC COMPLETE")
+    print("=" * 100)
+
+
+# =============================================================================
+# ENTRY POINT
+# =============================================================================
+
+if __name__ == "__main__":
+    main()

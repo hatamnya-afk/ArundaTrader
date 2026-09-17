@@ -1,0 +1,756 @@
+{
+  "artifact_sha256": "eb6d8595b9ba46118c8eb8863f51e853bc76fb6de1c26ae95ada0c102cf28219",
+  "candidate_real_identity_path": {
+    "candidate_intermediate_identity": "hunter_signals.id",
+    "candidate_intermediate_table": "hunter_signals",
+    "feature_identity": "asset_symbol + snapshot_timestamp",
+    "outcome_identity": "signal_outcomes.signal_id",
+    "outcome_table": "signal_outcomes",
+    "relationship": "signal_outcomes.signal_id = hunter_signals.id"
+  },
+  "column_population": {
+    "hunter_id": {
+      "distinct_non_null": 50,
+      "non_null_rows": 50,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 50
+    },
+    "hunter_symbol": {
+      "distinct_non_null": 50,
+      "non_null_rows": 50,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 50
+    },
+    "hunter_timestamp": {
+      "distinct_non_null": 49,
+      "non_null_rows": 50,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 50
+    },
+    "outcome_id": {
+      "distinct_non_null": 62,
+      "non_null_rows": 62,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 62
+    },
+    "outcome_signal_id": {
+      "distinct_non_null": 46,
+      "non_null_rows": 62,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 62
+    },
+    "outcome_symbol": {
+      "distinct_non_null": 4,
+      "non_null_rows": 16,
+      "null_rows": 46,
+      "population_ratio": 0.25806451612903225,
+      "total_rows": 62
+    },
+    "outcome_timestamp": {
+      "distinct_non_null": 50,
+      "non_null_rows": 62,
+      "null_rows": 0,
+      "population_ratio": 1.0,
+      "total_rows": 62
+    }
+  },
+  "contract": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_SIGNAL_IDENTITY_TRACE_v0.1",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "database_modified": false,
+  "feature_contract": "ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1",
+  "feature_contract_path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_identities_sample": [
+    {
+      "asset_symbol": "AAVE",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "ADA",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "AVAX",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "BTC",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "DOGE",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "DOT",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "ETH",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "LINK",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "LTC",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "NEAR",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SHIB",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SOL",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "SUI",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "UNI",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "asset_symbol": "XRP",
+      "snapshot_timestamp": "2026-08-23T13:39:16.730073+00:00"
+    }
+  ],
+  "feature_identity_count": 15,
+  "feature_to_hunter": {
+    "direct_match_count": 0,
+    "direct_match_ratio": 0.0,
+    "direct_matches": [],
+    "relaxed_match_count": 0,
+    "relaxed_match_ratio": 0.0,
+    "relaxed_matches": []
+  },
+  "forensic_status": "OUTCOME_TO_HUNTER_ESTABLISHED",
+  "mode": "READ_ONLY",
+  "network": false,
+  "outcome_to_hunter": {
+    "available": true,
+    "distinct_outcome_signal_ids": 46,
+    "identity_relation": "signal_outcomes.signal_id -> hunter_signals.id",
+    "link_ratio": 1.0,
+    "null_outcome_signal_ids": 0,
+    "outcome_rows": 62,
+    "outcome_rows_linked_to_hunter": 62,
+    "outcome_rows_without_hunter_match": 0
+  },
+  "prediction": false,
+  "predictive_claim": "NOT_ESTABLISHED",
+  "relationship_calculation": "NOT_PERFORMED",
+  "sample_identity_chains": [
+    {
+      "hunter_id": 5,
+      "hunter_symbol": "SHIB",
+      "hunter_timestamp": "2026-08-15T00:29:52.353078",
+      "outcome_id": 1,
+      "outcome_signal_id": 5,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:52.353078"
+    },
+    {
+      "hunter_id": 6,
+      "hunter_symbol": "XRP",
+      "hunter_timestamp": "2026-08-15T00:29:50.035769",
+      "outcome_id": 2,
+      "outcome_signal_id": 6,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.035769"
+    },
+    {
+      "hunter_id": 7,
+      "hunter_symbol": "SOL",
+      "hunter_timestamp": "2026-08-15T00:29:50.090036",
+      "outcome_id": 3,
+      "outcome_signal_id": 7,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.090036"
+    },
+    {
+      "hunter_id": 8,
+      "hunter_symbol": "ADA",
+      "hunter_timestamp": "2026-08-15T00:29:50.411446",
+      "outcome_id": 4,
+      "outcome_signal_id": 8,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.411446"
+    },
+    {
+      "hunter_id": 9,
+      "hunter_symbol": "DOGE",
+      "hunter_timestamp": "2026-08-15T00:29:51.184250",
+      "outcome_id": 5,
+      "outcome_signal_id": 9,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:51.184250"
+    },
+    {
+      "hunter_id": 10,
+      "hunter_symbol": "LINK",
+      "hunter_timestamp": "2026-08-15T00:29:51.197130",
+      "outcome_id": 6,
+      "outcome_signal_id": 10,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:51.197130"
+    },
+    {
+      "hunter_id": 11,
+      "hunter_symbol": "PEPE",
+      "hunter_timestamp": "2026-08-15T00:29:55.349811",
+      "outcome_id": 7,
+      "outcome_signal_id": 11,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:55.349811"
+    },
+    {
+      "hunter_id": 12,
+      "hunter_symbol": "BTC",
+      "hunter_timestamp": "2026-08-15T00:29:50.318095",
+      "outcome_id": 8,
+      "outcome_signal_id": 12,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.318095"
+    },
+    {
+      "hunter_id": 13,
+      "hunter_symbol": "ETH",
+      "hunter_timestamp": "2026-08-15T00:29:50.416166",
+      "outcome_id": 9,
+      "outcome_signal_id": 13,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.416166"
+    },
+    {
+      "hunter_id": 14,
+      "hunter_symbol": "TRX",
+      "hunter_timestamp": "2026-08-15T00:29:51.881494",
+      "outcome_id": 10,
+      "outcome_signal_id": 14,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:51.881494"
+    },
+    {
+      "hunter_id": 15,
+      "hunter_symbol": "AAVE",
+      "hunter_timestamp": "2026-08-15T00:29:54.110870",
+      "outcome_id": 11,
+      "outcome_signal_id": 15,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:54.110870"
+    },
+    {
+      "hunter_id": 16,
+      "hunter_symbol": "FET",
+      "hunter_timestamp": "2026-08-15T00:29:55.034233",
+      "outcome_id": 12,
+      "outcome_signal_id": 16,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:55.034233"
+    },
+    {
+      "hunter_id": 17,
+      "hunter_symbol": "LTC",
+      "hunter_timestamp": "2026-08-15T00:29:50.082879",
+      "outcome_id": 13,
+      "outcome_signal_id": 17,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.082879"
+    },
+    {
+      "hunter_id": 18,
+      "hunter_symbol": "ARB",
+      "hunter_timestamp": "2026-08-15T00:29:50.361360",
+      "outcome_id": 14,
+      "outcome_signal_id": 18,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.361360"
+    },
+    {
+      "hunter_id": 19,
+      "hunter_symbol": "AVAX",
+      "hunter_timestamp": "2026-08-15T00:29:50.508921",
+      "outcome_id": 15,
+      "outcome_signal_id": 19,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.508921"
+    },
+    {
+      "hunter_id": 20,
+      "hunter_symbol": "BNB",
+      "hunter_timestamp": "2026-08-15T00:29:50.508998",
+      "outcome_id": 16,
+      "outcome_signal_id": 20,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:50.508998"
+    },
+    {
+      "hunter_id": 21,
+      "hunter_symbol": "FIL",
+      "hunter_timestamp": "2026-08-15T00:29:51.677351",
+      "outcome_id": 17,
+      "outcome_signal_id": 21,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:51.677351"
+    },
+    {
+      "hunter_id": 21,
+      "hunter_symbol": "FIL",
+      "hunter_timestamp": "2026-08-15T00:29:51.677351",
+      "outcome_id": 47,
+      "outcome_signal_id": 21,
+      "outcome_symbol": "BTC",
+      "outcome_timestamp": "2026-08-15T16:46:07.577825+00:00"
+    },
+    {
+      "hunter_id": 22,
+      "hunter_symbol": "GALA",
+      "hunter_timestamp": "2026-08-15T00:29:51.839390",
+      "outcome_id": 18,
+      "outcome_signal_id": 22,
+      "outcome_symbol": null,
+      "outcome_timestamp": "2026-08-15T00:29:51.839390"
+    },
+    {
+      "hunter_id": 22,
+      "hunter_symbol": "GALA",
+      "hunter_timestamp": "2026-08-15T00:29:51.839390",
+      "outcome_id": 48,
+      "outcome_signal_id": 22,
+      "outcome_symbol": "ETH",
+      "outcome_timestamp": "2026-08-15T16:46:07.577825+00:00"
+    }
+  ],
+  "tables": {
+    "hunter_signals": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "name": "id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "name": "timestamp",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "name": "market",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "name": "asset",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "name": "hunter_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "name": "book_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "name": "galaxy_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "name": "momentum_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "name": "social_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "name": "volume_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "name": "catalyst_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "name": "global_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "name": "final_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "name": "status",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "name": "signal",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "name": "entry_price",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "name": "engine_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "name": "snapshot_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "exists": true,
+      "foreign_keys": [],
+      "resolved_identity": {
+        "direction": null,
+        "entry_price": "entry_price",
+        "id": "id",
+        "symbol": "asset",
+        "timestamp": "timestamp"
+      }
+    },
+    "signal_outcomes": {
+      "columns": [
+        {
+          "cid": 0,
+          "default": null,
+          "name": "id",
+          "notnull": 0,
+          "pk": 1,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 1,
+          "default": null,
+          "name": "signal_id",
+          "notnull": 1,
+          "pk": 0,
+          "type": "INTEGER"
+        },
+        {
+          "cid": 2,
+          "default": null,
+          "name": "timestamp",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 3,
+          "default": null,
+          "name": "market",
+          "notnull": 1,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 4,
+          "default": null,
+          "name": "entry_price",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 5,
+          "default": null,
+          "name": "price_5m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 6,
+          "default": null,
+          "name": "price_15m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 7,
+          "default": null,
+          "name": "price_30m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 8,
+          "default": null,
+          "name": "price_60m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 9,
+          "default": null,
+          "name": "return_5m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 10,
+          "default": null,
+          "name": "return_15m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 11,
+          "default": null,
+          "name": "return_30m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 12,
+          "default": null,
+          "name": "return_60m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 13,
+          "default": null,
+          "name": "max_gain",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 14,
+          "default": null,
+          "name": "max_drawdown",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 15,
+          "default": null,
+          "name": "outcome",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 16,
+          "default": null,
+          "name": "snapshot_id",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 17,
+          "default": null,
+          "name": "asset",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 18,
+          "default": null,
+          "name": "fused_score",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 19,
+          "default": null,
+          "name": "confidence",
+          "notnull": 0,
+          "pk": 0,
+          "type": "REAL"
+        },
+        {
+          "cid": 20,
+          "default": null,
+          "name": "regime",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 21,
+          "default": null,
+          "name": "direction",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 22,
+          "default": null,
+          "name": "outcome_5m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 23,
+          "default": null,
+          "name": "outcome_15m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 24,
+          "default": null,
+          "name": "outcome_30m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 25,
+          "default": null,
+          "name": "outcome_60m",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 26,
+          "default": null,
+          "name": "engine_version",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        },
+        {
+          "cid": 27,
+          "default": null,
+          "name": "entry_timestamp",
+          "notnull": 0,
+          "pk": 0,
+          "type": "TEXT"
+        }
+      ],
+      "exists": true,
+      "foreign_keys": [
+        {
+          "from": "signal_id",
+          "id": 0,
+          "match": "NONE",
+          "on_delete": "NO ACTION",
+          "on_update": "NO ACTION",
+          "seq": 0,
+          "table": "hunter_signals",
+          "to": "id"
+        }
+      ],
+      "resolved_identity": {
+        "entry_price": "entry_price",
+        "id": "id",
+        "outcome_15m": "outcome_15m",
+        "outcome_30m": "outcome_30m",
+        "outcome_5m": "outcome_5m",
+        "outcome_60m": "outcome_60m",
+        "price_15m": "price_15m",
+        "price_30m": "price_30m",
+        "price_5m": "price_5m",
+        "price_60m": "price_60m",
+        "return_15m": "return_15m",
+        "return_30m": "return_30m",
+        "return_5m": "return_5m",
+        "return_60m": "return_60m",
+        "signal_id": "signal_id",
+        "symbol": "asset",
+        "timestamp": "timestamp"
+      }
+    }
+  },
+  "trading_decision": false
+}

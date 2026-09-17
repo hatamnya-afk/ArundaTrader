@@ -1,0 +1,64 @@
+{
+  "version": "NOSTR_REAL_EVENT_PROBE_v0.1",
+  "results": [
+    {
+      "relay": "wss://relay.damus.io",
+      "status": "FAIL",
+      "events": 0,
+      "eose": false,
+      "latency": 8.016,
+      "error": "TimeoutError"
+    },
+    {
+      "relay": "wss://nos.lol",
+      "status": "PASS",
+      "events": 5,
+      "eose": true,
+      "latency": 0.354,
+      "samples": [
+        {
+          "id": "ef23e157d9ab0340116db73f55109b17a5dd7f64b0b446cffb253b320f6f8a0c",
+          "pubkey": "ce873c3288a163cdc9327e10cb6a5a5fbed2881ebb6d359d39bcb1eb78b5db98",
+          "created_at": 1788913135,
+          "kind": 1,
+          "content": "🚶 EXITED PROPERTY | QuickTurtle4443 ← [Cocaine Lockup (Alamo Sea)]"
+        },
+        {
+          "id": "5e3ccbfaf21dda1fe5e0998be87c3c024c8d56af7f4042a5c48d9a8798663ce3",
+          "pubkey": "77cc1725d92c109c31a62a9e6199b86fbee1ff678e40e4251eaaaadb13949d1f",
+          "created_at": 1788913128,
+          "kind": 1,
+          "content": "channel:__roster\ne1f042bc05890bb4510f53028da01502f27a8859c13c2d1fecb16ef78f26821369aa71f9d7668ac477c3dd264533516f25c67ed76b30dcb1e8f358bb41feea9d112247eea86fff7addb3060641f1fb8b6127d479603c28f6d7"
+        },
+        {
+          "id": "a194a4a7924dc77a54ab47e2316250a43bacce14050fc0f22cfeee886620b0b7",
+          "pubkey": "14b52cfa1af81646e868fd6cce1fffc83e813f7d568108bf7f9ac35306166d37",
+          "created_at": 1788913125,
+          "kind": 1,
+          "content": "channel:__roster\n5f764ad117a92d7bcf99464992b17ece3529b5bbe1c1d4972ce9835b8ed5fff496aa3d88ed56fdc39a4511e0bc12bdcf73869bb3a225574e9bd3eaf260548a70fec649a74cdb90a0142050dc124cb1111b6f74d997874f066952"
+        }
+      ]
+    },
+    {
+      "relay": "wss://relay.primal.net",
+      "status": "FAIL",
+      "events": 0,
+      "eose": false,
+      "latency": 8.0,
+      "error": "TimeoutError"
+    },
+    {
+      "relay": "wss://nostr.wine",
+      "status": "FAIL",
+      "events": 0,
+      "eose": false,
+      "latency": 8.014,
+      "error": "TimeoutError"
+    }
+  ],
+  "real_event_pass": 1,
+  "runtime": "FAIL",
+  "db_write": 0,
+  "lunarcrush": 0,
+  "execution": "OFF"
+}

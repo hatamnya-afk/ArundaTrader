@@ -1,0 +1,45 @@
+ARUNDA EXECUTION FLAG FORENSIC v0.1
+==========================================================================================
+MODE          : READ ONLY
+TARGET        : EXECUTION_ENABLED=True
+DELETE        : NONE
+MODIFICATION  : NONE
+RUNTIME       : NONE
+DB CHANGE     : NONE
+EXCHANGE      : NONE
+ORDER         : NONE
+
+HITS : 8
+
+FILE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.py
+LINE : 360
+CODE : blockers.append("EXECUTION_ENABLED=True found in repository")
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.txt
+LINE : 258
+CODE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.py : EXECUTION_ENABLED=True
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.txt
+LINE : 259
+CODE : cleanup_controlled_inventory_v0.1.py : EXECUTION_ENABLED=True
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.txt
+LINE : 266
+CODE : cp9_production_safety_gate.py : EXECUTION_ENABLED=True
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.txt
+LINE : 310
+CODE : - EXECUTION_ENABLED=True found in repository
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_PROJECT_INTEGRITY_AUDIT.txt
+LINE : 2074
+CODE : arunda_pipeline.py:667 -> EXECUTION_ENABLED = True is forbidden "
+------------------------------------------------------------------------------------------
+FILE : cleanup_controlled_inventory_v0.1.py
+LINE : 481
+CODE : return "TRUE", "EXECUTION_ENABLED=True found"
+------------------------------------------------------------------------------------------
+FILE : cp9_production_safety_gate.py
+LINE : 453
+CODE : "EXECUTION_ENABLED=True"
+------------------------------------------------------------------------------------------

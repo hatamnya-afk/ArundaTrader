@@ -1,0 +1,31 @@
+﻿{
+    "source":  "C:\\Users\\ASUS\\ArundaTrader",
+    "files":  1588,
+    "database_policy":  "LOCAL_ONLY_NOT_PUSHED",
+    "excluded_directories":  [
+                                 ".git",
+                                 "__pycache__",
+                                 "_backups",
+                                 "BACKUPS",
+                                 "_backup_tools",
+                                 "indicator_repair_backups",
+                                 "indicator_post_repair_backups",
+                                 "_QUARANTINE_NONPRODUCTION_SYNTAX_FAILURES",
+                                 "github_review",
+                                 "diagnostics",
+                                 "binding_inspection"
+                             ],
+    "local_files_modified":  false,
+    "generated_at":  "2026-09-17T07:43:32.1162777+03:30",
+    "excluded_file_patterns":  [
+                                   "*.db",
+                                   "*.db-wal",
+                                   "*.db-shm",
+                                   "*.sqlite",
+                                   "*.sqlite3",
+                                   "*.zip",
+                                   "*.7z",
+                                   "*.bak",
+                                   "*.tmp"
+                               ]
+}

@@ -1,0 +1,51 @@
+{
+  "artifact": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_POST_REPAIR_STATIC_CONTRACT_VERIFICATION_v0.1",
+  "timestamp_utc": "2026-08-24T18:20:45.411115+00:00",
+  "mode": "READ-ONLY STATIC CONTRACT VERIFICATION",
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "producer_sha256": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074",
+  "verification": {
+    "verified": true,
+    "deterministic": true,
+    "project_root_reference": true,
+    "target_value_correct": true,
+    "operator_correct": true,
+    "capture_dir_dependency_removed": true,
+    "reasons": []
+  },
+  "report_path_assignments": [
+    {
+      "line": 701,
+      "end_line": 701,
+      "expression": "report_path = PROJECT_ROOT / 'LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json'",
+      "semantic_ast": "BinOp"
+    }
+  ],
+  "target_references": [
+    {
+      "line": 698,
+      "column": 8,
+      "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+    },
+    {
+      "line": 701,
+      "column": 33,
+      "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+    }
+  ],
+  "suspicious_assignments": [],
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE",
+    "source_modified": false
+  },
+  "verdict": "POST_REPAIR_STATIC_OUTPUT_PATH_CONTRACT_VERIFIED"
+}

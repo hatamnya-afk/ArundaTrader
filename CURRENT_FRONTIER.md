@@ -4,50 +4,52 @@
 CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
 
 ## GOVERNANCE GATE
-Repository consolidation is CLOSED by Management. CP44 controlled-test runtime is authorized within the existing safety boundary.
-
-## FINAL PROJECT LIFECYCLE
-PROJECT COMPLETION MUST PRECEDE EXCHANGE BINDING.
-
-Mandatory lifecycle:
-1. Complete the exchange-agnostic ArundaTrader project/core.
-2. Explicitly close project completion through Management and the roadmap.
-3. Bind an exchange through a replaceable adapter/environment boundary.
-4. Perform final real-market exchange integration and controlled testing.
-5. Enable real trading only after final acceptance and explicit Management authorization.
-
-No exchange-specific architecture may be introduced into the core before the completion gate.
+Repository consolidation is CLOSED by Management. CP44 controlled-test work is authorized only inside the existing safety boundary.
 
 ## CURRENT FRONTIER
 CP44 — REAL-MARKET CONTROLLED TEST
 
 CP41 = CLOSED / VERIFIED / PASS
 CP43 = CLOSED / VERIFIED / PASS
-CP44 = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
 
-## CP43 CLOSED STATE
-CP43 = CLOSED / VERIFIED / PASS
-Scope = PRE-EXECUTION READINESS → EXECUTION-READY PACKAGE
+## CP44 RUNTIME OBSERVATION
+A controlled real-market runtime was executed from the established downstream eligibility boundary.
+Observed result: **6 assets reached ELIGIBLE**.
 
-Evidence recorded:
-- 77/77 focused tests passed.
-- Compile verification passed.
-- git diff --check passed.
-- Worktree clean at closure.
-- EXECUTION AUTHORIZATION = FALSE.
-- No order, execution, API write, or production DB mutation occurred.
+This observation is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
+No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
 
-CP43 remains historical truth and is not to be re-audited unless Management identifies a direct regression.
+`15` is legacy test-universe history and is not a production cardinality contract.
 
 ## CP44 OBJECTIVE
-REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT
+Complete and verify the provider-neutral downstream chain:
+
+```text
+REAL MARKET DATA
+→ DYNAMIC ELIGIBLE[N]
+→ ENTRY + INVALIDATION / STOP
+→ PROFIT / OPPORTUNITY ASSESSMENT
+→ SMART RISK
+→ CAPITAL ALLOCATION
+→ POSITION SIZING
+→ TRADE GATE
+→ TRADE READY
+→ ORDER INTENT
+→ PRE-EXECUTION
+→ EXCHANGE-AGNOSTIC BOUNDARY
+```
+
+The optimization objective is maximum validated profit-opportunity capture. Risk management must prevent invalid/uninformed allocation, not impose an arbitrary universal profit ceiling.
 
 ## CP44 ACCEPTANCE REQUIREMENTS
 - REAL_MARKET_DATA
 - VALIDATED_OBSERVATIONS
 - REAL_CAPITAL_BOUNDARY
 - VALID_ENTRY
-- VALID_STOP
+- VALID_STOP_OR_INVALIDATION
+- PROFIT_OPPORTUNITY_ASSESSMENT
+- INTELLIGENT_CAPITAL_ALLOCATION
 - VALID_QUANTITY
 - VALID_EXPOSURE
 - DECISION_CONSISTENCY
@@ -56,13 +58,22 @@ REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXE
 - PROVENANCE
 - FAIL_CLOSED
 - DYNAMIC_ASSET
+- DYNAMIC_CARDINALITY
+- SCALE_INDEPENDENT_LOGIC
 - NO_TEST_DATA
 - NO_FIXED_15
+- NO_FIXED_RUNTIME_CARDINALITY
 - NO_ORDER
 - NO_AUTHORIZATION
 - NO_EXECUTION
 - NO_API_WRITE
 - NO_DB_WRITE
+- NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
+
+## CP44 CURRENT BLOCKER
+Production-compatible real Entry + Invalidation/Stop is not yet proven as the input to the Smart Risk authority for dynamic `ELIGIBLE[N]`.
+
+The active route must also establish opportunity-driven capital allocation semantics. The legacy fixed-15 `market_entry_stop_adapter.py` snapshot path must not become the production route.
 
 ## CP44 FORBIDDEN DURING TEST
 - order submission/cancellation
@@ -74,18 +85,20 @@ REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXE
 - architecture redesign
 - reopening closed checkpoints
 - upstream rebuild of the established ELIGIBLE path
+- exchange-specific logic inside Core Risk/Decision/Allocation
 
 ## REPOSITORY GOVERNANCE
 Canonical branch is `main`.
-Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`.
+The Local Original remains the primary operational/recovery object; GitHub is the controlled durable project-management and builder-handoff source.
+The synchronization branch is authorized for the current controlled roadmap/governance work.
 
-No Builder, Manager, coding agent, or implementation agent may create a project branch merely for personal workflow, experimentation, convenience, or parallel project truth.
-A new branch is permitted only when Management explicitly authorizes it as part of the active roadmap/checkpoint and records its purpose, source, target checkpoint, and relationship to Canonical.
+Repository organization is classification-first and behavior-neutral:
+- governance/control documents remain at root;
+- operational source paths are preserved until dependency/path audit authorizes relocation;
+- verification, evidence/forensic, and historical material have explicit navigation locations;
+- `README.md` and `REPOSITORY_STRUCTURE.md` provide repository navigation and organization rules.
 
-No unapproved file may be added to Canonical. A new file is permitted only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope.
-Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not project truth.
-
-All work must map to MANAGEMENT_ROADMAP.md and the active checkpoint. When uncertain: STOP and escalate to Management.
+Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not automatically project truth and must be classified before canonical promotion.
 
 ## MANDATORY STATE SYNCHRONIZATION
 At the end of every checkpoint, the responsible Builder/Manager MUST synchronize:
@@ -96,15 +109,16 @@ At the end of every checkpoint, the responsible Builder/Manager MUST synchronize
 
 The synchronization must record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker if any, CURRENT FRONTIER, NEXT ACTION, and any authorized branch/file scope change.
 
-For every route/frontier change, the roadmap and state documents must be updated immediately, with the reason and Management authorization.
-
-A checkpoint is not governance-complete until these documents are synchronized and internally consistent. The next frontier must not start while the synchronization gate is incomplete.
-
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
 This remains an independent Account/Real-Capital blocker. CP44 does not authorize bypassing or repeating private diagnostics.
+Toobit is not part of the Core Risk/Allocation architecture.
 
 ## NEXT ACTION
-Execute the single controlled CP44 runtime from the established downstream eligibility boundary, with all fail-closed and no-write constraints enforced.
+1. Trace the exact production Entry + Invalidation/Stop source into Smart Risk.
+2. Preserve dynamic `ELIGIBLE[N]` and prove `RISK[N] → TRADE_GATE[N]` without fixed cardinality.
+3. Define/verify opportunity-driven capital allocation that scales across valid capital amounts.
+4. Keep all pre-boundary logic exchange-agnostic.
+5. At CP44 completion, synchronize all four governance documents before any VERIFIED/PASS/CLOSED claim.
 
 # END CURRENT FRONTIER

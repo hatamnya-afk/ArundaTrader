@@ -1,0 +1,124 @@
+==========================================================================================
+ARUNDA SNAPSHOT FEATURE EXTRA SYMBOL DECISION CONTRACT REPAIR FORENSIC v0.1
+==========================================================================================
+Database       : C:\Users\ASUS\ArundaTrader\arunda.db
+Normalization  : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json
+Provenance     : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json
+Semantic       : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json
+Origin         : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json
+First Insertion: C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json
+CMC Identity   : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json
+Expected Status: C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json
+Decision       : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json
+Mode           : READ ONLY
+Network        : FORBIDDEN
+Database Write : FORBIDDEN
+Repair         : FORENSIC ARTIFACT REPAIR ONLY
+Prediction     : FORBIDDEN
+Decision       : FORENSIC STATUS ONLY
+------------------------------------------------------------------------------------------
+==========================================================================================
+REPAIR CONTRACT
+==========================================================================================
+Repair scope : ARTIFACT CONTRACT RECONSTRUCTION ONLY
+Production DB mutation : NONE
+------------------------------------------------------------------------------------------
+SYMBOL : 4
+SEMANTIC CLASS       : NUMERIC_IDENTIFIER_CANDIDATE
+ORIGIN CLASS         : None
+CMC IDENTITY PRESENT : True
+CMC IDS              : 38557
+EXPECTED MEMBER      : False
+EXPECTED STATUS      : OUTSIDE_EXPECTED_UNIVERSE
+DECISION CLASS       : OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE
+DECISION             : EXCLUDE_FROM_EXPECTED_UNIVERSE
+DATABASE OBSERVED    : True
+DATABASE TABLE COUNT : 7
+DATABASE TOTAL ROWS  : 1420
+TABLES               : market_history, market_history_legacy, market_microstructure, market_opportunity, market_state, market_technical, market_universe
+RATIONALE            : Symbol has observed database evidence and CMC identity evidence, but is outside the normalized expected universe; therefore observed identity does not establish expected-universe membership.
+SEMANTIC NOTE        : Pure numeric token; not established as a market symbol.
+------------------------------------------------------------------------------------------
+REPAIR CHANGES
+  semantic_class_repaired : False
+  origin_class_repaired : True
+  cmc_identity_evidence_repaired : True
+  decision_class_repaired : False
+  decision_repaired : False
+  database_table_count_repaired : False
+  database_total_rows_repaired : False
+------------------------------------------------------------------------------------------
+POST-REPAIR CONTRACT CHECKS
+  PASS : target_symbol
+  PASS : outside_expected_universe
+  PASS : decision_excludes_symbol
+  PASS : decision_class_outside_expected
+  PASS : semantic_present
+  FAIL : origin_present
+  PASS : cmc_identity_consistent
+  PASS : database_observed_consistent
+  PASS : database_table_count_consistent
+  PASS : database_rows_nonnegative
+CONSISTENCY : FAIL
+CONTRADICTIONS :
+  - origin_present
+------------------------------------------------------------------------------------------
+SYMBOL : ASSET
+SEMANTIC CLASS       : GENERIC_FIELD_LABEL
+ORIGIN CLASS         : None
+CMC IDENTITY PRESENT : True
+CMC IDS              : 39922
+EXPECTED MEMBER      : False
+EXPECTED STATUS      : OUTSIDE_EXPECTED_UNIVERSE
+DECISION CLASS       : OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE
+DECISION             : EXCLUDE_FROM_EXPECTED_UNIVERSE
+DATABASE OBSERVED    : True
+DATABASE TABLE COUNT : 7
+DATABASE TOTAL ROWS  : 1420
+TABLES               : market_history, market_history_legacy, market_microstructure, market_opportunity, market_state, market_technical, market_universe
+RATIONALE            : Symbol has observed database evidence and CMC identity evidence, but is outside the normalized expected universe; therefore observed identity does not establish expected-universe membership.
+SEMANTIC NOTE        : Generic field label rather than a market symbol.
+------------------------------------------------------------------------------------------
+REPAIR CHANGES
+  semantic_class_repaired : True
+  origin_class_repaired : True
+  cmc_identity_evidence_repaired : True
+  decision_class_repaired : False
+  decision_repaired : False
+  database_table_count_repaired : False
+  database_total_rows_repaired : False
+------------------------------------------------------------------------------------------
+POST-REPAIR CONTRACT CHECKS
+  PASS : target_symbol
+  PASS : outside_expected_universe
+  PASS : decision_excludes_symbol
+  PASS : decision_class_outside_expected
+  PASS : semantic_present
+  FAIL : origin_present
+  PASS : cmc_identity_consistent
+  PASS : database_observed_consistent
+  PASS : database_table_count_consistent
+  PASS : database_rows_nonnegative
+CONSISTENCY : FAIL
+CONTRADICTIONS :
+  - origin_present
+==========================================================================================
+CROSS-SYMBOL SUMMARY
+==========================================================================================
+Target Symbols : 2
+Passed         : 0
+Failed         : 2
+Repair DB      : NONE
+Production Mutation : NONE
+==========================================================================================
+FORENSIC STATUS
+==========================================================================================
+FORENSIC STATUS : DECISION_CONTRACT_REPAIR_INCOMPLETE
+PREDICTIVE CLAIM : NOT ESTABLISHED
+RELATIONSHIP CALCULATION : NOT PERFORMED
+DATABASE WRITE : NOT PERFORMED
+DATABASE REPAIR : NOT PERFORMED
+UNIVERSE REBUILD : NOT PERFORMED
+SYMBOL DELETION : NOT PERFORMED
+TRADING DECISION : NOT PERFORMED
+==========================================================================================

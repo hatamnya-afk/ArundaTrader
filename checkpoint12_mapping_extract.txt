@@ -1,0 +1,706 @@
+﻿
+  arunda_pipeline.py:1088:    return fusion_snapshot
+  arunda_pipeline.py:1089:def bind_fused_scores(
+  arunda_pipeline.py:1090:    validated_signals: dict,
+  arunda_pipeline.py:1091:    fusion_snapshot: dict,
+  arunda_pipeline.py:1092:    ) -> dict:
+  arunda_pipeline.py:1093:    validate_signal_coverage(
+  arunda_pipeline.py:1094:        validated_signals
+  arunda_pipeline.py:1095:    )
+  arunda_pipeline.py:1096:
+  arunda_pipeline.py:1097:    if not isinstance(
+  arunda_pipeline.py:1098:        fusion_snapshot,
+  arunda_pipeline.py:1099:        dict,
+  arunda_pipeline.py:1100:    ):
+  arunda_pipeline.py:1101:
+  arunda_pipeline.py:1102:        fail(
+  arunda_pipeline.py:1103:            "Fusion snapshot must be dict"
+  arunda_pipeline.py:1104:        )
+  arunda_pipeline.py:1105:
+  arunda_pipeline.py:1106:    try:
+  arunda_pipeline.py:1107:
+> arunda_pipeline.py:1108:        score_snapshot = (
+  arunda_pipeline.py:1109:            production_fused_score_binding_v0_1.run(
+  arunda_pipeline.py:1110:                validated_signals,
+  arunda_pipeline.py:1111:                fusion_snapshot,
+  arunda_pipeline.py:1112:            )
+  arunda_pipeline.py:1113:        )
+  arunda_pipeline.py:1114:
+  arunda_pipeline.py:1115:    except Exception as exc:
+  arunda_pipeline.py:1116:
+  arunda_pipeline.py:1117:        raise RuntimeError(
+  arunda_pipeline.py:1118:            "PRODUCTION FUSED-SCORE BINDING FAILED: "
+  arunda_pipeline.py:1119:            f"{exc}"
+  arunda_pipeline.py:1120:        ) from exc
+  arunda_pipeline.py:1121:
+  arunda_pipeline.py:1122:    if not isinstance(
+> arunda_pipeline.py:1123:        score_snapshot,
+  arunda_pipeline.py:1124:        dict,
+  arunda_pipeline.py:1125:    ):
+  arunda_pipeline.py:1126:
+  arunda_pipeline.py:1127:        fail(
+  arunda_pipeline.py:1128:            "Fused-score binding must return dict"
+  arunda_pipeline.py:1129:        )
+  arunda_pipeline.py:1130:
+> arunda_pipeline.py:1131:    return score_snapshot
+  arunda_pipeline.py:1132:    # ============================================================================
+  arunda_pipeline.py:1133:
+  arunda_pipeline.py:1134:    # MARKET REGIME
+  arunda_pipeline.py:1135:
+  arunda_pipeline.py:1136:    # ============================================================================
+  arunda_pipeline.py:1137:
+  arunda_pipeline.py:1138:def load_current_market_regime() -> dict:
+  arunda_pipeline.py:1139:    regime_snapshot = (
+  arunda_pipeline.py:1140:        market_regime_engine.load_market_regime()
+  arunda_pipeline.py:1141:    )
+  arunda_pipeline.py:1142:
+  arunda_pipeline.py:1143:    if not isinstance(
+  arunda_pipeline.py:1144:        regime_snapshot,
+  arunda_pipeline.py:1145:        dict,
+  arunda_pipeline.py:1146:    ):
+  arunda_pipeline.py:1147:
+  arunda_pipeline.py:1148:        fail(
+  arunda_pipeline.py:1149:            "CURRENT_MARKET_REGIME must be a dict"
+  arunda_pipeline.py:1150:        )
+  arunda_pipeline.py:1151:
+  arunda_pipeline.py:1152:    return regime_snapshot
+  arunda_pipeline.py:1153:def get_current_regime(
+  arunda_pipeline.py:1154:    regime_snapshot: dict,
+  arunda_pipeline.py:1155:    asset: str,
+  arunda_pipeline.py:1156:    ) -> Any:
+  arunda_pipeline.py:1157:    asset = normalize_asset(
+  arunda_pipeline.py:1158:        asset
+  arunda_pipeline.py:1159:    )
+  arunda_pipeline.py:1160:
+  arunda_pipeline.py:1161:    if asset is None:
+  arunda_pipeline.py:1368:            "CURRENT RUNTIME MARKET DATA stop_distance missing: "
+  arunda_pipeline.py:1369:            f"{asset}"
+  arunda_pipeline.py:1370:        )
+  arunda_pipeline.py:1371:
+  arunda_pipeline.py:1372:    return {
+  arunda_pipeline.py:1373:        "source": source,
+  arunda_pipeline.py:1374:        "latest_ohlcv_timestamp": timestamp,
+  arunda_pipeline.py:1375:        "real_candle_count": candle_count,
+  arunda_pipeline.py:1376:        "atr14": atr14,
+  arunda_pipeline.py:1377:        "stop_distance": stop_distance,
+  arunda_pipeline.py:1378:    }
+  arunda_pipeline.py:1379:    # ============================================================================
+  arunda_pipeline.py:1380:
+  arunda_pipeline.py:1381:    # CURRENT-RUNTIME QUANTITY BRIDGE
+  arunda_pipeline.py:1382:
+  arunda_pipeline.py:1383:    # ============================================================================
+  arunda_pipeline.py:1384:
+  arunda_pipeline.py:1385:def build_runtime_quantity_bridge(
+  arunda_pipeline.py:1386:    snapshot_id: str,
+  arunda_pipeline.py:1387:    opportunity_rows: list[dict],
+> arunda_pipeline.py:1388:    risk_snapshot: dict,
+  arunda_pipeline.py:1389:    market_data_result: dict,
+  arunda_pipeline.py:1390:    ) -> dict:
+  arunda_pipeline.py:1391:    if not isinstance(
+  arunda_pipeline.py:1392:        opportunity_rows,
+  arunda_pipeline.py:1393:        list,
+  arunda_pipeline.py:1394:    ):
+  arunda_pipeline.py:1395:
+  arunda_pipeline.py:1396:        fail(
+  arunda_pipeline.py:1397:            "Opportunity rows must be list"
+  arunda_pipeline.py:1398:        )
+  arunda_pipeline.py:1399:
+  arunda_pipeline.py:1400:    opportunities = opportunity_map(
+  arunda_pipeline.py:1401:        {
+  arunda_pipeline.py:1402:            "opportunities": opportunity_rows,
+  arunda_pipeline.py:1403:        }
+  arunda_pipeline.py:1404:    )
+  arunda_pipeline.py:1405:
+  arunda_pipeline.py:1406:    risk_rows = extract_rows(
+> arunda_pipeline.py:1407:        risk_snapshot,
+  arunda_pipeline.py:1408:        (
+  arunda_pipeline.py:1409:            "risk",
+  arunda_pipeline.py:1410:            "risk_decisions",
+  arunda_pipeline.py:1411:            "decisions",
+  arunda_pipeline.py:1412:            "rows",
+  arunda_pipeline.py:1413:            "assets",
+  arunda_pipeline.py:1414:            "results",
+  arunda_pipeline.py:1415:        ),
+  arunda_pipeline.py:1416:    )
+  arunda_pipeline.py:1417:
+  arunda_pipeline.py:1418:    risk_rows = exact_asset_rows(
+  arunda_pipeline.py:1419:        risk_rows,
+  arunda_pipeline.py:1420:        "RISK",
+  arunda_pipeline.py:1421:    )
+  arunda_pipeline.py:1422:
+  arunda_pipeline.py:1423:    r_map = risk_map(
+  arunda_pipeline.py:1424:        risk_rows
+  arunda_pipeline.py:1425:    )
+  arunda_pipeline.py:1426:
+  arunda_pipeline.py:1427:    if market_data_result is None:
+  arunda_pipeline.py:1428:
+  arunda_pipeline.py:1429:        fail(
+  arunda_pipeline.py:1430:            "CURRENT RUNTIME MARKET DATA unavailable"
+  arunda_pipeline.py:1431:        )
+  arunda_pipeline.py:1432:
+  arunda_pipeline.py:1433:    records = {}
+  arunda_pipeline.py:1434:
+  arunda_pipeline.py:1435:    for asset in EXPECTED_ASSETS:
+  arunda_pipeline.py:1436:
+  arunda_pipeline.py:1437:        opportunity = opportunities.get(
+  arunda_pipeline.py:2729:        return fusion_snapshot
+  arunda_pipeline.py:2730:
+  arunda_pipeline.py:2731:
+  arunda_pipeline.py:2732:def bind_fused_scores(
+  arunda_pipeline.py:2733:        validated_signals: dict,
+  arunda_pipeline.py:2734:        fusion_snapshot: dict,
+  arunda_pipeline.py:2735:    ) -> dict:
+  arunda_pipeline.py:2736:        validate_signal_coverage(
+  arunda_pipeline.py:2737:            validated_signals
+  arunda_pipeline.py:2738:        )
+  arunda_pipeline.py:2739:
+  arunda_pipeline.py:2740:        if not isinstance(
+  arunda_pipeline.py:2741:            fusion_snapshot,
+  arunda_pipeline.py:2742:            dict,
+  arunda_pipeline.py:2743:        ):
+  arunda_pipeline.py:2744:            fail(
+  arunda_pipeline.py:2745:                "Fusion snapshot must be dict"
+  arunda_pipeline.py:2746:            )
+  arunda_pipeline.py:2747:
+  arunda_pipeline.py:2748:        try:
+> arunda_pipeline.py:2749:            score_snapshot = (
+  arunda_pipeline.py:2750:                production_fused_score_binding_v0_1.run(
+  arunda_pipeline.py:2751:                    validated_signals,
+  arunda_pipeline.py:2752:                    fusion_snapshot,
+  arunda_pipeline.py:2753:                )
+  arunda_pipeline.py:2754:            )
+  arunda_pipeline.py:2755:        except Exception as exc:
+  arunda_pipeline.py:2756:            raise RuntimeError(
+  arunda_pipeline.py:2757:                "PRODUCTION FUSED-SCORE BINDING FAILED: "
+  arunda_pipeline.py:2758:                f"{exc}"
+  arunda_pipeline.py:2759:            ) from exc
+  arunda_pipeline.py:2760:
+  arunda_pipeline.py:2761:        if not isinstance(
+> arunda_pipeline.py:2762:            score_snapshot,
+  arunda_pipeline.py:2763:            dict,
+  arunda_pipeline.py:2764:        ):
+  arunda_pipeline.py:2765:            fail(
+  arunda_pipeline.py:2766:                "Fused-score binding must return dict"
+  arunda_pipeline.py:2767:            )
+  arunda_pipeline.py:2768:
+> arunda_pipeline.py:2769:        return score_snapshot
+  arunda_pipeline.py:2770:
+  arunda_pipeline.py:2771:
+  arunda_pipeline.py:2772:    # ============================================================================
+  arunda_pipeline.py:2773:    # MARKET REGIME
+  arunda_pipeline.py:2774:    # ============================================================================
+  arunda_pipeline.py:2775:
+  arunda_pipeline.py:2776:def load_current_market_regime() -> dict:
+  arunda_pipeline.py:2777:        regime_snapshot = (
+  arunda_pipeline.py:2778:            market_regime_engine.load_market_regime()
+  arunda_pipeline.py:2779:        )
+  arunda_pipeline.py:2780:
+  arunda_pipeline.py:2781:        if not isinstance(
+  arunda_pipeline.py:2782:            regime_snapshot,
+  arunda_pipeline.py:2783:            dict,
+  arunda_pipeline.py:2784:        ):
+  arunda_pipeline.py:2785:            fail(
+  arunda_pipeline.py:2786:                "CURRENT_MARKET_REGIME must be a dict"
+  arunda_pipeline.py:2787:            )
+  arunda_pipeline.py:2788:
+  arunda_pipeline.py:2789:        return regime_snapshot
+  arunda_pipeline.py:2790:
+  arunda_pipeline.py:2791:
+  arunda_pipeline.py:2792:def get_current_regime(
+  arunda_pipeline.py:2793:        regime_snapshot: dict,
+  arunda_pipeline.py:2794:        asset: str,
+  arunda_pipeline.py:2795:    ) -> Any:
+  arunda_pipeline.py:2796:        asset = normalize_asset(asset)
+  arunda_pipeline.py:2797:
+  arunda_pipeline.py:2798:        if asset is None:
+  arunda_pipeline.py:2799:            fail(
+  arunda_pipeline.py:3006:                "CURRENT RUNTIME MARKET DATA stop_distance must be > 0: "
+  arunda_pipeline.py:3007:                f"{asset}"
+  arunda_pipeline.py:3008:            )
+  arunda_pipeline.py:3009:
+  arunda_pipeline.py:3010:        return {
+  arunda_pipeline.py:3011:            "source": source,
+  arunda_pipeline.py:3012:            "latest_ohlcv_timestamp": timestamp,
+  arunda_pipeline.py:3013:            "real_candle_count": candle_count,
+  arunda_pipeline.py:3014:            "atr14": atr14,
+  arunda_pipeline.py:3015:            "stop_distance": stop_distance,
+  arunda_pipeline.py:3016:        }
+  arunda_pipeline.py:3017:
+  arunda_pipeline.py:3018:
+  arunda_pipeline.py:3019:    # ============================================================================
+  arunda_pipeline.py:3020:    # CURRENT-RUNTIME QUANTITY BRIDGE
+  arunda_pipeline.py:3021:    # ============================================================================
+  arunda_pipeline.py:3022:
+  arunda_pipeline.py:3023:def build_runtime_quantity_bridge(
+  arunda_pipeline.py:3024:        snapshot_id: str,
+  arunda_pipeline.py:3025:        opportunity_rows: list[dict],
+> arunda_pipeline.py:3026:        risk_snapshot: dict,
+  arunda_pipeline.py:3027:        market_data_result: dict,
+  arunda_pipeline.py:3028:    ) -> dict:
+  arunda_pipeline.py:3029:        if not isinstance(
+  arunda_pipeline.py:3030:            opportunity_rows,
+  arunda_pipeline.py:3031:            list,
+  arunda_pipeline.py:3032:        ):
+  arunda_pipeline.py:3033:            fail(
+  arunda_pipeline.py:3034:                "Opportunity rows must be list"
+  arunda_pipeline.py:3035:            )
+  arunda_pipeline.py:3036:
+  arunda_pipeline.py:3037:        opportunities = opportunity_map(
+  arunda_pipeline.py:3038:            {
+  arunda_pipeline.py:3039:                "opportunities": opportunity_rows,
+  arunda_pipeline.py:3040:            }
+  arunda_pipeline.py:3041:        )
+  arunda_pipeline.py:3042:
+  arunda_pipeline.py:3043:        risk_rows = extract_rows(
+> arunda_pipeline.py:3044:            risk_snapshot,
+  arunda_pipeline.py:3045:            (
+  arunda_pipeline.py:3046:                "risk",
+  arunda_pipeline.py:3047:                "risk_decisions",
+  arunda_pipeline.py:3048:                "decisions",
+  arunda_pipeline.py:3049:                "rows",
+  arunda_pipeline.py:3050:                "assets",
+  arunda_pipeline.py:3051:                "results",
+  arunda_pipeline.py:3052:            ),
+  arunda_pipeline.py:3053:        )
+  arunda_pipeline.py:3054:
+  arunda_pipeline.py:3055:        risk_rows = exact_asset_rows(
+  arunda_pipeline.py:3056:            risk_rows,
+  arunda_pipeline.py:3057:            "RISK",
+  arunda_pipeline.py:3058:        )
+  arunda_pipeline.py:3059:
+  arunda_pipeline.py:3060:        r_map = risk_map(
+  arunda_pipeline.py:3061:            risk_rows
+  arunda_pipeline.py:3062:        )
+  arunda_pipeline.py:3063:
+  arunda_pipeline.py:3064:        if market_data_result is None:
+  arunda_pipeline.py:3065:            fail(
+  arunda_pipeline.py:3066:                "CURRENT RUNTIME MARKET DATA unavailable"
+  arunda_pipeline.py:3067:            )
+  arunda_pipeline.py:3068:
+  arunda_pipeline.py:3069:        if not isinstance(
+  arunda_pipeline.py:3070:            market_data_result,
+  arunda_pipeline.py:3071:            dict,
+  arunda_pipeline.py:3072:        ):
+  arunda_pipeline.py:3073:            fail(
+  arunda_pipeline.py:3074:                "CURRENT RUNTIME MARKET DATA result must be dict"
+  arunda_pipeline.py:3421:                "quantity_rescaled",
+  arunda_pipeline.py:3422:                "quantity_rounded",
+  arunda_pipeline.py:3423:                "quantity_clipped",
+  arunda_pipeline.py:3424:            ):
+  arunda_pipeline.py:3425:                if record.get(flag) is not False:
+  arunda_pipeline.py:3426:                    fail(
+  arunda_pipeline.py:3427:                        "Quantity transformation detected: "
+  arunda_pipeline.py:3428:                        f"{asset}.{flag}"
+  arunda_pipeline.py:3429:                    )
+  arunda_pipeline.py:3430:
+  arunda_pipeline.py:3431:
+  arunda_pipeline.py:3432:    # ============================================================================
+  arunda_pipeline.py:3433:    # ORDER INTENT
+  arunda_pipeline.py:3434:    # ============================================================================
+  arunda_pipeline.py:3435:
+  arunda_pipeline.py:3436:def build_current_order_intents(
+  arunda_pipeline.py:3437:        gate_results: list[dict],
+  arunda_pipeline.py:3438:        opportunity_rows: list[dict],
+  arunda_pipeline.py:3439:        snapshot_id: str,
+  arunda_pipeline.py:3440:        regime_snapshot: dict,
+> arunda_pipeline.py:3441:        risk_snapshot: dict,
+  arunda_pipeline.py:3442:    ) -> list[dict]:
+  arunda_pipeline.py:3443:        gate_rows = exact_asset_rows(
+  arunda_pipeline.py:3444:            gate_results,
+  arunda_pipeline.py:3445:            "TRADE GATE",
+  arunda_pipeline.py:3446:        )
+  arunda_pipeline.py:3447:
+  arunda_pipeline.py:3448:        opportunities = opportunity_map(
+  arunda_pipeline.py:3449:            {
+  arunda_pipeline.py:3450:                "opportunities": opportunity_rows,
+  arunda_pipeline.py:3451:            }
+  arunda_pipeline.py:3452:        )
+  arunda_pipeline.py:3453:
+  arunda_pipeline.py:3454:        risk_rows = extract_rows(
+> arunda_pipeline.py:3455:            risk_snapshot,
+  arunda_pipeline.py:3456:            (
+  arunda_pipeline.py:3457:                "risk",
+  arunda_pipeline.py:3458:                "risk_decisions",
+  arunda_pipeline.py:3459:                "decisions",
+  arunda_pipeline.py:3460:                "rows",
+  arunda_pipeline.py:3461:                "assets",
+  arunda_pipeline.py:3462:                "results",
+  arunda_pipeline.py:3463:            ),
+  arunda_pipeline.py:3464:        )
+  arunda_pipeline.py:3465:
+  arunda_pipeline.py:3466:        risk_rows = exact_asset_rows(
+  arunda_pipeline.py:3467:            risk_rows,
+  arunda_pipeline.py:3468:            "RISK",
+  arunda_pipeline.py:3469:        )
+  arunda_pipeline.py:3470:
+  arunda_pipeline.py:3471:        r_map = risk_map(
+  arunda_pipeline.py:3472:            risk_rows
+  arunda_pipeline.py:3473:        )
+  arunda_pipeline.py:3474:
+  arunda_pipeline.py:3475:        trade_ready_rows = [
+  arunda_pipeline.py:3476:            row
+  arunda_pipeline.py:3477:            for row in gate_rows
+  arunda_pipeline.py:3478:            if normalize_status(
+  arunda_pipeline.py:3479:                row.get("trade_gate_status")
+  arunda_pipeline.py:3480:            ) == TRADE_READY_STATUS
+  arunda_pipeline.py:3481:        ]
+  arunda_pipeline.py:3482:
+  arunda_pipeline.py:3483:        if not trade_ready_rows:
+  arunda_pipeline.py:3484:            return []
+  arunda_pipeline.py:3485:
+  arunda_pipeline.py:3933:                ):
+  arunda_pipeline.py:3934:                    fail(
+  arunda_pipeline.py:3935:                        "ORDER_INTENT quantity provenance mismatch: "
+  arunda_pipeline.py:3936:                        f"{asset}"
+  arunda_pipeline.py:3937:                    )
+  arunda_pipeline.py:3938:
+  arunda_pipeline.py:3939:        if seen != set(gate_map.keys()):
+  arunda_pipeline.py:3940:            fail(
+  arunda_pipeline.py:3941:                "ORDER_INTENT final coverage mismatch"
+  arunda_pipeline.py:3942:            )
+  arunda_pipeline.py:3943:
+  arunda_pipeline.py:3944:        return len(intents)
+  arunda_pipeline.py:3945:
+  arunda_pipeline.py:3946:
+  arunda_pipeline.py:3947:    # ============================================================================
+  arunda_pipeline.py:3948:    # CANONICAL ORDER REQUEST
+  arunda_pipeline.py:3949:    # ============================================================================
+  arunda_pipeline.py:3950:
+  arunda_pipeline.py:3951:def build_canonical_order_requests(
+  arunda_pipeline.py:3952:        order_intents: list[dict],
+> arunda_pipeline.py:3953:        risk_snapshot: dict,
+  arunda_pipeline.py:3954:        snapshot_id: str,
+  arunda_pipeline.py:3955:    ) -> dict[str, dict]:
+  arunda_pipeline.py:3956:        risk_rows = extract_rows(
+> arunda_pipeline.py:3957:            risk_snapshot,
+  arunda_pipeline.py:3958:            (
+  arunda_pipeline.py:3959:                "risk",
+  arunda_pipeline.py:3960:                "risk_decisions",
+  arunda_pipeline.py:3961:                "decisions",
+  arunda_pipeline.py:3962:                "rows",
+  arunda_pipeline.py:3963:                "assets",
+  arunda_pipeline.py:3964:                "results",
+  arunda_pipeline.py:3965:            ),
+  arunda_pipeline.py:3966:        )
+  arunda_pipeline.py:3967:
+  arunda_pipeline.py:3968:        risk_rows = exact_asset_rows(
+  arunda_pipeline.py:3969:            risk_rows,
+  arunda_pipeline.py:3970:            "RISK",
+  arunda_pipeline.py:3971:        )
+  arunda_pipeline.py:3972:
+  arunda_pipeline.py:3973:        r_map = risk_map(
+  arunda_pipeline.py:3974:            risk_rows
+  arunda_pipeline.py:3975:        )
+  arunda_pipeline.py:3976:
+  arunda_pipeline.py:3977:        result = {}
+  arunda_pipeline.py:3978:
+  arunda_pipeline.py:3979:        for intent in order_intents:
+  arunda_pipeline.py:3980:            asset = normalize_asset(
+  arunda_pipeline.py:3981:                intent.get("asset")
+  arunda_pipeline.py:3982:            )
+  arunda_pipeline.py:3983:
+  arunda_pipeline.py:3984:            if asset is None:
+  arunda_pipeline.py:3985:                fail(
+  arunda_pipeline.py:3986:                    "Canonical request asset missing"
+  arunda_pipeline.py:3987:                )
+  arunda_pipeline.py:4749:            str(symbol).strip().upper()
+  arunda_pipeline.py:4750:            for symbol in runtime_universe
+  arunda_pipeline.py:4751:        }:
+  arunda_pipeline.py:4752:            fail(
+  arunda_pipeline.py:4753:                "MarketDataResult cardinality/identity mismatch"
+  arunda_pipeline.py:4754:            )
+  arunda_pipeline.py:4755:
+  arunda_pipeline.py:4756:        opportunity_results = build_dynamic_opportunities(
+  arunda_pipeline.py:4757:            market_data_results
+  arunda_pipeline.py:4758:        )
+  arunda_pipeline.py:4759:
+  arunda_pipeline.py:4760:        if len(opportunity_results) != len(runtime_universe):
+  arunda_pipeline.py:4761:            fail(
+  arunda_pipeline.py:4762:                "Dynamic Opportunity cardinality mismatch: "
+  arunda_pipeline.py:4763:                f"expected={len(runtime_universe)} "
+  arunda_pipeline.py:4764:                f"actual={len(opportunity_results)}"
+  arunda_pipeline.py:4765:            )
+  arunda_pipeline.py:4766:
+  arunda_pipeline.py:4767:        ready_opportunity_results = ready_opportunities(opportunity_results)
+  arunda_pipeline.py:4768:
+> arunda_pipeline.py:4769:        opportunity_by_asset = {}
+  arunda_pipeline.py:4770:
+  arunda_pipeline.py:4771:        for result in opportunity_results:
+  arunda_pipeline.py:4772:            opportunity = getattr(result, "opportunity", None)
+  arunda_pipeline.py:4773:
+  arunda_pipeline.py:4774:            if opportunity is None and isinstance(result, dict):
+  arunda_pipeline.py:4775:                opportunity = result.get("opportunity")
+  arunda_pipeline.py:4776:
+  arunda_pipeline.py:4777:            if opportunity is None:
+  arunda_pipeline.py:4778:                continue
+  arunda_pipeline.py:4779:
+  arunda_pipeline.py:4780:            opportunity = ensure_dict(opportunity, "opportunity")
+  arunda_pipeline.py:4781:
+  arunda_pipeline.py:4782:            opportunity_identity = opportunity.get(
+  arunda_pipeline.py:4783:                "asset",
+  arunda_pipeline.py:4784:                opportunity.get("symbol")
+  arunda_pipeline.py:4785:            )
+  arunda_pipeline.py:4786:
+  arunda_pipeline.py:4787:            if not isinstance(opportunity_identity, str):
+  arunda_pipeline.py:4788:                continue
+  arunda_pipeline.py:4789:
+  arunda_pipeline.py:4790:            opportunity_identity = opportunity_identity.strip().upper()
+  arunda_pipeline.py:4791:
+  arunda_pipeline.py:4792:            if opportunity_identity not in universe:
+  arunda_pipeline.py:4793:                fail(
+  arunda_pipeline.py:4794:                    "Opportunity returned asset outside Production Universe: "
+  arunda_pipeline.py:4795:                    f"{opportunity_identity}"
+  arunda_pipeline.py:4796:                )
+  arunda_pipeline.py:4797:
+  arunda_pipeline.py:4798:            asset = normalize_asset(
+  arunda_pipeline.py:4799:                opportunity_identity.split("/", 1)[0]
+  arunda_pipeline.py:4800:            )
+  arunda_pipeline.py:4801:
+  arunda_pipeline.py:4802:            if not asset:
+  arunda_pipeline.py:4803:                continue
+  arunda_pipeline.py:4804:
+> arunda_pipeline.py:4805:            if asset in opportunity_by_asset:
+  arunda_pipeline.py:4806:                fail(f"Duplicate Opportunity asset: {asset}")
+  arunda_pipeline.py:4807:
+> arunda_pipeline.py:4808:            opportunity_by_asset[asset] = opportunity
+  arunda_pipeline.py:4809:
+  arunda_pipeline.py:4810:        print(
+  arunda_pipeline.py:4811:            f"OPPORTUNITY_READY={len(ready_opportunity_results)}"
+  arunda_pipeline.py:4812:        )
+  arunda_pipeline.py:4813:
+  arunda_pipeline.py:4814:        # ------------------------------------------------------------------
+  arunda_pipeline.py:4815:        # 3. REAL PRODUCTION SIGNAL INPUT + DYNAMIC SIGNAL
+  arunda_pipeline.py:4816:        # ------------------------------------------------------------------
+  arunda_pipeline.py:4817:        import importlib.util
+  arunda_pipeline.py:4818:
+  arunda_pipeline.py:4819:        signal_input_path = (
+  arunda_pipeline.py:4820:            PROJECT_DIR / "production_signal_input_boundary_v0_1.py"
+  arunda_pipeline.py:4821:        )
+  arunda_pipeline.py:4822:
+  arunda_pipeline.py:4823:        spec = importlib.util.spec_from_file_location(
+  arunda_pipeline.py:4824:            "arunda_production_signal_input_runtime",
+  arunda_pipeline.py:4825:            signal_input_path,
+  arunda_pipeline.py:4826:        )
+  arunda_pipeline.py:4827:
+  arunda_pipeline.py:4828:        if spec is None or spec.loader is None:
+  arunda_pipeline.py:4829:            fail("Unable to load production_signal_input_boundary_v0_1")
+  arunda_pipeline.py:4830:
+  arunda_pipeline.py:4831:        signal_input_module = importlib.util.module_from_spec(spec)
+  arunda_pipeline.py:4832:        sys.modules[spec.name] = signal_input_module
+  arunda_pipeline.py:4833:        spec.loader.exec_module(signal_input_module)
+  arunda_pipeline.py:4834:
+  arunda_pipeline.py:4835:        import ccxt
+  arunda_pipeline.py:4836:
+  arunda_pipeline.py:4837:        kucoin = ccxt.kucoin()
+  arunda_pipeline.py:4838:        kucoin.load_markets()
+  arunda_pipeline.py:5075:        # 6. REAL SOCIAL
+  arunda_pipeline.py:5076:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5077:        from dynamic_social_boundary_v0_1 import run_dynamic_social
+  arunda_pipeline.py:5078:
+  arunda_pipeline.py:5079:        social_result = run_dynamic_social(runtime_universe)
+  arunda_pipeline.py:5080:
+  arunda_pipeline.py:5081:        if not isinstance(social_result, dict):
+  arunda_pipeline.py:5082:            fail("Dynamic Social returned invalid result")
+  arunda_pipeline.py:5083:
+  arunda_pipeline.py:5084:        social_items = social_result.get("items", [])
+  arunda_pipeline.py:5085:        if not isinstance(social_items, list):
+  arunda_pipeline.py:5086:            fail("Dynamic Social items must be a list")
+  arunda_pipeline.py:5087:
+  arunda_pipeline.py:5088:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5089:        # 7. DYNAMIC FUSION
+  arunda_pipeline.py:5090:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5091:        from dynamic_fusion_boundary_v0_1 import (
+  arunda_pipeline.py:5092:            fuse_dynamic_asset,
+  arunda_pipeline.py:5093:        )
+  arunda_pipeline.py:5094:
+> arunda_pipeline.py:5095:        market_signal_map = {
+  arunda_pipeline.py:5096:            asset: validated_signals[asset]
+  arunda_pipeline.py:5097:            for asset in validated_signals
+  arunda_pipeline.py:5098:        }
+  arunda_pipeline.py:5099:
+  arunda_pipeline.py:5100:        fusion_snapshot = {}
+  arunda_pipeline.py:5101:
+> arunda_pipeline.py:5102:        for asset in market_signal_map:
+  arunda_pipeline.py:5103:            fusion_snapshot[asset] = fuse_dynamic_asset(
+  arunda_pipeline.py:5104:                asset,
+> arunda_pipeline.py:5105:                market_signal_map[asset],
+  arunda_pipeline.py:5106:                news_items,
+  arunda_pipeline.py:5107:                social_items,
+  arunda_pipeline.py:5108:                runtime_universe,
+  arunda_pipeline.py:5109:            )
+  arunda_pipeline.py:5110:
+> arunda_pipeline.py:5111:        if set(fusion_snapshot) != set(market_signal_map):
+  arunda_pipeline.py:5112:            fail("Fast Debug Dynamic Fusion cardinality mismatch")
+  arunda_pipeline.py:5113:
+  arunda_pipeline.py:5114:        print(f"FUSION_READY={len(fusion_snapshot)}")
+  arunda_pipeline.py:5115:
+  arunda_pipeline.py:5116:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5117:        # 8. DYNAMIC SCORE
+  arunda_pipeline.py:5118:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5119:        from dynamic_score_contract_boundary_v0_1 import (
+  arunda_pipeline.py:5120:            build_dynamic_score,
+  arunda_pipeline.py:5121:        )
+  arunda_pipeline.py:5122:
+> arunda_pipeline.py:5123:        score_snapshot = {}
+  arunda_pipeline.py:5124:
+> arunda_pipeline.py:5125:        for asset in market_signal_map:
+> arunda_pipeline.py:5126:            signal_record = market_signal_map[asset]
+  arunda_pipeline.py:5127:            direction = signal_record["direction"]
+  arunda_pipeline.py:5128:
+  arunda_pipeline.py:5129:            feature_record = signal_record.get("feature_record")
+  arunda_pipeline.py:5130:
+  arunda_pipeline.py:5131:            structural_state = signal_record.get(
+  arunda_pipeline.py:5132:                "structure_state",
+  arunda_pipeline.py:5133:                {},
+  arunda_pipeline.py:5134:            )
+  arunda_pipeline.py:5135:
+  arunda_pipeline.py:5136:            regime_data = {
+  arunda_pipeline.py:5137:                "trend": signal_record.get("trend"),
+  arunda_pipeline.py:5138:                "momentum": signal_record.get("momentum"),
+  arunda_pipeline.py:5139:                "acceleration": signal_record.get("acceleration"),
+  arunda_pipeline.py:5140:                "position": signal_record.get("position"),
+  arunda_pipeline.py:5141:                "volatility": signal_record.get("volatility"),
+  arunda_pipeline.py:5142:            }
+  arunda_pipeline.py:5143:
+> arunda_pipeline.py:5144:            score_snapshot[asset] = build_dynamic_score(
+  arunda_pipeline.py:5145:                f"{asset}/USDT",
+  arunda_pipeline.py:5146:                direction,
+  arunda_pipeline.py:5147:                signal_record.get("feature_records"),
+  arunda_pipeline.py:5148:                structural_state,
+  arunda_pipeline.py:5149:                regime_data,
+  arunda_pipeline.py:5150:            )
+  arunda_pipeline.py:5151:
+> arunda_pipeline.py:5152:        if set(score_snapshot) != set(market_signal_map):
+  arunda_pipeline.py:5153:            fail("Dynamic Score cardinality mismatch")
+  arunda_pipeline.py:5154:
+  arunda_pipeline.py:5155:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5156:        # 9. DYNAMIC DECISION
+  arunda_pipeline.py:5157:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5158:        from dynamic_decision_contract_boundary_v0_1 import (
+  arunda_pipeline.py:5159:            build_dynamic_decision,
+  arunda_pipeline.py:5160:        )
+  arunda_pipeline.py:5161:
+> arunda_pipeline.py:5162:        decision_snapshot = {}
+  arunda_pipeline.py:5163:
+> arunda_pipeline.py:5164:        for asset in market_signal_map:
+> arunda_pipeline.py:5165:            validated_signal = dict(market_signal_map[asset])
+  arunda_pipeline.py:5166:            validation = validation_results[asset]
+  arunda_pipeline.py:5167:            validated_signal["valid"] = validation["valid"]
+  arunda_pipeline.py:5168:            validated_signal["validation"] = validation["validation"]
+> arunda_pipeline.py:5169:            decision_snapshot[asset] = build_dynamic_decision(
+  arunda_pipeline.py:5170:                f"{asset}/USDT",
+  arunda_pipeline.py:5171:                validated_signal,
+> arunda_pipeline.py:5172:                score_snapshot[asset],
+  arunda_pipeline.py:5173:            )
+  arunda_pipeline.py:5174:        # 10. DYNAMIC RISK
+  arunda_pipeline.py:5175:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5176:        from dynamic_risk_contract_boundary_v0_1 import (
+  arunda_pipeline.py:5177:            build_dynamic_risk,
+  arunda_pipeline.py:5178:        )
+  arunda_pipeline.py:5179:
+> arunda_pipeline.py:5180:        risk_snapshot = {}
+  arunda_pipeline.py:5181:
+> arunda_pipeline.py:5182:        for asset in decision_snapshot:
+> arunda_pipeline.py:5183:            risk_snapshot[asset] = build_dynamic_risk(
+  arunda_pipeline.py:5184:                f"{asset}/USDT",
+> arunda_pipeline.py:5185:                decision_snapshot[asset],
+  arunda_pipeline.py:5186:            )
+  arunda_pipeline.py:5187:
+> arunda_pipeline.py:5188:        if set(risk_snapshot) != set(decision_snapshot):
+  arunda_pipeline.py:5189:            fail("Dynamic Risk cardinality mismatch")
+  arunda_pipeline.py:5190:
+  arunda_pipeline.py:5191:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5192:        # 11. DYNAMIC TRADE GATE
+  arunda_pipeline.py:5193:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5194:        from dynamic_trade_gate_contract_boundary_v0_1 import (
+  arunda_pipeline.py:5195:            build_dynamic_trade_gate,
+  arunda_pipeline.py:5196:        )
+  arunda_pipeline.py:5197:
+  arunda_pipeline.py:5198:        trade_gate_snapshot = {}
+  arunda_pipeline.py:5199:
+> arunda_pipeline.py:5200:        for asset in risk_snapshot:
+> arunda_pipeline.py:5201:            opportunity = opportunity_by_asset.get(asset)
+  arunda_pipeline.py:5202:
+  arunda_pipeline.py:5203:            if opportunity is None:
+  arunda_pipeline.py:5204:                # No real Opportunity for this asset => fail closed.
+  arunda_pipeline.py:5205:                trade_gate_snapshot[asset] = {
+  arunda_pipeline.py:5206:                    "asset": asset,
+  arunda_pipeline.py:5207:                    "trade_gate_state": "REJECTED",
+  arunda_pipeline.py:5208:                    "reasons": ["opportunity unavailable"],
+  arunda_pipeline.py:5209:                }
+  arunda_pipeline.py:5210:                continue
+  arunda_pipeline.py:5211:
+  arunda_pipeline.py:5212:            trade_gate_snapshot[asset] = build_dynamic_trade_gate(
+  arunda_pipeline.py:5213:                opportunity,
+> arunda_pipeline.py:5214:                decision_snapshot[asset],
+> arunda_pipeline.py:5215:                risk_snapshot[asset],
+  arunda_pipeline.py:5216:            )
+  arunda_pipeline.py:5217:
+> arunda_pipeline.py:5218:        if set(trade_gate_snapshot) != set(risk_snapshot):
+  arunda_pipeline.py:5219:            fail("Dynamic Trade Gate cardinality mismatch")
+  arunda_pipeline.py:5220:
+  arunda_pipeline.py:5221:        trade_ready_assets = [
+  arunda_pipeline.py:5222:            asset
+  arunda_pipeline.py:5223:            for asset, result in trade_gate_snapshot.items()
+  arunda_pipeline.py:5224:            if result.get("trade_gate_state") == "TRADE_READY"
+  arunda_pipeline.py:5225:        ]
+  arunda_pipeline.py:5226:
+  arunda_pipeline.py:5227:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5228:        # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
+  arunda_pipeline.py:5229:        # ------------------------------------------------------------------
+  arunda_pipeline.py:5230:        assert_execution_disabled()
+  arunda_pipeline.py:5231:
+  arunda_pipeline.py:5232:        if trade_ready_assets:
+  arunda_pipeline.py:5233:            print(
+  arunda_pipeline.py:5234:                "TRADE_READY assets detected; "
+  arunda_pipeline.py:5235:                "OrderIntent creation/submission remains disabled."
+  arunda_pipeline.py:5236:            )
+  arunda_pipeline.py:5237:
+  arunda_pipeline.py:5238:        # No OrderIntent creation.
+  arunda_pipeline.py:5239:        # No canonical order request creation.
+  arunda_pipeline.py:5240:        # No exchange submission.
+  arunda_pipeline.py:5241:        # No execution.
+  arunda_pipeline.py:5242:        # No DB writes.
+  arunda_pipeline.py:5243:
+  arunda_pipeline.py:5244:        print("=" * 90)
+  arunda_pipeline.py:5245:        print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
+  arunda_pipeline.py:5246:        print(f"UNIVERSE_SIZE={len(universe_assets)}")
+  arunda_pipeline.py:5247:        print(f"SIGNAL_READY={len(dynamic_signals)}")
+  arunda_pipeline.py:5248:        print(f"VALIDATED={len(validated_signals)}")
+  arunda_pipeline.py:5249:        print(f"FUSION_READY={len(fusion_snapshot)}")
+> arunda_pipeline.py:5250:        print(f"SCORE_READY={len(score_snapshot)}")
+> arunda_pipeline.py:5251:        print(f"DECISION_READY={len(decision_snapshot)}")
+> arunda_pipeline.py:5252:        print(f"RISK_READY={len(risk_snapshot)}")
+  arunda_pipeline.py:5253:        print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
+  arunda_pipeline.py:5254:        print(f"TRADE_READY={len(trade_ready_assets)}")
+  arunda_pipeline.py:5255:        print("ORDER_INTENTS_CREATED=0")
+  arunda_pipeline.py:5256:        print("REAL_ORDER=FALSE")
+  arunda_pipeline.py:5257:        print("REAL_TRADE=FALSE")
+  arunda_pipeline.py:5258:        print("EXECUTION=OFF")
+  arunda_pipeline.py:5259:        print("DB_WRITES=0")
+  arunda_pipeline.py:5260:        print("FAIL_CLOSED=TRUE")
+  arunda_pipeline.py:5261:        print("=" * 90)
+  arunda_pipeline.py:5262:
+  arunda_pipeline.py:5263:        return 0
+  arunda_pipeline.py:5264:
+  arunda_pipeline.py:5265:    except Exception as exc:
+  arunda_pipeline.py:5266:        print("=" * 90)
+  arunda_pipeline.py:5267:        print("ARUNDA TRADER ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â DYNAMIC PIPELINE 
+FAILURE")
+  arunda_pipeline.py:5268:        print(f"ERROR : {exc}")
+  arunda_pipeline.py:5269:        print("EXECUTION          : DISABLED")
+  arunda_pipeline.py:5270:        print("ORDER SUBMISSION   : NONE")
+  arunda_pipeline.py:5271:        print("EXCHANGE WRITE     : NONE")
+  arunda_pipeline.py:5272:        print("DB_WRITES           : 0")
+  arunda_pipeline.py:5273:        print("FAIL-CLOSED         : YES")
+  arunda_pipeline.py:5274:        print("=" * 90)
+  arunda_pipeline.py:5275:        return 1
+  arunda_pipeline.py:5276:
+  arunda_pipeline.py:5277:if __name__ == "__main__":
+  arunda_pipeline.py:5278:    try:
+  arunda_pipeline.py:5279:        raise SystemExit(
+  arunda_pipeline.py:5280:            main()
+  arunda_pipeline.py:5281:        )
+  arunda_pipeline.py:5282:
+
+

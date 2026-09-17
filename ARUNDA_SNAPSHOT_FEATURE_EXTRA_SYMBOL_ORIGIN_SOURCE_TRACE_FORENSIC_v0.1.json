@@ -1,0 +1,3420 @@
+{
+  "artifact_version": "v0.1",
+  "artifact_name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_SOURCE_TRACE_FORENSIC_v0.1",
+  "generated_at_utc": "2026-08-26T17:27:20.958750+00:00",
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "database_write": "FORBIDDEN",
+  "repair": "FORBIDDEN",
+  "prediction": "FORBIDDEN",
+  "decision": "FORENSIC STATUS ONLY",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "target_symbols": [
+    "4",
+    "ASSET"
+  ],
+  "input_artifacts": {
+    "input_provenance": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+    "semantic": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+    "origin": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+    "first_insertion": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+    "cmc_identity": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+    "expected_status": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+    "decision": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+    "contract_repair": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+    "origin_path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json"
+  },
+  "input_artifact_sha256": {
+    "input_provenance": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd",
+    "semantic": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856",
+    "origin": "f3554f92cb117876ca9e3883ba84bb74d5f28e5dbdca48f6dead86365f949c33",
+    "first_insertion": "07b1d31cf3dc84ce2cceb4f5ef0ffb2d4d427b77898194c51e7d6c4ae15d4aee",
+    "cmc_identity": "305191d517122fee4c0d5b83f8f63bea64fc8450c6dc07ed783c9636eab8882c",
+    "expected_status": "78e4bc900dd9b91f879bd8946b9aa9da6c8ed0f93a17cc597837c988f0de8861",
+    "decision": "4ec43e218e835c329aa31659458bda00ec025ba62d1f8c23f572ba40b519e09b",
+    "contract_repair": "b38402c0c695b1db070d0fbb52651fd127c556fe1476ed6bb5d470a1da08d1b7",
+    "origin_path": "2dcef1eae1d4eb5da4eafce505fd369e1106ac6f28b0c57d855eed9dd18b7196"
+  },
+  "status": {
+    "target_symbols": 2,
+    "source_trace_established": 2,
+    "unresolved_targets": 0,
+    "forensic_status": "SOURCE_TRACE_ESTABLISHED_FOR_ALL_TARGETS"
+  },
+  "results": [
+    {
+      "target_symbol": "4",
+      "database_observed": true,
+      "database_table_count": 7,
+      "database_tables": [
+        "market_history",
+        "market_history_legacy",
+        "market_microstructure",
+        "market_opportunity",
+        "market_state",
+        "market_technical",
+        "market_universe"
+      ],
+      "database_total_symbol_matches": 1420,
+      "market_universe_records": [
+        {
+          "id": 854,
+          "cmc_id": 38557,
+          "symbol": "4",
+          "name": "4",
+          "slug": "4four",
+          "rank": null,
+          "is_active": 1,
+          "first_seen": null,
+          "last_seen": null,
+          "source": "COINMARKETCAP",
+          "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+          "cmc_rank": 854,
+          "price": 0.010788479457453717,
+          "market_cap": 10788479.457453717,
+          "volume_24h": 2516222.12933637,
+          "percent_change_1h": -0.21396725,
+          "percent_change_24h": 4.72043937,
+          "percent_change_7d": -20.39574243,
+          "circulating_supply": 1000000000.0,
+          "total_supply": 1000000000.0,
+          "max_supply": 1000000000.0,
+          "num_market_pairs": 180,
+          "date_added": "2025-10-02T09:38:05.000Z",
+          "last_updated": "2026-08-16T23:31:00.000Z",
+          "updated_at": "2026-08-16T23:32:17.309031+00:00"
+        }
+      ],
+      "artifact_trace": [
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.cross_source_extra_presence.market_history.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_history_legacy.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_microstructure.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_opportunity.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_state.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_technical.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_universe.extra_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.extra_classification.numeric_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.extra_universe.symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.primary_feature_input.symbols[3]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.provenance_groups[0].symbols[0]",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.extra_symbol_resolution.alignment_sources[0].symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.extra_symbol_resolution.provenance_sources[0].symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.extra_symbol_resolution.target_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.semantic_classification.numeric_identifier_candidates[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.semantic_classification.symbols.4.symbol",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.outcome.symbols_analyzed[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.outcome.symbols_observed[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.semantic_input.target_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_contract.targets[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_contract.targets_outside_expected_universe[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[0].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[1].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[1].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[2].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[2].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[3].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[3].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[4].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[0].samples[4].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[0].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[1].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[1].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[2].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[2].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[3].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[3].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[4].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[1].samples[4].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[2].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[3].samples[0].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[3].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[4].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[5].samples[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[5].samples[1].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[5].samples[2].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[5].samples[3].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[5].samples[4].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[6].samples[0].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_database_provenance.4[6].samples[0].symbol",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.cross_symbol_first_observable_summary.ordered_by_first_observation[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[1].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[1].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[2].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[2].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[3].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[3].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[4].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[4].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].first_observed_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[1].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[1].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[2].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[2].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[3].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[3].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[4].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[4].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].first_observed_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[1].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[2].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[2].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[2].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[3].earliest_observed_rows[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[3].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[3].first_observed_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[3].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[3].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[4].earliest_observed_rows[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[4].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[4].first_observed_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[4].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[4].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[1].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[2].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[3].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[4].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[5].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[6].earliest_observed_rows[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[6].earliest_observed_rows[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[6].first_observed_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[6].first_observed_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.evidence[6].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[1].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[1].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[2].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[2].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[3].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[4].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[5].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[5].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[6].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.candidates[6].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.first_observable_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.first_observable_event.first_observable_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_contract.target_symbols[0]",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[1].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[1].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[2].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[2].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[3].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[3].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[4].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[4].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[5].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[5].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.identity_consistency.cmc_cross_table_names[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.identity_consistency.cmc_cross_table_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.identity_consistency.market_universe_names[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.identity_consistency.market_universe_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.identity_consistency.target_symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.evidence[0].first_row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.evidence[0].first_row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.evidence[0].samples[0].row.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.evidence[0].samples[0].row.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.evidence[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.identity_records[0].name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.identity_records[0].symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.market_universe.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.primary_identity.name",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.primary_identity.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.semantic_identity.names[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.semantic_identity.symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.symbol_results.4.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_contract.target_symbols[0]",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.input_contract.target_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_results[0].symbol",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.expected_universe.target_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.target_decisions[0].symbol",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.repaired_contract.4.cmc_identity.names[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.repaired_contract.4.cmc_identity.symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.repaired_contract.4.symbol",
+              "value": "4"
+            },
+            {
+              "json_path": "$.targets[0]",
+              "value": "4"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.target_symbols[0]",
+              "value": "4"
+            },
+            {
+              "json_path": "$.results.4.symbol",
+              "value": "4"
+            }
+          ]
+        }
+      ],
+      "explicit_origin_paths": [
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_history.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_history_legacy.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_microstructure.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_opportunity.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_state.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_technical.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_universe.extra_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.extra_classification.numeric_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.extra_universe.symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.primary_feature_input.symbols[3]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.provenance_groups[0].symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.alignment_sources[0].symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.provenance_sources[0].symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_classification.numeric_identifier_candidates[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_classification.symbols.4.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.outcome.symbols_analyzed[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.outcome.symbols_observed[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_input.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.targets[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.targets_outside_expected_universe[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[0].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[1].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[1].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[2].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[2].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[3].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[3].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[4].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[0].samples[4].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[0].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[1].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[1].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[2].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[2].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[3].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[3].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[4].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[1].samples[4].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[2].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[3].samples[0].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[3].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[4].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[5].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[5].samples[1].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[5].samples[2].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[5].samples[3].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[5].samples[4].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[6].samples[0].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.4[6].samples[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.cross_symbol_first_observable_summary.ordered_by_first_observation[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[1].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[1].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[2].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[2].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[3].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[3].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[4].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].earliest_observed_rows[4].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].first_observed_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[1].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[1].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[2].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[2].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[3].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[3].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[4].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].earliest_observed_rows[4].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].first_observed_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[1].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[2].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[2].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[2].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[3].earliest_observed_rows[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[3].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[3].first_observed_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[3].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[3].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[4].earliest_observed_rows[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[4].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[4].first_observed_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[4].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[4].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[1].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[2].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[3].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].earliest_observed_rows[4].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[5].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[6].earliest_observed_rows[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[6].earliest_observed_rows[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[6].first_observed_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[6].first_observed_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.evidence[6].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[1].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[1].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[2].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[2].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[3].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[4].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[5].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[5].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[6].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.candidates[6].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.first_observable_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.first_observable_event.first_observable_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[1].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[1].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[2].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[2].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[3].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[3].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[4].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[4].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[5].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.cmc_id_cross_table_evidence[5].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.identity_consistency.cmc_cross_table_names[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.identity_consistency.cmc_cross_table_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.identity_consistency.market_universe_names[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.identity_consistency.market_universe_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.identity_consistency.target_symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.evidence[0].first_row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.evidence[0].first_row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.evidence[0].samples[0].row.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.evidence[0].samples[0].row.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.evidence[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.identity_records[0].name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.identity_records[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.market_universe.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.primary_identity.name",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.primary_identity.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.semantic_identity.names[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.semantic_identity.symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.4.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "json_path": "$.input_contract.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "json_path": "$.target_results[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "json_path": "$.expected_universe.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "json_path": "$.target_decisions[0].symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.repaired_contract.4.cmc_identity.names[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.repaired_contract.4.cmc_identity.symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.repaired_contract.4.symbol",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.targets[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "json_path": "$.target_symbols[0]",
+          "value": "4"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "json_path": "$.results.4.symbol",
+          "value": "4"
+        }
+      ],
+      "database_source_column_trace": [
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": "COINMARKETCAP",
+          "count": 7
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:31:00.000Z",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:39:33.608988+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:40:44.661983+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:41:55.268165+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:43:05.589397+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:44:17.013255+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-18T12:25:45.754732+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_HISTORY_CMC_v0.1",
+          "count": 5
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_HISTORY_CMC_v0.4",
+          "count": 2
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": "COINMARKETCAP",
+          "count": 5
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:39:33.608988+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:40:44.661983+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:41:55.268165+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:43:05.589397+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "4",
+          "source_value": "2026-08-16T23:44:17.013255+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_HISTORY_CMC_v0.1",
+          "count": 5
+        },
+        {
+          "table": "market_microstructure",
+          "symbol_column": "symbol",
+          "source_column": "data_source",
+          "symbol_value": "4",
+          "source_value": "CMC_HISTORICAL",
+          "count": 1
+        },
+        {
+          "table": "market_microstructure",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_MICROSTRUCTURE_v0.1",
+          "count": 1
+        },
+        {
+          "table": "market_opportunity",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": "market_state",
+          "count": 1
+        },
+        {
+          "table": "market_opportunity",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_OPPORTUNITY_v0.1",
+          "count": 1
+        },
+        {
+          "table": "market_state",
+          "symbol_column": "symbol",
+          "source_column": "data_sources",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 1
+        },
+        {
+          "table": "market_state",
+          "symbol_column": "symbol",
+          "source_column": "state_sources",
+          "symbol_value": "4",
+          "source_value": "technical",
+          "count": 1
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 6
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_TECHNICAL_CMC_v0.2",
+          "count": 5
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": null,
+          "count": 1
+        },
+        {
+          "table": "market_universe",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "4",
+          "source_value": "COINMARKETCAP",
+          "count": 1
+        },
+        {
+          "table": "market_universe",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "4",
+          "source_value": "MARKET_UNIVERSE_CMC_v0.3.1",
+          "count": 1
+        }
+      ],
+      "observed_source_values": [
+        "2026-08-16T23:31:00.000Z",
+        "2026-08-16T23:39:33.608988+00:00",
+        "2026-08-16T23:40:44.661983+00:00",
+        "2026-08-16T23:41:55.268165+00:00",
+        "2026-08-16T23:43:05.589397+00:00",
+        "2026-08-16T23:44:17.013255+00:00",
+        "2026-08-18T12:25:45.754732+00:00",
+        "CMC_HISTORICAL",
+        "COINMARKETCAP",
+        "MARKET_HISTORY_CMC_v0.1",
+        "MARKET_HISTORY_CMC_v0.4",
+        "MARKET_MICROSTRUCTURE_v0.1",
+        "MARKET_OPPORTUNITY_v0.1",
+        "MARKET_TECHNICAL_CMC_v0.2",
+        "MARKET_UNIVERSE_CMC_v0.3.1",
+        "market_state",
+        "technical"
+      ],
+      "source_trace_class": "EXPLICIT_ARTIFACT_SOURCE_TRACE_FOUND",
+      "source_trace_established": true,
+      "contradictions": []
+    },
+    {
+      "target_symbol": "ASSET",
+      "database_observed": true,
+      "database_table_count": 7,
+      "database_tables": [
+        "market_history",
+        "market_history_legacy",
+        "market_microstructure",
+        "market_opportunity",
+        "market_state",
+        "market_technical",
+        "market_universe"
+      ],
+      "database_total_symbol_matches": 1420,
+      "market_universe_records": [
+        {
+          "id": 343,
+          "cmc_id": 39922,
+          "symbol": "ASSET",
+          "name": "REAL",
+          "slug": "real-finance",
+          "rank": null,
+          "is_active": 1,
+          "first_seen": null,
+          "last_seen": null,
+          "source": "COINMARKETCAP",
+          "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+          "cmc_rank": 343,
+          "price": 0.26172906710602617,
+          "market_cap": 46074112.067913316,
+          "volume_24h": 1072104.94807767,
+          "percent_change_1h": 0.00861589,
+          "percent_change_24h": -0.3338151,
+          "percent_change_7d": 1.00562806,
+          "circulating_supply": 176037429.0,
+          "total_supply": 1000000000.0,
+          "max_supply": 1000000000.0,
+          "num_market_pairs": 9,
+          "date_added": "2026-04-30T07:15:03.000Z",
+          "last_updated": "2026-08-16T23:31:00.000Z",
+          "updated_at": "2026-08-16T23:32:16.045814+00:00"
+        }
+      ],
+      "artifact_trace": [
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.cross_source_extra_presence.fusion_signals.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.hunter_signals.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_history.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_history_legacy.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_microstructure.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_opportunity.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_records.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_state.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_technical.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.market_universe.extra_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.news_data.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.news_signals.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.opportunity_signals.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.risk_decisions.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.signal_outcomes.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.social_metrics.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.trade_decisions.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.cross_source_extra_presence.trade_gate_decisions.column",
+              "value": "asset"
+            },
+            {
+              "json_path": "$.extra_classification.known_artifact_symbols[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.extra_universe.symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.primary_feature_input.symbols[76]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.provenance_groups[0].symbols[1]",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.extra_symbol_resolution.alignment_sources[0].symbols[5]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.extra_symbol_resolution.provenance_sources[0].symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.extra_symbol_resolution.target_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.semantic_classification.generic_field_labels[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.semantic_classification.symbols.ASSET.symbol",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.outcome.symbols_analyzed[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.outcome.symbols_observed[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.semantic_input.target_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_contract.targets[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_contract.targets_outside_expected_universe[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[0].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[0].samples[1].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[0].samples[2].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[0].samples[3].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[0].samples[4].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[1].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[1].samples[1].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[1].samples[2].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[1].samples[3].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[1].samples[4].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[2].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[3].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[4].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[5].samples[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[5].samples[1].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[5].samples[2].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[5].samples[3].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[5].samples[4].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_database_provenance.ASSET[6].samples[0].symbol",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.cross_symbol_first_observable_summary.ordered_by_first_observation[1].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[1].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[2].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[3].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[4].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[1].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[2].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[3].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[4].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[1].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[2].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[2].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[2].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[3].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[3].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[3].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[4].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[4].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[4].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[1].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[2].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[3].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[4].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[5].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[6].earliest_observed_rows[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[6].first_observed_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.evidence[6].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[1].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[2].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[3].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[4].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[5].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[6].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.first_observable_event.first_observable_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_contract.target_symbols[1]",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[1].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[2].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[3].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[4].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[5].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.identity_consistency.cmc_cross_table_symbols[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.identity_consistency.market_universe_symbols[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.identity_consistency.target_symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].first_row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].samples[0].row.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.market_universe.identity_records[0].symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.market_universe.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.primary_identity.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.semantic_identity.symbols[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.symbol_results.ASSET.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_contract.target_symbols[1]",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.input_contract.target_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_results[1].symbol",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.expected_universe.target_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.target_decisions[1].symbol",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.repaired_contract.ASSET.cmc_identity.symbols[0]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.repaired_contract.ASSET.symbol",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.targets[1]",
+              "value": "ASSET"
+            }
+          ]
+        },
+        {
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "exists": true,
+          "records": 1,
+          "symbol_paths": [
+            {
+              "json_path": "$.target_symbols[1]",
+              "value": "ASSET"
+            },
+            {
+              "json_path": "$.results.ASSET.symbol",
+              "value": "ASSET"
+            }
+          ]
+        }
+      ],
+      "explicit_origin_paths": [
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.fusion_signals.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.hunter_signals.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_history.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_history_legacy.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_microstructure.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_opportunity.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_records.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_state.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_technical.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.market_universe.extra_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.news_data.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.news_signals.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.opportunity_signals.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.risk_decisions.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.signal_outcomes.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.social_metrics.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.trade_decisions.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.cross_source_extra_presence.trade_gate_decisions.column",
+          "value": "asset"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.extra_classification.known_artifact_symbols[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.extra_universe.symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.primary_feature_input.symbols[76]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "json_path": "$.provenance_groups[0].symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.alignment_sources[0].symbols[5]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.provenance_sources[0].symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.extra_symbol_resolution.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_classification.generic_field_labels[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_classification.symbols.ASSET.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.outcome.symbols_analyzed[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.outcome.symbols_observed[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.semantic_input.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.targets[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.targets_outside_expected_universe[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[0].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[0].samples[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[0].samples[2].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[0].samples[3].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[0].samples[4].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[1].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[1].samples[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[1].samples[2].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[1].samples[3].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[1].samples[4].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[2].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[3].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[4].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[5].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[5].samples[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[5].samples[2].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[5].samples[3].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[5].samples[4].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "json_path": "$.target_database_provenance.ASSET[6].samples[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.cross_symbol_first_observable_summary.ordered_by_first_observation[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[1].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[2].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[3].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].earliest_observed_rows[4].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[1].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[2].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[3].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].earliest_observed_rows[4].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[2].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[2].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[2].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[3].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[3].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[3].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[4].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[4].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[4].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[1].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[2].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[3].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].earliest_observed_rows[4].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[5].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[6].earliest_observed_rows[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[6].first_observed_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.evidence[6].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[1].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[2].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[3].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[4].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[5].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.candidates[6].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.first_observable_event.first_observable_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[1].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[2].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[3].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[4].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.cmc_id_cross_table_evidence[5].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.identity_consistency.cmc_cross_table_symbols[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.identity_consistency.market_universe_symbols[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.identity_consistency.target_symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].first_row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].samples[0].row.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.market_universe.evidence[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.market_universe.identity_records[0].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.market_universe.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.primary_identity.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.semantic_identity.symbols[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.symbol_results.ASSET.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "json_path": "$.target_contract.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "json_path": "$.input_contract.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "json_path": "$.target_results[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "json_path": "$.expected_universe.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "json_path": "$.target_decisions[1].symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.repaired_contract.ASSET.cmc_identity.symbols[0]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.repaired_contract.ASSET.symbol",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "json_path": "$.targets[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "json_path": "$.target_symbols[1]",
+          "value": "ASSET"
+        },
+        {
+          "stage_artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json",
+          "json_path": "$.results.ASSET.symbol",
+          "value": "ASSET"
+        }
+      ],
+      "database_source_column_trace": [
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": "COINMARKETCAP",
+          "count": 7
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:31:00.000Z",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:39:28.148100+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:40:39.066734+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:41:50.200473+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:43:00.511712+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:44:11.480246+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-18T12:25:45.754732+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_HISTORY_CMC_v0.1",
+          "count": 5
+        },
+        {
+          "table": "market_history",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_HISTORY_CMC_v0.4",
+          "count": 2
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": "COINMARKETCAP",
+          "count": 5
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:39:28.148100+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:40:39.066734+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:41:50.200473+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:43:00.511712+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "source_timestamp",
+          "symbol_value": "ASSET",
+          "source_value": "2026-08-16T23:44:11.480246+00:00",
+          "count": 1
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 699
+        },
+        {
+          "table": "market_history_legacy",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_HISTORY_CMC_v0.1",
+          "count": 5
+        },
+        {
+          "table": "market_microstructure",
+          "symbol_column": "symbol",
+          "source_column": "data_source",
+          "symbol_value": "ASSET",
+          "source_value": "CMC_HISTORICAL",
+          "count": 1
+        },
+        {
+          "table": "market_microstructure",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_MICROSTRUCTURE_v0.1",
+          "count": 1
+        },
+        {
+          "table": "market_opportunity",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": "market_state",
+          "count": 1
+        },
+        {
+          "table": "market_opportunity",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_OPPORTUNITY_v0.1",
+          "count": 1
+        },
+        {
+          "table": "market_state",
+          "symbol_column": "symbol",
+          "source_column": "data_sources",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 1
+        },
+        {
+          "table": "market_state",
+          "symbol_column": "symbol",
+          "source_column": "state_sources",
+          "symbol_value": "ASSET",
+          "source_value": "technical",
+          "count": 1
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 6
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_TECHNICAL_CMC_v0.2",
+          "count": 5
+        },
+        {
+          "table": "market_technical",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": null,
+          "count": 1
+        },
+        {
+          "table": "market_universe",
+          "symbol_column": "symbol",
+          "source_column": "source",
+          "symbol_value": "ASSET",
+          "source_value": "COINMARKETCAP",
+          "count": 1
+        },
+        {
+          "table": "market_universe",
+          "symbol_column": "symbol",
+          "source_column": "engine_version",
+          "symbol_value": "ASSET",
+          "source_value": "MARKET_UNIVERSE_CMC_v0.3.1",
+          "count": 1
+        }
+      ],
+      "observed_source_values": [
+        "2026-08-16T23:31:00.000Z",
+        "2026-08-16T23:39:28.148100+00:00",
+        "2026-08-16T23:40:39.066734+00:00",
+        "2026-08-16T23:41:50.200473+00:00",
+        "2026-08-16T23:43:00.511712+00:00",
+        "2026-08-16T23:44:11.480246+00:00",
+        "2026-08-18T12:25:45.754732+00:00",
+        "CMC_HISTORICAL",
+        "COINMARKETCAP",
+        "MARKET_HISTORY_CMC_v0.1",
+        "MARKET_HISTORY_CMC_v0.4",
+        "MARKET_MICROSTRUCTURE_v0.1",
+        "MARKET_OPPORTUNITY_v0.1",
+        "MARKET_TECHNICAL_CMC_v0.2",
+        "MARKET_UNIVERSE_CMC_v0.3.1",
+        "market_state",
+        "technical"
+      ],
+      "source_trace_class": "EXPLICIT_ARTIFACT_SOURCE_TRACE_FOUND",
+      "source_trace_established": true,
+      "contradictions": []
+    }
+  ],
+  "safety_assertions": {
+    "database_open_mode": "READ_ONLY_URI",
+    "network_calls": 0,
+    "insert": 0,
+    "update": 0,
+    "delete": 0,
+    "alter": 0,
+    "create": 0,
+    "drop": 0,
+    "vacuum": 0,
+    "prediction": false,
+    "trading_decision": false
+  }
+}

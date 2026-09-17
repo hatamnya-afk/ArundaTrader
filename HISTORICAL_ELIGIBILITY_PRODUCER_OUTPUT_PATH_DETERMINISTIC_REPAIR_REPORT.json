@@ -1,0 +1,105 @@
+{
+  "artifact": {
+    "name": "ARUNDA TRADER HISTORICAL ELIGIBILITY PRODUCER OUTPUT PATH DETERMINISTIC REPAIR v0.1",
+    "mode": "READ-ONLY REPAIR SPECIFICATION",
+    "timestamp_utc": "2026-08-24T18:14:04.157144+00:00"
+  },
+  "project": {
+    "root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "target": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "producer": {
+    "exists": true,
+    "syntax_valid": true
+  },
+  "current_path_analysis": {
+    "found": true,
+    "deterministic": false,
+    "assignments": [
+      {
+        "line": 701,
+        "source": "os.path.join(capture_dir, report_name)"
+      }
+    ]
+  },
+  "target_assignments": [
+    {
+      "line": 697,
+      "variable": "report_name",
+      "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+    }
+  ],
+  "writer_calls": [
+    {
+      "line": 91,
+      "type": "open",
+      "arguments": [
+        "path",
+        "'rb'"
+      ]
+    },
+    {
+      "line": 706,
+      "type": "open",
+      "arguments": [
+        "report_path",
+        "'w'"
+      ]
+    },
+    {
+      "line": 711,
+      "type": "json.dump",
+      "arguments": [
+        "report",
+        "f"
+      ]
+    }
+  ],
+  "path_operations": [],
+  "main_functions": [
+    {
+      "line": 448,
+      "end_line": 773
+    }
+  ],
+  "repair_contract": {
+    "repair_required": true,
+    "canonical_target_name": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "canonical_expression": "PROJECT_ROOT / \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"",
+    "repair_type": "DETERMINISTIC_ABSOLUTE_PROJECT_ROOT_PATH",
+    "constraints": [
+      "READ_ONLY_ANALYSIS",
+      "DO_NOT_EXECUTE_PRODUCER",
+      "DO_NOT_IMPORT_PRODUCER",
+      "DO_NOT_WRITE_PRODUCTION_DB",
+      "DO_NOT_REGENERATE_TARGET_REPORT",
+      "DO_NOT_CREATE_SYNTHETIC_TARGET_ARTIFACT",
+      "DO_NOT_MODIFY_PRODUCTION_SOURCE"
+    ]
+  },
+  "patch": {
+    "patch_required": true,
+    "patch": "PROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nreport_path = PROJECT_ROOT / \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n"
+  },
+  "decision": {
+    "status": "DETERMINISTIC_OUTPUT_PATH_REPAIR_REQUIRED",
+    "repair_required": true
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "production_source_modified": false,
+    "network_access": false,
+    "repair_applied": false
+  },
+  "final_verdict": {
+    "historical_eligibility_output_path": "DETERMINISTIC_OUTPUT_PATH_REPAIR_REQUIRED",
+    "report": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_DETERMINISTIC_REPAIR_REPORT.json"
+  }
+}

@@ -1,0 +1,5938 @@
+{
+  "version": "v0.1",
+  "frontier": "LIVE_DATA_BOUNDARY_PREFLIGHT",
+  "status": "LIVE_DATA_BOUNDARY_PREFLIGHT_BLOCKED",
+  "started_utc": "2026-08-26T21:05:59.900856+00:00",
+  "finished_utc": "2026-08-26T21:06:09.166031+00:00",
+  "mode": "READ_ONLY",
+  "network_execution": false,
+  "database_write": false,
+  "production_run": false,
+  "order_execution": false,
+  "synthetic_data": false,
+  "prediction": false,
+  "historical_repair": false,
+  "universe_rebuild": false,
+  "python_files_scanned": 850,
+  "syntax_failures": 50,
+  "candidate_files": 327,
+  "network_candidates": 86,
+  "database_candidates": 135,
+  "live_source_candidates": 86,
+  "write_candidates": 117,
+  "checks": {
+    "SYNTAX_GATE": false,
+    "LIVE_SOURCE_PRESENT": true,
+    "NETWORK_BOUNDARY_IDENTIFIED": true,
+    "DATABASE_READ_BOUNDARY_IDENTIFIED": true,
+    "NO_WRITE_SQL_IN_LIVE_CANDIDATES": false
+  },
+  "production_db_before": {
+    "exists": true,
+    "sha256": "c842927ef129307ea2edd1735d9848605caa585da2e096b72f402b8d40d021b7",
+    "size": 521883648,
+    "tables": [
+      "fusion_signals",
+      "hunter_signals",
+      "market_data",
+      "market_history",
+      "market_history_legacy",
+      "market_microstructure",
+      "market_news",
+      "market_news_intelligence",
+      "market_opportunity",
+      "market_records",
+      "market_state",
+      "market_technical",
+      "market_universe",
+      "market_whale",
+      "news_data",
+      "news_signals",
+      "opportunity_signals",
+      "positioning_data",
+      "risk_decisions",
+      "scheduler_runs",
+      "signal_outcomes",
+      "social_metrics",
+      "source_status",
+      "sqlite_sequence",
+      "trade_decisions",
+      "trade_gate_decisions"
+    ]
+  },
+  "boundary_ready": false,
+  "syntax_failure_files": [
+    "_diag_analysis.py",
+    "_diag_market_source.py",
+    "_repair_fusion_syntax.py",
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_FINAL_FORENSIC_v0.1.py",
+    "audit_fusion_freshness.py",
+    "audit_snapshot_readonly.py",
+    "diagnostic_fusion_readonly.py",
+    "entry_stop_contract.py",
+    "fusion_engine_backup_before_market_fix_20260820_134917.py",
+    "fusion_engine_before_market_input_fix_20260820_134746.py",
+    "fusion_engine_before_positioning_normalization_20260820_024337.py",
+    "INDICATOR_CURRENT_CONVENTION_EXECUTION_DETERMINATION_AND_REPAIR_v0.1.py",
+    "INDICATOR_CURRENT_CONVENTION_IMPLEMENTATION_FORENSIC_AUDIT_v0.1.py",
+    "INDICATOR_POST_REPAIR_ACTUAL_ROWS_PRODUCER_CHAIN_FORENSIC_AUDIT_v0.1.py",
+    "INDICATOR_POST_REPAIR_HISTORY_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+    "INDICATOR_POST_REPAIR_PRODUCTION_INPUT_PATH_FORENSIC_AUDIT_v0.1.py",
+    "INDICATOR_POST_REPAIR_PRODUCTION_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py",
+    "market_analysis_engine.py",
+    "market_history_asset_identity_diagnostic.py",
+    "market_history_asset_identity_source_diagnostic.py",
+    "market_history_diagnostic.py",
+    "market_history_duplicate_diagnostic.py",
+    "market_history_duplicate_pair_inspection.py",
+    "market_history_engine.py",
+    "market_history_engine_v0_4.py",
+    "market_microstructure_engine.py",
+    "market_monitor_engine.py",
+    "market_news_engine.py",
+    "market_news_intelligence_engine.py",
+    "market_opportunity_engine.py",
+    "market_regime_engine.py",
+    "market_snapshot_engine.py",
+    "market_snapshot_scheduler.py",
+    "market_state_engine.py",
+    "market_state_engine_pre_step18_loader.py",
+    "market_stop_distance_adapter.py",
+    "market_technical_engine.py",
+    "market_universe_engine.py",
+    "market_whale_engine.py",
+    "snapshot_reader.py",
+    "step15d_signal_adversarial_integrity_audit.py",
+    "step15i_signal_state_transition_lifecycle_audit.py",
+    "step15l_signal_contract_immutability_boundary_hardening_audit.py",
+    "step15n_final_architectural_consistency_audit.py",
+    "step18_signal_score_contract_audit.py",
+    "step5a_feature_schema_audit.py",
+    "step9_analysis_output_contract_audit.py",
+    "stop_loss_contract.py",
+    "stop_loss_engine.py",
+    "technical_history_diagnostic.py"
+  ],
+  "live_boundary_candidates": [
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\cli\\index_command.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "contextlib",
+        "functools",
+        "logging",
+        "optparse",
+        "os",
+        "pip",
+        "ssl",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\commands\\install.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "contextlib",
+        "errno",
+        "json",
+        "operator",
+        "optparse",
+        "os",
+        "pathlib",
+        "pip",
+        "shutil",
+        "site",
+        "sys",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\distributions\\sdist.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "contextlib",
+        "logging",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\exceptions.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "configparser",
+        "contextlib",
+        "hashlib",
+        "http",
+        "itertools",
+        "locale",
+        "logging",
+        "os",
+        "pathlib",
+        "pip",
+        "re",
+        "sys",
+        "traceback",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\index\\collector.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "email",
+        "functools",
+        "html",
+        "itertools",
+        "json",
+        "logging",
+        "optparse",
+        "os",
+        "pip",
+        "sources",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\__init__.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "base",
+        "contextlib",
+        "functools",
+        "importlib",
+        "os",
+        "pip",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\_json.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "email",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\base.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_json",
+        "collections",
+        "csv",
+        "email",
+        "functools",
+        "json",
+        "logging",
+        "pathlib",
+        "pip",
+        "re",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\importlib\\__init__.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "_dists",
+        "_envs"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\importlib\\_compat.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "importlib",
+        "os",
+        "pip",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\importlib\\_dists.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_compat",
+        "collections",
+        "email",
+        "importlib",
+        "os",
+        "pathlib",
+        "pip",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\importlib\\_envs.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_compat",
+        "_dists",
+        "collections",
+        "importlib",
+        "logging",
+        "os",
+        "pathlib",
+        "pip",
+        "sys",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\metadata\\pkg_resources.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "base",
+        "collections",
+        "email",
+        "logging",
+        "os",
+        "pip",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\models\\index.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\models\\link.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "functools",
+        "itertools",
+        "logging",
+        "os",
+        "pip",
+        "posixpath",
+        "re",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\models\\search_scope.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dataclasses",
+        "itertools",
+        "logging",
+        "os",
+        "pip",
+        "posixpath",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\auth.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "abc",
+        "functools",
+        "json",
+        "keyring",
+        "logging",
+        "os",
+        "pathlib",
+        "pip",
+        "shutil",
+        "subprocess",
+        "sysconfig",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\cache.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "contextlib",
+        "datetime",
+        "os",
+        "pip",
+        "shutil",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\download.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "email",
+        "http",
+        "logging",
+        "mimetypes",
+        "os",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\lazy_wheel.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "bisect",
+        "collections",
+        "contextlib",
+        "pip",
+        "tempfile",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\session.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_ssl",
+        "collections",
+        "email",
+        "functools",
+        "io",
+        "ipaddress",
+        "json",
+        "logging",
+        "mimetypes",
+        "os",
+        "pip",
+        "platform",
+        "shutil",
+        "ssl",
+        "subprocess",
+        "sys",
+        "typing",
+        "urllib",
+        "warnings"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\utils.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "pip",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\network\\xmlrpc.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "_typeshed",
+        "logging",
+        "pip",
+        "typing",
+        "urllib",
+        "xmlrpc"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\operations\\build\\metadata.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "pip"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\operations\\build\\metadata_editable.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "pip"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\req\\req_file.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "codecs",
+        "collections",
+        "dataclasses",
+        "logging",
+        "optparse",
+        "os",
+        "pip",
+        "re",
+        "shlex",
+        "sys",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\req\\req_install.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "functools",
+        "logging",
+        "optparse",
+        "os",
+        "pathlib",
+        "pip",
+        "shutil",
+        "sys",
+        "typing",
+        "uuid",
+        "zipfile"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\utils\\misc.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "errno",
+        "functools",
+        "getpass",
+        "hashlib",
+        "io",
+        "itertools",
+        "logging",
+        "os",
+        "pathlib",
+        "pip",
+        "posixpath",
+        "shutil",
+        "stat",
+        "sys",
+        "sysconfig",
+        "types",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\utils\\pylock.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "os",
+        "pathlib",
+        "pip",
+        "re",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\utils\\urls.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "compat",
+        "os",
+        "string",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\vcs\\git.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "logging",
+        "os",
+        "pathlib",
+        "pip",
+        "re",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\vcs\\subversion.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "logging",
+        "os",
+        "pip",
+        "re"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_internal\\vcs\\versioncontrol.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "logging",
+        "os",
+        "pip",
+        "shutil",
+        "sys",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\__init__.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "glob",
+        "os",
+        "sys"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\cachecontrol\\_cmd.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "argparse",
+        "logging",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\cachecontrol\\adapter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "functools",
+        "pip",
+        "typing",
+        "weakref",
+        "zlib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\cachecontrol\\controller.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "calendar",
+        "email",
+        "logging",
+        "pip",
+        "re",
+        "time",
+        "typing",
+        "weakref"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\cachecontrol\\serialize.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "io",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\cachecontrol\\wrapper.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\distlib\\compat.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ConfigParser",
+        "HTMLParser",
+        "Queue",
+        "StringIO",
+        "__builtin__",
+        "__future__",
+        "_abcoll",
+        "builtins",
+        "cgi",
+        "codecs",
+        "collections",
+        "configparser",
+        "dummy_thread",
+        "html",
+        "htmlentitydefs",
+        "http",
+        "httplib",
+        "importlib",
+        "io",
+        "itertools",
+        "logging",
+        "os",
+        "platform",
+        "queue",
+        "re",
+        "reprlib",
+        "shutil",
+        "ssl",
+        "sys",
+        "sysconfig",
+        "thread",
+        "tokenize",
+        "types",
+        "urllib",
+        "urllib2",
+        "urlparse",
+        "xmlrpc",
+        "xmlrpclib",
+        "zipfile"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\idna\\idnadata.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\idna\\package_data.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\idna\\uts46data.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "array",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\packaging\\direct_url.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "re",
+        "sys",
+        "typing",
+        "typing_extensions",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\packaging\\metadata.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "email",
+        "errors",
+        "keyword",
+        "licenses",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\packaging\\pylock.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "logging",
+        "markers",
+        "pathlib",
+        "re",
+        "specifiers",
+        "tags",
+        "typing",
+        "typing_extensions",
+        "urllib",
+        "utils",
+        "version"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\__init__.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "__version__",
+        "api",
+        "cryptography",
+        "exceptions",
+        "logging",
+        "models",
+        "pip",
+        "sessions",
+        "ssl",
+        "status_codes",
+        "warnings"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\__version__.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\_internal_utils.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "compat",
+        "re"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\_types.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "auth",
+        "collections",
+        "cookies",
+        "http",
+        "models",
+        "structures",
+        "typing",
+        "typing_extensions"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\adapters.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_types",
+        "auth",
+        "compat",
+        "cookies",
+        "exceptions",
+        "models",
+        "os",
+        "pip",
+        "socket",
+        "structures",
+        "typing",
+        "utils",
+        "warnings"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\api.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "models",
+        "typing",
+        "typing_extensions"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\auth.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_internal_utils",
+        "base64",
+        "compat",
+        "cookies",
+        "hashlib",
+        "http",
+        "models",
+        "os",
+        "re",
+        "threading",
+        "time",
+        "typing",
+        "utils",
+        "warnings"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\certs.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "pip"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\compat.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "http",
+        "io",
+        "json",
+        "pip",
+        "sys",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\cookies.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_internal_utils",
+        "_types",
+        "_typeshed",
+        "calendar",
+        "collections",
+        "compat",
+        "copy",
+        "http",
+        "models",
+        "threading",
+        "time",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\exceptions.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "compat",
+        "models",
+        "pip",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\hooks.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "models",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\models.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_internal_utils",
+        "_types",
+        "adapters",
+        "auth",
+        "collections",
+        "compat",
+        "cookies",
+        "datetime",
+        "encodings",
+        "exceptions",
+        "hooks",
+        "http",
+        "io",
+        "pip",
+        "status_codes",
+        "structures",
+        "typing",
+        "typing_extensions",
+        "utils"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\packages.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "compat",
+        "sys"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\sessions.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_internal_utils",
+        "_types",
+        "adapters",
+        "auth",
+        "collections",
+        "compat",
+        "cookies",
+        "datetime",
+        "exceptions",
+        "hooks",
+        "http",
+        "models",
+        "os",
+        "status_codes",
+        "structures",
+        "sys",
+        "time",
+        "typing",
+        "typing_extensions",
+        "utils"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\status_codes.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "structures"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\structures.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "compat",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\requests\\utils.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "__version__",
+        "_internal_utils",
+        "_types",
+        "codecs",
+        "collections",
+        "compat",
+        "contextlib",
+        "cookies",
+        "exceptions",
+        "http",
+        "io",
+        "models",
+        "netrc",
+        "os",
+        "pip",
+        "re",
+        "socket",
+        "struct",
+        "structures",
+        "sys",
+        "tempfile",
+        "typing",
+        "warnings",
+        "winreg",
+        "zipfile"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\rich\\live.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "IPython",
+        "__future__",
+        "align",
+        "console",
+        "control",
+        "file_proxy",
+        "ipywidgets",
+        "itertools",
+        "jupyter",
+        "live",
+        "live_render",
+        "panel",
+        "random",
+        "rule",
+        "screen",
+        "syntax",
+        "sys",
+        "table",
+        "text",
+        "threading",
+        "time",
+        "types",
+        "typing",
+        "typing_extensions",
+        "warnings"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\rich\\live_render.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "_loop",
+        "console",
+        "control",
+        "segment",
+        "style",
+        "text",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\_request_methods.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_base_connection",
+        "_collections",
+        "filepost",
+        "json",
+        "response",
+        "typing",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\contrib\\emscripten\\connection.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_base_connection",
+        "connection",
+        "exceptions",
+        "fetch",
+        "http",
+        "os",
+        "request",
+        "response",
+        "typing",
+        "util"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\contrib\\emscripten\\fetch.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "email",
+        "importlib",
+        "io",
+        "js",
+        "json",
+        "pyodide",
+        "request",
+        "response",
+        "typing",
+        "typing_extensions"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\contrib\\pyopenssl.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "OpenSSL",
+        "__future__",
+        "cryptography",
+        "io",
+        "logging",
+        "pip",
+        "socket",
+        "ssl",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\poolmanager.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "_collections",
+        "_request_methods",
+        "connection",
+        "connectionpool",
+        "exceptions",
+        "functools",
+        "logging",
+        "response",
+        "ssl",
+        "types",
+        "typing",
+        "typing_extensions",
+        "urllib",
+        "util",
+        "warnings"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\util\\timeout.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "enum",
+        "exceptions",
+        "socket",
+        "time",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": ".venv\\Lib\\site-packages\\pip\\_vendor\\urllib3\\util\\url.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "exceptions",
+        "pip",
+        "re",
+        "typing",
+        "util"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "_diag_market_source.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (_diag_market_source.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "_repair_fusion_syntax.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (_repair_fusion_syntax.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "analyze_market.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "pandas"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "ARUNDA_LIVE_DATA_BOUNDARY_LAUNCH_READINESS_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_LIVE_DATA_BOUNDARY_PREFLIGHT_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_LIVE_SNAPSHOT_FRESHNESS_CAUSALITY_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "arunda_recorder.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "concurrent",
+        "datetime",
+        "requests",
+        "sqlite3",
+        "time",
+        "uuid"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_MARKET_HISTORY_ALIGNMENT_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_MARKET_HISTORY_ALIGNMENT_FORENSIC_v0.2.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_SIGNAL_IDENTITY_TRACE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_EXECUTION_IDENTITY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_GROUP_COVERAGE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_GROUP_COVERAGE_REPAIR_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_GROUP_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_IDENTITY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_KEY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_TEMPORAL_LINEAGE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3",
+        "statistics"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "arunda_source_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "json",
+        "os",
+        "sqlite3",
+        "time",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_DATAFLOW_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "json",
+        "os",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_RUNTIME_RESOLUTION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_RUNTIME_WRITE_BOUNDARY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "shutil",
+        "subprocess",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "subprocess",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_EXTRACTION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_LOCATION_RESOLUTION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_CONTRACT_MAPPING_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_FINAL_FORENSIC_v0.1.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_FINAL_FORENSIC_v0.1.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_SEMANTIC_BINDING_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_SEAL_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_ARTIFACT_MAPPING_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_TRACE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_POST_REPAIR_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "subprocess",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_REPAIR_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "shutil"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "re",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_INFORMATION_ARMS_ARCHITECTURE_FORENSIC_AND_SCOPE_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "collections",
+        "dataclasses",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "sys",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "contextlib",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "runpy",
+        "shutil",
+        "sqlite3",
+        "subprocess",
+        "sys",
+        "tempfile",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_INFORMATION_ARMS_EXACT_ENTRYPOINT_TRACE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "json",
+        "pathlib",
+        "re",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_BOUNDARY_TRACE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_VERIFICATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_FROM_LAUNCH_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_LAUNCH_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "shutil",
+        "subprocess",
+        "sys",
+        "time",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_LAUNCH_LIFECYCLE_PIPELINE_EXECUTION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "subprocess",
+        "sys",
+        "tempfile",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_EXECUTION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "subprocess",
+        "sys",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_ISOLATION_ADAPTER_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "subprocess",
+        "sys",
+        "tempfile",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_DRAWDOWN_EQUITY_CURVE_PERFORMANCE_RISK_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_ATTRIBUTION_PNL_CONSISTENCY_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_METRICS_TRADE_STATISTICS_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_STABILITY_RISK_ADJUSTED_METRICS_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "math",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_GOVERNANCE_READINESS_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_LIMITS_CIRCUIT_BREAKER_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_STABILITY_STRESS_RESPONSE_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "math",
+        "os",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_TRANSITION_STRESS_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "math",
+        "os",
+        "sqlite3",
+        "statistics"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_PATH_VERIFICATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_CONTRACT_REPAIR_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_CONTRACT_REPAIR_v0.3.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.3.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_DRY_RUN_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_ORDER_INTENT_VALIDATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_PREFLIGHT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_GENERATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT_v0.2.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_CONTRACT_FORENSICS_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_CONTRACT_REPAIR_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "pathlib",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_SNAPSHOT_FRESHNESS_SOURCE_ROW_CAUSALITY_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3",
+        "sys",
+        "tempfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "runpy",
+        "sqlite3",
+        "sys",
+        "tempfile",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "math",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "json",
+        "math",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "ARUNDA_TRADER_RUNTIME_CONTRACT_FORENSICS_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "audit_data_lineage.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "audit_database.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "audit_fusion_freshness.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (audit_fusion_freshness.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "audit_market_snapshot_depth.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "audit_market_snapshot_producer.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "catalyst_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "requests",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "check_market.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "check_signals.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "cmc_market_adapter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "coinalyze_positioning.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "os",
+        "requests",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "data_quality.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "numpy",
+        "os",
+        "pandas",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "data_quality_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "numpy",
+        "os",
+        "pandas",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "database_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "diagnostic_fusion_readonly.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (diagnostic_fusion_readonly.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "diagnostic_market_data_source.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "DOWNSTREAM_CONSUMER_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "os",
+        "sqlite3",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "DOWNSTREAM_FIND_FUTURE_PRICE_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "inspect",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "DOWNSTREAM_MARKET_DATA_CONSUMPTION_DISCOVERY_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "os",
+        "re",
+        "sqlite3",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "execution_contract.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "execution_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "decision_engine",
+        "execution_contract",
+        "portfolio_risk_engine",
+        "position_sizing_engine",
+        "risk_budget_engine",
+        "risk_engine",
+        "stop_loss_engine"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_ASSIGNMENT_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "importlib",
+        "os",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_BRANCH_OPERAND_VALUE_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dis",
+        "linecache",
+        "os",
+        "signal_outcome_engine",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_COMPARE_OP_RUNTIME_OPERAND_RESULT_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "dis",
+        "importlib",
+        "inspect",
+        "os",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_DICTIONARY_RETURN_PACKING_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "os",
+        "runpy",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_LOCALIZATION_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "os",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "importlib",
+        "os",
+        "pathlib",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_FINAL_OUTPUT_FIELD_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "importlib",
+        "inspect",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_MAIN_TO_PROCESS_SIGNALS_EXECUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "dis",
+        "importlib",
+        "inspect",
+        "os",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "dis",
+        "os",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_OPERAND_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dis",
+        "linecache",
+        "os",
+        "signal_outcome_engine",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_NONE_BRANCH_REPRODUCTION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dis",
+        "os",
+        "signal_outcome_engine",
+        "sqlite3",
+        "sys",
+        "traceback",
+        "types"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_NONE_CAUSE_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dis",
+        "importlib",
+        "os",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_RUNTIME_OPERAND_CONSTRUCTION_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "dis",
+        "inspect",
+        "os",
+        "runpy",
+        "sqlite3",
+        "sys",
+        "traceback",
+        "types"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_RUNTIME_OPERAND_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dis",
+        "inspect",
+        "os",
+        "runpy",
+        "sqlite3",
+        "sys",
+        "traceback",
+        "types"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_PRODUCTION_EXECUTION_BOUNDARY_RESOLUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "contextlib",
+        "dis",
+        "importlib",
+        "inspect",
+        "io",
+        "os",
+        "runpy",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback",
+        "types"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_RUNTIME_INPUT_OUTPUT_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "FIND_FUTURE_PRICE_TOLERANCE_REPAIR_AND_RUNTIME_VERIFY_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "importlib",
+        "math",
+        "os",
+        "shutil",
+        "sqlite3",
+        "statistics"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "fix_signals_db.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "fusion_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "hashlib",
+        "math",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "fusion_engine_backup_before_market_fix_20260820_134917.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (fusion_engine_backup_before_market_fix_20260820_134917.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "fusion_engine_before_market_input_fix_20260820_134746.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (fusion_engine_before_market_input_fix_20260820_134746.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "fusion_engine_before_positioning_normalization_20260820_024337.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (fusion_engine_before_positioning_normalization_20260820_024337.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "hunter_filter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "hunter_recorder.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "csv",
+        "datetime",
+        "os",
+        "requests",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_CURRENT_CONVENTION_COMPLETE_EXECUTION_CHAIN_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "pathlib",
+        "re"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_CURRENT_CONVENTION_EXECUTION_DETERMINATION_AND_REPAIR_v0.1.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (INDICATOR_CURRENT_CONVENTION_EXECUTION_DETERMINATION_AND_REPAIR_v0.1.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "INDICATOR_CURRENT_CONVENTION_EXECUTION_PATH_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "pathlib",
+        "re"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_POST_REPAIR_CALCULATION_INPUT_ORDER_FILTER_WINDOW_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "datetime",
+        "math",
+        "os",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "importlib",
+        "inspect",
+        "os",
+        "pathlib",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback",
+        "types"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_PATH_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_PRODUCTION_RUNTIME_PRECALCULATION_PATH_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "inspect",
+        "market_data_engine",
+        "os",
+        "re",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "indicator_repair_backups\\20260821_173909\\market_data_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "math",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_RUNTIME_INSTRUMENTATION_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "importlib",
+        "inspect",
+        "os",
+        "pathlib",
+        "re",
+        "runpy",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "INDICATOR_RUNTIME_ROWS_EXACT_SQL_RESULT_FIRST_DIVERGENCE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "importlib",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_RUNTIME_ROWS_VS_STORED_POSTCALC_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "inspect",
+        "market_data_engine",
+        "os",
+        "re",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INDICATOR_RUNTIME_SQL_RESULT_CONSTRUCTION_ORDER_FILTER_WINDOW_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "inspect",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "INFORMATION_ARMS_TARGETED_ARCHITECTURAL_REPAIR.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "collections",
+        "hashlib",
+        "json",
+        "os",
+        "pathlib",
+        "re",
+        "sys",
+        "typing"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "LIVE_LAUNCH_HARNESS_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "contextlib",
+        "datetime",
+        "hashlib",
+        "importlib",
+        "io",
+        "json",
+        "os",
+        "pathlib",
+        "shutil",
+        "sqlite3",
+        "sys",
+        "tempfile",
+        "time",
+        "traceback",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "lunar_hunter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "requests",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "lunarcrush.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "market_adapter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "json",
+        "os",
+        "sqlite3",
+        "time",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "market_analysis_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_analysis_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_data.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "market_data_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "math",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_entry_stop_adapter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "entry_stop_contract",
+        "risk_engine",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_asset_identity_contract_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_asset_identity_diagnostic.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_asset_identity_diagnostic.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_asset_identity_resolution_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "pathlib",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_asset_identity_source_diagnostic.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_asset_identity_source_diagnostic.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_diagnostic.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_diagnostic.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_duplicate_diagnostic.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_duplicate_diagnostic.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_duplicate_pair_inspection.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_duplicate_pair_inspection.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_engine_v0_4.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_history_engine_v0_4.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_history_identity_ingestion_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_identity_ingestion_source_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "pathlib"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_ingestion_guard.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "dataclasses",
+        "datetime",
+        "hashlib",
+        "math",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_ingestion_integrity_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "math",
+        "sqlite3",
+        "statistics",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_history_temporal_integrity_diagnostic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "dataclasses",
+        "datetime",
+        "math",
+        "sqlite3",
+        "statistics",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_microstructure_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_microstructure_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_monitor_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_monitor_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_news_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_news_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_news_intelligence_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_news_intelligence_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_opportunity_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_opportunity_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_recorder.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "csv",
+        "datetime",
+        "requests",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "market_regime.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "market_state_engine",
+        "math"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_regime_contract.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "market_regime"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_regime_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_regime_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_scanner.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "market_snapshot_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_snapshot_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_snapshot_scheduler.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_snapshot_scheduler.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_state_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_state_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_state_engine_pre_step18_loader.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_state_engine_pre_step18_loader.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_state_reader.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "normalized_feature_contract"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_stop_distance_adapter.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_stop_distance_adapter.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_structure_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "math",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "market_technical_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_technical_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_universe_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_universe_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "market_whale_engine.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (market_whale_engine.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "news_adapter.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "email",
+        "hashlib",
+        "json",
+        "re",
+        "sqlite3",
+        "time",
+        "urllib",
+        "xml"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "opportunity_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "os",
+        "requests",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "orderbook.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "orderbook_weighted.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "requests"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "OUTCOME_v0.3_ELIGIBLE_SIGNAL_SET_RECONCILIATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "datetime",
+        "os",
+        "re",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_NULL_CAUSALITY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "tempfile",
+        "typing",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_REPAIR_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "importlib",
+        "os",
+        "shutil",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_ARTIFACT_CORRELATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "datetime",
+        "hashlib",
+        "io",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_FILESYSTEM_PROVENANCE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "datetime",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_PROVENANCE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "collections",
+        "datetime",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_ROW_LEVEL_HISTORICAL_PROVENANCE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_RUNTIME_ARTIFACT_TEMPORAL_CORRELATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "collections",
+        "datetime",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "zipfile"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ACTUAL_RUNTIME_INVOCATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "contextlib",
+        "hashlib",
+        "importlib",
+        "io",
+        "os",
+        "pathlib",
+        "re",
+        "shutil",
+        "sqlite3",
+        "sys",
+        "tempfile",
+        "traceback",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ISOLATED_RUNTIME_INSTRUMENTATION_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "collections",
+        "hashlib",
+        "inspect",
+        "os",
+        "pathlib",
+        "re",
+        "sqlite3",
+        "sys",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_INVOCATION_TRACE_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "collections",
+        "hashlib",
+        "pathlib",
+        "re",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "sqlite3",
+        "subprocess",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "OUTCOME_v0.3_LIVE_DATA_SOURCE_HEALTH_ARM_AVAILABILITY_CONTRACT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "collections",
+        "hashlib",
+        "os",
+        "sqlite3",
+        "sys"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_contract.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "market_regime",
+        "market_regime_contract",
+        "signal_contract",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_logic.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "SIGNAL_OUTCOME_CALL_GRAPH_DEEP_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "os",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "inspect",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_outcome_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "datetime",
+        "math",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "SIGNAL_OUTCOME_PRODUCTION_CALLER_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "os",
+        "sqlite3",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "collections",
+        "importlib",
+        "inspect",
+        "os",
+        "sys",
+        "time",
+        "traceback"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_performance.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "signal_score_contract.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "signal_scorer"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_scorer.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "feature_snapshot_reader",
+        "market_regime_contract",
+        "market_state_engine",
+        "signal_validator"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_scorer_pre_step18_fix.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "feature_snapshot_reader",
+        "market_regime_contract",
+        "market_state_engine",
+        "signal_validator"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_semantic_boundary_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "signal_validator.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "market_regime_contract",
+        "signal_contract",
+        "signal_engine"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "social_engine.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "requests",
+        "sqlite3",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "sqlite_recorder.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "csv",
+        "datetime",
+        "os",
+        "sqlite3"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": true,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step11a_market_structure_contract_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "importlib",
+        "inspect",
+        "math",
+        "os",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step11b_market_structure_quality_causal_validation.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "dataclasses",
+        "importlib",
+        "inspect",
+        "math",
+        "os",
+        "re",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step14a_market_regime_engine_contract_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "dataclasses",
+        "importlib",
+        "inspect",
+        "math",
+        "pathlib",
+        "sys",
+        "tempfile",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step14b_market_regime_engine_behavioral_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "__future__",
+        "ast",
+        "dataclasses",
+        "importlib",
+        "inspect",
+        "math",
+        "pathlib",
+        "sys",
+        "typing"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15a_signal_engine_contract_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15c_signal_dependency_information_flow_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "step15d_signal_adversarial_integrity_audit.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (step15d_signal_adversarial_integrity_audit.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "step15e_signal_output_consistency_cross_asset_contract_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15f_signal_failure_mode_recovery_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15g_signal_contract_engine_integration_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15h_signal_end_to_end_behavioral_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15i_signal_state_transition_lifecycle_audit.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (step15i_signal_state_transition_lifecycle_audit.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15k_signal_determinism_reproducibility_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "random",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15l_signal_contract_immutability_boundary_hardening_audit.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (step15l_signal_contract_immutability_boundary_hardening_audit.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "step15m_signal_contract_engine_stress_resilience_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step15n_signal_final_architectural_consistency_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step16_signal_validator_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "os",
+        "signal_contract",
+        "signal_engine",
+        "signal_logic"
+      ],
+      "network_usage": false,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": true
+    },
+    {
+      "file": "step17_signal_scoring_audit.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "ast",
+        "copy",
+        "pathlib"
+      ],
+      "network_usage": true,
+      "database_usage": true,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "step18_signal_score_contract_audit.py",
+      "syntax_pass": false,
+      "syntax_error": "SyntaxError: invalid non-printable character U+FEFF (step18_signal_score_contract_audit.py, line 1)",
+      "imports": [],
+      "network_usage": false,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": false,
+      "main_present": false
+    },
+    {
+      "file": "test_cmc.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "json",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    },
+    {
+      "file": "test_coinalyze.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "os",
+        "requests",
+        "time"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": true
+    },
+    {
+      "file": "test_coinglass_v4.py",
+      "syntax_pass": true,
+      "syntax_error": null,
+      "imports": [
+        "json",
+        "os",
+        "time",
+        "urllib"
+      ],
+      "network_usage": true,
+      "database_usage": false,
+      "write_sql_present": false,
+      "live_source_present": true,
+      "main_present": false
+    }
+  ]
+}

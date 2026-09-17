@@ -1,0 +1,66 @@
+{
+  "forensic": {
+    "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_FORENSIC_v0.1",
+    "mode": "CONTROLLED RUNTIME FORENSIC",
+    "timestamp_utc": "2026-08-24T18:31:13.691526+00:00"
+  },
+  "project": {
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "target": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "producer": {
+    "exists": true,
+    "syntax_valid": true,
+    "syntax_error": null,
+    "sha256_before": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074",
+    "sha256_after": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074",
+    "source_unchanged": true
+  },
+  "target_before_execution": {
+    "exists": false,
+    "valid_json": false,
+    "size": null,
+    "sha256": null,
+    "top_level_type": null,
+    "keys": [],
+    "error": null
+  },
+  "target_after_execution": {
+    "exists": false,
+    "valid_json": false,
+    "size": null,
+    "sha256": null,
+    "top_level_type": null,
+    "keys": [],
+    "error": null
+  },
+  "backup": null,
+  "execution": {
+    "executed": true,
+    "imported": false,
+    "returncode": 1,
+    "success": false,
+    "stdout": "====================================================================================================\nARUNDA TRADER LIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY GATE v0.1\n====================================================================================================\nOBJECTIVE:\n  Evaluate ONLY the newest FUSION_v0.5 snapshot.\n  Determine trade eligibility or NO-TRADE.\n\nProduction DB writes       : FORBIDDEN\nProduction engine run      : NO\nHistorical repair          : NONE\nDirection inference        : NONE\nScore reconstruction       : NONE\nSynthetic data             : FORBIDDEN\nLive data injection        : NONE\nOrder execution            : NONE\n\n====================================================================================================\nPRODUCTION BASELINE\n====================================================================================================\nRows   : 36\nSize   : 521883648\nSHA256 : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\n\n====================================================================================================\nLIVE CAPTURE\n====================================================================================================\nDirectory : C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_m1ld7rpr\nDatabase  : C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_m1ld7rpr\\arunda_live_capture.db\nSize      : 521883648\n\n====================================================================================================\nELIGIBILITY INPUT CONTRACT\n====================================================================================================\nCONTRACT : PASS\n\n====================================================================================================\nCURRENT LIVE SNAPSHOT\n====================================================================================================\nSnapshot : FUSION-20260824T153800744724+0000-b4f75221aa02defa\nRows     : 4\n\n====================================================================================================\nSIGNAL ELIGIBILITY MATRIX\n====================================================================================================\nID | ASSET | DIR   | CONF     | QUALITY  | STRENGTH | ARMS | RESULT\n----------------------------------------------------------------------------------------------------\n37 | BTC   | FLAT  | 0.5901933333333333 | VERIFIED | WEAK     | 1/1/1 | NO_TRADE\n38 | ETH   | SHORT | 0.4854675001907309 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n39 | SOL   | FLAT  | 0.39190069532428357 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n40 | XRP   | FLAT  | 0.4329772730514519 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n\n====================================================================================================\nNO-TRADE REASONS\n====================================================================================================\nid=37 asset=BTC direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\nid=38 asset=ETH direction=SHORT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\nid=39 asset=SOL direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\nid=40 asset=XRP direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\n\n====================================================================================================\nELIGIBILITY SUMMARY\n====================================================================================================\nTRADE_ELIGIBLE : 0\nNO_TRADE       : 4\n\n====================================================================================================\nPRODUCTION DATABASE INVARIANT\n====================================================================================================\nBefore rows : 36\nAfter rows  : 36\nBefore size : 521883648\nAfter size  : 521883648\nBefore SHA256 : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\nAfter SHA256  : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\nPRODUCTION DB INVARIANT : PASS\n",
+    "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\", line 774, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\", line 701, in main\n    report_path = PROJECT_ROOT / \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n                  ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nTypeError: unsupported operand type(s) for /: 'str' and 'str'\n"
+  },
+  "artifact_verification": {
+    "artifact_created": false,
+    "artifact_changed": false,
+    "valid_json": false,
+    "canonical_path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "safety": {
+    "producer_executed": true,
+    "producer_imported": false,
+    "eligibility_executed": true,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_source_modified": false,
+    "production_db_writes": "NOT_PERFORMED_BY_FORENSIC_SCRIPT",
+    "network_access": "DELEGATED_TO_PRODUCER",
+    "target_artifact_write": "NONE"
+  },
+  "verdict": "RUNTIME_OUTPUT_ARTIFACT_GENERATION_FAILED"
+}

@@ -1,0 +1,1734 @@
+{
+  "frontier": "RUNTIME_CONTRACT_FORENSICS_v0.1",
+  "timestamp_utc": "2026-08-24T22:10:33.772723+00:00",
+  "safety": {
+    "mode": "READ_ONLY",
+    "producer_execution": false,
+    "producer_import": false,
+    "database_write": false,
+    "network_access": false,
+    "exchange_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "artifact_mutation": false
+  },
+  "source": {
+    "runtime_path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_REPORT.json",
+    "file_exists": true,
+    "sha256": "4f7bf82348a913e889885f72a447e6266870515b61cebe4ede178f4828d9758c",
+    "root_type": "dict"
+  },
+  "root": {
+    "type": "dict",
+    "contract": true,
+    "keys": [
+      "project",
+      "component",
+      "version",
+      "safety",
+      "upstream_gate",
+      "identity",
+      "artifact",
+      "runtime",
+      "execution",
+      "final_verdict",
+      "next_stage"
+    ],
+    "key_count": 11
+  },
+  "root_sections": [
+    {
+      "path": "$.project",
+      "key": "project",
+      "type": "str",
+      "value": "ARUNDA TRADER"
+    },
+    {
+      "path": "$.component",
+      "key": "component",
+      "type": "str",
+      "value": "LIVE SIGNAL EXECUTION RUNTIME"
+    },
+    {
+      "path": "$.version",
+      "key": "version",
+      "type": "str",
+      "value": "v0.1"
+    },
+    {
+      "path": "$.safety",
+      "key": "safety",
+      "type": "dict",
+      "keys": [
+        "producer_execution",
+        "producer_import",
+        "production_db_write",
+        "network_access",
+        "order_execution",
+        "order_creation",
+        "artifact_mutation",
+        "operational_safety"
+      ]
+    },
+    {
+      "path": "$.upstream_gate",
+      "key": "upstream_gate",
+      "type": "dict",
+      "keys": [
+        "path",
+        "producer_identity",
+        "artifact_identity",
+        "artifact_contract",
+        "operational_safety",
+        "upstream_contract_verified",
+        "execution_gate_ready",
+        "release_gate_verified",
+        "gate_name",
+        "gate_state",
+        "verdict",
+        "identity_contract",
+        "contracts_verified",
+        "release_verified",
+        "verdict_verified",
+        "gate_ready"
+      ]
+    },
+    {
+      "path": "$.identity",
+      "key": "identity",
+      "type": "dict",
+      "keys": [
+        "producer_sha256",
+        "artifact_sha256",
+        "chain_sha256",
+        "producer_match",
+        "artifact_match",
+        "chain_match",
+        "artifact_file_sha256",
+        "artifact_file_match"
+      ]
+    },
+    {
+      "path": "$.artifact",
+      "key": "artifact",
+      "type": "dict",
+      "keys": [
+        "path",
+        "contract",
+        "verified",
+        "rows",
+        "eligible_rows",
+        "no_trade_rows",
+        "decision",
+        "assets",
+        "directions",
+        "snapshot_id",
+        "row_count_contract",
+        "decision_contract",
+        "identity_contract",
+        "snapshot_contract",
+        "verified_contract",
+        "upstream_artifact_contract",
+        "upstream_artifact_identity"
+      ]
+    },
+    {
+      "path": "$.runtime",
+      "key": "runtime",
+      "type": "dict",
+      "keys": [
+        "upstream_verified",
+        "artifact_verified",
+        "operational_safety",
+        "runtime_ready",
+        "execution_allowed",
+        "execution",
+        "orders_created",
+        "orders_submitted"
+      ]
+    },
+    {
+      "path": "$.execution",
+      "key": "execution",
+      "type": "dict",
+      "keys": [
+        "executed",
+        "orders_created",
+        "orders_submitted"
+      ]
+    },
+    {
+      "path": "$.final_verdict",
+      "key": "final_verdict",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    },
+    {
+      "path": "$.next_stage",
+      "key": "next_stage",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    }
+  ],
+  "target_key_forensics": [
+    {
+      "key": "producer_execution",
+      "path": "$.safety.producer_execution",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "producer_import",
+      "path": "$.safety.producer_import",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "production_db_write",
+      "path": "$.safety.production_db_write",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "network_access",
+      "path": "$.safety.network_access",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "order_execution",
+      "path": "$.safety.order_execution",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "order_creation",
+      "path": "$.safety.order_creation",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "artifact_mutation",
+      "path": "$.safety.artifact_mutation",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "key": "operational_safety",
+      "path": "$.safety.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "operational_safety",
+      "path": "$.upstream_gate.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "verdict",
+      "path": "$.upstream_gate.verdict",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_GATE_READY"
+    },
+    {
+      "key": "contracts_verified",
+      "path": "$.upstream_gate.contracts_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "release_verified",
+      "path": "$.upstream_gate.release_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "verdict_verified",
+      "path": "$.upstream_gate.verdict_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "contract",
+      "path": "$.artifact.contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "verified",
+      "path": "$.artifact.verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "upstream_verified",
+      "path": "$.runtime.upstream_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "artifact_verified",
+      "path": "$.runtime.artifact_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "operational_safety",
+      "path": "$.runtime.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "runtime_ready",
+      "path": "$.runtime.runtime_ready",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "key": "execution",
+      "path": "$.runtime.execution",
+      "type": "str",
+      "value": "NOT_EXECUTED"
+    },
+    {
+      "key": "orders_created",
+      "path": "$.runtime.orders_created",
+      "type": "int",
+      "value": 0
+    },
+    {
+      "key": "orders_submitted",
+      "path": "$.runtime.orders_submitted",
+      "type": "int",
+      "value": 0
+    },
+    {
+      "key": "execution",
+      "path": "$.execution",
+      "type": "dict",
+      "value": null
+    },
+    {
+      "key": "orders_created",
+      "path": "$.execution.orders_created",
+      "type": "int",
+      "value": 0
+    },
+    {
+      "key": "orders_submitted",
+      "path": "$.execution.orders_submitted",
+      "type": "int",
+      "value": 0
+    }
+  ],
+  "interesting_value_forensics": [
+    {
+      "path": "$.safety.producer_execution",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.producer_import",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.production_db_write",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.network_access",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.order_execution",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.order_creation",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.artifact_mutation",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.safety.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.producer_identity",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.artifact_identity",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.artifact_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.upstream_contract_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.execution_gate_ready",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.release_gate_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.gate_state",
+      "type": "str",
+      "value": "READY"
+    },
+    {
+      "path": "$.upstream_gate.verdict",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_GATE_READY"
+    },
+    {
+      "path": "$.upstream_gate.identity_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.contracts_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.release_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.verdict_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.gate_ready",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.identity.producer_match",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.identity.artifact_match",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.identity.chain_match",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.identity.artifact_file_match",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.row_count_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.decision_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.identity_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.snapshot_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.verified_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.upstream_artifact_contract",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.artifact.upstream_artifact_identity",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.runtime.upstream_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.runtime.artifact_verified",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.runtime.operational_safety",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.runtime.runtime_ready",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "path": "$.runtime.execution_allowed",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.runtime.execution",
+      "type": "str",
+      "value": "NOT_EXECUTED"
+    },
+    {
+      "path": "$.execution.executed",
+      "type": "bool",
+      "value": false
+    },
+    {
+      "path": "$.final_verdict",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    },
+    {
+      "path": "$.next_stage",
+      "type": "str",
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    }
+  ],
+  "contract_like_containers": [
+    {
+      "path": "$.safety",
+      "keys": [
+        "producer_execution",
+        "producer_import",
+        "production_db_write",
+        "network_access",
+        "order_execution",
+        "order_creation",
+        "artifact_mutation",
+        "operational_safety"
+      ],
+      "contract_key_overlap": [
+        "operational_safety"
+      ]
+    },
+    {
+      "path": "$.upstream_gate",
+      "keys": [
+        "path",
+        "producer_identity",
+        "artifact_identity",
+        "artifact_contract",
+        "operational_safety",
+        "upstream_contract_verified",
+        "execution_gate_ready",
+        "release_gate_verified",
+        "gate_name",
+        "gate_state",
+        "verdict",
+        "identity_contract",
+        "contracts_verified",
+        "release_verified",
+        "verdict_verified",
+        "gate_ready"
+      ],
+      "contract_key_overlap": [
+        "contracts_verified",
+        "operational_safety",
+        "release_verified",
+        "verdict",
+        "verdict_verified"
+      ]
+    },
+    {
+      "path": "$.artifact",
+      "keys": [
+        "path",
+        "contract",
+        "verified",
+        "rows",
+        "eligible_rows",
+        "no_trade_rows",
+        "decision",
+        "assets",
+        "directions",
+        "snapshot_id",
+        "row_count_contract",
+        "decision_contract",
+        "identity_contract",
+        "snapshot_contract",
+        "verified_contract",
+        "upstream_artifact_contract",
+        "upstream_artifact_identity"
+      ],
+      "contract_key_overlap": [
+        "contract",
+        "verified"
+      ]
+    },
+    {
+      "path": "$.runtime",
+      "keys": [
+        "upstream_verified",
+        "artifact_verified",
+        "operational_safety",
+        "runtime_ready",
+        "execution_allowed",
+        "execution",
+        "orders_created",
+        "orders_submitted"
+      ],
+      "contract_key_overlap": [
+        "artifact_verified",
+        "operational_safety",
+        "runtime_ready",
+        "upstream_verified"
+      ]
+    }
+  ],
+  "key_index": {
+    "project": [
+      {
+        "path": "$.project",
+        "type": "str",
+        "value": "ARUNDA TRADER"
+      }
+    ],
+    "component": [
+      {
+        "path": "$.component",
+        "type": "str",
+        "value": "LIVE SIGNAL EXECUTION RUNTIME"
+      }
+    ],
+    "version": [
+      {
+        "path": "$.version",
+        "type": "str",
+        "value": "v0.1"
+      }
+    ],
+    "safety": [
+      {
+        "path": "$.safety",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "producer_execution": [
+      {
+        "path": "$.safety.producer_execution",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "producer_import": [
+      {
+        "path": "$.safety.producer_import",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "production_db_write": [
+      {
+        "path": "$.safety.production_db_write",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "network_access": [
+      {
+        "path": "$.safety.network_access",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "order_execution": [
+      {
+        "path": "$.safety.order_execution",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "order_creation": [
+      {
+        "path": "$.safety.order_creation",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "artifact_mutation": [
+      {
+        "path": "$.safety.artifact_mutation",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "operational_safety": [
+      {
+        "path": "$.safety.operational_safety",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.upstream_gate.operational_safety",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime.operational_safety",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "upstream_gate": [
+      {
+        "path": "$.upstream_gate",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "path": [
+      {
+        "path": "$.upstream_gate.path",
+        "type": "str",
+        "value": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_GATE_REPORT.json"
+      },
+      {
+        "path": "$.artifact.path",
+        "type": "str",
+        "value": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+      }
+    ],
+    "producer_identity": [
+      {
+        "path": "$.upstream_gate.producer_identity",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact_identity": [
+      {
+        "path": "$.upstream_gate.artifact_identity",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact_contract": [
+      {
+        "path": "$.upstream_gate.artifact_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "upstream_contract_verified": [
+      {
+        "path": "$.upstream_gate.upstream_contract_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "execution_gate_ready": [
+      {
+        "path": "$.upstream_gate.execution_gate_ready",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "release_gate_verified": [
+      {
+        "path": "$.upstream_gate.release_gate_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "gate_name": [
+      {
+        "path": "$.upstream_gate.gate_name",
+        "type": "str",
+        "value": "LIVE_SIGNAL_EXECUTION_GATE"
+      }
+    ],
+    "gate_state": [
+      {
+        "path": "$.upstream_gate.gate_state",
+        "type": "str",
+        "value": "READY"
+      }
+    ],
+    "verdict": [
+      {
+        "path": "$.upstream_gate.verdict",
+        "type": "str",
+        "value": "LIVE_SIGNAL_EXECUTION_GATE_READY"
+      }
+    ],
+    "identity_contract": [
+      {
+        "path": "$.upstream_gate.identity_contract",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.artifact.identity_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "contracts_verified": [
+      {
+        "path": "$.upstream_gate.contracts_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "release_verified": [
+      {
+        "path": "$.upstream_gate.release_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "verdict_verified": [
+      {
+        "path": "$.upstream_gate.verdict_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "gate_ready": [
+      {
+        "path": "$.upstream_gate.gate_ready",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "identity": [
+      {
+        "path": "$.identity",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "producer_sha256": [
+      {
+        "path": "$.identity.producer_sha256",
+        "type": "str",
+        "value": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0"
+      }
+    ],
+    "artifact_sha256": [
+      {
+        "path": "$.identity.artifact_sha256",
+        "type": "str",
+        "value": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+      }
+    ],
+    "chain_sha256": [
+      {
+        "path": "$.identity.chain_sha256",
+        "type": "str",
+        "value": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4"
+      }
+    ],
+    "producer_match": [
+      {
+        "path": "$.identity.producer_match",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact_match": [
+      {
+        "path": "$.identity.artifact_match",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "chain_match": [
+      {
+        "path": "$.identity.chain_match",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact_file_sha256": [
+      {
+        "path": "$.identity.artifact_file_sha256",
+        "type": "str",
+        "value": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+      }
+    ],
+    "artifact_file_match": [
+      {
+        "path": "$.identity.artifact_file_match",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact": [
+      {
+        "path": "$.artifact",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "contract": [
+      {
+        "path": "$.artifact.contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "verified": [
+      {
+        "path": "$.artifact.verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "rows": [
+      {
+        "path": "$.artifact.rows",
+        "type": "int",
+        "value": 4
+      }
+    ],
+    "eligible_rows": [
+      {
+        "path": "$.artifact.eligible_rows",
+        "type": "int",
+        "value": 0
+      }
+    ],
+    "no_trade_rows": [
+      {
+        "path": "$.artifact.no_trade_rows",
+        "type": "int",
+        "value": 4
+      }
+    ],
+    "decision": [
+      {
+        "path": "$.artifact.decision",
+        "type": "str",
+        "value": "NO_TRADE"
+      }
+    ],
+    "assets": [
+      {
+        "path": "$.artifact.assets",
+        "type": "list",
+        "value": null
+      },
+      {
+        "path": "$.artifact.assets[0]",
+        "type": "str",
+        "value": "BTC"
+      },
+      {
+        "path": "$.artifact.assets[1]",
+        "type": "str",
+        "value": "ETH"
+      },
+      {
+        "path": "$.artifact.assets[2]",
+        "type": "str",
+        "value": "SOL"
+      },
+      {
+        "path": "$.artifact.assets[3]",
+        "type": "str",
+        "value": "XRP"
+      }
+    ],
+    "directions": [
+      {
+        "path": "$.artifact.directions",
+        "type": "list",
+        "value": null
+      },
+      {
+        "path": "$.artifact.directions[0]",
+        "type": "str",
+        "value": "FLAT"
+      },
+      {
+        "path": "$.artifact.directions[1]",
+        "type": "str",
+        "value": "SHORT"
+      },
+      {
+        "path": "$.artifact.directions[2]",
+        "type": "str",
+        "value": "FLAT"
+      },
+      {
+        "path": "$.artifact.directions[3]",
+        "type": "str",
+        "value": "FLAT"
+      }
+    ],
+    "snapshot_id": [
+      {
+        "path": "$.artifact.snapshot_id",
+        "type": "str",
+        "value": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+      }
+    ],
+    "row_count_contract": [
+      {
+        "path": "$.artifact.row_count_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "decision_contract": [
+      {
+        "path": "$.artifact.decision_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "snapshot_contract": [
+      {
+        "path": "$.artifact.snapshot_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "verified_contract": [
+      {
+        "path": "$.artifact.verified_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "upstream_artifact_contract": [
+      {
+        "path": "$.artifact.upstream_artifact_contract",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "upstream_artifact_identity": [
+      {
+        "path": "$.artifact.upstream_artifact_identity",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "runtime": [
+      {
+        "path": "$.runtime",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "upstream_verified": [
+      {
+        "path": "$.runtime.upstream_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "artifact_verified": [
+      {
+        "path": "$.runtime.artifact_verified",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "runtime_ready": [
+      {
+        "path": "$.runtime.runtime_ready",
+        "type": "bool",
+        "value": true
+      }
+    ],
+    "execution_allowed": [
+      {
+        "path": "$.runtime.execution_allowed",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "execution": [
+      {
+        "path": "$.runtime.execution",
+        "type": "str",
+        "value": "NOT_EXECUTED"
+      },
+      {
+        "path": "$.execution",
+        "type": "dict",
+        "value": null
+      }
+    ],
+    "orders_created": [
+      {
+        "path": "$.runtime.orders_created",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.execution.orders_created",
+        "type": "int",
+        "value": 0
+      }
+    ],
+    "orders_submitted": [
+      {
+        "path": "$.runtime.orders_submitted",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.execution.orders_submitted",
+        "type": "int",
+        "value": 0
+      }
+    ],
+    "executed": [
+      {
+        "path": "$.execution.executed",
+        "type": "bool",
+        "value": false
+      }
+    ],
+    "final_verdict": [
+      {
+        "path": "$.final_verdict",
+        "type": "str",
+        "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+      }
+    ],
+    "next_stage": [
+      {
+        "path": "$.next_stage",
+        "type": "str",
+        "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+      }
+    ]
+  },
+  "full_schema_tree": [
+    {
+      "path": "$",
+      "type": "dict",
+      "depth": 0,
+      "keys": [
+        "project",
+        "component",
+        "version",
+        "safety",
+        "upstream_gate",
+        "identity",
+        "artifact",
+        "runtime",
+        "execution",
+        "final_verdict",
+        "next_stage"
+      ]
+    },
+    {
+      "path": "$.project",
+      "type": "str",
+      "depth": 1,
+      "value": "ARUNDA TRADER"
+    },
+    {
+      "path": "$.component",
+      "type": "str",
+      "depth": 1,
+      "value": "LIVE SIGNAL EXECUTION RUNTIME"
+    },
+    {
+      "path": "$.version",
+      "type": "str",
+      "depth": 1,
+      "value": "v0.1"
+    },
+    {
+      "path": "$.safety",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "producer_execution",
+        "producer_import",
+        "production_db_write",
+        "network_access",
+        "order_execution",
+        "order_creation",
+        "artifact_mutation",
+        "operational_safety"
+      ]
+    },
+    {
+      "path": "$.safety.producer_execution",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.producer_import",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.production_db_write",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.network_access",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.order_execution",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.order_creation",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.artifact_mutation",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.safety.operational_safety",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "path",
+        "producer_identity",
+        "artifact_identity",
+        "artifact_contract",
+        "operational_safety",
+        "upstream_contract_verified",
+        "execution_gate_ready",
+        "release_gate_verified",
+        "gate_name",
+        "gate_state",
+        "verdict",
+        "identity_contract",
+        "contracts_verified",
+        "release_verified",
+        "verdict_verified",
+        "gate_ready"
+      ]
+    },
+    {
+      "path": "$.upstream_gate.path",
+      "type": "str",
+      "depth": 2,
+      "value": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_GATE_REPORT.json"
+    },
+    {
+      "path": "$.upstream_gate.producer_identity",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.artifact_identity",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.artifact_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.operational_safety",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.upstream_contract_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.execution_gate_ready",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.release_gate_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.gate_name",
+      "type": "str",
+      "depth": 2,
+      "value": "LIVE_SIGNAL_EXECUTION_GATE"
+    },
+    {
+      "path": "$.upstream_gate.gate_state",
+      "type": "str",
+      "depth": 2,
+      "value": "READY"
+    },
+    {
+      "path": "$.upstream_gate.verdict",
+      "type": "str",
+      "depth": 2,
+      "value": "LIVE_SIGNAL_EXECUTION_GATE_READY"
+    },
+    {
+      "path": "$.upstream_gate.identity_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.contracts_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.release_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.verdict_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.upstream_gate.gate_ready",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.identity",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "producer_sha256",
+        "artifact_sha256",
+        "chain_sha256",
+        "producer_match",
+        "artifact_match",
+        "chain_match",
+        "artifact_file_sha256",
+        "artifact_file_match"
+      ]
+    },
+    {
+      "path": "$.identity.producer_sha256",
+      "type": "str",
+      "depth": 2,
+      "value": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0"
+    },
+    {
+      "path": "$.identity.artifact_sha256",
+      "type": "str",
+      "depth": 2,
+      "value": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+    },
+    {
+      "path": "$.identity.chain_sha256",
+      "type": "str",
+      "depth": 2,
+      "value": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4"
+    },
+    {
+      "path": "$.identity.producer_match",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.identity.artifact_match",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.identity.chain_match",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.identity.artifact_file_sha256",
+      "type": "str",
+      "depth": 2,
+      "value": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+    },
+    {
+      "path": "$.identity.artifact_file_match",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "path",
+        "contract",
+        "verified",
+        "rows",
+        "eligible_rows",
+        "no_trade_rows",
+        "decision",
+        "assets",
+        "directions",
+        "snapshot_id",
+        "row_count_contract",
+        "decision_contract",
+        "identity_contract",
+        "snapshot_contract",
+        "verified_contract",
+        "upstream_artifact_contract",
+        "upstream_artifact_identity"
+      ]
+    },
+    {
+      "path": "$.artifact.path",
+      "type": "str",
+      "depth": 2,
+      "value": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+    },
+    {
+      "path": "$.artifact.contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.rows",
+      "type": "int",
+      "depth": 2,
+      "value": 4
+    },
+    {
+      "path": "$.artifact.eligible_rows",
+      "type": "int",
+      "depth": 2,
+      "value": 0
+    },
+    {
+      "path": "$.artifact.no_trade_rows",
+      "type": "int",
+      "depth": 2,
+      "value": 4
+    },
+    {
+      "path": "$.artifact.decision",
+      "type": "str",
+      "depth": 2,
+      "value": "NO_TRADE"
+    },
+    {
+      "path": "$.artifact.assets",
+      "type": "list",
+      "depth": 2,
+      "length": 4
+    },
+    {
+      "path": "$.artifact.assets[0]",
+      "type": "str",
+      "depth": 3,
+      "value": "BTC"
+    },
+    {
+      "path": "$.artifact.assets[1]",
+      "type": "str",
+      "depth": 3,
+      "value": "ETH"
+    },
+    {
+      "path": "$.artifact.assets[2]",
+      "type": "str",
+      "depth": 3,
+      "value": "SOL"
+    },
+    {
+      "path": "$.artifact.assets[3]",
+      "type": "str",
+      "depth": 3,
+      "value": "XRP"
+    },
+    {
+      "path": "$.artifact.directions",
+      "type": "list",
+      "depth": 2,
+      "length": 4
+    },
+    {
+      "path": "$.artifact.directions[0]",
+      "type": "str",
+      "depth": 3,
+      "value": "FLAT"
+    },
+    {
+      "path": "$.artifact.directions[1]",
+      "type": "str",
+      "depth": 3,
+      "value": "SHORT"
+    },
+    {
+      "path": "$.artifact.directions[2]",
+      "type": "str",
+      "depth": 3,
+      "value": "FLAT"
+    },
+    {
+      "path": "$.artifact.directions[3]",
+      "type": "str",
+      "depth": 3,
+      "value": "FLAT"
+    },
+    {
+      "path": "$.artifact.snapshot_id",
+      "type": "str",
+      "depth": 2,
+      "value": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+    },
+    {
+      "path": "$.artifact.row_count_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.decision_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.identity_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.snapshot_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.verified_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.upstream_artifact_contract",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.artifact.upstream_artifact_identity",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.runtime",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "upstream_verified",
+        "artifact_verified",
+        "operational_safety",
+        "runtime_ready",
+        "execution_allowed",
+        "execution",
+        "orders_created",
+        "orders_submitted"
+      ]
+    },
+    {
+      "path": "$.runtime.upstream_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.runtime.artifact_verified",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.runtime.operational_safety",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.runtime.runtime_ready",
+      "type": "bool",
+      "depth": 2,
+      "value": true
+    },
+    {
+      "path": "$.runtime.execution_allowed",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.runtime.execution",
+      "type": "str",
+      "depth": 2,
+      "value": "NOT_EXECUTED"
+    },
+    {
+      "path": "$.runtime.orders_created",
+      "type": "int",
+      "depth": 2,
+      "value": 0
+    },
+    {
+      "path": "$.runtime.orders_submitted",
+      "type": "int",
+      "depth": 2,
+      "value": 0
+    },
+    {
+      "path": "$.execution",
+      "type": "dict",
+      "depth": 1,
+      "keys": [
+        "executed",
+        "orders_created",
+        "orders_submitted"
+      ]
+    },
+    {
+      "path": "$.execution.executed",
+      "type": "bool",
+      "depth": 2,
+      "value": false
+    },
+    {
+      "path": "$.execution.orders_created",
+      "type": "int",
+      "depth": 2,
+      "value": 0
+    },
+    {
+      "path": "$.execution.orders_submitted",
+      "type": "int",
+      "depth": 2,
+      "value": 0
+    },
+    {
+      "path": "$.final_verdict",
+      "type": "str",
+      "depth": 1,
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    },
+    {
+      "path": "$.next_stage",
+      "type": "str",
+      "depth": 1,
+      "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+    }
+  ],
+  "conclusion": {
+    "artifact_modified": false,
+    "runtime_modified": false,
+    "producer_executed": false,
+    "contract_modified": false,
+    "automatic_contract_selection": false,
+    "automatic_runtime_repair": false,
+    "status": "FORENSIC_ONLY",
+    "next_action": "USE ACTUAL RUNTIME CONTRACT PATHS FROM THIS REPORT TO BUILD THE NEXT CONSUMER"
+  }
+}

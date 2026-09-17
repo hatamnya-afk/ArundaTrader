@@ -1,0 +1,562 @@
+
+==========================================================================================
+ARUNDA TRADER — CP8 FULL PRODUCTION DRY-RUN
+CURRENT RUNTIME IDENTITY
+Execution Enabled : False
+==========================================================================================
+============================================================
+       ARUNDA DATABASE UPGRADE v0.1
+============================================================
+
+TABLES
+------------------------------------------------------------
+fusion_signals
+hunter_signals
+market_data
+market_history
+market_history_legacy
+market_microstructure
+market_news
+market_news_intelligence
+market_opportunity
+market_records
+market_state
+market_technical
+market_universe
+market_whale
+news_data
+news_signals
+opportunity_candidates
+opportunity_signals
+positioning_data
+risk_decisions
+scheduler_runs
+signal_outcomes
+social_metrics
+source_status
+sqlite_sequence
+trade_decisions
+trade_gate_decisions
+
+DATABASE UPGRADE COMPLETE
+============================================================
+==============================================================================
+          ARUNDA MARKET SNAPSHOT ENGINE v0.6
+==============================================================================
+Source            : COINMARKETCAP
+Database          : C:\Users\ASUS\ArundaTrader\arunda.db
+Universe           : 15 assets
+Universe Mode      : TEST / EXTENSIBLE
+Timeframe          : SNAPSHOT
+Purpose            : REAL MARKET DATA COLLECTION
+Analysis           : NOT USED
+Signal             : NOT USED
+Risk               : NOT USED
+Execution          : NOT USED
+Launch Boundary    : 2026-08-31T00:00:00+00:00
+Provenance         : PRODUCTION
+Legacy Data        : BLOCKED / UNMODIFIED
+==============================================================================
+
+Checking market-data schema...
+Existing snapshots : 2348
+
+Current UTC         : 2026-09-03T20:44:41.545485+00:00
+Launch status       : LIVE / POST-LAUNCH
+
+Fetching REAL CMC market data...
+CMC API : ONLINE | Latency 1566 ms
+
+CMC assets returned : 15
+Expected assets     : 15
+
+ASSET                  PRICE       1H %      24H %     HISTORY            STATUS
+--------------------------------------------------------------------------------------------
+ARUNDA_CURRENT_RUNTIME_SNAPSHOT={"runtime_source":"CURRENT_SUBPROCESS_RUN","engine_version":"MARKET_SNAPSHOT_CMC_v0.6","source":"COINMARKETCAP","timeframe":"SNAPSHOT","timestamp":"2026-09-03T20:44:43.114127+00:00","assets":[{"asset":"BTC","timestamp":"2026-09-03T20:44:43.114127+00:00","price":81495.43700938592,"change_1h":-0.10595334,"change_24h":5.36055394,"market_cap":1636366683102.653,"volume_24h":36973205498.89233},{"asset":"ETH","timestamp":"2026-09-03T20:44:43.114127+00:00","price":2506.1402923544406,"change_1h":-0.38193747,"change_24h":4.812631,"market_cap":305787014172.9188,"volume_24h":17427066595.723442},{"asset":"SOL","timestamp":"2026-09-03T20:44:43.114127+00:00","price":105.05845098728382,"change_1h":-0.35124714,"change_24h":5.39776172,"market_cap":61488037362.21715,"volume_24h":3783626516.878017},{"asset":"XRP","timestamp":"2026-09-03T20:44:43.114127+00:00","price":1.4765263724343711,"change_1h":0.41031864,"change_24h":9.43057273,"market_cap":92643916139.31436,"volume_24h":4349226346.8235655},{"asset":"ADA","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.22312246605662064,"change_1h":0.43583511,"change_24h":12.58382666,"market_cap":8195347449.590071,"volume_24h":691873556.80541},{"asset":"DOGE","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.08879517207193638,"change_1h":-0.67388496,"change_24h":8.66479417,"market_cap":13831339487.985384,"volume_24h":1142997536.3223205},{"asset":"SHIB","timestamp":"2026-09-03T20:44:43.114127+00:00","price":5.429224566931e-06,"change_1h":-0.21302774,"change_24h":4.94001163,"market_cap":3199112155.5410314,"volume_24h":74922518.92612195},{"asset":"LINK","timestamp":"2026-09-03T20:44:43.114127+00:00","price":11.887474724848861,"change_1h":0.25800249,"change_24h":6.83985972,"market_cap":8893019490.085989,"volume_24h":385718250.85195786},{"asset":"AVAX","timestamp":"2026-09-03T20:44:43.114127+00:00","price":7.519455130909588,"change_1h":-0.0942212,"change_24h":4.7269488,"market_cap":3246689888.8568816,"volume_24h":340546554.2348476},{"asset":"DOT","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.8945026119098973,"change_1h":-0.44281168,"change_24h":3.74345394,"market_cap":1521633183.5778134,"volume_24h":114308364.42576946},{"asset":"LTC","timestamp":"2026-09-03T20:44:43.114127+00:00","price":51.69419613781295,"change_1h":-0.03742544,"change_24h":3.80861662,"market_cap":4009925155.22788,"volume_24h":254569852.23471826},{"asset":"UNI","timestamp":"2026-09-03T20:44:43.114127+00:00","price":6.3287370209280915,"change_1h":1.47121891,"change_24h":8.30423622,"market_cap":3939983228.984333,"volume_24h":787855402.9764937},{"asset":"AAVE","timestamp":"2026-09-03T20:44:43.114127+00:00","price":134.45265401118445,"change_1h":0.28286865,"change_24h":5.89013913,"market_cap":2074192101.364915,"volume_24h":287531007.10544074},{"asset":"SUI","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.7881306502479788,"change_1h":0.02241891,"change_24h":6.34338972,"market_cap":3228606485.068326,"volume_24h":647210945.6005793},{"asset":"NEAR","timestamp":"2026-09-03T20:44:43.114127+00:00","price":1.9770626038427783,"change_1h":-1.00634731,"change_24h":5.48814517,"market_cap":2580740129.033072,"volume_24h":274306180.35801744}]}
+BTC            81,495.437009     -0.11%      5.36%         164          INSERTED
+ETH             2,506.140292     -0.38%      4.81%         163          INSERTED
+SOL               105.058451     -0.35%      5.40%         163          INSERTED
+XRP                 1.476526      0.41%      9.43%         163          INSERTED
+ADA                 0.223122      0.44%     12.58%         156          INSERTED
+DOGE                0.088795     -0.67%      8.66%         155          INSERTED
+SHIB                0.000005     -0.21%      4.94%         155          INSERTED
+LINK               11.887475      0.26%      6.84%         156          INSERTED
+AVAX                7.519455     -0.09%      4.73%         155          INSERTED
+DOT                 0.894503     -0.44%      3.74%         155          INSERTED
+LTC                51.694196     -0.04%      3.81%         155          INSERTED
+UNI                 6.328737      1.47%      8.30%         156          INSERTED
+AAVE              134.452654      0.28%      5.89%         156          INSERTED
+SUI                 0.788131      0.02%      6.34%         155          INSERTED
+NEAR                1.977063     -1.01%      5.49%         156          INSERTED
+
+==============================================================================
+              SNAPSHOT ENGINE SUMMARY
+==============================================================================
+Expected Assets      : 15
+CMC Returned         : 15
+Inserted             : 15
+Duplicates           : 0
+Launch Blocked       : 0
+Missing              : 0
+Errors               : 0
+Records Before       : 2348
+Records After        : 2363
+Records New          : 15
+CMC Latency          : 1566 ms
+Run Time             : 1.60 sec
+Launch Boundary      : 2026-08-31T00:00:00+00:00
+Legacy Modification  : NONE
+Engine               : MARKET_SNAPSHOT_CMC_v0.6
+==============================================================================
+
+SNAPSHOT HISTORY BY ASSET
+------------------------------------------------------------------------------
+BTC    | SNAPSHOTS=164   | STATUS=READY
+ETH    | SNAPSHOTS=163   | STATUS=READY
+SOL    | SNAPSHOTS=163   | STATUS=READY
+XRP    | SNAPSHOTS=163   | STATUS=READY
+ADA    | SNAPSHOTS=156   | STATUS=READY
+DOGE   | SNAPSHOTS=155   | STATUS=READY
+SHIB   | SNAPSHOTS=155   | STATUS=READY
+LINK   | SNAPSHOTS=156   | STATUS=READY
+AVAX   | SNAPSHOTS=155   | STATUS=READY
+DOT    | SNAPSHOTS=155   | STATUS=READY
+LTC    | SNAPSHOTS=155   | STATUS=READY
+UNI    | SNAPSHOTS=156   | STATUS=READY
+AAVE   | SNAPSHOTS=156   | STATUS=READY
+SUI    | SNAPSHOTS=155   | STATUS=READY
+NEAR   | SNAPSHOTS=156   | STATUS=READY
+
+RECENT MARKET SNAPSHOTS
+----------------------------------------------------------------------------------------------------
+NEAR   | 2026-09-03T20:44:43.114127+00:00 |           1.977063 | 1H    -1.01% | 24H    +5.49%
+SUI    | 2026-09-03T20:44:43.114127+00:00 |           0.788131 | 1H    +0.02% | 24H    +6.34%
+AAVE   | 2026-09-03T20:44:43.114127+00:00 |         134.452654 | 1H    +0.28% | 24H    +5.89%
+UNI    | 2026-09-03T20:44:43.114127+00:00 |           6.328737 | 1H    +1.47% | 24H    +8.30%
+LTC    | 2026-09-03T20:44:43.114127+00:00 |          51.694196 | 1H    -0.04% | 24H    +3.81%
+DOT    | 2026-09-03T20:44:43.114127+00:00 |           0.894503 | 1H    -0.44% | 24H    +3.74%
+AVAX   | 2026-09-03T20:44:43.114127+00:00 |           7.519455 | 1H    -0.09% | 24H    +4.73%
+LINK   | 2026-09-03T20:44:43.114127+00:00 |          11.887475 | 1H    +0.26% | 24H    +6.84%
+SHIB   | 2026-09-03T20:44:43.114127+00:00 |           0.000005 | 1H    -0.21% | 24H    +4.94%
+DOGE   | 2026-09-03T20:44:43.114127+00:00 |           0.088795 | 1H    -0.67% | 24H    +8.66%
+ADA    | 2026-09-03T20:44:43.114127+00:00 |           0.223122 | 1H    +0.44% | 24H   +12.58%
+XRP    | 2026-09-03T20:44:43.114127+00:00 |           1.476526 | 1H    +0.41% | 24H    +9.43%
+SOL    | 2026-09-03T20:44:43.114127+00:00 |         105.058451 | 1H    -0.35% | 24H    +5.40%
+ETH    | 2026-09-03T20:44:43.114127+00:00 |       2,506.140292 | 1H    -0.38% | 24H    +4.81%
+BTC    | 2026-09-03T20:44:43.114127+00:00 |      81,495.437009 | 1H    -0.11% | 24H    +5.36%
+NEAR   | 2026-09-03T20:42:22.540175+00:00 |           1.976766 | 1H    -1.04% | 24H    +5.44%
+SUI    | 2026-09-03T20:42:22.540175+00:00 |           0.787766 | 1H    +0.09% | 24H    +6.03%
+AAVE   | 2026-09-03T20:42:22.540175+00:00 |         134.443380 | 1H    +0.31% | 24H    +5.77%
+UNI    | 2026-09-03T20:42:22.540175+00:00 |           6.328714 | 1H    +1.73% | 24H    +8.23%
+LTC    | 2026-09-03T20:42:22.540175+00:00 |          51.689348 | 1H    -0.07% | 24H    +3.71%
+
+==============================================================================
+          MARKET SNAPSHOT ENGINE v0.6 COMPLETE
+==============================================================================
+SNAPSHOT STATUS : SUCCESS
+==============================================================================
+
+CP7-G CURRENT RUNTIME SNAPSHOT : PASS
+Snapshot ID : RS-e32e322f107e8c26f993cdf8cb72b4c0c6f95753b0e67d15404a2dad2c573841
+Assets      : 15/15
+==========================================================================================
+             ARUNDA MARKET DATA ENGINE v0.4
+==========================================================================================
+Provider : COINMARKETCAP SNAPSHOTS
+Database : arunda.db
+Binance  : REMOVED
+History  : LAST 150 SNAPSHOTS
+Minimum  : 60 SNAPSHOTS
+Mode     : SNAPSHOT ANALYSIS
+OHLC     : NOT MANUFACTURED
+ATR/ADX  : DISABLED FOR SNAPSHOT DATA
+Ordering : OLD -> NEW FOR INDICATORS
+==========================================================================================
+
+Checking market-data schema...
+Snapshot rows : 2363
+Analysis rows : 571
+
+Reading latest CMC snapshot history...
+------------------------------------------------------------------------------------------
+BTC    | INSERTED  | POINTS=150 | PRICE= 81,495.437009 | SCORE=  35.00 | RSI=68.90
+ETH    | INSERTED  | POINTS=150 | PRICE=  2,506.140292 | SCORE=   5.00 | RSI=62.61
+SOL    | INSERTED  | POINTS=150 | PRICE=    105.058451 | SCORE=   5.00 | RSI=66.81
+XRP    | INSERTED  | POINTS=150 | PRICE=      1.476526 | SCORE=  35.00 | RSI=68.30
+ADA    | INSERTED  | POINTS=150 | PRICE=      0.223122 | SCORE=  35.00 | RSI=66.99
+DOGE   | INSERTED  | POINTS=150 | PRICE=      0.088795 | SCORE=  -2.00 | RSI=59.23
+SHIB   | INSERTED  | POINTS=150 | PRICE=      0.000005 | SCORE=   5.00 | RSI=64.15
+LINK   | INSERTED  | POINTS=150 | PRICE=     11.887475 | SCORE=  40.00 | RSI=72.29
+AVAX   | INSERTED  | POINTS=150 | PRICE=      7.519455 | SCORE=   5.00 | RSI=62.53
+DOT    | INSERTED  | POINTS=150 | PRICE=      0.894503 | SCORE=  35.00 | RSI=61.78
+LTC    | INSERTED  | POINTS=150 | PRICE=     51.694196 | SCORE=  35.00 | RSI=68.15
+UNI    | INSERTED  | POINTS=150 | PRICE=      6.328737 | SCORE=  40.00 | RSI=84.55
+AAVE   | INSERTED  | POINTS=150 | PRICE=    134.452654 | SCORE=  40.00 | RSI=71.81
+SUI    | INSERTED  | POINTS=150 | PRICE=      0.788131 | SCORE=  35.00 | RSI=60.70
+NEAR   | INSERTED  | POINTS=150 | PRICE=      1.977063 | SCORE=  -2.00 | RSI=57.94
+
+==========================================================================================
+                 MARKET DATA SUMMARY
+==========================================================================================
+Symbols Evaluated : 15
+Inserted          : 15
+Insufficient Data : 0
+Errors            : 0
+Analysis Records  : 586
+Run Time          : 0.03 sec
+Engine            : MARKET_DATA_CMC_SNAPSHOT_v0.4
+Provider          : COINMARKETCAP SNAPSHOT
+Binance           : DISABLED / REMOVED
+Synthetic OHLC    : FORBIDDEN
+ATR / ADX         : NULL / NOT DERIVED
+Time-Series Order : OLD -> NEW
+==========================================================================================
+
+RECENT MARKET ANALYSIS
+------------------------------------------------------------------------------------------
+NEAR  | 2026-09-03T20:44:43.114127+00:00 | PRICE 1.97706260 | SCORE   -2.00 | RSI   57.94 | ATR     N/A | ADX     N/A
+SUI   | 2026-09-03T20:44:43.114127+00:00 | PRICE 0.78813065 | SCORE   35.00 | RSI   60.70 | ATR     N/A | ADX     N/A
+AAVE  | 2026-09-03T20:44:43.114127+00:00 | PRICE 134.45265401 | SCORE   40.00 | RSI   71.81 | ATR     N/A | ADX     N/A
+UNI   | 2026-09-03T20:44:43.114127+00:00 | PRICE 6.32873702 | SCORE   40.00 | RSI   84.55 | ATR     N/A | ADX     N/A
+LTC   | 2026-09-03T20:44:43.114127+00:00 | PRICE 51.69419614 | SCORE   35.00 | RSI   68.15 | ATR     N/A | ADX     N/A
+DOT   | 2026-09-03T20:44:43.114127+00:00 | PRICE 0.89450261 | SCORE   35.00 | RSI   61.78 | ATR     N/A | ADX     N/A
+AVAX  | 2026-09-03T20:44:43.114127+00:00 | PRICE 7.51945513 | SCORE    5.00 | RSI   62.53 | ATR     N/A | ADX     N/A
+LINK  | 2026-09-03T20:44:43.114127+00:00 | PRICE 11.88747472 | SCORE   40.00 | RSI   72.29 | ATR     N/A | ADX     N/A
+SHIB  | 2026-09-03T20:44:43.114127+00:00 | PRICE 0.00000543 | SCORE    5.00 | RSI   64.15 | ATR     N/A | ADX     N/A
+DOGE  | 2026-09-03T20:44:43.114127+00:00 | PRICE 0.08879517 | SCORE   -2.00 | RSI   59.23 | ATR     N/A | ADX     N/A
+ADA   | 2026-09-03T20:44:43.114127+00:00 | PRICE 0.22312247 | SCORE   35.00 | RSI   66.99 | ATR     N/A | ADX     N/A
+XRP   | 2026-09-03T20:44:43.114127+00:00 | PRICE 1.47652637 | SCORE   35.00 | RSI   68.30 | ATR     N/A | ADX     N/A
+SOL   | 2026-09-03T20:44:43.114127+00:00 | PRICE 105.05845099 | SCORE    5.00 | RSI   66.81 | ATR     N/A | ADX     N/A
+ETH   | 2026-09-03T20:44:43.114127+00:00 | PRICE 2,506.14029235 | SCORE    5.00 | RSI   62.61 | ATR     N/A | ADX     N/A
+BTC   | 2026-09-03T20:44:43.114127+00:00 | PRICE 81,495.43700939 | SCORE   35.00 | RSI   68.90 | ATR     N/A | ADX     N/A
+
+==========================================================================================
+             MARKET DATA ENGINE COMPLETE
+==========================================================================================
+MARKET DATA STATUS : SUCCESS
+SNAPSHOT RECORDS : 2363
+ANALYSIS BEFORE  : 571
+ANALYSIS AFTER   : 586
+ANALYSIS NEW     : 15
+==========================================================================================
+==============================================================================
+              ARUNDA OPPORTUNITY ENGINE v0.3
+==============================================================================
+Database       : C:\Users\ASUS\ArundaTrader\arunda.db
+Input          : market_data
+CMC API        : NOT USED
+API KEY        : NOT REQUIRED
+Min History    : 60
+Max Candidates : 15
+Min Score      : 65.00
+Min Confidence : 0.60
+Execution      : DISABLED
+==============================================================================
+
+Checking market-data contract...
+MARKET_DATA CONTRACT : OK
+Columns Available    : 33
+
+Checking opportunity contract...
+OPPORTUNITY CONTRACT : OK
+
+Symbols Available : 15
+
+SYMBOL    POINTS           PRICE      1H %     24H %      RSI    SCORE    CONF          STATUS
+--------------------------------------------------------------------------------------------------------------
+XRP          150        1.476526     +0.41     +9.43    65.41    77.34    1.00        ELIGIBLE
+ADA          150        0.223122     +0.44    +12.58    72.85    75.49    1.00        ELIGIBLE
+LTC          150       51.694196     -0.04     +3.81    67.17    67.68    1.00        ELIGIBLE
+UNI          150        6.328737     +1.47     +8.30    83.15    66.26    1.00        ELIGIBLE
+SUI          150        0.788131     +0.02     +6.34    49.22    63.97    1.00        NO_TRADE
+LINK         150       11.887475     +0.26     +6.84    84.33    59.36    1.00        NO_TRADE
+DOT          150        0.894503     -0.44     +3.74    41.27    58.47    1.00        NO_TRADE
+AAVE         150      134.452654     +0.28     +5.89    87.60    58.13    1.00        NO_TRADE
+DOGE         150        0.088795     -0.67     +8.66    14.81    54.44    1.00        NO_TRADE
+BTC          150   81,495.437009     -0.11     +5.36    35.44    52.08    1.00        NO_TRADE
+AVAX         150        7.519455     -0.09     +4.73    11.00    51.24    1.00        NO_TRADE
+SOL          150      105.058451     -0.35     +5.40    20.68    51.15    1.00        NO_TRADE
+SHIB         150        0.000005     -0.21     +4.94    34.45    51.06    1.00        NO_TRADE
+ETH          150    2,506.140292     -0.38     +4.81    16.59    50.21    1.00        NO_TRADE
+NEAR         150        1.977063     -1.01     +5.49    33.71    48.66    1.00        NO_TRADE
+
+==============================================================================
+              OPPORTUNITY ENGINE SUMMARY
+==============================================================================
+Symbols Evaluated   : 15
+History Ready       : 15
+Waiting For History : 0
+Selected Candidates : 15
+Inserted            : 15
+Eligible            : 4
+No Trade            : 11
+Engine              : OPPORTUNITY_v0.3
+Runtime             : 0.03 sec
+==============================================================================
+ARUNDA_RUNTIME_OPPORTUNITY_SNAPSHOT={"engine_version":"OPPORTUNITY_v0.3","runtime_source":"CURRENT_SUBPROCESS_RUN","count":15,"opportunities":[{"symbol":"XRP","timestamp":"2026-09-03T20:44:43.114127+00:00","price":1.4765263724343711,"score":77.344076382,"confidence":1.0,"momentum_1h":0.41031864,"momentum_24h":9.43057273,"market_cap":92643916139.31436,"volume_24h":4349226346.8235655,"rsi":65.41233799597791,"points":150,"source":"COINMARKETCAP","status":"ELIGIBLE"},{"symbol":"ADA","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.22312246605662064,"score":75.49334044,"confidence":1.0,"momentum_1h":0.43583511,"momentum_24h":12.58382666,"market_cap":8195347449.590071,"volume_24h":691873556.80541,"rsi":72.84727970805423,"points":150,"source":"COINMARKETCAP","status":"ELIGIBLE"},{"symbol":"LTC","timestamp":"2026-09-03T20:44:43.114127+00:00","price":51.69419613781295,"score":67.682361508,"confidence":1.0,"momentum_1h":-0.03742544,"momentum_24h":3.80861662,"market_cap":4009925155.22788,"volume_24h":254569852.23471826,"rsi":67.16738902815709,"points":150,"source":"COINMARKETCAP","status":"ELIGIBLE"},{"symbol":"UNI","timestamp":"2026-09-03T20:44:43.114127+00:00","price":6.3287370209280915,"score":66.260806348,"confidence":1.0,"momentum_1h":1.47121891,"momentum_24h":8.30423622,"market_cap":3939983228.984333,"volume_24h":787855402.9764937,"rsi":83.14506099209372,"points":150,"source":"COINMARKETCAP","status":"ELIGIBLE"},{"symbol":"SUI","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.7881306502479788,"score":63.970421248,"confidence":1.0,"momentum_1h":0.02241891,"momentum_24h":6.34338972,"market_cap":3228606485.068326,"volume_24h":647210945.6005793,"rsi":49.218275098741444,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"LINK","timestamp":"2026-09-03T20:44:43.114127+00:00","price":11.887474724848861,"score":59.357813568,"confidence":1.0,"momentum_1h":0.25800249,"momentum_24h":6.83985972,"market_cap":8893019490.085989,"volume_24h":385718250.85195786,"rsi":84.3342719871555,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"DOT","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.8945026119098973,"score":58.469588796000004,"confidence":1.0,"momentum_1h":-0.44281168,"momentum_24h":3.74345394,"market_cap":1521633183.5778134,"volume_24h":114308364.42576946,"rsi":41.27004482744552,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"AAVE","timestamp":"2026-09-03T20:44:43.114127+00:00","price":134.45265401118445,"score":58.12766938200001,"confidence":1.0,"momentum_1h":0.28286865,"momentum_24h":5.89013913,"market_cap":2074192101.364915,"volume_24h":287531007.10544074,"rsi":87.60253663386611,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"DOGE","timestamp":"2026-09-03T20:44:43.114127+00:00","price":0.08879517207193638,"score":54.435171998,"confidence":1.0,"momentum_1h":-0.67388496,"momentum_24h":8.66479417,"market_cap":13831339487.985384,"volume_24h":1142997536.3223205,"rsi":14.810802568095994,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"BTC","timestamp":"2026-09-03T20:44:43.114127+00:00","price":81495.43700938592,"score":52.080962156,"confidence":1.0,"momentum_1h":-0.10595334,"momentum_24h":5.36055394,"market_cap":1636366683102.653,"volume_24h":36973205498.89233,"rsi":35.44486869991073,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"AVAX","timestamp":"2026-09-03T20:44:43.114127+00:00","price":7.519455130909588,"score":51.24084352,"confidence":1.0,"momentum_1h":-0.0942212,"momentum_24h":4.7269488,"market_cap":3246689888.8568816,"volume_24h":340546554.2348476,"rsi":10.99897037068375,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"SOL","timestamp":"2026-09-03T20:44:43.114127+00:00","price":105.05845098728382,"score":51.151877848,"confidence":1.0,"momentum_1h":-0.35124714,"momentum_24h":5.39776172,"market_cap":61488037362.21715,"volume_24h":3783626516.878017,"rsi":20.677108463277662,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"SHIB","timestamp":"2026-09-03T20:44:43.114127+00:00","price":5.429224566931e-06,"score":51.063905322000004,"confidence":1.0,"momentum_1h":-0.21302774,"momentum_24h":4.94001163,"market_cap":3199112155.5410314,"volume_24h":74922518.92612195,"rsi":34.452540477505096,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"ETH","timestamp":"2026-09-03T20:44:43.114127+00:00","price":2506.1402923544406,"score":50.20993352,"confidence":1.0,"momentum_1h":-0.38193747,"momentum_24h":4.812631,"market_cap":305787014172.9188,"volume_24h":17427066595.723442,"rsi":16.592283954976182,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"},{"symbol":"NEAR","timestamp":"2026-09-03T20:44:43.114127+00:00","price":1.9770626038427783,"score":48.658013998,"confidence":1.0,"momentum_1h":-1.00634731,"momentum_24h":5.48814517,"market_cap":2580740129.033072,"volume_24h":274306180.35801744,"rsi":33.70743687157568,"points":150,"source":"COINMARKETCAP","status":"NO_TRADE"}]}
+
+OPPORTUNITY STATUS : SUCCESS
+ELIGIBLE OPPORTUNITIES : 4
+NEXT : DECISION ENGINE
+
+CURRENT-RUN OPPORTUNITY SNAPSHOT : 15
+
+==========================================================================================
+SIGNAL → SCORE → DECISION RUNTIME
+==========================================================================================
+==========================================================================================
+ARUNDA SCORE PRODUCER v0.2
+==========================================================================================
+Contract repair      : FEATURE SNAPSHOT -> SCORE PRODUCER
+Runtime source       : runtime_feature_producer
+Runtime engine       : RECONSTRUCTED_RUNTIME_FEATURE_PRODUCER_v0.5
+Feature definitions  : market_analysis_engine
+Scoring model        : signal_scorer v0.3 recovered logic
+Storage              : MEMORY ONLY
+Database writes      : NONE
+Synthetic data       : NONE
+Interpolation        : NONE
+Forward fill         : NONE
+Back fill            : NONE
+Padding              : NONE
+Execution            : DISABLED
+
+SCORE PRODUCER STATUS : READY
+Produced assets       : 15
+Feature adapter       : PASS
+7/7 score features    : PASS
+Score formula         : FROZEN
+Database writes       : NONE
+Execution             : DISABLED
+
+==================================================================================
+ARUNDA SIGNAL SCORER v0.4
+==================================================================================
+Input 1    : validated_signals
+Input 2    : REAL scores
+Producer   : UPSTREAM RUNTIME
+Storage    : MEMORY ONLY
+Writes     : NONE
+SQL        : NOT USED
+Feature    : NOT LOADED
+Signal     : NOT LOADED
+Decision   : NOT USED
+Prediction : NOT USED
+Ranking    : NOT USED
+==================================================================================
+
+REAL SIGNAL SCORE SNAPSHOT
+----------------------------------------------------------------------------------
+Asset  | State   | Direction | Score
+----------------------------------------------------------------------------------
+BTC    | NEUTRAL | NONE      | +0.000000
+ETH    | NEUTRAL | NONE      | +0.000000
+SOL    | ACTIVE  | SHORT     | -0.057564
+XRP    | ACTIVE  | LONG      | +0.099157
+ADA    | ACTIVE  | SHORT     | -0.090208
+DOGE   | ACTIVE  | LONG      | +0.010074
+SHIB   | ACTIVE  | SHORT     | -0.016370
+LINK   | NEUTRAL | NONE      | +0.000000
+AVAX   | ACTIVE  | SHORT     | -0.043227
+DOT    | ACTIVE  | SHORT     | -0.056234
+LTC    | ACTIVE  | SHORT     | -0.095833
+UNI    | ACTIVE  | SHORT     | -0.110026
+AAVE   | ACTIVE  | LONG      | +0.073084
+SUI    | ACTIVE  | SHORT     | -0.043993
+NEAR   | ACTIVE  | SHORT     | -0.007882
+
+==================================================================================
+SIGNAL SCORE CONTRACT
+==================================================================================
+Scorer Version  : SCORER_v0.4
+Score Producer  : UPSTREAM_RUNTIME
+Expected Assets : 15
+Scored Assets   : 15
+Active Signals  : 12
+Neutral Signals : 3
+Storage         : MEMORY ONLY
+Database writes : NONE
+SQL             : NOT USED
+Feature Loading : NOT USED
+Signal Loading  : NOT USED
+Decision        : NOT USED
+Prediction      : NOT USED
+Ranking         : NOT USED
+Interpretation  : NOT USED
+Contract Status : VALID
+
+SIGNAL SCORER STATUS : READY
+==================================================================================
+ARUNDA DECISION ENGINE v0.6
+==================================================================================
+Signals       : validated_signals
+Scores        : REAL score snapshot
+Input Contract: validated_signals + scores
+Feature Gen   : NOT USED
+Indicator Gen : NOT USED
+Structure Gen : NOT USED
+Score Gen     : NOT USED
+Prediction    : NOT USED
+Ranking       : NOT USED
+Risk          : NOT USED
+Execution     : NOT USED
+Storage       : MEMORY ONLY
+Writes        : NONE
+SQL           : NOT USED
+==================================================================================
+
+DECISION SNAPSHOT
+----------------------------------------------------------------------------------------------------
+Asset  | Decision    | Direction | Score        | Reason
+----------------------------------------------------------------------------------------------------
+BTC    | HOLD        | NONE      |    0.000000 | VALID_NEUTRAL_SIGNAL
+ETH    | HOLD        | NONE      |    0.000000 | VALID_NEUTRAL_SIGNAL
+SOL    | ACTIONABLE  | SHORT     |   -0.057564 | VALID_ACTIVE_SIGNAL
+XRP    | ACTIONABLE  | LONG      |    0.099157 | VALID_ACTIVE_SIGNAL
+ADA    | ACTIONABLE  | SHORT     |   -0.090208 | VALID_ACTIVE_SIGNAL
+DOGE   | ACTIONABLE  | LONG      |    0.010074 | VALID_ACTIVE_SIGNAL
+SHIB   | ACTIONABLE  | SHORT     |   -0.016370 | VALID_ACTIVE_SIGNAL
+LINK   | HOLD        | NONE      |    0.000000 | VALID_NEUTRAL_SIGNAL
+AVAX   | ACTIONABLE  | SHORT     |   -0.043227 | VALID_ACTIVE_SIGNAL
+DOT    | ACTIONABLE  | SHORT     |   -0.056234 | VALID_ACTIVE_SIGNAL
+LTC    | ACTIONABLE  | SHORT     |   -0.095833 | VALID_ACTIVE_SIGNAL
+UNI    | ACTIONABLE  | SHORT     |   -0.110026 | VALID_ACTIVE_SIGNAL
+AAVE   | ACTIONABLE  | LONG      |    0.073084 | VALID_ACTIVE_SIGNAL
+SUI    | ACTIONABLE  | SHORT     |   -0.043993 | VALID_ACTIVE_SIGNAL
+NEAR   | ACTIONABLE  | SHORT     |   -0.007882 | VALID_ACTIVE_SIGNAL
+
+==================================================================================
+DECISION ENGINE CONTRACT
+==================================================================================
+Expected Assets : 15
+Ready Assets    : 15
+Actionable      : 12
+Hold            : 3
+Reject          : 0
+LONG            : 3
+SHORT           : 9
+NONE            : 3
+Storage         : MEMORY ONLY
+Database writes : NONE
+SQL             : NOT USED
+Feature Gen     : NOT USED
+Indicator Gen   : NOT USED
+Structure Gen   : NOT USED
+Score Gen       : NOT USED
+Prediction      : NOT USED
+Ranking         : NOT USED
+Risk            : NOT USED
+Execution       : NOT USED
+Contract Status : VALID
+==================================================================================
+
+DECISION ENGINE STATUS : READY
+
+==========================================================================================
+DECISION → RISK RUNTIME
+==========================================================================================
+
+==========================================================================================
+RISK → TRADE GATE RUNTIME
+==========================================================================================
+==========================================================================================
+ARUNDA TRADER — CP8
+==========================================================================================
+
+STATUS:
+FULL PRODUCTION DRY-RUN
+
+CHECKPOINT:
+CP8
+
+FILES CHANGED:
+arunda_pipeline.py
+
+FUNCTIONS CHANGED:
+Current Order Intent Boundary
+
+CP8 FULL PRODUCTION DRY-RUN:
+SOURCE: CURRENT MARKET SNAPSHOT SAME-CYCLE PAYLOAD
+SNAPSHOT_ID: RS-e32e322f107e8c26f993cdf8cb72b4c0c6f95753b0e67d15404a2dad2c573841
+DETERMINISTIC: YES
+REPRODUCIBLE: YES
+AUDITABLE: YES
+
+COVERAGE:
+OPPORTUNITY: 15 CURRENT-RUN SELECTED
+DECISION: 15/15
+RISK: 15/15
+TRADE GATE: 15/15
+
+TRADE_READY:
+0
+
+ORDER_INTENT:
+0
+
+VALIDATED_ORDER_INTENTS:
+0
+
+INVALID_ORDER_INTENTS:
+0
+
+NO_TRADE:
+15
+
+PROVENANCE:
+asset: TRADE_GATE
+direction: TRADE_GATE
+entry_price: CURRENT_OPPORTUNITY
+confidence: CURRENT_OPPORTUNITY
+regime: CURRENT_MARKET_REGIME
+timestamp: CURRENT_OPPORTUNITY
+snapshot_id: CP7-G CURRENT RUNTIME IDENTITY
+intent_id: DETERMINISTIC SNAPSHOT_ID + ASSET
+
+ORDER_SUBMISSION:
+NONE
+
+EXCHANGE_WRITE:
+NONE
+
+EXECUTION:
+DISABLED
+
+DB_WRITE:
+NONE
+
+SYNTHETIC:
+NONE
+
+FALLBACK:
+NONE
+
+INTERPOLATION:
+NONE
+
+FORWARD_FILL:
+NONE
+
+BACK_FILL:
+NONE
+
+PADDING:
+NONE
+
+FABRICATION:
+NONE
+
+UPSTREAM BUSINESS LOGIC:
+UNCHANGED
+
+CLOSED_LAYERS_REOPENED:
+NONE
+
+RESULT:
+PASS — NO TRADE_READY / FAIL-CLOSED
+
+NEXT CHECKPOINT:
+DO NOT START AUTOMATICALLY
+WAIT FOR MANAGEMENT REVIEW.
+==========================================================================================
+

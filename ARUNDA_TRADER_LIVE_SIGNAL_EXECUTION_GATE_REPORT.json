@@ -1,0 +1,85 @@
+{
+  "artifact": {
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "decision": "NO_TRADE",
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "rows": 4,
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "verified": true
+  },
+  "execution_policy": {
+    "execution_allowed": false,
+    "network_access": false,
+    "order_creation_allowed": false,
+    "order_submission_allowed": false,
+    "production_db_write": false
+  },
+  "final_verdict": "LIVE_SIGNAL_EXECUTION_GATE_READY",
+  "gate": {
+    "name": "LIVE_SIGNAL_EXECUTION_GATE",
+    "state": "READY",
+    "version": "v0.1"
+  },
+  "identity": {
+    "artifact_identity": true,
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "chain_identity": true,
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "expected_artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "producer_identity": true,
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0"
+  },
+  "launch_contract": {
+    "downstream_contract": "READY",
+    "execution_performed": false,
+    "orders_created": 0,
+    "orders_submitted": 0,
+    "status": "READY",
+    "upstream_contract": "VERIFIED"
+  },
+  "launch_package": {
+    "execution_gate": "READY",
+    "execution_performed": false,
+    "orders_created": 0,
+    "orders_submitted": 0,
+    "status": "READY",
+    "upstream_contract": "VERIFIED"
+  },
+  "next_stage": "LIVE_SIGNAL_EXECUTION_RUNTIME",
+  "safety": {
+    "artifact_mutation": false,
+    "contract": true,
+    "network_access": false,
+    "order_creation": false,
+    "order_execution": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false
+  },
+  "upstream": {
+    "release_gate_verified": true,
+    "source": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN",
+    "state": "VERIFIED"
+  },
+  "verification": {
+    "artifact_contract_verified": true,
+    "artifact_identity_verified": true,
+    "execution_gate_ready": true,
+    "operational_safety_verified": true,
+    "producer_identity_verified": true,
+    "upstream_contract_verified": true
+  }
+}

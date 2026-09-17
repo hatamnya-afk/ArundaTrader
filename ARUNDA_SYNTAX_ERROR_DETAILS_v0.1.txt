@@ -1,0 +1,152 @@
+ARUNDA SYNTAX ERROR DETAILS v0.1
+==========================================================================================
+MODE        : READ ONLY
+TARGET      : EXACT 17 REVIEW_SYNTAX FILES
+DELETE      : NONE
+DB CHANGE   : NONE
+RUNTIME     : NONE
+EXECUTION   : DISABLED
+
+
+------------------------------------------------------------------------------------------
+PATH    : _diag_market_source.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : fusion_engine_before_positioning_normalization_20260820_024337.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_history_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_history_engine_v0_4.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_microstructure_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿# market_microstructure_engine.py
+
+------------------------------------------------------------------------------------------
+PATH    : market_monitor_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import os
+
+------------------------------------------------------------------------------------------
+PATH    : market_news_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_news_intelligence_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_opportunity_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_regime_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import math
+
+------------------------------------------------------------------------------------------
+PATH    : market_state_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿# =============================================================================
+
+------------------------------------------------------------------------------------------
+PATH    : market_state_engine_pre_step18_loader.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿# ==============================================================================
+
+------------------------------------------------------------------------------------------
+PATH    : market_stop_distance_adapter.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿# ============================================================
+
+------------------------------------------------------------------------------------------
+PATH    : market_technical_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import sqlite3
+
+------------------------------------------------------------------------------------------
+PATH    : market_universe_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿import os
+
+------------------------------------------------------------------------------------------
+PATH    : market_whale_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿# ================================================================
+
+------------------------------------------------------------------------------------------
+PATH    : stop_loss_engine.py
+STATUS  : SYNTAX_FAIL
+ERROR   : invalid non-printable character U+FEFF
+LINE    : 1
+OFFSET  : 1
+BADLINE : ﻿"""
+
+==========================================================================================
+SAFE_TO_REMOVE : NONE
+DELETE         : NONE
+DB CHANGE      : NONE
+RUNTIME        : NONE
+EXECUTION      : DISABLED

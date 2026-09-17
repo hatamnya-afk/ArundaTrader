@@ -1,0 +1,56 @@
+{
+  "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "artifact_contract": true,
+  "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+  "chain_seal_contract": false,
+  "chain_sha256": null,
+  "evidence_chain_contract": true,
+  "evidence_reports": {
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_REPORT.json": {
+      "exists": true,
+      "sha256": "66abccbeee0b2a05654b1f3a7b763ad9fddf91fe74657ca70b3cf0b5ec673c97",
+      "valid_json": true
+    },
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_REPORT.json": {
+      "exists": true,
+      "sha256": "497c9c53d43652a6316db964b6247f4dbc2d9e8f736da22f4daab1a7de93b265",
+      "valid_json": true
+    },
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_REPORT.json": {
+      "exists": true,
+      "sha256": "54461245e1efb94141cae03872d8b7fb789440dfc2ada8b33cbe52668acce4ee",
+      "valid_json": true
+    },
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_REPORT.json": {
+      "exists": true,
+      "sha256": "6a4351b92ebeb874cafa46a571b4d3aad907824239053d69bec43eef4248e7ab",
+      "valid_json": true
+    },
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_FORENSIC_REPORT.json": {
+      "exists": true,
+      "sha256": "1d2971383d7ba10256654a5194fd6fc414902ef5903707ad0086863e12649893",
+      "valid_json": true
+    }
+  },
+  "expected_artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+  "expected_chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+  "expected_producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+  "mode": "READ_ONLY_RELEASE_GATE_FORENSIC",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+  "production_db_contract": true,
+  "release_baseline_sha256": "7b81c951581309e7208b523c5a1cadf86a8bdc512827ca76546ce2eb0f4274ab",
+  "release_gate_verified": false,
+  "safety": {
+    "artifact_delete": false,
+    "artifact_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false
+  },
+  "safety_contract": true,
+  "seal_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_SEAL_FORENSIC_REPORT.json",
+  "timestamp_utc": "2026-08-24T19:02:03.650533+00:00",
+  "verdict": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_BLOCKED"
+}

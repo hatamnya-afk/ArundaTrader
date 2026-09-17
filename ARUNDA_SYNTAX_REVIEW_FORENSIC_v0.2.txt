@@ -1,0 +1,176 @@
+ARUNDA SYNTAX REVIEW FORENSIC v0.2
+==========================================================================================
+MODE              : READ ONLY
+TARGET            : EXACT 17 REVIEW_SYNTAX FILES
+DELETE            : NONE
+DB CHANGE         : NONE
+RUNTIME           : NONE
+EXECUTION         : DISABLED
+
+CATEGORY SUMMARY
+==========================================================================================
+OTHER_SYNTAX_FAILURE               : 17
+
+DETAILS
+==========================================================================================
+
+PATH     : _diag_market_source.py
+STATUS   : FAIL
+SIZE     : 258
+SHA256   : c5d64c482b3a1c66b2dd40c5632ab9f7f3a8f3374240274d0cf4b78177bc3013
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : fusion_engine_before_positioning_normalization_20260820_024337.py
+STATUS   : FAIL
+SIZE     : 22664
+SHA256   : 814f100bb163f15ba4580bb7887bbd2812bbdb81bc27aa90628ee12433554f53
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_history_engine.py
+STATUS   : FAIL
+SIZE     : 31014
+SHA256   : efc1e1ef377894657b2e17da41a5eb3ef972e36d850fd4eff560292ab55de0a6
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_history_engine_v0_4.py
+STATUS   : FAIL
+SIZE     : 6704
+SHA256   : 052213e4645e181dfd11775bc35ab843477be05c6710c704aae3ebe1811cea76
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_microstructure_engine.py
+STATUS   : FAIL
+SIZE     : 11865
+SHA256   : d2ede73376d59f529a2e27c2f4db03c6b38fa1e8a045c58024643b6c8d9a82bf
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_monitor_engine.py
+STATUS   : FAIL
+SIZE     : 13074
+SHA256   : feae744a7cb0d6cabd81192003f4a72199dfa10de7cfec631b8191456170ed88
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_news_engine.py
+STATUS   : FAIL
+SIZE     : 13506
+SHA256   : f7680c7ede39323f6a18d589748adb62e1f5dd7deb2c64f199f61a279f4abd80
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_news_intelligence_engine.py
+STATUS   : FAIL
+SIZE     : 20603
+SHA256   : 8cf2e0e813994e44bda66e67a55323440a1433483215fe13406a676d6662676e
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_opportunity_engine.py
+STATUS   : FAIL
+SIZE     : 14864
+SHA256   : e45d984e19922600696f51331943520a062997c1b8d507a9cec285d010bcde3b
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_regime_engine.py
+STATUS   : FAIL
+SIZE     : 35313
+SHA256   : 56a3170f9105737a4f9fe026d6a622e3d281e2cf20e86f1b67b7e071be5dd55f
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_state_engine.py
+STATUS   : FAIL
+SIZE     : 31394
+SHA256   : 31b3cf8735572f35fdbef271ef721407ca7d6acb84d8711db094384f840f4fcf
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_state_engine_pre_step18_loader.py
+STATUS   : FAIL
+SIZE     : 33996
+SHA256   : d4e88891293d08d245b451d99c6ee04d24e83bb2f731b9c5cf1f9cc5ae443734
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_stop_distance_adapter.py
+STATUS   : FAIL
+SIZE     : 19779
+SHA256   : d2de9870305533d3beade6668d3d5a078a4938e5f48282d2657587c3c617e681
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_technical_engine.py
+STATUS   : FAIL
+SIZE     : 20593
+SHA256   : 8a1aa1326642ca8ae90a5384cb08bd2224a68703417c10d257e139603814156c
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_universe_engine.py
+STATUS   : FAIL
+SIZE     : 16120
+SHA256   : 50698a08fe6908a735dd0efea92d78ef15f3b47ed654d7385ba3743a121cfd78
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : market_whale_engine.py
+STATUS   : FAIL
+SIZE     : 17518
+SHA256   : 660b5090444b36c3a54a0469a8bca55ddb8e5c9b6b0921211603aa3a691d8c16
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+PATH     : stop_loss_engine.py
+STATUS   : FAIL
+SIZE     : 15300
+SHA256   : 87c5950141d673f01f8234f0a51cbeeeaa92ef8dacce839944a7a99832eca1a7
+CATEGORY : OTHER_SYNTAX_FAILURE
+ERROR    : invalid non-printable character U+FEFF
+LINE     : 1
+OFFSET   : 1
+
+SAFETY
+==========================================================================================
+SAFE_TO_REMOVE : NONE
+DELETE         : NONE
+DB CHANGE      : NONE
+RUNTIME        : NONE
+EXECUTION      : DISABLED

@@ -1,0 +1,87 @@
+{
+  "engine": "ARUNDA_PUBLIC_MARKET_DATA_PROVIDER_SELECTION_PROBE_v0.1",
+  "run_utc": "2026-09-08T09:47:34.615956+00:00",
+  "mode": "EVIDENCE_ONLY",
+  "source_artifact": "arunda_public_market_data_qualification_evidence_v0.3.json",
+  "source_evidence_contract": "ARUNDA_PUBLIC_MARKET_DATA_QUALIFICATION_EVIDENCE_v0.3",
+  "source_engine": "ARUNDA_PUBLIC_MARKET_DATA_QUALIFICATION_PROBE_v0.3",
+  "source_qualification_engine": "ARUNDA_PUBLIC_MARKET_DATA_QUALIFICATION_PROBE_v0.3",
+  "providers": {
+    "BYBIT": {
+      "provider": "BYBIT",
+      "qualification_status": "PUBLIC_MARKET_METADATA_ERROR",
+      "market_coverage": {
+        "ready": 0,
+        "total": 15
+      },
+      "qualified_coverage": {
+        "ready": 0,
+        "total": 15
+      },
+      "asset_forensics": {
+        "asset_count": 15,
+        "assets_complete": true,
+        "all_fresh": null,
+        "all_current": null,
+        "all_complete": null,
+        "all_clean": true
+      },
+      "classification": "ENVIRONMENT_BLOCKED",
+      "reason": "Qualification was blocked by the current runtime environment. Provider quality is not determined."
+    },
+    "KUCOIN": {
+      "provider": "KUCOIN",
+      "qualification_status": "FULLY_QUALIFIED",
+      "market_coverage": {
+        "ready": 15,
+        "total": 15
+      },
+      "qualified_coverage": {
+        "ready": 15,
+        "total": 15
+      },
+      "asset_forensics": {
+        "asset_count": 15,
+        "assets_complete": true,
+        "all_fresh": null,
+        "all_current": null,
+        "all_complete": null,
+        "all_clean": true
+      },
+      "classification": "CANDIDATE_ONLY",
+      "reason": "Qualification evidence reports FULLY_QUALIFIED with complete 15/15 market and asset coverage. Provider is reported as an evidence-derived production-selection candidate only."
+    }
+  },
+  "selection_evidence": {
+    "qualified_candidates": [
+      "KUCOIN"
+    ],
+    "blocked_providers": [
+      "BYBIT"
+    ],
+    "rejected_providers": [],
+    "insufficient_evidence_providers": [],
+    "primary_candidate": "KUCOIN",
+    "secondary_candidate": null,
+    "canonical_selection": "DEFERRED",
+    "failover_selection": "DEFERRED",
+    "selection_evidence_status": "SINGLE_PROVIDER_CANDIDACY_ONLY",
+    "production_change": false,
+    "automatic_selection": false,
+    "blending": false,
+    "exit_recommendation": "SELECTION_DEFERRED",
+    "conclusion": "Exactly one provider is fully qualified in the supplied evidence. It may be reported as an evidence-derived candidate only. Canonical and failover selection remain deferred."
+  },
+  "safety": {
+    "network": false,
+    "ccxt_network": false,
+    "db_write": false,
+    "production_change": false,
+    "automatic_selection": false,
+    "blending": false,
+    "synthetic_data": false,
+    "interpolation": false,
+    "forward_fill": false,
+    "back_fill": false
+  }
+}

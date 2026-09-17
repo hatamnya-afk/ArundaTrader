@@ -1,0 +1,1249 @@
+"""
+====================================================================================================
+ARUNDA TRADER — DEV-06
+MARKET_STRUCTURE_CONTRACT_AUDIT_v0.1
+====================================================================================================
+
+PURPOSE
+-------
+Independent contract audit for MARKET_STRUCTURE_ENGINE_v0.1.
+
+MODE
+----
+READ ONLY
+
+DATABASE
+--------
+NOT USED
+
+PRODUCTION SOURCE
+-----------------
+NOT MODIFIED
+
+SCOPE
+-----
+- Input contract
+- OHLC numeric safety
+- chronological contract
+- Swing API contract
+- Swing identity preservation
+- Swing confirmation contract
+- Structure classification contract
+- BOS contract
+- CHoCH contract
+- Unified event contract
+- Direction contract
+- Strength contract
+- Confidence contract
+- Output contract
+- deterministic behavior
+- end-of-series protection
+- repaired look-ahead boundary dependency
+
+IMPORTANT
+---------
+This audit does NOT redesign or modify the production engine.
+
+The previously verified LOOKAHEAD CONTRACT REPAIR is treated as
+a prerequisite and is checked only through its observable contract.
+
+====================================================================================================
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Dict, List
+
+import math
+
+
+# ================================================================================================
+# ENGINE IMPORT
+# ================================================================================================
+
+# Adjust this import ONLY if the production filename differs.
+#
+# Expected production module:
+#     market_structure_engine.py
+#
+# The audit itself performs NO writes.
+
+from market_structure_engine import (
+    ENGINE_NAME,
+    MarketBar,
+    SwingPoint,
+    StructurePoint,
+    StructureEvent,
+    ALLOWED_SWING_TYPES,
+    ALLOWED_STRUCTURE_TYPES,
+    ALLOWED_BREAK_TYPES,
+    ALLOWED_DIRECTIONS,
+    ALLOWED_STRENGTH,
+    ALLOWED_CONFIDENCE,
+    validate_bar,
+    validate_bars,
+    detect_swing_highs,
+    detect_swing_lows,
+    detect_swings,
+    classify_structure,
+    classify_swing_structure,
+    classify_structure_direction,
+    calculate_structure_strength,
+    calculate_structure_confidence,
+    detect_bos,
+    detect_choch,
+    detect_structure_events,
+    analyze_market_structure,
+    validate_swing_point,
+    validate_structure_point,
+    validate_structure_event,
+    validate_market_structure_output,
+    lookahead_audit,
+)
+
+
+# ================================================================================================
+# CONSTANTS
+# ================================================================================================
+
+AUDIT_NAME = (
+    "MARKET_STRUCTURE_CONTRACT_AUDIT_v0.1"
+)
+
+LEFT_BARS = 2
+RIGHT_BARS = 2
+
+
+# ================================================================================================
+# AUDIT RESULT
+# ================================================================================================
+
+@dataclass
+class AuditResult:
+
+    name: str
+    status: str
+    detail: str = ""
+
+
+# ================================================================================================
+# TERMINAL
+# ================================================================================================
+
+def line(char="=", length=100):
+    print(char * length)
+
+
+def print_result(
+    name: str,
+    passed: bool,
+    detail: str = "",
+):
+    status = "PASS" if passed else "FAIL"
+
+    print(
+        f"{name:<48} : {status}"
+    )
+
+    if detail:
+        print(
+            f"{'':48}   {detail}"
+        )
+
+
+# ================================================================================================
+# TEST DATA
+# ================================================================================================
+
+def build_test_bars() -> List[MarketBar]:
+
+    closes = [
+        100,
+        102,
+        105,
+        103,
+        101,
+        104,
+        108,
+        106,
+        103,
+        107,
+        112,
+        109,
+        106,
+        110,
+        115,
+        111,
+        108,
+        104,
+    ]
+
+    result = []
+
+    for index, close in enumerate(closes):
+
+        result.append(
+            MarketBar(
+                timestamp=index,
+                high=close + 1,
+                low=close - 1,
+                close=close,
+                open=close,
+                volume=1000.0 + index,
+                cmc_id=875,
+                symbol="TEST",
+            )
+        )
+
+    return result
+
+
+# ================================================================================================
+# NEGATIVE / INVALID INPUT TESTS
+# ================================================================================================
+
+def audit_invalid_inputs() -> bool:
+
+    # Missing timestamp
+    try:
+
+        validate_bar(
+            {
+                "high": 10,
+                "low": 5,
+                "close": 8,
+            }
+        )
+
+        return False
+
+    except (ValueError, TypeError):
+        pass
+
+    # Missing high
+    try:
+
+        validate_bar(
+            {
+                "timestamp": 1,
+                "low": 5,
+                "close": 8,
+            }
+        )
+
+        return False
+
+    except (ValueError, TypeError):
+        pass
+
+    # high < low
+    try:
+
+        validate_bar(
+            {
+                "timestamp": 1,
+                "high": 5,
+                "low": 10,
+                "close": 8,
+            }
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    # NaN
+    try:
+
+        validate_bar(
+            {
+                "timestamp": 1,
+                "high": float("nan"),
+                "low": 5,
+                "close": 8,
+            }
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    # Infinity
+    try:
+
+        validate_bar(
+            {
+                "timestamp": 1,
+                "high": float("inf"),
+                "low": 5,
+                "close": 8,
+            }
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    # Negative volume
+    try:
+
+        validate_bar(
+            {
+                "timestamp": 1,
+                "high": 10,
+                "low": 5,
+                "close": 8,
+                "volume": -1,
+            }
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    # Insufficient bars
+    try:
+
+        validate_bars(
+            build_test_bars()[:2]
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    # Reverse chronology
+    try:
+
+        validate_bars(
+            [
+                MarketBar(
+                    timestamp=2,
+                    high=10,
+                    low=8,
+                    close=9,
+                ),
+                MarketBar(
+                    timestamp=1,
+                    high=11,
+                    low=8,
+                    close=10,
+                ),
+                MarketBar(
+                    timestamp=3,
+                    high=12,
+                    low=9,
+                    close=11,
+                ),
+            ]
+        )
+
+        return False
+
+    except ValueError:
+        pass
+
+    return True
+
+
+# ================================================================================================
+# INPUT CONTRACT
+# ================================================================================================
+
+def audit_input_contract(
+    bars: List[MarketBar],
+) -> bool:
+
+    try:
+
+        validated = validate_bars(bars)
+
+        if len(validated) != len(bars):
+            return False
+
+        for bar in validated:
+
+            if not math.isfinite(bar.high):
+                return False
+
+            if not math.isfinite(bar.low):
+                return False
+
+            if not math.isfinite(bar.close):
+                return False
+
+            if bar.high < bar.low:
+                return False
+
+        return True
+
+    except Exception:
+        return False
+
+
+# ================================================================================================
+# IDENTITY CONTRACT
+# ================================================================================================
+
+def audit_identity_preservation(
+    bars: List[MarketBar],
+    swings: List[SwingPoint],
+    structures: List[StructurePoint],
+    events: List[StructureEvent],
+) -> bool:
+
+    source = {
+        index: bar
+        for index, bar in enumerate(bars)
+    }
+
+    for swing in swings:
+
+        if swing.cmc_id != source[swing.index].cmc_id:
+            return False
+
+        if swing.symbol != source[swing.index].symbol:
+            return False
+
+    for point in structures:
+
+        if point.cmc_id != source[point.index].cmc_id:
+            return False
+
+        if point.symbol != source[point.index].symbol:
+            return False
+
+    for event in events:
+
+        if event.cmc_id != source[event.index].cmc_id:
+            return False
+
+        if event.symbol != source[event.index].symbol:
+            return False
+
+    return True
+
+
+# ================================================================================================
+# SWING CONTRACT
+# ================================================================================================
+
+def audit_swing_contract(
+    bars: List[MarketBar],
+) -> bool:
+
+    highs = detect_swing_highs(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    lows = detect_swing_lows(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    all_swings = detect_swings(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    if not all(
+        point.swing_type == "SWING_HIGH"
+        for point in highs
+    ):
+        return False
+
+    if not all(
+        point.swing_type == "SWING_LOW"
+        for point in lows
+    ):
+        return False
+
+    if len(all_swings) != (
+        len(highs) + len(lows)
+    ):
+        return False
+
+    for point in all_swings:
+
+        validate_swing_point(point)
+
+        if point.index < 0:
+            return False
+
+        if point.index >= len(bars):
+            return False
+
+        if point.confirmation_index != (
+            point.index + RIGHT_BARS
+        ):
+            return False
+
+        if point.confirmation_index >= len(bars):
+            return False
+
+        source = bars[point.index]
+
+        expected_price = (
+            source.high
+            if point.swing_type == "SWING_HIGH"
+            else source.low
+        )
+
+        if point.price != expected_price:
+            return False
+
+    return True
+
+
+# ================================================================================================
+# STRUCTURE CONTRACT
+# ================================================================================================
+
+def audit_structure_contract(
+    swings: List[SwingPoint],
+) -> bool:
+
+    structures_a = classify_structure(
+        swings
+    )
+
+    structures_b = classify_swing_structure(
+        swings
+    )
+
+    if structures_a != structures_b:
+        return False
+
+    for point in structures_a:
+
+        validate_structure_point(point)
+
+        if point.structure_type not in {
+            "HH",
+            "HL",
+            "LH",
+            "LL",
+        }:
+            return False
+
+        if point.swing_type not in {
+            "SWING_HIGH",
+            "SWING_LOW",
+        }:
+            return False
+
+        if point.previous_price is None:
+            return False
+
+    return True
+
+
+# ================================================================================================
+# EVENT CONTRACT
+# ================================================================================================
+
+def audit_event_contract(
+    bars: List[MarketBar],
+    structures: List[StructurePoint],
+) -> bool:
+
+    bos = detect_bos(
+        bars,
+        structures,
+    )
+
+    choch = detect_choch(
+        bars,
+        structures,
+    )
+
+    unified = detect_structure_events(
+        bars,
+        structures,
+    )
+
+    # ------------------------------------------------------------------
+    # BOS API must return BOS only.
+    # ------------------------------------------------------------------
+
+    if not all(
+        event.event_type == "BOS"
+        for event in bos
+    ):
+        return False
+
+    # ------------------------------------------------------------------
+    # CHoCH API must return CHoCH only.
+    # ------------------------------------------------------------------
+
+    if not all(
+        event.event_type == "CHoCH"
+        for event in choch
+    ):
+        return False
+
+    # ------------------------------------------------------------------
+    # Unified events must use allowed contracts.
+    # ------------------------------------------------------------------
+
+    for event in unified:
+
+        validate_structure_event(event)
+
+        if event.event_type not in {
+            "BOS",
+            "CHoCH",
+        }:
+            return False
+
+        if event.direction not in {
+            "BULLISH",
+            "BEARISH",
+        }:
+            return False
+
+        if event.index < 0:
+            return False
+
+        if event.index >= len(bars):
+            return False
+
+        if event.broken_price is None:
+            return False
+
+        if not math.isfinite(
+            event.broken_price
+        ):
+            return False
+
+    return True
+
+
+# ================================================================================================
+# EVENT TEMPORAL CONTRACT
+# ================================================================================================
+
+def audit_event_temporal_integrity(
+    bars: List[MarketBar],
+    structures: List[StructurePoint],
+) -> bool:
+
+    events = detect_structure_events(
+        bars,
+        structures,
+    )
+
+    structure_by_index = {
+        point.index: point
+        for point in structures
+    }
+
+    for event in events:
+
+        candidates = [
+            point
+            for point in structures
+            if (
+                point.index < event.index
+                and
+                (
+                    (
+                        event.direction == "BULLISH"
+                        and
+                        point.swing_type == "SWING_HIGH"
+                    )
+                    or
+                    (
+                        event.direction == "BEARISH"
+                        and
+                        point.swing_type == "SWING_LOW"
+                    )
+                )
+            )
+        ]
+
+        if not candidates:
+            return False
+
+        broken = candidates[-1]
+
+        if event.broken_price != broken.price:
+            return False
+
+        if broken.index >= event.index:
+            return False
+
+        if event.index not in range(
+            len(bars)
+        ):
+            return False
+
+    return True
+
+
+# ================================================================================================
+# LOOK-AHEAD DEPENDENCY CONTRACT
+# ================================================================================================
+
+def audit_lookahead_dependency(
+    bars: List[MarketBar],
+) -> bool:
+
+    # This is intentionally NOT a new forensic audit.
+    #
+    # The dedicated LOOKAHEAD CONTRACT REPAIR has already been
+    # verified. Here we only verify that the engine's observable
+    # contract remains compatible with the repaired boundary.
+
+    if not lookahead_audit(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    ):
+        return False
+
+    swings = detect_swings(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    for swing in swings:
+
+        # Before confirmation the swing must not be considered
+        # confirmed by the contract.
+        if swing.confirmation_index <= swing.index:
+            return False
+
+        # At confirmation it becomes available.
+        if swing.confirmation_index >= len(bars):
+            return False
+
+    return True
+
+
+# ================================================================================================
+# OUTPUT CONTRACT
+# ================================================================================================
+
+def audit_output_contract(
+    result: Dict[str, Any],
+) -> bool:
+
+    if result.get("engine") != ENGINE_NAME:
+        return False
+
+    if not validate_market_structure_output(
+        result
+    ):
+        return False
+
+    expected = {
+        "engine",
+        "bars",
+        "swings",
+        "structure_points",
+        "events",
+        "direction",
+        "strength",
+        "confidence",
+    }
+
+    if set(result.keys()) != expected:
+        return False
+
+    return True
+
+
+# ================================================================================================
+# DIRECTION / STRENGTH / CONFIDENCE CONTRACT
+# ================================================================================================
+
+def audit_classification_contract(
+    structures: List[StructurePoint],
+    events: List[StructureEvent],
+) -> bool:
+
+    direction = classify_structure_direction(
+        structures
+    )
+
+    strength = calculate_structure_strength(
+        structures
+    )
+
+    confidence = calculate_structure_confidence(
+        structures,
+        events,
+    )
+
+    if direction not in ALLOWED_DIRECTIONS:
+        return False
+
+    if strength not in ALLOWED_STRENGTH:
+        return False
+
+    if confidence not in ALLOWED_CONFIDENCE:
+        return False
+
+    return True
+
+
+# ================================================================================================
+# DETERMINISM CONTRACT
+# ================================================================================================
+
+def audit_determinism(
+    bars: List[MarketBar],
+) -> bool:
+
+    result_a = analyze_market_structure(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    result_b = analyze_market_structure(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    return result_a == result_b
+
+
+# ================================================================================================
+# END-OF-SERIES CONTRACT
+# ================================================================================================
+
+def audit_end_of_series(
+    bars: List[MarketBar],
+) -> bool:
+
+    swings = detect_swings(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    last_possible_confirmed_index = (
+        len(bars) - RIGHT_BARS - 1
+    )
+
+    for swing in swings:
+
+        if swing.index > last_possible_confirmed_index:
+            return False
+
+        if swing.confirmation_index >= len(bars):
+            return False
+
+    return True
+
+
+# ================================================================================================
+# SELF TEST
+# ================================================================================================
+
+def self_test() -> bool:
+
+    bars = build_test_bars()
+
+    # Input
+    assert audit_input_contract(
+        bars
+    )
+
+    assert audit_invalid_inputs()
+
+    # Core analysis
+    result = analyze_market_structure(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    swings = result["swings"]
+    structures = result["structure_points"]
+    events = result["events"]
+
+    # Engine identity
+    assert result["engine"] == ENGINE_NAME
+
+    # Contracts
+    assert audit_swing_contract(
+        bars
+    )
+
+    assert audit_structure_contract(
+        swings
+    )
+
+    assert audit_event_contract(
+        bars,
+        structures,
+    )
+
+    assert audit_event_temporal_integrity(
+        bars,
+        structures,
+    )
+
+    assert audit_classification_contract(
+        structures,
+        events,
+    )
+
+    assert audit_output_contract(
+        result
+    )
+
+    assert audit_identity_preservation(
+        bars,
+        swings,
+        structures,
+        events,
+    )
+
+    assert audit_lookahead_dependency(
+        bars
+    )
+
+    assert audit_end_of_series(
+        bars
+    )
+
+    assert audit_determinism(
+        bars
+    )
+
+    return True
+
+
+# ================================================================================================
+# FULL AUDIT
+# ================================================================================================
+
+def run_audit() -> bool:
+
+    bars = build_test_bars()
+
+    result = analyze_market_structure(
+        bars,
+        LEFT_BARS,
+        RIGHT_BARS,
+    )
+
+    swings = result["swings"]
+    structures = result["structure_points"]
+    events = result["events"]
+
+    line()
+
+    print(
+        "ARUNDA TRADER — MARKET STRUCTURE CONTRACT AUDIT v0.1"
+    )
+
+    line()
+
+    print(
+        "MODE                : READ ONLY"
+    )
+
+    print(
+        "DATABASE             : NOT USED"
+    )
+
+    print(
+        "DATABASE WRITE       : NONE"
+    )
+
+    print(
+        "PRODUCTION MODIFIED  : NO"
+    )
+
+    print(
+        f"ENGINE               : {ENGINE_NAME}"
+    )
+
+    print(
+        f"BARS                 : {len(bars)}"
+    )
+
+    print(
+        f"SWINGS               : {len(swings)}"
+    )
+
+    print(
+        f"STRUCTURE POINTS     : {len(structures)}"
+    )
+
+    print(
+        f"EVENTS               : {len(events)}"
+    )
+
+    line("-")
+
+    print(
+        "CONTRACT AUDIT"
+    )
+
+    line("-")
+
+    checks = []
+
+    checks.append(
+        (
+            "INPUT_CONTRACT",
+            audit_input_contract(bars),
+        )
+    )
+
+    checks.append(
+        (
+            "INVALID_INPUT_REJECTION",
+            audit_invalid_inputs(),
+        )
+    )
+
+    checks.append(
+        (
+            "SWING_CONTRACT",
+            audit_swing_contract(bars),
+        )
+    )
+
+    checks.append(
+        (
+            "STRUCTURE_CONTRACT",
+            audit_structure_contract(swings),
+        )
+    )
+
+    checks.append(
+        (
+            "EVENT_CONTRACT",
+            audit_event_contract(
+                bars,
+                structures,
+            ),
+        )
+    )
+
+    checks.append(
+        (
+            "EVENT_TEMPORAL_INTEGRITY",
+            audit_event_temporal_integrity(
+                bars,
+                structures,
+            ),
+        )
+    )
+
+    checks.append(
+        (
+            "IDENTITY_PRESERVATION",
+            audit_identity_preservation(
+                bars,
+                swings,
+                structures,
+                events,
+            ),
+        )
+    )
+
+    checks.append(
+        (
+            "DIRECTION_STRENGTH_CONFIDENCE",
+            audit_classification_contract(
+                structures,
+                events,
+            ),
+        )
+    )
+
+    checks.append(
+        (
+            "OUTPUT_CONTRACT",
+            audit_output_contract(result),
+        )
+    )
+
+    checks.append(
+        (
+            "LOOKAHEAD_DEPENDENCY",
+            audit_lookahead_dependency(bars),
+        )
+    )
+
+    checks.append(
+        (
+            "END_OF_SERIES_PROTECTION",
+            audit_end_of_series(bars),
+        )
+    )
+
+    checks.append(
+        (
+            "DETERMINISTIC_OUTPUT",
+            audit_determinism(bars),
+        )
+    )
+
+    failed = []
+
+    for name, passed in checks:
+
+        print_result(
+            name,
+            passed,
+        )
+
+        if not passed:
+            failed.append(name)
+
+    line("-")
+
+    print(
+        "CONTRACT SUMMARY"
+    )
+
+    line("-")
+
+    print(
+        f"Checks Executed      : {len(checks)}"
+    )
+
+    print(
+        f"Checks Passed        : "
+        f"{sum(1 for _, passed in checks if passed)}"
+    )
+
+    print(
+        f"Checks Failed        : {len(failed)}"
+    )
+
+    if failed:
+
+        print()
+
+        print(
+            "FAILED CONTRACTS     :"
+        )
+
+        for item in failed:
+
+            print(
+                f"  - {item}"
+            )
+
+    line()
+
+    if failed:
+
+        print(
+            "FINAL STATUS : MARKET STRUCTURE CONTRACT AUDIT FAILED"
+        )
+
+        print(
+            "ACTION       : DO NOT INTEGRATE"
+        )
+
+        line()
+
+        return False
+
+    print(
+        "FINAL STATUS : MARKET STRUCTURE CONTRACT AUDIT VERIFIED"
+    )
+
+    print(
+        "ENGINE       : MARKET_STRUCTURE_ENGINE_v0.1"
+    )
+
+    print(
+        "LOOK-AHEAD   : REPAIRED CONTRACT PRESERVED"
+    )
+
+    print(
+        "DATABASE     : NOT USED"
+    )
+
+    print(
+        "WRITE        : NONE"
+    )
+
+    print(
+        "PRODUCTION   : NOT MODIFIED"
+    )
+
+    print(
+        "STATUS       : READY FOR NEXT DEV-06 ROADMAP STEP"
+    )
+
+    line()
+
+    return True
+
+
+# ================================================================================================
+# ENTRY POINT
+# ================================================================================================
+
+if __name__ == "__main__":
+
+    line()
+
+    print(
+        "ARUNDA TRADER — DEV-06"
+    )
+
+    print(
+        "MARKET_STRUCTURE_CONTRACT_AUDIT_v0.1"
+    )
+
+    line()
+
+    print()
+
+    print(
+        "Running self-test..."
+    )
+
+    try:
+
+        self_test()
+
+        print(
+            "SELF TEST : PASS"
+        )
+
+    except Exception as exc:
+
+        print(
+            "SELF TEST : FAIL"
+        )
+
+        print(
+            f"ERROR     : {type(exc).__name__}: {exc}"
+        )
+
+        raise SystemExit(1)
+
+    print()
+
+    if not run_audit():
+
+        raise SystemExit(1)
+
+    raise SystemExit(0)

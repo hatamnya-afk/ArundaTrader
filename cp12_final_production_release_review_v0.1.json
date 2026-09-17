@@ -1,0 +1,1041 @@
+{
+  "checkpoint": "CP12",
+  "version": "v0.1",
+  "mode": "READ_ONLY",
+  "result": "BLOCKED",
+  "status": "BLOCKED",
+  "execution_enabled": false,
+  "release_authorization": "NOT GRANTED",
+  "next_checkpoint": "MINIMAL ACTION FOR REAL BLOCKER(S)",
+  "cp13": "NONE",
+  "project_dir": "C:\\Users\\ASUS\\ArundaTrader",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "pipeline": "C:\\Users\\ASUS\\ArundaTrader\\arunda_pipeline.py",
+  "launch_timestamp": "2026-08-31T00:00:00+00:00",
+  "expected_assets": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "XRP",
+    "ADA",
+    "DOGE",
+    "SHIB",
+    "LINK",
+    "AVAX",
+    "DOT",
+    "LTC",
+    "UNI",
+    "AAVE",
+    "SUI",
+    "NEAR"
+  ],
+  "pipeline_exit_code": 0,
+  "execution_scan": {
+    "execution_enabled": false,
+    "execution_names": [],
+    "exchange_names": [],
+    "legacy_references": [],
+    "pass": true
+  },
+  "snapshot": {
+    "present": false,
+    "id": null,
+    "sha256": false,
+    "deterministic": true,
+    "random": false,
+    "uuid": false,
+    "timestamp_as_id": false,
+    "pass": false
+  },
+  "opportunity_contract": {
+    "exists": true,
+    "max_candidates": null,
+    "min_history_points": null,
+    "engine_version": null,
+    "pass": false
+  },
+  "opportunity_coverage": {
+    "expected": 15,
+    "actual": 15,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "pass": true
+  },
+  "opportunity_actual": 15,
+  "opportunity_eligible": 0,
+  "opportunity_no_trade": 15,
+  "signal_score_decision": {
+    "signal_coverage": {
+      "expected": 15,
+      "actual": 0,
+      "unique": 0,
+      "missing": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "extra": [],
+      "duplicates": [],
+      "pass": false
+    },
+    "score_coverage": {
+      "expected": 15,
+      "actual": 15,
+      "unique": 15,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "pass": true
+    },
+    "decision_coverage": {
+      "expected": 15,
+      "actual": 0,
+      "unique": 0,
+      "missing": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "extra": [],
+      "duplicates": [],
+      "pass": false
+    },
+    "mismatches": [],
+    "pass": false
+  },
+  "risk_coverage": {
+    "expected": 15,
+    "actual": 30,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "pass": false
+  },
+  "trade_gate_coverage": {
+    "expected": 15,
+    "actual": 30,
+    "unique": 15,
+    "missing": [],
+    "extra": [],
+    "duplicates": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "pass": false
+  },
+  "trade_ready": 0,
+  "order_intent": {
+    "coverage": {
+      "expected": 15,
+      "actual": 30,
+      "unique": 15,
+      "missing": [],
+      "extra": [],
+      "duplicates": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "pass": false
+    },
+    "rows": 30,
+    "forbidden_fields": [],
+    "invalid_keys": [
+      {
+        "asset": "BTC",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "ETH",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SOL",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "XRP",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "ADA",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "DOGE",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SHIB",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "LINK",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "AVAX",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "DOT",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "LTC",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "UNI",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "AAVE",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SUI",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "NEAR",
+        "extra_fields": [
+          "change_1h",
+          "change_24h",
+          "market_cap",
+          "price",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "XRP",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SOL",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "ADA",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "NEAR",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "LTC",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "DOT",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "UNI",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "BTC",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SUI",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "SHIB",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "LINK",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "AAVE",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "AVAX",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "DOGE",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      },
+      {
+        "asset": "ETH",
+        "extra_fields": [
+          "market_cap",
+          "momentum_1h",
+          "momentum_24h",
+          "points",
+          "price",
+          "rsi",
+          "score",
+          "source",
+          "status",
+          "symbol",
+          "volume_24h"
+        ]
+      }
+    ],
+    "required_missing": [
+      {
+        "asset": "BTC",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "ETH",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SOL",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "XRP",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "ADA",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "DOGE",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SHIB",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "LINK",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "AVAX",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "DOT",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "LTC",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "UNI",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "AAVE",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SUI",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "NEAR",
+        "missing": [
+          "confidence",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "XRP",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SOL",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "ADA",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "NEAR",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "LTC",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "DOT",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "UNI",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "BTC",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SUI",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "SHIB",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "LINK",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "AAVE",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "AVAX",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "DOGE",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      },
+      {
+        "asset": "ETH",
+        "missing": [
+          "asset",
+          "direction",
+          "entry_price",
+          "intent_id",
+          "regime",
+          "snapshot_id"
+        ]
+      }
+    ],
+    "pass": false
+  },
+  "identity": {
+    "snapshot": {
+      "present": false,
+      "id": null,
+      "sha256": false,
+      "deterministic": true,
+      "random": false,
+      "uuid": false,
+      "timestamp_as_id": false,
+      "pass": false
+    },
+    "stages": {
+      "opportunity": [],
+      "trade_gate": [],
+      "order_intent": []
+    },
+    "mismatches": [],
+    "pass": false
+  },
+  "data_purity": {
+    "terms_found": {
+      "synthetic": 5,
+      "interpolation": 4,
+      "forward fill": 1,
+      "back fill": 1,
+      "fallback": 3,
+      "fabrication": 3,
+      "padding": 4
+    },
+    "positive_safety_violations": [],
+    "pass": true
+  },
+  "launch_boundary": {
+    "launch_boundary_reference": true,
+    "legacy_isolation_reference": true,
+    "legacy_mentions": [
+      "market_technical",
+      "legacy"
+    ],
+    "pass": true
+  },
+  "write_safety": {
+    "order_submission_hits": [
+      "\\border_submission\\s*[:=]\\s*(?!none\\b)"
+    ],
+    "exchange_write_hits": [
+      "\\bexchange_write\\s*[:=]\\s*(?!none\\b)"
+    ],
+    "execution_bypass_hits": [],
+    "execution_db_write_hits": [],
+    "operational_db_writes_allowed": true,
+    "pass": false
+  },
+  "warnings": [],
+  "blockers": [
+    {
+      "control": "CP12-04",
+      "blocker": "Current runtime snapshot identity failed.",
+      "boundary": "Current Runtime Snapshot",
+      "provenance": "ARUNDA_CURRENT_RUNTIME_SNAPSHOT"
+    },
+    {
+      "control": "CP12-05",
+      "blocker": "Opportunity contract does not have MAX_CANDIDATES = 15.",
+      "boundary": "Opportunity Engine",
+      "provenance": "opportunity_engine.py"
+    },
+    {
+      "control": "CP12-06",
+      "blocker": "Signal/Score/Decision current-runtime contract failed.",
+      "boundary": "Signal → Score → Decision",
+      "provenance": "CURRENT_PRODUCTION_RUNTIME"
+    },
+    {
+      "control": "CP12-07",
+      "blocker": "Risk/Trade Gate contract failed.",
+      "boundary": "Decision → Risk → Trade Gate",
+      "provenance": "CURRENT_PRODUCTION_RUNTIME"
+    },
+    {
+      "control": "CP12-08",
+      "blocker": "Current Order Intent contract failed.",
+      "boundary": "Order Intent Boundary",
+      "provenance": "CURRENT_ORDER_INTENT_BOUNDARY"
+    },
+    {
+      "control": "CP12-08",
+      "blocker": "Trade Ready = 0 but Order Intent rows are non-zero.",
+      "boundary": "Trade Gate → Order Intent Boundary",
+      "provenance": "FAIL-CLOSED"
+    },
+    {
+      "control": "CP12-09",
+      "blocker": "Current runtime identity propagation failed.",
+      "boundary": "Snapshot → Opportunity → Trade Gate → Order Intent",
+      "provenance": "CURRENT_RUNTIME_IDENTITY"
+    },
+    {
+      "control": "CP12-11",
+      "blocker": "Execution/order/exchange write safety failed.",
+      "boundary": "Execution Boundary",
+      "provenance": "CURRENT_PRODUCTION_RUNTIME"
+    }
+  ]
+}

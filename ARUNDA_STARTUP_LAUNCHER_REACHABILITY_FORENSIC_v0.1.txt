@@ -1,0 +1,18 @@
+====================================================================================================
+ARUNDA STARTUP / LAUNCHER REACHABILITY FORENSIC v0.1
+====================================================================================================
+Started UTC  : 2026-08-27T10:49:56.592751+00:00
+Finished UTC : 2026-08-27T10:50:00.196893+00:00
+VERDICT      : STANDALONE_LEGACY
+Pipeline     : True
+Upgrade DB   : True
+Pipeline Launchers : 0
+Upgrade Launchers  : 0
+Upgrade Importers  : 0
+----------------------------------------------------------------------------------------------------
+DATABASE        : NOT USED
+NETWORK         : NOT USED
+EXECUTION       : NOT PERFORMED
+FILE MODIFIED   : NOT PERFORMED
+FORENSIC FILES  : EXCLUDED
+====================================================================================================

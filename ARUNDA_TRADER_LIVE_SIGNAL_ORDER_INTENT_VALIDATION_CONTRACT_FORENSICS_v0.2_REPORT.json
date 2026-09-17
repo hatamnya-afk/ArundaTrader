@@ -1,0 +1,1199 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT VALIDATION CONTRACT FORENSICS",
+  "version": "v0.2",
+  "mode": "READ_ONLY",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false,
+    "signal_creation": false,
+    "signal_inference": false,
+    "signal_reconstruction": false,
+    "signal_injection": false,
+    "replay_execution": false
+  },
+  "sources": {
+    "validation_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+    "validation_report_sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582",
+    "replay_consumer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py",
+    "replay_consumer_sha256": "8728be5aea45c11c3d332a62187c0040d6bf3d101433f5bd12781d4a4b192651"
+  },
+  "validation_actual": {
+    "root_type": "dict",
+    "top_level_keys": [
+      "project",
+      "component",
+      "version",
+      "safety",
+      "sources",
+      "generation_contract",
+      "runtime_contract",
+      "artifact_contract",
+      "order_intent_validation",
+      "execution_safety",
+      "execution",
+      "final_verdict",
+      "next_stage"
+    ],
+    "structure": [
+      {
+        "path": "$",
+        "type": "dict",
+        "keys": [
+          "project",
+          "component",
+          "version",
+          "safety",
+          "sources",
+          "generation_contract",
+          "runtime_contract",
+          "artifact_contract",
+          "order_intent_validation",
+          "execution_safety",
+          "execution",
+          "final_verdict",
+          "next_stage"
+        ],
+        "key_count": 13
+      },
+      {
+        "path": "$.project",
+        "type": "str",
+        "value": "ARUNDA TRADER"
+      },
+      {
+        "path": "$.component",
+        "type": "str",
+        "value": "LIVE SIGNAL ORDER-INTENT VALIDATION"
+      },
+      {
+        "path": "$.version",
+        "type": "str",
+        "value": "v0.2"
+      },
+      {
+        "path": "$.safety",
+        "type": "dict",
+        "keys": [
+          "producer_execution",
+          "producer_import",
+          "production_db_write",
+          "network_access",
+          "order_execution",
+          "order_creation",
+          "order_submission",
+          "artifact_mutation",
+          "operational_safety"
+        ],
+        "key_count": 9
+      },
+      {
+        "path": "$.safety.producer_execution",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.producer_import",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.production_db_write",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.network_access",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.order_execution",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.order_creation",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.order_submission",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.artifact_mutation",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.safety.operational_safety",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.sources",
+        "type": "dict",
+        "keys": [
+          "generation",
+          "generation_sha256"
+        ],
+        "key_count": 2
+      },
+      {
+        "path": "$.sources.generation",
+        "type": "str",
+        "value": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_GENERATION_REPORT.json"
+      },
+      {
+        "path": "$.sources.generation_sha256",
+        "type": "str",
+        "value": "e3bd49dd5239b37ad9e1611d7df0a30ccc87ff9a74a4218abadf830bd701af7e"
+      },
+      {
+        "path": "$.generation_contract",
+        "type": "dict",
+        "keys": [
+          "contract",
+          "verified",
+          "status",
+          "eligible_signals",
+          "order_intents_generated",
+          "validated_intents",
+          "invalid_intents"
+        ],
+        "key_count": 7
+      },
+      {
+        "path": "$.generation_contract.contract",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.generation_contract.verified",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.generation_contract.status",
+        "type": "str",
+        "value": "READY_NO_ELIGIBLE_SIGNALS"
+      },
+      {
+        "path": "$.generation_contract.eligible_signals",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.generation_contract.order_intents_generated",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.generation_contract.validated_intents",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.generation_contract.invalid_intents",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.runtime_contract",
+        "type": "dict",
+        "keys": [
+          "contract",
+          "runtime_ready",
+          "upstream_verified",
+          "artifact_verified",
+          "operational_safety",
+          "verdict"
+        ],
+        "key_count": 6
+      },
+      {
+        "path": "$.runtime_contract.contract",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime_contract.runtime_ready",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime_contract.upstream_verified",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime_contract.artifact_verified",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime_contract.operational_safety",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.runtime_contract.verdict",
+        "type": "str",
+        "value": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+      },
+      {
+        "path": "$.artifact_contract",
+        "type": "dict",
+        "keys": [
+          "contract",
+          "verified",
+          "rows",
+          "eligible_rows",
+          "no_trade_rows",
+          "decision",
+          "snapshot_id"
+        ],
+        "key_count": 7
+      },
+      {
+        "path": "$.artifact_contract.contract",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.artifact_contract.verified",
+        "type": "bool",
+        "value": true
+      },
+      {
+        "path": "$.artifact_contract.rows",
+        "type": "int",
+        "value": 4
+      },
+      {
+        "path": "$.artifact_contract.eligible_rows",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.artifact_contract.no_trade_rows",
+        "type": "int",
+        "value": 4
+      },
+      {
+        "path": "$.artifact_contract.decision",
+        "type": "str",
+        "value": "NO_TRADE"
+      },
+      {
+        "path": "$.artifact_contract.snapshot_id",
+        "type": "str",
+        "value": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+      },
+      {
+        "path": "$.order_intent_validation",
+        "type": "dict",
+        "keys": [
+          "status",
+          "reason",
+          "eligible_signals",
+          "order_intents",
+          "validated_intents",
+          "invalid_intents",
+          "intents",
+          "invalid_details"
+        ],
+        "key_count": 8
+      },
+      {
+        "path": "$.order_intent_validation.status",
+        "type": "str",
+        "value": "READY_NO_ELIGIBLE_SIGNALS"
+      },
+      {
+        "path": "$.order_intent_validation.reason",
+        "type": "str",
+        "value": "NO_ORDER_INTENTS_TO_VALIDATE"
+      },
+      {
+        "path": "$.order_intent_validation.eligible_signals",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.order_intent_validation.order_intents",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.order_intent_validation.validated_intents",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.order_intent_validation.invalid_intents",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.order_intent_validation.intents",
+        "type": "list",
+        "length": 0
+      },
+      {
+        "path": "$.order_intent_validation.invalid_details",
+        "type": "list",
+        "length": 0
+      },
+      {
+        "path": "$.execution_safety",
+        "type": "dict",
+        "keys": [
+          "network_access",
+          "order_creation",
+          "order_submission",
+          "order_execution",
+          "production_db_write"
+        ],
+        "key_count": 5
+      },
+      {
+        "path": "$.execution_safety.network_access",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution_safety.order_creation",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution_safety.order_submission",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution_safety.order_execution",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution_safety.production_db_write",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution",
+        "type": "dict",
+        "keys": [
+          "executed",
+          "orders_created",
+          "orders_submitted"
+        ],
+        "key_count": 3
+      },
+      {
+        "path": "$.execution.executed",
+        "type": "bool",
+        "value": false
+      },
+      {
+        "path": "$.execution.orders_created",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.execution.orders_submitted",
+        "type": "int",
+        "value": 0
+      },
+      {
+        "path": "$.final_verdict",
+        "type": "str",
+        "value": "LIVE_SIGNAL_ORDER_INTENT_VALIDATION_READY"
+      },
+      {
+        "path": "$.next_stage",
+        "type": "str",
+        "value": "WAIT_FOR_ELIGIBLE_SIGNAL"
+      }
+    ]
+  },
+  "replay_consumer_contract": {
+    "subscript_paths": [
+      "artifact_contract",
+      "artifact_contract_valid",
+      "artifact_contract_verified",
+      "contract",
+      "decision",
+      "eligible_rows",
+      "eligible_signal_path",
+      "eligible_signals",
+      "execution",
+      "execution_allowed",
+      "execution_gate_verified",
+      "execution_safety",
+      "final_verdict",
+      "gate_valid",
+      "generation_contract",
+      "generation_contract_valid",
+      "generation_contract_verified",
+      "intents",
+      "network_access",
+      "next_stage",
+      "no_trade_rows",
+      "order_creation",
+      "order_intents",
+      "order_submission",
+      "path_verified",
+      "production_db_write",
+      "reason",
+      "replay_performed",
+      "rows",
+      "runtime_contract_valid",
+      "runtime_contract_verified",
+      "snapshot_id",
+      "source_chain",
+      "status",
+      "validation_contract_verified",
+      "validation_valid",
+      "verified"
+    ],
+    "required_dict_keys": [],
+    "required_bool_keys": [],
+    "required_list_keys": [],
+    "required_string_keys": [],
+    "interesting_lines": [
+      {
+        "line": 11,
+        "text": "GENERATION_REPORT = ("
+      },
+      {
+        "line": 13,
+        "text": "    / \"ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_GENERATION_REPORT.json\""
+      },
+      {
+        "line": 16,
+        "text": "VALIDATION_REPORT = ("
+      },
+      {
+        "line": 18,
+        "text": "    / \"ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json\""
+      },
+      {
+        "line": 23,
+        "text": "    / \"ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_REPORT.json\""
+      },
+      {
+        "line": 28,
+        "text": "    / \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_REPORT.json\""
+      },
+      {
+        "line": 105,
+        "text": "def extract_artifact_contract("
+      },
+      {
+        "line": 106,
+        "text": "    generation: dict[str, Any],"
+      },
+      {
+        "line": 110,
+        "text": "        generation,"
+      },
+      {
+        "line": 111,
+        "text": "        \"artifact_contract\","
+      },
+      {
+        "line": 116,
+        "text": "            \"GENERATION_ARTIFACT_CONTRACT_MISSING\""
+      },
+      {
+        "line": 122,
+        "text": "def extract_generation_contract("
+      },
+      {
+        "line": 123,
+        "text": "    generation: dict[str, Any],"
+      },
+      {
+        "line": 126,
+        "text": "    order_generation = get_dict("
+      },
+      {
+        "line": 127,
+        "text": "        generation,"
+      },
+      {
+        "line": 128,
+        "text": "        \"order_intent_generation\","
+      },
+      {
+        "line": 131,
+        "text": "    if order_generation is None:"
+      },
+      {
+        "line": 133,
+        "text": "            \"ORDER_INTENT_GENERATION_SECTION_MISSING\""
+      },
+      {
+        "line": 136,
+        "text": "    return order_generation"
+      },
+      {
+        "line": 139,
+        "text": "def extract_runtime_contract("
+      },
+      {
+        "line": 140,
+        "text": "    generation: dict[str, Any],"
+      },
+      {
+        "line": 144,
+        "text": "        generation,"
+      },
+      {
+        "line": 145,
+        "text": "        \"runtime_contract\","
+      },
+      {
+        "line": 150,
+        "text": "            \"RUNTIME_CONTRACT_SECTION_MISSING\""
+      },
+      {
+        "line": 158,
+        "text": "    generation = load_json("
+      },
+      {
+        "line": 159,
+        "text": "        GENERATION_REPORT"
+      },
+      {
+        "line": 162,
+        "text": "    validation = load_json("
+      },
+      {
+        "line": 163,
+        "text": "        VALIDATION_REPORT"
+      },
+      {
+        "line": 170,
+        "text": "    artifact_contract = extract_artifact_contract("
+      },
+      {
+        "line": 171,
+        "text": "        generation"
+      },
+      {
+        "line": 174,
+        "text": "    generation_contract = extract_generation_contract("
+      },
+      {
+        "line": 175,
+        "text": "        generation"
+      },
+      {
+        "line": 178,
+        "text": "    runtime_contract = extract_runtime_contract("
+      },
+      {
+        "line": 179,
+        "text": "        generation"
+      },
+      {
+        "line": 182,
+        "text": "    generation_contract_valid = ("
+      },
+      {
+        "line": 183,
+        "text": "        generation_contract.get(\"contract_valid\") is True"
+      },
+      {
+        "line": 184,
+        "text": "        or generation_contract.get(\"status\")"
+      },
+      {
+        "line": 185,
+        "text": "        == \"READY_NO_ELIGIBLE_SIGNALS\""
+      },
+      {
+        "line": 188,
+        "text": "    runtime_contract_valid = ("
+      },
+      {
+        "line": 189,
+        "text": "        runtime_contract.get(\"contract\") is True"
+      },
+      {
+        "line": 192,
+        "text": "    artifact_contract_valid = ("
+      },
+      {
+        "line": 193,
+        "text": "        artifact_contract.get(\"contract\") is True"
+      },
+      {
+        "line": 194,
+        "text": "        and artifact_contract.get(\"verified\") is True"
+      },
+      {
+        "line": 197,
+        "text": "    validation_final = get_dict("
+      },
+      {
+        "line": 198,
+        "text": "        validation,"
+      },
+      {
+        "line": 202,
+        "text": "    validation_runtime = get_dict("
+      },
+      {
+        "line": 203,
+        "text": "        validation,"
+      },
+      {
+        "line": 204,
+        "text": "        \"runtime_contract\","
+      },
+      {
+        "line": 207,
+        "text": "    validation_artifact = get_dict("
+      },
+      {
+        "line": 208,
+        "text": "        validation,"
+      },
+      {
+        "line": 209,
+        "text": "        \"artifact_contract\","
+      },
+      {
+        "line": 214,
+        "text": "        \"runtime_contract\","
+      },
+      {
+        "line": 219,
+        "text": "        \"artifact_contract\","
+      },
+      {
+        "line": 226,
+        "text": "    validation_valid = ("
+      },
+      {
+        "line": 227,
+        "text": "        isinstance(validation_final, dict)"
+      },
+      {
+        "line": 228,
+        "text": "        and validation_final.get(\"contract\") is True"
+      },
+      {
+        "line": 233,
+        "text": "        and gate_runtime.get(\"contract\") is True"
+      },
+      {
+        "line": 235,
+        "text": "        and gate_artifact.get(\"contract\") is True"
+      },
+      {
+        "line": 238,
+        "text": "    intents = generation_contract.get("
+      },
+      {
+        "line": 239,
+        "text": "        \"intents\","
+      },
+      {
+        "line": 243,
+        "text": "    if not isinstance(intents, list):"
+      },
+      {
+        "line": 245,
+        "text": "            \"order_intent_generation.intents must be a list.\""
+      },
+      {
+        "line": 248,
+        "text": "    eligible_rows = get_int("
+      },
+      {
+        "line": 249,
+        "text": "        artifact_contract,"
+      },
+      {
+        "line": 250,
+        "text": "        \"eligible_rows\","
+      },
+      {
+        "line": 255,
+        "text": "        artifact_contract,"
+      },
+      {
+        "line": 261,
+        "text": "        artifact_contract,"
+      },
+      {
+        "line": 266,
+        "text": "    decision = artifact_contract.get("
+      },
+      {
+        "line": 270,
+        "text": "    snapshot_id = artifact_contract.get("
+      },
+      {
+        "line": 275,
+        "text": "        \"generation\": generation,"
+      },
+      {
+        "line": 276,
+        "text": "        \"validation\": validation,"
+      },
+      {
+        "line": 278,
+        "text": "        \"artifact_contract\": artifact_contract,"
+      },
+      {
+        "line": 279,
+        "text": "        \"generation_contract\": generation_contract,"
+      },
+      {
+        "line": 280,
+        "text": "        \"runtime_contract\": runtime_contract,"
+      },
+      {
+        "line": 281,
+        "text": "        \"intents\": intents,"
+      },
+      {
+        "line": 283,
+        "text": "        \"eligible_rows\": eligible_rows,"
+      },
+      {
+        "line": 287,
+        "text": "        \"generation_contract_valid\": generation_contract_valid,"
+      },
+      {
+        "line": 288,
+        "text": "        \"runtime_contract_valid\": runtime_contract_valid,"
+      },
+      {
+        "line": 289,
+        "text": "        \"artifact_contract_valid\": artifact_contract_valid,"
+      },
+      {
+        "line": 290,
+        "text": "        \"validation_valid\": validation_valid,"
+      },
+      {
+        "line": 293,
+        "text": "        \"validation_runtime\": validation_runtime,"
+      },
+      {
+        "line": 294,
+        "text": "        \"validation_artifact\": validation_artifact,"
+      },
+      {
+        "line": 302,
+        "text": "    intents = chain[\"intents\"]"
+      },
+      {
+        "line": 303,
+        "text": "    eligible_rows = chain[\"eligible_rows\"]"
+      },
+      {
+        "line": 305,
+        "text": "    real_eligible_signal_exists = ("
+      },
+      {
+        "line": 306,
+        "text": "        eligible_rows > 0"
+      },
+      {
+        "line": 309,
+        "text": "    if real_eligible_signal_exists:"
+      },
+      {
+        "line": 311,
+        "text": "        status = \"ELIGIBLE_SIGNAL_PRESENT\""
+      },
+      {
+        "line": 313,
+        "text": "        path_verified = False"
+      },
+      {
+        "line": 318,
+        "text": "            \"A real eligible signal exists in the upstream \""
+      },
+      {
+        "line": 320,
+        "text": "            \"any execution consumer.\""
+      },
+      {
+        "line": 323,
+        "text": "        next_stage = ("
+      },
+      {
+        "line": 324,
+        "text": "            \"ELIGIBLE_SIGNAL_REPLAY_FIXTURE_VERIFICATION\""
+      },
+      {
+        "line": 329,
+        "text": "        status = \"NO_ELIGIBLE_SIGNAL\""
+      },
+      {
+        "line": 331,
+        "text": "        path_verified = False"
+      },
+      {
+        "line": 336,
+        "text": "            \"No eligible signal exists in the current artifact. \""
+      },
+      {
+        "line": 341,
+        "text": "        next_stage = \"WAIT_FOR_ELIGIBLE_SIGNAL\""
+      },
+      {
+        "line": 347,
+        "text": "            \"LIVE SIGNAL ELIGIBLE SIGNAL \""
+      },
+      {
+        "line": 356,
+        "text": "            \"producer_execution\": False,"
+      },
+      {
+        "line": 361,
+        "text": "            \"order_execution\": False,"
+      },
+      {
+        "line": 368,
+        "text": "            \"replay_execution\": False,"
+      },
+      {
+        "line": 373,
+        "text": "            \"generation_report\": str("
+      },
+      {
+        "line": 374,
+        "text": "                GENERATION_REPORT"
+      },
+      {
+        "line": 376,
+        "text": "            \"generation_report_sha256\": sha256_file("
+      },
+      {
+        "line": 377,
+        "text": "                GENERATION_REPORT"
+      },
+      {
+        "line": 379,
+        "text": "            \"validation_report\": str("
+      },
+      {
+        "line": 380,
+        "text": "                VALIDATION_REPORT"
+      },
+      {
+        "line": 382,
+        "text": "            \"validation_report_sha256\": sha256_file("
+      },
+      {
+        "line": 383,
+        "text": "                VALIDATION_REPORT"
+      },
+      {
+        "line": 394,
+        "text": "            \"generation_contract_verified\": ("
+      },
+      {
+        "line": 395,
+        "text": "                chain[\"generation_contract_valid\"]"
+      },
+      {
+        "line": 397,
+        "text": "            \"runtime_contract_verified\": ("
+      },
+      {
+        "line": 398,
+        "text": "                chain[\"runtime_contract_valid\"]"
+      },
+      {
+        "line": 400,
+        "text": "            \"artifact_contract_verified\": ("
+      },
+      {
+        "line": 401,
+        "text": "                chain[\"artifact_contract_valid\"]"
+      },
+      {
+        "line": 403,
+        "text": "            \"validation_contract_verified\": ("
+      },
+      {
+        "line": 404,
+        "text": "                chain[\"validation_valid\"]"
+      },
+      {
+        "line": 406,
+        "text": "            \"execution_gate_verified\": ("
+      },
+      {
+        "line": 411,
+        "text": "        \"artifact_contract\": {"
+      },
+      {
+        "line": 412,
+        "text": "            \"contract\": chain["
+      },
+      {
+        "line": 413,
+        "text": "                \"artifact_contract_valid\""
+      },
+      {
+        "line": 415,
+        "text": "            \"verified\": chain["
+      },
+      {
+        "line": 416,
+        "text": "                \"artifact_contract_valid\""
+      },
+      {
+        "line": 419,
+        "text": "            \"eligible_rows\": chain["
+      },
+      {
+        "line": 420,
+        "text": "                \"eligible_rows\""
+      },
+      {
+        "line": 429,
+        "text": "        \"generation_contract\": {"
+      },
+      {
+        "line": 430,
+        "text": "            \"contract\": chain["
+      },
+      {
+        "line": 431,
+        "text": "                \"generation_contract_valid\""
+      },
+      {
+        "line": 434,
+        "text": "                \"generation_contract\""
+      },
+      {
+        "line": 436,
+        "text": "            \"intents_count\": len(intents),"
+      },
+      {
+        "line": 439,
+        "text": "        \"eligible_signal_path\": {"
+      },
+      {
+        "line": 441,
+        "text": "            \"eligible_signals\": eligible_rows,"
+      },
+      {
+        "line": 442,
+        "text": "            \"order_intents\": len(intents),"
+      },
+      {
+        "line": 443,
+        "text": "            \"path_verified\": path_verified,"
+      },
+      {
+        "line": 451,
+        "text": "        \"execution_safety\": {"
+      },
+      {
+        "line": 452,
+        "text": "            \"execution_allowed\": False,"
+      },
+      {
+        "line": 455,
+        "text": "            \"order_execution\": False,"
+      },
+      {
+        "line": 460,
+        "text": "        \"execution\": {"
+      },
+      {
+        "line": 467,
+        "text": "            \"LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_READY\""
+      },
+      {
+        "line": 470,
+        "text": "        \"next_stage\": next_stage,"
+      },
+      {
+        "line": 479,
+        "text": "        \"artifact_contract\""
+      },
+      {
+        "line": 483,
+        "text": "        \"eligible_signal_path\""
+      },
+      {
+        "line": 487,
+        "text": "        \"execution_safety\""
+      },
+      {
+        "line": 490,
+        "text": "    execution = report["
+      },
+      {
+        "line": 491,
+        "text": "        \"execution\""
+      },
+      {
+        "line": 499,
+        "text": "        \"LIVE SIGNAL ELIGIBLE SIGNAL \""
+      },
+      {
+        "line": 520,
+        "text": "        \"Producer execution : False\""
+      },
+      {
+        "line": 536,
+        "text": "        \"Order execution    : False\""
+      },
+      {
+        "line": 548,
+        "text": "        \"Replay execution   : False\""
+      },
+      {
+        "line": 560,
+        "text": "        \"Generation contract : \""
+      },
+      {
+        "line": 561,
+        "text": "        f\"{chain['generation_contract_verified']}\""
+      },
+      {
+        "line": 565,
+        "text": "        \"Runtime contract    : \""
+      },
+      {
+        "line": 566,
+        "text": "        f\"{chain['runtime_contract_verified']}\""
+      },
+      {
+        "line": 570,
+        "text": "        \"Artifact contract   : \""
+      },
+      {
+        "line": 571,
+        "text": "        f\"{chain['artifact_contract_verified']}\""
+      },
+      {
+        "line": 575,
+        "text": "        \"Validation contract : \""
+      },
+      {
+        "line": 576,
+        "text": "        f\"{chain['validation_contract_verified']}\""
+      },
+      {
+        "line": 580,
+        "text": "        \"Execution gate      : \""
+      },
+      {
+        "line": 581,
+        "text": "        f\"{chain['execution_gate_verified']}\""
+      },
+      {
+        "line": 586,
+        "text": "    print(\"ARTIFACT CONTRACT\")"
+      },
+      {
+        "line": 591,
+        "text": "        f\"contract       : \""
+      },
+      {
+        "line": 592,
+        "text": "        f\"{artifact['contract']}\""
+      },
+      {
+        "line": 596,
+        "text": "        f\"verified       : \""
+      },
+      {
+        "line": 597,
+        "text": "        f\"{artifact['verified']}\""
+      },
+      {
+        "line": 606,
+        "text": "        f\"eligible_rows  : \""
+      },
+      {
+        "line": 607,
+        "text": "        f\"{artifact['eligible_rows']}\""
+      },
+      {
+        "line": 627,
+        "text": "    print(\"ELIGIBLE SIGNAL PATH\")"
+      },
+      {
+        "line": 637,
+        "text": "        f\"ELIGIBLE       : \""
+      },
+      {
+        "line": 638,
+        "text": "        f\"{path['eligible_signals']}\""
+      },
+      {
+        "line": 642,
+        "text": "        f\"ORDER INTENTS  : \""
+      },
+      {
+        "line": 643,
+        "text": "        f\"{path['order_intents']}\""
+      },
+      {
+        "line": 647,
+        "text": "        f\"PATH VERIFIED  : \""
+      },
+      {
+        "line": 648,
+        "text": "        f\"{path['path_verified']}\""
+      },
+      {
+        "line": 662,
+        "text": "    print(\"EXECUTION SAFETY\")"
+      },
+      {
+        "line": 667,
+        "text": "        f\"Execution allowed : \""
+      },
+      {
+        "line": 668,
+        "text": "        f\"{safety['execution_allowed']}\""
+      },
+      {
+        "line": 704,
+        "text": "        f\"{report['next_stage']}\""
+      }
+    ]
+  },
+  "comparison": {
+    "mismatch_count": 0,
+    "mismatches": [],
+    "contract_match": true
+  },
+  "repair": {
+    "performed": false,
+    "mode": "FORENSIC_ONLY"
+  },
+  "final_verdict": {
+    "validation_contract_verified": false,
+    "status": "FORENSICS_ONLY"
+  },
+  "next_stage": "MINIMUM_TARGETED_VALIDATION_CONTRACT_REPAIR"
+}

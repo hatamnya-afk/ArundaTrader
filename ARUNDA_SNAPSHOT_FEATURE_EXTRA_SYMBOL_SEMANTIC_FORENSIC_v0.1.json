@@ -1,0 +1,240 @@
+{
+  "artifact": {
+    "name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+    "script_version": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1"
+  },
+  "artifact_sha256": "c426b6deabdeea548adab50a4f7bc66173af6d3e6b3a86296d5ebf0cc8272fb9",
+  "database": {
+    "mode": "READ ONLY",
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db"
+  },
+  "database_provenance": {
+    "4": {
+      "evidence_sources": [
+        "DATABASE_TABLE:MARKET_HISTORY:SYMBOL",
+        "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL",
+        "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL",
+        "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL",
+        "DATABASE_TABLE:MARKET_STATE:SYMBOL",
+        "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL",
+        "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL"
+      ],
+      "row_counts": {
+        "DATABASE_TABLE:MARKET_HISTORY:SYMBOL": 706,
+        "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL": 704,
+        "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_STATE:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL": 6,
+        "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL": 1
+      }
+    },
+    "ASSET": {
+      "evidence_sources": [
+        "DATABASE_TABLE:MARKET_HISTORY:SYMBOL",
+        "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL",
+        "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL",
+        "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL",
+        "DATABASE_TABLE:MARKET_STATE:SYMBOL",
+        "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL",
+        "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL"
+      ],
+      "row_counts": {
+        "DATABASE_TABLE:MARKET_HISTORY:SYMBOL": 706,
+        "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL": 704,
+        "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_STATE:SYMBOL": 1,
+        "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL": 6,
+        "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL": 1
+      }
+    }
+  },
+  "database_repair": "NOT PERFORMED",
+  "database_write": "NOT PERFORMED",
+  "expected_universe": {
+    "count": 985,
+    "source": "normalization.normalized_expected_universe"
+  },
+  "extra_symbol_resolution": {
+    "alignment_sources": [
+      {
+        "source": "root.feature_input_inventory[3].comparison.extra_symbols",
+        "symbols": [
+          "4",
+          "AAPLON",
+          "AGGON",
+          "AMDON",
+          "AMZNON",
+          "ASSET",
+          "BABYDOGE",
+          "COINON",
+          "CRCLON",
+          "EFAON",
+          "EUSD",
+          "GOOGLON",
+          "HIMSON",
+          "IAUON",
+          "IBITON",
+          "IEFAON",
+          "IEMGON",
+          "INTCON",
+          "ITOTON",
+          "IVVON",
+          "IWFON",
+          "LISUSD",
+          "METAON",
+          "MRVLON",
+          "MSFTON",
+          "MSTRON",
+          "MUON",
+          "MUSD",
+          "MUX",
+          "NVDAON",
+          "PDDON",
+          "PREOPAI",
+          "PRESPCX",
+          "QQQON",
+          "RCRCL",
+          "RGOOGL",
+          "RINTC",
+          "RMU",
+          "RNVDA",
+          "RSNDK",
+          "SGOVON",
+          "SKHYX",
+          "SLVON",
+          "SOFION",
+          "SPCXON",
+          "SPCXX",
+          "SPYON",
+          "STRCON",
+          "TIPON",
+          "TLTON",
+          "TSLAON",
+          "USDE",
+          "USDF",
+          "USDON",
+          "USDSUI",
+          "VBUSD",
+          "XAUT"
+        ]
+      }
+    ],
+    "provenance_sources": [
+      {
+        "source": "root.cross_source_extra_presence.market_history.extra_symbols",
+        "symbols": [
+          "4",
+          "ASSET"
+        ]
+      }
+    ],
+    "resolved_symbol_count": 2,
+    "target_symbols": [
+      "4",
+      "ASSET"
+    ]
+  },
+  "forensic_constraints": {
+    "database_repair": "FORBIDDEN",
+    "database_write": "FORBIDDEN",
+    "decision": "FORBIDDEN",
+    "mode": "READ ONLY",
+    "network": "FORBIDDEN",
+    "prediction": "FORBIDDEN",
+    "symbol_deletion": "FORBIDDEN",
+    "universe_rebuild": "FORBIDDEN"
+  },
+  "forensic_status": "EXTRA_SYMBOLS_SEMANTICALLY_CLASSIFIED",
+  "generated_at_utc": "2026-08-25T20:19:14.094009+00:00",
+  "inputs": {
+    "alignment": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_FEATURE_INPUT_ALIGNMENT_FORENSIC_v0.1.json",
+      "sha256": "02a9d2aaea5220835fcd14d1e6819bd7a0cf69486ca4f570912c967c78b48f86"
+    },
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    }
+  },
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "semantic_classification": {
+    "generic_field_labels": [
+      "ASSET"
+    ],
+    "numeric_identifier_candidates": [
+      "4"
+    ],
+    "symbols": {
+      "4": {
+        "artifact_likelihood": "MEDIUM",
+        "classification_basis": [
+          "pure_numeric_token",
+          "no_non_numeric_symbol_semantics",
+          "database_presence_does_not_establish_market_identity"
+        ],
+        "database_row_counts": {
+          "DATABASE_TABLE:MARKET_HISTORY:SYMBOL": 706,
+          "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL": 704,
+          "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_STATE:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL": 6,
+          "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL": 1
+        },
+        "evidence_source_count": 7,
+        "evidence_sources": [
+          "DATABASE_TABLE:MARKET_HISTORY:SYMBOL",
+          "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL",
+          "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL",
+          "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL",
+          "DATABASE_TABLE:MARKET_STATE:SYMBOL",
+          "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL",
+          "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL"
+        ],
+        "market_symbol_likelihood": "LOW",
+        "meaning": "Pure numeric token; not established as a market symbol.",
+        "semantic_class": "NUMERIC_IDENTIFIER_CANDIDATE",
+        "symbol": "4"
+      },
+      "ASSET": {
+        "artifact_likelihood": "HIGH",
+        "classification_basis": [
+          "known_generic_field_label",
+          "field_name_semantics",
+          "database_presence_does_not_establish_market_identity"
+        ],
+        "database_row_counts": {
+          "DATABASE_TABLE:MARKET_HISTORY:SYMBOL": 706,
+          "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL": 704,
+          "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_STATE:SYMBOL": 1,
+          "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL": 6,
+          "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL": 1
+        },
+        "evidence_source_count": 7,
+        "evidence_sources": [
+          "DATABASE_TABLE:MARKET_HISTORY:SYMBOL",
+          "DATABASE_TABLE:MARKET_HISTORY_LEGACY:SYMBOL",
+          "DATABASE_TABLE:MARKET_MICROSTRUCTURE:SYMBOL",
+          "DATABASE_TABLE:MARKET_OPPORTUNITY:SYMBOL",
+          "DATABASE_TABLE:MARKET_STATE:SYMBOL",
+          "DATABASE_TABLE:MARKET_TECHNICAL:SYMBOL",
+          "DATABASE_TABLE:MARKET_UNIVERSE:SYMBOL"
+        ],
+        "market_symbol_likelihood": "VERY_LOW",
+        "meaning": "Generic field label rather than a market symbol.",
+        "semantic_class": "GENERIC_FIELD_LABEL",
+        "symbol": "ASSET"
+      }
+    },
+    "unresolved_symbols": []
+  }
+}

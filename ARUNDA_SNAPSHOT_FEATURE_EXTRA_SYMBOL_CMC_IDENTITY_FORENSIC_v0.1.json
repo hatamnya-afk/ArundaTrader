@@ -1,0 +1,746 @@
+{
+  "artifact": {
+    "content_sha256": "0d50f21966bf647d70637a0413df77bf144d4a1e550ab5f934b68a66051a8ddc",
+    "generated_at_utc": "2026-08-26T16:51:58.602983+00:00",
+    "name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+    "version": "v0.1"
+  },
+  "claims": {
+    "database_repair": "NOT PERFORMED",
+    "database_write": "NOT PERFORMED",
+    "predictive_claim": "NOT ESTABLISHED",
+    "relationship_calculation": "NOT PERFORMED"
+  },
+  "contract": {
+    "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+    "database_write": "FORBIDDEN",
+    "decision": "FORBIDDEN",
+    "mode": "READ ONLY",
+    "network": "FORBIDDEN",
+    "prediction": "FORBIDDEN",
+    "script": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1"
+  },
+  "cross_symbol_summary": {
+    "cmc_identity_count": 2,
+    "target_count": 2,
+    "unresolved_identity_count": 0
+  },
+  "database_inventory": {
+    "table_count": 25,
+    "tables": [
+      "fusion_signals",
+      "hunter_signals",
+      "market_data",
+      "market_history",
+      "market_history_legacy",
+      "market_microstructure",
+      "market_news",
+      "market_news_intelligence",
+      "market_opportunity",
+      "market_records",
+      "market_state",
+      "market_technical",
+      "market_universe",
+      "market_whale",
+      "news_data",
+      "news_signals",
+      "opportunity_signals",
+      "positioning_data",
+      "risk_decisions",
+      "scheduler_runs",
+      "signal_outcomes",
+      "social_metrics",
+      "source_status",
+      "trade_decisions",
+      "trade_gate_decisions"
+    ]
+  },
+  "forensic_status": "CMC_ASSET_IDENTITIES_OBSERVED_FOR_ALL_TARGETS",
+  "important_limitation": "CMC identity observed in the local database does not prove that the current expected universe should contain the symbol. It only establishes locally observable identity metadata and cross-table consistency.",
+  "input_artifacts": {
+    "first_insertion": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+      "sha256": "07b1d31cf3dc84ce2cceb4f5ef0ffb2d4d427b77898194c51e7d6c4ae15d4aee"
+    },
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "origin": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+      "sha256": "f3554f92cb117876ca9e3883ba84bb74d5f28e5dbdca48f6dead86365f949c33"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    },
+    "semantic": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+      "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856"
+    }
+  },
+  "symbol_results": {
+    "4": {
+      "cmc_id_cross_table_evidence": [
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": -0.0610962,
+            "change_24h": 4.59152192,
+            "change_7d": -20.25647435,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 846,
+            "market_cap": 10783487.25162235,
+            "name": "4",
+            "price": 0.010783487251622351,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:33.608988+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 2518581.15379046
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": -0.05963615,
+            "change_24h": 4.58825619,
+            "change_7d": -20.86759765,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1833,
+            "market_cap": 10783559.988166494,
+            "name": "4",
+            "price": 0.010783559988166495,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:44.661983+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 2518780.54174929
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:40:34.668681+00:00"
+        },
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.15738152,
+            "change_24h": 4.71106288,
+            "change_7d": -20.92155613,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2820,
+            "market_cap": 10790733.940043163,
+            "name": "4",
+            "price": 0.010790733940043162,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:55.268165+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 2518761.29320224
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:41:45.849863+00:00"
+        },
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": -0.0457848,
+            "change_24h": 4.60678359,
+            "change_7d": -20.96721976,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3807,
+            "market_cap": 10776944.499590924,
+            "name": "4",
+            "price": 0.010776944499590924,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:05.589397+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 2518700.93293491
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:42:56.312879+00:00"
+        },
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.11001148,
+            "change_24h": 4.70113029,
+            "change_7d": -20.9116004,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4794,
+            "market_cap": 10786979.023102477,
+            "name": "4",
+            "price": 0.010786979023102477,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:17.013255+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 2518250.46545886
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "cmc_id": 38557,
+          "column": "cmc_id",
+          "row": {
+            "circulating_supply": 1000000000.0,
+            "cmc_id": 38557,
+            "cmc_rank": 854,
+            "date_added": "2025-10-02T09:38:05.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "id": 854,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "market_cap": 10788479.457453717,
+            "max_supply": 1000000000.0,
+            "name": "4",
+            "num_market_pairs": 180,
+            "percent_change_1h": -0.21396725,
+            "percent_change_24h": 4.72043937,
+            "percent_change_7d": -20.39574243,
+            "price": 0.010788479457453717,
+            "rank": null,
+            "slug": "4four",
+            "source": "COINMARKETCAP",
+            "symbol": "4",
+            "total_supply": 1000000000.0,
+            "updated_at": "2026-08-16T23:32:17.309031+00:00",
+            "volume_24h": 2516222.12933637
+          },
+          "table": "market_universe",
+          "timestamp_column": "date_added",
+          "timestamp_utc": "2025-10-02T09:38:05+00:00"
+        }
+      ],
+      "identity_consistency": {
+        "cmc_cross_table_names": [
+          "4"
+        ],
+        "cmc_cross_table_slugs": [
+          "4four"
+        ],
+        "cmc_cross_table_symbols": [
+          "4"
+        ],
+        "cross_table_symbol_consistent": true,
+        "identity_consistency": "CONSISTENT",
+        "market_universe_names": [
+          "4"
+        ],
+        "market_universe_slugs": [
+          "4four"
+        ],
+        "market_universe_symbol_consistent": true,
+        "market_universe_symbols": [
+          "4"
+        ],
+        "target_symbol": "4"
+      },
+      "market_universe": {
+        "available": true,
+        "evidence": [
+          {
+            "column": "symbol",
+            "first_row": {
+              "circulating_supply": 1000000000.0,
+              "cmc_id": 38557,
+              "cmc_rank": 854,
+              "date_added": "2025-10-02T09:38:05.000Z",
+              "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+              "first_seen": null,
+              "id": 854,
+              "is_active": 1,
+              "last_seen": null,
+              "last_updated": "2026-08-16T23:31:00.000Z",
+              "market_cap": 10788479.457453717,
+              "max_supply": 1000000000.0,
+              "name": "4",
+              "num_market_pairs": 180,
+              "percent_change_1h": -0.21396725,
+              "percent_change_24h": 4.72043937,
+              "percent_change_7d": -20.39574243,
+              "price": 0.010788479457453717,
+              "rank": null,
+              "slug": "4four",
+              "source": "COINMARKETCAP",
+              "symbol": "4",
+              "total_supply": 1000000000.0,
+              "updated_at": "2026-08-16T23:32:17.309031+00:00",
+              "volume_24h": 2516222.12933637
+            },
+            "first_timestamp_column": "date_added",
+            "first_timestamp_utc": "2025-10-02T09:38:05+00:00",
+            "row_count": 1,
+            "samples": [
+              {
+                "row": {
+                  "circulating_supply": 1000000000.0,
+                  "cmc_id": 38557,
+                  "cmc_rank": 854,
+                  "date_added": "2025-10-02T09:38:05.000Z",
+                  "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+                  "first_seen": null,
+                  "id": 854,
+                  "is_active": 1,
+                  "last_seen": null,
+                  "last_updated": "2026-08-16T23:31:00.000Z",
+                  "market_cap": 10788479.457453717,
+                  "max_supply": 1000000000.0,
+                  "name": "4",
+                  "num_market_pairs": 180,
+                  "percent_change_1h": -0.21396725,
+                  "percent_change_24h": 4.72043937,
+                  "percent_change_7d": -20.39574243,
+                  "price": 0.010788479457453717,
+                  "rank": null,
+                  "slug": "4four",
+                  "source": "COINMARKETCAP",
+                  "symbol": "4",
+                  "total_supply": 1000000000.0,
+                  "updated_at": "2026-08-16T23:32:17.309031+00:00",
+                  "volume_24h": 2516222.12933637
+                },
+                "timestamp_column": "date_added",
+                "timestamp_utc": "2025-10-02T09:38:05+00:00"
+              }
+            ],
+            "symbol": "4",
+            "table": "market_universe"
+          }
+        ],
+        "identity_records": [
+          {
+            "cmc_id": 38557,
+            "cmc_rank": 854,
+            "date_added": "2025-10-02T09:38:05.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "name": "4",
+            "rank": null,
+            "slug": "4four",
+            "source": "COINMARKETCAP",
+            "symbol": "4"
+          }
+        ],
+        "search_columns": [
+          "symbol"
+        ],
+        "symbol": "4"
+      },
+      "primary_identity": {
+        "cmc_id": 38557,
+        "cmc_rank": 854,
+        "date_added": "2025-10-02T09:38:05.000Z",
+        "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+        "first_seen": null,
+        "is_active": 1,
+        "last_seen": null,
+        "last_updated": "2026-08-16T23:31:00.000Z",
+        "name": "4",
+        "rank": null,
+        "slug": "4four",
+        "source": "COINMARKETCAP",
+        "symbol": "4"
+      },
+      "semantic_identity": {
+        "canonical_asset_evidence": true,
+        "cmc_ids": [
+          "38557"
+        ],
+        "engine_versions": [
+          "MARKET_UNIVERSE_CMC_v0.3.1"
+        ],
+        "identity_class": "CMC_ASSET_IDENTITY_OBSERVED",
+        "is_active_values": [
+          1
+        ],
+        "names": [
+          "4"
+        ],
+        "slugs": [
+          "4four"
+        ],
+        "sources": [
+          "COINMARKETCAP"
+        ],
+        "status": "IDENTITY_OBSERVED",
+        "symbols": [
+          "4"
+        ]
+      },
+      "symbol": "4",
+      "temporal_evidence": {
+        "earliest_sample_timestamp_utc": "2025-10-02T09:38:05+00:00",
+        "latest_sample_timestamp_utc": "2025-10-02T09:38:05+00:00"
+      }
+    },
+    "ASSET": {
+      "cmc_id_cross_table_evidence": [
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.13888834,
+            "change_24h": -0.20005887,
+            "change_7d": 1.0309557,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 342,
+            "market_cap": 46076925.77449055,
+            "name": "REAL",
+            "price": 0.2617450506760727,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:28.148100+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 1072505.39922362
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.09623458,
+            "change_24h": -0.1901015,
+            "change_7d": 1.08969721,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1329,
+            "market_cap": 46081523.02405535,
+            "name": "REAL",
+            "price": 0.261771165858457,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:39.066734+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 1072501.86106066
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:40:34.668681+00:00"
+        },
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.10437227,
+            "change_24h": -0.16138529,
+            "change_7d": 1.10823536,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2316,
+            "market_cap": 46093758.21081405,
+            "name": "REAL",
+            "price": 0.26184066918413157,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:50.200473+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 1075791.27296629
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:41:45.849863+00:00"
+        },
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.15110721,
+            "change_24h": -0.12146495,
+            "change_7d": 1.40235138,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3303,
+            "market_cap": 46095641.743370935,
+            "name": "REAL",
+            "price": 0.26185136879822835,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:00.511712+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 1075600.40726396
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:42:56.312879+00:00"
+        },
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "change_1h": 0.19159,
+            "change_24h": -0.12965145,
+            "change_7d": 1.77672642,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4290,
+            "market_cap": 46109590.78612574,
+            "name": "REAL",
+            "price": 0.26193060787161204,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:11.480246+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 1075424.82685462
+          },
+          "table": "market_history",
+          "timestamp_column": "timestamp",
+          "timestamp_utc": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "cmc_id": 39922,
+          "column": "cmc_id",
+          "row": {
+            "circulating_supply": 176037429.0,
+            "cmc_id": 39922,
+            "cmc_rank": 343,
+            "date_added": "2026-04-30T07:15:03.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "id": 343,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "market_cap": 46074112.067913316,
+            "max_supply": 1000000000.0,
+            "name": "REAL",
+            "num_market_pairs": 9,
+            "percent_change_1h": 0.00861589,
+            "percent_change_24h": -0.3338151,
+            "percent_change_7d": 1.00562806,
+            "price": 0.26172906710602617,
+            "rank": null,
+            "slug": "real-finance",
+            "source": "COINMARKETCAP",
+            "symbol": "ASSET",
+            "total_supply": 1000000000.0,
+            "updated_at": "2026-08-16T23:32:16.045814+00:00",
+            "volume_24h": 1072104.94807767
+          },
+          "table": "market_universe",
+          "timestamp_column": "date_added",
+          "timestamp_utc": "2026-04-30T07:15:03+00:00"
+        }
+      ],
+      "identity_consistency": {
+        "cmc_cross_table_names": [
+          "REAL"
+        ],
+        "cmc_cross_table_slugs": [
+          "real-finance"
+        ],
+        "cmc_cross_table_symbols": [
+          "ASSET"
+        ],
+        "cross_table_symbol_consistent": true,
+        "identity_consistency": "CONSISTENT",
+        "market_universe_names": [
+          "REAL"
+        ],
+        "market_universe_slugs": [
+          "real-finance"
+        ],
+        "market_universe_symbol_consistent": true,
+        "market_universe_symbols": [
+          "ASSET"
+        ],
+        "target_symbol": "ASSET"
+      },
+      "market_universe": {
+        "available": true,
+        "evidence": [
+          {
+            "column": "symbol",
+            "first_row": {
+              "circulating_supply": 176037429.0,
+              "cmc_id": 39922,
+              "cmc_rank": 343,
+              "date_added": "2026-04-30T07:15:03.000Z",
+              "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+              "first_seen": null,
+              "id": 343,
+              "is_active": 1,
+              "last_seen": null,
+              "last_updated": "2026-08-16T23:31:00.000Z",
+              "market_cap": 46074112.067913316,
+              "max_supply": 1000000000.0,
+              "name": "REAL",
+              "num_market_pairs": 9,
+              "percent_change_1h": 0.00861589,
+              "percent_change_24h": -0.3338151,
+              "percent_change_7d": 1.00562806,
+              "price": 0.26172906710602617,
+              "rank": null,
+              "slug": "real-finance",
+              "source": "COINMARKETCAP",
+              "symbol": "ASSET",
+              "total_supply": 1000000000.0,
+              "updated_at": "2026-08-16T23:32:16.045814+00:00",
+              "volume_24h": 1072104.94807767
+            },
+            "first_timestamp_column": "date_added",
+            "first_timestamp_utc": "2026-04-30T07:15:03+00:00",
+            "row_count": 1,
+            "samples": [
+              {
+                "row": {
+                  "circulating_supply": 176037429.0,
+                  "cmc_id": 39922,
+                  "cmc_rank": 343,
+                  "date_added": "2026-04-30T07:15:03.000Z",
+                  "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+                  "first_seen": null,
+                  "id": 343,
+                  "is_active": 1,
+                  "last_seen": null,
+                  "last_updated": "2026-08-16T23:31:00.000Z",
+                  "market_cap": 46074112.067913316,
+                  "max_supply": 1000000000.0,
+                  "name": "REAL",
+                  "num_market_pairs": 9,
+                  "percent_change_1h": 0.00861589,
+                  "percent_change_24h": -0.3338151,
+                  "percent_change_7d": 1.00562806,
+                  "price": 0.26172906710602617,
+                  "rank": null,
+                  "slug": "real-finance",
+                  "source": "COINMARKETCAP",
+                  "symbol": "ASSET",
+                  "total_supply": 1000000000.0,
+                  "updated_at": "2026-08-16T23:32:16.045814+00:00",
+                  "volume_24h": 1072104.94807767
+                },
+                "timestamp_column": "date_added",
+                "timestamp_utc": "2026-04-30T07:15:03+00:00"
+              }
+            ],
+            "symbol": "ASSET",
+            "table": "market_universe"
+          }
+        ],
+        "identity_records": [
+          {
+            "cmc_id": 39922,
+            "cmc_rank": 343,
+            "date_added": "2026-04-30T07:15:03.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "name": "REAL",
+            "rank": null,
+            "slug": "real-finance",
+            "source": "COINMARKETCAP",
+            "symbol": "ASSET"
+          }
+        ],
+        "search_columns": [
+          "symbol"
+        ],
+        "symbol": "ASSET"
+      },
+      "primary_identity": {
+        "cmc_id": 39922,
+        "cmc_rank": 343,
+        "date_added": "2026-04-30T07:15:03.000Z",
+        "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+        "first_seen": null,
+        "is_active": 1,
+        "last_seen": null,
+        "last_updated": "2026-08-16T23:31:00.000Z",
+        "name": "REAL",
+        "rank": null,
+        "slug": "real-finance",
+        "source": "COINMARKETCAP",
+        "symbol": "ASSET"
+      },
+      "semantic_identity": {
+        "canonical_asset_evidence": true,
+        "cmc_ids": [
+          "39922"
+        ],
+        "engine_versions": [
+          "MARKET_UNIVERSE_CMC_v0.3.1"
+        ],
+        "identity_class": "CMC_ASSET_IDENTITY_OBSERVED",
+        "is_active_values": [
+          1
+        ],
+        "names": [
+          "REAL"
+        ],
+        "slugs": [
+          "real-finance"
+        ],
+        "sources": [
+          "COINMARKETCAP"
+        ],
+        "status": "IDENTITY_OBSERVED",
+        "symbols": [
+          "ASSET"
+        ]
+      },
+      "symbol": "ASSET",
+      "temporal_evidence": {
+        "earliest_sample_timestamp_utc": "2026-04-30T07:15:03+00:00",
+        "latest_sample_timestamp_utc": "2026-04-30T07:15:03+00:00"
+      }
+    }
+  },
+  "target_contract": {
+    "expected_universe": null,
+    "target_count": 2,
+    "target_symbols": [
+      "4",
+      "ASSET"
+    ]
+  }
+}

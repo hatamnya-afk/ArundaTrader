@@ -1,0 +1,2091 @@
+{
+  "script": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+  "version": "v0.1",
+  "generated_at_utc": "2026-08-24T17:39:53.128032+00:00",
+  "started_at_utc": "2026-08-24T17:39:52.406855+00:00",
+  "mode": "READ_ONLY_FORENSIC",
+  "objective": "Historical runtime provenance forensic for the verified eligibility producer and report.",
+  "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "producer": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "consumer": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+  "safety_policy": {
+    "production_db_writes": false,
+    "production_db_access": "READ_ONLY_ONLY",
+    "production_source_modification": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "eligibility_execution": false,
+    "eligibility_rebuild": false,
+    "report_regeneration": false,
+    "synthetic_report": false,
+    "network_access": false,
+    "archive_extraction": false,
+    "recovery_staging": "NONE"
+  },
+  "baseline": {
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": {
+      "exists": true,
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+      "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+      "analysis": {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "parse": "PASS",
+        "report_references": [
+          {
+            "line": 698,
+            "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+          }
+        ],
+        "producer_references": [],
+        "write_calls": [],
+        "subprocess_calls": [
+          {
+            "line": 198,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 485,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 681,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 540,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 557,
+            "call": "RuntimeError"
+          }
+        ],
+        "path_construction": [],
+        "main_guard": true
+      }
+    },
+    "consumer": {
+      "exists": true,
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+      "sha256": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9",
+      "analysis": {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "parse": "PASS",
+        "report_references": [
+          {
+            "line": 225,
+            "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+          }
+        ],
+        "producer_references": [],
+        "write_calls": [],
+        "subprocess_calls": [
+          {
+            "line": 669,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 698,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 732,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 738,
+            "call": "RuntimeError"
+          },
+          {
+            "line": 932,
+            "call": "RuntimeError"
+          }
+        ],
+        "path_construction": [],
+        "main_guard": true
+      }
+    }
+  },
+  "filesystem": {
+    "files_discovered": 370,
+    "exact_artifacts": []
+  },
+  "content_provenance": {
+    "candidate_count": 266,
+    "top_candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 193,
+        "matched_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "UPSTREAM_ELIGIBILITY_CONSUMED",
+          "capture",
+          "cwd",
+          "eligibility_report",
+          "eligible_pool",
+          "entrypoint",
+          "executed",
+          "execution",
+          "exit code",
+          "invocation",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess",
+          "working directory"
+        ],
+        "mtime": "2026-08-24T17:39:24.732337+00:00",
+        "size": 35825
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "relative_path": "VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 168,
+        "matched_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "UPSTREAM_ELIGIBILITY_CONSUMED",
+          "capture",
+          "eligibility_report",
+          "eligible_pool",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T17:31:52.117490+00:00",
+        "size": 56587
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "relative_path": "HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 164,
+        "matched_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "capture",
+          "eligibility_report",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "invocation",
+          "isolated",
+          "launch",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T17:35:22.682433+00:00",
+        "size": 28812
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 159,
+        "matched_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "UPSTREAM_ELIGIBILITY_CONSUMED",
+          "eligibility_report",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "isolated",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T17:31:20.274980+00:00",
+        "size": 35913
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 157,
+        "matched_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "eligibility_report",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "isolated",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T17:34:59.014421+00:00",
+        "size": 34974
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 121,
+        "matched_terms": [
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "UPSTREAM_ELIGIBILITY_CONSUMED",
+          "capture",
+          "eligibility_report",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T17:02:52.416966+00:00",
+        "size": 24552
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 115,
+        "matched_terms": [
+          "ELIGIBILITY_NO_TRADE",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "SIGNAL_ELIGIBILITY",
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T16:54:08.642490+00:00",
+        "size": 21139
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_ISOLATION_ADAPTER_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_ISOLATION_ADAPTER_v0.1.py",
+        "score": 43,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "executed",
+          "execution",
+          "exit code",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-24T15:59:01.884522+00:00",
+        "size": 19024
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_EXECUTION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_EXECUTION_v0.1.py",
+        "score": 41,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "executed",
+          "execution",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-24T15:51:33.868617+00:00",
+        "size": 17149
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_ISOLATED_LAUNCH_LIFECYCLE_PIPELINE_EXECUTION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_ISOLATED_LAUNCH_LIFECYCLE_PIPELINE_EXECUTION_v0.1.py",
+        "score": 41,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "executed",
+          "execution",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-24T15:49:05.787414+00:00",
+        "size": 14454
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py",
+        "score": 39,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "execution",
+          "exit code",
+          "isolated",
+          "output",
+          "report",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-24T17:24:34.040841+00:00",
+        "size": 19764
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda_pipeline.py",
+        "relative_path": "arunda_pipeline.py",
+        "score": 35,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "execution",
+          "launch",
+          "output",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-15T19:18:31.736278+00:00",
+        "size": 15201
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "score": 33,
+        "matched_terms": [
+          "SIGNAL_ELIGIBILITY",
+          "eligibility_report",
+          "execution",
+          "isolated",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T17:27:52.966150+00:00",
+        "size": 21641
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py",
+        "score": 33,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "exit code",
+          "output",
+          "returncode",
+          "runtime",
+          "stderr",
+          "stdout",
+          "subprocess"
+        ],
+        "mtime": "2026-08-23T14:45:59.147969+00:00",
+        "size": 18383
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_ARTIFACT_CORRELATION_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_ARTIFACT_CORRELATION_FORENSIC_v0.1.py",
+        "score": 31,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime",
+          "stderr",
+          "stdout"
+        ],
+        "mtime": "2026-08-23T15:31:42.810393+00:00",
+        "size": 30337
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_LAUNCH_HARNESS_v0.1.py",
+        "relative_path": "LIVE_LAUNCH_HARNESS_v0.1.py",
+        "score": 30,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "runtime",
+          "stderr",
+          "stdout"
+        ],
+        "mtime": "2026-08-23T16:44:10.244331+00:00",
+        "size": 21128
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_FILESYSTEM_PROVENANCE_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_RUNTIME_FILESYSTEM_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 30,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime",
+          "stderr",
+          "stdout"
+        ],
+        "mtime": "2026-08-23T15:29:49.962884+00:00",
+        "size": 26582
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ACTUAL_RUNTIME_INVOCATION_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ACTUAL_RUNTIME_INVOCATION_FORENSIC_v0.1.py",
+        "score": 30,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "invocation",
+          "isolated",
+          "output",
+          "report",
+          "runtime",
+          "stderr",
+          "stdout"
+        ],
+        "mtime": "2026-08-23T15:23:54.351515+00:00",
+        "size": 40621
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_PRODUCTION_EXECUTION_BOUNDARY_RESOLUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_PRODUCTION_EXECUTION_BOUNDARY_RESOLUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 29,
+        "matched_terms": [
+          "entrypoint",
+          "execution",
+          "invocation",
+          "launch",
+          "runtime",
+          "stderr",
+          "stdout"
+        ],
+        "mtime": "2026-08-22T23:37:26.652572+00:00",
+        "size": 32572
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_RUNTIME_ARTIFACT_TEMPORAL_CORRELATION_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_RUNTIME_ARTIFACT_TEMPORAL_CORRELATION_FORENSIC_v0.1.py",
+        "score": 26,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime",
+          "subprocess"
+        ],
+        "mtime": "2026-08-23T15:33:52.438536+00:00",
+        "size": 28063
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py",
+        "score": 25,
+        "matched_terms": [
+          "capture",
+          "cwd",
+          "execution",
+          "exit code",
+          "isolated",
+          "report",
+          "runtime",
+          "stdout"
+        ],
+        "mtime": "2026-08-24T17:12:57.051189+00:00",
+        "size": 13743
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_RUNTIME_INPUT_OUTPUT_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_RUNTIME_INPUT_OUTPUT_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "score": 25,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:39:03.965923+00:00",
+        "size": 31168
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_STORE_SUBSCR_DICTIONARY_WRITE_PATH_EXACT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_STORE_SUBSCR_DICTIONARY_WRITE_PATH_EXACT_FORENSIC_AUDIT_v0.1.py",
+        "score": 23,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T00:00:55.377128+00:00",
+        "size": 23374
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_WRITE_NOOP_REAL_READ_RETURN_IDENTITY_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_WRITE_NOOP_REAL_READ_RETURN_IDENTITY_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 23,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:45:10.593014+00:00",
+        "size": 30543
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DICTIONARY_RETURN_PACKING_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DICTIONARY_RETURN_PACKING_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 23,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:23:07.890401+00:00",
+        "size": 29754
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "SIGNAL_OUTCOME_CREATE_OUTCOME_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 23,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:18:43.773819+00:00",
+        "size": 33072
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:09:03.422911+00:00",
+        "size": 26038
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:07:09.750281+00:00",
+        "size": 20422
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:04:55.453942+00:00",
+        "size": 29757
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T17:14:50.457079+00:00",
+        "size": 29948
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T17:11:27.493837+00:00",
+        "size": 26243
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "score": 22,
+        "matched_terms": [
+          "capture",
+          "eligible_pool",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T17:06:56.582399+00:00",
+        "size": 31036
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_ROW_LEVEL_HISTORICAL_PROVENANCE_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_ROW_LEVEL_HISTORICAL_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "invocation",
+          "isolated",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T15:28:26.715780+00:00",
+        "size": 33315
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_INVOCATION_TRACE_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_INVOCATION_TRACE_FORENSIC_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "invocation",
+          "isolated",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T15:10:04.762452+00:00",
+        "size": 35998
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T15:07:54.319837+00:00",
+        "size": 42916
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_CAPTURE_REAL_INVOCATION_POP_JUMP_OPERAND_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_CAPTURE_REAL_INVOCATION_POP_JUMP_OPERAND_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:44:57.707256+00:00",
+        "size": 16104
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_OPERAND_RECURSION_ISOLATION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_OPERAND_RECURSION_ISOLATION_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "invocation",
+          "isolated",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:34:34.831147+00:00",
+        "size": 16328
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_MAIN_ROW_SCHEMA_FIRST_BOUNDARY_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_MAIN_ROW_SCHEMA_FIRST_BOUNDARY_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:49:06.174983+00:00",
+        "size": 23141
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_MAIN_ROW_SCHEMA_BOUNDARY_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_MAIN_ROW_SCHEMA_BOUNDARY_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:46:31.443932+00:00",
+        "size": 20327
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_PRICE_IDENTITY_DICTIONARY_RETURN_PACKING_EXACT_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_PRICE_IDENTITY_DICTIONARY_RETURN_PACKING_EXACT_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:42:14.895301+00:00",
+        "size": 26196
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_INSTRUCTION_BOUNDARY_RETURN_PACKING_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_INSTRUCTION_BOUNDARY_RETURN_PACKING_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:35:23.179950+00:00",
+        "size": 29000
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_RUNTIME_INSTRUMENTATION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_RUNTIME_INSTRUMENTATION_FORENSIC_AUDIT_v0.1.py",
+        "score": 21,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:46:27.940286+00:00",
+        "size": 34781
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:46:02.515686+00:00",
+        "size": 15640
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "isolated",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:44:01.023154+00:00",
+        "size": 13532
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:34:09.563403+00:00",
+        "size": 29016
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_STABILITY_STRESS_RESPONSE_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_STABILITY_STRESS_RESPONSE_RECONCILIATION_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:18:01.046801+00:00",
+        "size": 28523
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_DRAWDOWN_EQUITY_CURVE_PERFORMANCE_RISK_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_DRAWDOWN_EQUITY_CURVE_PERFORMANCE_RISK_RECONCILIATION_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:27:20.516071+00:00",
+        "size": 24571
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_ATTRIBUTION_PNL_CONSISTENCY_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_ATTRIBUTION_PNL_CONSISTENCY_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:24:50.332635+00:00",
+        "size": 27086
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:16:54.117822+00:00",
+        "size": 36716
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_LIMITS_CIRCUIT_BREAKER_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_LIMITS_CIRCUIT_BREAKER_GATE_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:14:07.941598+00:00",
+        "size": 25744
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:01:49.378651+00:00",
+        "size": 17255
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SNAPSHOT_FRESHNESS_SOURCE_ROW_CAUSALITY_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_SNAPSHOT_FRESHNESS_SOURCE_ROW_CAUSALITY_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T16:52:09.366798+00:00",
+        "size": 29786
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_LIVE_SNAPSHOT_FRESHNESS_CAUSALITY_v0.1.py",
+        "relative_path": "ARUNDA_LIVE_SNAPSHOT_FRESHNESS_CAUSALITY_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T16:49:32.321780+00:00",
+        "size": 37375
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DOWNSTREAM_VALUE_COMPARISON_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DOWNSTREAM_VALUE_COMPARISON_FORENSIC_AUDIT_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:51:42.280777+00:00",
+        "size": 33642
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\DOWNSTREAM_FIND_FUTURE_PRICE_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "DOWNSTREAM_FIND_FUTURE_PRICE_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T21:14:47.234716+00:00",
+        "size": 36120
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_RUNTIME_ROWS_VS_STORED_POSTCALC_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_RUNTIME_ROWS_VS_STORED_POSTCALC_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:55:48.579474+00:00",
+        "size": 44448
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "score": 20,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:50:23.116864+00:00",
+        "size": 41904
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_LAUNCH_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_LAUNCH_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "execution",
+          "launch",
+          "report",
+          "runtime",
+          "subprocess"
+        ],
+        "mtime": "2026-08-24T15:36:44.222097+00:00",
+        "size": 6877
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_RUNTIME_OPERAND_CONSTRUCTION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_POP_JUMP_IF_TRUE_RUNTIME_OPERAND_CONSTRUCTION_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:48:10.525752+00:00",
+        "size": 24589
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_NONE_BRANCH_REPRODUCTION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_NONE_BRANCH_REPRODUCTION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:22:45.823808+00:00",
+        "size": 13395
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_PRICES_CALL_OPERAND_STACK_FINAL_PARAMETER_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_PRICES_CALL_OPERAND_STACK_FINAL_PARAMETER_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T00:10:59.878287+00:00",
+        "size": 26131
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_STORE_SUBSCR_RETURN_VALUE_EXACT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_STORE_SUBSCR_RETURN_VALUE_EXACT_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:53:25.133424+00:00",
+        "size": 21260
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_MAIN_TO_PROCESS_SIGNALS_EXECUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_MAIN_TO_PROCESS_SIGNALS_EXECUTION_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "entrypoint",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:43:04.435322+00:00",
+        "size": 17990
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DICTIONARY_OBJECT_IDENTITY_RETURN_PACKING_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DICTIONARY_OBJECT_IDENTITY_RETURN_PACKING_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:32:13.244275+00:00",
+        "size": 31182
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_POST_REPAIR_CALL-SITE_TRANSFORMATION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_POST_REPAIR_CALL-SITE_TRANSFORMATION_FORENSIC_AUDIT_v0.1.py",
+        "score": 19,
+        "matched_terms": [
+          "execution",
+          "invocation",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:40:34.446564+00:00",
+        "size": 39030
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\step15c_signal_dependency_information_flow_audit.py",
+        "relative_path": "step15c_signal_dependency_information_flow_audit.py",
+        "score": 19,
+        "matched_terms": [
+          "cwd",
+          "entrypoint",
+          "execution",
+          "runtime",
+          "subprocess"
+        ],
+        "mtime": "2026-08-19T17:18:34.398340+00:00",
+        "size": 41976
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\market_snapshot_scheduler.py",
+        "relative_path": "market_snapshot_scheduler.py",
+        "score": 19,
+        "matched_terms": [
+          "execution",
+          "exit code",
+          "returncode",
+          "runtime",
+          "subprocess"
+        ],
+        "mtime": "2026-08-16T23:18:29.075894+00:00",
+        "size": 5290
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:30:48.714853+00:00",
+        "size": 19724
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_GOVERNANCE_READINESS_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_GOVERNANCE_READINESS_GATE_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:26:54.337874+00:00",
+        "size": 23354
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_TRANSITION_STRESS_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_TRANSITION_STRESS_RECONCILIATION_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "launch",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-24T15:13:00.684114+00:00",
+        "size": 27317
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_STABILITY_RISK_ADJUSTED_METRICS_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_STABILITY_RISK_ADJUSTED_METRICS_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:33:42.994965+00:00",
+        "size": 28710
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_METRICS_TRADE_STATISTICS_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_METRICS_TRADE_STATISTICS_RECONCILIATION_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "launch",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:31:40.570602+00:00",
+        "size": 26269
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ISOLATED_RUNTIME_INSTRUMENTATION_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_ISOLATED_RUNTIME_INSTRUMENTATION_FORENSIC_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "invocation",
+          "isolated",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T15:15:14.234868+00:00",
+        "size": 29018
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_INVOCATION_CHAIN_VALUE_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_INVOCATION_CHAIN_VALUE_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "entrypoint",
+          "executed",
+          "invocation",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:21:29.074781+00:00",
+        "size": 16880
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_FINAL_FIELD_VALUE_INTEGRITY_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_FINAL_FIELD_VALUE_INTEGRITY_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:20:10.359233+00:00",
+        "size": 23934
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_LOCALIZATION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_LOCALIZATION_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:53:09.274559+00:00",
+        "size": 28350
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_ASSIGNMENT_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_ASSIGNMENT_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:46:59.522101+00:00",
+        "size": 27691
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DOWNSTREAM_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DOWNSTREAM_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:40:46.480574+00:00",
+        "size": 37050
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_CALL_GRAPH_DEEP_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "SIGNAL_OUTCOME_CALL_GRAPH_DEEP_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:26:27.490977+00:00",
+        "size": 37479
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\DOWNSTREAM_CONSUMER_ENTRYPOINT_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "DOWNSTREAM_CONSUMER_ENTRYPOINT_RESOLUTION_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T20:55:36.800052+00:00",
+        "size": 45533
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\DOWNSTREAM_MARKET_DATA_CONSUMPTION_DISCOVERY_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "DOWNSTREAM_MARKET_DATA_CONSUMPTION_DISCOVERY_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T20:50:14.195815+00:00",
+        "size": 31690
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_RUNTIME_ROWS_EXACT_SQL_RESULT_FIRST_DIVERGENCE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_RUNTIME_ROWS_EXACT_SQL_RESULT_FIRST_DIVERGENCE_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T20:24:10.511833+00:00",
+        "size": 41129
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_RUNTIME_SQL_RESULT_CONSTRUCTION_ORDER_FILTER_WINDOW_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_RUNTIME_SQL_RESULT_CONSTRUCTION_ORDER_FILTER_WINDOW_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:57:29.761822+00:00",
+        "size": 34541
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_PATH_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_PRODUCTION_ENTRYPOINT_RUNTIME_PATH_FORENSIC_AUDIT_v0.1.py",
+        "score": 18,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:47:59.983177+00:00",
+        "size": 27134
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_COMPARE_OP_RUNTIME_OPERAND_RESULT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_COMPARE_OP_RUNTIME_OPERAND_RESULT_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:56:48.248521+00:00",
+        "size": 35037
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DIRECT_INVOCATION_POP_JUMP_IF_TRUE_OPERAND_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DIRECT_INVOCATION_POP_JUMP_IF_TRUE_OPERAND_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:43:25.762135+00:00",
+        "size": 19868
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_OPERAND_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_OPERAND_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:27:16.650578+00:00",
+        "size": 13900
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_NONE_BRANCH_CONDITION_EXACT_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:20:11.662038+00:00",
+        "size": 20534
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_NONE_RETURN_CONTROL_FLOW_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_NONE_RETURN_CONTROL_FLOW_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:15:41.368882+00:00",
+        "size": 21834
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_NONE_CAUSE_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_NONE_CAUSE_RUNTIME_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "entrypoint",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T08:12:40.842301+00:00",
+        "size": 16970
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_RETURN_BOUNDARY_EXACT_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_RETURN_BOUNDARY_EXACT_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "entrypoint",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:51:34.832946+00:00",
+        "size": 19700
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DICTIONARY_RETURN_PACKING_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DICTIONARY_RETURN_PACKING_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "capture",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-22T23:27:59.340372+00:00",
+        "size": 22053
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "entrypoint",
+          "execution",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T23:10:32.687942+00:00",
+        "size": 26315
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "INDICATOR_RUNTIME_CALLER_SQL_PARAMETER_ASSIGNMENT_FORENSIC_AUDIT_v0.1.py",
+        "score": 17,
+        "matched_terms": [
+          "execution",
+          "invocation",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T19:44:32.652094+00:00",
+        "size": 28376
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "executed",
+          "execution",
+          "launch",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T20:35:43.143519+00:00",
+        "size": 30119
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_NULL_CAUSALITY_FORENSIC_v0.1.py",
+        "relative_path": "OUTCOME_v0.3_FUSION_DIRECTION_HISTORICAL_NULL_CAUSALITY_FORENSIC_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "capture",
+          "executed",
+          "execution",
+          "isolated",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T15:26:45.195422+00:00",
+        "size": 32317
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_PRICES_POST_STORE_SUBSCR_FINAL_DB_PARAMETER_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_PRICES_POST_STORE_SUBSCR_FINAL_DB_PARAMETER_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "execution",
+          "report",
+          "runtime"
+        ],
+        "mtime": "2026-08-23T00:05:04.465424+00:00",
+        "size": 29243
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_LOCALIZATION_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "FIND_FUTURE_PRICE_DOWNSTREAM_FIELD_RUNTIME_LOCALIZATION_FORENSIC_AUDIT_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "invocation",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T23:01:58.980301+00:00",
+        "size": 18884
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "SIGNAL_OUTCOME_RUNTIME_ENTRYPOINT_TO_FIND_FUTURE_PRICE_FORENSIC_AUDIT_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "capture",
+          "entrypoint",
+          "executed",
+          "execution",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:54:27.596873+00:00",
+        "size": 23595
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "relative_path": "SIGNAL_OUTCOME_RUNTIME_CALL_CHAIN_TRACE_FORENSIC_AUDIT_v0.1.py",
+        "score": 16,
+        "matched_terms": [
+          "entrypoint",
+          "executed",
+          "execution",
+          "output",
+          "runtime"
+        ],
+        "mtime": "2026-08-21T22:30:58.172695+00:00",
+        "size": 26061
+      }
+    ]
+  },
+  "runtime_provenance": {
+    "candidate_count": 7,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 120,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-24T17:39:24.732337+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "relative_path": "VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 117,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "output",
+          "report",
+          "capture",
+          "isolated"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-24T17:31:52.117490+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "relative_path": "HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 114,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "report",
+          "capture",
+          "isolated"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-24T17:35:22.682433+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 108,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-24T17:34:59.014421+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 108,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-24T17:31:20.274980+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 71,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-23T17:02:52.416966+00:00"
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 71,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "runtime_signal": true,
+        "mtime": "2026-08-23T16:54:08.642490+00:00"
+      }
+    ]
+  },
+  "json_forensics": {
+    "candidate_count": 3,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "valid_json": true,
+        "root_type": "dict",
+        "keys": [
+          "script",
+          "mode",
+          "timestamp_utc",
+          "target_report",
+          "target_producer",
+          "target_consumer",
+          "base_dir",
+          "production_source_modified",
+          "production_db_modified",
+          "network_access",
+          "eligibility_executed",
+          "report_reconstructed",
+          "synthetic_report_created",
+          "candidate_created",
+          "candidates",
+          "archive_candidates",
+          "exact_matches",
+          "schema_matches",
+          "recovery_candidates",
+          "recovery_staged",
+          "verdict",
+          "producer",
+          "filesystem_files_discovered",
+          "content_candidates",
+          "recovery_decision",
+          "runtime_seconds",
+          "forensic_report"
+        ],
+        "producer_reference": true,
+        "report_reference": true,
+        "eligibility_fields": [
+          "eligibility_executed"
+        ],
+        "snapshot_fields": [],
+        "pool_fields": [
+          "candidate_created",
+          "candidates",
+          "archive_candidates",
+          "recovery_candidates",
+          "content_candidates"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "valid_json": true,
+        "root_type": "dict",
+        "keys": [
+          "script",
+          "version",
+          "status",
+          "reason",
+          "project_root",
+          "target_frontier",
+          "target_frontier_sha256",
+          "candidate_count",
+          "candidates",
+          "production_modification",
+          "database_write",
+          "synthetic_report",
+          "network_access",
+          "timestamp_utc"
+        ],
+        "producer_reference": false,
+        "report_reference": false,
+        "eligibility_fields": [],
+        "snapshot_fields": [],
+        "pool_fields": [
+          "candidate_count",
+          "candidates"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "valid_json": true,
+        "root_type": "dict",
+        "keys": [
+          "script",
+          "version",
+          "mode",
+          "timestamp_started_utc",
+          "timestamp_finished_utc",
+          "project_root",
+          "target_report",
+          "target_producer_name",
+          "downstream_frontier",
+          "downstream_frontier_sha256_before",
+          "downstream_frontier_sha256_after",
+          "production_source_invariant",
+          "exact_report_artifacts",
+          "producer_candidates",
+          "producer_resolution",
+          "all_references",
+          "historical_artifacts",
+          "possible_report_artifacts",
+          "final_status",
+          "final_reason",
+          "safety",
+          "next_action"
+        ],
+        "producer_reference": true,
+        "report_reference": true,
+        "eligibility_fields": [],
+        "snapshot_fields": [],
+        "pool_fields": [
+          "producer_candidates"
+        ]
+      }
+    ]
+  },
+  "archive_forensics": {
+    "archive_count": 1,
+    "archives": [
+      {
+        "archive": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_BACKUP_20260818_003611.zip",
+        "relative_path": "_backups\\ArundaTrader_BACKUP_20260818_003611.zip",
+        "member_count": 108,
+        "exact_report_members": [],
+        "producer_members": [],
+        "provenance_members": [
+          "_report_block.txt"
+        ],
+        "archive_mtime": "2026-08-17T21:06:17.038665+00:00"
+      }
+    ]
+  },
+  "timeline": {
+    "candidate_count": 7,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "mtime": "2026-08-24T17:39:24.732337+00:00",
+        "size": 35825,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "relative_path": "HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "mtime": "2026-08-24T17:35:22.682433+00:00",
+        "size": 28812,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "mtime": "2026-08-24T17:34:59.014421+00:00",
+        "size": 34974,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "relative_path": "VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "mtime": "2026-08-24T17:31:52.117490+00:00",
+        "size": 56587,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "mtime": "2026-08-24T17:31:20.274980+00:00",
+        "size": 35913,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "mtime": "2026-08-23T17:02:52.416966+00:00",
+        "size": 24552,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "relative_path": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "mtime": "2026-08-23T16:54:08.642490+00:00",
+        "size": 21139,
+        "producer_reference": false,
+        "report_reference": true
+      }
+    ]
+  },
+  "decision": {
+    "status": "HISTORICAL_RUNTIME_REPORT_REFERENCE_FOUND",
+    "exact_artifact_present": false,
+    "archive_exact_artifact_present": false,
+    "historical_runtime_report_reference_found": true,
+    "historical_runtime_producer_reference_found": true
+  },
+  "integrity": {
+    "producer_sha256_before": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "producer_sha256_after": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "source_invariant": true
+  },
+  "recovery": {
+    "artifact_recovered": false,
+    "artifact_staged": false,
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "report_regenerated": false,
+    "synthetic_report_created": false
+  }
+}

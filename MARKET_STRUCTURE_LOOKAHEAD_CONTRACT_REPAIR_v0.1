@@ -1,0 +1,1588 @@
+"""
+ARUNDA TRADER — DEV-06
+MARKET_STRUCTURE_LOOKAHEAD_CONTRACT_REPAIR_v0.1
+
+MODE:
+    READ-ONLY FORENSIC CONTRACT AUDIT
+
+PURPOSE:
+    Audit and repair the look-ahead contract of
+    MARKET_STRUCTURE_ENGINE_v0.1.
+
+IMPORTANT:
+    - No database access
+    - No SQL
+    - No file writes
+    - No production-source modification
+    - No synthetic market data
+    - No interpolation
+    - No forward fill
+    - No back fill
+
+CORE CONTRACT:
+    A swing at index S becomes observable only at:
+
+        confirmation_index = S + right_bars
+
+    Therefore a structure point is usable at bar T only when:
+
+        confirmation_index <= T
+
+    The current engine incorrectly uses:
+
+        point.index < bar_index
+
+    which can expose an unconfirmed swing.
+
+TARGET:
+    MARKET_STRUCTURE_LOOKAHEAD_CONTRACT_REPAIR_v0.1
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Sequence
+import math
+
+
+ENGINE_NAME = "MARKET_STRUCTURE_LOOKAHEAD_CONTRACT_REPAIR_v0.1"
+
+DEFAULT_LEFT_BARS = 2
+DEFAULT_RIGHT_BARS = 2
+
+
+# ============================================================================
+# DATA MODELS
+# ============================================================================
+
+@dataclass(frozen=True)
+class MarketBar:
+    timestamp: Any
+    high: float
+    low: float
+    close: float
+    open: Optional[float] = None
+    volume: Optional[float] = None
+    cmc_id: Optional[int] = None
+    symbol: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class SwingPoint:
+    index: int
+    timestamp: Any
+    price: float
+    swing_type: str
+    confirmation_index: int
+    cmc_id: Optional[int] = None
+    symbol: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class StructurePoint:
+    index: int
+    timestamp: Any
+    price: float
+    swing_type: str
+    structure_type: str
+    previous_price: Optional[float]
+    confirmation_index: int
+    cmc_id: Optional[int] = None
+    symbol: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class StructureEvent:
+    index: int
+    timestamp: Any
+    event_type: str
+    direction: str
+    reference_price: float
+    broken_price: Optional[float]
+    broken_structure_index: Optional[int]
+    broken_confirmation_index: Optional[int]
+
+
+# ============================================================================
+# CONSTANTS
+# ============================================================================
+
+ALLOWED_SWING_TYPES = {
+    "SWING_HIGH",
+    "SWING_LOW",
+}
+
+ALLOWED_STRUCTURE_TYPES = {
+    "HH",
+    "HL",
+    "LH",
+    "LL",
+}
+
+ALLOWED_BREAK_TYPES = {
+    "BOS",
+    "CHoCH",
+}
+
+ALLOWED_DIRECTIONS = {
+    "BULLISH",
+    "BEARISH",
+}
+
+
+# ============================================================================
+# NUMERIC SAFETY
+# ============================================================================
+
+def finite(value: Any) -> bool:
+
+    try:
+        return math.isfinite(float(value))
+
+    except (
+        TypeError,
+        ValueError,
+    ):
+        return False
+
+
+def as_float(value: Any) -> float:
+
+    result = float(value)
+
+    if not math.isfinite(result):
+        raise ValueError(
+            f"Non-finite numeric value: {value}"
+        )
+
+    return result
+
+
+# ============================================================================
+# BAR VALIDATION
+# ============================================================================
+
+def validate_bar(
+    bar: Any,
+) -> MarketBar:
+
+    if isinstance(bar, MarketBar):
+
+        result = bar
+
+    elif isinstance(bar, dict):
+
+        required = (
+            "timestamp",
+            "high",
+            "low",
+            "close",
+        )
+
+        for field in required:
+
+            if field not in bar:
+
+                raise ValueError(
+                    f"Missing required field: {field}"
+                )
+
+        result = MarketBar(
+            timestamp=bar["timestamp"],
+            high=as_float(bar["high"]),
+            low=as_float(bar["low"]),
+            close=as_float(bar["close"]),
+            open=(
+                as_float(bar["open"])
+                if bar.get("open") is not None
+                else None
+            ),
+            volume=(
+                as_float(bar["volume"])
+                if bar.get("volume") is not None
+                else None
+            ),
+            cmc_id=bar.get("cmc_id"),
+            symbol=bar.get("symbol"),
+        )
+
+    else:
+
+        raise TypeError(
+            f"Unsupported bar type: {type(bar).__name__}"
+        )
+
+    if result.high < result.low:
+
+        raise ValueError(
+            f"high < low at {result.timestamp}"
+        )
+
+    if not finite(result.close):
+
+        raise ValueError(
+            f"Invalid close at {result.timestamp}"
+        )
+
+    return result
+
+
+def validate_bars(
+    bars: Sequence[Any],
+) -> List[MarketBar]:
+
+    if bars is None:
+
+        raise ValueError(
+            "bars cannot be None"
+        )
+
+    result = [
+        validate_bar(bar)
+        for bar in bars
+    ]
+
+    if len(result) < 3:
+
+        raise ValueError(
+            "At least 3 bars are required."
+        )
+
+    for i in range(1, len(result)):
+
+        previous = result[i - 1].timestamp
+        current = result[i].timestamp
+
+        try:
+
+            if current < previous:
+
+                raise ValueError(
+                    "Bars are not chronological."
+                )
+
+        except TypeError:
+
+            pass
+
+    return result
+
+
+# ============================================================================
+# SWING DETECTION
+# ============================================================================
+
+def is_swing_high(
+    bars: Sequence[MarketBar],
+    index: int,
+    left_bars: int,
+    right_bars: int,
+) -> bool:
+
+    if left_bars < 1 or right_bars < 1:
+
+        raise ValueError(
+            "left_bars/right_bars must be >= 1"
+        )
+
+    if index < left_bars:
+
+        return False
+
+    if index + right_bars >= len(bars):
+
+        return False
+
+    current = bars[index].high
+
+    left = bars[
+        index - left_bars:index
+    ]
+
+    right = bars[
+        index + 1:
+        index + right_bars + 1
+    ]
+
+    return (
+        all(current >= bar.high for bar in left)
+        and
+        all(current >= bar.high for bar in right)
+        and
+        (
+            any(current > bar.high for bar in left)
+            or
+            any(current > bar.high for bar in right)
+        )
+    )
+
+
+def is_swing_low(
+    bars: Sequence[MarketBar],
+    index: int,
+    left_bars: int,
+    right_bars: int,
+) -> bool:
+
+    if left_bars < 1 or right_bars < 1:
+
+        raise ValueError(
+            "left_bars/right_bars must be >= 1"
+        )
+
+    if index < left_bars:
+
+        return False
+
+    if index + right_bars >= len(bars):
+
+        return False
+
+    current = bars[index].low
+
+    left = bars[
+        index - left_bars:index
+    ]
+
+    right = bars[
+        index + 1:
+        index + right_bars + 1
+    ]
+
+    return (
+        all(current <= bar.low for bar in left)
+        and
+        all(current <= bar.low for bar in right)
+        and
+        (
+            any(current < bar.low for bar in left)
+            or
+            any(current < bar.low for bar in right)
+        )
+    )
+
+
+def detect_swings(
+    bars: Sequence[Any],
+    left_bars: int = DEFAULT_LEFT_BARS,
+    right_bars: int = DEFAULT_RIGHT_BARS,
+) -> List[SwingPoint]:
+
+    validated = validate_bars(bars)
+
+    result = []
+
+    for index, bar in enumerate(validated):
+
+        if is_swing_high(
+            validated,
+            index,
+            left_bars,
+            right_bars,
+        ):
+
+            result.append(
+                SwingPoint(
+                    index=index,
+                    timestamp=bar.timestamp,
+                    price=bar.high,
+                    swing_type="SWING_HIGH",
+                    confirmation_index=(
+                        index + right_bars
+                    ),
+                    cmc_id=bar.cmc_id,
+                    symbol=bar.symbol,
+                )
+            )
+
+        if is_swing_low(
+            validated,
+            index,
+            left_bars,
+            right_bars,
+        ):
+
+            result.append(
+                SwingPoint(
+                    index=index,
+                    timestamp=bar.timestamp,
+                    price=bar.low,
+                    swing_type="SWING_LOW",
+                    confirmation_index=(
+                        index + right_bars
+                    ),
+                    cmc_id=bar.cmc_id,
+                    symbol=bar.symbol,
+                )
+            )
+
+    result.sort(
+        key=lambda x: (
+            x.index,
+            0 if x.swing_type == "SWING_HIGH" else 1,
+        )
+    )
+
+    return result
+
+
+# ============================================================================
+# STRUCTURE CLASSIFICATION
+# ============================================================================
+
+def classify_structure(
+    swings: Sequence[SwingPoint],
+) -> List[StructurePoint]:
+
+    last_high = None
+    last_low = None
+
+    result = []
+
+    for swing in swings:
+
+        if swing.swing_type == "SWING_HIGH":
+
+            if last_high is None:
+
+                structure_type = None
+                previous_price = None
+
+            elif swing.price > last_high:
+
+                structure_type = "HH"
+                previous_price = last_high
+
+            else:
+
+                structure_type = "LH"
+                previous_price = last_high
+
+            last_high = swing.price
+
+        elif swing.swing_type == "SWING_LOW":
+
+            if last_low is None:
+
+                structure_type = None
+                previous_price = None
+
+            elif swing.price > last_low:
+
+                structure_type = "HL"
+                previous_price = last_low
+
+            else:
+
+                structure_type = "LL"
+                previous_price = last_low
+
+        else:
+
+            raise ValueError(
+                f"Unknown swing type: {swing.swing_type}"
+            )
+
+        if structure_type is not None:
+
+            result.append(
+                StructurePoint(
+                    index=swing.index,
+                    timestamp=swing.timestamp,
+                    price=swing.price,
+                    swing_type=swing.swing_type,
+                    structure_type=structure_type,
+                    previous_price=previous_price,
+                    confirmation_index=(
+                        swing.confirmation_index
+                    ),
+                    cmc_id=swing.cmc_id,
+                    symbol=swing.symbol,
+                )
+            )
+
+    return result
+
+
+# ============================================================================
+# REPAIRED LOOK-AHEAD CONTRACT
+# ============================================================================
+
+def confirmed_structure_points_at(
+    structure_points: Sequence[StructurePoint],
+    bar_index: int,
+) -> List[StructurePoint]:
+
+    """
+    REPAIRED CONTRACT.
+
+    A structure point is available only after its
+    confirmation window has completed.
+
+        confirmation_index <= bar_index
+    """
+
+    return [
+        point
+        for point in structure_points
+        if point.confirmation_index <= bar_index
+    ]
+
+
+# ============================================================================
+# LEGACY CONTRACT — AUDIT TARGET
+# ============================================================================
+
+def legacy_structure_points_at(
+    structure_points: Sequence[StructurePoint],
+    bar_index: int,
+) -> List[StructurePoint]:
+
+    """
+    Original v0.1 behavior.
+
+    This is intentionally preserved here only as an
+    audit reference.
+
+    It uses:
+
+        point.index < bar_index
+
+    instead of confirmation_index.
+    """
+
+    return [
+        point
+        for point in structure_points
+        if point.index < bar_index
+    ]
+
+
+# ============================================================================
+# INITIAL DIRECTION
+# ============================================================================
+
+def initial_direction(
+    structure_points: Sequence[StructurePoint],
+) -> str:
+
+    for point in reversed(structure_points):
+
+        if point.structure_type in {
+            "HH",
+            "HL",
+        }:
+
+            return "BULLISH"
+
+        if point.structure_type in {
+            "LH",
+            "LL",
+        }:
+
+            return "BEARISH"
+
+    return "NEUTRAL"
+
+
+# ============================================================================
+# REPAIRED EVENT ENGINE
+# ============================================================================
+
+def detect_structure_events(
+    bars: Sequence[Any],
+    structure_points: Sequence[StructurePoint],
+) -> List[StructureEvent]:
+
+    validated = validate_bars(bars)
+
+    if not structure_points:
+
+        return []
+
+    events = []
+
+    direction = initial_direction(
+        structure_points
+    )
+
+    broken_high_indices = set()
+    broken_low_indices = set()
+
+    for bar_index, bar in enumerate(validated):
+
+        available = confirmed_structure_points_at(
+            structure_points,
+            bar_index,
+        )
+
+        latest_high = None
+        latest_low = None
+
+        for point in available:
+
+            if point.swing_type == "SWING_HIGH":
+
+                latest_high = point
+
+            elif point.swing_type == "SWING_LOW":
+
+                latest_low = point
+
+        # --------------------------------------------------------
+        # BULLISH BREAK
+        # --------------------------------------------------------
+
+        if (
+            latest_high is not None
+            and
+            latest_high.index
+            not in broken_high_indices
+            and
+            bar.close > latest_high.price
+        ):
+
+            previous_direction = direction
+
+            event_type = (
+                "CHoCH"
+                if previous_direction == "BEARISH"
+                else "BOS"
+            )
+
+            direction = "BULLISH"
+
+            broken_high_indices.add(
+                latest_high.index
+            )
+
+            events.append(
+                StructureEvent(
+                    index=bar_index,
+                    timestamp=bar.timestamp,
+                    event_type=event_type,
+                    direction="BULLISH",
+                    reference_price=bar.close,
+                    broken_price=latest_high.price,
+                    broken_structure_index=(
+                        latest_high.index
+                    ),
+                    broken_confirmation_index=(
+                        latest_high.confirmation_index
+                    ),
+                )
+            )
+
+            continue
+
+        # --------------------------------------------------------
+        # BEARISH BREAK
+        # --------------------------------------------------------
+
+        if (
+            latest_low is not None
+            and
+            latest_low.index
+            not in broken_low_indices
+            and
+            bar.close < latest_low.price
+        ):
+
+            previous_direction = direction
+
+            event_type = (
+                "CHoCH"
+                if previous_direction == "BULLISH"
+                else "BOS"
+            )
+
+            direction = "BEARISH"
+
+            broken_low_indices.add(
+                latest_low.index
+            )
+
+            events.append(
+                StructureEvent(
+                    index=bar_index,
+                    timestamp=bar.timestamp,
+                    event_type=event_type,
+                    direction="BEARISH",
+                    reference_price=bar.close,
+                    broken_price=latest_low.price,
+                    broken_structure_index=(
+                        latest_low.index
+                    ),
+                    broken_confirmation_index=(
+                        latest_low.confirmation_index
+                    ),
+                )
+            )
+
+    return events
+
+
+# ============================================================================
+# FORENSIC AUDIT 1
+# ============================================================================
+# Every structure point must obey:
+#
+#     confirmation_index > index
+#     confirmation_index < len(bars)
+# ============================================================================
+
+def audit_swing_confirmation(
+    bars: Sequence[MarketBar],
+    swings: Sequence[SwingPoint],
+    right_bars: int,
+) -> Dict[str, Any]:
+
+    failures = []
+
+    for swing in swings:
+
+        expected = (
+            swing.index + right_bars
+        )
+
+        if swing.confirmation_index != expected:
+
+            failures.append(
+                {
+                    "index": swing.index,
+                    "reason": "INVALID_CONFIRMATION_INDEX",
+                    "actual": swing.confirmation_index,
+                    "expected": expected,
+                }
+            )
+
+        if swing.confirmation_index <= swing.index:
+
+            failures.append(
+                {
+                    "index": swing.index,
+                    "reason": "CONFIRMATION_NOT_AFTER_SWING",
+                }
+            )
+
+        if swing.confirmation_index >= len(bars):
+
+            failures.append(
+                {
+                    "index": swing.index,
+                    "reason": "CONFIRMATION_OUTSIDE_DATASET",
+                    "confirmation_index":
+                        swing.confirmation_index,
+                }
+            )
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+        "checked": len(swings),
+    }
+
+
+# ============================================================================
+# FORENSIC AUDIT 2
+# ============================================================================
+# Detects points exposed by the legacy contract before confirmation.
+# ============================================================================
+
+def audit_legacy_leakage(
+    structure_points: Sequence[StructurePoint],
+    bars_count: int,
+) -> Dict[str, Any]:
+
+    leaks = []
+
+    for bar_index in range(
+        bars_count
+    ):
+
+        legacy = legacy_structure_points_at(
+            structure_points,
+            bar_index,
+        )
+
+        repaired = confirmed_structure_points_at(
+            structure_points,
+            bar_index,
+        )
+
+        legacy_ids = {
+            point.index
+            for point in legacy
+        }
+
+        repaired_ids = {
+            point.index
+            for point in repaired
+        }
+
+        leaked = sorted(
+            legacy_ids - repaired_ids
+        )
+
+        for index in leaked:
+
+            point = next(
+                point
+                for point in structure_points
+                if point.index == index
+            )
+
+            leaks.append(
+                {
+                    "bar_index": bar_index,
+                    "structure_index": point.index,
+                    "confirmation_index":
+                        point.confirmation_index,
+                    "exposure_distance":
+                        point.confirmation_index
+                        - bar_index,
+                }
+            )
+
+    return {
+        "passed": not leaks,
+        "leak_count": len(leaks),
+        "leaks": leaks,
+    }
+
+
+# ============================================================================
+# FORENSIC AUDIT 3
+# ============================================================================
+# Repaired availability contract.
+# ============================================================================
+
+def audit_repaired_availability(
+    structure_points: Sequence[StructurePoint],
+    bars_count: int,
+) -> Dict[str, Any]:
+
+    failures = []
+
+    for bar_index in range(
+        bars_count
+    ):
+
+        available = confirmed_structure_points_at(
+            structure_points,
+            bar_index,
+        )
+
+        for point in available:
+
+            if point.confirmation_index > bar_index:
+
+                failures.append(
+                    {
+                        "bar_index": bar_index,
+                        "structure_index": point.index,
+                        "confirmation_index":
+                            point.confirmation_index,
+                    }
+                )
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+    }
+
+
+# ============================================================================
+# FORENSIC AUDIT 4
+# ============================================================================
+# Event-level temporal integrity.
+#
+# Every broken structure must have been confirmed
+# no later than the event bar.
+# ============================================================================
+
+def audit_event_temporal_integrity(
+    events: Sequence[StructureEvent],
+) -> Dict[str, Any]:
+
+    failures = []
+
+    for event in events:
+
+        if event.broken_confirmation_index is None:
+
+            failures.append(
+                {
+                    "event_index": event.index,
+                    "reason":
+                        "MISSING_BROKEN_CONFIRMATION_INDEX",
+                }
+            )
+
+            continue
+
+        if (
+            event.broken_confirmation_index
+            > event.index
+        ):
+
+            failures.append(
+                {
+                    "event_index": event.index,
+                    "reason":
+                        "EVENT_USES_UNCONFIRMED_STRUCTURE",
+                    "confirmation_index":
+                        event.broken_confirmation_index,
+                }
+            )
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+    }
+
+
+# ============================================================================
+# FORENSIC AUDIT 5
+# ============================================================================
+# End-of-series protection.
+#
+# No swing can be considered confirmed beyond
+# the available dataset.
+# ============================================================================
+
+def audit_end_of_series(
+    bars: Sequence[MarketBar],
+    swings: Sequence[SwingPoint],
+    right_bars: int,
+) -> Dict[str, Any]:
+
+    failures = []
+
+    last_index = len(bars) - 1
+
+    for swing in swings:
+
+        expected = (
+            swing.index + right_bars
+        )
+
+        if expected > last_index:
+
+            failures.append(
+                {
+                    "swing_index": swing.index,
+                    "confirmation_index": expected,
+                    "last_bar": last_index,
+                }
+            )
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+    }
+
+
+# ============================================================================
+# FORENSIC AUDIT 6
+# ============================================================================
+# Prefix stability test.
+#
+# Changing future bars after a confirmation boundary must
+# not alter whether an already-confirmed swing was confirmed.
+# ============================================================================
+
+def audit_confirmation_boundary(
+    bars: Sequence[MarketBar],
+    swings: Sequence[SwingPoint],
+    right_bars: int,
+) -> Dict[str, Any]:
+
+    failures = []
+
+    for swing in swings:
+
+        confirmation = swing.confirmation_index
+
+        if confirmation >= len(bars):
+
+            failures.append(
+                {
+                    "swing_index": swing.index,
+                    "reason":
+                        "CONFIRMATION_OUTSIDE_DATA",
+                }
+            )
+
+            continue
+
+        prefix = bars[
+            :confirmation + 1
+        ]
+
+        # The swing itself must be inside the prefix.
+        if swing.index >= len(prefix):
+
+            failures.append(
+                {
+                    "swing_index": swing.index,
+                    "confirmation_index": confirmation,
+                    "reason":
+                        "SWING_NOT_PRESENT_AT_CONFIRMATION",
+                }
+            )
+
+            continue
+
+        # Confirmation requires exactly right_bars
+        # bars after the swing.
+        if (
+            confirmation
+            != swing.index + right_bars
+        ):
+
+            failures.append(
+                {
+                    "swing_index": swing.index,
+                    "confirmation_index": confirmation,
+                    "reason":
+                        "BOUNDARY_MISMATCH",
+                }
+            )
+
+    return {
+        "passed": not failures,
+        "failures": failures,
+    }
+
+
+# ============================================================================
+# SYNTHETIC TEST DATA
+# ============================================================================
+#
+# This is TEST DATA ONLY.
+# It never enters production DB.
+# ============================================================================
+
+def build_test_bars() -> List[MarketBar]:
+
+    closes = [
+        100,
+        102,
+        105,
+        103,
+        101,
+        104,
+        108,
+        106,
+        103,
+        107,
+        112,
+        109,
+        106,
+        110,
+        115,
+        111,
+        108,
+        104,
+    ]
+
+    result = []
+
+    for index, close in enumerate(closes):
+
+        result.append(
+            MarketBar(
+                timestamp=index,
+                high=close + 1,
+                low=close - 1,
+                close=close,
+                cmc_id=1,
+                symbol="TEST",
+            )
+        )
+
+    return result
+
+
+# ============================================================================
+# SELF TEST
+# ============================================================================
+
+def self_test() -> bool:
+
+    bars = build_test_bars()
+
+    swings = detect_swings(
+        bars,
+        left_bars=2,
+        right_bars=2,
+    )
+
+    structures = classify_structure(
+        swings
+    )
+
+    # --------------------------------------------------------
+    # Basic swing contract
+    # --------------------------------------------------------
+
+    assert swings
+
+    for swing in swings:
+
+        assert (
+            swing.confirmation_index
+            ==
+            swing.index + 2
+        )
+
+        assert (
+            swing.confirmation_index
+            < len(bars)
+        )
+
+    # --------------------------------------------------------
+    # Audit confirmation
+    # --------------------------------------------------------
+
+    confirmation_audit = audit_swing_confirmation(
+        bars,
+        swings,
+        right_bars=2,
+    )
+
+    assert confirmation_audit["passed"]
+
+    # --------------------------------------------------------
+    # Legacy leakage MUST be detectable.
+    #
+    # This proves the audit can actually catch
+    # the original defect.
+    # --------------------------------------------------------
+
+    leakage_audit = audit_legacy_leakage(
+        structures,
+        len(bars),
+    )
+
+    assert leakage_audit["leak_count"] >= 0
+
+    # If structure exists, at least one early
+    # exposure is expected for normal right-bars.
+    if structures:
+
+        assert (
+            leakage_audit["leak_count"] > 0
+        )
+
+    # --------------------------------------------------------
+    # Repaired availability
+    # --------------------------------------------------------
+
+    availability_audit = audit_repaired_availability(
+        structures,
+        len(bars),
+    )
+
+    assert availability_audit["passed"]
+
+    # --------------------------------------------------------
+    # Event detection
+    # --------------------------------------------------------
+
+    events = detect_structure_events(
+        bars,
+        structures,
+    )
+
+    event_audit = audit_event_temporal_integrity(
+        events
+    )
+
+    assert event_audit["passed"]
+
+    # --------------------------------------------------------
+    # End-of-series
+    # --------------------------------------------------------
+
+    end_audit = audit_end_of_series(
+        bars,
+        swings,
+        right_bars=2,
+    )
+
+    assert end_audit["passed"]
+
+    # --------------------------------------------------------
+    # Confirmation boundary
+    # --------------------------------------------------------
+
+    boundary_audit = audit_confirmation_boundary(
+        bars,
+        swings,
+        right_bars=2,
+    )
+
+    assert boundary_audit["passed"]
+
+    # --------------------------------------------------------
+    # Explicit boundary checks
+    # --------------------------------------------------------
+
+    for point in structures:
+
+        before_confirmation = (
+            confirmed_structure_points_at(
+                structures,
+                point.confirmation_index - 1,
+            )
+        )
+
+        at_confirmation = (
+            confirmed_structure_points_at(
+                structures,
+                point.confirmation_index,
+            )
+        )
+
+        assert point not in (
+            before_confirmation
+        )
+
+        assert point in (
+            at_confirmation
+        )
+
+    return True
+
+
+# ============================================================================
+# REPORT
+# ============================================================================
+
+def print_report(
+    bars: Sequence[MarketBar],
+    swings: Sequence[SwingPoint],
+    structures: Sequence[StructurePoint],
+    events: Sequence[StructureEvent],
+    audits: Dict[str, Dict[str, Any]],
+) -> None:
+
+    print()
+    print("=" * 100)
+    print(
+        "ARUNDA TRADER — MARKET STRUCTURE LOOKAHEAD "
+        "CONTRACT REPAIR v0.1"
+    )
+    print("=" * 100)
+
+    print(
+        "MODE                : READ ONLY"
+    )
+
+    print(
+        "DATABASE             : NOT USED"
+    )
+
+    print(
+        "DATABASE WRITE       : NONE"
+    )
+
+    print(
+        "PRODUCTION MODIFIED  : NO"
+    )
+
+    print(
+        f"BARS                 : {len(bars)}"
+    )
+
+    print(
+        f"SWINGS               : {len(swings)}"
+    )
+
+    print(
+        f"STRUCTURE POINTS     : {len(structures)}"
+    )
+
+    print(
+        f"EVENTS               : {len(events)}"
+    )
+
+    print()
+    print("-" * 100)
+    print("AUDIT RESULTS")
+    print("-" * 100)
+
+    for name, audit in audits.items():
+
+        status = (
+            "PASS"
+            if audit["passed"]
+            else "FAIL"
+        )
+
+        print(
+            f"{name:<42} : {status}"
+        )
+
+        if (
+            "leak_count"
+            in audit
+        ):
+
+            print(
+                f"{'Legacy leakage count':<42} : "
+                f"{audit['leak_count']}"
+            )
+
+    print()
+    print("-" * 100)
+    print("CONFIRMATION CONTRACT")
+    print("-" * 100)
+
+    print(
+        "SWING AVAILABLE BEFORE CONFIRMATION : NO"
+    )
+
+    print(
+        "SWING AVAILABLE AT CONFIRMATION     : YES"
+    )
+
+    print(
+        "STRUCTURE AVAILABILITY RULE         : "
+        "confirmation_index <= bar_index"
+    )
+
+    print(
+        "LOOK-AHEAD WINDOW                   : "
+        "RIGHT_BARS ONLY"
+    )
+
+    print()
+    print("-" * 100)
+    print("EVENT TEMPORAL CONTRACT")
+    print("-" * 100)
+
+    for event in events[:10]:
+
+        print(
+            f"EVENT={event.index} | "
+            f"TYPE={event.event_type} | "
+            f"DIRECTION={event.direction} | "
+            f"BROKEN_INDEX={event.broken_structure_index} | "
+            f"CONFIRMED_AT={event.broken_confirmation_index}"
+        )
+
+    print()
+    print("=" * 100)
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+def main() -> int:
+
+    print("=" * 100)
+    print(
+        "ARUNDA TRADER — DEV-06"
+    )
+    print(
+        "MARKET_STRUCTURE_LOOKAHEAD_CONTRACT_REPAIR_v0.1"
+    )
+    print("=" * 100)
+
+    try:
+
+        # ----------------------------------------------------
+        # SELF TEST
+        # ----------------------------------------------------
+
+        print()
+        print(
+            "Running self-test..."
+        )
+
+        self_test()
+
+        print(
+            "SELF TEST : PASS"
+        )
+
+        # ----------------------------------------------------
+        # FORENSIC DATASET
+        # ----------------------------------------------------
+
+        bars = build_test_bars()
+
+        swings = detect_swings(
+            bars,
+            DEFAULT_LEFT_BARS,
+            DEFAULT_RIGHT_BARS,
+        )
+
+        structures = classify_structure(
+            swings
+        )
+
+        events = detect_structure_events(
+            bars,
+            structures,
+        )
+
+        # ----------------------------------------------------
+        # AUDITS
+        # ----------------------------------------------------
+
+        audits = {
+
+            "SWING_CONFIRMATION":
+                audit_swing_confirmation(
+                    bars,
+                    swings,
+                    DEFAULT_RIGHT_BARS,
+                ),
+
+            "LEGACY_LOOKAHEAD_LEAKAGE":
+                audit_legacy_leakage(
+                    structures,
+                    len(bars),
+                ),
+
+            "REPAIRED_AVAILABILITY":
+                audit_repaired_availability(
+                    structures,
+                    len(bars),
+                ),
+
+            "EVENT_TEMPORAL_INTEGRITY":
+                audit_event_temporal_integrity(
+                    events,
+                ),
+
+            "END_OF_SERIES_PROTECTION":
+                audit_end_of_series(
+                    bars,
+                    swings,
+                    DEFAULT_RIGHT_BARS,
+                ),
+
+            "CONFIRMATION_BOUNDARY":
+                audit_confirmation_boundary(
+                    bars,
+                    swings,
+                    DEFAULT_RIGHT_BARS,
+                ),
+        }
+
+        print_report(
+            bars,
+            swings,
+            structures,
+            events,
+            audits,
+        )
+
+        # ----------------------------------------------------
+        # FINAL CONTRACT
+        # ----------------------------------------------------
+
+        contract_audits = [
+            audit
+            for name, audit in audits.items()
+            if name != "LEGACY_LOOKAHEAD_LEAKAGE"
+        ]
+
+        repaired_contract_valid = all(
+            audit["passed"]
+            for audit in contract_audits
+        )
+
+        legacy_defect_detected = (
+            audits[
+                "LEGACY_LOOKAHEAD_LEAKAGE"
+            ]["leak_count"] > 0
+        )
+
+        print()
+        print("=" * 100)
+
+        if (
+            repaired_contract_valid
+            and legacy_defect_detected
+        ):
+
+            print(
+                "FINAL STATUS : "
+                "LOOKAHEAD CONTRACT REPAIR VERIFIED"
+            )
+
+            print(
+                "LEGACY DEFECT : CONFIRMED"
+            )
+
+            print(
+                "REPAIRED RULE : "
+                "confirmation_index <= bar_index"
+            )
+
+            print(
+                "FUTURE DATA LEAKAGE : "
+                "PROTECTED BY REPAIRED CONTRACT"
+            )
+
+            print(
+                "DATABASE ACCESS : NONE"
+            )
+
+            print(
+                "DATABASE WRITE : NONE"
+            )
+
+            print(
+                "PRODUCTION SOURCE : NOT MODIFIED"
+            )
+
+            print(
+                "STATUS : READY FOR INTEGRATION PATCH"
+            )
+
+            print("=" * 100)
+
+            return 0
+
+        print(
+            "FINAL STATUS : CONTRACT AUDIT FAILED"
+        )
+
+        print("=" * 100)
+
+        return 1
+
+    except Exception as exc:
+
+        print()
+        print("=" * 100)
+        print(
+            "FINAL STATUS : FAIL"
+        )
+
+        print(
+            f"{type(exc).__name__}: {exc}"
+        )
+
+        print("=" * 100)
+
+        raise
+
+
+# ============================================================================
+# ENTRY POINT
+# ============================================================================
+
+if __name__ == "__main__":
+
+    raise SystemExit(
+        main()
+    )

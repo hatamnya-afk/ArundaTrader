@@ -1,0 +1,1208 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_IDENTITY_FORENSIC_v0.1",
+  "cross_symbol": {
+    "all_symbols_exact": false,
+    "distinct_execution_fingerprints": 4,
+    "exact_match_symbols": 15,
+    "single_cross_symbol_execution_identity": false,
+    "total_symbols": 35
+  },
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "decision": "FORBIDDEN",
+  "execution_identity_columns": [
+    "source",
+    "engine_version"
+  ],
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_identities": 1,
+  "feature_symbols": [
+    "AAVE",
+    "ADA",
+    "ADX",
+    "ATR",
+    "AVAX",
+    "BLOCKED",
+    "BOLLINGER",
+    "BTC",
+    "CLOSE",
+    "DOGE",
+    "DOT",
+    "ETH",
+    "HIGH",
+    "ID",
+    "LINK",
+    "LOW",
+    "LTC",
+    "MACD",
+    "NEAR",
+    "OPEN",
+    "PRICE",
+    "RSI",
+    "SHIB",
+    "SNAPSHOT",
+    "SOL",
+    "SOURCE",
+    "SUI",
+    "SYMBOL",
+    "TIMEFRAME",
+    "TIMESTAMP",
+    "UNI",
+    "UNSUPPORTED",
+    "VOLATILITY",
+    "VOLUME",
+    "XRP"
+  ],
+  "feature_timestamp_candidates": 623,
+  "feature_timestamp_key_candidates": 150,
+  "feature_timestamps": [
+    "2026-08-23T13:39:16.730073+00:00"
+  ],
+  "forensic_status": "MARKET_DATA_PARTIAL_RUN_IDENTITY",
+  "market_data_inventory": {
+    "parseable_rows": 1795,
+    "raw_rows": 1795
+  },
+  "market_data_schema": {
+    "columns": [
+      "id",
+      "timestamp",
+      "symbol",
+      "timeframe",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "ema20",
+      "ema50",
+      "rsi14",
+      "macd",
+      "macd_signal",
+      "macd_hist",
+      "atr14",
+      "adx14",
+      "bb_middle",
+      "bb_upper",
+      "bb_lower",
+      "bb_width",
+      "volume_sma20",
+      "volume_ratio",
+      "volatility",
+      "technical_score",
+      "source",
+      "source_timestamp",
+      "price_change_1h",
+      "price_change_24h",
+      "market_cap",
+      "volume_24h",
+      "source_latency_ms",
+      "engine_version"
+    ],
+    "symbol_column": "symbol",
+    "timestamp_column": "timestamp"
+  },
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "outcome": "NOT CALCULATED",
+  "prediction": "FORBIDDEN",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "results": [
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "162a3b578b8490d6fd8042dc9c422a27948c95cd81968675028cae429df67dd4",
+        "892e6e1bff28f854e3eb8804d07c28f67e36e76d607c32b4acc973f1705ba5ab",
+        "bf45fa09bc198ec476b49cb42c5a897e7a17f37cc62c0ebe16eac583f66eec2a",
+        "bf4fad9f4fe006fcccc2b6fccae444c807935553b9020242621072fa53201178"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "162a3b578b8490d6fd8042dc9c422a27948c95cd81968675028cae429df67dd4",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "AAVE",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "135699afb4e61d0f15d09c386a7e46ccb15c42507c24b6d0a8b305d86a1fbae8",
+        "23a2bebca6206edaabe7ed38f7ef9d4dc6e3ff1dc77695a9f6f08d067e04250c",
+        "6f04de490f52e13fa143f63f5d0ef486b31006de3d069c4b368c0c8463593070",
+        "cdae269f7237fd97ecec8953c5abbcf015cef3e1ed40032a2bbcdb1d724957b5"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "cdae269f7237fd97ecec8953c5abbcf015cef3e1ed40032a2bbcdb1d724957b5",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "ADA",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "ADX",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "ATR",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "6dfce9d64c1a3fe2e7cfe07dde78a9fca979c7cce29586eb1b5a3032450942b3",
+        "9bb3295ac8abd66984db43d45f35189594599eea9148a6db11c5133eaec2dd91",
+        "d986db9487fe35d349da42754d1ec9fe42aff1da9b1b7df42c7fdbc3c46c814b",
+        "f5294108ca3ce4b3e1255cac12d7f728974eb28e8a24c02f02a956446bf57c25"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "9bb3295ac8abd66984db43d45f35189594599eea9148a6db11c5133eaec2dd91",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "AVAX",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "BLOCKED",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "BOLLINGER",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 127,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "66fd976ad502d863d507dd4f0755467490d4bce4fba06763320e5a171ec63887",
+        "69e3e9e23246a65a69d1056d8d4c91af4554bf98a342846abf24c75d7ce36a4a",
+        "6b14cd2f6960e24bb289329719124c778e7302cbefaa68bfe3a3c4597824dba7",
+        "99717624582fd63c804bf10bcc2c9815e263972f2921ee4f87e199e5fb1c97a8"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "69e3e9e23246a65a69d1056d8d4c91af4554bf98a342846abf24c75d7ce36a4a",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "BTC",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "CLOSE",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "a100e59a78cbe69f255ccdc080733793634b434b8f5c62e0004f1b31780f446c",
+        "e3cc5a6a6bc6d05f3499999b8911c7c0ab0586bde3aae92679964498c41e724b",
+        "eb9befc90ba8013d15ca8ecf12bb1cbae3878cc95bf00ff57903ea0b06cd56c9",
+        "f69cfbc5573fda0c8d71732f2cb9d6ddfe7b2124a343991ab4d0de81d6f71e01"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "f69cfbc5573fda0c8d71732f2cb9d6ddfe7b2124a343991ab4d0de81d6f71e01",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "DOGE",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "07062399fddad6bcaa423721fd82cee7a81e905599e9dd099c2760346b1c1e82",
+        "0740abb6bd764b6cbfb34d5e170813ec1dc93494852bc7e48bdf5c26fb8db23e",
+        "4a0659373731b0f9b783f35165c2f8e5aeb7d255aa45cb06127f505db9fe6d5c",
+        "a8147821570b1cf539704436347f2e10b125165348800b6ee97d1836255475c7"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "a8147821570b1cf539704436347f2e10b125165348800b6ee97d1836255475c7",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "DOT",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 127,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "089f0500667bf74198da768546590e5e5226bc31527cbee3e3c4f52e642cd25c",
+        "0d63ce6debe90aebef9dc7aa86ad5028059491a2fdd3f1188109b7ea868aa888",
+        "1b6c50c5149ddba719799f371b87e1640076054d6be4f150be856927d9dcf33c",
+        "e1e13f3a8ca426e38de5f646e7bc34f7d3729aafe66783cfbfe856ecdf45697c"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "0d63ce6debe90aebef9dc7aa86ad5028059491a2fdd3f1188109b7ea868aa888",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "ETH",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "HIGH",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "ID",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "38420225ac165f873ee0b2013213d658a01a75f6c6f62365e2627d010fc63ac8",
+        "418bd1171d082b4c2f2f4b201bec2925f880d8c03e46f5fc347ef7d0d46bb181",
+        "693b2ae79983d78ebc77025ab1eb78e74305e7d4a95e03e94b93da19e96fcb91",
+        "c5329eac5a68adcf557db5d977afecdc22433b847daea51af0b98ae7d4e726bc"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "418bd1171d082b4c2f2f4b201bec2925f880d8c03e46f5fc347ef7d0d46bb181",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "LINK",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "LOW",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "219176580e6fe8dd4c097e9733429c6d8622b35744801e3ba2c143fe9642e944",
+        "66cd72252a13e61b6e00931a428551827537fcdfbd7fc4d268c266e7260e4683",
+        "8a508e3acc9299da9537f776e829db0c2e948af704dec1b2902a81bd4f701ad7",
+        "ab400254e70b2186b7e9ee9223c8eb4b7482de0e79f151c48c029504cde15717"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "219176580e6fe8dd4c097e9733429c6d8622b35744801e3ba2c143fe9642e944",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "LTC",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "MACD",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "6ef262d5dcfa9b31592c324dec86e77f9ee62c80f8717a8bfc686a0716a14ea1",
+        "7a38eedb23153db8ab776842cd7339004354b0aedc89fc17b0488dae5bca310c",
+        "d8b2e79882c1b051f02c9f747b45c853f0bad237654fe501e33939ca8ad975ad",
+        "efcd9e98982363db8edf8656393db1870e007220565b30a7b28f963b3c722884"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "7a38eedb23153db8ab776842cd7339004354b0aedc89fc17b0488dae5bca310c",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "NEAR",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "OPEN",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "PRICE",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "RSI",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "2bb88f01f992a759e1125f46f708ff461d15c937f66c1343c28c572082eac124",
+        "a225a15f7ff70643084eada0aa773086922ba45bc90aba44193493e2f16cbff4",
+        "cbf2f47e9a81eeb8b4b7406fe7cecb279e8120e045a1ea056e9087f42381d2ac",
+        "f1100714b4f1ba22b9aec9f85a81de720c269d7f328d3035e6decb825e44294b"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "f1100714b4f1ba22b9aec9f85a81de720c269d7f328d3035e6decb825e44294b",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "SHIB",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "SNAPSHOT",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 127,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "4f22bb14584b683ecfe19b05fdad3c4ee5b40794b39298a57f50f5370ef3fb7b",
+        "685a2545433e5b431828afe3e06db384ac626f8af5e0698a6e35ff5e569dae49",
+        "b2066f04c4c3d9aa2388046ec54be0da08ce47082b2dc1837a22dd957e4db9b8",
+        "fc6597b0a13cc3fd34b42ae895442fecde426bee4823d9ba263c7dbabf6b0c18"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "fc6597b0a13cc3fd34b42ae895442fecde426bee4823d9ba263c7dbabf6b0c18",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "SOL",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "SOURCE",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "3d3247d6aebfc7d2b6d590f8e34c86d60d470c1e1fbe65268bf010f15699f106",
+        "6ff26dbf3dbef877990a018d3ebd22841a60c08d45d18500ee109460bcca82be",
+        "93c27c3d44223b06d96182f47222d67cd51f15e14951c77db41f49633f973872",
+        "e446d1d07d5d661e839b0df09738ff524c34099613f70ce3f591961a2ef2d3bb"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "6ff26dbf3dbef877990a018d3ebd22841a60c08d45d18500ee109460bcca82be",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "SUI",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "SYMBOL",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "TIMEFRAME",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "TIMESTAMP",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 117,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "44cbc883cc4f28417c0e4dcd4a3c1ebf23e85fd5667a87c7e25b119c0d83a404",
+        "d207e6ee4244864e2cb3dbcb15faededec98ac96fa903232487dc0e880e8b133",
+        "ddd642aeab242db7d89bde725f7c9b4099eff39d84067530c334e6844524e50d",
+        "e943e22e13d0231ec9a97470d5bc3aebbd569b31dde546a61c6af0b3d34dadbb"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "ddd642aeab242db7d89bde725f7c9b4099eff39d84067530c334e6844524e50d",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "UNI",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "UNSUPPORTED",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "VOLATILITY",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 0,
+      "exact_count": 0,
+      "exact_row_fingerprints": [],
+      "execution_groups": [],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": null,
+      "nearest_row_fingerprint": null,
+      "nearest_timestamp": null,
+      "status": "NO_SAME_SYMBOL_MARKET_DATA",
+      "symbol": "VOLUME",
+      "within_120_count": 0,
+      "within_300_count": 0,
+      "within_600_count": 0
+    },
+    {
+      "candidate_count": 127,
+      "exact_count": 4,
+      "exact_row_fingerprints": [
+        "0ea70e774cabe2e4d98bd977596e2ea3d8c65f3ff7c16c2f5413df62ccd2ad82",
+        "3ef497d3244b062c4e42c2d461ceaa4f2684edf106eae42fe2e19a80106950c8",
+        "65b227178c439a7fcfd8d5b9db808bb078b248221eab7553ae190fd6d01de96e",
+        "9b9b7eeda52013f58606982afdf3d85b0c2362310b92f71b14f435876ee1644d"
+      ],
+      "execution_groups": [
+        {
+          "count": 1,
+          "execution_fingerprint": "23a7de1420f720b1845fb68904184e7be52e32d81c2c2dc872f598b3f254bf21",
+          "values": {
+            "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+            "source": "COINMARKETCAP"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "771dc2c0a1e328675298ec677a0badfca0ea276c798edd5efce9e7c7dbb18bd4",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "835b5ec557f121a5e158ada4b841a23a95cc0ae41395225e28120970c1c6e723",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+          }
+        },
+        {
+          "count": 1,
+          "execution_fingerprint": "c16f4ef799b865ccc8f58e1abbcd095e1f317bfc4bcc3cc25806c3bfe8bb11ab",
+          "values": {
+            "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+            "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+          }
+        }
+      ],
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_delta_seconds": 0.0,
+      "nearest_row_fingerprint": "65b227178c439a7fcfd8d5b9db808bb078b248221eab7553ae190fd6d01de96e",
+      "nearest_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "EXACT_TIMESTAMP_MATCH",
+      "symbol": "XRP",
+      "within_120_count": 4,
+      "within_300_count": 4,
+      "within_600_count": 4
+    }
+  ],
+  "symbol_provenance": []
+}

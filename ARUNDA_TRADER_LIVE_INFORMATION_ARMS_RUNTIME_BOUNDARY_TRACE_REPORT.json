@@ -1,0 +1,1929 @@
+{
+  "project": "ArundaTrader",
+  "component": "LIVE_INFORMATION_ARMS_RUNTIME_BOUNDARY_TRACE",
+  "version": "v0.1",
+  "mode": "READ_ONLY",
+  "safety": {
+    "database_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "signal_creation": false,
+    "signal_injection": false,
+    "replay_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "artifact_mutation": false
+  },
+  "discovery": {
+    "python_files_scanned": 392,
+    "backups_excluded": true,
+    "syntax_invalid_files": 55
+  },
+  "arm_status": {
+    "news": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+    "technical": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+    "social": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+    "market": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+    "tradingview": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+    "fusion": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT"
+  },
+  "runtime_boundaries": {
+    "news": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 31,
+      "selected_candidates": [
+        {
+          "file": "news_adapter.py",
+          "matched_keywords": [
+            "article",
+            "feed",
+            "news",
+            "rss"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:generate_signal",
+            "function:generate_signal"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "urllib"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "connect(",
+            "get(",
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "sentiment_processing",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "catalyst_engine.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests",
+            "tradingview"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "requests.",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion"
+          ]
+        },
+        {
+          "file": "arunda_source_engine.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "urllib"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "api.",
+            "connect(",
+            "get(",
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "database_insert_reference",
+            "external_source",
+            "indicator_calculation",
+            "information_arm_candidate"
+          ]
+        },
+        {
+          "file": "LIVE_LAUNCH_HARNESS_v0.1.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "urllib"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "api.",
+            "connect(",
+            "get(",
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "fusion_engine.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "calculation",
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "audit_data_lineage.py",
+          "matched_keywords": [
+            "market_news",
+            "news",
+            "news_intelligence"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "market_history",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_LIVE_DATA_SOURCE_HEALTH_ARM_AVAILABILITY_CONTRACT_v0.1.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "get(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_FUSION_DIRECTION_WRITER_RUNTIME_BOUNDARY_FORENSIC_v0.1.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:start",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "get(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "indicator_calculation",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_FUSION_DIRECTION_ROW_LEVEL_HISTORICAL_PROVENANCE_FORENSIC_v0.1.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_FUSION_DIRECTION_PROVENANCE_FORENSIC_v0.1.py",
+          "matched_keywords": [
+            "news"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:start",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "indicator_calculation",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        }
+      ]
+    },
+    "technical": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 332,
+      "selected_candidates": [
+        {
+          "file": "step17_signal_scoring_audit.py",
+          "matched_keywords": [
+            "ema",
+            "rsi",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "aiohttp",
+            "ccxt",
+            "httpx",
+            "requests",
+            "socket",
+            "urllib",
+            "websocket"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "ccxt",
+            "get(",
+            "sqlite3",
+            "urllib",
+            "websocket"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step16_signal_validator_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15n_signal_final_architectural_consistency_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15m_signal_contract_engine_stress_resilience_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15k_signal_determinism_reproducibility_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15h_signal_end_to_end_behavioral_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15g_signal_contract_engine_integration_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "call:update",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "aiohttp",
+            "httpx",
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15f_signal_failure_mode_recovery_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15e_signal_output_consistency_cross_asset_contract_audit.py",
+          "matched_keywords": [
+            "ema",
+            "sma"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        }
+      ]
+    },
+    "social": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 16,
+      "selected_candidates": [
+        {
+          "file": "social_engine.py",
+          "matched_keywords": [
+            "engagement",
+            "lunarcrush",
+            "social",
+            "social_score",
+            "social_volume"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "requests.",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "news_adapter.py",
+          "matched_keywords": [
+            "sentiment"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:generate_signal",
+            "function:generate_signal"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "urllib"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "connect(",
+            "get(",
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "sentiment_processing",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "catalyst_engine.py",
+          "matched_keywords": [
+            "lunarcrush",
+            "social"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests",
+            "tradingview"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "requests.",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion"
+          ]
+        },
+        {
+          "file": "upgrade_db.py",
+          "matched_keywords": [
+            "engagement",
+            "lunarcrush",
+            "social",
+            "social_score",
+            "social_volume"
+          ],
+          "runtime_boundaries": [
+            "call:execute"
+          ],
+          "main_execution": false,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "audit_data_lineage.py",
+          "matched_keywords": [
+            "social"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "market_history",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_VERIFICATION_v0.1.py",
+          "matched_keywords": [
+            "engagement",
+            "lunar_crush",
+            "lunarcrush",
+            "sentiment",
+            "social",
+            "social_score",
+            "social_volume"
+          ],
+          "runtime_boundaries": [
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "newsapi",
+            "tradingview"
+          ],
+          "database_usage": [
+            "market_data"
+          ],
+          "data_access": [],
+          "roles": [
+            "data_fetch",
+            "indicator_calculation",
+            "information_arm_candidate",
+            "sentiment_processing",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "signal_performance.py",
+          "matched_keywords": [
+            "social",
+            "social_score"
+          ],
+          "runtime_boundaries": [
+            "call:execute"
+          ],
+          "main_execution": false,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "feature_integrity_audit.py",
+          "matched_keywords": [
+            "social",
+            "social_score"
+          ],
+          "runtime_boundaries": [
+            "call:execute"
+          ],
+          "main_execution": false,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "calibration_diagnostic.py",
+          "matched_keywords": [
+            "social",
+            "social_score"
+          ],
+          "runtime_boundaries": [
+            "call:execute"
+          ],
+          "main_execution": false,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "lunarcrush.py",
+          "matched_keywords": [
+            "lunarcrush"
+          ],
+          "runtime_boundaries": [],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests"
+          ],
+          "database_usage": [],
+          "data_access": [
+            "get(",
+            "requests."
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate"
+          ]
+        }
+      ]
+    },
+    "market": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 297,
+      "selected_candidates": [
+        {
+          "file": "step17_signal_scoring_audit.py",
+          "matched_keywords": [
+            "market",
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "aiohttp",
+            "ccxt",
+            "httpx",
+            "requests",
+            "socket",
+            "urllib",
+            "websocket"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "ccxt",
+            "get(",
+            "sqlite3",
+            "urllib",
+            "websocket"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step16_signal_validator_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15n_signal_final_architectural_consistency_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15m_signal_contract_engine_stress_resilience_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15k_signal_determinism_reproducibility_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15j_signal_temporal_consistency_sequence_integrity_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15h_signal_end_to_end_behavioral_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15g_signal_contract_engine_integration_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "call:update",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "aiohttp",
+            "httpx",
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "calculation",
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15f_signal_failure_mode_recovery_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "step15e_signal_output_consistency_cross_asset_contract_audit.py",
+          "matched_keywords": [
+            "price"
+          ],
+          "runtime_boundaries": [
+            "call:build_signal",
+            "call:main",
+            "function:build_signal",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "requests",
+            "socket",
+            "urllib"
+          ],
+          "database_usage": [
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "external_source",
+            "information_arm_candidate",
+            "signal_processing"
+          ]
+        }
+      ]
+    },
+    "tradingview": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 2,
+      "selected_candidates": [
+        {
+          "file": "catalyst_engine.py",
+          "matched_keywords": [
+            "tradingview"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests",
+            "tradingview"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "requests.",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion"
+          ]
+        },
+        {
+          "file": "ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_VERIFICATION_v0.1.py",
+          "matched_keywords": [
+            "trading_view",
+            "tradingview"
+          ],
+          "runtime_boundaries": [
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "newsapi",
+            "tradingview"
+          ],
+          "database_usage": [
+            "market_data"
+          ],
+          "data_access": [],
+          "roles": [
+            "data_fetch",
+            "indicator_calculation",
+            "information_arm_candidate",
+            "sentiment_processing",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        }
+      ]
+    },
+    "fusion": {
+      "status": "RUNTIME_BOUNDARY_FOUND_NETWORK_DEPENDENCY_PRESENT",
+      "candidate_count": 59,
+      "selected_candidates": [
+        {
+          "file": "catalyst_engine.py",
+          "matched_keywords": [
+            "fusion"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush",
+            "requests",
+            "tradingview"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "requests.",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion"
+          ]
+        },
+        {
+          "file": "LIVE_LAUNCH_HARNESS_v0.1.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [
+            "urllib"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "api.",
+            "connect(",
+            "get(",
+            "sqlite3",
+            "urllib"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "upgrade_db.py",
+          "matched_keywords": [
+            "fusion"
+          ],
+          "runtime_boundaries": [
+            "call:execute"
+          ],
+          "main_execution": false,
+          "syntax_valid": true,
+          "network_usage": [
+            "lunarcrush"
+          ],
+          "database_usage": [
+            "arunda.db",
+            "market_records",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "signal_outcome_engine.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:process_signals",
+            "function:main",
+            "function:process_signals"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "calculation",
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "external_source",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "fusion_engine.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "calculation",
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "formula_coverage_audit_v0.1.py",
+          "matched_keywords": [
+            "fusion"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "market_data",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "SELECT ",
+            "connect(",
+            "get(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_read",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "audit_data_lineage.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "market_data",
+            "market_history",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_POST_REPAIR_LAUNCH_GATE_v0.2.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "get(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_POST_REPAIR_LAUNCH_GATE_v0.1.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        },
+        {
+          "file": "OUTCOME_v0.3_LIVE_DATA_SOURCE_HEALTH_ARM_AVAILABILITY_CONTRACT_v0.1.py",
+          "matched_keywords": [
+            "fusion",
+            "fusion_signal",
+            "fusion_signals"
+          ],
+          "runtime_boundaries": [
+            "call:execute",
+            "call:main",
+            "call:update",
+            "function:main"
+          ],
+          "main_execution": true,
+          "syntax_valid": true,
+          "network_usage": [],
+          "database_usage": [
+            "arunda.db",
+            "fusion_signals",
+            "sqlite",
+            "sqlite3"
+          ],
+          "data_access": [
+            "INSERT ",
+            "SELECT ",
+            "UPDATE ",
+            "connect(",
+            "get(",
+            "sqlite3"
+          ],
+          "roles": [
+            "data_fetch",
+            "database_insert_reference",
+            "database_read",
+            "database_update_reference",
+            "information_arm_candidate",
+            "signal_fusion",
+            "signal_processing"
+          ]
+        }
+      ]
+    }
+  },
+  "important_trace_rule": "Candidate discovery does not constitute runtime verification. No producer, network source, exchange, signal creation, replay, or order execution was run.",
+  "final_verdict": {
+    "status": "BOUNDARIES_IDENTIFIED_RUNTIME_NOT_EXECUTED",
+    "verified": false,
+    "reason": "Actual source/runtime boundaries have been identified from project code only. Live runtime execution has intentionally not been performed on this frontier."
+  },
+  "next_stage": {
+    "status": "SELECT_EXACT_RUNTIME_ENTRYPOINT_PER_ARM",
+    "requires_network": false,
+    "requires_producer_execution": false
+  }
+}

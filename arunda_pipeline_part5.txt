@@ -1,0 +1,500 @@
+﻿                "Quantity transformation detected: "
+                f"{asset}.{flag}"
+            )
+```
+# -*- coding: utf-8 -*-
+
+"""
+ARUNDA TRADER â€” PIPELINE v1.0
+
+PRODUCTION FUSED-SCORE â†’ SCORE / DECISION BINDING
+FINAL ORDER-INTENT CONTRACT / PROVENANCE PREFLIGHT
+
+Architecture:
+MARKET SNAPSHOT
+â†“
+MARKET DATA
+â†“
+OPPORTUNITY
+â†“
+SIGNAL VALIDATION
+â†“
+FUSION v0.6
+â†“
+FUSED SCORE BINDING v0.1
+â†“
+SCORE
+â†“
+DECISION
+â†“
+RISK
+â†“
+CURRENT RUNTIME QUANTITY
+â†“
+TRADE GATE
+â†“
+MARKET REGIME
+â†“
+ORDER INTENT
+â†“
+CANONICAL ORDER REQUEST
+â†“
+QUANTITY OBSERVABILITY
+â†“
+EXECUTION BOUNDARY
+
+HARD SAFETY RULES:
+- EXECUTION_ENABLED = False
+- No exchange writes
+- No order submission
+- No database writes
+- No synthetic data
+- No interpolation
+- No fill
+- No backfill
+- No padding
+- No blending
+- Legacy market_technical forbidden
+- CLOSED layers are not reopened
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+import signal_validator
+import signal_scorer
+import decision_engine
+import risk_engine
+import trade_gate_engine
+import market_regime_engine
+import market_data_engine
+import exchange_execution_contract
+import fusion_engine
+import production_fused_score_binding_v0_1
+
+from exchange_execution_boundary import execute_order
+
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+PROJECT_DIR = Path(__file__).resolve().parent
+DB_PATH = PROJECT_DIR / "arunda.db"
+
+EXECUTION_ENABLED = False
+
+LAUNCH_TIMESTAMP = "2026-08-31T00:00:00+00:00"
+TIMEFRAME = "1h"
+
+EXPECTED_ASSETS = [
+    "BTC",
+    "ETH",
+    "SOL",
+    "XRP",
+    "ADA",
+    "DOGE",
+    "SHIB",
+    "LINK",
+    "AVAX",
+    "DOT",
+    "LTC",
+    "UNI",
+    "AAVE",
+    "SUI",
+    "NEAR",
+]
+
+EXPECTED_ASSET_SET = set(EXPECTED_ASSETS)
+
+
+# ============================================================================
+# ORDER-INTENT CONTRACT
+# ============================================================================
+
+CURRENT_ORDER_INTENT_REQUIRED_FIELDS = (
+    "asset",
+    "direction",
+    "entry_price",
+    "confidence",
+    "regime",
+    "timestamp",
+    "snapshot_id",
+    "intent_id",
+)
+
+CURRENT_ORDER_INTENT_FORBIDDEN_FIELDS = (
+    "signal_strength",
+    "data_quality",
+    "source_row_id",
+)
+
+VALID_DIRECTIONS = {
+    "LONG",
+    "SHORT",
+}
+
+TRADE_READY_STATUS = "TRADE_READY"
+ELIGIBLE_STATUS = "ELIGIBLE"
+
+ACTIONABLE_DECISIONS = {
+    "TRADE",
+    "BUY",
+    "SELL",
+    "LONG",
+    "SHORT",
+    "ACTIONABLE",
+}
+
+APPROVED_RISK_STATUSES = {
+    "ACCEPTED",
+    "APPROVED",
+    "PASS",
+}
+
+POSITION_QUANTITY_SOURCE = "POSITION_SIZING.position_size"
+POSITION_QUANTITY_UNIT = "BASE_ASSET"
+
+CANONICAL_QUANTITY_SOURCE = "RISK.position_quantity"
+CANONICAL_QUANTITY_UNIT = "BASE_ASSET"
+
+
+# ============================================================================
+# RUNTIME ORDER INTENT
+# ============================================================================
+
+class RuntimeOrderIntent(dict):
+    """
+    Visible ORDER_INTENT contract remains exactly eight fields.
+
+    Quantity observability is runtime-only metadata and is intentionally
+    excluded from the visible dict contract.
+    """
+
+    def __init__(
+        self,
+        *,
+        quantity,
+        quantity_unit,
+        quantity_source,
+        asset,
+        direction,
+        entry_price,
+        confidence,
+        regime,
+        timestamp,
+        snapshot_id,
+        intent_id,
+    ):
+        super().__init__(
+            asset=asset,
+            direction=direction,
+            entry_price=entry_price,
+            confidence=confidence,
+            regime=regime,
+            timestamp=timestamp,
+            snapshot_id=snapshot_id,
+            intent_id=intent_id,
+        )
+
+        self.quantity = quantity
+        self.quantity_unit = quantity_unit
+        self.quantity_source = quantity_source
+
+        self.quantity_changed = False
+        self.quantity_recomputed = False
+        self.quantity_rescaled = False
+        self.quantity_rounded = False
+        self.quantity_clipped = False
+
+
+# ============================================================================
+# GENERIC HELPERS
+# ============================================================================
+
+def fail(message: str) -> None:
+    raise RuntimeError(message)
+
+
+def utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def normalize_asset(value: Any) -> str | None:
+    if value is None:
+        return None
+
+    text = str(value).strip().upper()
+
+    if not text:
+        return None
+
+    return text
+
+
+def normalize_status(value: Any) -> str | None:
+    if value is None:
+        return None
+
+    text = str(value).strip().upper()
+
+    if not text:
+        return None
+
+    return text
+
+
+def get_row_value(row: Any, *keys: str) -> Any:
+    if not isinstance(row, dict):
+        return None
+
+    for key in keys:
+        if key in row:
+            return row[key]
+
+    return None
+
+
+def ensure_dict(value: Any, name: str) -> dict:
+    if not isinstance(value, dict):
+        fail(f"{name} must be a dict")
+
+    return value
+
+
+def ensure_list(value: Any, name: str) -> list:
+    if not isinstance(value, list):
+        fail(f"{name} must be a list")
+
+    return value
+
+
+def is_finite_number(value: Any) -> bool:
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(float(value))
+    )
+
+
+# ============================================================================
+# SUBPROCESS
+# ============================================================================
+
+def run_script(script_name: str) -> str:
+    script_path = PROJECT_DIR / script_name
+
+    if not script_path.exists():
+        fail(
+            "Required production script not found: "
+            f"{script_path}"
+        )
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(script_path),
+        ],
+        cwd=str(PROJECT_DIR),
+        capture_output=True,
+        text=True,
+    )
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Production subprocess failed: {script_name}"
+            f"\nSTDOUT:\n{result.stdout}"
+            f"\nSTDERR:\n{result.stderr}"
+        )
+
+    return result.stdout
+
+
+# ============================================================================
+# MARKER PARSER
+# ============================================================================
+
+def extract_marker_payload(
+    output: str,
+    marker: str,
+) -> dict:
+    matches = []
+
+    for line in output.splitlines():
+        if line.startswith(marker):
+            payload = line[len(marker):].strip()
+
+            if payload:
+                matches.append(payload)
+
+    if not matches:
+        fail(
+            "Required runtime marker not found: "
+            f"{marker}"
+        )
+
+    if len(matches) != 1:
+        fail(
+            "Runtime marker must appear exactly once: "
+            f"{marker} | count={len(matches)}"
+        )
+
+    try:
+        value = json.loads(matches[0])
+    except json.JSONDecodeError as exc:
+        fail(
+            f"Invalid JSON payload for marker "
+            f"{marker}: {exc}"
+        )
+
+    if not isinstance(value, dict):
+        fail(
+            "Runtime marker payload must be dict: "
+            f"{marker}"
+        )
+
+    return value
+
+
+# ============================================================================
+# MARKET SNAPSHOT
+# ============================================================================
+
+def parse_market_runtime_snapshot(
+    output: str,
+) -> dict:
+    snapshot = extract_marker_payload(
+        output,
+        "ARUNDA_CURRENT_RUNTIME_SNAPSHOT=",
+    )
+
+    if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
+        fail(
+            "Market snapshot is not from current subprocess run"
+        )
+
+    if not snapshot.get("engine_version"):
+        fail(
+            "Market snapshot engine_version missing"
+        )
+
+    if snapshot.get("source") != "COINMARKETCAP":
+        fail(
+            "Market snapshot source is not COINMARKETCAP"
+        )
+
+    if snapshot.get("timeframe") != "SNAPSHOT":
+        fail(
+            "Market snapshot timeframe is not SNAPSHOT"
+        )
+
+    timestamp = snapshot.get("timestamp")
+
+    if not timestamp:
+        fail(
+            "Market snapshot timestamp missing"
+        )
+
+    assets = snapshot.get("assets")
+
+    if not isinstance(assets, list):
+        fail(
+            "Market snapshot assets must be list"
+        )
+
+    if len(assets) != len(EXPECTED_ASSETS):
+        fail(
+            "Market snapshot asset count mismatch"
+        )
+
+    seen = set()
+
+    for row in assets:
+        if not isinstance(row, dict):
+            fail(
+                "Market snapshot asset row must be dict"
+            )
+
+        asset = normalize_asset(row.get("asset"))
+
+        if asset is None:
+            fail(
+                "Market snapshot asset missing"
+            )
+
+        if asset in seen:
+            fail(
+                f"Duplicate market snapshot asset: {asset}"
+            )
+
+        seen.add(asset)
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Unexpected production asset: {asset}"
+            )
+
+        if row.get("timestamp") != timestamp:
+            fail(
+                f"Market snapshot timestamp mismatch: {asset}"
+            )
+
+        if row.get("price") is None:
+            fail(
+                f"Market snapshot price missing: {asset}"
+            )
+
+    if seen != EXPECTED_ASSET_SET:
+        fail(
+            "Market snapshot exact coverage failed"
+        )
+
+    return snapshot
+
+
+def build_runtime_snapshot_id(
+    snapshot: dict,
+) -> str:
+    canonical_assets = []
+
+    for row in snapshot["assets"]:
+        canonical_assets.append(
+            {
+                "asset": normalize_asset(row["asset"]),
+                "timestamp": row["timestamp"],
+                "price": row["price"],
+                "change_1h": row.get("change_1h"),
+                "change_24h": row.get("change_24h"),
+                "market_cap": row.get("market_cap"),
+                "volume_24h": row.get("volume_24h"),
+            }
+        )
+
+    canonical_assets.sort(
+        key=lambda x: x["asset"]
+    )
+
+    payload = {
+        "timestamp": snapshot["timestamp"],
+        "assets": canonical_assets,
+    }
+
+    canonical_json = json.dumps(
+        payload,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+
+    digest = hashlib.sha256(
+        canonical_json.encode("utf-8")
+    ).hexdigest()
+

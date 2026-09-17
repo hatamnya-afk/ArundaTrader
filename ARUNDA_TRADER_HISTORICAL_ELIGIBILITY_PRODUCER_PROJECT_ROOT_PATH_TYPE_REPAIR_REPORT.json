@@ -1,0 +1,35 @@
+{
+  "forensic": {
+    "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_PROJECT_ROOT_PATH_TYPE_REPAIR_v0.1",
+    "mode": "CONTROLLED SOURCE REPAIR"
+  },
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "target": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "before": {
+    "sha256": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074",
+    "syntax_valid": true,
+    "project_root_type": "STRING",
+    "runtime_failure": "TypeError: unsupported operand type(s) for /: 'str' and 'str'"
+  },
+  "repair": {
+    "type": "PROJECT_ROOT_PATH_TYPE_REPAIR",
+    "old_expression": "PROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"",
+    "new_expression": "PROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")",
+    "applied": true
+  },
+  "after": {
+    "sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "syntax_valid": true,
+    "project_root_type": "PATHLIB_PATH",
+    "report_path_compatible": true
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE",
+    "source_modified": true
+  },
+  "verdict": "PROJECT_ROOT_PATH_TYPE_REPAIR_APPLIED_VERIFIED",
+  "backup": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_PRE_PROJECT_ROOT_PATH_TYPE_REPAIR_20260824_220248.py"
+}

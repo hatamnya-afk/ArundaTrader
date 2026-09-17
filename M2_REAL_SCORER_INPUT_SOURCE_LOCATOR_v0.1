@@ -1,0 +1,1520 @@
+import ast
+import inspect
+import os
+import sqlite3
+from pathlib import Path
+
+
+# =============================================================================
+# ARUNDA TRADER — M2
+# REAL SCORER INPUT SOURCE LOCATOR v0.1
+# =============================================================================
+#
+# PURPOSE
+# -------
+# Locate and verify the REAL production sources required by:
+#
+#     signal_scorer.calculate_score(
+#         direction,
+#         feature_record,
+#         structural_state,
+#         regime_data
+#     )
+#
+# TARGET DEPENDENCIES
+# -------------------
+#     1. feature_record
+#     2. structural_state
+#     3. regime_data
+#
+# RULES
+# -----
+# - READ ONLY
+# - NO DATABASE WRITE
+# - NO PRODUCTION MODIFICATION
+# - NO SYNTHETIC DATA
+# - NO RECONSTRUCTION
+# - NO INTERPOLATION
+# - NO FORWARD FILL
+# - NO BACK FILL
+# - NO SCORE CALCULATION
+# - NO DECISION
+# - NO PREDICTION
+# - NO EXECUTION
+#
+# IMPORTANT
+# ---------
+# This script is a locator / dependency resolver only.
+#
+# It must identify the REAL production path already used by
+# signal_scorer.py.
+#
+# =============================================================================
+
+
+ENGINE_VERSION = "M2_REAL_SCORER_INPUT_SOURCE_LOCATOR_v0.1"
+
+PROJECT_DIR = Path(
+    __file__
+).resolve().parent
+
+
+SIGNAL_SCORER_FILE = (
+    PROJECT_DIR
+    / "signal_scorer.py"
+)
+
+FEATURE_CONTRACT_FILE = (
+    PROJECT_DIR
+    / "feature_contract.py"
+)
+
+MARKET_STATE_ENGINE_FILE = (
+    PROJECT_DIR
+    / "market_state_engine.py"
+)
+
+MARKET_REGIME_CONTRACT_FILE = (
+    PROJECT_DIR
+    / "market_regime_contract.py"
+)
+
+FEATURE_ENGINE_FILE = (
+    PROJECT_DIR
+    / "feature_engine.py"
+)
+
+SIGNAL_ENGINE_FILE = (
+    PROJECT_DIR
+    / "signal_engine.py"
+)
+
+
+# =============================================================================
+# TERMINAL HELPERS
+# =============================================================================
+
+def line(char="=", length=100):
+    print(char * length)
+
+
+def fail(message):
+    raise RuntimeError(message)
+
+
+def read_text(path):
+    if not path.exists():
+        fail(
+            f"REQUIRED FILE NOT FOUND: {path}"
+        )
+
+    return path.read_text(
+        encoding="utf-8-sig"
+    )
+
+
+def print_context(
+    path,
+    source_lines,
+    line_number,
+    radius=5
+):
+    """
+    Print source context around a discovered line.
+    """
+
+    start = max(
+        1,
+        line_number - radius
+    )
+
+    end = min(
+        len(source_lines),
+        line_number + radius
+    )
+
+    for number in range(
+        start,
+        end + 1
+    ):
+        marker = (
+            ">>"
+            if number == line_number
+            else "  "
+        )
+
+        print(
+            f"{marker} "
+            f"{number:>5} | "
+            f"{source_lines[number - 1]}"
+        )
+
+
+# =============================================================================
+# AST HELPERS
+# =============================================================================
+
+def parse_tree(path):
+    text = read_text(path)
+
+    try:
+        return ast.parse(
+            text,
+            filename=str(path)
+        )
+
+    except SyntaxError as exc:
+        fail(
+            f"SYNTAX ERROR IN {path}: "
+            f"{exc}"
+        )
+
+
+def find_function(
+    tree,
+    function_name
+):
+    matches = []
+
+    for node in ast.walk(tree):
+
+        if isinstance(
+            node,
+            (
+                ast.FunctionDef,
+                ast.AsyncFunctionDef,
+            )
+        ):
+
+            if node.name == function_name:
+
+                matches.append(
+                    node
+                )
+
+    return matches
+
+
+def find_imports(
+    tree
+):
+    imports = []
+
+    for node in ast.walk(tree):
+
+        if isinstance(
+            node,
+            ast.Import
+        ):
+
+            for alias in node.names:
+
+                imports.append(
+                    alias.name
+                )
+
+        elif isinstance(
+            node,
+            ast.ImportFrom
+        ):
+
+            if node.module:
+
+                imports.append(
+                    node.module
+                )
+
+    return imports
+
+
+def find_name_references(
+    tree,
+    target_names
+):
+    found = []
+
+    for node in ast.walk(tree):
+
+        if isinstance(
+            node,
+            ast.Name
+        ):
+
+            if node.id in target_names:
+
+                found.append(
+                    (
+                        node.id,
+                        getattr(
+                            node,
+                            "lineno",
+                            None
+                        )
+                    )
+                )
+
+    return found
+
+
+def find_call_references(
+    tree,
+    function_names
+):
+    found = []
+
+    for node in ast.walk(tree):
+
+        if not isinstance(
+            node,
+            ast.Call
+        ):
+            continue
+
+        function_name = None
+
+        if isinstance(
+            node.func,
+            ast.Name
+        ):
+
+            function_name = (
+                node.func.id
+            )
+
+        elif isinstance(
+            node.func,
+            ast.Attribute
+        ):
+
+            function_name = (
+                node.func.attr
+            )
+
+        if function_name in function_names:
+
+            found.append(
+                (
+                    function_name,
+                    getattr(
+                        node,
+                        "lineno",
+                        None
+                    )
+                )
+            )
+
+    return found
+
+
+# =============================================================================
+# FILE / FUNCTION VERIFICATION
+# =============================================================================
+
+def verify_file(
+    path,
+    label
+):
+
+    print(
+        f"{label:<30}: "
+        f"{path}"
+    )
+
+    if not path.exists():
+
+        print(
+            " " * 30
+            + "STATUS : NOT FOUND"
+        )
+
+        return False
+
+    print(
+        " " * 30
+        + "STATUS : FOUND"
+    )
+
+    return True
+
+
+def verify_function(
+    path,
+    function_name,
+    label
+):
+
+    tree = parse_tree(
+        path
+    )
+
+    matches = find_function(
+        tree,
+        function_name
+    )
+
+    if not matches:
+
+        print(
+            f"{label:<30}: "
+            f"{function_name} "
+            f"NOT FOUND"
+        )
+
+        return False
+
+    if len(matches) > 1:
+
+        print(
+            f"{label:<30}: "
+            f"AMBIGUOUS "
+            f"({len(matches)} definitions)"
+        )
+
+        return False
+
+    node = matches[0]
+
+    print(
+        f"{label:<30}: "
+        f"{function_name} "
+        f"FOUND @ LINE {node.lineno}"
+    )
+
+    return True
+
+
+# =============================================================================
+# SIGNAL SCORER ANALYSIS
+# =============================================================================
+
+def inspect_signal_scorer():
+
+    print()
+    line("-")
+    print(
+        "SIGNAL SCORER DEPENDENCY ANALYSIS"
+    )
+    line("-")
+
+    if not SIGNAL_SCORER_FILE.exists():
+
+        fail(
+            "signal_scorer.py not found."
+        )
+
+    text = read_text(
+        SIGNAL_SCORER_FILE
+    )
+
+    source_lines = text.splitlines()
+
+    tree = parse_tree(
+        SIGNAL_SCORER_FILE
+    )
+
+    # -------------------------------------------------------------------------
+    # calculate_score
+    # -------------------------------------------------------------------------
+
+    calculate_matches = find_function(
+        tree,
+        "calculate_score"
+    )
+
+    if len(calculate_matches) != 1:
+
+        fail(
+            "calculate_score resolution is "
+            "not deterministic."
+        )
+
+    calculate_node = (
+        calculate_matches[0]
+    )
+
+    calculate_args = [
+        arg.arg
+        for arg in (
+            calculate_node.args.args
+        )
+    ]
+
+    print(
+        f"calculate_score line : "
+        f"{calculate_node.lineno}"
+    )
+
+    print(
+        "Arguments            : "
+        f"{', '.join(calculate_args)}"
+    )
+
+    required_arguments = {
+        "direction",
+        "feature_record",
+        "structural_state",
+        "regime_data",
+    }
+
+    if not required_arguments.issubset(
+        set(calculate_args)
+    ):
+
+        fail(
+            "calculate_score argument contract "
+            "does not match expected production contract."
+        )
+
+    # -------------------------------------------------------------------------
+    # load_scores
+    # -------------------------------------------------------------------------
+
+    load_matches = find_function(
+        tree,
+        "load_scores"
+    )
+
+    if len(load_matches) != 1:
+
+        fail(
+            "load_scores resolution is "
+            "not deterministic."
+        )
+
+    load_node = load_matches[0]
+
+    print(
+        f"load_scores line      : "
+        f"{load_node.lineno}"
+    )
+
+    load_calls = find_call_references(
+        tree,
+        {
+            "load_features",
+            "load_structural_states",
+            "load_regimes",
+            "calculate_score",
+            "extract_latest_feature_record",
+        }
+    )
+
+    print()
+    print(
+        "Production dependency calls:"
+    )
+
+    for function_name, line_number in sorted(
+        load_calls,
+        key=lambda item: (
+            item[1] or 0,
+            item[0],
+        )
+    ):
+
+        print(
+            f"  {function_name:<35}"
+            f"LINE {line_number}"
+        )
+
+    # -------------------------------------------------------------------------
+    # Imports
+    # -------------------------------------------------------------------------
+
+    imports = find_imports(
+        tree
+    )
+
+    print()
+    print(
+        "Relevant imported modules:"
+    )
+
+    relevant_modules = [
+        item
+        for item in imports
+        if item in {
+            "feature_contract",
+            "market_regime_contract",
+            "market_state_engine",
+            "feature_engine",
+            "signal_engine",
+        }
+    ]
+
+    for module in sorted(
+        set(relevant_modules)
+    ):
+
+        print(
+            f"  {module}"
+        )
+
+    # -------------------------------------------------------------------------
+    # Context around load_features / load_regimes / structural loader
+    # -------------------------------------------------------------------------
+
+    print()
+    print(
+        "SOURCE CONTEXT"
+    )
+
+    for function_name in (
+        "load_features",
+        "load_structural_states",
+        "load_regimes",
+        "extract_latest_feature_record",
+        "load_scores",
+    ):
+
+        matches = find_function(
+            tree,
+            function_name
+        )
+
+        if not matches:
+            continue
+
+        node = matches[0]
+
+        print()
+        print(
+            f"[{function_name}] "
+            f"LINE {node.lineno}"
+        )
+
+        print_context(
+            SIGNAL_SCORER_FILE,
+            source_lines,
+            node.lineno,
+            radius=4
+        )
+
+    return {
+        "calculate_score_line":
+            calculate_node.lineno,
+        "load_scores_line":
+            load_node.lineno,
+        "calculate_args":
+            calculate_args,
+    }
+
+
+# =============================================================================
+# FEATURE SOURCE
+# =============================================================================
+
+def locate_feature_source():
+
+    print()
+    line("-")
+    print(
+        "1. REAL FEATURE SOURCE"
+    )
+    line("-")
+
+    if not SIGNAL_SCORER_FILE.exists():
+
+        fail(
+            "signal_scorer.py not found."
+        )
+
+    tree = parse_tree(
+        SIGNAL_SCORER_FILE
+    )
+
+    source_lines = read_text(
+        SIGNAL_SCORER_FILE
+    ).splitlines()
+
+    # -------------------------------------------------------------------------
+    # load_features
+    # -------------------------------------------------------------------------
+
+    matches = find_function(
+        tree,
+        "load_features"
+    )
+
+    if len(matches) != 1:
+
+        fail(
+            "Cannot deterministically resolve "
+            "signal_scorer.load_features()."
+        )
+
+    node = matches[0]
+
+    print(
+        f"signal_scorer.load_features "
+        f"@ line {node.lineno}"
+    )
+
+    print_context(
+        SIGNAL_SCORER_FILE,
+        source_lines,
+        node.lineno,
+        radius=7
+    )
+
+    # -------------------------------------------------------------------------
+    # feature contract
+    # -------------------------------------------------------------------------
+
+    if not FEATURE_CONTRACT_FILE.exists():
+
+        print()
+        print(
+            "FEATURE CONTRACT : NOT FOUND"
+        )
+
+    else:
+
+        feature_tree = parse_tree(
+            FEATURE_CONTRACT_FILE
+        )
+
+        feature_loader_names = {
+            "load_feature_snapshot",
+            "validate_feature_snapshot",
+        }
+
+        print()
+        print(
+            "Feature-contract functions:"
+        )
+
+        for function_name in sorted(
+            feature_loader_names
+        ):
+
+            functions = find_function(
+                feature_tree,
+                function_name
+            )
+
+            for function in functions:
+
+                print(
+                    f"  {function_name:<35}"
+                    f"LINE {function.lineno}"
+                )
+
+    # -------------------------------------------------------------------------
+    # feature engine
+    # -------------------------------------------------------------------------
+
+    if FEATURE_ENGINE_FILE.exists():
+
+        feature_tree = parse_tree(
+            FEATURE_ENGINE_FILE
+        )
+
+        print()
+        print(
+            "Feature-engine candidate functions:"
+        )
+
+        for function_name in (
+            "build_features",
+            "calculate_features",
+            "calculate_feature_records",
+            "load_features",
+            "build_all",
+        ):
+
+            functions = find_function(
+                feature_tree,
+                function_name
+            )
+
+            for function in functions:
+
+                print(
+                    f"  {function_name:<35}"
+                    f"LINE {function.lineno}"
+                )
+
+    return True
+
+
+# =============================================================================
+# STRUCTURAL SOURCE
+# =============================================================================
+
+def locate_structural_source():
+
+    print()
+    line("-")
+    print(
+        "2. REAL STRUCTURAL STATE SOURCE"
+    )
+    line("-")
+
+    if not MARKET_STATE_ENGINE_FILE.exists():
+
+        fail(
+            "market_state_engine.py not found."
+        )
+
+    tree = parse_tree(
+        MARKET_STATE_ENGINE_FILE
+    )
+
+    functions = find_function(
+        tree,
+        "load_structural_state"
+    )
+
+    if len(functions) != 1:
+
+        fail(
+            "Cannot deterministically resolve "
+            "market_state_engine.load_structural_state()."
+        )
+
+    node = functions[0]
+
+    source_lines = read_text(
+        MARKET_STATE_ENGINE_FILE
+    ).splitlines()
+
+    print(
+        "Module   : market_state_engine"
+    )
+
+    print(
+        "Function : load_structural_state"
+    )
+
+    print(
+        f"Line     : {node.lineno}"
+    )
+
+    print()
+    print(
+        "SOURCE CONTEXT"
+    )
+
+    print_context(
+        MARKET_STATE_ENGINE_FILE,
+        source_lines,
+        node.lineno,
+        radius=7
+    )
+
+    return True
+
+
+# =============================================================================
+# REGIME SOURCE
+# =============================================================================
+
+def locate_regime_source():
+
+    print()
+    line("-")
+    print(
+        "3. REAL REGIME DATA SOURCE"
+    )
+    line("-")
+
+    if not MARKET_REGIME_CONTRACT_FILE.exists():
+
+        fail(
+            "market_regime_contract.py not found."
+        )
+
+    tree = parse_tree(
+        MARKET_REGIME_CONTRACT_FILE
+    )
+
+    functions = find_function(
+        tree,
+        "load_market_regime_contract"
+    )
+
+    if len(functions) != 1:
+
+        fail(
+            "Cannot deterministically resolve "
+            "market_regime_contract."
+        )
+
+    node = functions[0]
+
+    source_lines = read_text(
+        MARKET_REGIME_CONTRACT_FILE
+    ).splitlines()
+
+    print(
+        "Module   : market_regime_contract"
+    )
+
+    print(
+        "Function : load_market_regime_contract"
+    )
+
+    print(
+        f"Line     : {node.lineno}"
+    )
+
+    print()
+    print(
+        "SOURCE CONTEXT"
+    )
+
+    print_context(
+        MARKET_REGIME_CONTRACT_FILE,
+        source_lines,
+        node.lineno,
+        radius=7
+    )
+
+    return True
+
+
+# =============================================================================
+# DATABASE SAFETY CHECK
+# =============================================================================
+
+def database_safety_check():
+
+    print()
+    line("-")
+    print(
+        "DATABASE SAFETY"
+    )
+    line("-")
+
+    db_path = (
+        PROJECT_DIR
+        / "arunda.db"
+    )
+
+    print(
+        f"DATABASE PATH : {db_path}"
+    )
+
+    if not db_path.exists():
+
+        print(
+            "DATABASE      : NOT PRESENT"
+        )
+
+        print(
+            "DATABASE WRITE: NONE"
+        )
+
+        return True
+
+    # Read-only SQLite URI.
+    # This connection is used ONLY to prove the database is readable.
+    # No SQL mutation is executed.
+
+    uri = (
+        f"file:{db_path.as_posix()}"
+        f"?mode=ro"
+    )
+
+    conn = None
+
+    try:
+
+        conn = sqlite3.connect(
+            uri,
+            uri=True,
+            timeout=5
+        )
+
+        conn.execute(
+            "PRAGMA query_only = ON"
+        )
+
+        conn.execute(
+            "SELECT name FROM sqlite_master "
+            "WHERE type='table' LIMIT 1"
+        ).fetchone()
+
+        print(
+            "DATABASE      : READABLE"
+        )
+
+        print(
+            "QUERY MODE    : READ ONLY"
+        )
+
+        print(
+            "DATABASE WRITE: NONE"
+        )
+
+        return True
+
+    finally:
+
+        if conn is not None:
+
+            conn.close()
+
+
+# =============================================================================
+# RUNTIME IMPORT SAFETY
+# =============================================================================
+
+def runtime_import_check():
+
+    print()
+    line("-")
+    print(
+        "PRODUCTION MODULE IMPORT CHECK"
+    )
+    line("-")
+
+    modules = (
+        "signal_scorer",
+        "feature_contract",
+        "market_state_engine",
+        "market_regime_contract",
+    )
+
+    imported = {}
+
+    for module_name in modules:
+
+        try:
+
+            module = __import__(
+                module_name
+            )
+
+            imported[
+                module_name
+            ] = module
+
+            print(
+                f"{module_name:<35}"
+                " : IMPORT OK"
+            )
+
+        except Exception as exc:
+
+            print(
+                f"{module_name:<35}"
+                f" : IMPORT FAILED"
+            )
+
+            print(
+                f"    {type(exc).__name__}: "
+                f"{exc}"
+            )
+
+            fail(
+                "Production dependency import failed: "
+                f"{module_name}"
+            )
+
+    return imported
+
+
+# =============================================================================
+# RUNTIME API VERIFICATION
+# =============================================================================
+
+def runtime_api_check(
+    modules
+):
+
+    print()
+    line("-")
+    print(
+        "PRODUCTION API RESOLUTION"
+    )
+    line("-")
+
+    checks = (
+        (
+            "signal_scorer",
+            "calculate_score",
+        ),
+        (
+            "signal_scorer",
+            "load_scores",
+        ),
+        (
+            "signal_scorer",
+            "load_features",
+        ),
+        (
+            "signal_scorer",
+            "load_structural_states",
+        ),
+        (
+            "signal_scorer",
+            "load_regimes",
+        ),
+        (
+            "signal_scorer",
+            "extract_latest_feature_record",
+        ),
+        (
+            "market_state_engine",
+            "load_structural_state",
+        ),
+        (
+            "market_regime_contract",
+            "load_market_regime_contract",
+        ),
+    )
+
+    for module_name, function_name in checks:
+
+        module = modules[
+            module_name
+        ]
+
+        function = getattr(
+            module,
+            function_name,
+            None
+        )
+
+        if function is None:
+
+            fail(
+                "PRODUCTION API MISSING: "
+                f"{module_name}.{function_name}"
+            )
+
+        if not callable(function):
+
+            fail(
+                "PRODUCTION API NOT CALLABLE: "
+                f"{module_name}.{function_name}"
+            )
+
+        try:
+
+            signature = inspect.signature(
+                function
+            )
+
+        except (
+            TypeError,
+            ValueError,
+        ):
+
+            signature = "<unavailable>"
+
+        print(
+            f"{module_name}."
+            f"{function_name:<35}"
+            f" : RESOLVED"
+        )
+
+        print(
+            f"    Signature: {signature}"
+        )
+
+
+# =============================================================================
+# CROSS-CONTRACT DEPENDENCY VERIFICATION
+# =============================================================================
+
+def verify_cross_contract_flow():
+
+    print()
+    line("-")
+    print(
+        "CROSS-CONTRACT PRODUCTION FLOW"
+    )
+    line("-")
+
+    expected_flow = [
+        (
+            "REAL SIGNAL",
+            "signal_engine.build_all()"
+        ),
+        (
+            "FEATURE SOURCE",
+            "signal_scorer.load_features()"
+        ),
+        (
+            "FEATURE RECORD",
+            "signal_scorer.extract_latest_feature_record()"
+        ),
+        (
+            "STRUCTURE SOURCE",
+            "signal_scorer.load_structural_states()"
+        ),
+        (
+            "STRUCTURE ENGINE",
+            "market_state_engine.load_structural_state()"
+        ),
+        (
+            "REGIME SOURCE",
+            "signal_scorer.load_regimes()"
+        ),
+        (
+            "REGIME CONTRACT",
+            "market_regime_contract.load_market_regime_contract()"
+        ),
+        (
+            "PRODUCTION SCORER",
+            "signal_scorer.calculate_score()"
+        ),
+    ]
+
+    for label, source in expected_flow:
+
+        print(
+            f"{label:<25} : {source}"
+        )
+
+    # -------------------------------------------------------------------------
+    # Verify signal_engine.build_all exists.
+    # -------------------------------------------------------------------------
+
+    if not SIGNAL_ENGINE_FILE.exists():
+
+        fail(
+            "signal_engine.py not found."
+        )
+
+    signal_tree = parse_tree(
+        SIGNAL_ENGINE_FILE
+    )
+
+    build_all = find_function(
+        signal_tree,
+        "build_all"
+    )
+
+    if len(build_all) != 1:
+
+        fail(
+            "signal_engine.build_all() "
+            "is not deterministic."
+        )
+
+    print()
+    print(
+        "REAL SIGNAL SOURCE"
+    )
+
+    print(
+        f"signal_engine.build_all() "
+        f"@ line {build_all[0].lineno}"
+    )
+
+    print(
+        "Status : RESOLVED"
+    )
+
+
+# =============================================================================
+# SELF TEST
+# =============================================================================
+
+def self_test():
+
+    print(
+        "Running self-test..."
+    )
+
+    assert ENGINE_VERSION == (
+        "M2_REAL_SCORER_INPUT_SOURCE_LOCATOR_v0.1"
+    )
+
+    assert (
+        PROJECT_DIR.exists()
+    )
+
+    assert (
+        SIGNAL_SCORER_FILE.exists()
+    )
+
+    print(
+        "SELF TEST : PASS"
+    )
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
+
+def main():
+
+    print("=" * 100)
+    print(
+        "ARUNDA TRADER — M2"
+    )
+    print(
+        "REAL_SCORER_INPUT_SOURCE_LOCATOR_v0.1"
+    )
+    print("=" * 100)
+
+    print(
+        f"PROJECT              : {PROJECT_DIR}"
+    )
+
+    print(
+        "MODE                 : READ ONLY"
+    )
+
+    print(
+        "DATABASE             : READ ONLY CHECK"
+    )
+
+    print(
+        "DATABASE WRITE       : NONE"
+    )
+
+    print(
+        "PRODUCTION MODIFIED  : NO"
+    )
+
+    print(
+        "SYNTHETIC DATA       : NONE"
+    )
+
+    print(
+        "SCORING               : NOT EXECUTED"
+    )
+
+    print(
+        "DECISION              : NOT USED"
+    )
+
+    print(
+        "PREDICTION            : NOT USED"
+    )
+
+    print(
+        "EXECUTION             : NOT USED"
+    )
+
+    print("=" * 100)
+
+    try:
+
+        # ---------------------------------------------------------------------
+        # SELF TEST
+        # ---------------------------------------------------------------------
+
+        self_test()
+
+        # ---------------------------------------------------------------------
+        # FILE EXISTENCE
+        # ---------------------------------------------------------------------
+
+        print()
+        line("-")
+        print(
+            "PRODUCTION FILE RESOLUTION"
+        )
+        line("-")
+
+        verify_file(
+            SIGNAL_ENGINE_FILE,
+            "signal_engine.py"
+        )
+
+        verify_file(
+            SIGNAL_SCORER_FILE,
+            "signal_scorer.py"
+        )
+
+        verify_file(
+            FEATURE_CONTRACT_FILE,
+            "feature_contract.py"
+        )
+
+        verify_file(
+            MARKET_STATE_ENGINE_FILE,
+            "market_state_engine.py"
+        )
+
+        verify_file(
+            MARKET_REGIME_CONTRACT_FILE,
+            "market_regime_contract.py"
+        )
+
+        # ---------------------------------------------------------------------
+        # DATABASE
+        # ---------------------------------------------------------------------
+
+        database_safety_check()
+
+        # ---------------------------------------------------------------------
+        # SCORER SOURCE ANALYSIS
+        # ---------------------------------------------------------------------
+
+        scorer_info = inspect_signal_scorer()
+
+        # ---------------------------------------------------------------------
+        # FEATURE SOURCE
+        # ---------------------------------------------------------------------
+
+        feature_ok = (
+            locate_feature_source()
+        )
+
+        if not feature_ok:
+
+            fail(
+                "REAL FEATURE SOURCE "
+                "COULD NOT BE RESOLVED."
+            )
+
+        # ---------------------------------------------------------------------
+        # STRUCTURAL SOURCE
+        # ---------------------------------------------------------------------
+
+        structure_ok = (
+            locate_structural_source()
+        )
+
+        if not structure_ok:
+
+            fail(
+                "REAL STRUCTURAL SOURCE "
+                "COULD NOT BE RESOLVED."
+            )
+
+        # ---------------------------------------------------------------------
+        # REGIME SOURCE
+        # ---------------------------------------------------------------------
+
+        regime_ok = (
+            locate_regime_source()
+        )
+
+        if not regime_ok:
+
+            fail(
+                "REAL REGIME SOURCE "
+                "COULD NOT BE RESOLVED."
+            )
+
+        # ---------------------------------------------------------------------
+        # IMPORTS
+        # ---------------------------------------------------------------------
+
+        modules = (
+            runtime_import_check()
+        )
+
+        # ---------------------------------------------------------------------
+        # API
+        # ---------------------------------------------------------------------
+
+        runtime_api_check(
+            modules
+        )
+
+        # ---------------------------------------------------------------------
+        # CROSS-CONTRACT FLOW
+        # ---------------------------------------------------------------------
+
+        verify_cross_contract_flow()
+
+        # ---------------------------------------------------------------------
+        # FINAL
+        # ---------------------------------------------------------------------
+
+        print()
+        line("=")
+        print(
+            "LOCATOR SUMMARY"
+        )
+        line("=")
+
+        print(
+            "REAL SIGNAL SOURCE       : "
+            "signal_engine.build_all()"
+        )
+
+        print(
+            "FEATURE SOURCE           : "
+            "RESOLVED"
+        )
+
+        print(
+            "STRUCTURAL SOURCE        : "
+            "market_state_engine.load_structural_state()"
+        )
+
+        print(
+            "REGIME SOURCE            : "
+            "market_regime_contract.load_market_regime_contract()"
+        )
+
+        print(
+            "PRODUCTION SCORER        : "
+            "signal_scorer.calculate_score()"
+        )
+
+        print(
+            "SCORING EXECUTED         : NO"
+        )
+
+        print(
+            "DATABASE WRITE           : NONE"
+        )
+
+        print(
+            "PRODUCTION MODIFIED      : NO"
+        )
+
+        print()
+        print(
+            "FINAL STATUS : "
+            "REAL SCORER INPUT SOURCES LOCATED"
+        )
+
+        print(
+            "NEXT : "
+            "M2 REAL SIGNAL → PRODUCTION SCORER "
+            "RUNTIME"
+        )
+
+        line("=")
+
+        return 0
+
+    except KeyboardInterrupt:
+
+        print()
+        print(
+            "LOCATOR INTERRUPTED"
+        )
+
+        return 130
+
+    except Exception as exc:
+
+        print()
+        line("=")
+        print(
+            "LOCATOR ERROR"
+        )
+        line("=")
+
+        print(
+            f"{type(exc).__name__}: {exc}"
+        )
+
+        line("=")
+
+        return 1
+
+
+# =============================================================================
+# ENTRY POINT
+# =============================================================================
+
+if __name__ == "__main__":
+
+    raise SystemExit(
+        main()
+    )

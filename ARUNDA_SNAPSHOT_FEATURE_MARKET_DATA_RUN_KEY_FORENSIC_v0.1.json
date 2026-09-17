@@ -1,0 +1,433 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_KEY_FORENSIC_v0.1",
+  "cross_symbol_run_key_inventory": {
+    "00cad55cf994477961262864ebf8eff6ff4ba9e58830a7bb05a08faab25f29b0": {
+      "count": 1,
+      "symbols": [
+        "UNI"
+      ]
+    },
+    "028666b47894486b7bebbe5145d2fdbde9aa139a560e006efcaab7ea86ae5c90": {
+      "count": 1,
+      "symbols": [
+        "SHIB"
+      ]
+    },
+    "08a5920e3a4533ed01f96ed07b7f49a2dbbb8f3f3803b61385d252403b5566a8": {
+      "count": 1,
+      "symbols": [
+        "SOL"
+      ]
+    },
+    "0c151edb809bcf41bd150b368f7edef262d18c1520ebd6e93f2635ab7d0b3ccc": {
+      "count": 1,
+      "symbols": [
+        "SHIB"
+      ]
+    },
+    "168d5c336e567fc5dca7c33bc306f724970ca70681fc242925e923e985170cda": {
+      "count": 1,
+      "symbols": [
+        "NEAR"
+      ]
+    },
+    "17c4cb72aa8d3ff7c62aca1fea9ac129dc86bbfdfdefe013ad63ffcaaa32ca69": {
+      "count": 1,
+      "symbols": [
+        "LTC"
+      ]
+    },
+    "1d6123b12a3a53d5ad1ffde8bc3dd7bc7f381d228cbdf5e3b32752897c7cdf75": {
+      "count": 1,
+      "symbols": [
+        "AAVE"
+      ]
+    },
+    "1ffa521edafacabde19ed0d5129e51887d902dd20cc3d3b0af8e735b23612b4a": {
+      "count": 1,
+      "symbols": [
+        "SUI"
+      ]
+    },
+    "267abc4e4ee7b8b01344f2f8b0c9a729bd75eaeba7bff0d7c406586fb6f5646a": {
+      "count": 1,
+      "symbols": [
+        "BTC"
+      ]
+    },
+    "2adae1007eb1762b06b5f1f0a227e284f4ce52d11d940a376d6250a5d1e657ab": {
+      "count": 1,
+      "symbols": [
+        "SHIB"
+      ]
+    },
+    "2ede606cde9d52230e5a3e0214c911da06b8bd56d8be084febc2a0ae5bcaf494": {
+      "count": 1,
+      "symbols": [
+        "ADA"
+      ]
+    },
+    "38e5b3060a4e8e61aa2d31123f432bec9be3390c20d1326012f8216fbf01003d": {
+      "count": 1,
+      "symbols": [
+        "XRP"
+      ]
+    },
+    "3bed9064eb2c18f3a09d9d368c7ab0f62289de90fe84dde536d7bb6e6bd5b5a7": {
+      "count": 1,
+      "symbols": [
+        "BTC"
+      ]
+    },
+    "3d164edb4b5ce2f54958a329a74a227132464ec1637c8fdcd7cb76b9940a51e3": {
+      "count": 1,
+      "symbols": [
+        "DOGE"
+      ]
+    },
+    "3e3c5f2c8eff3d6a0647a4f14d4475a6152896ab3fa60cfcebe5f2101440ff9c": {
+      "count": 1,
+      "symbols": [
+        "ETH"
+      ]
+    },
+    "3fd049a1450801c1300d22e2d75db0ec324e6dd733dda342568e0c8405c5a825": {
+      "count": 1,
+      "symbols": [
+        "ADA"
+      ]
+    },
+    "420fb8b2372383069f57d0a5a4617f2d8a392b315ad7cbbc17ab16f2faf90a47": {
+      "count": 1,
+      "symbols": [
+        "DOGE"
+      ]
+    },
+    "4564d63db4a830a5fefdb1120dbe5741563a74aab0bc0b3f6e8ff3d785bf6dac": {
+      "count": 1,
+      "symbols": [
+        "AAVE"
+      ]
+    },
+    "55f84edd5d09d03a2eff13bbc972060c08a8d87ab34755222acff0dca2fae6ca": {
+      "count": 1,
+      "symbols": [
+        "ADA"
+      ]
+    },
+    "579a2fa79b052522a6b2fbed9c22103c56e0140f35aa2503c68d9865fff88ea0": {
+      "count": 1,
+      "symbols": [
+        "ETH"
+      ]
+    },
+    "5d2bcb1fdf2ab7ea40d3df0ca25e6cc1e0b9ab6d529233fab9fc4d3590ae65cf": {
+      "count": 1,
+      "symbols": [
+        "XRP"
+      ]
+    },
+    "5d508f6b71a5ae0f5aee2bd2edbb7e3972a28e07d2ef9c913eb7afc1d6b032ac": {
+      "count": 1,
+      "symbols": [
+        "AAVE"
+      ]
+    },
+    "603c306f891373531cb12e388a03caf81964504d97105388da29ba2b316a3274": {
+      "count": 1,
+      "symbols": [
+        "SOL"
+      ]
+    },
+    "62cb98787af997419319d2033753728fc6749a5224576da78d4bc7f8b58e5fbc": {
+      "count": 1,
+      "symbols": [
+        "SUI"
+      ]
+    },
+    "6a2318e858808212b346611412082c67b89968a45614314b5a2101c2c1e0ba87": {
+      "count": 1,
+      "symbols": [
+        "DOT"
+      ]
+    },
+    "6b61b6c8a11d7665c0dab1366cabb2c8b82d9b50ea6e2358098d8cd2f7a38eef": {
+      "count": 1,
+      "symbols": [
+        "SUI"
+      ]
+    },
+    "6caed7934f18fbf52b6810a63bf54ef1b2eb6227cdf49095a0523ebd8caf7980": {
+      "count": 1,
+      "symbols": [
+        "LTC"
+      ]
+    },
+    "6e84825e9d1ba7e77887d5b9272f4002ada394047d94dc9839efd0be22d6d363": {
+      "count": 1,
+      "symbols": [
+        "ETH"
+      ]
+    },
+    "7925bc8d06450a06215e3572010b8b36a6b3f3354e01ead7164c40db5bc737c4": {
+      "count": 1,
+      "symbols": [
+        "SOL"
+      ]
+    },
+    "7cd44808f26787a6c4bd30decbb2222e8fed1c73ff2a04a533950840fbb9522f": {
+      "count": 1,
+      "symbols": [
+        "BTC"
+      ]
+    },
+    "863d58965cf2ad1d0f9e75441dbdd51bcccd676715463b50a32d9d5ca2a66bfc": {
+      "count": 1,
+      "symbols": [
+        "DOT"
+      ]
+    },
+    "86f106db42a0cd48c16df42045a6a40a1192c4154882554e0ab79efcb9210b34": {
+      "count": 1,
+      "symbols": [
+        "DOGE"
+      ]
+    },
+    "8797d5c531c10697121982ad9923b410ed14e3c360111e8310806febc0dc11de": {
+      "count": 1,
+      "symbols": [
+        "DOGE"
+      ]
+    },
+    "87a39bfa076b7448b4d59ed60d872f6bbd748476e7034b0ee5d500784d252a9d": {
+      "count": 1,
+      "symbols": [
+        "SHIB"
+      ]
+    },
+    "8c4b02a80874ce7bac1d33708430feda54d9a03976e5c76d846f183f17a456ea": {
+      "count": 1,
+      "symbols": [
+        "LINK"
+      ]
+    },
+    "8d39cef9b767d1393f951858c6156f88708d57fbfbbef7485bfaf1a6491fc8c4": {
+      "count": 1,
+      "symbols": [
+        "UNI"
+      ]
+    },
+    "8f2a986846a99c06bb44c5b8d329c00d3ac4be2596fd12202b25d71e97c88c79": {
+      "count": 1,
+      "symbols": [
+        "AVAX"
+      ]
+    },
+    "91f7c3d104175ca163e531243e9974b78ee5c7e765888c8f56a49a759b08baca": {
+      "count": 1,
+      "symbols": [
+        "LTC"
+      ]
+    },
+    "9aadff997bd639fec43fe988844a06ab22d867cfe16cd88ac110680a67266bc4": {
+      "count": 1,
+      "symbols": [
+        "AAVE"
+      ]
+    },
+    "a02953d4d11d3320ec88f3ed4a774ada3951a1a3da8d849c5dd5553f6c5f8f82": {
+      "count": 1,
+      "symbols": [
+        "DOT"
+      ]
+    },
+    "a7534665a3965cdadbf890038ef0393c9ee8ec8ea6de4058fc1740a88353fdb2": {
+      "count": 1,
+      "symbols": [
+        "AVAX"
+      ]
+    },
+    "ba6034e574297afe045a68c96f24309af2c4fe29757573c87c19ce500e503fff": {
+      "count": 1,
+      "symbols": [
+        "SOL"
+      ]
+    },
+    "bf19e11f1927203729912c7d3892a710349dba6ca86fad0f831f5f36f18a6698": {
+      "count": 1,
+      "symbols": [
+        "XRP"
+      ]
+    },
+    "c65a70a07c98869b8276a5b536f4d66e0a640977b20f1f615292768eb9671b47": {
+      "count": 1,
+      "symbols": [
+        "ETH"
+      ]
+    },
+    "c8456217900af2a4f142242b3682355fa5c73d25162e65553cff442a2de5563b": {
+      "count": 1,
+      "symbols": [
+        "DOT"
+      ]
+    },
+    "cbaf541752e685f57dea15d3f269c49d29c2ffdc89e2a905ec64fc4ed83a3cd2": {
+      "count": 1,
+      "symbols": [
+        "NEAR"
+      ]
+    },
+    "ccc92aee0cf723ff20b040cc404054760f4001a8fb0f27472a20228b5d5c1682": {
+      "count": 1,
+      "symbols": [
+        "UNI"
+      ]
+    },
+    "dbcc15bf32263d1839dd1c7ff66b0334f200307bd203302e8ddcb11743dd389d": {
+      "count": 1,
+      "symbols": [
+        "NEAR"
+      ]
+    },
+    "e0ff7cff74a9875ca3fd42f81d8bf83b8a6617c0d5bf55b6beac6684ed3a304b": {
+      "count": 1,
+      "symbols": [
+        "XRP"
+      ]
+    },
+    "e4f6987b159db53c1590b0de013862d5c6f9c7aa2d2cb4ee304e14f02de8fd0e": {
+      "count": 1,
+      "symbols": [
+        "LTC"
+      ]
+    },
+    "e4fa1225f8b657a979e6c0d422cd0f1b156629cfbd5928b363e33eafbe217711": {
+      "count": 1,
+      "symbols": [
+        "LINK"
+      ]
+    },
+    "e5f0234203d85efe8639419d0bddf107978ae5e60b8d173f0ae96aaf6fdd40c0": {
+      "count": 1,
+      "symbols": [
+        "LINK"
+      ]
+    },
+    "e7e8a0abe349082142d3495cdb6a18b8f98eb20eeef54df55d8f37a7dbc8ee70": {
+      "count": 1,
+      "symbols": [
+        "BTC"
+      ]
+    },
+    "ea16833f5663514442bde9acc88bc4c50664b14f93f589095c3f31bdd8ae1eca": {
+      "count": 1,
+      "symbols": [
+        "LINK"
+      ]
+    },
+    "edc5c698dd3643280eb5f3c2c9d9a73b1e235a3b4984ed3c70c84c98e05c40a2": {
+      "count": 1,
+      "symbols": [
+        "NEAR"
+      ]
+    },
+    "ef2899866088f6d65595dec836c2fa97be02aaf879986e43083ca58d3e0c792d": {
+      "count": 1,
+      "symbols": [
+        "ADA"
+      ]
+    },
+    "f66371d8ecfe193f816145bc3d8263d39ba889bef0c4fd44a3accda8cb773b62": {
+      "count": 1,
+      "symbols": [
+        "AVAX"
+      ]
+    },
+    "fc9bece8a80ada5e42a04e705f03cf8916a35896dda706682921fa957d37ba63": {
+      "count": 1,
+      "symbols": [
+        "SUI"
+      ]
+    },
+    "fdd84bf3e5f52abd19ff5a29ab6238c974df05a2a1a30f566f9e49f28040605c": {
+      "count": 1,
+      "symbols": [
+        "AVAX"
+      ]
+    },
+    "ff2c6884c363f44fc01dafa0d7cab162124df691ca0d334147bd4ec2c6739f73": {
+      "count": 1,
+      "symbols": [
+        "UNI"
+      ]
+    }
+  },
+  "cross_symbol_run_keys": 0,
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "decision": "FORBIDDEN",
+  "distinct_execution_fingerprints": 4,
+  "distinct_run_key_fingerprints": 60,
+  "exact_market_data_rows": 60,
+  "exact_match_symbols": [
+    "AAVE",
+    "ADA",
+    "AVAX",
+    "BTC",
+    "DOGE",
+    "DOT",
+    "ETH",
+    "LINK",
+    "LTC",
+    "NEAR",
+    "SHIB",
+    "SOL",
+    "SUI",
+    "UNI",
+    "XRP"
+  ],
+  "execution_identity_columns": [
+    "source",
+    "engine_version"
+  ],
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_symbols_discovered": [],
+  "feature_timestamp": [
+    "2026-08-23T13:39:16.730073+00:00"
+  ],
+  "forensic_status": "MARKET_DATA_RUN_KEY_IDENTITY_PARTIAL",
+  "market_data_rows_loaded": 1795,
+  "market_symbols": [
+    "AAVE",
+    "ADA",
+    "AVAX",
+    "BTC",
+    "DOGE",
+    "DOT",
+    "ETH",
+    "LINK",
+    "LTC",
+    "NEAR",
+    "SHIB",
+    "SOL",
+    "SUI",
+    "UNI",
+    "XRP"
+  ],
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "outcome": "NOT CALCULATED",
+  "parseable_market_data_rows": 1795,
+  "per_symbol": {},
+  "prediction": "FORBIDDEN",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "run_key_columns": [
+    "source",
+    "engine_version",
+    "timestamp",
+    "symbol",
+    "timeframe"
+  ],
+  "symbol_column": "symbol",
+  "timestamp_column": "timestamp"
+}

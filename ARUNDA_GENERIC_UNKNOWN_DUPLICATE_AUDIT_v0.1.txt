@@ -1,0 +1,16 @@
+ARUNDA GENERIC UNKNOWN DUPLICATE AUDIT v0.1
+================================================================================
+MODE              : READ ONLY
+TARGET FILES      : 92
+DUPLICATE GROUPS  : 0
+DUPLICATE FILES   : 0
+MISSING FILES     : 0
+READ ERRORS       : 0
+DELETE            : NONE
+DB CHANGE         : NONE
+RUNTIME           : NONE
+EXECUTION         : DISABLED
+
+EXACT DUPLICATES
+================================================================================
+NONE

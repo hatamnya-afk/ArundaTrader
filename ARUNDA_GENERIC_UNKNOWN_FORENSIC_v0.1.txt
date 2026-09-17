@@ -1,0 +1,569 @@
+ARUNDA GENERIC UNKNOWN FORENSIC v0.1
+================================================================================
+MODE              : READ ONLY
+TARGET FILES      : 92
+DELETE            : NONE
+DB CHANGE         : NONE
+RUNTIME           : NONE
+EXECUTION         : DISABLED
+
+DECISION SUMMARY
+================================================================================
+REVIEW_PYTHON           : 65
+REVIEW_SYNTAX           : 17
+RETAIN_PRODUCTION       : 10
+
+DETAILS
+================================================================================
+
+[REVIEW_SYNTAX]
+PATH    : _diag_market_source.py
+SIZE    : 258
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : ACTIVE_ELIGIBILITY_PATH_CHECK_v0.1.py
+SIZE    : 5842
+SYNTAX  : True
+IMPORTS : importlib, inspect, os, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_CLEANUP_CANDIDATE_INVENTORY_v0.1.py
+SIZE    : 18630
+SYNTAX  : True
+IMPORTS : datetime, hashlib, json, pathlib, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_DYNAMIC_SQL_BUILDER_EXECUTION_SCAN_v0.1.py
+SIZE    : 6601
+SYNTAX  : True
+IMPORTS : ast, pathlib
+
+[REVIEW_PYTHON]
+PATH    : arunda_pipeline.py
+SIZE    : 57887
+SYNTAX  : True
+IMPORTS : decision_engine, hashlib, json, market_regime_engine, os, risk_engine, score_producer, signal_scorer, signal_validator, subprocess, sys, trade_gate_engine
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py
+SIZE    : 16935
+SYNTAX  : True
+IMPORTS : ast, datetime, hashlib, json, pathlib
+
+[REVIEW_PYTHON]
+PATH    : arunda_recorder.py
+SIZE    : 13434
+SYNTAX  : True
+IMPORTS : concurrent, datetime, requests, sqlite3, time, uuid
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_RISK_DECISIONS_PRODUCTION_WRITER_SCAN_v0.1.py
+SIZE    : 5752
+SYNTAX  : True
+IMPORTS : pathlib, re
+
+[REVIEW_PYTHON]
+PATH    : arunda_source_engine.py
+SIZE    : 20104
+SYNTAX  : True
+IMPORTS : datetime, json, os, sqlite3, time, urllib
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_TECHNICAL_ENGINE_v0.5.py
+SIZE    : 36812
+SYNTAX  : True
+IMPORTS : datetime, math, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : ARUNDA_TECHNICAL_PERSISTENCE_v0.1.py
+SIZE    : 28071
+SYNTAX  : True
+IMPORTS : datetime, importlib, pathlib, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : capital_config.py
+SIZE    : 3903
+SYNTAX  : True
+IMPORTS : capital_contract
+
+[REVIEW_PYTHON]
+PATH    : catalyst_engine.py
+SIZE    : 9262
+SYNTAX  : True
+IMPORTS : datetime, requests, sqlite3, time
+
+[REVIEW_PYTHON]
+PATH    : check_btc.py
+SIZE    : 273
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : check_db.py
+SIZE    : 175
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : check_market.py
+SIZE    : 385
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : check_signals.py
+SIZE    : 331
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : cleanup_controlled_inventory_v0.1.py
+SIZE    : 24954
+SYNTAX  : True
+IMPORTS : __future__, ast, collections, hashlib, json, os, pathlib, re
+
+[REVIEW_PYTHON]
+PATH    : cleanup_inventory_short.py
+SIZE    : 4058
+SYNTAX  : True
+IMPORTS : json, pathlib, re
+
+[REVIEW_PYTHON]
+PATH    : cmc_market_adapter.py
+SIZE    : 0
+SYNTAX  : True
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : coinalyze_positioning.py
+SIZE    : 21242
+SYNTAX  : True
+IMPORTS : datetime, os, requests, sqlite3, time
+
+[REVIEW_PYTHON]
+PATH    : cp9_production_safety_gate.py
+SIZE    : 27024
+SYNTAX  : True
+IMPORTS : hashlib, json, os, re, subprocess, sys
+
+[REVIEW_PYTHON]
+PATH    : data_quality.py
+SIZE    : 19253
+SYNTAX  : True
+IMPORTS : datetime, numpy, os, pandas, sys
+
+[RETAIN_PRODUCTION]
+PATH    : decision_engine.py
+SIZE    : 27734
+SYNTAX  : True
+IMPORTS : __future__, decision_contract, math, typing
+
+[REVIEW_PYTHON]
+PATH    : execution_engine.py
+SIZE    : 27662
+SYNTAX  : True
+IMPORTS : decision_engine, execution_contract, portfolio_risk_engine, position_sizing_engine, risk_budget_engine, risk_engine, stop_loss_engine
+
+[REVIEW_PYTHON]
+PATH    : feature_engine.py
+SIZE    : 49985
+SYNTAX  : True
+IMPORTS : __future__, dataclasses, math, typing
+
+[REVIEW_PYTHON]
+PATH    : feature_normalizer.py
+SIZE    : 11276
+SYNTAX  : True
+IMPORTS : feature_snapshot_reader, math
+
+[REVIEW_PYTHON]
+PATH    : fusion_engine.py
+SIZE    : 26484
+SYNTAX  : True
+IMPORTS : datetime, hashlib, math, sqlite3
+
+[REVIEW_SYNTAX]
+PATH    : fusion_engine_before_positioning_normalization_20260820_024337.py
+SIZE    : 22664
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : history_query_layer.py
+SIZE    : 26876
+SYNTAX  : True
+IMPORTS : datetime, sqlite3, typing
+
+[REVIEW_PYTHON]
+PATH    : hunter_filter.py
+SIZE    : 2952
+SYNTAX  : True
+IMPORTS : requests
+
+[REVIEW_PYTHON]
+PATH    : hunter_recorder.py
+SIZE    : 6238
+SYNTAX  : True
+IMPORTS : csv, datetime, os, requests, time
+
+[REVIEW_PYTHON]
+PATH    : indicator_convention_reconstruction_v0.1.py
+SIZE    : 17840
+SYNTAX  : True
+IMPORTS : pathlib, re, sys
+
+[REVIEW_PYTHON]
+PATH    : indicator_engine.py
+SIZE    : 62302
+SYNTAX  : True
+IMPORTS : __future__, dataclasses, math, typing
+
+[RETAIN_PRODUCTION]
+PATH    : indicator_repair_backups\20260821_173909\market_data_engine.py
+SIZE    : 36310
+SYNTAX  : True
+IMPORTS : datetime, math, sqlite3, time
+
+[REVIEW_PYTHON]
+PATH    : indicator_standard_convention_reconstruction_v0.1.py
+SIZE    : 29838
+SYNTAX  : True
+IMPORTS : math, pathlib, sqlite3, statistics, sys
+
+[REVIEW_PYTHON]
+PATH    : indicator_standard_convention_reconstruction_v0.2.py
+SIZE    : 30523
+SYNTAX  : True
+IMPORTS : math, pathlib, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : lunar_hunter.py
+SIZE    : 2537
+SYNTAX  : True
+IMPORTS : os, requests, time
+
+[REVIEW_PYTHON]
+PATH    : lunarcrush.py
+SIZE    : 2185
+SYNTAX  : True
+IMPORTS : os, requests
+
+[REVIEW_PYTHON]
+PATH    : market_adapter.py
+SIZE    : 16073
+SYNTAX  : True
+IMPORTS : datetime, json, os, sqlite3, time, urllib
+
+[RETAIN_PRODUCTION]
+PATH    : market_data.py
+SIZE    : 704
+SYNTAX  : True
+IMPORTS : requests
+
+[RETAIN_PRODUCTION]
+PATH    : market_data_engine.py
+SIZE    : 32286
+SYNTAX  : True
+IMPORTS : datetime, math, sqlite3, time
+
+[REVIEW_PYTHON]
+PATH    : market_entry_stop_adapter.py
+SIZE    : 18626
+SYNTAX  : True
+IMPORTS : entry_stop_contract, risk_engine, sqlite3
+
+[REVIEW_SYNTAX]
+PATH    : market_history_engine.py
+SIZE    : 31014
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_history_engine_v0_4.py
+SIZE    : 6704
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_history_ingestion_guard.py
+SIZE    : 23430
+SYNTAX  : True
+IMPORTS : dataclasses, datetime, hashlib, math, sqlite3, typing
+
+[REVIEW_SYNTAX]
+PATH    : market_microstructure_engine.py
+SIZE    : 11865
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_monitor_engine.py
+SIZE    : 13074
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_news_engine.py
+SIZE    : 13506
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_news_intelligence_engine.py
+SIZE    : 20603
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_opportunity_engine.py
+SIZE    : 14864
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_recorder.py
+SIZE    : 3657
+SYNTAX  : True
+IMPORTS : csv, datetime, requests, time
+
+[REVIEW_PYTHON]
+PATH    : market_regime.py
+SIZE    : 3970
+SYNTAX  : True
+IMPORTS : market_regime_engine
+
+[REVIEW_SYNTAX]
+PATH    : market_regime_engine.py
+SIZE    : 35313
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_scanner.py
+SIZE    : 1905
+SYNTAX  : True
+IMPORTS : requests
+
+[REVIEW_SYNTAX]
+PATH    : market_state_engine.py
+SIZE    : 31394
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_state_engine_pre_step18_loader.py
+SIZE    : 33996
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_state_reader.py
+SIZE    : 9294
+SYNTAX  : True
+IMPORTS : normalized_feature_contract
+
+[REVIEW_SYNTAX]
+PATH    : market_stop_distance_adapter.py
+SIZE    : 19779
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_structure_engine.py
+SIZE    : 36714
+SYNTAX  : True
+IMPORTS : __future__, dataclasses, math, typing
+
+[REVIEW_SYNTAX]
+PATH    : market_technical_engine.py
+SIZE    : 20593
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : market_technical_persistence.py
+SIZE    : 9474
+SYNTAX  : True
+IMPORTS : __future__, dataclasses, datetime, sqlite3, typing
+
+[REVIEW_SYNTAX]
+PATH    : market_universe_engine.py
+SIZE    : 16120
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_SYNTAX]
+PATH    : market_whale_engine.py
+SIZE    : 17518
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : news_adapter.py
+SIZE    : 18107
+SYNTAX  : True
+IMPORTS : datetime, email, hashlib, json, re, sqlite3, time, urllib, xml
+
+[RETAIN_PRODUCTION]
+PATH    : opportunity_engine.py
+SIZE    : 20828
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : orderbook.py
+SIZE    : 1593
+SYNTAX  : True
+IMPORTS : requests
+
+[REVIEW_PYTHON]
+PATH    : orderbook_weighted.py
+SIZE    : 1543
+SYNTAX  : True
+IMPORTS : requests
+
+[REVIEW_PYTHON]
+PATH    : outcome_engine.py
+SIZE    : 4265
+SYNTAX  : True
+IMPORTS : datetime, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : OUTCOME_v0.3_LAUNCH_READINESS_GATE_v0.3.py
+SIZE    : 13716
+SYNTAX  : True
+IMPORTS : collections, pathlib, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : pattern_engine.py
+SIZE    : 4248
+SYNTAX  : True
+IMPORTS : numpy, pandas
+
+[REVIEW_PYTHON]
+PATH    : portfolio_risk_engine.py
+SIZE    : 23142
+SYNTAX  : True
+IMPORTS : capital_config, portfolio_risk_contract, position_sizing_engine
+
+[REVIEW_PYTHON]
+PATH    : position_sizing_engine.py
+SIZE    : 36087
+SYNTAX  : True
+IMPORTS : capital_config, position_sizing_contract, risk_budget_engine, stop_loss_engine
+
+[REVIEW_PYTHON]
+PATH    : real_score_producer.py
+SIZE    : 21742
+SYNTAX  : True
+IMPORTS : __future__, math, runtime_feature_producer, typing
+
+[REVIEW_PYTHON]
+PATH    : risk_budget_engine.py
+SIZE    : 27193
+SYNTAX  : True
+IMPORTS : capital_config, risk_budget_contract, risk_engine
+
+[RETAIN_PRODUCTION]
+PATH    : risk_engine.py
+SIZE    : 18159
+SYNTAX  : True
+IMPORTS : risk_contract
+
+[RETAIN_PRODUCTION]
+PATH    : score_producer.py
+SIZE    : 35835
+SYNTAX  : True
+IMPORTS : __future__, market_regime_contract, market_state_engine, math, runtime_feature_producer, typing
+
+[REVIEW_PYTHON]
+PATH    : show_lines.py
+SIZE    : 554
+SYNTAX  : True
+IMPORTS : pathlib
+
+[REVIEW_PYTHON]
+PATH    : signal_engine.py
+SIZE    : 26942
+SYNTAX  : True
+IMPORTS : market_regime, math, signal_contract, signal_logic
+
+[REVIEW_PYTHON]
+PATH    : signal_logic.py
+SIZE    : 10399
+SYNTAX  : True
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : signal_outcome_engine.py
+SIZE    : 29790
+SYNTAX  : True
+IMPORTS : datetime, math, sqlite3
+
+[REVIEW_PYTHON]
+PATH    : signal_performance.py
+SIZE    : 4821
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[RETAIN_PRODUCTION]
+PATH    : signal_scorer.py
+SIZE    : 20908
+SYNTAX  : True
+IMPORTS : __future__, math, typing
+
+[RETAIN_PRODUCTION]
+PATH    : signal_validator.py
+SIZE    : 15353
+SYNTAX  : True
+IMPORTS : signal_contract, signal_engine
+
+[REVIEW_PYTHON]
+PATH    : social_engine.py
+SIZE    : 5064
+SYNTAX  : True
+IMPORTS : os, requests, sqlite3, time
+
+[REVIEW_PYTHON]
+PATH    : sqlite_recorder.py
+SIZE    : 5009
+SYNTAX  : True
+IMPORTS : csv, datetime, os, sqlite3
+
+[REVIEW_SYNTAX]
+PATH    : stop_loss_engine.py
+SIZE    : 15300
+SYNTAX  : False
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : technical_engine.py
+SIZE    : 30800
+SYNTAX  : True
+IMPORTS : __future__, dataclasses, datetime, math, sqlite3, statistics, typing
+
+[RETAIN_PRODUCTION]
+PATH    : trade_gate_engine.py
+SIZE    : 27201
+SYNTAX  : True
+IMPORTS : NONE
+
+[REVIEW_PYTHON]
+PATH    : upgrade_db.py
+SIZE    : 3110
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : upgrade_positioning_db.py
+SIZE    : 3638
+SYNTAX  : True
+IMPORTS : sqlite3
+
+[REVIEW_PYTHON]
+PATH    : upgrade_positioning_v02.py
+SIZE    : 2314
+SYNTAX  : True
+IMPORTS : sqlite3

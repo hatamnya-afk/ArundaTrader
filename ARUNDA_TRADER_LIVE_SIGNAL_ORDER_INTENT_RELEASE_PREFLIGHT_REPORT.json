@@ -1,0 +1,77 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT RELEASE PREFLIGHT",
+  "version": "v0.2",
+  "mode": "READ_ONLY",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false
+  },
+  "upstream_contracts": {
+    "gate_runtime_contract": true,
+    "gate_artifact_contract": true,
+    "gate_safety_contract": true,
+    "preflight_runtime_contract": true,
+    "preflight_artifact_contract": true,
+    "preflight_safety_contract": true,
+    "replay_artifact_contract": true,
+    "replay_verification": true
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "release_preflight": {
+    "status": "READY_NO_ORDER_INTENTS",
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "release_allowed": false,
+    "execution_allowed": false,
+    "order_creation": false,
+    "order_submission": false,
+    "network_access": false,
+    "production_db_write": false,
+    "safety_verified": true,
+    "upstream_verified": true,
+    "artifact_chain_match": true,
+    "canonical_binding": {
+      "source": "replay.artifact_contract",
+      "eligible_signals_source": "replay.artifact_contract.eligible_rows",
+      "order_intents_source": "canonical_zero_eligible_state",
+      "decision_source": "replay.artifact_contract"
+    }
+  },
+  "artifact_consistency": {
+    "rows": true,
+    "eligible_rows": true,
+    "no_trade_rows": true,
+    "decision": true,
+    "snapshot_id": true
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "final_verdict": "LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT_READY",
+  "next_stage": "WAIT_FOR_ELIGIBLE_SIGNAL",
+  "sources": {
+    "gate_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_REPORT.json",
+    "gate_report_sha256": "ab19975b57f5d09b9f51f5a6753fc644ec5e7ad256eb1e12f563f9e44637f136",
+    "preflight_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_PREFLIGHT_REPORT.json",
+    "preflight_report_sha256": "96a0e12f7a3378c4aca083032fe8e70c37e6f59a2ffa396458495188d8c5c2f6",
+    "replay_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_REPORT.json",
+    "replay_report_sha256": "2d92b303deaa9f4a512359edf229830c18dc30afeffe6851403a19b64400fd97"
+  }
+}

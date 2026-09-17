@@ -1,0 +1,68 @@
+{
+  "forensic": {
+    "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_v0.1",
+    "mode": "CONTROLLED RUNTIME FORENSIC",
+    "started_utc": "2026-08-24T18:34:34.867700+00:00",
+    "finished_utc": "2026-08-24T18:34:37.925574+00:00"
+  },
+  "producer": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "sha256_before": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "sha256_after": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "source_modified": false,
+    "return_code": 0,
+    "execution_success": true
+  },
+  "target": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "exists_before": false,
+    "exists_after": true,
+    "valid_json": true,
+    "size": 4410,
+    "sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "json_error": null,
+    "canonical_path_match": true,
+    "top_level_keys": [
+      "capture_db",
+      "decision",
+      "eligible_rows",
+      "engine",
+      "frontier",
+      "gate_configuration",
+      "no_trade_rows",
+      "production_db",
+      "row_results",
+      "rows",
+      "safety",
+      "snapshot_id",
+      "timestamp_utc"
+    ]
+  },
+  "production_db": {
+    "before": {
+      "exists": true,
+      "size": 521883648,
+      "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+    },
+    "after": {
+      "exists": true,
+      "size": 521883648,
+      "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+    },
+    "size_same": true,
+    "sha256_same": true,
+    "invariant": true
+  },
+  "execution": {
+    "producer_executed": true,
+    "producer_imported": false,
+    "eligibility_executed": true,
+    "eligibility_rebuilt": false,
+    "report_regenerated": true,
+    "synthetic_artifact": false,
+    "forensic_script_db_writes": false
+  },
+  "stdout": "====================================================================================================\nARUNDA TRADER LIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY GATE v0.1\n====================================================================================================\nOBJECTIVE:\n  Evaluate ONLY the newest FUSION_v0.5 snapshot.\n  Determine trade eligibility or NO-TRADE.\n\nProduction DB writes       : FORBIDDEN\nProduction engine run      : NO\nHistorical repair          : NONE\nDirection inference        : NONE\nScore reconstruction       : NONE\nSynthetic data             : FORBIDDEN\nLive data injection        : NONE\nOrder execution            : NONE\n\n====================================================================================================\nPRODUCTION BASELINE\n====================================================================================================\nRows   : 36\nSize   : 521883648\nSHA256 : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\n\n====================================================================================================\nLIVE CAPTURE\n====================================================================================================\nDirectory : C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_m1ld7rpr\nDatabase  : C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_m1ld7rpr\\arunda_live_capture.db\nSize      : 521883648\n\n====================================================================================================\nELIGIBILITY INPUT CONTRACT\n====================================================================================================\nCONTRACT : PASS\n\n====================================================================================================\nCURRENT LIVE SNAPSHOT\n====================================================================================================\nSnapshot : FUSION-20260824T153800744724+0000-b4f75221aa02defa\nRows     : 4\n\n====================================================================================================\nSIGNAL ELIGIBILITY MATRIX\n====================================================================================================\nID | ASSET | DIR   | CONF     | QUALITY  | STRENGTH | ARMS | RESULT\n----------------------------------------------------------------------------------------------------\n37 | BTC   | FLAT  | 0.5901933333333333 | VERIFIED | WEAK     | 1/1/1 | NO_TRADE\n38 | ETH   | SHORT | 0.4854675001907309 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n39 | SOL   | FLAT  | 0.39190069532428357 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n40 | XRP   | FLAT  | 0.4329772730514519 | PARTIAL  | WEAK     | 1/0/1 | NO_TRADE\n\n====================================================================================================\nNO-TRADE REASONS\n====================================================================================================\nid=37 asset=BTC direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\nid=38 asset=ETH direction=SHORT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\nid=39 asset=SOL direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\nid=40 asset=XRP direction=FLAT\n  - CONFIDENCE_BELOW_GATE\n  - INSUFFICIENT_AVAILABLE_WEIGHT\n  - DATA_QUALITY_NOT_VERIFIED\n  - FLAT_DIRECTION\n  - WEAK_SIGNAL\n  - INCOMPLETE_ARM_SET\n\n====================================================================================================\nELIGIBILITY SUMMARY\n====================================================================================================\nTRADE_ELIGIBLE : 0\nNO_TRADE       : 4\n\n====================================================================================================\nPRODUCTION DATABASE INVARIANT\n====================================================================================================\nBefore rows : 36\nAfter rows  : 36\nBefore size : 521883648\nAfter size  : 521883648\nBefore SHA256 : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\nAfter SHA256  : 3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7\nPRODUCTION DB INVARIANT : PASS\n\n====================================================================================================\nLIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY VERDICT\n====================================================================================================\nELIGIBILITY_EVALUATION : PASS\nPRODUCTION_ISOLATION   : PASS\nORDER_EXECUTION        : NONE\nFRONTIER VERDICT       : NO_TRADE\n\nRuntime report : C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\n\n====================================================================================================\nFINAL SAFETY VERDICT\n====================================================================================================\nProduction DB writes : NONE\nINSERT               : NONE\nUPDATE               : NONE\nDELETE               : NONE\nDDL                  : NONE\nProduction engine    : NOT EXECUTED\nHistorical repair    : NONE\nDirection inference  : NONE\nScore reconstruction : NONE\nSynthetic data       : NONE\nLive data injection  : NONE\nOrder execution      : NONE\n\nThe eligibility gate is analytical only.\nNO order or trading action is performed.\n",
+  "stderr": "",
+  "verdict": "RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_VERIFIED"
+}

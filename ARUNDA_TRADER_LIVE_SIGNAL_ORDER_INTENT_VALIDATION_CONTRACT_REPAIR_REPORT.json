@@ -1,0 +1,118 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT VALIDATION CONTRACT REPAIR",
+  "version": "v0.1",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false,
+    "signal_creation": false,
+    "signal_injection": false,
+    "replay_execution": false,
+    "operational_safety": true
+  },
+  "sources": {
+    "validation_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+    "validation_report_sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582"
+  },
+  "generation_contract": {
+    "contract": true,
+    "verified": true,
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "eligible_signals": 0,
+    "order_intents_generated": 0,
+    "validated_intents": 0,
+    "invalid_intents": 0,
+    "contract_valid": true
+  },
+  "runtime_contract": {
+    "contract": true,
+    "runtime_ready": true,
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "operational_safety": true,
+    "verdict": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY",
+    "verified": true
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "order_intent_validation": {
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "reason": "NO_ORDER_INTENTS_TO_VALIDATE",
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "validated_intents": 0,
+    "invalid_intents": 0,
+    "intents": [],
+    "invalid_details": [],
+    "contract": true,
+    "verified": true
+  },
+  "execution_safety": {
+    "network_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "production_db_write": false,
+    "execution_allowed": false
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "source_chain": {
+    "generation_contract": true,
+    "generation_contract_valid": true,
+    "generation_contract_verified": true,
+    "runtime_contract": true,
+    "runtime_contract_valid": true,
+    "runtime_contract_verified": true,
+    "artifact_contract": true,
+    "artifact_contract_valid": true,
+    "artifact_contract_verified": true,
+    "validation_contract": true,
+    "validation_contract_valid": true,
+    "validation_contract_verified": true,
+    "execution_gate_verified": false,
+    "gate_valid": false,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "intents": [],
+    "order_intents": 0
+  },
+  "eligible_signal_path": {
+    "status": "NO_ELIGIBLE_SIGNAL",
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "path_verified": false,
+    "replay_performed": false,
+    "reason": "No eligible signal exists in the current artifact. No signal was created, inferred, reconstructed, replayed, or injected."
+  },
+  "validation": {
+    "consumer_compatibility": true,
+    "representation_repaired": true,
+    "source_contract_preserved": true,
+    "no_signal_created": true,
+    "no_signal_inferred": true,
+    "no_signal_reconstructed": true,
+    "no_signal_injected": true
+  },
+  "final_verdict": "LIVE_SIGNAL_ORDER_INTENT_VALIDATION_CONTRACT_REPAIRED",
+  "next_stage": "LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_CONTRACT_REPAIR"
+}

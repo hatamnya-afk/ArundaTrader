@@ -1,0 +1,172 @@
+{
+  "version": "NOSTR_CRYPTO_REDUNDANCY_PROBE_v0.2",
+  "results": [
+    {
+      "relay": "wss://nos.lol",
+      "status": "PASS",
+      "crypto_events": 2,
+      "latency": 8.812,
+      "events": [
+        {
+          "id": "34cdaab5488f44fc1da21451122f237ca0d6315dc5296efd64d8717632d6f9e3",
+          "pubkey": "da2bcaaa2952bd1e9a3e3708c4330442991bf6c0b0a20624a58516e154c37ae1",
+          "created_at": 1788913274,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "I wonder if anyone has thought about using a blockchain system like bitcoin to give people an easier way to vote in a direct democracy.\nI do not know much about the programming of blockchain or bitcoin but I am watching a lot of what happens politically in the world. I am following Australian and Eu"
+        },
+        {
+          "id": "2ed4573ce403f4501c6a58c6bcbb391fd5ca145e97a5718b869969481227f7c3",
+          "pubkey": "0d4330174e16a2e8d5d366fa4cbf4f07919b29db2ccde26252aad37935ffc8a3",
+          "created_at": 1788913255,
+          "kind": 1,
+          "assets": [
+            "SOL"
+          ],
+          "content": "🔴 What Is Islam?  \n \n🔴 Islam is not just another religion.  \n \n🔵 It is the same message preached by Moses, Jesus and Abraham. \n \n 🔴 Islam literally means ‘submission to God’ and it teaches us to have a direct relationship with God.  \n \n 🔵 It reminds us that since God created us, no one should be wor"
+        }
+      ]
+    },
+    {
+      "relay": "wss://relay.damus.io",
+      "status": "FAIL",
+      "crypto_events": 0,
+      "latency": 7.016,
+      "error": "TimeoutError"
+    },
+    {
+      "relay": "wss://relay.primal.net",
+      "status": "FAIL",
+      "crypto_events": 0,
+      "latency": 7.013,
+      "error": "TimeoutError"
+    },
+    {
+      "relay": "wss://nostr.wine",
+      "status": "FAIL",
+      "crypto_events": 0,
+      "latency": 7.01,
+      "error": "TimeoutError"
+    },
+    {
+      "relay": "wss://relay.snort.social",
+      "status": "PASS",
+      "crypto_events": 4,
+      "latency": 10.109,
+      "events": [
+        {
+          "id": "03f50f96e5efde0018a47de2591a4d23466b2ed525a7e7e7bdcfeabaa3547674",
+          "pubkey": "9c684f1ea7c7ec36be3ec4c768a32bdae9f76797f6066d93f1153217acdb3102",
+          "created_at": 1788913314,
+          "kind": 1,
+          "assets": [
+            "SOL"
+          ],
+          "content": "VVV показал рост на 40% за сутки на фоне высокой волатильности на Binance\n\nКриптовалютный актив VVV продемонстрировал значительный рост стоимости, увеличившись более чем на 40% за последние 24 часа. Основным драйвером данного движения стал сегмент бессрочных фьючерсов на платформе Binance, где торго"
+        },
+        {
+          "id": "2977fd68389d03542da753655f26dc9fbafb1317696302b2d4dbb321085fbf9c",
+          "pubkey": "10cfb1810392dbfc16c8fb12d3c35f020cc8c22bb423cc3e9a3f13c233f299b3",
+          "created_at": 1788913309,
+          "kind": 1,
+          "assets": [
+            "SOL"
+          ],
+          "content": "#cookiebot #meshtestic\n\n📡 [Test]  5:19 PM\nHotPotato Solar 🥔  (HPS1 ):\n6️⃣ \n\n📡 [Test]  5:19 PM\n🍪👹 Cookiebot MF (cm/? for menu)  (🍪 ):\nCopy \"Test 53\" from 7 hops away in Penn Valley, CA. \n\n📡 [Test]  5:19 PM\nHotPotato Solar 🥔  (HPS1 ):\n🥔 🤖 @🫒 Heard ya in 6 hops in Clayton, CA  \n\n📡 [Test]  5:19 PM\nAlexi"
+        },
+        {
+          "id": "c2180ae46e78a94cb2c8546462b8036984f9d3cca9fc653dd9528053312685c6",
+          "pubkey": "8c593cc6084205228f9d5f826249596710bbbee6236d54e2c74b2826d00e4c83",
+          "created_at": 1788913307,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "I got into #bitcoin after my government froze citizens bank account.  How did you discover it? https://blossom.primal.net/153c1306e4256eebfe67a41d3c179112cf73049b20863899d72bd27e74876f56.jpg"
+        },
+        {
+          "id": "34cdaab5488f44fc1da21451122f237ca0d6315dc5296efd64d8717632d6f9e3",
+          "pubkey": "da2bcaaa2952bd1e9a3e3708c4330442991bf6c0b0a20624a58516e154c37ae1",
+          "created_at": 1788913274,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "I wonder if anyone has thought about using a blockchain system like bitcoin to give people an easier way to vote in a direct democracy.\nI do not know much about the programming of blockchain or bitcoin but I am watching a lot of what happens politically in the world. I am following Australian and Eu"
+        }
+      ]
+    },
+    {
+      "relay": "wss://nostr.mom",
+      "status": "PASS",
+      "crypto_events": 4,
+      "latency": 11.937,
+      "events": [
+        {
+          "id": "c2180ae46e78a94cb2c8546462b8036984f9d3cca9fc653dd9528053312685c6",
+          "pubkey": "8c593cc6084205228f9d5f826249596710bbbee6236d54e2c74b2826d00e4c83",
+          "created_at": 1788913307,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "I got into #bitcoin after my government froze citizens bank account.  How did you discover it? https://blossom.primal.net/153c1306e4256eebfe67a41d3c179112cf73049b20863899d72bd27e74876f56.jpg"
+        },
+        {
+          "id": "e2972395023b5c4196625b433bc1d2cf07b2e79689f03579dc98a818c98bb3fa",
+          "pubkey": "8534b22a15cb31ad1236e109201daf651c6ea8cec888d44194e51a337ffb12c7",
+          "created_at": 1788913242,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "🏝 New booking made for 2 nights\n🔵 Amazing booking! (24% discount)\n💰 ₿ooking value: 153k sats ($120)\n\n₿itcoin accepted 🧡\nSave up to 60% on your next trip\nhttps://unstoppablehoteldeals.com/book-with-bitcoin"
+        },
+        {
+          "id": "2b32af0cc08a80f1e6cc17a5145d9a936791e2ba79175defc9701f43c32722f2",
+          "pubkey": "1e67de3754171071d3cf9b44b6e546bd94fd0a2ca3fb4dbbb1b054685c9116e4",
+          "created_at": 1788913149,
+          "kind": 1,
+          "assets": [
+            "BTC"
+          ],
+          "content": "Bitcoin’s Overlooked Promise: Freedom \nhttps://partners.wsj.com/the-nakamoto-project/bitcoin-reframed/bitcoins-overlooked-promise-freedom/"
+        },
+        {
+          "id": "b6bf02d31ff39d21e8dc62c36b153b8d3c41e25d17b9f3ec7dbcb4e27f2529b1",
+          "pubkey": "f59c8a80afd8c01d9d937c8d6c690fa850b89c78a727c9fc6a5ccf58c90a654a",
+          "created_at": 1788913118,
+          "kind": 1,
+          "assets": [
+            "BTC",
+            "ETH"
+          ],
+          "content": "OpenCrypto whitepaper is live. Three pillars:\n— Multi-chain intelligence: BNB, ETH, BTC\n— Open protocol: any AI agent connects\n— ETHIC+ at the centre: gold-indexed, ethical\n\ngithub.com/opencrypto-agent/opencrypto-agent\nopencryptoagent.com\n\n#ethicoin #ETHICplus #crypto #goldcrypto #BNBChain #AIagents"
+        }
+      ]
+    },
+    {
+      "relay": "wss://relay.nostr.bg",
+      "status": "FAIL",
+      "crypto_events": 0,
+      "latency": 0.121,
+      "error": "WebSocketAddressException"
+    },
+    {
+      "relay": "wss://relay.orangepill.dev",
+      "status": "NO_CRYPTO_DATA",
+      "crypto_events": 0,
+      "latency": 0.748,
+      "events": []
+    }
+  ],
+  "crypto_relevance": "PASS",
+  "crypto_relay_count": 3,
+  "redundancy": "PASS",
+  "nostr_production": "PASS",
+  "db_write": 0,
+  "lunarcrush": 0,
+  "execution": "OFF"
+}

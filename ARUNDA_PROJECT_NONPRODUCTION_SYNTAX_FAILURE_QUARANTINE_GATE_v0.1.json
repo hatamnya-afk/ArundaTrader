@@ -1,0 +1,152 @@
+{
+  "version": "v0.1",
+  "project_directory": "C:\\Users\\ASUS\\ArundaTrader",
+  "started_utc": "2026-08-26T20:57:34.216032+00:00",
+  "finished_utc": "2026-08-26T20:57:34.625213+00:00",
+  "mode": "READ_ONLY",
+  "database_used": false,
+  "network_used": false,
+  "file_modification": false,
+  "deletion_performed": false,
+  "quarantine_performed": false,
+  "target_files": [
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.2.py",
+    "history_feature_extractor_corrupted_backup.py",
+    "INDICATOR_POST_REPAIR_PRODUCTION_PRICE_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py",
+    "prediction_test.py"
+  ],
+  "records": [
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.2.py",
+      "exists": true,
+      "size": 1294,
+      "sha256": "71e598ca532a8ec23b601af7632ae04609587f4d893427bfcf32f70db1ecbf50",
+      "filename_class": "FORENSIC_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "error_message": "invalid syntax (<unknown>, line 10)",
+        "error_line": 10,
+        "error_column": 102
+      },
+      "content_markers": [
+        "PRODUCTION_TERM",
+        "TRADE_TERM"
+      ],
+      "referenced_by": [
+        "ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py",
+        "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py"
+      ],
+      "production_entry_references": [],
+      "reasons": [
+        "direct_project_reference_found",
+        "filename_identifies_forensic_artifact"
+      ],
+      "deletion_performed": false,
+      "quarantine_performed": false
+    },
+    {
+      "file": "history_feature_extractor_corrupted_backup.py",
+      "exists": true,
+      "size": 6045,
+      "sha256": "935b6ef3b82a24b6d0083fed33dbc28568c931940ae1662f4759ebd1d1d26c8a",
+      "filename_class": "BACKUP_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "error_message": "invalid non-printable character U+FEFF (<unknown>, line 1)",
+        "error_line": 1,
+        "error_column": 1
+      },
+      "content_markers": [
+        "POWERSHELL_HERE_STRING",
+        "SQL_CREATE_TABLE_TEXT",
+        "SQL_ALTER_TABLE_TEXT",
+        "SQL_DROP_TABLE_TEXT",
+        "TRADE_TERM"
+      ],
+      "referenced_by": [
+        "ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py",
+        "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py"
+      ],
+      "production_entry_references": [],
+      "reasons": [
+        "direct_project_reference_found",
+        "filename_identifies_backup_artifact"
+      ],
+      "deletion_performed": false,
+      "quarantine_performed": false
+    },
+    {
+      "file": "INDICATOR_POST_REPAIR_PRODUCTION_PRICE_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py",
+      "exists": true,
+      "size": 14877,
+      "sha256": "9e6ec1d7b6d54f772d830ce48e90f9dfcf8a7528c60e49e856e4f080df460367",
+      "filename_class": "FORENSIC_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "error_message": "unterminated string literal (detected at line 1) (<unknown>, line 1)",
+        "error_line": 1,
+        "error_column": 2
+      },
+      "content_markers": [
+        "SQLITE_USAGE",
+        "SQLITE_CONNECT",
+        "POWERSHELL_HERE_STRING",
+        "PRODUCTION_TERM",
+        "ORDER_TERM"
+      ],
+      "referenced_by": [
+        "ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py",
+        "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py"
+      ],
+      "production_entry_references": [],
+      "reasons": [
+        "direct_project_reference_found",
+        "filename_identifies_forensic_artifact"
+      ],
+      "deletion_performed": false,
+      "quarantine_performed": false
+    },
+    {
+      "file": "prediction_test.py",
+      "exists": true,
+      "size": 48,
+      "sha256": "5513feefe38a18aae3b0ae01503f0d47d637bfc52956c58348c8121fb09c2f06",
+      "filename_class": "TEST_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "error_message": "invalid syntax (<unknown>, line 2)",
+        "error_line": 2,
+        "error_column": 8
+      },
+      "content_markers": [
+        "PLAIN_TEXT_TEST_EXPRESSION"
+      ],
+      "referenced_by": [
+        "ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py",
+        "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py"
+      ],
+      "production_entry_references": [],
+      "reasons": [
+        "direct_project_reference_found",
+        "filename_identifies_test_artifact"
+      ],
+      "deletion_performed": false,
+      "quarantine_performed": false
+    }
+  ],
+  "summary": {
+    "target_files": 4,
+    "non_production_quarantine_candidates": 4,
+    "manual_review_candidates": 0,
+    "production_dependency_candidates": 0
+  },
+  "status": "NONPRODUCTION_FAILURES_SAFE_TO_QUARANTINE"
+}

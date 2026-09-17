@@ -1,0 +1,63 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT GENERATION",
+  "version": "v0.1",
+  "timestamp_utc": "2026-08-24T22:14:40.174457+00:00",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false,
+    "operational_safety": true
+  },
+  "sources": {
+    "runtime": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_REPORT.json",
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "validation": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_ORDER_INTENT_VALIDATION_REPORT.json"
+  },
+  "runtime_contract": {
+    "contract": true,
+    "reason": "RUNTIME_CONTRACT_VERIFIED",
+    "runtime_ready": true,
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "operational_safety": true,
+    "verdict": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+  },
+  "artifact_contract": {
+    "contract": true,
+    "reason": "ARTIFACT_CONTRACT_VERIFIED",
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "order_intent_generation": {
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "eligible_signals": 0,
+    "order_intents_generated": 0,
+    "validated_intents": 0,
+    "invalid_intents": 0,
+    "intents": [],
+    "invalid_details": []
+  },
+  "execution_safety": {
+    "network_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "production_db_write": false
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "final_verdict": "LIVE_SIGNAL_ORDER_INTENT_GENERATION_READY",
+  "next_stage": "WAIT_FOR_ELIGIBLE_SIGNAL"
+}

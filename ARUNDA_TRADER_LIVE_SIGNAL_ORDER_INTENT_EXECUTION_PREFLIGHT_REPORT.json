@@ -1,0 +1,59 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT EXECUTION PREFLIGHT",
+  "version": "v0.1",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false,
+    "operational_safety": true
+  },
+  "source": {
+    "execution_gate": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_REPORT.json",
+    "execution_gate_sha256": "ab19975b57f5d09b9f51f5a6753fc644ec5e7ad256eb1e12f563f9e44637f136"
+  },
+  "runtime_contract": {
+    "contract": true,
+    "runtime_ready": true,
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "operational_safety": true
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "execution_gate": {
+    "contract": true,
+    "verified": true,
+    "execution_allowed": false,
+    "order_intents": 0
+  },
+  "preflight": {
+    "status": "READY_NO_ORDER_INTENTS",
+    "execution_allowed": false,
+    "network_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "production_db_write": false,
+    "order_intents": 0
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "final_verdict": "LIVE_SIGNAL_ORDER_INTENT_EXECUTION_PREFLIGHT_READY",
+  "next_stage": "WAIT_FOR_ELIGIBLE_SIGNAL"
+}

@@ -1,0 +1,304 @@
+{
+  "forensic": {
+    "project": "ARUNDA TRADER",
+    "component": "ARTIFACT PRODUCER/CONSUMER CONTRACT FORENSICS",
+    "version": "v0.1",
+    "mode": "READ_ONLY",
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "exchange_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false
+  },
+  "source": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "exists": true,
+    "sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "root_type": "dict"
+  },
+  "root_schema": {
+    "frontier": {
+      "type": "str",
+      "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1"
+    },
+    "timestamp_utc": {
+      "type": "str",
+      "value": "2026-08-24T18:34:37.914306+00:00"
+    },
+    "production_db": {
+      "path": {
+        "type": "str",
+        "value": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db"
+      },
+      "before": {
+        "size": {
+          "type": "int",
+          "value": 521883648
+        },
+        "sha256": {
+          "type": "str",
+          "value": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+        },
+        "rows": {
+          "type": "int",
+          "value": 36
+        }
+      },
+      "after": {
+        "size": {
+          "type": "int",
+          "value": 521883648
+        },
+        "sha256": {
+          "type": "str",
+          "value": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+        },
+        "rows": {
+          "type": "int",
+          "value": 36
+        }
+      },
+      "unchanged": {
+        "type": "bool",
+        "value": true
+      }
+    },
+    "capture_db": {
+      "type": "str",
+      "value": "C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_m1ld7rpr\\arunda_live_capture.db"
+    },
+    "engine": {
+      "type": "str",
+      "value": "FUSION_v0.5"
+    },
+    "snapshot_id": {
+      "type": "str",
+      "value": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+    },
+    "gate_configuration": {
+      "min_confidence": {
+        "type": "float",
+        "value": 0.6
+      },
+      "min_available_weight": {
+        "type": "float",
+        "value": 1.0
+      },
+      "required_data_quality": {
+        "type": "str",
+        "value": "VERIFIED"
+      },
+      "required_safety": {
+        "type": "str",
+        "value": "FULL_INPUT"
+      },
+      "blocked_signal_strength": {
+        "type": "list",
+        "length": 1,
+        "item_types": [
+          "str"
+        ],
+        "first_item": {
+          "type": "str",
+          "value": "WEAK"
+        }
+      },
+      "blocked_directions": {
+        "type": "list",
+        "length": 1,
+        "item_types": [
+          "str"
+        ],
+        "first_item": {
+          "type": "str",
+          "value": "FLAT"
+        }
+      },
+      "required_arms": {
+        "type": "list",
+        "length": 3,
+        "item_types": [
+          "str"
+        ],
+        "first_item": {
+          "type": "str",
+          "value": "market"
+        }
+      }
+    },
+    "rows": {
+      "type": "int",
+      "value": 4
+    },
+    "eligible_rows": {
+      "type": "int",
+      "value": 0
+    },
+    "no_trade_rows": {
+      "type": "int",
+      "value": 4
+    },
+    "decision": {
+      "type": "str",
+      "value": "NO_TRADE"
+    },
+    "row_results": {
+      "type": "list",
+      "length": 4,
+      "item_types": [
+        "dict"
+      ],
+      "first_item": {
+        "id": {
+          "type": "int",
+          "value": 37
+        },
+        "asset": {
+          "type": "str",
+          "value": "BTC"
+        },
+        "timestamp": {
+          "type": "str",
+          "value": "2026-08-24T15:38:00.744724+00:00"
+        },
+        "direction": {
+          "type": "str",
+          "value": "FLAT"
+        },
+        "confidence": {
+          "type": "float",
+          "value": 0.5901933333333333
+        },
+        "regime": {
+          "type": "str",
+          "value": "NEUTRAL"
+        },
+        "signal_strength": {
+          "type": "str",
+          "value": "WEAK"
+        },
+        "data_quality": {
+          "type": "str",
+          "value": "VERIFIED"
+        },
+        "entry_price": {
+          "type": "float",
+          "value": 72719.42995131218
+        },
+        "available_weight": {
+          "type": "float",
+          "value": 1.0
+        },
+        "missing_arm_penalty": {
+          "type": "float",
+          "value": 1.0
+        },
+        "market_available": {
+          "type": "int",
+          "value": 1
+        },
+        "positioning_available": {
+          "type": "int",
+          "value": 1
+        },
+        "news_available": {
+          "type": "int",
+          "value": 1
+        },
+        "status": {
+          "type": "str",
+          "value": "NO_TRADE"
+        },
+        "eligible": {
+          "type": "bool",
+          "value": false
+        },
+        "reasons": {
+          "type": "list",
+          "length": 3,
+          "item_types": [
+            "str"
+          ],
+          "first_item": {
+            "type": "str",
+            "value": "CONFIDENCE_BELOW_GATE"
+          }
+        }
+      }
+    },
+    "safety": {
+      "production_db_modified": {
+        "type": "bool",
+        "value": false
+      },
+      "engine_executed": {
+        "type": "bool",
+        "value": false
+      },
+      "historical_repair": {
+        "type": "bool",
+        "value": false
+      },
+      "direction_inference": {
+        "type": "bool",
+        "value": false
+      },
+      "score_reconstruction": {
+        "type": "bool",
+        "value": false
+      },
+      "synthetic_data": {
+        "type": "bool",
+        "value": false
+      },
+      "live_data_injection": {
+        "type": "bool",
+        "value": false
+      },
+      "order_execution": {
+        "type": "bool",
+        "value": false
+      }
+    }
+  },
+  "candidate_key_paths": [
+    {
+      "path": "production_db.before.rows",
+      "value_type": "int",
+      "value": 36
+    },
+    {
+      "path": "production_db.after.rows",
+      "value_type": "int",
+      "value": 36
+    },
+    {
+      "path": "snapshot_id",
+      "value_type": "str",
+      "value": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+    },
+    {
+      "path": "rows",
+      "value_type": "int",
+      "value": 4
+    },
+    {
+      "path": "eligible_rows",
+      "value_type": "int",
+      "value": 0
+    },
+    {
+      "path": "no_trade_rows",
+      "value_type": "int",
+      "value": 4
+    },
+    {
+      "path": "decision",
+      "value_type": "str",
+      "value": "NO_TRADE"
+    }
+  ]
+}

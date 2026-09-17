@@ -1,0 +1,42 @@
+==========================================================================================
+ARUNDA_LIVE_DATA_BOUNDARY_LAUNCH_READINESS_FORENSIC_v0.1
+==========================================================================================
+Generated UTC : 2026-08-26T17:48:39.295219+00:00
+Project Root  : C:\Users\ASUS\ArundaTrader
+Mode          : STATIC / READ ONLY
+Network       : FORBIDDEN
+Production Run: FORBIDDEN
+Database Write: FORBIDDEN
+
+==========================================================================================
+SUMMARY
+==========================================================================================
+Python Files              : 445
+Syntax Failures           : 55
+Live Boundary Candidates  : 3
+Network Files             : 49
+DB Write Sources          : 324
+Synthetic/Fallback Files  : 0
+Execution References      : 50
+
+==========================================================================================
+LAUNCH STATUS
+==========================================================================================
+STATUS   : LAUNCH_READINESS_BLOCKERS_IDENTIFIED
+BLOCKERS : PYTHON_SYNTAX_FAILURES
+
+==========================================================================================
+SAFETY STATUS
+==========================================================================================
+NETWORK TEST        : NOT PERFORMED
+PRODUCTION EXECUTION: NOT PERFORMED
+DATABASE WRITE      : NOT PERFORMED
+DATABASE DELETE     : NOT PERFORMED
+DATABASE REPAIR     : NOT PERFORMED
+PREDICTION          : NOT PERFORMED
+TRADING DECISION    : NOT PERFORMED
+
+==========================================================================================
+ARTIFACT
+==========================================================================================
+Artifact : C:\Users\ASUS\ArundaTrader\ARUNDA_LIVE_DATA_BOUNDARY_LAUNCH_READINESS_FORENSIC_v0.1.json

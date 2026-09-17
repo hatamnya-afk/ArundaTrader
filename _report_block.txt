@@ -1,0 +1,88 @@
+﻿def print_series_report(
+    series: NormalizedSeries,
+):
+    print()
+    print("=" * 78)
+    print(series.asset)
+    print("=" * 78)
+
+    print(
+        f"QUALITY            : {series.quality}"
+    )
+
+    print(
+        f"POINTS             : {series.point_count}"
+    )
+
+    print(
+        f"SELECTED SEGMENT   : "
+        f"{series.source_segment_index}"
+    )
+
+    print(
+        f"TOTAL SEGMENTS     : "
+        f"{series.total_segments}"
+    )
+
+    print(
+        f"HISTORICAL GAPS    : "
+        f"{series.gaps_before_selected_segment}"
+    )
+
+    start_text = (
+        series.start.isoformat()
+        if series.start is not None
+        else "-"
+    )
+
+    end_text = (
+        series.end.isoformat()
+        if series.end is not None
+        else "-"
+    )
+
+    print(
+        f"START              : {start_text}"
+    )
+
+    print(
+        f"END                : {end_text}"
+    )
+
+    print(
+        f"DURATION           : "
+        f"{series.duration_seconds:.3f}s"
+    )
+
+    print(
+        f"AVG INTERVAL       : "
+        f"{format_seconds(series.average_interval)}"
+    )
+
+    closes = series.closes()
+
+    if closes:
+        print(
+            f"FIRST PRICE        : {closes[0]}"
+        )
+
+        print(
+            f"LAST PRICE         : {closes[-1]}"
+        )
+
+    print()
+    print("NORMALIZED SERIES")
+    print("-" * 78)
+
+    if not series.points:
+        print("No usable points.")
+        return
+
+    preview = series.points[-5:]
+
+    for point in preview:
+        print(
+            f"{point.timestamp.isoformat()} | "
+            f"PRICE={point.price} | "
+            f"SNAP={point.snapshot_id}"
+        )

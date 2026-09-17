@@ -1,0 +1,500 @@
+﻿    return regime_snapshot
+
+
+def get_current_regime(
+    regime_snapshot: dict,
+    asset: str,
+) -> Any:
+    asset = normalize_asset(asset)
+
+    if asset is None:
+        fail(
+            "Cannot resolve regime for empty asset"
+        )
+
+    direct = regime_snapshot.get(asset)
+
+    if (
+        isinstance(direct, dict)
+        and "regime" in direct
+    ):
+        return direct["regime"]
+
+    for key, value in regime_snapshot.items():
+        if str(key).strip().upper() == asset:
+            if (
+                isinstance(value, dict)
+                and "regime" in value
+            ):
+                return value["regime"]
+
+    fail(
+        "CURRENT_MARKET_REGIME ownership unavailable "
+        f"for asset={asset}"
+    )
+
+
+# ============================================================================
+# MARKET-DATA RUNTIME EXTRACTION
+# ============================================================================
+
+def _find_runtime_asset_record(
+    market_data_result: Any,
+    asset: str,
+) -> dict | None:
+    if not isinstance(
+        market_data_result,
+        dict,
+    ):
+        return None
+
+    asset = normalize_asset(asset)
+
+    candidates = extract_rows(
+        market_data_result,
+        (
+            "assets",
+            "rows",
+            "results",
+            "data",
+            "market_data",
+            "ohlcv",
+            "records",
+        ),
+    )
+
+    for row in candidates:
+        row_asset = normalize_asset(
+            row.get(
+                "asset",
+                row.get(
+                    "symbol",
+                    row.get(
+                        "market",
+                        row.get("pair"),
+                    ),
+                ),
+            )
+        )
+
+        if row_asset == asset:
+            return row
+
+    for key, value in market_data_result.items():
+        if normalize_asset(key) == asset:
+            if isinstance(value, dict):
+                return value
+
+    return None
+
+
+def _runtime_value(
+    asset_record: dict | None,
+    *keys: str,
+) -> Any:
+    if not isinstance(
+        asset_record,
+        dict,
+    ):
+        return None
+
+    for key in keys:
+        if key in asset_record:
+            return asset_record[key]
+
+    return None
+
+
+def _resolve_market_data_provenance(
+    market_data_result: Any,
+    asset: str,
+) -> dict:
+    record = _find_runtime_asset_record(
+        market_data_result,
+        asset,
+    )
+
+    if record is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA asset record "
+            f"missing: {asset}"
+        )
+
+    source = _runtime_value(
+        record,
+        "source",
+        "provider",
+        "data_source",
+    )
+
+    timestamp = _runtime_value(
+        record,
+        "latest_ohlcv_timestamp",
+        "ohlcv_timestamp",
+        "timestamp",
+        "latest_timestamp",
+    )
+
+    candle_count = _runtime_value(
+        record,
+        "real_candle_count",
+        "valid_candles",
+        "candle_count",
+        "real_candles",
+    )
+
+    atr14 = _runtime_value(
+        record,
+        "atr14",
+        "atr_14",
+    )
+
+    stop_distance = _runtime_value(
+        record,
+        "stop_distance",
+    )
+
+    if not source:
+        fail(
+            "CURRENT RUNTIME MARKET DATA source missing: "
+            f"{asset}"
+        )
+
+    if not timestamp:
+        fail(
+            "CURRENT RUNTIME MARKET DATA timestamp missing: "
+            f"{asset}"
+        )
+
+    if candle_count is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA real candle count "
+            f"missing: {asset}"
+        )
+
+    if (
+        not isinstance(candle_count, int)
+        or isinstance(candle_count, bool)
+        or candle_count < 1
+    ):
+        fail(
+            "CURRENT RUNTIME MARKET DATA candle count invalid: "
+            f"{asset}"
+        )
+
+    if atr14 is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA ATR14 missing: "
+            f"{asset}"
+        )
+
+    if not is_finite_number(atr14):
+        fail(
+            "CURRENT RUNTIME MARKET DATA ATR14 invalid: "
+            f"{asset}"
+        )
+
+    if float(atr14) <= 0:
+        fail(
+            "CURRENT RUNTIME MARKET DATA ATR14 must be > 0: "
+            f"{asset}"
+        )
+
+    if stop_distance is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA stop_distance missing: "
+            f"{asset}"
+        )
+
+    if not is_finite_number(stop_distance):
+        fail(
+            "CURRENT RUNTIME MARKET DATA stop_distance invalid: "
+            f"{asset}"
+        )
+
+    if float(stop_distance) <= 0:
+        fail(
+            "CURRENT RUNTIME MARKET DATA stop_distance must be > 0: "
+            f"{asset}"
+        )
+
+    return {
+        "source": source,
+        "latest_ohlcv_timestamp": timestamp,
+        "real_candle_count": candle_count,
+        "atr14": atr14,
+        "stop_distance": stop_distance,
+    }
+
+
+# ============================================================================
+# CURRENT-RUNTIME QUANTITY BRIDGE
+# ============================================================================
+
+def build_runtime_quantity_bridge(
+    snapshot_id: str,
+    opportunity_rows: list[dict],
+    risk_snapshot: dict,
+    market_data_result: dict,
+) -> dict:
+    if not isinstance(
+        opportunity_rows,
+        list,
+    ):
+        fail(
+            "Opportunity rows must be list"
+        )
+
+    opportunities = opportunity_map(
+        {
+            "opportunities": opportunity_rows,
+        }
+    )
+
+    risk_rows = extract_rows(
+        risk_snapshot,
+        (
+            "risk",
+            "risk_decisions",
+            "decisions",
+            "rows",
+            "assets",
+            "results",
+        ),
+    )
+
+    risk_rows = exact_asset_rows(
+        risk_rows,
+        "RISK",
+    )
+
+    r_map = risk_map(
+        risk_rows
+    )
+
+    if market_data_result is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA unavailable"
+        )
+
+    if not isinstance(
+        market_data_result,
+        dict,
+    ):
+        fail(
+            "CURRENT RUNTIME MARKET DATA result must be dict"
+        )
+
+    records = {}
+
+    for asset in EXPECTED_ASSETS:
+        opportunity = opportunities.get(asset)
+
+        if not isinstance(
+            opportunity,
+            dict,
+        ):
+            fail(
+                f"Opportunity missing: {asset}"
+            )
+
+        risk_row = r_map.get(asset)
+
+        if not isinstance(
+            risk_row,
+            dict,
+        ):
+            fail(
+                f"Risk row missing: {asset}"
+            )
+
+        risk_status = normalize_status(
+            get_row_value(
+                risk_row,
+                "risk_status",
+                "status",
+                "decision",
+                "risk_state",
+            )
+        )
+
+        if risk_status not in APPROVED_RISK_STATUSES:
+            continue
+
+        direction = normalize_status(
+            risk_row.get("direction")
+        )
+
+        if direction not in VALID_DIRECTIONS:
+            fail(
+                f"Risk direction invalid: {asset}"
+            )
+
+        entry_price = opportunity.get("price")
+
+        if entry_price is None:
+            fail(
+                f"Opportunity price missing: {asset}"
+            )
+
+        if not is_finite_number(entry_price):
+            fail(
+                f"Opportunity price invalid: {asset}"
+            )
+
+        risk_budget = risk_row.get(
+            "risk_budget"
+        )
+
+        if risk_budget is None:
+            risk_budget = risk_row.get(
+                "allocated_budget"
+            )
+
+        if risk_budget is None:
+            fail(
+                f"Risk budget missing: {asset}"
+            )
+
+        if not is_finite_number(risk_budget):
+            fail(
+                f"Risk budget invalid: {asset}"
+            )
+
+        position_size = risk_row.get(
+            "position_size"
+        )
+
+        if position_size is None:
+            position_size = risk_row.get(
+                "position_quantity"
+            )
+
+        if position_size is None:
+            fail(
+                f"Risk position size missing: {asset}"
+            )
+
+        if not is_finite_number(position_size):
+            fail(
+                f"Risk position size invalid: {asset}"
+            )
+
+        if float(position_size) <= 0:
+            fail(
+                f"Risk position size must be > 0: {asset}"
+            )
+
+        quantity_unit = risk_row.get(
+            "quantity_unit"
+        )
+
+        if quantity_unit is None:
+            quantity_unit = POSITION_QUANTITY_UNIT
+
+        quantity_source = risk_row.get(
+            "quantity_source"
+        )
+
+        if quantity_source is None:
+            quantity_source = POSITION_QUANTITY_SOURCE
+
+        if quantity_unit != POSITION_QUANTITY_UNIT:
+            fail(
+                f"Risk quantity unit invalid: {asset}"
+            )
+
+        if quantity_source != POSITION_QUANTITY_SOURCE:
+            fail(
+                f"Risk quantity source invalid: {asset}"
+            )
+
+        for flag in (
+            "quantity_changed",
+            "quantity_recomputed",
+            "quantity_rescaled",
+            "quantity_rounded",
+            "quantity_clipped",
+        ):
+            if risk_row.get(flag, False) is not False:
+                fail(
+                    "Risk quantity transformation detected: "
+                    f"{asset}.{flag}"
+                )
+
+        runtime = _resolve_market_data_provenance(
+            market_data_result,
+            asset,
+        )
+
+        risk_row["position_quantity"] = position_size
+        risk_row["quantity_unit"] = POSITION_QUANTITY_UNIT
+        risk_row["quantity_source"] = POSITION_QUANTITY_SOURCE
+
+        risk_row["quantity_changed"] = False
+        risk_row["quantity_recomputed"] = False
+        risk_row["quantity_rescaled"] = False
+        risk_row["quantity_rounded"] = False
+        risk_row["quantity_clipped"] = False
+
+        records[asset] = {
+            "snapshot_id": snapshot_id,
+            "asset": asset,
+            "timeframe": TIMEFRAME,
+            "source": runtime["source"],
+            "latest_ohlcv_timestamp": (
+                runtime["latest_ohlcv_timestamp"]
+            ),
+            "real_candle_count": (
+                runtime["real_candle_count"]
+            ),
+            "atr14": runtime["atr14"],
+            "stop_distance": runtime["stop_distance"],
+            "risk_budget": risk_budget,
+            "entry_price": entry_price,
+            "position_size": position_size,
+            "risk_position_quantity": position_size,
+            "order_intent_quantity": None,
+            "canonical_order_request_quantity": None,
+            "quantity_unit": POSITION_QUANTITY_UNIT,
+            "quantity_source": POSITION_QUANTITY_SOURCE,
+            "quantity_changed": False,
+            "quantity_recomputed": False,
+            "quantity_rescaled": False,
+            "quantity_rounded": False,
+            "quantity_clipped": False,
+        }
+
+    return records
+
+
+# ============================================================================
+# QUANTITY OBSERVABILITY VALIDATION
+# ============================================================================
+
+def validate_runtime_quantity_records(
+    quantity_records: dict,
+    snapshot_id: str,
+) -> None:
+    if not isinstance(
+        quantity_records,
+        dict,
+    ):
+        fail(
+            "Quantity records must be dict"
+        )
+
+    if (
+        not isinstance(snapshot_id, str)
+        or not snapshot_id
+    ):
+        fail(
+            "Quantity observability snapshot_id missing"
+        )
+
+    for asset_key, record in quantity_records.items():
+        asset = normalize_asset(asset_key)
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Unexpected quantity asset: {asset}"

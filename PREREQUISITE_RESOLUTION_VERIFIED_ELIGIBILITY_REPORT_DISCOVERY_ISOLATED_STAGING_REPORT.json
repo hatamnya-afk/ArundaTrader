@@ -1,0 +1,75 @@
+{
+  "script": "ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+  "version": "v0.1",
+  "status": "BLOCKED",
+  "reason": "Verified eligibility report could not be resolved uniquely and safely.",
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "target_frontier": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+  "target_frontier_sha256": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9",
+  "candidate_count": 5,
+  "candidates": [
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\BACKUPS\\ARUNDA_PROJECT_STATE_LATEST.txt",
+      "name": "ARUNDA_PROJECT_STATE_LATEST.txt",
+      "suffix": ".txt",
+      "size": 18973,
+      "score": 6,
+      "reasons": [
+        "content:verification",
+        "content:forensic",
+        "content:gate"
+      ],
+      "sha256": "152890cb0fc1faeb425b59c8498628508b87ffeac674b51332b6d0247d781602"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_PROJECT_STATE_BACKUP_20260821_000450.txt",
+      "name": "ARUNDA_PROJECT_STATE_BACKUP_20260821_000450.txt",
+      "suffix": ".txt",
+      "size": 15349,
+      "score": 4,
+      "reasons": [
+        "content:verified",
+        "content:forensic"
+      ],
+      "sha256": "c7ac572287395cea2ff49fd5ef717e3e3b2ad7c03a224fdda8d2f5442cb3a810"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\_report_block.txt",
+      "name": "_report_block.txt",
+      "suffix": ".txt",
+      "size": 1640,
+      "score": 3,
+      "reasons": [
+        "filename:report"
+      ],
+      "sha256": "391b7ceff0c92f5e8a69cea083ea9608f48f94a5a0598a299402a0a0a6c2b3fc"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\CODE_STRUCTURE.txt",
+      "name": "CODE_STRUCTURE.txt",
+      "suffix": ".txt",
+      "size": 31672,
+      "score": 2,
+      "reasons": [
+        "content:gate"
+      ],
+      "sha256": "bb9eecb5b4a09e8a741cbe14ca741982082ab5113f1f41ece7701e79ba8c5f45"
+    },
+    {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\IMPORT_MAP.txt",
+      "name": "IMPORT_MAP.txt",
+      "suffix": ".txt",
+      "size": 11498,
+      "score": 2,
+      "reasons": [
+        "content:gate"
+      ],
+      "sha256": "82742d5f65a7934d7db70a93affacc041365866f4eb2e2977c00af48eca30467"
+    }
+  ],
+  "production_modification": false,
+  "database_write": false,
+  "synthetic_report": false,
+  "network_access": false,
+  "timestamp_utc": "2026-08-24T17:28:02.850673+00:00"
+}

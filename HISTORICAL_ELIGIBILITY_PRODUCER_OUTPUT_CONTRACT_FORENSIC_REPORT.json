@@ -1,0 +1,390 @@
+{
+  "metadata": {
+    "title": "ARUNDA TRADER HISTORICAL ELIGIBILITY PRODUCER OUTPUT CONTRACT FORENSIC v0.1",
+    "mode": "READ-ONLY FORENSIC",
+    "generated_at_utc": "2026-08-24T18:08:03.540771+00:00",
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "report": "HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_CONTRACT_FORENSIC_REPORT.json"
+  },
+  "filesystem_inventory": {
+    "files_discovered": 387,
+    "exact_target_files_found": 0
+  },
+  "target_artifact": {
+    "exact_target_found": false,
+    "exact_paths": [],
+    "similar_candidates": [
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_CONTRACT_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_DATAFLOW_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_EXTRACTION_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_LOCATION_RESOLUTION_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_ARTIFACT_MAPPING_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_TRACE_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json"
+    ]
+  },
+  "producer_static_forensic": {
+    "exists": true,
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "size_bytes": 21139,
+    "syntax_valid": true,
+    "parse_error": null,
+    "target_string_occurrences": [
+      {
+        "line": 698,
+        "text": "        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+      }
+    ],
+    "target_literal_occurrences": [
+      {
+        "line": 698,
+        "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+      }
+    ],
+    "path_construction_occurrences": [
+      {
+        "line": 697,
+        "source": "'LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json'"
+      }
+    ],
+    "writer_calls": [
+      {
+        "line": 91,
+        "call": "open",
+        "source": "open(path, 'rb')"
+      },
+      {
+        "line": 706,
+        "call": "open",
+        "source": "open(report_path, 'w', encoding='utf-8')"
+      },
+      {
+        "line": 711,
+        "call": "json.dump",
+        "source": "json.dump(report, f, indent=2, ensure_ascii=False)"
+      }
+    ],
+    "open_calls": [
+      {
+        "line": 91,
+        "call": "open",
+        "source": "open(path, 'rb')"
+      },
+      {
+        "line": 706,
+        "call": "open",
+        "source": "open(report_path, 'w', encoding='utf-8')"
+      }
+    ],
+    "json_dump_calls": [
+      {
+        "line": 711,
+        "call": "json.dump",
+        "source": "json.dump(report, f, indent=2, ensure_ascii=False)"
+      }
+    ],
+    "json_load_calls": [],
+    "write_text_calls": [],
+    "write_bytes_calls": [],
+    "rename_replace_calls": [],
+    "function_definitions": [
+      {
+        "name": "sha256_file",
+        "line": 88,
+        "end_line": 100
+      },
+      {
+        "name": "find_latest_capture",
+        "line": 103,
+        "end_line": 135
+      },
+      {
+        "name": "open_readonly",
+        "line": 138,
+        "end_line": 140
+      },
+      {
+        "name": "get_columns",
+        "line": 143,
+        "end_line": 148
+      },
+      {
+        "name": "utc_now",
+        "line": 151,
+        "end_line": 152
+      },
+      {
+        "name": "production_baseline",
+        "line": 159,
+        "end_line": 176
+      },
+      {
+        "name": "load_latest_snapshot",
+        "line": 183,
+        "end_line": 230
+      },
+      {
+        "name": "evaluate_row",
+        "line": 237,
+        "end_line": 356
+      },
+      {
+        "name": "build_report",
+        "line": 363,
+        "end_line": 441
+      },
+      {
+        "name": "main",
+        "line": 448,
+        "end_line": 773
+      }
+    ],
+    "main_guard": true,
+    "producer_execution_indicators": [
+      {
+        "line": 3,
+        "pattern": "eligibility",
+        "text": "# LIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY GATE v0.1"
+      },
+      {
+        "line": 10,
+        "pattern": "eligibility",
+        "text": "#   1. Signal eligibility"
+      },
+      {
+        "line": 32,
+        "pattern": "eligibility",
+        "text": "#       ELIGIBILITY"
+      },
+      {
+        "line": 234,
+        "pattern": "eligibility",
+        "text": "# ROW ELIGIBILITY"
+      },
+      {
+        "line": 323,
+        "pattern": "eligibility",
+        "text": "    # all three arms must be available before trade eligibility."
+      },
+      {
+        "line": 381,
+        "pattern": "eligibility",
+        "text": "        \"frontier\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\","
+      },
+      {
+        "line": 448,
+        "pattern": "main(",
+        "text": "def main():"
+      },
+      {
+        "line": 451,
+        "pattern": "eligibility",
+        "text": "    print(\"ARUNDA TRADER LIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY GATE v0.1\")"
+      },
+      {
+        "line": 456,
+        "pattern": "eligibility",
+        "text": "    print(\"  Determine trade eligibility or NO-TRADE.\")"
+      },
+      {
+        "line": 534,
+        "pattern": "eligibility",
+        "text": "        print(\"ELIGIBILITY INPUT CONTRACT\")"
+      },
+      {
+        "line": 541,
+        "pattern": "eligibility",
+        "text": "                f\"Eligibility contract failed: {missing}\""
+      },
+      {
+        "line": 579,
+        "pattern": "eligibility",
+        "text": "    print(\"SIGNAL ELIGIBILITY MATRIX\")"
+      },
+      {
+        "line": 633,
+        "pattern": "eligibility",
+        "text": "    print(\"ELIGIBILITY SUMMARY\")"
+      },
+      {
+        "line": 698,
+        "pattern": "eligibility",
+        "text": "        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+      },
+      {
+        "line": 720,
+        "pattern": "eligibility",
+        "text": "    print(\"LIVE SIGNAL ELIGIBILITY + NO-TRADE SAFETY VERDICT\")"
+      },
+      {
+        "line": 724,
+        "pattern": "eligibility",
+        "text": "        \"ELIGIBILITY_EVALUATION : PASS\""
+      },
+      {
+        "line": 769,
+        "pattern": "eligibility",
+        "text": "        \"The eligibility gate is analytical only.\""
+      },
+      {
+        "line": 777,
+        "pattern": "main(",
+        "text": "    main()"
+      }
+    ],
+    "report_generation_contract": {
+      "target_referenced": true,
+      "writer_present": true,
+      "target_passed_to_writer": false,
+      "static_output_path_resolved": true,
+      "dynamic_output_path": false
+    }
+  },
+  "related_json_evidence": {
+    "candidate_count": 11,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "score": 44,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_EXTRACTION_FORENSIC_REPORT.json",
+        "score": 44,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_ARTIFACT_LOCATION_RESOLUTION_FORENSIC_REPORT.json",
+        "score": 44,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_TRACE_FORENSIC_REPORT.json",
+        "score": 44,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 44,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 43,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_DATAFLOW_FORENSIC_REPORT.json",
+        "score": 43,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_REPORT.json",
+        "score": 43,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_REPORT.json",
+        "score": 43,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_SOURCE_ARTIFACT_MAPPING_FORENSIC_REPORT.json",
+        "score": 43,
+        "target_reference": true,
+        "producer_reference": true,
+        "reasons": [
+          "TARGET_REPORT_REFERENCE",
+          "PRODUCER_REFERENCE"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "score": 4,
+        "target_reference": false,
+        "producer_reference": false,
+        "reasons": []
+      }
+    ]
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "production_source_modified": false,
+    "network_access": false,
+    "artifact_extraction_executed": false,
+    "recovery_staging": false
+  },
+  "verdict": {
+    "status": "OUTPUT_CONTRACT_TARGET_WRITER_LINK_UNVERIFIED",
+    "exact_artifact_recovered": false,
+    "producer_exists": true,
+    "producer_syntax_valid": true,
+    "target_referenced": true,
+    "writer_present": true,
+    "target_passed_to_writer": false,
+    "dynamic_output_path": false
+  },
+  "next_action": {
+    "if_contract_broken": "DIRECT_PRODUCER_OUTPUT_CONTRACT_REPAIR",
+    "if_contract_valid": "RUNTIME_OUTPUT_WRITER_INVOCATION_VERIFICATION"
+  }
+}

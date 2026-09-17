@@ -1,0 +1,115 @@
+{
+  "artifact_sha256": "f5e553ec877a5ff26fa34162b8ca3006ab1ba1446461938442ba74befc941e3a",
+  "comparisons": [
+    {
+      "asset_symbol": "AAVE",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "ADA",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "AVAX",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "BTC",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "DOGE",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "DOT",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "ETH",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "LINK",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "LTC",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "NEAR",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "SHIB",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "SOL",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "SUI",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "UNI",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    },
+    {
+      "asset_symbol": "XRP",
+      "feature_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "status": "NO_SAME_SYMBOL_HUNTER_ROW"
+    }
+  ],
+  "database_modified": false,
+  "delta_histogram": {},
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_contract_modified": false,
+  "forensic": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_TIMESTAMP_DELTA_FORENSIC_v0.1",
+  "hunter_identity_rule": "hunter_signals.asset + hunter_signals.timestamp",
+  "identity_rule": "asset_symbol + snapshot_timestamp",
+  "mode": "READ_ONLY",
+  "network": false,
+  "outcome_calculation": false,
+  "prediction": false,
+  "relationship_calculation": false,
+  "signal_generation": false,
+  "summary": {
+    "comparable_pairs": 0,
+    "exact_zero_delta": 0,
+    "feature_identities": 15,
+    "hunter_rows": 50,
+    "maximum_delta_seconds": null,
+    "mean_delta_seconds": null,
+    "median_delta_seconds": null,
+    "minimum_delta_seconds": null,
+    "non_comparable_pairs": 15,
+    "within_120_seconds": 0,
+    "within_300_seconds": 0,
+    "within_600_seconds": 0
+  },
+  "timestamp_policy": {
+    "aware_vs_aware": "UTC_COMPARISON",
+    "aware_vs_naive": "NOT_COMPARABLE",
+    "matching_rule_established": false,
+    "naive_vs_naive": "DIRECT_COMPARISON",
+    "raw_values_preserved": true
+  },
+  "trading_decision": false
+}

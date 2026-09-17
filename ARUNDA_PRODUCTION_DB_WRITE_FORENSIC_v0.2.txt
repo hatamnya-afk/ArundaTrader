@@ -1,0 +1,9 @@
+ARUNDA TRADER — PRODUCTION DB WRITE FORENSIC v0.2
+==============================================================================
+Production static modules: 21
+DB write references: 4
+
+C:\Users\ASUS\ArundaTrader\market_state_engine.py | LINE 420 | CREATE | CREATE TABLE market_state (
+C:\Users\ASUS\ArundaTrader\market_state_engine.py | LINE 448 | ALTER | ALTER TABLE market_state
+C:\Users\ASUS\ArundaTrader\market_state_engine.py | LINE 1070 | DELETE | DELETE FROM market_state
+C:\Users\ASUS\ArundaTrader\market_state_engine.py | LINE 1148 | INSERT | INSERT INTO market_state (

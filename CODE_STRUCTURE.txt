@@ -1,0 +1,1323 @@
+﻿
+===== analyze_market.py =====
+import pandas as pd
+
+===== arunda_pipeline.py =====
+import os
+import sys
+import time
+import sqlite3
+import subprocess
+from datetime import datetime, timezone
+def line(char="=", length=78):
+def utc_now():
+def print_header():
+def database_exists():
+def connect_database():
+def check_database():
+def check_engine_files():
+def check_execution():
+def preflight():
+def classify_stage_output(
+def run_stage(
+def print_pipeline_summary(
+def main():
+
+===== arunda_recorder.py =====
+import requests
+import sqlite3
+import time
+import uuid
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
+def get_connection():
+def prepare_database(conn):
+def get_markets():
+def fetch_orderbook(market):
+def analyze_orderbook(ob):
+def hunter_score(
+def build_record(
+def save_records(conn, records):
+def main():
+
+===== arunda_source_engine.py =====
+import os
+import json
+import sqlite3
+import urllib.request
+import urllib.error
+import time
+from datetime import datetime, timezone
+def get_connection():
+def create_tables(conn):
+def utc_now():
+def http_get(
+def parse_json(body):
+def result(
+def test_binance():
+def test_coinmarketcap():
+def test_coinapi():
+def test_coinglass():
+def test_cryptopanic():
+def test_fred():
+def run_tests():
+def save_results(
+def print_header():
+def print_result(item):
+def print_summary(results):
+def main():
+
+===== backup_arunda.py =====
+from pathlib import Path
+from datetime import datetime
+import zipfile
+
+===== calibration_diagnostic.py =====
+import sqlite3
+import math
+def correlation(x, y):
+FROM hunter_signals h
+FROM hunter_signals h
+FROM signal_outcomes
+
+===== capital_config.py =====
+from capital_contract import (
+def validate_config():
+def get_config():
+def get_config_state():
+def print_header():
+def print_config():
+def main():
+
+===== capital_contract.py =====
+def build_empty_capital():
+def validate_capital(capital):
+def get_capital_state(capital):
+def print_header():
+def print_contract(capital):
+def main():
+
+===== catalyst_engine.py =====
+import sqlite3
+import requests
+import time
+from datetime import datetime
+def load_markets():
+FROM market_records
+FROM market_records
+def lunar(symbol):
+def clamp(x, low=0, high=100):
+def momentum_score(change):
+def volume_score(volume, max_volume):
+def book_score(pressure):
+def catalyst_score(galaxy, change):
+def global_score(asset):
+def classify(score, catalyst):
+def main():
+
+===== check_btc.py =====
+import sqlite3
+FROM market_records
+
+===== check_db.py =====
+import sqlite3
+
+===== check_market.py =====
+import sqlite3
+FROM market_data
+
+===== check_signals.py =====
+import sqlite3
+FROM hunter_signals
+
+===== cmc_market_adapter.py =====
+
+===== coinalyze_positioning.py =====
+import os
+import sqlite3
+import time
+from datetime import datetime, timezone
+import requests
+def get_connection():
+def create_table(conn):
+class CoinalyzeClient:
+def __init__(self):
+def get(self, endpoint, params):
+def now_unix():
+def unix_to_iso(ts):
+def get_open_interest(client):
+def get_funding_rate(client):
+def get_open_interest_history(client):
+def get_liquidation_history(client):
+def get_long_short_history(client):
+def get_history_values(container):
+def latest_value(container):
+def previous_value(container):
+def calculate_oi_change(
+def parse_liquidations(
+def parse_long_short(
+def calculate_positioning_score(
+def determine_quality(
+def save_positioning(
+def process():
+
+===== data_quality.py =====
+import pandas as pd
+import numpy as np
+import os
+import sys
+from datetime import datetime
+
+===== data_quality_diagnostic.py =====
+import pandas as pd
+import numpy as np
+import os
+import sys
+
+===== decision_contract.py =====
+def build_empty_decision(asset):
+def validate_decision(decision):
+def validate_decision_snapshot(snapshot):
+def print_header():
+def print_contract():
+def main():
+
+===== decision_engine.py =====
+def load_validated_signals():
+import signal_validator
+def load_scores():
+import signal_scorer
+def normalize_snapshot(data, source_name):
+def get_signal_record(record):
+def get_direction(record):
+def get_signal_state(record):
+def extract_score(record):
+def determine_decision(signal_state, direction, score):
+def build_decision(asset, signal_record, score_record):
+def validate_input_assets(snapshot, source_name):
+def build_decision_snapshot(signals, scores):
+def validate_decision_snapshot(snapshot):
+import decision_contract
+def print_header():
+def print_decisions(snapshot):
+def print_contract(snapshot):
+def main():
+
+===== entry_stop_contract.py =====
+def build_empty_record(asset):
+def validate_positive_number(
+def validate_entry_stop(data):
+def validate_entry_stop_snapshot(snapshot):
+def self_test():
+def print_header():
+def main():
+
+===== execution_contract.py =====
+def validate_execution_record(data):
+def validate_execution_snapshot(snapshot):
+def print_header():
+def print_contract():
+def main():
+
+===== execution_engine.py =====
+from execution_contract import (
+import decision_engine
+import risk_engine
+import risk_budget_engine
+import stop_loss_engine
+import position_sizing_engine
+import portfolio_risk_engine
+def index_by_asset(data):
+def get_first(record, names, default=None):
+def to_float(value):
+def is_positive(value):
+def load_decisions():
+def load_risks(decisions):
+def load_risk_budgets():
+def load_stops():
+def load_positions():
+def load_portfolio_risk():
+def portfolio_is_valid(
+def extract_entry(
+def extract_stop(
+def extract_stop_distance(
+def extract_position_size(
+def extract_exposure(
+def build_execution_record(
+def calculate_snapshot():
+def validate_snapshot(
+def print_header():
+def print_results(
+def print_contract(
+def main():
+
+===== feature_contract.py =====
+import feature_engine
+def load_engine_features():
+def build_feature_snapshot():
+def load_feature_snapshot():
+def validate_feature_snapshot(snapshot):
+def print_header():
+def print_snapshot(snapshot):
+def print_contract(snapshot):
+def main():
+
+===== feature_engine.py =====
+import math
+import snapshot_reader
+def percentage_return(old_price, new_price):
+def standard_deviation(values):
+def linear_slope(values):
+def calculate_features(snapshot):
+def build_features():
+def print_header():
+def print_features(features):
+def main():
+
+===== feature_integrity_audit.py =====
+import sqlite3
+from collections import Counter
+FROM hunter_signals
+
+===== feature_normalizer.py =====
+import math
+import feature_snapshot_reader
+def validate_snapshot(snapshots):
+def numeric_value(value):
+def collect_feature_values(
+def normalize_values(values):
+def build_normalized_features():
+def load_normalized_features():
+def validate_normalized_snapshot(
+def print_header():
+def print_snapshot(snapshot):
+def print_contract(snapshot):
+def main():
+
+===== feature_snapshot_reader.py =====
+import feature_contract
+def load_feature_snapshot():
+def validate_snapshot(snapshot):
+def print_header():
+def print_snapshot(snapshot):
+def print_contract(snapshot):
+def main():
+
+===== fix_signals_db.py =====
+import sqlite3
+
+===== fusion_engine.py =====
+import sqlite3
+import math
+import hashlib
+from datetime import datetime, timezone
+def clamp(value, low=-100.0, high=100.0):
+def normalize_market(score):
+def normalize_positioning(score):
+def normalize_news(score):
+def connect_db():
+def ensure_column(conn, table, column, definition):
+def ensure_schema(conn):
+def get_latest_market(conn, asset):
+FROM market_data
+def get_latest_positioning(conn, asset):
+FROM positioning_data
+def get_latest_news(conn, asset):
+FROM news_signals
+def calculate_news_confidence(news):
+def calculate_dynamic_weights(
+def calculate_agreement(values):
+def calculate_missing_penalty(
+def calculate_fused_score(
+def calculate_confidence(
+def determine_regime(score):
+def determine_direction(score):
+def determine_signal_strength(score, confidence):
+def calculate_available_weight(
+def create_snapshot_id(timestamp):
+def main():
+
+===== hunter_filter.py =====
+import requests
+def get_markets():
+def get_change(market):
+def build_candidates(markets):
+
+===== hunter_recorder.py =====
+import requests
+import csv
+import os
+import time
+from datetime import datetime
+def get_markets():
+def get_change(market):
+def get_candidates():
+def get_orderbook(market_id):
+def calculate_orderbook(ob):
+def init_csv():
+def record():
+def main():
+
+===== inspect_db.py =====
+import sqlite3
+FROM sqlite_master
+
+===== lunarcrush.py =====
+import os
+import requests
+def get_coin(symbol):
+
+===== lunar_hunter.py =====
+import os
+import requests
+import time
+def get_coin(symbol, retries=2):
+
+===== market_adapter.py =====
+import os
+import sqlite3
+import time
+import json
+import urllib.request
+import urllib.error
+from datetime import datetime, timezone
+def get_db():
+def ensure_schema(conn):
+def fetch_cmc():
+def normalize_assets(data):
+def number(value, default=None):
+def clamp(value, low, high):
+def calculate_market_score(quote):
+def extract_asset(symbol, item):
+def insert_market_data(
+def ensure_market_records_schema(conn):
+def insert_market_record(
+def main():
+
+===== market_analysis_engine.py =====
+import sqlite3
+import math
+from datetime import datetime, timezone
+def parse_timestamp(value):
+def connect_database():
+def validate_schema(connection):
+def load_asset_history(connection, asset):
+FROM market_records
+def calculate_gaps(history):
+def find_latest_contiguous_window(history, required_points):
+def percentage_return(old_price, new_price):
+def standard_deviation(values):
+def linear_slope(values):
+def calculate_snapshot(asset, window):
+def analyze_asset(connection, asset):
+def print_header():
+def print_summary(results):
+def print_snapshot_details(result):
+def print_contract(results):
+def print_output_contract(results):
+def print_read_only_confirmation():
+def print_errors(results):
+def run_engine():
+
+===== market_data.py =====
+import requests
+def get_btc_market():
+
+===== market_data_engine.py =====
+import sqlite3
+import math
+import time
+from datetime import datetime, timezone
+def connect_database():
+def ensure_schema(conn):
+def utc_now():
+def safe_float(value):
+def mean(values):
+def stdev(values):
+def get_snapshot_history(
+FROM market_data
+def ema(values, period):
+def ema_series(values, period):
+def rsi(values, period=14):
+def macd(values):
+def atr(
+def adx(
+def bollinger(
+def volume_metrics(
+def volatility(
+def technical_score(
+def calculate_analysis(rows):
+def save_analysis(
+FROM market_data
+def print_analysis(
+def print_insufficient(
+def show_recent_analysis(
+FROM market_data
+def count_snapshot_rows(
+FROM market_data
+def count_analysis_rows(
+FROM market_data
+def main():
+
+===== market_entry_stop_adapter.py =====
+import sqlite3
+import entry_stop_contract
+def connect_database():
+def load_latest_market_data(
+FROM market_data
+def validate_market_price(
+def validate_risk_record(
+def build_entry_stop_record(
+def build_snapshot(
+def validate_snapshot(
+def print_results(
+def print_contract(
+def self_test():
+def load_risk_snapshot_for_demo():
+import risk_engine
+def main():
+
+===== market_history_diagnostic.py =====
+import sqlite3
+import math
+from datetime import datetime, timezone
+def parse_ts(value):
+def fmt_dt(value):
+def safe_float(value):
+def median(values):
+def percentile(values, p):
+def main():
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+
+===== market_history_engine.py =====
+import sqlite3
+import time
+from datetime import datetime, timezone
+def utc_now():
+def table_exists(conn, table_name):
+def get_columns(conn, table_name):
+def ensure_history_table(conn):
+def get_universe(conn):
+FROM market_universe
+def build_universe_from_market_state(conn):
+FROM market_state
+def row_to_dict(columns, row):
+def collect_snapshot(conn):
+FROM {source_table}
+def history_statistics(conn):
+FROM (
+FROM market_history
+FROM (
+FROM market_history
+FROM (
+FROM market_history
+def print_statistics(conn):
+FROM (
+FROM market_history
+def print_recent_depth(conn, limit=30):
+FROM market_history
+def main():
+
+===== market_microstructure_engine.py =====
+import sqlite3
+import time
+from datetime import datetime, timezone
+def utc_now():
+def connect_db():
+def ensure_schema(conn):
+def detect_history_table(conn):
+FROM sqlite_master
+def get_columns(conn, table):
+def choose_column(columns, candidates):
+def load_latest_market_data(conn, table):
+FROM "{table}"
+FROM "{table}"
+def safe_float(value):
+def calculate_microstructure_features(row):
+def write_features(conn, features):
+FROM market_microstructure
+def print_recent(conn):
+FROM market_microstructure
+def fmt(value):
+def run_cycle(cycle):
+FROM market_microstructure
+def main():
+
+===== market_monitor_engine.py =====
+import os
+import sqlite3
+import time
+from datetime import datetime, timezone
+import requests
+def utc_now():
+def get_api_key():
+def connect_database():
+def get_universe(conn):
+FROM market_universe
+def fetch_quotes(symbols):
+def build_snapshot(item, monitor_timestamp):
+def monitor_cycle(universe):
+def print_monitor_table(result):
+def main():
+
+===== market_news_engine.py =====
+import sqlite3
+import time
+import hashlib
+import re
+import html
+import requests
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
+def utc_now():
+def clean_text(value):
+def normalize_url(url):
+def parse_date(value):
+def content_hash(source, title, url):
+def detect_symbol(title, description):
+def connect_database():
+def ensure_schema(conn):
+def parse_rss(source, xml_data):
+def fetch_source(source, url):
+def insert_news(conn, item):
+def print_recent_news(conn):
+FROM market_news
+def main():
+FROM market_news
+
+===== market_news_intelligence_engine.py =====
+import sqlite3
+import re
+import math
+import hashlib
+from datetime import datetime, timezone
+def utc_now():
+def clean_text(text):
+def normalize_columns(conn, table):
+def find_column(columns, candidates):
+def ensure_intelligence_schema(conn):
+def tokenize(text):
+def count_terms(text, terms):
+def detect_event_type(text):
+def detect_symbol(title, description, existing_symbol):
+def calculate_sentiment(text):
+def calculate_freshness(published_at):
+def calculate_importance(
+def calculate_confidence(
+def intelligence_hash(
+def process_news(conn):
+def insert_intelligence(
+def print_recent_intelligence(conn):
+FROM market_news_intelligence
+def main():
+FROM market_news_intelligence
+
+===== market_opportunity_engine.py =====
+import sqlite3
+import math
+from datetime import datetime, timezone
+def now_utc():
+def safe_float(value, default=None):
+def clamp(value, low=0.0, high=1.0):
+def table_exists(conn, table_name):
+def get_columns(conn, table_name):
+def add_column(conn, table_name, column, column_type):
+def normalize_score(value):
+def ensure_schema(conn):
+def calculate_opportunity(row):
+def main():
+FROM market_state
+FROM market_opportunity
+FROM market_opportunity
+FROM market_opportunity
+
+===== market_recorder.py =====
+import requests
+import csv
+import time
+from datetime import datetime
+def get_orderbook():
+def weighted_pressure(levels, reference_price, max_distance):
+def analyze(data):
+
+===== market_regime.py =====
+import market_state_engine
+def load_structural_state():
+def classify_regime(
+def build_market_regime():
+def load_market_regime():
+def validate_market_regime(
+def print_header():
+def print_regime(
+def print_contract(
+def main():
+
+===== market_regime_contract.py =====
+import market_regime
+def load_market_regime():
+def build_market_regime_contract():
+def load_market_regime_contract():
+def validate_market_regime_contract(
+def print_header():
+def print_contract(
+def main():
+
+===== market_scanner.py =====
+import requests
+def get_markets():
+def scan_markets(markets):
+
+===== market_snapshot_engine.py =====
+import os
+import sqlite3
+import time
+from datetime import datetime, timezone
+import requests
+def connect_database():
+def ensure_schema(conn):
+def utc_now():
+def get_api_key():
+def fetch_cmc():
+def extract_assets(payload):
+def validate_asset_data(data):
+def record_exists(
+FROM market_data
+def insert_snapshot(
+def count_records(conn):
+FROM market_data
+def count_symbol_records(
+FROM market_data
+def show_recent_snapshots(conn):
+FROM market_data
+def show_universe_status(conn):
+def main():
+
+===== market_snapshot_scheduler.py =====
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+def utc_now():
+def print_header():
+def print_status(message):
+def run_snapshot_engine():
+def wait_for_next_cycle():
+def main():
+
+===== market_state_engine.py =====
+import sqlite3
+import math
+import traceback
+from datetime import datetime, timezone
+def utc_now():
+def safe_float(value):
+def clamp(value, low=-1.0, high=1.0):
+def normalize_percent(value, scale=10.0):
+def inverse_normalize(value, scale=10.0):
+def table_exists(conn, table_name):
+FROM sqlite_master
+def get_columns(conn, table_name):
+def get_table_info(conn, table_name):
+def find_column(columns, candidates):
+def ensure_column(conn, table_name, column_name, column_type):
+def ensure_market_state_schema(conn):
+def load_latest_by_symbol(
+FROM "{table_name}"
+def load_universe(conn):
+FROM market_history
+def calculate_technical_score(t):
+def calculate_news_score(n):
+def get_news_value(n, candidates):
+def calculate_whale_score(w):
+def calculate_micro_score(m):
+def copy_value(source, candidates):
+def detect_news_event(news):
+def build_state(
+def upsert_state(
+def main():
+FROM market_history
+FROM market_state
+FROM market_state
+FROM market_state
+def fmt(value):
+
+===== market_state_reader.py =====
+import normalized_feature_contract
+def load_source_contract():
+def validate_source(source):
+def build_market_state():
+def load_market_state():
+def validate_market_state(
+def print_header():
+def print_state(
+def print_contract(
+def main():
+
+===== market_stop_distance_adapter.py =====
+import sqlite3
+import math
+from entry_stop_contract import (
+import risk_budget_engine
+def connect_database():
+def safe_positive_float(
+def load_latest_market_data(
+FROM market_data
+def calculate_stop_distance(
+def build_unavailable_record(
+def build_blocked_record(
+def build_ready_record(
+def build_asset_record(
+def build_adapter_snapshot(
+def validate_snapshot(
+def load_existing_budgets():
+def print_header():
+def print_results(
+def print_contract(
+def main():
+
+===== market_technical_engine.py =====
+import sqlite3
+import math
+from datetime import datetime, timezone
+def utc_now():
+def safe_float(value):
+def safe_int(value, default=0):
+def clamp(value, low=0.0, high=1.0):
+def is_valid_positive(value):
+def is_valid_non_negative(value):
+def add_validation_columns(conn):
+def get_columns(conn):
+def validate_row(row, columns):
+def main():
+FROM sqlite_master
+FROM market_technical
+
+===== market_universe_engine.py =====
+import os
+import sqlite3
+import time
+from datetime import datetime, timezone
+import requests
+def connect_database():
+def ensure_schema(conn):
+def get_api_key():
+def fetch_page(api_key, start, limit):
+def upsert_asset(conn, item):
+FROM market_universe
+def get_counts(conn):
+FROM market_universe
+FROM market_universe
+def show_top_assets(conn):
+FROM market_universe
+def main():
+
+===== market_whale_engine.py =====
+import os
+import sys
+import time
+import hashlib
+import sqlite3
+from datetime import datetime, timezone
+import requests
+def utc_now():
+def sha256_text(value):
+def safe_float(value, default=0.0):
+def safe_int(value, default=0):
+def connect_db():
+def ensure_schema(conn):
+def count_records(conn):
+def classify_direction(from_type, to_type):
+def fetch_whale_transactions():
+def normalize_transaction(tx):
+def insert_transaction(conn, data):
+FROM market_whale
+def print_recent(conn):
+FROM market_whale
+def run_cycle(conn, cycle_number):
+def main():
+
+===== news_adapter.py =====
+import sqlite3
+import hashlib
+import json
+import re
+import time
+import urllib.request
+import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
+def db_connect():
+def ensure_schema():
+def fetch_url(url, timeout=12):
+def parse_rss(data):
+def clean_text(text):
+def parse_date(value):
+def fingerprint(title, url):
+def detect_asset(title, description):
+def calculate_sentiment(text):
+def calculate_impact(text):
+def calculate_news_score(
+def insert_article(article):
+FROM news_data
+def generate_signal(asset):
+FROM news_data
+def run_sources():
+
+===== normalized_feature_contract.py =====
+import math
+import feature_normalizer
+def load_normalized_features():
+def validate_numeric(value):
+def build_contract():
+def load_normalized_feature_contract():
+def validate_contract(contract):
+def print_header():
+def print_snapshot(contract):
+def print_contract(contract):
+def main():
+
+===== opportunity_engine.py =====
+import os
+import sqlite3
+import time
+from datetime import datetime, timezone
+import requests
+def utc_now():
+def safe_float(value):
+def get_api_key():
+def connect_database():
+def ensure_schema(conn):
+def fetch_cmc():
+def extract_assets(payload):
+def record_exists(
+FROM market_data
+def insert_snapshot(
+def count_records(conn):
+FROM market_data
+def show_recent_snapshots(conn):
+FROM market_data
+def main():
+
+===== orderbook.py =====
+import requests
+def get_orderbook():
+def analyze_orderbook(data):
+
+===== orderbook_weighted.py =====
+import requests
+def get_orderbook():
+def weighted_pressure(levels, reference_price, max_distance):
+
+===== outcome_audit.py =====
+import sqlite3
+from statistics import mean
+def pct(value):
+def fmt(value):
+def win_rate(wins, total):
+FROM hunter_signals h
+
+===== outcome_engine.py =====
+import sqlite3
+from datetime import datetime, timedelta
+def parse_time(value):
+def find_price(cur, market, target_time):
+FROM market_records
+def calculate_return(entry, exit_price):
+def main():
+FROM hunter_signals
+FROM signal_outcomes
+FROM signal_outcomes
+
+===== outcome_validation.py =====
+import sqlite3
+from datetime import datetime
+FROM hunter_signals
+FROM signal_outcomes
+FROM hunter_signals
+FROM hunter_signals h
+FROM signal_outcomes
+FROM signal_outcomes
+FROM hunter_signals h
+FROM hunter_signals
+FROM hunter_signals
+FROM signal_outcomes o
+FROM signal_outcomes
+FROM signal_outcomes
+
+===== pattern_engine.py =====
+import pandas as pd
+import numpy as np
+def add_future_return(data, minutes):
+
+===== portfolio_risk_contract.py =====
+def validate_position(
+def validate_position_snapshot(
+def validate_portfolio(
+def validate_portfolio_reason(
+def validate_portfolio_snapshot(
+def print_header():
+def print_contract():
+def run_self_test():
+def main():
+
+===== portfolio_risk_engine.py =====
+from portfolio_risk_contract import (
+import capital_config
+import position_sizing_engine
+def load_capital_config():
+def load_position_snapshot():
+def index_positions(
+def calculate_total_risk(
+def calculate_total_exposure(
+def calculate_active_positions(
+def calculate_available_capital(
+def calculate_capital_utilization(
+def calculate_unused_capital(
+def calculate_max_portfolio_risk_amount(
+def validate_portfolio_limits(
+def build_portfolio_record(
+def calculate_snapshot():
+def print_header():
+def print_results(
+def main():
+
+===== position_sizing_contract.py =====
+def validate_position_sizing(data):
+def validate_snapshot(snapshot):
+def print_header():
+def print_contract():
+def self_test():
+def main():
+
+===== position_sizing_engine.py =====
+from position_sizing_contract import (
+import capital_config
+import risk_budget_engine
+import stop_loss_engine
+def load_capital_config():
+def load_risk_budgets():
+def load_stop_losses():
+def index_stop_losses(snapshot):
+def to_float(
+def extract_entry_price(record):
+def extract_stop_price(record):
+def extract_stop_distance(
+def calculate_risk_amount(
+def extract_budget_state(
+def extract_direction(
+def extract_risk_budget(
+def calculate_position_size(
+def calculate_exposure(
+def build_uncalculated_record(
+def build_blocked_record(
+def build_calculated_record(
+def build_position_record(
+def calculate_snapshot():
+def validate_snapshot(
+def calculate_statistics(
+def print_header():
+def print_results(
+def main():
+
+===== prediction_test.py =====
+
+===== risk_budget_contract.py =====
+def build_empty_budget(asset):
+def validate_budget(budget):
+def validate_budget_snapshot(snapshot):
+def print_header():
+def print_contract():
+def main():
+
+===== risk_budget_engine.py =====
+import capital_config
+import risk_engine
+from risk_budget_contract import (
+def load_capital_config():
+def load_risk_snapshot():
+def validate_risk_input(
+def calculate_risk_budget(
+def calculate_max_portfolio_risk_amount(
+def allocate_budget(
+def build_budget_snapshot(
+def validate_budget(
+def calculate_snapshot():
+def print_header():
+def print_results(
+def print_contract(
+def main():
+
+===== risk_contract.py =====
+def build_empty_risk(asset):
+def validate_risk(risk):
+def validate_risk_snapshot(snapshot):
+def print_header():
+def print_contract():
+def main():
+
+===== risk_engine.py =====
+def load_decisions():
+import decision_engine
+def normalize_snapshot(data):
+def validate_input_assets(snapshot):
+def get_decision_state(record):
+def get_direction(record):
+def evaluate_risk(asset, decision):
+def build_risk_snapshot(decisions):
+def validate_risk_snapshot(snapshot):
+import risk_contract
+def print_header():
+def print_results(snapshot):
+def print_contract(snapshot):
+def main():
+
+===== signal_contract.py =====
+def build_empty_signal(
+def build_signal_contract():
+def validate_signal(
+def validate_signal_contract(
+def load_signal_contract():
+def print_header():
+def print_schema():
+def print_contract(
+def main():
+
+===== signal_engine.py =====
+import market_regime
+import market_regime_contract
+import signal_logic
+import signal_contract
+def load_regime_contract():
+def load_structural_state():
+def build_signal(
+def load_signals():
+def print_header():
+def print_signals(signals):
+def print_contract(signals):
+def main():
+
+===== signal_logic.py =====
+def determine_direction(
+def build_direction(
+def validate_direction(
+def main():
+
+===== signal_outcome_engine.py =====
+import sqlite3
+import math
+from datetime import datetime, timezone
+def get_connection():
+def column_exists(conn, table_name, column_name):
+def ensure_schema(conn):
+def safe_float(value):
+def parse_timestamp(value):
+def timestamp_to_epoch(value):
+def calculate_return(entry, future, direction):
+def classify_outcome(return_pct):
+def find_future_price(
+FROM market_data
+def outcome_exists(
+FROM signal_outcomes
+def create_outcome(
+FROM signal_outcomes
+def process_signals(conn):
+FROM fusion_signals
+def print_summary(conn):
+FROM signal_outcomes
+FROM signal_outcomes
+FROM signal_outcomes
+def main():
+FROM sqlite_master
+
+===== signal_performance.py =====
+import sqlite3
+FROM hunter_signals h
+def avg(values):
+def win_rate(values):
+def correlation(xs, ys):
+
+===== signal_scorer.py =====
+import signal_validator
+import feature_snapshot_reader
+import market_state_engine
+import market_regime_contract
+def load_validated_signals():
+def load_features():
+def load_structural_states():
+def load_regimes():
+def extract_features(asset_data):
+def get_feature(
+def signed_feature(
+def clamp(
+def calculate_score(
+def load_scores():
+def print_header():
+def print_scores(
+def print_contract(
+def main():
+
+===== signal_score_contract.py =====
+def load_score_snapshot():
+import signal_scorer
+def extract_score(record):
+def normalize_snapshot(scores):
+def validate_contract(scores):
+def print_header():
+def print_contract(result):
+def main():
+
+===== signal_validator.py =====
+import signal_engine
+import signal_contract
+import market_regime_contract
+def load_signals():
+def load_regimes():
+def validate_one_signal(
+def load_validated_signals():
+def validate_snapshot(
+def print_header():
+def print_results(
+def print_contract(
+def main():
+
+===== snapshot_reader.py =====
+import sqlite3
+from datetime import datetime, timezone
+def parse_timestamp(value):
+def open_database():
+def load_asset_history(connection, asset):
+FROM market_records
+def valid_window(window):
+def find_latest_window(history):
+def build_snapshot(asset, history):
+def load_snapshots():
+def print_summary(snapshots):
+def main():
+
+===== social_engine.py =====
+import sqlite3
+import os
+import requests
+import time
+def get_symbols():
+FROM market_records
+def normalize_symbol(asset):
+def get_lunar(symbol):
+def score_social(data):
+def main():
+
+===== sqlite_recorder.py =====
+import sqlite3
+import csv
+import os
+from datetime import datetime
+def create_database():
+def import_csv(conn):
+def test_database(conn):
+FROM market_records
+FROM market_records
+def main():
+
+===== stop_loss_contract.py =====
+def build_empty_stop(asset):
+def validate_stop_loss(data):
+def validate_stop_loss_snapshot(snapshot):
+def print_header():
+def print_contract():
+def self_test():
+def main():
+
+===== stop_loss_engine.py =====
+from entry_stop_contract import (
+def calculate_stop_loss(record):
+def build_stop_loss_snapshot(entry_stop_snapshot):
+def validate_stop_loss_snapshot(snapshot):
+def self_test():
+def print_header():
+def main():
+
+===== technical_history_diagnostic.py =====
+import sqlite3
+from datetime import datetime, timezone
+def main():
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+FROM market_history
+def percentile(values, p):
+FROM (
+FROM market_history
+FROM market_state
+FROM market_state
+FROM market_technical
+FROM market_technical
+
+===== test.py =====
+
+===== test_cmc.py =====
+import urllib.request
+import json
+
+===== test_coinalyze.py =====
+import os
+import requests
+import time
+def test_endpoint(name, endpoint, params=None):
+def main():
+
+===== test_coinglass_v4.py =====
+import os
+import json
+import urllib.request
+import urllib.error
+import time
+def request(endpoint, params=None):
+
+===== trade_gate_engine.py =====
+import sqlite3
+from datetime import datetime, timezone
+def utc_now():
+def connect_db():
+def table_exists(conn, table_name):
+FROM sqlite_master
+def ensure_schema(conn):
+def safe_float(value, default=0.0):
+def normalize_direction(value):
+def get_latest_snapshot(conn):
+FROM opportunity_signals
+def get_opportunities(conn, snapshot_id):
+FROM opportunity_signals
+def get_decision(conn, snapshot_id, asset):
+FROM trade_decisions
+def get_risk(conn, snapshot_id, asset):
+FROM risk_decisions
+def check_opportunity(opportunity):
+def check_decision(decision):
+def check_risk(risk):
+def evaluate(opportunity, decision, risk):
+def save_result(
+def build_order_intent(
+def print_candidate(
+def main():
+
+===== upgrade_db.py =====
+import sqlite3
+FROM sqlite_master
+
+===== upgrade_positioning_db.py =====
+import sqlite3
+def main():
+
+===== upgrade_positioning_v02.py =====
+import sqlite3
+def main():

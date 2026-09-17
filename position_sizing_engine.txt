@@ -1,0 +1,918 @@
+"""
+ARUNDA POSITION SIZING ENGINE v0.3
+
+Purpose:
+    Convert APPROVED risk + calculated stop loss
+    into structural position size and exposure.
+
+Formula:
+    Risk Amount = Capital × Risk Per Trade
+
+    Position Size = Risk Amount / Stop Distance
+
+    Exposure = Position Size × Entry Price
+
+Architecture:
+    MEMORY ONLY
+    NO SQL
+    NO DATABASE WRITES
+    NO EXCHANGE CONNECTION
+    BITPIN = FUTURE EXECUTION
+
+NOT INCLUDED:
+    Leverage
+    Take Profit
+    Execution
+    Prediction
+    Ranking
+    Interpretation
+"""
+
+# ============================================================================
+# IMPORTS
+# ============================================================================
+
+from position_sizing_contract import (
+    EXPECTED_ASSETS,
+    validate_position_sizing,
+)
+
+import capital_config
+import risk_budget_engine
+import stop_loss_engine
+
+
+# ============================================================================
+# CONSTANTS
+# ============================================================================
+
+EPSILON = 1e-12
+
+
+# ============================================================================
+# CAPITAL
+# ============================================================================
+
+def load_capital_config():
+    """
+    Load the current capital configuration.
+
+    Supports the existing capital_config module
+    without modifying it.
+    """
+
+    loader_names = [
+        "get_config",
+        "load_config",
+        "get_capital_config",
+        "load_capital_config",
+    ]
+
+    for name in loader_names:
+
+        loader = getattr(
+            capital_config,
+            name,
+            None,
+        )
+
+        if callable(loader):
+
+            data = loader()
+
+            if isinstance(data, dict):
+                return data
+
+    required = [
+        "capital",
+        "available_capital",
+        "risk_per_trade",
+        "max_portfolio_risk",
+        "max_concurrent_positions",
+    ]
+
+    if all(
+        hasattr(capital_config, field)
+        for field in required
+    ):
+
+        return {
+            field: getattr(
+                capital_config,
+                field,
+            )
+            for field in required
+        }
+
+    raise RuntimeError(
+        "capital_config does not expose "
+        "a supported configuration API"
+    )
+
+
+# ============================================================================
+# RISK BUDGET
+# ============================================================================
+
+def load_risk_budgets():
+    """
+    Current real API:
+
+        risk_budget_engine.load_risk_snapshot()
+
+    Current structure:
+
+        {
+            "BTC": {...},
+            "ETH": {...},
+            ...
+        }
+    """
+
+    loader = getattr(
+        risk_budget_engine,
+        "load_risk_snapshot",
+        None,
+    )
+
+    if not callable(loader):
+
+        raise RuntimeError(
+            "risk_budget_engine must expose "
+            "load_risk_snapshot()"
+        )
+
+    snapshot = loader()
+
+    if not isinstance(
+        snapshot,
+        dict,
+    ):
+
+        raise RuntimeError(
+            "Risk snapshot must be a dictionary"
+        )
+
+    return snapshot
+
+
+# ============================================================================
+# STOP LOSS
+# ============================================================================
+
+def load_stop_losses():
+    """
+    Current real API:
+
+        stop_loss_engine.calculate_snapshot()
+
+    Current structure:
+
+        [
+            {
+                "asset": "...",
+                ...
+            }
+        ]
+    """
+
+    loader = getattr(
+        stop_loss_engine,
+        "calculate_snapshot",
+        None,
+    )
+
+    if not callable(loader):
+
+        raise RuntimeError(
+            "stop_loss_engine must expose "
+            "calculate_snapshot()"
+        )
+
+    snapshot = loader()
+
+    if not isinstance(
+        snapshot,
+        list,
+    ):
+
+        raise RuntimeError(
+            "Stop loss snapshot must be a list"
+        )
+
+    return snapshot
+
+
+# ============================================================================
+# STOP LOSS INDEX
+# ============================================================================
+
+def index_stop_losses(snapshot):
+
+    result = {}
+
+    for record in snapshot:
+
+        if not isinstance(
+            record,
+            dict,
+        ):
+            continue
+
+        asset = record.get(
+            "asset"
+        )
+
+        if asset is not None:
+
+            result[asset] = record
+
+    return result
+
+
+# ============================================================================
+# RISK AMOUNT
+# ============================================================================
+
+def calculate_risk_amount(
+    capital,
+    risk_per_trade,
+):
+
+    capital = float(
+        capital
+    )
+
+    risk_per_trade = float(
+        risk_per_trade
+    )
+
+    if capital <= 0:
+
+        raise RuntimeError(
+            "Capital must be greater than zero"
+        )
+
+    if risk_per_trade <= 0:
+
+        raise RuntimeError(
+            "Risk per trade must be greater than zero"
+        )
+
+    return (
+        capital
+        * risk_per_trade
+    )
+
+
+# ============================================================================
+# POSITION SIZE
+# ============================================================================
+
+def calculate_position_size(
+    risk_amount,
+    stop_distance,
+    entry_price,
+):
+
+    risk_amount = float(
+        risk_amount
+    )
+
+    stop_distance = float(
+        stop_distance
+    )
+
+    entry_price = float(
+        entry_price
+    )
+
+    if risk_amount <= 0:
+
+        raise RuntimeError(
+            "Risk amount must be greater than zero"
+        )
+
+    if stop_distance <= EPSILON:
+
+        raise RuntimeError(
+            "Stop distance must be greater than zero"
+        )
+
+    if entry_price <= 0:
+
+        raise RuntimeError(
+            "Entry price must be greater than zero"
+        )
+
+    position_size = (
+        risk_amount
+        / stop_distance
+    )
+
+    exposure = (
+        position_size
+        * entry_price
+    )
+
+    return (
+        position_size,
+        exposure,
+    )
+
+
+# ============================================================================
+# BUILD ONE RECORD
+# ============================================================================
+
+def build_position_record(
+    asset,
+    risk_record,
+    stop_record,
+    default_risk,
+):
+
+    # ------------------------------------------------------------------------
+    # No risk record
+    # ------------------------------------------------------------------------
+
+    if risk_record is None:
+
+        return {
+            "asset": asset,
+            "direction": "NONE",
+            "state": "UNCALCULATED",
+            "risk_budget": 0.0,
+            "entry_price": None,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # REAL Risk Budget field is risk_state
+    # ------------------------------------------------------------------------
+
+    risk_state = risk_record.get(
+        "risk_state"
+    )
+
+    direction = risk_record.get(
+        "direction",
+        "NONE",
+    )
+
+    # ------------------------------------------------------------------------
+    # NOT_APPLICABLE
+    # ------------------------------------------------------------------------
+
+    if risk_state == "NOT_APPLICABLE":
+
+        return {
+            "asset": asset,
+            "direction": "NONE",
+            "state": "UNCALCULATED",
+            "risk_budget": 0.0,
+            "entry_price": None,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # Only APPROVED can continue.
+    # ------------------------------------------------------------------------
+
+    if risk_state != "APPROVED":
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": None,
+            "entry_price": None,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # Direction must be LONG or SHORT.
+    # ------------------------------------------------------------------------
+
+    if direction not in (
+        "LONG",
+        "SHORT",
+    ):
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": None,
+            "entry_price": None,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # Stop must be calculated.
+    # ------------------------------------------------------------------------
+
+    if stop_record is None:
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": default_risk,
+            "entry_price": None,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    if stop_record.get(
+        "state"
+    ) != "CALCULATED":
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": default_risk,
+            "entry_price": stop_record.get(
+                "entry_price"
+            ),
+            "stop_distance": stop_record.get(
+                "stop_distance"
+            ),
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # Entry
+    # ------------------------------------------------------------------------
+
+    entry_price = stop_record.get(
+        "entry_price"
+    )
+
+    stop_distance = stop_record.get(
+        "stop_distance"
+    )
+
+    if entry_price is None:
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": default_risk,
+            "entry_price": None,
+            "stop_distance": stop_distance,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    if stop_distance is None:
+
+        return {
+            "asset": asset,
+            "direction": direction,
+            "state": "BLOCKED",
+            "risk_budget": default_risk,
+            "entry_price": entry_price,
+            "stop_distance": None,
+            "position_size": 0.0,
+            "exposure": 0.0,
+        }
+
+    # ------------------------------------------------------------------------
+    # Calculate
+    # ------------------------------------------------------------------------
+
+    position_size, exposure = (
+        calculate_position_size(
+            risk_amount=default_risk,
+            stop_distance=stop_distance,
+            entry_price=entry_price,
+        )
+    )
+
+    record = {
+        "asset": asset,
+        "direction": direction,
+        "state": "CALCULATED",
+        "risk_budget": default_risk,
+        "entry_price": float(
+            entry_price
+        ),
+        "stop_distance": float(
+            stop_distance
+        ),
+        "position_size": float(
+            position_size
+        ),
+        "exposure": float(
+            exposure
+        ),
+    }
+
+    validate_position_sizing(
+        record
+    )
+
+    return record
+
+
+# ============================================================================
+# SNAPSHOT
+# ============================================================================
+
+def calculate_snapshot():
+
+    capital = (
+        load_capital_config()
+    )
+
+    risk_amount = (
+        calculate_risk_amount(
+            capital=capital["capital"],
+            risk_per_trade=capital["risk_per_trade"],
+        )
+    )
+
+    risk_snapshot = (
+        load_risk_budgets()
+    )
+
+    stop_snapshot = (
+        load_stop_losses()
+    )
+
+    stop_map = (
+        index_stop_losses(
+            stop_snapshot
+        )
+    )
+
+    positions = []
+
+    for asset in EXPECTED_ASSETS:
+
+        risk_record = (
+            risk_snapshot.get(
+                asset
+            )
+        )
+
+        stop_record = (
+            stop_map.get(
+                asset
+            )
+        )
+
+        record = (
+            build_position_record(
+                asset=asset,
+                risk_record=risk_record,
+                stop_record=stop_record,
+                default_risk=risk_amount,
+            )
+        )
+
+        positions.append(
+            record
+        )
+
+    return {
+        "capital": capital,
+        "risk_amount": risk_amount,
+        "positions": positions,
+    }
+
+
+# ============================================================================
+# HEADER
+# ============================================================================
+
+def print_header():
+
+    print("=" * 77)
+    print("ARUNDA POSITION SIZING ENGINE v0.3")
+    print("=" * 77)
+
+    print(
+        "Source          : risk_budget + stop_loss"
+    )
+
+    print(
+        "Capital         : capital_config"
+    )
+
+    print(
+        "Risk Budget     : risk_budget_engine"
+    )
+
+    print(
+        "Stop Loss       : stop_loss_engine"
+    )
+
+    print(
+        "Formula         : Risk / Stop Distance"
+    )
+
+    print(
+        "Exposure        : Position Size × Entry"
+    )
+
+    print(
+        "Storage         : MEMORY ONLY"
+    )
+
+    print(
+        "Writes          : NONE"
+    )
+
+    print(
+        "SQL             : NOT USED"
+    )
+
+    print(
+        "Exchange        : NOT CONNECTED"
+    )
+
+    print(
+        "Bitpin          : FUTURE EXECUTION"
+    )
+
+    print(
+        "Leverage        : NOT USED"
+    )
+
+    print(
+        "Take Profit     : NOT USED"
+    )
+
+    print(
+        "Portfolio Risk  : NOT USED"
+    )
+
+    print(
+        "Execution       : NOT USED"
+    )
+
+    print(
+        "Prediction      : NOT USED"
+    )
+
+    print(
+        "Ranking         : NOT USED"
+    )
+
+    print(
+        "Interpretation  : NOT USED"
+    )
+
+    print("=" * 77)
+
+
+# ============================================================================
+# RESULTS
+# ============================================================================
+
+def print_results(
+    snapshot,
+):
+
+    positions = snapshot[
+        "positions"
+    ]
+
+    calculated = sum(
+        1
+        for row in positions
+        if row["state"] == "CALCULATED"
+    )
+
+    uncalculated = sum(
+        1
+        for row in positions
+        if row["state"] == "UNCALCULATED"
+    )
+
+    blocked = sum(
+        1
+        for row in positions
+        if row["state"] == "BLOCKED"
+    )
+
+    print()
+    print("=" * 77)
+    print("POSITION SIZING SNAPSHOT")
+    print("=" * 77)
+
+    print(
+        "Asset | Dir   | State        | "
+        "Risk     | Entry        | Stop Dist.   | "
+        "Position Size | Exposure"
+    )
+
+    print("-" * 77)
+
+    for row in positions:
+
+        risk = row[
+            "risk_budget"
+        ]
+
+        entry = row[
+            "entry_price"
+        ]
+
+        stop = row[
+            "stop_distance"
+        ]
+
+        risk_text = (
+            f"{risk:,.2f}"
+            if risk is not None
+            else "NONE"
+        )
+
+        entry_text = (
+            f"{entry:,.2f}"
+            if entry is not None
+            else "NONE"
+        )
+
+        stop_text = (
+            f"{stop:,.2f}"
+            if stop is not None
+            else "NONE"
+        )
+
+        print(
+            f"{row['asset']:<5} | "
+            f"{row['direction']:<5} | "
+            f"{row['state']:<12} | "
+            f"{risk_text:>8} | "
+            f"{entry_text:>12} | "
+            f"{stop_text:>12} | "
+            f"{row['position_size']:>13.8f} | "
+            f"{row['exposure']:>10.2f}"
+        )
+
+    print()
+    print("=" * 77)
+    print("POSITION SIZING ENGINE CONTRACT")
+    print("=" * 77)
+
+    print(
+        f"Expected Assets : "
+        f"{len(EXPECTED_ASSETS)}"
+    )
+
+    print(
+        f"Calculated      : "
+        f"{calculated}"
+    )
+
+    print(
+        f"Uncalculated    : "
+        f"{uncalculated}"
+    )
+
+    print(
+        f"Blocked         : "
+        f"{blocked}"
+    )
+
+    print(
+        f"Capital         : "
+        f"{snapshot['capital']['capital']:,.2f}"
+    )
+
+    print(
+        f"Available       : "
+        f"{snapshot['capital']['available_capital']:,.2f}"
+    )
+
+    print(
+        f"Risk / Trade    : "
+        f"{snapshot['capital']['risk_per_trade'] * 100:.2f}%"
+    )
+
+    print(
+        f"Risk Amount     : "
+        f"{snapshot['risk_amount']:,.2f}"
+    )
+
+    print(
+        "Storage         : MEMORY ONLY"
+    )
+
+    print(
+        "Database writes : NONE"
+    )
+
+    print(
+        "SQL             : NOT USED"
+    )
+
+    print(
+        "Exchange        : NOT CONNECTED"
+    )
+
+    print(
+        "Bitpin          : FUTURE EXECUTION"
+    )
+
+    print(
+        "Leverage        : NOT USED"
+    )
+
+    print(
+        "Take Profit     : NOT USED"
+    )
+
+    print(
+        "Execution       : NOT USED"
+    )
+
+    print(
+        "Prediction      : NOT USED"
+    )
+
+    print(
+        "Ranking         : NOT USED"
+    )
+
+    print(
+        "Interpretation  : NOT USED"
+    )
+
+    print(
+        "Contract Status : VALID"
+    )
+
+    print("=" * 77)
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+def main():
+
+    print_header()
+
+    try:
+
+        snapshot = (
+            calculate_snapshot()
+        )
+
+        print_results(
+            snapshot
+        )
+
+        print()
+        print(
+            "POSITION SIZING ENGINE STATUS : READY"
+        )
+
+        return 0
+
+    except Exception as exc:
+
+        print()
+        print("=" * 77)
+        print("POSITION SIZING ENGINE ERROR")
+        print("=" * 77)
+
+        print(
+            f"Type   : "
+            f"{type(exc).__name__}"
+        )
+
+        print(
+            f"Error  : {exc}"
+        )
+
+        print()
+        print(
+            "POSITION SIZING ENGINE STATUS : FAILED"
+        )
+
+        return 1
+
+
+if __name__ == "__main__":
+
+    raise SystemExit(
+        main()
+    )

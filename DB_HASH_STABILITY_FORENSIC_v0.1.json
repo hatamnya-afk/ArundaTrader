@@ -1,0 +1,110 @@
+{
+  "checkpoint": "DB_HASH_STABILITY_FORENSIC_v0.1",
+  "read_only": true,
+  "runtime_executed": false,
+  "sql_write_executed": false,
+  "production_code_changed": false,
+  "database_copied": false,
+  "rounds": [
+    {
+      "round": 1,
+      "timestamp_utc": "2026-09-06T10:53:56.326123+00:00",
+      "db": {
+        "exists": true,
+        "size": 521883648,
+        "mtime_ns": 1788691424852867600,
+        "sha256": "4B92A14D1D34A8EAFA43603358EA03BEF23408C39CCD7D62E5FB20FA83824460"
+      },
+      "wal": {
+        "exists": true,
+        "size": 0,
+        "mtime_ns": 1788691899075686700,
+        "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+      },
+      "shm": {
+        "exists": true,
+        "size": 32768,
+        "mtime_ns": 1788692003531870400,
+        "sha256": "FD4C9FDA9CD3F9AE7C962B0DDF37232294D55580E1AA165AA06129B8549389EB"
+      },
+      "journal": {
+        "exists": false,
+        "size": null,
+        "mtime_ns": null,
+        "sha256": null
+      }
+    },
+    {
+      "round": 2,
+      "timestamp_utc": "2026-09-06T10:53:59.838393+00:00",
+      "db": {
+        "exists": true,
+        "size": 521883648,
+        "mtime_ns": 1788691424852867600,
+        "sha256": "4B92A14D1D34A8EAFA43603358EA03BEF23408C39CCD7D62E5FB20FA83824460"
+      },
+      "wal": {
+        "exists": true,
+        "size": 0,
+        "mtime_ns": 1788691899075686700,
+        "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+      },
+      "shm": {
+        "exists": true,
+        "size": 32768,
+        "mtime_ns": 1788692003531870400,
+        "sha256": "FD4C9FDA9CD3F9AE7C962B0DDF37232294D55580E1AA165AA06129B8549389EB"
+      },
+      "journal": {
+        "exists": false,
+        "size": null,
+        "mtime_ns": null,
+        "sha256": null
+      }
+    },
+    {
+      "round": 3,
+      "timestamp_utc": "2026-09-06T10:54:03.375354+00:00",
+      "db": {
+        "exists": true,
+        "size": 521883648,
+        "mtime_ns": 1788691424852867600,
+        "sha256": "4B92A14D1D34A8EAFA43603358EA03BEF23408C39CCD7D62E5FB20FA83824460"
+      },
+      "wal": {
+        "exists": true,
+        "size": 0,
+        "mtime_ns": 1788691899075686700,
+        "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+      },
+      "shm": {
+        "exists": true,
+        "size": 32768,
+        "mtime_ns": 1788692003531870400,
+        "sha256": "FD4C9FDA9CD3F9AE7C962B0DDF37232294D55580E1AA165AA06129B8549389EB"
+      },
+      "journal": {
+        "exists": false,
+        "size": null,
+        "mtime_ns": null,
+        "sha256": null
+      }
+    }
+  ],
+  "analysis": {
+    "db_hash_stable": true,
+    "db_size_stable": true,
+    "db_mtime_stable": true,
+    "unique_hashes": [
+      "4B92A14D1D34A8EAFA43603358EA03BEF23408C39CCD7D62E5FB20FA83824460"
+    ],
+    "unique_sizes": [
+      521883648
+    ],
+    "unique_mtimes": [
+      1788691424852867600
+    ]
+  },
+  "classification": "A ? FILE HASH STABLE",
+  "finished_utc": "2026-09-06T10:54:04.854632+00:00"
+}

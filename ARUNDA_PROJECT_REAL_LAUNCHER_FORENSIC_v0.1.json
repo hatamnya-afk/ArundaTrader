@@ -1,0 +1,311 @@
+{
+  "version": "v0.1",
+  "project_directory": "C:\\Users\\ASUS\\ArundaTrader",
+  "target": "arunda_pipeline.py",
+  "started_utc": "2026-08-27T10:47:55.646724+00:00",
+  "database_used": false,
+  "network_used": false,
+  "execution_performed": false,
+  "file_modification": false,
+  "target_exists": true,
+  "target_analysis": {
+    "file": "arunda_pipeline.py",
+    "sha256": "6d28a963cb1449c4774ce1538ea3485119f0a21a54358ce7f55b232aed6e29ef",
+    "syntax_pass": true,
+    "encoding": "UTF-8",
+    "imports": [
+      {
+        "line": 1,
+        "source": "import os"
+      },
+      {
+        "line": 2,
+        "source": "import sys"
+      },
+      {
+        "line": 3,
+        "source": "import time"
+      },
+      {
+        "line": 4,
+        "source": "import sqlite3"
+      },
+      {
+        "line": 5,
+        "source": "import subprocess"
+      },
+      {
+        "line": 6,
+        "source": "from datetime import datetime, timezone"
+      }
+    ],
+    "execution_calls": [
+      {
+        "line": 405,
+        "function": "subprocess.run",
+        "source": "subprocess.run([PYTHON, script], cwd=os.getcwd(), capture_output=True, text=True, errors='replace')"
+      }
+    ],
+    "pipeline_references": [],
+    "launcher_references": [],
+    "upgrade_db_references": []
+  },
+  "candidate_count": 455,
+  "candidate_files": [],
+  "pipeline_launchers": [],
+  "upgrade_db_references": [
+    {
+      "file": "ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.broken.py",
+      "syntax_pass": false,
+      "sha256": "c24c8d3d96c06e11b0bce49d1316e68c3443d6dd8e95052ba3b9496699245873",
+      "references": [
+        {
+          "line": 11,
+          "source": "TARGET = \"upgrade_db.py\""
+        },
+        {
+          "line": 13,
+          "source": "OUTPUT_JSON = PROJECT_DIR / \"ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.json\""
+        },
+        {
+          "line": 14,
+          "source": "OUTPUT_TXT = PROJECT_DIR / \"ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.txt\""
+        },
+        {
+          "line": 115,
+          "source": "alias.name == \"upgrade_db\""
+        },
+        {
+          "line": 116,
+          "source": "or alias.name.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 129,
+          "source": "module == \"upgrade_db\""
+        },
+        {
+          "line": 130,
+          "source": "or module.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 363,
+          "source": "\"upgrade_db.py WAS NOT EXECUTED\","
+        },
+        {
+          "line": 398,
+          "source": "'@ | Set-Content -LiteralPath \".\\ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.py\" -Encoding UTF8"
+        }
+      ]
+    },
+    {
+      "file": "ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "sha256": "83d028104f1c4de792acb9a3c4bb28ee37efb4d6f65aea74cd84db67b1072786",
+      "references": [
+        {
+          "line": 11,
+          "source": "TARGET_NAME = \"upgrade_db.py\""
+        },
+        {
+          "line": 16,
+          "source": "\"ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.json\""
+        },
+        {
+          "line": 20,
+          "source": "\"ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.txt\""
+        },
+        {
+          "line": 357,
+          "source": "alias.name == \"upgrade_db\""
+        },
+        {
+          "line": 358,
+          "source": "or alias.name.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 374,
+          "source": "module == \"upgrade_db\""
+        },
+        {
+          "line": 375,
+          "source": "or module.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 482,
+          "source": "\"upgrade_db_executed\": False,"
+        },
+        {
+          "line": 639,
+          "source": "\"This artifact does NOT execute upgrade_db.py.\","
+        },
+        {
+          "line": 620,
+          "source": "lines.extend(['', sep, 'CALLCHAIN CLASSIFICATION', sep, f'CLASSIFICATION : {classification}', '', sep, 'FORENSIC VERDICT', sep, f'FORENSIC STATUS : {classification}', 'PREDICTIVE CLAIM : NOT_ESTABLISHED', 'DATABASE USED    : False', 'NETWORK USED     : False', 'EXECUTION        : False', 'FILE MODIFICATION: False', 'QUARANTINE USED  : False', '', 'IMPORTANT:', 'This artifact does NOT execute upgrade_db.py.', 'This artifact does NOT open arunda.db.', 'This artifact does NOT execute SQL.', 'This artifact does NOT modify production state.', '', sep, 'ARTIFACT', sep, f'Artifact : {OUTPUT_JSON}', f'Report   : {OUTPUT_TXT}', sep])"
+        },
+        {
+          "line": 358,
+          "source": "alias.name.endswith('.upgrade_db')"
+        },
+        {
+          "line": 375,
+          "source": "module.endswith('.upgrade_db')"
+        }
+      ]
+    },
+    {
+      "file": "ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "sha256": "655229cbd9cfac5b1c2aef284f8d8eb1ef2c45bb8ff2c5864adec7546f0ce0fe",
+      "references": [
+        {
+          "line": 12,
+          "source": "TARGET_NAME = \"upgrade_db.py\""
+        },
+        {
+          "line": 18,
+          "source": "/ \"ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.json\""
+        },
+        {
+          "line": 23,
+          "source": "/ \"ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.txt\""
+        },
+        {
+          "line": 327,
+          "source": "def collect_upgrade_db_structure("
+        },
+        {
+          "line": 490,
+          "source": "[\"upgrade_db.py_not_found\"],"
+        },
+        {
+          "line": 617,
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "line": 639,
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "line": 661,
+          "source": "structure = collect_upgrade_db_structure("
+        },
+        {
+          "line": 739,
+          "source": "\"UPGRADE_DB_DEPENDENCY_REVIEW\""
+        },
+        {
+          "line": 1084,
+          "source": "\"This artifact does NOT execute upgrade_db.py.\""
+        },
+        {
+          "line": 661,
+          "source": "collect_upgrade_db_structure(source)"
+        },
+        {
+          "line": 1083,
+          "source": "lines.append('This artifact does NOT execute upgrade_db.py.')"
+        }
+      ]
+    },
+    {
+      "file": "ARUNDA_PROJECT_UPGRADE_DB_REAL_CALLCHAIN_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "sha256": "e98c34415c2376f59dcde5ff1df43c17296c3036808bdaead416ab1bea1d206d",
+      "references": [
+        {
+          "line": 5,
+          "source": "TARGET = \"upgrade_db.py\""
+        },
+        {
+          "line": 50,
+          "source": "print(\"TARGET            : upgrade_db.py\")"
+        },
+        {
+          "line": 82,
+          "source": "if \"upgrade_db.py\" in lower or \"upgrade_db\" in lower:"
+        },
+        {
+          "line": 86,
+          "source": "if \"upgrade_db.py\" in line.lower():"
+        },
+        {
+          "line": 104,
+          "source": "alias.name == \"upgrade_db\""
+        },
+        {
+          "line": 105,
+          "source": "or alias.name.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 120,
+          "source": "module == \"upgrade_db\""
+        },
+        {
+          "line": 121,
+          "source": "or module.endswith(\".upgrade_db\")"
+        },
+        {
+          "line": 150,
+          "source": "if \"upgrade_db\" in segment.lower():"
+        },
+        {
+          "line": 213,
+          "source": "print(\"STATUS         : NO_REAL_UPGRADE_DB_CALLCHAIN\")"
+        },
+        {
+          "line": 217,
+          "source": "print(\"upgrade_db.py was NOT executed.\")"
+        },
+        {
+          "line": 50,
+          "source": "print('TARGET            : upgrade_db.py')"
+        },
+        {
+          "line": 217,
+          "source": "print('upgrade_db.py was NOT executed.')"
+        },
+        {
+          "line": 213,
+          "source": "print('STATUS         : NO_REAL_UPGRADE_DB_CALLCHAIN')"
+        },
+        {
+          "line": 105,
+          "source": "alias.name.endswith('.upgrade_db')"
+        },
+        {
+          "line": 121,
+          "source": "module.endswith('.upgrade_db')"
+        }
+      ]
+    },
+    {
+      "file": "ARUNDA_STAGE_DEPENDENCY_FORENSIC_v0.1.py",
+      "syntax_pass": true,
+      "sha256": "008ba419ea4f47027c67f56d7be099d93b0d8448ea7870459fc12b0d7ac422ea",
+      "references": [
+        {
+          "line": 51,
+          "source": "if \"upgrade_db\" in text.lower():"
+        },
+        {
+          "line": 79,
+          "source": "if \"upgrade_db\" in call_text.lower():"
+        },
+        {
+          "line": 83,
+          "source": "if \"upgrade_db\" in line.lower():"
+        },
+        {
+          "line": 105,
+          "source": "print(\"UPGRADE_DB REFERENCES :\")"
+        },
+        {
+          "line": 105,
+          "source": "print('UPGRADE_DB REFERENCES :')"
+        }
+      ]
+    }
+  ],
+  "status": "REAL_LAUNCHER_NOT_FOUND",
+  "finished_utc": "2026-08-27T10:48:01.083785+00:00"
+}

@@ -1,0 +1,40 @@
+{
+  "version": "NOSTR_RUNTIME_PROBE_v0.1",
+  "results": [
+    {
+      "relay": "wss://relay.damus.io",
+      "status": "PASS",
+      "http": 200,
+      "latency": 6.571
+    },
+    {
+      "relay": "wss://nos.lol",
+      "status": "PASS",
+      "http": 200,
+      "latency": 0.421
+    },
+    {
+      "relay": "wss://relay.primal.net",
+      "status": "PASS",
+      "http": 200,
+      "latency": 6.348
+    },
+    {
+      "relay": "wss://relay.nostr.band",
+      "status": "FAIL",
+      "error": "URLError",
+      "latency": 6.092
+    },
+    {
+      "relay": "wss://nostr.wine",
+      "status": "PASS",
+      "http": 200,
+      "latency": 6.666
+    }
+  ],
+  "relay_pass": 4,
+  "runtime": "PASS",
+  "db_write": 0,
+  "lunarcrush": 0,
+  "execution": "OFF"
+}
