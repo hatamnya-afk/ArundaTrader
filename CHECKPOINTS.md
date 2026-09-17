@@ -79,11 +79,10 @@ Evidence:
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
 CP44 = CURRENT FRONTIER
-CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ### Runtime observation
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
-**Observed: 6 assets reached ELIGIBLE.**
 
 This is runtime evidence only. It does not define cardinality and does not independently close or verify CP44.
 
@@ -134,10 +133,14 @@ NO_DB_WRITE
 NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ### Forward rule
-The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce the observed six-asset ELIGIBLE state.
+The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce historical runtime observations.
 
 ### Current blocker
-Production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk for dynamic `ELIGIBLE[N]`. The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling.
+The single authorized CP44 controlled runtime failed closed at the dynamic fusion path because production real closed-market data for `MHA/USDT` contained only `7` candles in the latest contiguous run, below the required `MIN_CONTEXT = 21`.
+
+Exact runtime blocker: `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`.
+
+This is a real-data continuity/context sufficiency blocker. Do not lower `MIN_CONTEXT`, pad, interpolate, forward-fill, back-fill, or bridge timestamp gaps. CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.

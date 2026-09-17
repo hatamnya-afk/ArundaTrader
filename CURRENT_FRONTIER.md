@@ -11,11 +11,10 @@ CP44 — REAL-MARKET CONTROLLED TEST
 
 CP41 = CLOSED / VERIFIED / PASS
 CP43 = CLOSED / VERIFIED / PASS
-CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ## CP44 RUNTIME OBSERVATION
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
-Observed result: **6 assets reached ELIGIBLE**.
 
 This observation is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
 No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
@@ -71,7 +70,7 @@ The optimization objective is maximum validated profit-opportunity capture. Risk
 - NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ## CP44 CURRENT BLOCKER
-Production-compatible real Entry + Invalidation/Stop is not yet proven as the input to the Smart Risk authority for dynamic `ELIGIBLE[N]`.
+CP44 runtime is BLOCKED before completion by insufficient contiguous real-market context for MHA/USDT: `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`. The runtime requires the existing contiguous-context contract and must not weaken it.
 
 The active route must also establish opportunity-driven capital allocation semantics. The legacy fixed-15 `market_entry_stop_adapter.py` snapshot path must not become the production route.
 

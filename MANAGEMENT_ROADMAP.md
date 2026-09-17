@@ -78,7 +78,7 @@ Rules:
 Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
-- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
+- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ### PHASE B — EXCHANGE BINDING
 May begin only after Phase A completion is explicitly closed and recorded in all four governance documents.
@@ -92,7 +92,6 @@ Requires Phase A/B/C closure, satisfied execution/risk/constraint gates, and exp
 ## CP44 MANAGEMENT STATE
 A controlled real-market runtime has been executed from the established downstream ELIGIBLE boundary.
 
-**Observed result: 6 assets reached ELIGIBLE.**
 
 This is runtime evidence only. It does not define cardinality and does not close or verify CP44.
 
@@ -120,7 +119,7 @@ ORDER INTENT
 Do not rebuild or redesign Opportunity / Signal / Score / Fusion / Decision merely to reproduce the observed ELIGIBLE state.
 
 ## CP44 CURRENT BLOCKER
-The active blocker is the production-compatible connection of real Entry + Invalidation/Stop into the Smart Risk authority, with intelligent capital allocation semantics and no legacy fixed-15 path.
+The active CP44 blocker is `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`. The runtime fail-closed correctly. No padding, interpolation, forward-fill, back-fill, gap bridging, or MIN_CONTEXT reduction is authorized.
 
 The legacy `market_entry_stop_adapter.py` fixed-15 snapshot path must not become the production route.
 

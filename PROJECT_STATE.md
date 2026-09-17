@@ -63,17 +63,23 @@ Closed checkpoints are historical truth. They must not be reopened or re-audited
 ## CURRENT PROJECT STATE
 CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
-CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED.
+CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED.
 
 ## CP44 RUNTIME OBSERVATION
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
-Observed result: **6 assets reached ELIGIBLE**.
 
 This is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
 
 `15` is legacy test-universe history and is not a production cardinality contract.
 
 The established upstream ELIGIBLE path remains accepted as the operational boundary for forward work. No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
+
+### Current blocker
+The single authorized CP44 controlled runtime failed closed at the dynamic fusion path because production real closed-market data for `MHA/USDT` contained only `7` candles in the latest contiguous run, below the required `MIN_CONTEXT = 21`.
+
+Exact runtime blocker: `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`.
+
+This is a real-data continuity/context sufficiency blocker. Do not lower `MIN_CONTEXT`, pad, interpolate, forward-fill, back-fill, or bridge timestamp gaps. CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
 
 ## CP44 ACCEPTANCE BOUNDARY
 REAL_MARKET_DATA
