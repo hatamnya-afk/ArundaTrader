@@ -61,6 +61,12 @@ Canonical branch is `main`.
 The Local Original remains the primary operational/recovery object; GitHub is the controlled durable project-management and builder-handoff source.
 The synchronization branch is authorized only for the current consolidation/synchronization task.
 
+Repository organization is classification-first and behavior-neutral:
+- governance/control documents remain at root;
+- operational source paths are preserved until dependency/path audit authorizes relocation;
+- verification, evidence/forensic, and historical material have explicit navigation locations;
+- `README.md` and `REPOSITORY_STRUCTURE.md` provide repository navigation and organization rules.
+
 Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not automatically project truth and must be classified before canonical promotion.
 
 ## MANDATORY STATE SYNCHRONIZATION
