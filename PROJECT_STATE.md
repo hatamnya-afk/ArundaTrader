@@ -1,4 +1,4 @@
-# ARUNDA TRADER — PROJECT STATE
+# ARUNDA TRADER ΓÇö PROJECT STATE
 
 ## PURPOSE
 Canonical repository-level source of truth for ArundaTrader. Chat memory is not authoritative when these documents are available.
@@ -19,21 +19,21 @@ The provider-neutral route is:
 
 ```text
 REAL MARKET DATA
-→ DYNAMIC UNIVERSE
-→ OPPORTUNITY
-→ SIGNAL
-→ SCORE
-→ DECISION
-→ PROFIT / OPPORTUNITY INTELLIGENCE
-→ ENTRY + INVALIDATION / STOP
-→ SMART RISK
-→ CAPITAL ALLOCATION
-→ POSITION SIZING
-→ TRADE GATE
-→ TRADE READY
-→ ORDER INTENT
-→ PRE-EXECUTION
-→ EXCHANGE-AGNOSTIC BOUNDARY
+ΓåÆ DYNAMIC UNIVERSE
+ΓåÆ OPPORTUNITY
+ΓåÆ SIGNAL
+ΓåÆ SCORE
+ΓåÆ DECISION
+ΓåÆ PROFIT / OPPORTUNITY INTELLIGENCE
+ΓåÆ ENTRY + INVALIDATION / STOP
+ΓåÆ SMART RISK
+ΓåÆ CAPITAL ALLOCATION
+ΓåÆ POSITION SIZING
+ΓåÆ TRADE GATE
+ΓåÆ TRADE READY
+ΓåÆ ORDER INTENT
+ΓåÆ PRE-EXECUTION
+ΓåÆ EXCHANGE-AGNOSTIC BOUNDARY
 ```
 
 No exchange adapter may become a dependency of the Core before the exchange-agnostic boundary.
@@ -61,9 +61,28 @@ CP43 = CLOSED / VERIFIED / PASS
 Closed checkpoints are historical truth. They must not be reopened or re-audited unless Management identifies a direct, provable regression.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
+CURRENT FRONTIER: CP44 ΓÇö REAL-MARKET CONTROLLED TEST
 
 CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+## CP44 IMPLEMENTATION VERIFICATION
+The authorized CP44 downstream implementation is present on branch `sync/local-project-20260917` at HEAD `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
+Verified implementation surfaces:
+- `dynamic_smart_risk_contract_boundary_v0_1.py`
+- `entry_invalidation_boundary_v0_1.py`
+- `smart_risk_contract_v0_1.py`
+- `smart_risk_engine_v0_1.py`
+- `test_smart_risk_engine_v0_1.py`
+
+Evidence:
+- All five CP44 surfaces compiled successfully with Python 3.13.15.
+- Existing Smart Risk test exited `0`.
+- Corrected Dynamic Smart Risk boundary test exited `0` and emitted `CP44_DYNAMIC_BOUNDARY_PASS`.
+- Verified dynamic asset `BTC/USDT`, LONG direction, explicit entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`, APPROVED risk state, and snapshot cardinality `1 ΓåÆ 1`.
+- No order, execution, API write, or production DB write occurred.
+- Generated `__pycache__` is temporary and is not project truth.
+
+This is contract/boundary verification evidence only. It does not constitute CP44 real-market closure.
 
 ## CP44 RUNTIME OBSERVATION
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
@@ -72,15 +91,12 @@ This is runtime evidence only. It is not a cardinality contract, target, or CP44
 
 `15` is legacy test-universe history and is not a production cardinality contract.
 
-The established upstream ELIGIBLE path remains accepted as the operational boundary for forward work. No upstream rebuild, redesign, or re-audit is authorized merely to reproduce this observation.
-
 ### Current blocker
-The single authorized CP44 controlled runtime failed closed at the dynamic fusion path because production real closed-market data for `MHA/USDT` contained only `7` candles in the latest contiguous run, below the required `MIN_CONTEXT = 21`.
+The single authorized CP44 controlled runtime failed closed at the dynamic fusion path because production real closed-market data for MHA/USDT contained only 7 candles in the latest contiguous run, below the required MIN_CONTEXT = 21.
 
-Exact runtime blocker: `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`.
+Exact runtime blocker: INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7.
 
-This is a real-data continuity/context sufficiency blocker. Do not lower `MIN_CONTEXT`, pad, interpolate, forward-fill, back-fill, or bridge timestamp gaps. CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
-
+This is a real-data continuity/context sufficiency blocker. Do not lower MIN_CONTEXT, pad, interpolate, forward-fill, back-fill, or bridge timestamp gaps. CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
 ## CP44 ACCEPTANCE BOUNDARY
 REAL_MARKET_DATA
 VALIDATED_OBSERVATIONS
@@ -178,9 +194,8 @@ Continue only from the active frontier recorded in the repository. If repository
 
 ## NEXT ACTION
 1. Trace exact production Entry + Invalidation/Stop into Smart Risk.
-2. Preserve dynamic `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]`.
+2. Preserve dynamic ELIGIBLE[N] → RISK[N] → TRADE_GATE[N].
 3. Define and verify opportunity-driven capital allocation that scales across valid capital amounts.
 4. Keep all pre-boundary logic exchange-agnostic.
 5. Synchronize all four governance documents at CP44 completion before closure.
-
 # END PROJECT STATE

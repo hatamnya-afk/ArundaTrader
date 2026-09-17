@@ -1,17 +1,32 @@
-# ARUNDA TRADER — CURRENT FRONTIER
+# ARUNDA TRADER ΓÇö CURRENT FRONTIER
 
 ## STATUS
-CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
+CURRENT FRONTIER ΓÇö CP44 / REAL-MARKET CONTROLLED TEST
 
 ## GOVERNANCE GATE
 Repository consolidation is CLOSED by Management. CP44 controlled-test work is authorized only inside the existing safety boundary.
 
 ## CURRENT FRONTIER
-CP44 — REAL-MARKET CONTROLLED TEST
+CP44 ΓÇö REAL-MARKET CONTROLLED TEST
 
 CP41 = CLOSED / VERIFIED / PASS
 CP43 = CLOSED / VERIFIED / PASS
 CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / BLOCKED / NOT VERIFIED / NOT CLOSED
+
+## CP44 IMPLEMENTATION VERIFICATION
+The authorized CP44 implementation is present on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
+
+Verified:
+- five CP44 Smart Risk/Entry surfaces compile successfully;
+- existing Smart Risk test exits `0`;
+- Dynamic Smart Risk boundary test exits `0` with `CP44_DYNAMIC_BOUNDARY_PASS`;
+- explicit `BTC/USDT` LONG entry/invalidation geometry is accepted;
+- stop distance is `1000.0`;
+- Smart Risk result is `APPROVED`;
+- dynamic snapshot preserves cardinality `1 ΓåÆ 1`;
+- no order, execution, API write, or production DB write occurred.
+
+The test used a controlled fixture. It verifies the boundary implementation, not the CP44 real-market closure.
 
 ## CP44 RUNTIME OBSERVATION
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
@@ -26,17 +41,17 @@ Complete and verify the provider-neutral downstream chain:
 
 ```text
 REAL MARKET DATA
-→ DYNAMIC ELIGIBLE[N]
-→ ENTRY + INVALIDATION / STOP
-→ PROFIT / OPPORTUNITY ASSESSMENT
-→ SMART RISK
-→ CAPITAL ALLOCATION
-→ POSITION SIZING
-→ TRADE GATE
-→ TRADE READY
-→ ORDER INTENT
-→ PRE-EXECUTION
-→ EXCHANGE-AGNOSTIC BOUNDARY
+ΓåÆ DYNAMIC ELIGIBLE[N]
+ΓåÆ ENTRY + INVALIDATION / STOP
+ΓåÆ PROFIT / OPPORTUNITY ASSESSMENT
+ΓåÆ SMART RISK
+ΓåÆ CAPITAL ALLOCATION
+ΓåÆ POSITION SIZING
+ΓåÆ TRADE GATE
+ΓåÆ TRADE READY
+ΓåÆ ORDER INTENT
+ΓåÆ PRE-EXECUTION
+ΓåÆ EXCHANGE-AGNOSTIC BOUNDARY
 ```
 
 The optimization objective is maximum validated profit-opportunity capture. Risk management must prevent invalid/uninformed allocation, not impose an arbitrary universal profit ceiling.
@@ -70,54 +85,13 @@ The optimization objective is maximum validated profit-opportunity capture. Risk
 - NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ## CP44 CURRENT BLOCKER
-CP44 runtime is BLOCKED before completion by insufficient contiguous real-market context for MHA/USDT: `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`. The runtime requires the existing contiguous-context contract and must not weaken it.
+CP44 runtime is BLOCKED before completion by insufficient contiguous real-market context for MHA/USDT: INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7. The runtime requires the existing contiguous-context contract and must not weaken it.
 
-The active route must also establish opportunity-driven capital allocation semantics. The legacy fixed-15 `market_entry_stop_adapter.py` snapshot path must not become the production route.
-
-## CP44 FORBIDDEN DURING TEST
-- order submission/cancellation
-- execution authorization
-- signature work
-- exchange writes
-- test capital
-- modification of `arunda_pipeline.py` without explicit separate authorization
-- architecture redesign
-- reopening closed checkpoints
-- upstream rebuild of the established ELIGIBLE path
-- exchange-specific logic inside Core Risk/Decision/Allocation
-
-## REPOSITORY GOVERNANCE
-Canonical branch is `main`.
-The Local Original remains the primary operational/recovery object; GitHub is the controlled durable project-management and builder-handoff source.
-The synchronization branch is authorized for the current controlled roadmap/governance work.
-
-Repository organization is classification-first and behavior-neutral:
-- governance/control documents remain at root;
-- operational source paths are preserved until dependency/path audit authorizes relocation;
-- verification, evidence/forensic, and historical material have explicit navigation locations;
-- `README.md` and `REPOSITORY_STRUCTURE.md` provide repository navigation and organization rules.
-
-Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not automatically project truth and must be classified before canonical promotion.
-
-## MANDATORY STATE SYNCHRONIZATION
-At the end of every checkpoint, the responsible Builder/Manager MUST synchronize:
-- PROJECT_STATE.md
-- CURRENT_FRONTIER.md
-- CHECKPOINTS.md
-- MANAGEMENT_ROADMAP.md
-
-The synchronization must record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker if any, CURRENT FRONTIER, NEXT ACTION, and any authorized branch/file scope change.
-
-## TOOBIT
-TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital blocker. CP44 does not authorize bypassing or repeating private diagnostics.
-Toobit is not part of the Core Risk/Allocation architecture.
-
+The active route must also establish opportunity-driven capital allocation semantics. The legacy fixed-15 market_entry_stop_adapter.py snapshot path must not become the production route.
 ## NEXT ACTION
-1. Trace the exact production Entry + Invalidation/Stop source into Smart Risk.
-2. Preserve dynamic `ELIGIBLE[N]` and prove `RISK[N] → TRADE_GATE[N]` without fixed cardinality.
-3. Define/verify opportunity-driven capital allocation that scales across valid capital amounts.
+1. Trace exact production Entry + Invalidation/Stop into Smart Risk.
+2. Preserve dynamic ELIGIBLE[N] → RISK[N] → TRADE_GATE[N].
+3. Define and verify opportunity-driven capital allocation that scales across valid capital amounts.
 4. Keep all pre-boundary logic exchange-agnostic.
-5. At CP44 completion, synchronize all four governance documents before any VERIFIED/PASS/CLOSED claim.
-
+5. Synchronize all four governance documents at CP44 completion before closure.
 # END CURRENT FRONTIER
