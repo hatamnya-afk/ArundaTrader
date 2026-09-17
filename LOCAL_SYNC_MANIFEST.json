@@ -1,31 +1,54 @@
-﻿{
-    "source":  "C:\\Users\\ASUS\\ArundaTrader",
-    "files":  1588,
-    "database_policy":  "LOCAL_ONLY_NOT_PUSHED",
-    "excluded_directories":  [
-                                 ".git",
-                                 "__pycache__",
-                                 "_backups",
-                                 "BACKUPS",
-                                 "_backup_tools",
-                                 "indicator_repair_backups",
-                                 "indicator_post_repair_backups",
-                                 "_QUARANTINE_NONPRODUCTION_SYNTAX_FAILURES",
-                                 "github_review",
-                                 "diagnostics",
-                                 "binding_inspection"
-                             ],
-    "local_files_modified":  false,
-    "generated_at":  "2026-09-17T07:43:32.1162777+03:30",
-    "excluded_file_patterns":  [
-                                   "*.db",
-                                   "*.db-wal",
-                                   "*.db-shm",
-                                   "*.sqlite",
-                                   "*.sqlite3",
-                                   "*.zip",
-                                   "*.7z",
-                                   "*.bak",
-                                   "*.tmp"
-                               ]
+{
+  "source": "C:\\Users\\ASUS\\ArundaTrader",
+  "snapshot_policy": "controlled_local_to_github_sync",
+  "files_snapshot": 1588,
+  "local_files_modified": false,
+  "database_policy": "LOCAL_ONLY_NOT_PUSHED",
+  "organization_policy": "classification_first_behavior_neutral",
+  "operational_source_relocation": "FORBIDDEN_UNLESS_DEPENDENCY_PATH_AUDIT_PROVES_SAFE",
+  "governance_documents_remain_at_root": true,
+  "repository_navigation": [
+    "README.md",
+    "REPOSITORY_STRUCTURE.md",
+    "docs/README.md",
+    "tests/README.md",
+    "evidence/README.md",
+    "historical/README.md"
+  ],
+  "excluded_directories": [
+    ".git",
+    "__pycache__",
+    "_backups",
+    "BACKUPS",
+    "_backup_tools",
+    "indicator_repair_backups",
+    "indicator_post_repair_backups",
+    "_QUARANTINE_NONPRODUCTION_SYNTAX_FAILURES",
+    "github_review",
+    "diagnostics",
+    "binding_inspection"
+  ],
+  "excluded_patterns": [
+    "*.db",
+    "*.db-wal",
+    "*.db-shm",
+    "*.sqlite",
+    "*.sqlite3",
+    "*.zip",
+    "*.7z",
+    "*.bak",
+    "*.tmp"
+  ],
+  "safety": {
+    "EXECUTION_AUTHORIZATION": false,
+    "ORDER_WRITE": false,
+    "DATABASE_WRITE": false,
+    "WITHDRAW": false,
+    "arunda_pipeline.py": "PROTECTED"
+  },
+  "current_frontier": "CP44 — REAL-MARKET CONTROLLED TEST",
+  "runtime_observation": "6 assets reached ELIGIBLE",
+  "runtime_observation_status": "EVIDENCE_ONLY_NOT_CLOSURE",
+  "next_route": "ELIGIBLE -> RISK -> TRADE GATE -> TRADE READY / ORDER INTENT READINESS -> CONTROLLED EVIDENCE",
+  "generated_note": "This manifest records the controlled synchronization and repository organization policy. The Local original remains untouched."
 }
