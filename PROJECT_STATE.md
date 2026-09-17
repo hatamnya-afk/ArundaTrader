@@ -5,11 +5,17 @@ Canonical repository-level source of truth for ArundaTrader. Chat memory is not 
 
 ## PROJECT IDENTITY
 ArundaTrader is a modular, layered, exchange-agnostic real-market analysis and trading-decision system.
-
 Toobit is an exchange adapter/environment, not the project core.
 
-## CORE FLOW
-REAL DYNAMIC UNIVERSE → REAL MARKET DATA → REAL OPPORTUNITY → REAL SIGNAL → REAL DECISION → SMART RISK MANAGEMENT → TRADE GATE → ORDER INTENT → EXECUTION → REAL TRADE → REAL OUTCOME → REAL OBSERVATION → CALIBRATION
+## MANAGEMENT ROADMAP
+See `MANAGEMENT_ROADMAP.md` for the authoritative strategic sequence.
+
+Approved sequence:
+REAL MARKET DATA → ANALYSIS → OPPORTUNITY → SIGNAL → SCORE → DECISION → RISK → POSITION SIZE → TRADE GATE → TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
+→ PROJECT VERIFICATION → FULL TEST / CLEANUP → PACKAGE → SERIOUS PORTABLE BACKUP
+→ EXCHANGE BINDING → EXCHANGE-SPECIFIC TESTS → MANAGEMENT AUTHORIZATION → USER CAPITAL → CONTROLLED REAL TEST
+
+**Critical rule:** the exchange-agnostic Core does NOT wait for a live exchange account, live exchange balance, private API, signature, or user capital. Those belong to the later Exchange Binding / Controlled Real Test phase.
 
 ## PRODUCTION BOUNDARY
 LAUNCH_TIMESTAMP = 2026-08-31T00:00:00+00:00
@@ -22,110 +28,42 @@ WITHDRAW = FORBIDDEN
 DATABASE WRITE = FORBIDDEN unless explicitly authorized
 Credentials and secrets must never be exposed.
 
-## CP38 STATE — PRE-EXECUTION ARCHITECTURE COMPLETE
-CP38-A = CLOSED / VERIFIED / PASS
+## CLOSED STATES
+CP38-A/C/D/E/F/G/H/I/J/K/L/N = CLOSED / VERIFIED / PASS
 CP38-B = DESIGN PASS
-CP38-C = CLOSED / VERIFIED / PASS
-CP38-D = CLOSED / VERIFIED / PASS
-CP38-E = CLOSED / VERIFIED / PASS
-CP38-F = CLOSED / VERIFIED / PASS
-CP38-G = CLOSED / VERIFIED / PASS
-CP38-H = CLOSED / VERIFIED / PASS
-CP38-I = CLOSED / VERIFIED / PASS
-CP38-J = CLOSED / VERIFIED / PASS
-CP38-K = CLOSED / VERIFIED / PASS
-CP38-L = CLOSED / VERIFIED / PASS
-CP38-N = CLOSED / VERIFIED / PASS
-
-CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL.
-
-## CP39 STATE
 CP39 = CLOSED / VERIFIED / PASS
-Scope = Pre-Execution Readiness → Decision Handoff
-PRE-EXECUTION READINESS = SEALED
-
-Verified CP39 chain:
-REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
-
-The verified CP39 chain is provider-neutral, fail-closed, and contains no execution surface.
-
-## CP40 STATE
-CP40 = CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
-DECISION CONTRACT = VERIFIED
-DECISION ENGINE = VERIFIED
-DECISION INPUT = SEALED-INPUT ONLY
-
-Implementation:
-- decision_contract_v0_1.py
-- decision_engine_v0_1.py
-- test_cp40_decision_v0_1.py
-
-CP40 validates the CP39 sealed Decision input, rejects TEST/LEGACY/SIMULATED or otherwise unverified provenance, rejects provider/execution coupling, enforces dynamic asset identity, validates timezone-aware observation timestamps, and applies an explicit deterministic staleness window. Valid input produces only a provider-neutral Decision status/result.
-
-Verification evidence:
-- Focused CP40 suite: 12 passed in isolated verification environment.
-- Static compile verification: PASS.
-- Forbidden API/import scan for Decision implementation: PASS.
-- No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
-
-## CP41 STATE — DECISION → TRADE INTENT
-CP41 = CLOSED / VERIFIED / PASS
-
-Scope = DECISION OUTPUT → TRADE INTENT
-
-Implementation:
-- decision_trade_intent_boundary_v0_1.py
-- test_cp41_decision_trade_intent_boundary_v0_1.py
-
-CP41 established a provider-neutral boundary/validation layer consuming validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs. It requires Decision READY + VALID, dynamic asset identity, valid provenance, approved Trade Gate/Risk state, and semantic agreement for direction, entry, stop, quantity, exposure, and policy version. It rejects execution/API/order surfaces.
-
-Fresh local verification evidence recorded by Management:
-- focused CP41 suite: 12 passed in 0.09s
-- py_compile: PASS
-- git diff --check: PASS
-- forbidden operation/write/runtime scans: PASS
-- fixed-15 / capital / synthetic scan: PASS
-- imports limited to standard-library modules
-- GitHub scope comparison: six CP41 files changed from the CP40 base; no runtime/Risk/execution modification
-
-CP41 does not calculate or invent price, stop, quantity, exposure, capital, portfolio state, risk policy, exchange constraints, or execution authorization. It does not submit orders, call APIs, execute trades, or write the database.
-
-## CP42 STATE — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
-CP42 = BLOCKED — REAL CAPITAL SOURCE GAP
-
-Scope = REAL PRODUCTION SOURCES → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT
-
-Repository inspection established that provider-neutral contracts and bridges exist for Real Capital Observation, Real Portfolio State, validated Entry/Stop/Risk Policy, Smart Risk, Trade Gate, and Decision → Trade Intent. However, the inspected branch does not establish a complete verified production-source binding from a real account/balance producer through the required upstream chain into Trade Intent.
-
-Real Capital:
-- production capital must originate from REAL ACCOUNT / BALANCE OBSERVATION
-- `capital_config.py` remains TEST / LEGACY / NON-PRODUCTION
-- existing real-capital contracts are present and fail closed on invalid/forbidden sources
-- Toobit Account remains blocked by HTTP 400 / API -1022 INVALID_SIGNATURE
-- no alternative verified real-account producer is established in the inspected CP42 state
-
-Entry / Stop:
-- validated contracts/bridges exist
-- complete real producer binding into the CP42 production path is not established
-- no latest-price fallback, ATR inference, interpolation, padding, or fabricated value is permitted
-
-Quantity / Exposure:
-- Smart Risk deterministically derives `position_size` and `exposure` from upstream capital, entry, stop distance, risk policy, and portfolio state
-- this calculation is not itself a production source
-- without verified production-bound upstream inputs, quantity/exposure production readiness cannot be certified
-
-Therefore CP42 stops at the source gap and introduces no workaround, synthetic producer, or redesign.
-
-## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP42 — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
 CP40 = CLOSED / VERIFIED
 CP41 = CLOSED / VERIFIED / PASS
-CP42 = BLOCKED — REAL CAPITAL SOURCE GAP
 
-EXECUTION = NOT AUTHORIZED
-REAL ORDER = NONE
-REAL TRADE = NONE
-TOOBIT -1022 = INDEPENDENT ACCOUNT / REAL-CAPITAL BLOCKER
+Closed checkpoints are historical truth and are not re-audited unless a real regression is demonstrated.
+
+## CP42 MANAGEMENT CORRECTION
+CP42 inspected production-source binding but initially treated absence of a live exchange Account/Balance producer as a Core blocker. Management has explicitly corrected that interpretation.
+
+CP42 is therefore NOT a justification for stopping the exchange-agnostic Core. Provider-neutral Capital/Portfolio abstractions are sufficient for Core architecture; actual exchange Account/Balance binding is deferred to the Exchange Binding phase.
+
+The known Toobit `-1022 INVALID_SIGNATURE` remains an independent future exchange-binding issue. It is not moved into Core and must not block Core completion.
+
+## CURRENT PROJECT STATE
+CURRENT FRONTIER: TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
+
+Next major sequence:
+1. Complete exchange-agnostic Core to Trade-Ready / Pre-Execution.
+2. Verify the complete Core.
+3. Clean and review contracts/boundaries.
+4. Package the complete project.
+5. Create a serious portable backup / ready package.
+6. Only then begin exchange binding.
+7. Implement and test exchange-specific Account/Balance/API/signature/constraints at that later phase.
+8. Only after exchange verification and Management authorization does user capital enter the project for a controlled real test.
+
+## CAPITAL POLICY
+- User capital is NOT required for the current Core frontier.
+- Do not ask the user to provide capital during Core development.
+- `capital_config.py` remains TEST / LEGACY / NON-PRODUCTION and cannot be promoted to production capital.
+- No synthetic, fabricated, interpolated, padded, or hardcoded capital.
+- No fixed-15 sizing.
+- Exchange-specific capital binding is a later integration concern.
 
 ## VERIFIED / CLOSED AREAS
 - Data Fabric
@@ -152,25 +90,21 @@ TOOBIT -1022 = INDEPENDENT ACCOUNT / REAL-CAPITAL BLOCKER
 - CP40 — Decision Implementation
 - CP41 — Decision → Trade Intent Boundary
 
-Closed areas are not re-audited unless a real regression is demonstrated.
-
 ## TOOBIT STATUS
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital path blocker. Do not repeat private Toobit diagnostics without explicit authorization.
+This is a future exchange-binding issue, not a Core blocker. Do not repeat private Toobit diagnostics without explicit Management authorization for the Exchange Binding phase.
 
 ## NON-NEGOTIABLE PROJECT RULES
-- Real data only.
-- No synthetic data, interpolation, forward-fill, back-fill, padding, or fabricated fallback values.
-- One candle = one source; provenance is required.
-- Fail closed when required real data cannot be verified.
-- Global Universe is not Toobit Universe.
-- Legacy test capital is not production capital.
-- No real capital → fail closed.
 - Core remains exchange-agnostic.
+- Real data only; no synthetic/fabricated/interpolated/forward-filled/back-filled/padded fallback values.
+- Fail closed when required data cannot be verified.
+- Legacy test capital is not production capital.
+- No user capital during Core development.
 - Read-only layers remain read-only unless a writer is explicitly authorized.
-- Do not modify arunda_pipeline.py without explicit authorization.
-- Do not modify the production DB without explicit authorization.
+- No order submission, execution authorization, signature generation, exchange write, or production DB write during the Core frontier.
+- Do not modify `arunda_pipeline.py` without explicit authorization.
 - Do not reopen closed checkpoints without proven regression.
+- Do not begin exchange binding before Core completion, verification, cleanup, packaging, and backup.
 
 ## SOURCE-OF-TRUTH ORDER
 1. Repository state documents
@@ -179,12 +113,14 @@ This remains an independent Account/Real-Capital path blocker. Do not repeat pri
 4. Chat context
 
 ## BUILDER START RULE
-A new Builder session must read:
+A new Builder/Manager session must read:
+- MANAGEMENT_ROADMAP.md
 - PROJECT_STATE.md
 - ARCHITECTURE.md
 - CHECKPOINTS.md
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
-Then continue from the active frontier recorded in CURRENT_FRONTIER.md.
+
+Then continue from the active frontier. The roadmap must not be reinterpreted: deferred exchange capital is not a current blocker.
 
 # END PROJECT STATE
