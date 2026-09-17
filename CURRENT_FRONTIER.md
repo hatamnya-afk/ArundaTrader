@@ -6,6 +6,18 @@ CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
 ## GOVERNANCE GATE
 Repository consolidation is the active management gate. CP44 runtime execution is forbidden until Canonical repository governance is finalized.
 
+## FINAL PROJECT LIFECYCLE
+PROJECT COMPLETION MUST PRECEDE EXCHANGE BINDING.
+
+Mandatory lifecycle:
+1. Complete the exchange-agnostic ArundaTrader project/core.
+2. Explicitly close project completion through Management and the roadmap.
+3. Bind an exchange through a replaceable adapter/environment boundary.
+4. Perform final real-market exchange integration and controlled testing.
+5. Enable real trading only after final acceptance and explicit Management authorization.
+
+No exchange-specific architecture may be introduced into the core before the completion gate.
+
 ## CURRENT FRONTIER
 CP44 — REAL-MARKET CONTROLLED TEST
 
@@ -68,15 +80,27 @@ REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXE
 ## REPOSITORY GOVERNANCE
 Canonical branch is `main`.
 Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`.
-Governance synchronization is recorded on the consolidation branch before promotion to remote `main`.
 
-No Builder or Manager may create a project branch merely for personal workflow, experimentation, convenience, or parallel project truth.
+No Builder, Manager, coding agent, or implementation agent may create a project branch merely for personal workflow, experimentation, convenience, or parallel project truth.
 A new branch is permitted only when Management explicitly authorizes it as part of the active roadmap/checkpoint and records its purpose, source, target checkpoint, and relationship to Canonical.
 
 No unapproved file may be added to Canonical. A new file is permitted only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope.
 Temporary, generated, backup, quarantine, forensic, review, and unrelated files are not project truth.
 
-All work must map to the active roadmap and checkpoint scope. When uncertain: STOP and escalate to Management.
+All work must map to MANAGEMENT_ROADMAP.md and the active checkpoint. When uncertain: STOP and escalate to Management.
+
+## MANDATORY STATE SYNCHRONIZATION
+At the end of every checkpoint, the responsible Builder/Manager MUST synchronize:
+- PROJECT_STATE.md
+- CURRENT_FRONTIER.md
+- CHECKPOINTS.md
+- MANAGEMENT_ROADMAP.md
+
+The synchronization must record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker if any, CURRENT FRONTIER, NEXT ACTION, and any authorized branch/file scope change.
+
+For every route/frontier change, the roadmap and state documents must be updated immediately, with the reason and Management authorization.
+
+A checkpoint is not governance-complete until these documents are synchronized and internally consistent. Reporting to Management does not substitute for state maintenance. The next frontier must not start while the synchronization gate is incomplete.
 
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
