@@ -1,19 +1,10 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-CP40 — CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
+ACTIVE — CP41 IMPLEMENTED / VERIFICATION PENDING
 
 ## CURRENT FRONTIER
-CP40 — CLOSED / VERIFIED
-
-## CP39 CLOSED STATE
-CP39 = CLOSED / VERIFIED / PASS
-PRE-EXECUTION READINESS = SEALED
-
-Verified CP39 chain:
-REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
-
-The CP39 chain establishes a sealed, provider-neutral, fail-closed input boundary for Decision.
+CP41 — DECISION → TRADE INTENT BOUNDARY
 
 ## CP40 CLOSED STATE
 CP40 = CLOSED / VERIFIED
@@ -31,49 +22,98 @@ NO DB WRITE = PASS
 NO API = PASS
 NO FIXED_15 = PASS
 
-Implementation:
-- decision_contract_v0_1.py
-- decision_engine_v0_1.py
-- test_cp40_decision_v0_1.py
+CP40 remains historical truth and is not to be re-audited unless Management identifies a regression.
 
-Decision consumes only the CP39 SEALED DECISION INPUT. It validates provenance, required validation states, dynamic asset identity, timestamp integrity, explicit staleness policy, and execution/provider exclusion surfaces. Valid input produces only a provider-neutral decision status/result.
+## CP41 OBJECTIVE
+DECISION OUTPUT ↓ TRADE INTENT
 
-Verification evidence:
-- CP40 focused suite: 12 passed in isolated verification environment.
-- Static compile verification: PASS.
-- Forbidden API/import scan for Decision implementation: PASS.
-- No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
+Establish a provider-neutral, fail-closed contract boundary that consumes validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs and exposes a Trade Intent-shaped downstream payload without creating or authorizing an order.
 
-Local Windows workspace execution is not directly accessible from this environment; therefore the 12-test evidence is isolated repository-code verification, not a claim of execution inside C:\Users\ASUS\ArundaTrader.
+## CP41 IMPLEMENTATION PRESENT
+- `decision_trade_intent_boundary_v0_1.py`
+- `test_cp41_decision_trade_intent_boundary_v0_1.py`
 
-## DECISION BOUNDARY
-DECISION ≠ EXECUTION
-DECISION ≠ ORDER INTENT
-DECISION ≠ AUTHORIZATION
+Implementation status:
+- Decision READY + VALID required.
+- Dynamic asset identity required across all upstream sources.
+- Direction, entry, stop, quantity, exposure, and policy values are sourced from upstream and cross-checked.
+- Provenance is required and TEST / LEGACY / SIMULATED are rejected.
+- Trade Gate and Risk approval are required.
+- Stop/Risk validation state is required.
+- Provider/execution surfaces are rejected.
+- No capital, price, stop, quantity, exposure, risk policy, portfolio state, or exchange constraint is invented.
+- No order object, authorization, execution, API call, or DB write is performed.
 
-The Decision layer evaluates sealed decision input and produces a provider-neutral decision result only. Any later transition toward Order Intent or Execution requires its own explicit boundary and Management authorization.
+## CP41 VERIFICATION STATUS
+IMPLEMENTATION = PRESENT
+FOCUSED TEST FILE = PRESENT
+REPOSITORY STATIC REVIEW = PENDING FINAL MANAGEMENT VERIFICATION
+LOCAL WINDOWS TEST EXECUTION = NOT VERIFIED FROM THIS ENVIRONMENT
+CP41 = NOT YET CLOSED / VERIFIED
 
-## EXECUTION BOUNDARY
-EXECUTION = NOT AUTHORIZED
-REAL TRADE = NOT EXECUTED
-ORDER SUBMISSION = NONE
-EXCHANGE WRITE = NONE
-DB MUTATION = NONE
+Required verification before closure:
+1. compile
+2. focused CP41 tests
+3. static inspection
+4. git diff --check
+5. scope check
+6. contamination check
+
+Required evidence:
+DECISION_TO_INTENT
+FAIL_CLOSED
+DYNAMIC_ASSET
+PROVIDER_NEUTRAL
+PROVENANCE
+NO_TEST_DATA
+NO_FIXED_15
+NO_CAPITAL_FABRICATION
+NO_ORDER
+NO_EXECUTION
+NO_AUTHORIZATION
+NO_API
+NO_DB_WRITE
+
+## ARCHITECTURAL BOUNDARIES
+Trade Intent ≠ Decision
+Trade Intent ≠ Smart Risk
+Trade Intent ≠ Trade Gate
+Trade Intent ≠ Exchange Constraints
+Trade Intent ≠ Execution Authorization
+Trade Intent ≠ Execution
+
+CP41 does not modify:
+- `arunda_pipeline.py`
+- Risk engine
+- Portfolio producers
+- Decision engine
+- Production DB
+- Exchange/API integration
+- Execution controls
+- Capital configuration
 
 ## TOOBIT
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital blocker and was not resolved by CP39 or CP40. It is outside Decision logic.
-
-## PROTECTED / UNCHANGED
-- arunda_pipeline.py = UNCHANGED
-- Smart Risk = UNCHANGED
-- Portfolio = UNCHANGED
-- Exchange Adapter = UNCHANGED
-- Execution controls = UNCHANGED
-- Production DB = UNCHANGED
+This remains an independent Account/Real-Capital blocker. CP41 does not resolve or bypass it.
 
 ## NEXT ACTION
-WAIT FOR MANAGEMENT AUTHORIZATION FOR THE NEXT FRONTIER.
-Do not enter CP41 automatically.
+Management verification of the existing CP41 implementation.
+If and only if all required evidence passes, update CP41 to CLOSED / VERIFIED and establish CP42 as the next frontier by a new Management command.
+
+## FORBIDDEN
+- runtime execution
+- real API
+- Toobit API
+- DB write
+- order submission/cancellation
+- execution authorization
+- signature work
+- exchange write
+- test capital
+- modification of `arunda_pipeline.py`
+- risk/portfolio/decision engine modification unless a direct CP41 gap is proven and separately authorized
+- fixed-15 logic
+- synthetic/fabricated/fallback values
+- reopening closed checkpoints
 
 # END CURRENT FRONTIER
