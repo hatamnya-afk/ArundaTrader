@@ -63,7 +63,7 @@ Closed checkpoints are historical truth. They must not be reopened or re-audited
 ## CURRENT PROJECT STATE
 CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
-CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED.
+CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST EXECUTED / BLOCKED / NOT VERIFIED / NOT CLOSED.
 
 ## CP44 IMPLEMENTATION VERIFICATION
 The authorized CP44 downstream implementation is present on branch `sync/local-project-20260917` at HEAD `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
@@ -80,17 +80,21 @@ Evidence:
 - Corrected Dynamic Smart Risk boundary test exited `0` and emitted `CP44_DYNAMIC_BOUNDARY_PASS`.
 - Verified dynamic asset `BTC/USDT`, LONG direction, explicit entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`, APPROVED risk state, and snapshot cardinality `1 → 1`.
 - No order, execution, API write, or production DB write occurred.
-- Generated `__pycache__` is temporary and is not project truth.
 
 This is contract/boundary verification evidence only. It does not constitute CP44 real-market closure.
 
-## CP44 RUNTIME OBSERVATION
-A controlled real-market runtime was previously executed from the established downstream eligibility boundary.
-Observed result: **6 assets reached ELIGIBLE**.
+## CP44 REAL-MARKET CONTROLLED RUNTIME
+The single authorized CP44 real-market controlled runtime was executed from the established downstream eligibility boundary.
 
-This is runtime evidence only. It is not a cardinality contract, target, or CP44 closure proof.
+Observed blocker:
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`
 
-`15` is legacy test-universe history and is not a production cardinality contract.
+Required minimum context:
+`MIN_CONTEXT = 21`
+
+The runtime therefore failed closed before a valid downstream real-market Entry + Invalidation/Stop → Smart Risk → Trade Gate → Trade Ready chain could be proven for CP44.
+
+This is the authoritative CP44 runtime result. No second CP44 runtime is authorized until the blocker is resolved and Management explicitly authorizes readiness for another controlled run.
 
 ## CP44 ACCEPTANCE BOUNDARY
 REAL_MARKET_DATA
@@ -188,9 +192,10 @@ Before acting, read:
 Continue only from the active frontier recorded in the repository. If repository documents and chat disagree, stop and escalate to Management.
 
 ## NEXT ACTION
-1. Run the single authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
-2. Verify production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic N.
-3. Preserve all safety boundaries: no order, execution, API write, or DB write.
-4. Synchronize all four governance documents again at CP44 completion before closure.
+1. Resolve the real-data continuity blocker for `MHA/USDT` without fabricating, interpolating, filling, padding, or backfilling production context.
+2. Do not rerun CP44 merely to retrieve metrics; a second controlled runtime requires the blocker to be resolved and explicit Management readiness.
+3. Once readiness is explicitly established, execute the single next authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
+4. Preserve all safety boundaries: no order, execution, API write, or DB write.
+5. Synchronize all four governance documents again at CP44 completion before closure.
 
 # END PROJECT STATE
