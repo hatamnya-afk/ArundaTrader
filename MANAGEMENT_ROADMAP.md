@@ -21,7 +21,7 @@ Rules:
 Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
-- CP44 = CURRENT FRONTIER / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
 
 Project completion is a Management-controlled gate. It is not declared merely because code appears feature-complete.
 
@@ -134,12 +134,11 @@ No one may use chat memory to override repository state.
 When uncertain: STOP and escalate to Management.
 
 ## CURRENT GOVERNANCE GATE
-Repository consolidation is active.
-CP44 runtime execution remains forbidden until Management closes the consolidation gate after remote Canonical verification.
+Repository consolidation is CLOSED by Management.
+The active frontier is CP44 and its controlled-test runtime is authorized under the existing no-write/no-order safety boundary.
 
 ## CURRENT NEXT ACTION
-1. Verify final remote Canonical state.
-2. Close repository-consolidation governance gate.
-3. Only then issue the explicit CP44 runtime authorization if still appropriate.
+Execute the single controlled CP44 runtime from the established downstream ELIGIBLE boundary.
+Do not rebuild or redesign the upstream Opportunity/Signal/Score/Fusion/Decision path.
 
 # END MANAGEMENT ROADMAP
