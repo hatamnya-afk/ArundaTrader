@@ -71,14 +71,13 @@ Rules:
 - Exchange adapters remain replaceable environment boundaries.
 - Dynamic runtime cardinality is preserved: `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]`.
 - `15` is legacy test-universe history, not a production cardinality contract.
-- `6` is only a runtime observation from one run, not a target or contract.
 - Closed/verified checkpoints remain historical truth unless Management proves regression.
 - No runtime, DB write, API write, or execution is implied merely by roadmap position.
 
 Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
-- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED
+- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST EXECUTED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ### PHASE B — EXCHANGE BINDING
 May begin only after Phase A completion is explicitly closed and recorded in all four governance documents.
@@ -90,9 +89,9 @@ After Phase B authorization, integrate the selected exchange through the exchang
 Requires Phase A/B/C closure, satisfied execution/risk/constraint gates, and explicit Management authorization.
 
 ## CP44 MANAGEMENT STATE
-The authorized CP44 implementation has now been verified on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
+The authorized CP44 implementation has been verified on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
 
-Verified evidence:
+Verified implementation evidence:
 - five CP44 Smart Risk/Entry surfaces compile successfully with Python 3.13.15;
 - existing Smart Risk test exits `0`;
 - corrected Dynamic Smart Risk boundary test exits `0` with `CP44_DYNAMIC_BOUNDARY_PASS`;
@@ -102,7 +101,18 @@ Verified evidence:
 - dynamic snapshot cardinality `1 → 1`;
 - no order, execution, API write, or production DB write occurred.
 
-The earlier controlled real-market runtime observed **6 assets reaching ELIGIBLE**. That remains runtime evidence only and is not a cardinality target or closure proof.
+## CP44 REAL-MARKET CONTROLLED RUNTIME RESULT
+The single authorized CP44 real-market controlled runtime was executed from the established downstream ELIGIBLE boundary.
+
+Observed blocker:
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`
+
+Required minimum context:
+`MIN_CONTEXT = 21`
+
+The runtime failed closed because the required real contiguous context was unavailable. Therefore the production-compatible Entry + Invalidation/Stop → Smart Risk → Trade Gate → Trade Ready chain was not proven and CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+This is the authoritative CP44 runtime result. No second runtime is authorized until the blocker is resolved and Management explicitly authorizes readiness.
 
 ## CP44 FORWARD CHAIN
 ```text
@@ -123,14 +133,18 @@ TRADE GATE
 TRADE READY
    ↓
 ORDER INTENT
+   ↓
+PRE-EXECUTION
 ```
 
-Do not rebuild or redesign Opportunity / Signal / Score / Fusion / Decision merely to reproduce the observed ELIGIBLE state.
+Do not rebuild or redesign Opportunity / Signal / Score / Fusion / Decision merely to reproduce the runtime observation.
 
 ## CP44 CURRENT BLOCKER
-The implementation boundary is verified, but production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk authority during the authorized real-market runtime.
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7` with `MIN_CONTEXT = 21`.
 
-The active route must also establish opportunity-driven capital allocation semantics and prove dynamic `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]` without legacy fixed-15 assumptions.
+The required condition is naturally accumulated, real, contiguous post-launch market context for MHA/USDT. No synthetic data, interpolation, fill, padding, fabricated fallback, or backfill is permitted.
+
+After blocker resolution, the next authorized runtime must prove production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic `N`.
 
 The legacy `market_entry_stop_adapter.py` fixed-15 snapshot path must not become the production route.
 
@@ -173,9 +187,10 @@ Repository consolidation is CLOSED by Management.
 CP44 remains the active frontier.
 
 ## CURRENT NEXT ACTION
-1. Execute the single authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
-2. Verify production-compatible Entry + Invalidation/Stop, opportunity-driven allocation, quantity/exposure, Trade Gate, Trade Ready, Order Intent, and pre-execution readiness with dynamic N.
-3. Preserve all execution, order, API-write, and DB-write prohibitions.
-4. Synchronize all four governance documents again at CP44 completion before closure.
+1. Resolve the real-data continuity blocker for `MHA/USDT` without fabricating, interpolating, filling, padding, or backfilling production context.
+2. Do not execute a second CP44 runtime merely to retrieve metrics.
+3. After blocker resolution and explicit Management readiness, execute the single next authorized CP44 real-market controlled runtime from the established downstream ELIGIBLE boundary.
+4. Preserve all execution, order, API-write, and DB-write prohibitions.
+5. Synchronize all four governance documents at CP44 completion before closure.
 
 # END MANAGEMENT ROADMAP
