@@ -66,6 +66,13 @@ No branch for personal workflow, experimentation, convenience, speculative work,
 ## FILE GOVERNANCE
 No file outside authorized checkpoint scope becomes Canonical project truth. Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts require classification before promotion.
 
+## REPOSITORY ORGANIZATION
+Repository organization is classification-first and behavior-neutral.
+- Governance/control documents remain at repository root.
+- Operational source paths are preserved until dependency/path analysis authorizes relocation.
+- Verification, evidence/forensic, and historical material have explicit navigation locations.
+- `README.md` and `REPOSITORY_STRUCTURE.md` provide the repository navigation/control layer.
+
 ## CURRENT GOVERNANCE GATE
 Repository consolidation is CLOSED by Management.
 CP44 remains the active frontier.
