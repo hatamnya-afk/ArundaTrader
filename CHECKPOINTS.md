@@ -79,7 +79,7 @@ Evidence:
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
 CP44 = CURRENT FRONTIER
-CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST EXECUTED / BLOCKED / NOT VERIFIED / NOT CLOSED
 
 ### Implementation verification
 Authorized implementation is present on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
@@ -96,15 +96,19 @@ Evidence:
 - Corrected Dynamic Smart Risk boundary test exited `0` with `CP44_DYNAMIC_BOUNDARY_PASS`.
 - Explicit `BTC/USDT` LONG entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`, APPROVED risk state, and snapshot cardinality `1 → 1` were verified.
 - No order, execution, API write, or production DB write occurred.
-- `__pycache__` generated during testing is temporary and not project truth.
 
-### Runtime observation
-A controlled real-market runtime was previously executed from the established downstream eligibility boundary.
-**Observed: 6 assets reached ELIGIBLE.**
+### REAL-MARKET RUNTIME RESULT
+The single authorized CP44 real-market controlled runtime was executed from the established downstream ELIGIBLE boundary.
 
-This is runtime evidence only. It does not define cardinality and does not independently close or verify CP44.
+Observed blocker:
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`
 
-`15` is legacy test-universe history and is not a production cardinality contract.
+Required minimum context:
+`MIN_CONTEXT = 21`
+
+The runtime failed closed because the required real contiguous context was unavailable. Therefore the production-compatible downstream chain was not proven and CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+This is the authoritative CP44 runtime result. No second runtime is authorized until the blocker is resolved and Management explicitly authorizes readiness.
 
 ### Required chain
 ```text
@@ -151,10 +155,14 @@ NO_DB_WRITE
 NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ### Forward rule
-The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce the observed six-asset ELIGIBLE state.
+The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce the runtime.
 
 ### Current blocker
-Implementation boundary verification is complete, but production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk for dynamic `ELIGIBLE[N]` during the authorized real-market runtime. The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling.
+`INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7` with `MIN_CONTEXT = 21`.
+
+Required next condition is naturally accumulated, real, contiguous post-launch market context for MHA/USDT. No synthetic data, interpolation, fill, padding, fabricated fallback, or backfill is permitted.
+
+The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling, with dynamic `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N]`.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
