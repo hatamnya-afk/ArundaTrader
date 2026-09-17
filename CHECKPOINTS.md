@@ -132,6 +132,13 @@ All work must map to MANAGEMENT_ROADMAP.md and the active checkpoint. No paralle
 ### BRANCH / FILE RULE
 No project branch may be created for personal workflow, experimentation, convenience, or unapproved parallel work. New files require defined responsibility, active-checkpoint necessity, and authorized scope. Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts are not automatically project truth.
 
+### REPOSITORY ORGANIZATION
+Repository organization is classification-first and behavior-neutral.
+- Governance/control documents remain at repository root.
+- Operational source paths are preserved until dependency/path analysis authorizes relocation.
+- Verification, evidence/forensic, and historical material have explicit navigation locations.
+- `README.md` and `REPOSITORY_STRUCTURE.md` are navigation/control documents for repository organization.
+
 ### CHECKPOINT CLOSURE GATE
 At the end of EVERY checkpoint, synchronize:
 1. PROJECT_STATE.md
