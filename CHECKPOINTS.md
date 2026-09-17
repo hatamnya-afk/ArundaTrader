@@ -85,17 +85,34 @@ CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
 A controlled real-market runtime was executed from the established downstream eligibility boundary.
 **Observed: 6 assets reached ELIGIBLE.**
 
-This is runtime evidence only. It does not independently close or verify CP44.
+This is runtime evidence only. It does not define cardinality and does not independently close or verify CP44.
+
+`15` is legacy test-universe history and is not a production cardinality contract.
 
 ### Required chain
-REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT
+```text
+REAL MARKET
+→ DYNAMIC ELIGIBLE[N]
+→ ENTRY + INVALIDATION / STOP
+→ PROFIT / OPPORTUNITY ASSESSMENT
+→ SMART RISK
+→ CAPITAL ALLOCATION
+→ POSITION SIZING
+→ TRADE GATE
+→ TRADE READY
+→ ORDER INTENT
+→ PRE-EXECUTION
+→ EXCHANGE-AGNOSTIC BOUNDARY
+```
 
 ### Required evidence
 REAL_MARKET_DATA
 VALIDATED_OBSERVATIONS
 REAL_CAPITAL_BOUNDARY
 VALID_ENTRY
-VALID_STOP
+VALID_STOP_OR_INVALIDATION
+PROFIT_OPPORTUNITY_ASSESSMENT
+INTELLIGENT_CAPITAL_ALLOCATION
 VALID_QUANTITY
 VALID_EXPOSURE
 DECISION_CONSISTENCY
@@ -104,16 +121,23 @@ CONSTRAINT_READINESS
 PROVENANCE
 FAIL_CLOSED
 DYNAMIC_ASSET
+DYNAMIC_CARDINALITY
+SCALE_INDEPENDENT_LOGIC
 NO_TEST_DATA
 NO_FIXED_15
+NO_FIXED_RUNTIME_CARDINALITY
 NO_ORDER
 NO_AUTHORIZATION
 NO_EXECUTION
 NO_API_WRITE
 NO_DB_WRITE
+NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 
 ### Forward rule
 The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce the observed six-asset ELIGIBLE state.
+
+### Current blocker
+Production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk for dynamic `ELIGIBLE[N]`. The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
@@ -122,6 +146,7 @@ CP37-MB: local signing diagnostic PASS: payload match, parameter order match, HM
 CP37-MC: official Toobit signing contract reviewed; root cause remained NOT_PROVEN.
 
 The Toobit -1022 INVALID_SIGNATURE remains an independent Account/Real-Capital path blocker. Do not reopen or repeat private diagnostics without explicit authorization.
+Toobit is not part of Core Risk/Allocation architecture.
 
 ## GOVERNANCE — MANDATORY
 Closed/Verified checkpoints are historical state. They become current only if Management explicitly identifies a regression.
