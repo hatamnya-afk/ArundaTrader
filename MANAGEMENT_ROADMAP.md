@@ -1,144 +1,76 @@
 # ARUNDA TRADER — MANAGEMENT ROADMAP
 
 ## AUTHORITY
-This document is the authoritative management route for project advancement.
-The roadmap is the only path. Chat instructions, personal Builder plans, side branches, and unrecorded files do not override it.
+This document is the authoritative management route for project advancement. The roadmap is the only path.
 
 ## FINAL OBJECTIVE
-Reach real trading through a controlled lifecycle, while keeping the ArundaTrader project itself exchange-agnostic until it is complete.
+Reach real trading through a controlled lifecycle while keeping the ArundaTrader project exchange-agnostic until it is complete.
 
 ## MANDATORY LIFECYCLE
-
 ### PHASE A — EXCHANGE-AGNOSTIC PROJECT COMPLETION
-Build and verify the complete ArundaTrader core, contracts, analysis/deployment boundaries, risk/decision/trade-intent chain, and required real-market readiness according to the checkpoint ledger.
+Build and verify the complete ArundaTrader core, contracts, analysis/deployment boundaries, risk/decision/trade-intent chain, and required real-market readiness.
 
 Rules:
-- No exchange-specific architecture is allowed to become Core.
+- No exchange-specific architecture becomes Core.
 - Exchange adapters remain replaceable environment boundaries.
-- Closed/verified checkpoints remain historical truth unless Management proves a regression.
+- Closed/verified checkpoints remain historical truth unless Management proves regression.
 - No runtime, DB write, API write, or execution is implied merely by roadmap position.
 
 Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
-- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
-
-Project completion is a Management-controlled gate. It is not declared merely because code appears feature-complete.
+- CP44 = CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
 
 ### PHASE B — EXCHANGE BINDING
-This phase may begin ONLY after Phase A project completion is explicitly closed and recorded in:
-- PROJECT_STATE.md
-- CURRENT_FRONTIER.md
-- CHECKPOINTS.md
-- MANAGEMENT_ROADMAP.md
-
-Purpose:
-- select/authorize the exchange environment
-- bind it through the existing exchange-agnostic adapter boundary
-- preserve core/provider separation
-
-No exchange-specific binding may be smuggled into an earlier phase.
+May begin only after Phase A completion is explicitly closed and recorded in all four governance documents.
 
 ### PHASE C — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
-After Phase B is explicitly authorized:
-- integrate the selected exchange using the adapter boundary
-- verify real-market data/account/constraint paths as authorized
-- perform the final controlled real-market test
-- record provenance, evidence, blockers, and fail-closed behavior
-
-No real order is implied by this phase. Execution remains separately authorized.
+After Phase B authorization, integrate the selected exchange through the adapter boundary and perform final controlled testing. No real order is implied.
 
 ### PHASE D — REAL TRADING
-Real trading may begin ONLY after:
-1. Phase A completion is closed.
-2. Phase B exchange binding is closed/verified.
-3. Phase C final real-market integration and controlled test are closed/verified.
-4. All execution/risk/constraint gates are satisfied.
-5. Management explicitly authorizes execution.
+Requires Phase A/B/C closure, satisfied execution/risk/constraint gates, and explicit Management authorization.
 
-No Builder or Manager may infer authorization from technical readiness.
+## CP44 MANAGEMENT STATE
+A controlled real-market runtime has been executed from the established downstream ELIGIBLE boundary.
+**Observed result: 6 assets reached ELIGIBLE.**
+
+This is an evidence observation, not a CP44 closure claim.
+
+The forward route is now:
+ELIGIBLE → RISK → TRADE GATE → TRADE READY / ORDER INTENT READINESS → CONTROLLED EVIDENCE
+
+Do not rebuild or redesign Opportunity / Signal / Score / Fusion / Decision merely to reproduce the observed ELIGIBLE state.
+
+## SAFETY BOUNDARY
+- EXECUTION AUTHORIZATION = FALSE
+- ORDER WRITE = FORBIDDEN
+- DATABASE WRITE = FORBIDDEN
+- WITHDRAW = FORBIDDEN
+- No execution, order submission, exchange write, or test capital.
+- `arunda_pipeline.py` remains protected.
 
 ## CHECKPOINT ADVANCEMENT GATE
-At the end of EVERY checkpoint, the responsible Builder/Manager MUST update:
+At the end of EVERY checkpoint update:
 1. PROJECT_STATE.md
 2. CURRENT_FRONTIER.md
 3. CHECKPOINTS.md
 4. MANAGEMENT_ROADMAP.md
 
-The update must record:
-- BUILT
-- VERIFIED
-- CLOSED / BLOCKED / NOT VERIFIED
-- verification evidence
-- blocker, if any
-- CURRENT FRONTIER
-- NEXT ACTION
-- authorized branch/file scope, if changed
+Record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT FRONTIER, NEXT ACTION, and authorized branch/file scope.
 
-A checkpoint is not governance-complete until these documents are synchronized and internally consistent.
+A checkpoint is not governance-complete until the four documents are synchronized and internally consistent.
 
-## ROUTE-CHANGE GATE
-Any change in route, frontier, checkpoint sequence, architecture boundary, exchange strategy, or lifecycle ordering requires:
-- explicit Management authorization
-- immediate update of the roadmap
-- immediate update of repository state documents
-- a recorded reason for the change
+## BRANCH GOVERNANCE
+No branch for personal workflow, experimentation, convenience, speculative work, or parallel truth. Historical branches may be preserved for provenance. Active branches require explicit Management authorization and recorded purpose/source/target/relationship.
 
-Until that synchronization is complete, the new route is not active.
-
-## BRANCH GOVERNANCE — ABSOLUTE
-No Builder, Manager, coding agent, or implementation agent may create a project branch for:
-- personal workflow
-- experimentation
-- convenience
-- speculative work
-- an unapproved parallel path
-- an alternate project truth
-
-A branch is permitted only when Management explicitly authorizes it as part of the active roadmap/checkpoint.
-Before project work begins on that branch, repository state must record:
-- purpose
-- source
-- target checkpoint
-- relationship to Canonical
-- authorization
-
-Historical branches may be preserved for provenance. They do not become active project truth without Management authorization.
-
-## FILE GOVERNANCE — ABSOLUTE
-No Builder, Manager, coding agent, or implementation agent may add a project file outside the explicitly authorized checkpoint scope.
-
-A new file is permitted only when:
-- it has a defined responsibility
-- it is required by the active checkpoint
-- its scope is authorized and recorded
-
-The following are not Canonical project truth unless explicitly authorized as historical records:
-- temporary files
-- generated outputs
-- backups
-- quarantine copies
-- forensic dumps
-- review dumps
-- unrelated code
-- personal workflow artifacts
-
-If a file is not required by the roadmap, it does not enter Canonical.
-
-## MANAGEMENT / BUILDER RULE
-No one may "dance around" the roadmap.
-No one may silently change the active frontier.
-No one may start a next checkpoint before the previous checkpoint state is synchronized.
-No one may use chat memory to override repository state.
-
-When uncertain: STOP and escalate to Management.
+## FILE GOVERNANCE
+No file outside authorized checkpoint scope becomes Canonical project truth. Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts require classification before promotion.
 
 ## CURRENT GOVERNANCE GATE
 Repository consolidation is CLOSED by Management.
-The active frontier is CP44 and its controlled-test runtime is authorized under the existing no-write/no-order safety boundary.
+CP44 remains the active frontier.
 
 ## CURRENT NEXT ACTION
-Execute the single controlled CP44 runtime from the established downstream ELIGIBLE boundary.
-Do not rebuild or redesign the upstream Opportunity/Signal/Score/Fusion/Decision path.
+Preserve the six-asset ELIGIBLE observation, continue downstream evidence work from ELIGIBLE toward Risk / Trade Gate, and complete CP44 governance/evidence synchronization before any VERIFIED/PASS/CLOSED claim.
 
 # END MANAGEMENT ROADMAP
