@@ -1,0 +1,163 @@
+{
+  "stage": "HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.1",
+  "mode": "READ-ONLY ARTIFACT CONTRACT FORENSIC",
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "target_artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "producer_identity": {
+    "exists": true,
+    "syntax_valid": true,
+    "sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0"
+  },
+  "artifact_identity": {
+    "exists": true,
+    "valid_json": true,
+    "size": 4410,
+    "sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+  },
+  "top_level_contract": {
+    "expected_keys": [
+      "capture_db",
+      "decision",
+      "eligible_rows",
+      "engine",
+      "frontier",
+      "gate_configuration",
+      "no_trade_rows",
+      "production_db",
+      "row_results",
+      "rows",
+      "safety",
+      "snapshot_id",
+      "timestamp_utc"
+    ],
+    "actual_keys": [
+      "capture_db",
+      "decision",
+      "eligible_rows",
+      "engine",
+      "frontier",
+      "gate_configuration",
+      "no_trade_rows",
+      "production_db",
+      "row_results",
+      "rows",
+      "safety",
+      "snapshot_id",
+      "timestamp_utc"
+    ],
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "pass": true
+  },
+  "artifact_runtime_content": {
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "row_results_count": 4,
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "results": [],
+    "reasons": [
+      "CONFIDENCE_BELOW_GATE",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET"
+    ],
+    "decision": "NO_TRADE",
+    "frontier": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+    "production_db": {
+      "exists": true,
+      "hashes": [
+        "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+        "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+      ],
+      "has_sha256_key": false,
+      "has_before_hash": false,
+      "has_after_hash": false,
+      "semantic_production_db_evidence": false
+    },
+    "safety": {
+      "exists": true,
+      "keys": [
+        "production_db_modified",
+        "engine_executed",
+        "historical_repair",
+        "direction_inference",
+        "score_reconstruction",
+        "synthetic_data",
+        "live_data_injection",
+        "order_execution"
+      ],
+      "write_evidence": false,
+      "order_evidence": true,
+      "synthetic_evidence": true,
+      "semantic_contract": false
+    }
+  },
+  "producer_contract_capability": {
+    "production_db_hash_generation": false,
+    "production_db_hash_reference": true,
+    "safety_write_evidence": true,
+    "safety_order_evidence": true,
+    "safety_synthetic_evidence": true,
+    "json_dump_present": true,
+    "report_path_present": true
+  },
+  "reconciliation": {
+    "rows": true,
+    "eligible_rows": true,
+    "no_trade_rows": true,
+    "assets": true,
+    "results": false,
+    "decision": true,
+    "no_trade_reasons": true,
+    "production_db_evidence": true,
+    "safety_evidence": false,
+    "producer_capable_of_db_evidence": true
+  },
+  "important_finding": {
+    "artifact_is_runtime_generated": true,
+    "artifact_must_not_be_syntheticly_rebuilt": true,
+    "source_modification": false,
+    "artifact_modification": false,
+    "previous_failure_may_be_checker_contract_mismatch": false
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "artifact_regenerated": false,
+    "artifact_modified": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE",
+    "source_modified": false
+  },
+  "final_verdict": "RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FAILED"
+}

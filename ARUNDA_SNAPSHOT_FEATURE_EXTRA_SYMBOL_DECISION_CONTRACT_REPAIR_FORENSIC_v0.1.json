@@ -1,0 +1,261 @@
+{
+  "artifact": {
+    "generated_at": "2026-08-26T17:11:20.746698+00:00",
+    "name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+    "version": "v0.1"
+  },
+  "contract": {
+    "database_write": "FORBIDDEN",
+    "decision": "FORENSIC STATUS ONLY",
+    "mode": "READ ONLY",
+    "network": "FORBIDDEN",
+    "prediction": "FORBIDDEN",
+    "repair": "FORENSIC ARTIFACT REPAIR ONLY"
+  },
+  "database": {
+    "inventory": {
+      "4": {
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ],
+        "total_rows": 1420
+      },
+      "ASSET": {
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ],
+        "total_rows": 1420
+      }
+    },
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+    "table_count": 26
+  },
+  "repair_scope": {
+    "database_mutated": false,
+    "database_repaired": false,
+    "prediction_performed": false,
+    "symbols_deleted": false,
+    "trading_decision_performed": false,
+    "universe_rebuilt": false
+  },
+  "repaired_contract": {
+    "4": {
+      "cmc_identity": {
+        "canonical_asset_evidence": false,
+        "cmc_ids": [
+          "38557"
+        ],
+        "identity_class": null,
+        "names": [
+          "4"
+        ],
+        "present": true,
+        "slugs": [
+          "4four"
+        ],
+        "sources": [
+          "COINMARKETCAP"
+        ],
+        "symbols": [
+          "4"
+        ]
+      },
+      "database": {
+        "observed": true,
+        "table_count": 7,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ],
+        "total_rows": 1420
+      },
+      "decision": {
+        "decision": "EXCLUDE_FROM_EXPECTED_UNIVERSE",
+        "decision_class": "OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE"
+      },
+      "expected_universe": {
+        "member": false,
+        "status": "OUTSIDE_EXPECTED_UNIVERSE"
+      },
+      "origin_class": null,
+      "rationale": "Symbol has observed database evidence and CMC identity evidence, but is outside the normalized expected universe; therefore observed identity does not establish expected-universe membership.",
+      "repair_changes": {
+        "cmc_identity_evidence_repaired": true,
+        "database_table_count_repaired": false,
+        "database_total_rows_repaired": false,
+        "decision_class_repaired": false,
+        "decision_repaired": false,
+        "origin_class_repaired": true,
+        "semantic_class_repaired": false
+      },
+      "semantic_class": "NUMERIC_IDENTIFIER_CANDIDATE",
+      "semantic_note": "Pure numeric token; not established as a market symbol.",
+      "source_decision_snapshot": {
+        "cmc_identity_evidence": null,
+        "decision": "EXCLUDE_FROM_EXPECTED_UNIVERSE",
+        "decision_class": "OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE",
+        "origin_class": "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL",
+        "semantic_class": "NUMERIC_IDENTIFIER_CANDIDATE"
+      },
+      "symbol": "4"
+    },
+    "ASSET": {
+      "cmc_identity": {
+        "canonical_asset_evidence": false,
+        "cmc_ids": [
+          "39922"
+        ],
+        "identity_class": null,
+        "names": [
+          "REAL"
+        ],
+        "present": true,
+        "slugs": [
+          "real-finance"
+        ],
+        "sources": [
+          "COINMARKETCAP"
+        ],
+        "symbols": [
+          "ASSET"
+        ]
+      },
+      "database": {
+        "observed": true,
+        "table_count": 7,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ],
+        "total_rows": 1420
+      },
+      "decision": {
+        "decision": "EXCLUDE_FROM_EXPECTED_UNIVERSE",
+        "decision_class": "OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE"
+      },
+      "expected_universe": {
+        "member": false,
+        "status": "OUTSIDE_EXPECTED_UNIVERSE"
+      },
+      "origin_class": null,
+      "rationale": "Symbol has observed database evidence and CMC identity evidence, but is outside the normalized expected universe; therefore observed identity does not establish expected-universe membership.",
+      "repair_changes": {
+        "cmc_identity_evidence_repaired": true,
+        "database_table_count_repaired": false,
+        "database_total_rows_repaired": false,
+        "decision_class_repaired": false,
+        "decision_repaired": false,
+        "origin_class_repaired": true,
+        "semantic_class_repaired": true
+      },
+      "semantic_class": "GENERIC_FIELD_LABEL",
+      "semantic_note": "Generic field label rather than a market symbol.",
+      "source_decision_snapshot": {
+        "cmc_identity_evidence": null,
+        "decision": "EXCLUDE_FROM_EXPECTED_UNIVERSE",
+        "decision_class": "OBSERVED_ASSET_OUTSIDE_EXPECTED_UNIVERSE",
+        "origin_class": "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL",
+        "semantic_class": "NUMERIC_IDENTIFIER_CANDIDATE"
+      },
+      "symbol": "ASSET"
+    }
+  },
+  "targets": [
+    "4",
+    "ASSET"
+  ],
+  "upstream_artifacts": {
+    "cmc_identity": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+      "sha256": "305191d517122fee4c0d5b83f8f63bea64fc8450c6dc07ed783c9636eab8882c"
+    },
+    "decision": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+      "sha256": "4ec43e218e835c329aa31659458bda00ec025ba62d1f8c23f572ba40b519e09b"
+    },
+    "expected_status": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+      "sha256": "78e4bc900dd9b91f879bd8946b9aa9da6c8ed0f93a17cc597837c988f0de8861"
+    },
+    "first_insertion": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+      "sha256": "07b1d31cf3dc84ce2cceb4f5ef0ffb2d4d427b77898194c51e7d6c4ae15d4aee"
+    },
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "origin": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+      "sha256": "f3554f92cb117876ca9e3883ba84bb74d5f28e5dbdca48f6dead86365f949c33"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    },
+    "semantic": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+      "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856"
+    }
+  },
+  "validation": {
+    "4": {
+      "checks": {
+        "cmc_identity_consistent": true,
+        "database_observed_consistent": true,
+        "database_rows_nonnegative": true,
+        "database_table_count_consistent": true,
+        "decision_class_outside_expected": true,
+        "decision_excludes_symbol": true,
+        "origin_present": false,
+        "outside_expected_universe": true,
+        "semantic_present": true,
+        "target_symbol": true
+      },
+      "failures": [
+        "origin_present"
+      ],
+      "passed": false
+    },
+    "ASSET": {
+      "checks": {
+        "cmc_identity_consistent": true,
+        "database_observed_consistent": true,
+        "database_rows_nonnegative": true,
+        "database_table_count_consistent": true,
+        "decision_class_outside_expected": true,
+        "decision_excludes_symbol": true,
+        "origin_present": false,
+        "outside_expected_universe": true,
+        "semantic_present": true,
+        "target_symbol": true
+      },
+      "failures": [
+        "origin_present"
+      ],
+      "passed": false
+    }
+  }
+}

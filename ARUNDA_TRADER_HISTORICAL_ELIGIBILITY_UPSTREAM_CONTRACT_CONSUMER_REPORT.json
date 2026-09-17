@@ -1,0 +1,117 @@
+{
+  "contract_name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_UPSTREAM_CONTRACT",
+  "contract_version": "v0.1",
+  "downstream_contract": {
+    "asset_identity_locked": true,
+    "decision_locked": true,
+    "direction_identity_locked": true,
+    "historical_evidence_verified": true,
+    "network_access_required": false,
+    "no_trade_execution_allowed": true,
+    "producer_execution_allowed": false,
+    "producer_import_allowed": false,
+    "production_db_write_allowed": false,
+    "snapshot_identity_locked": true,
+    "upstream_verified": true
+  },
+  "eligibility": {
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "decision": "NO_TRADE",
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "rows": 4,
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "execution_state": "NOT_EXECUTED",
+  "identity": {
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0"
+  },
+  "launch_rows": [
+    {
+      "asset": "BTC",
+      "decision": "NO_TRADE",
+      "direction": "FLAT",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL"
+      ]
+    },
+    {
+      "asset": "ETH",
+      "decision": "NO_TRADE",
+      "direction": "SHORT",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    },
+    {
+      "asset": "SOL",
+      "decision": "NO_TRADE",
+      "direction": "FLAT",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    },
+    {
+      "asset": "XRP",
+      "decision": "NO_TRADE",
+      "direction": "FLAT",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    }
+  ],
+  "next_stage": "LIVE_SIGNAL_EXECUTION_GATE",
+  "orders_created": 0,
+  "orders_submitted": 0,
+  "release_gate": {
+    "artifact_contract": true,
+    "artifact_identity": true,
+    "chain_seal_contract": true,
+    "operational_safety": true,
+    "producer_identity": true,
+    "production_db_contract": true,
+    "release_gate_verified": true,
+    "runtime_identity_contract": true,
+    "safety_contract": true,
+    "semantic_binding_contract": true,
+    "verdict": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_VERIFIED"
+  },
+  "source": {
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "release_gate_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_FINAL_FORENSIC_REPORT.json"
+  },
+  "status": "VERIFIED_UPSTREAM_CONTRACT_READY"
+}

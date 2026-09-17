@@ -1,0 +1,89 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL EXECUTION RUNTIME",
+  "version": "v0.1",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "artifact_mutation": false,
+    "operational_safety": true
+  },
+  "upstream_gate": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_GATE_REPORT.json",
+    "producer_identity": true,
+    "artifact_identity": true,
+    "artifact_contract": true,
+    "operational_safety": true,
+    "upstream_contract_verified": true,
+    "execution_gate_ready": true,
+    "release_gate_verified": true,
+    "gate_name": "LIVE_SIGNAL_EXECUTION_GATE",
+    "gate_state": "READY",
+    "verdict": "LIVE_SIGNAL_EXECUTION_GATE_READY",
+    "identity_contract": true,
+    "contracts_verified": true,
+    "release_verified": true,
+    "verdict_verified": true,
+    "gate_ready": true
+  },
+  "identity": {
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "producer_match": true,
+    "artifact_match": true,
+    "chain_match": true,
+    "artifact_file_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "artifact_file_match": true
+  },
+  "artifact": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "row_count_contract": true,
+    "decision_contract": true,
+    "identity_contract": true,
+    "snapshot_contract": true,
+    "verified_contract": true,
+    "upstream_artifact_contract": true,
+    "upstream_artifact_identity": true
+  },
+  "runtime": {
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "operational_safety": true,
+    "runtime_ready": true,
+    "execution_allowed": false,
+    "execution": "NOT_EXECUTED",
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "final_verdict": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY",
+  "next_stage": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+}

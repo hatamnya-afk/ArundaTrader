@@ -1,0 +1,134 @@
+{
+  "artifact": {
+    "asset_identity": true,
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "decision": "NO_TRADE",
+    "decision_contract": true,
+    "direction_identity": true,
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "eligible_contract": true,
+    "eligible_rows": 0,
+    "no_trade_contract": true,
+    "no_trade_rows": 4,
+    "production_db_contract": true,
+    "reason_contract": true,
+    "reason_count": 20,
+    "rows": 4,
+    "rows_contract": true,
+    "safety_contract": true,
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "snapshot_identity": true,
+    "top_contract": true
+  },
+  "chain_seal": {
+    "algorithm": "SHA256",
+    "canonical_material": {
+      "artifact_assets": [
+        "BTC",
+        "ETH",
+        "SOL",
+        "XRP"
+      ],
+      "artifact_decision": "NO_TRADE",
+      "artifact_directions": [
+        "FLAT",
+        "SHORT",
+        "FLAT",
+        "FLAT"
+      ],
+      "artifact_eligible_rows": 0,
+      "artifact_no_trade_rows": 4,
+      "artifact_rows": 4,
+      "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+      "artifact_snapshot": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+      "evidence_report_sha256": [
+        "66abccbeee0b2a05654b1f3a7b763ad9fddf91fe74657ca70b3cf0b5ec673c97",
+        "497c9c53d43652a6316db964b6247f4dbc2d9e8f736da22f4daab1a7de93b265",
+        "54461245e1efb94141cae03872d8b7fb789440dfc2ada8b33cbe52668acce4ee",
+        "6a4351b92ebeb874cafa46a571b4d3aad907824239053d69bec43eef4248e7ab",
+        "1d2971383d7ba10256654a5194fd6fc414902ef5903707ad0086863e12649893"
+      ],
+      "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+      "production_db_sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "production_db_size": 521883648
+    },
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4"
+  },
+  "evidence_chain": {
+    "all_expected_reports_present": true,
+    "decision_evidence_hits": 5,
+    "expected_reports": 5,
+    "loaded": [
+      {
+        "json": true,
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_REPORT.json",
+        "sha256": "66abccbeee0b2a05654b1f3a7b763ad9fddf91fe74657ca70b3cf0b5ec673c97"
+      },
+      {
+        "json": true,
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_REPORT.json",
+        "sha256": "497c9c53d43652a6316db964b6247f4dbc2d9e8f736da22f4daab1a7de93b265"
+      },
+      {
+        "json": true,
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_REPORT.json",
+        "sha256": "54461245e1efb94141cae03872d8b7fb789440dfc2ada8b33cbe52668acce4ee"
+      },
+      {
+        "json": true,
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_REPORT.json",
+        "sha256": "6a4351b92ebeb874cafa46a571b4d3aad907824239053d69bec43eef4248e7ab"
+      },
+      {
+        "json": true,
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_FORENSIC_REPORT.json",
+        "sha256": "1d2971383d7ba10256654a5194fd6fc414902ef5903707ad0086863e12649893"
+      }
+    ],
+    "loaded_reports": 5,
+    "missing_reports": [],
+    "reconciliation_evidence_hits": 1,
+    "safety_evidence_hits": 3,
+    "snapshot_evidence_hits": 4
+  },
+  "forensic": {
+    "mode": "READ_ONLY_EVIDENCE_CHAIN_SEAL",
+    "name": "HISTORICAL ELIGIBILITY RUNTIME EVIDENCE CHAIN SEAL FORENSIC v0.1",
+    "timestamp_utc": "2026-08-24T19:00:32.895005+00:00"
+  },
+  "identity": {
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "producer_syntax_valid": true,
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader"
+  },
+  "safety": {
+    "artifact_deleted": false,
+    "artifact_modified": false,
+    "network_access": false,
+    "producer_executed": false,
+    "producer_imported": false,
+    "production_db_written": false
+  },
+  "verdict": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_SEALED_VERIFIED",
+  "verification": {
+    "artifact_contract": true,
+    "artifact_identity": true,
+    "evidence_chain_contract": true,
+    "producer_identity": true,
+    "runtime_identity": true,
+    "verified": true
+  }
+}

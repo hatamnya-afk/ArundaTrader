@@ -1,0 +1,81 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ELIGIBLE SIGNAL REPLAY VERIFICATION",
+  "version": "v0.5",
+  "mode": "READ_ONLY",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "signal_creation": false,
+    "signal_injection": false,
+    "synthetic_signal": false,
+    "reconstructed_signal": false,
+    "inferred_signal": false,
+    "replay_execution": false,
+    "artifact_mutation": false
+  },
+  "source_chain": {
+    "validation_contract_verified": true,
+    "replay_contract_repaired": true,
+    "replay_contract_verified": true
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "eligible_signal_path": {
+    "status": "NO_ELIGIBLE_SIGNAL",
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "path_verified": false,
+    "replay_performed": false,
+    "eligible_signal_present": false,
+    "reason": "NO_ELIGIBLE_SIGNAL"
+  },
+  "replay_verification": {
+    "contract": true,
+    "verified": true,
+    "status": "NO_ELIGIBLE_SIGNAL",
+    "intents_source": "ZERO_INTENT_STATE",
+    "checks": {
+      "artifact_rows": true,
+      "artifact_eligible_rows": true,
+      "artifact_no_trade_rows": true,
+      "artifact_decision": true,
+      "artifact_snapshot": true,
+      "eligible_signals": true,
+      "order_intents": true
+    }
+  },
+  "execution_safety": {
+    "execution_allowed": false,
+    "order_creation": false,
+    "order_submission": false,
+    "network_access": false,
+    "production_db_write": false
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0,
+    "replay_performed": false
+  },
+  "final_verdict": "LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_READY",
+  "next_stage": "LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT",
+  "sources": {
+    "repair_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_CONTRACT_REPAIR_REPORT.json",
+    "repair_report_sha256": "988a6743aa84d9227d7ed86c9b963b30484bbbb585c391c28c49a971010c3857",
+    "validation_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+    "validation_report_sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582"
+  }
+}

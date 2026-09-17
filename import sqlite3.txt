@@ -1,0 +1,310 @@
+import sqlite3
+from datetime import datetime, timedelta
+
+DB = "arunda.db"
+
+VERSION = "OUTCOME_v0.2"
+
+HORIZONS = {
+    "5m": 5,
+    "15m": 15,
+    "30m": 30,
+}
+
+
+# ============================================================
+# DATABASE
+# ============================================================
+
+def ensure_table(conn):
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS signal_outcomes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            signal_id INTEGER NOT NULL,
+            market TEXT NOT NULL,
+            snapshot_id TEXT,
+
+            signal_time TEXT,
+            entry_price REAL,
+
+            return_5m REAL,
+            return_15m REAL,
+            return_30m REAL,
+
+            outcome_5m TEXT,
+            outcome_15m TEXT,
+            outcome_30m TEXT,
+
+            evaluated_at TEXT,
+            engine_version TEXT
+        )
+    """)
+
+    conn.commit()
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def parse_time(value):
+
+    try:
+        return datetime.fromisoformat(value)
+    except Exception:
+        return None
+
+
+def classify_return(value):
+
+    if value is None:
+        return "WAIT"
+
+    # فعلاً آستانه صفر است.
+    # بعداً می‌توانیم fee/slippage را وارد کنیم.
+
+    if value > 0.10:
+        return "WIN"
+
+    if value < -0.10:
+        return "LOSS"
+
+    return "NEUTRAL"
+
+
+def find_future_price(conn, market, signal_time, minutes):
+
+    target_time = signal_time + timedelta(minutes=minutes)
+
+    row = conn.execute("""
+        SELECT
+            price,
+            timestamp
+        FROM market_records
+        WHERE market = ?
+          AND timestamp >= ?
+        ORDER BY timestamp ASC
+        LIMIT 1
+    """, (
+        market,
+        target_time.isoformat()
+    )).fetchone()
+
+    if not row:
+        return None
+
+    return row[0]
+
+
+def calculate_return(entry, future):
+
+    if entry is None or future is None:
+        return None
+
+    if entry == 0:
+        return None
+
+    return ((future - entry) / entry) * 100
+
+
+# ============================================================
+# MAIN ENGINE
+# ============================================================
+
+def main():
+
+    print("=" * 80)
+    print("              ARUNDA OUTCOME ENGINE v0.2")
+    print("=" * 80)
+
+    conn = sqlite3.connect(DB)
+
+    ensure_table(conn)
+
+    # --------------------------------------------------------
+    # SIGNALS
+    # --------------------------------------------------------
+
+    signals = conn.execute("""
+        SELECT
+            id,
+            timestamp,
+            market,
+            entry_price,
+            final_score,
+            status,
+            signal,
+            snapshot_id
+        FROM hunter_signals
+        WHERE entry_price IS NOT NULL
+        ORDER BY id ASC
+    """).fetchall()
+
+    print(f"Signals loaded : {len(signals)}")
+    print()
+
+    processed = 0
+    waiting = 0
+    outcomes = 0
+
+    # --------------------------------------------------------
+    # PROCESS
+    # --------------------------------------------------------
+
+    for row in signals:
+
+        (
+            signal_id,
+            timestamp,
+            market,
+            entry_price,
+            final_score,
+            status,
+            signal,
+            snapshot_id
+        ) = row
+
+        # آیا قبلاً outcome ساخته شده؟
+        existing = conn.execute("""
+            SELECT id
+            FROM signal_outcomes
+            WHERE signal_id = ?
+        """, (signal_id,)).fetchone()
+
+        if existing:
+            continue
+
+        signal_time = parse_time(timestamp)
+
+        if signal_time is None:
+            continue
+
+        # ----------------------------------------------------
+        # FUTURE PRICES
+        # ----------------------------------------------------
+
+        future_prices = {}
+
+        for name, minutes in HORIZONS.items():
+
+            future_prices[name] = find_future_price(
+                conn,
+                market,
+                signal_time,
+                minutes
+            )
+
+        # اگر هنوز هیچ افق زمانی کامل نشده
+        if all(
+            future_prices[x] is None
+            for x in HORIZONS
+        ):
+
+            waiting += 1
+            continue
+
+        # ----------------------------------------------------
+        # RETURNS
+        # ----------------------------------------------------
+
+        returns = {}
+
+        for name in HORIZONS:
+
+            returns[name] = calculate_return(
+                entry_price,
+                future_prices[name]
+            )
+
+        # ----------------------------------------------------
+        # CLASSIFICATION
+        # ----------------------------------------------------
+
+        outcomes_map = {}
+
+        for name in HORIZONS:
+
+            outcomes_map[name] = classify_return(
+                returns[name]
+            )
+
+        # ----------------------------------------------------
+        # INSERT
+        # ----------------------------------------------------
+
+        conn.execute("""
+            INSERT INTO signal_outcomes (
+                signal_id,
+                market,
+                snapshot_id,
+                signal_time,
+                entry_price,
+
+                return_5m,
+                return_15m,
+                return_30m,
+
+                outcome_5m,
+                outcome_15m,
+                outcome_30m,
+
+                evaluated_at,
+                engine_version
+            )
+            VALUES (?, ?, ?, ?, ?,
+                    ?, ?, ?,
+                    ?, ?, ?,
+                    ?, ?)
+        """, (
+
+            signal_id,
+            market,
+            snapshot_id,
+            timestamp,
+            entry_price,
+
+            returns["5m"],
+            returns["15m"],
+            returns["30m"],
+
+            outcomes_map["5m"],
+            outcomes_map["15m"],
+            outcomes_map["30m"],
+
+            datetime.now().isoformat(),
+            VERSION
+        ))
+
+        processed += 1
+        outcomes += 1
+
+        print(
+            f"{market:12} | "
+            f"SCORE {final_score:6.2f} | "
+            f"5m {str(returns['5m'])[:8]:>8} | "
+            f"15m {str(returns['15m'])[:8]:>8} | "
+            f"30m {str(returns['30m'])[:8]:>8}"
+        )
+
+    conn.commit()
+
+    # ========================================================
+    # SUMMARY
+    # ========================================================
+
+    print()
+    print("=" * 80)
+    print("OUTCOME ENGINE COMPLETE")
+    print("=" * 80)
+
+    print(f"Processed : {processed}")
+    print(f"Waiting   : {waiting}")
+    print(f"Outcomes  : {outcomes}")
+
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()

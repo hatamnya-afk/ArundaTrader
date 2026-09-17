@@ -1,0 +1,500 @@
+﻿                return candidate
+
+    for key in (
+        "rows",
+        "assets",
+        "signals",
+        "validated_signals",
+        "decisions",
+        "risk",
+        "results",
+        "data",
+        "snapshot",
+    ):
+
+        candidate = value.get(key)
+
+        if isinstance(
+            candidate,
+            list,
+        ):
+
+            if all(
+                isinstance(item, dict)
+                for item in candidate
+            ):
+
+                return candidate
+
+    if (
+        len(value) == len(EXPECTED_ASSETS)
+        and all(
+            normalize_asset(k)
+            in EXPECTED_ASSET_SET
+            and isinstance(v, dict)
+            for k, v in value.items()
+        )
+    ):
+
+        return list(
+            value.values()
+        )
+
+return []
+```
+
+def exact_asset_rows(
+rows: list[dict],
+stage_name: str,
+) -> list[dict]:
+
+```
+if len(rows) != len(
+    EXPECTED_ASSETS
+):
+
+    fail(
+        f"{stage_name} row count mismatch: "
+        f"expected={len(EXPECTED_ASSETS)} "
+        f"actual={len(rows)}"
+    )
+
+seen = set()
+
+for row in rows:
+
+    if not isinstance(
+        row,
+        dict,
+    ):
+
+        fail(
+            f"{stage_name}: row must be dict"
+        )
+
+    asset = normalize_asset(
+        row.get(
+            "asset",
+            row.get("symbol"),
+        )
+    )
+
+    if asset is None:
+
+        fail(
+            f"{stage_name}: missing asset"
+        )
+
+    if asset in seen:
+
+        fail(
+            f"{stage_name}: duplicate asset {asset}"
+        )
+
+    seen.add(asset)
+
+    if asset not in EXPECTED_ASSET_SET:
+
+        fail(
+            f"{stage_name}: unexpected asset {asset}"
+        )
+
+if seen != EXPECTED_ASSET_SET:
+
+    fail(
+        f"{stage_name}: exact asset coverage failed"
+    )
+
+return rows
+```
+
+def decision_map(
+rows: list[dict],
+) -> dict[str, dict]:
+
+```
+result = {}
+
+for row in rows:
+
+    asset = normalize_asset(
+        row.get(
+            "asset",
+            row.get("symbol"),
+        )
+    )
+
+    if asset is None:
+
+        fail(
+            "Decision row missing asset"
+        )
+
+    if asset in result:
+
+        fail(
+            f"Duplicate Decision asset: {asset}"
+        )
+
+    result[asset] = row
+
+return result
+```
+
+def risk_map(
+rows: list[dict],
+) -> dict[str, dict]:
+
+```
+result = {}
+
+for row in rows:
+
+    asset = normalize_asset(
+        row.get(
+            "asset",
+            row.get("symbol"),
+        )
+    )
+
+    if asset is None:
+
+        fail(
+            "Risk row missing asset"
+        )
+
+    if asset in result:
+
+        fail(
+            f"Duplicate Risk asset: {asset}"
+        )
+
+    result[asset] = row
+
+return result
+```
+
+# ============================================================================
+
+# FUSION v0.6 â†’ SCORE BINDING
+
+# ============================================================================
+
+def build_production_fusion_snapshot(
+validated_signals: dict,
+) -> dict:
+
+```
+validate_signal_coverage(
+    validated_signals
+)
+
+fusion_snapshot = (
+    fusion_engine.run()
+)
+
+if not isinstance(
+    fusion_snapshot,
+    dict,
+):
+
+    fail(
+        "FUSION_v0.6 runtime result must be dict"
+    )
+
+return fusion_snapshot
+```
+
+def bind_fused_scores(
+validated_signals: dict,
+fusion_snapshot: dict,
+) -> dict:
+
+```
+validate_signal_coverage(
+    validated_signals
+)
+
+if not isinstance(
+    fusion_snapshot,
+    dict,
+):
+
+    fail(
+        "Fusion snapshot must be dict"
+    )
+
+try:
+
+    score_snapshot = (
+        production_fused_score_binding_v0_1.run(
+            validated_signals,
+            fusion_snapshot,
+        )
+    )
+
+except Exception as exc:
+
+    raise RuntimeError(
+        "PRODUCTION FUSED-SCORE BINDING FAILED: "
+        f"{exc}"
+    ) from exc
+
+if not isinstance(
+    score_snapshot,
+    dict,
+):
+
+    fail(
+        "Fused-score binding must return dict"
+    )
+
+return score_snapshot
+```
+
+# ============================================================================
+
+# MARKET REGIME
+
+# ============================================================================
+
+def load_current_market_regime() -> dict:
+
+```
+regime_snapshot = (
+    market_regime_engine.load_market_regime()
+)
+
+if not isinstance(
+    regime_snapshot,
+    dict,
+):
+
+    fail(
+        "CURRENT_MARKET_REGIME must be a dict"
+    )
+
+return regime_snapshot
+```
+
+def get_current_regime(
+regime_snapshot: dict,
+asset: str,
+) -> Any:
+
+```
+asset = normalize_asset(
+    asset
+)
+
+if asset is None:
+
+    fail(
+        "Cannot resolve regime for empty asset"
+    )
+
+direct = regime_snapshot.get(
+    asset
+)
+
+if (
+    isinstance(direct, dict)
+    and "regime" in direct
+):
+
+    return direct["regime"]
+
+for key, value in regime_snapshot.items():
+
+    if str(key).strip().upper() == asset:
+
+        if (
+            isinstance(value, dict)
+            and "regime" in value
+        ):
+
+            return value["regime"]
+
+fail(
+    "CURRENT_MARKET_REGIME ownership unavailable "
+    f"for asset={asset}"
+)
+```
+
+# ============================================================================
+
+# MARKET-DATA RUNTIME EXTRACTION
+
+# ============================================================================
+
+def _find_runtime_asset_record(
+market_data_result: Any,
+asset: str,
+) -> dict | None:
+
+```
+if not isinstance(
+    market_data_result,
+    dict,
+):
+
+    return None
+
+candidates = []
+
+candidates.extend(
+    extract_rows(
+        market_data_result,
+        (
+            "assets",
+            "rows",
+            "results",
+            "data",
+            "market_data",
+            "ohlcv",
+        ),
+    )
+)
+
+if not candidates:
+
+    for key, value in market_data_result.items():
+
+        if normalize_asset(key) == asset:
+
+            if isinstance(
+                value,
+                dict,
+            ):
+
+                return value
+
+for row in candidates:
+
+    row_asset = normalize_asset(
+        row.get(
+            "asset",
+            row.get(
+                "symbol",
+                row.get("market"),
+            ),
+        )
+    )
+
+    if row_asset == asset:
+
+        return row
+
+return None
+```
+
+def _runtime_value(
+asset_record: dict | None,
+*keys: str,
+) -> Any:
+
+```
+if not isinstance(
+    asset_record,
+    dict,
+):
+
+    return None
+
+for key in keys:
+
+    if key in asset_record:
+
+        return asset_record[key]
+
+return None
+```
+
+def _resolve_market_data_provenance(
+market_data_result: Any,
+asset: str,
+) -> dict:
+
+```
+record = _find_runtime_asset_record(
+    market_data_result,
+    asset,
+)
+
+if record is None:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA asset record "
+        f"missing: {asset}"
+    )
+
+source = _runtime_value(
+    record,
+    "source",
+    "provider",
+    "data_source",
+)
+
+timestamp = _runtime_value(
+    record,
+    "latest_ohlcv_timestamp",
+    "ohlcv_timestamp",
+    "timestamp",
+    "latest_timestamp",
+)
+
+candle_count = _runtime_value(
+    record,
+    "real_candle_count",
+    "candle_count",
+    "real_candles",
+)
+
+atr14 = _runtime_value(
+    record,
+    "atr14",
+    "atr_14",
+)
+
+stop_distance = _runtime_value(
+    record,
+    "stop_distance",
+)
+
+if not source:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA source missing: "
+        f"{asset}"
+    )
+
+if not timestamp:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA timestamp missing: "
+        f"{asset}"
+    )
+
+if candle_count is None:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA real candle count "
+        f"missing: {asset}"
+    )
+
+if not isinstance(
+    candle_count,
+    int,
+) or isinstance(
+    candle_count,
+    bool,
+) or candle_count < 1:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA candle count invalid: "
+        f"{asset}"
+    )
+
+if atr14 is None:
+
+    fail(

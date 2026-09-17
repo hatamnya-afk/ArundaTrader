@@ -1,0 +1,582 @@
+{
+  "artifact_sha256": "34ad74c3764ebe9323a82c135fe3db7d050fc947d598f70b071fdab20af799ef",
+  "database_modified": false,
+  "decision": false,
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_contract_modified": false,
+  "feature_identity": "asset_symbol + snapshot_timestamp",
+  "forensic": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_TIMESTAMP_NORMALIZATION_FORENSIC_v0.1",
+  "hunter_identity": "hunter_signals.asset + hunter_signals.timestamp",
+  "mode": "READ_ONLY",
+  "network": false,
+  "normalization_policy": {
+    "aware_timestamps": "normalized_to_UTC",
+    "aware_vs_naive": "NOT_COMPARABLE",
+    "identity_rule_established": false,
+    "iso8601": true,
+    "matching_tolerance": null,
+    "naive_timestamps": "preserved_without_timezone_assumption",
+    "rounding": false,
+    "timezone_invention": false,
+    "truncation": false,
+    "z_suffix_converted_to_utc": true
+  },
+  "outcome": "NOT_CALCULATED",
+  "prediction": false,
+  "records": [
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "AAVE",
+          "hunter_id": 15,
+          "hunter_raw_timestamp": "2026-08-15T00:29:54.110870",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:54.110870",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:54.110870",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "AAVE",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "ADA",
+          "hunter_id": 8,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.411446",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.411446",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.411446",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "ADA",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "AVAX",
+          "hunter_id": 19,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.508921",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.508921",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.508921",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "AVAX",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "BTC",
+          "hunter_id": 12,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.318095",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.318095",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.318095",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "BTC",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "DOGE",
+          "hunter_id": 9,
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.184250",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:51.184250",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:51.184250",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "DOGE",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "DOT",
+          "hunter_id": 34,
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.900559",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:51.900559",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:51.900559",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "DOT",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "ETH",
+          "hunter_id": 13,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.416166",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.416166",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.416166",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "ETH",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "LINK",
+          "hunter_id": 10,
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.197130",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:51.197130",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:51.197130",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "LINK",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "LTC",
+          "hunter_id": 17,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.082879",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.082879",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.082879",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "LTC",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "NEAR",
+          "hunter_id": 28,
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.922309",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:51.922309",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:51.922309",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "NEAR",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SHIB",
+          "hunter_id": 5,
+          "hunter_raw_timestamp": "2026-08-15T00:29:52.353078",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:52.353078",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:52.353078",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "SHIB",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SOL",
+          "hunter_id": 7,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.090036",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.090036",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.090036",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "SOL",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SUI",
+          "hunter_id": 25,
+          "hunter_raw_timestamp": "2026-08-15T00:29:53.823728",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:53.823728",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:53.823728",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "SUI",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "UNI",
+          "hunter_id": 36,
+          "hunter_raw_timestamp": "2026-08-15T00:29:52.334492",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:52.334492",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:52.334492",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "UNI",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    },
+    {
+      "all_same_symbol_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "XRP",
+          "hunter_id": 6,
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.035769",
+          "hunter_timestamp": {
+            "datetime_repr": "2026-08-15T00:29:50.035769",
+            "epoch_seconds": null,
+            "normalization_status": "PARSED_NAIVE",
+            "parseable": true,
+            "raw": "2026-08-15T00:29:50.035769",
+            "timezone_aware": false,
+            "timezone_name": null,
+            "utc_repr": null
+          }
+        }
+      ],
+      "asset_symbol": "XRP",
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp": {
+        "datetime_repr": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "normalization_status": "NORMALIZED_UTC",
+        "parseable": true,
+        "raw": "2026-08-23T13:39:16.730073+00:00",
+        "timezone_aware": true,
+        "timezone_name": "UTC",
+        "utc_repr": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "nearest_same_symbol_candidate": null,
+      "same_symbol_hunter_rows": 1
+    }
+  ],
+  "relationship_calculation": false,
+  "summary": {
+    "aware_aware_pairs": 0,
+    "aware_naive_mismatch_pairs": 0,
+    "comparable_pairs": 0,
+    "feature_identities": 15,
+    "feature_parseable": 15,
+    "feature_unparseable": 0,
+    "hunter_candidates_total": 15,
+    "hunter_unparseable_pairs": 0,
+    "naive_naive_pairs": 0,
+    "nearest_delta_available": 0,
+    "nearest_delta_unavailable": 15
+  }
+}

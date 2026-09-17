@@ -1,0 +1,128 @@
+{
+  "artifact_name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1",
+  "version": "v0.1",
+  "generated_at": "2026-08-26T16:53:17.227626+00:00",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "database_write": "NOT PERFORMED",
+  "prediction": "FORBIDDEN",
+  "decision": "FORBIDDEN",
+  "input_contract": {
+    "expected_universe_count": 985,
+    "target_symbols": [
+      "4",
+      "ASSET"
+    ]
+  },
+  "source_artifacts": {
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    },
+    "semantic": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+      "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856"
+    },
+    "origin": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+      "sha256": "f3554f92cb117876ca9e3883ba84bb74d5f28e5dbdca48f6dead86365f949c33"
+    },
+    "first_insertion": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+      "sha256": "07b1d31cf3dc84ce2cceb4f5ef0ffb2d4d427b77898194c51e7d6c4ae15d4aee"
+    },
+    "cmc_identity": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+      "sha256": "305191d517122fee4c0d5b83f8f63bea64fc8450c6dc07ed783c9636eab8882c"
+    }
+  },
+  "database_inventory": {
+    "table_count": 26,
+    "tables": [
+      "fusion_signals",
+      "hunter_signals",
+      "market_data",
+      "market_history",
+      "market_history_legacy",
+      "market_microstructure",
+      "market_news",
+      "market_news_intelligence",
+      "market_opportunity",
+      "market_records",
+      "market_state",
+      "market_technical",
+      "market_universe",
+      "market_whale",
+      "news_data",
+      "news_signals",
+      "opportunity_signals",
+      "positioning_data",
+      "risk_decisions",
+      "scheduler_runs",
+      "signal_outcomes",
+      "social_metrics",
+      "source_status",
+      "sqlite_sequence",
+      "trade_decisions",
+      "trade_gate_decisions"
+    ]
+  },
+  "target_results": [
+    {
+      "symbol": "4",
+      "expected_universe_member": false,
+      "status": "OUTSIDE_EXPECTED_UNIVERSE",
+      "database_evidence": {
+        "market_history.symbol": 706,
+        "market_history_legacy.symbol": 704,
+        "market_microstructure.symbol": 1,
+        "market_opportunity.symbol": 1,
+        "market_state.symbol": 1,
+        "market_technical.symbol": 6,
+        "market_universe.symbol": 1
+      },
+      "observed_table_count": 7,
+      "market_universe_identity_rows": [
+        {}
+      ],
+      "cmc_ids": [],
+      "canonical_asset_evidence": false
+    },
+    {
+      "symbol": "ASSET",
+      "expected_universe_member": false,
+      "status": "OUTSIDE_EXPECTED_UNIVERSE",
+      "database_evidence": {
+        "market_history.symbol": 706,
+        "market_history_legacy.symbol": 704,
+        "market_microstructure.symbol": 1,
+        "market_opportunity.symbol": 1,
+        "market_state.symbol": 1,
+        "market_technical.symbol": 6,
+        "market_universe.symbol": 1
+      },
+      "observed_table_count": 7,
+      "market_universe_identity_rows": [
+        {}
+      ],
+      "cmc_ids": [],
+      "canonical_asset_evidence": false
+    }
+  ],
+  "summary": {
+    "target_count": 2,
+    "expected_universe_members": 0,
+    "outside_expected_universe": 2,
+    "cmc_identified_targets": 0
+  },
+  "forensic_status": "EXTRA_SYMBOLS_EXPECTED_UNIVERSE_STATUS_ESTABLISHED",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "database_repair": "NOT PERFORMED",
+  "artifact_sha256": "6e9384ed33419cfe137ee94267123d2ca155abefd14216c3d000f082feb12b1a"
+}

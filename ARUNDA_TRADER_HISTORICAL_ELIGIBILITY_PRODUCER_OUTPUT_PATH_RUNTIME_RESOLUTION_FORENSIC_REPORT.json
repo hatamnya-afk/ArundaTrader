@@ -1,0 +1,72 @@
+{
+  "forensic": {
+    "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_RUNTIME_RESOLUTION_FORENSIC_v0.1",
+    "mode": "READ-ONLY FORENSIC",
+    "timestamp_utc": "2026-08-24T18:29:07.025045+00:00"
+  },
+  "project": {
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "producer": {
+    "exists": true,
+    "syntax_valid": true,
+    "sha256": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074"
+  },
+  "report_path_contract": {
+    "assignment_count": 1,
+    "assignment_line": 701,
+    "assignment_expression": "report_path = PROJECT_ROOT / 'LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json'",
+    "deterministic_static_resolution": true,
+    "resolved_path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "expected_path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "writer_boundary": {
+    "writer_usage_count": 3,
+    "writer_usages": [
+      {
+        "line": 91,
+        "type": "open",
+        "arguments": [
+          "path",
+          "'rb'"
+        ]
+      },
+      {
+        "line": 703,
+        "type": "open",
+        "arguments": [
+          "report_path",
+          "'w'"
+        ]
+      },
+      {
+        "line": 708,
+        "type": "json.dump",
+        "arguments": [
+          "report",
+          "f"
+        ]
+      }
+    ]
+  },
+  "runtime_entry": {
+    "main_exists": true,
+    "main_guard": true,
+    "producer_executed": false
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "artifact_written": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE",
+    "source_modified": false
+  },
+  "verdict": "RUNTIME_OUTPUT_PATH_RESOLUTION_VERIFIED"
+}

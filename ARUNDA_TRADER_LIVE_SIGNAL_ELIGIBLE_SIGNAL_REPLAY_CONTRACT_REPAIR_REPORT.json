@@ -1,0 +1,68 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ELIGIBLE SIGNAL REPLAY CONTRACT REPAIR",
+  "version": "v0.3",
+  "mode": "READ_ONLY",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "signal_creation": false,
+    "signal_injection": false,
+    "synthetic_signal": false,
+    "reconstructed_signal": false,
+    "inferred_signal": false,
+    "replay_execution": false,
+    "order_execution": false
+  },
+  "sources": {
+    "validation_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+    "validation_report_sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582",
+    "validation_repair_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_CONTRACT_REPAIR_REPORT.json",
+    "replay_consumer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py",
+    "replay_consumer_sha256": "8728be5aea45c11c3d332a62187c0040d6bf3d101433f5bd12781d4a4b192651"
+  },
+  "upstream_contracts": {
+    "validation_contract": true,
+    "validation_contract_verified": true,
+    "artifact_contract": true,
+    "generation_contract": true,
+    "runtime_contract": true
+  },
+  "artifact": {
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "replay_contract_repair": {
+    "status": "REPAIRED_VERIFIED",
+    "contract": true,
+    "verified": true,
+    "representation_repaired": true,
+    "minimum_targeted_repair": true,
+    "eligible_signals": 0,
+    "order_intents": 0,
+    "path_verified": false,
+    "replay_performed": false,
+    "errors": []
+  },
+  "execution_safety": {
+    "execution_allowed": false,
+    "order_creation": false,
+    "order_submission": false,
+    "network_access": false,
+    "production_db_write": false,
+    "validated": true
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0,
+    "replay_performed": false
+  },
+  "final_verdict": "LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_CONTRACT_REPAIRED",
+  "next_stage": "LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION"
+}

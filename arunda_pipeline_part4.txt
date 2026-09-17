@@ -1,0 +1,500 @@
+﻿        "CURRENT RUNTIME MARKET DATA ATR14 missing: "
+        f"{asset}"
+    )
+
+if stop_distance is None:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA stop_distance missing: "
+        f"{asset}"
+    )
+
+return {
+    "source": source,
+    "latest_ohlcv_timestamp": timestamp,
+    "real_candle_count": candle_count,
+    "atr14": atr14,
+    "stop_distance": stop_distance,
+}
+```
+
+# ============================================================================
+
+# CURRENT-RUNTIME QUANTITY BRIDGE
+
+# ============================================================================
+
+def build_runtime_quantity_bridge(
+snapshot_id: str,
+opportunity_rows: list[dict],
+risk_snapshot: dict,
+market_data_result: dict,
+) -> dict:
+
+```
+if not isinstance(
+    opportunity_rows,
+    list,
+):
+
+    fail(
+        "Opportunity rows must be list"
+    )
+
+opportunities = opportunity_map(
+    {
+        "opportunities": opportunity_rows,
+    }
+)
+
+risk_rows = extract_rows(
+    risk_snapshot,
+    (
+        "risk",
+        "risk_decisions",
+        "decisions",
+        "rows",
+        "assets",
+        "results",
+    ),
+)
+
+risk_rows = exact_asset_rows(
+    risk_rows,
+    "RISK",
+)
+
+r_map = risk_map(
+    risk_rows
+)
+
+if market_data_result is None:
+
+    fail(
+        "CURRENT RUNTIME MARKET DATA unavailable"
+    )
+
+records = {}
+
+for asset in EXPECTED_ASSETS:
+
+    opportunity = opportunities.get(
+        asset
+    )
+
+    if not isinstance(
+        opportunity,
+        dict,
+    ):
+
+        fail(
+            f"Opportunity missing: {asset}"
+        )
+
+    risk_row = r_map.get(
+        asset
+    )
+
+    if not isinstance(
+        risk_row,
+        dict,
+    ):
+
+        fail(
+            f"Risk row missing: {asset}"
+        )
+
+    risk_status = normalize_status(
+        get_row_value(
+            risk_row,
+            "risk_status",
+            "status",
+            "decision",
+            "risk_state",
+        )
+    )
+
+    if risk_status not in APPROVED_RISK_STATUSES:
+        continue
+
+    direction = normalize_status(
+        risk_row.get("direction")
+    )
+
+    if direction not in VALID_DIRECTIONS:
+
+        fail(
+            f"Risk direction invalid: {asset}"
+        )
+
+    entry_price = opportunity.get(
+        "price"
+    )
+
+    if entry_price is None:
+
+        fail(
+            f"Opportunity price missing: {asset}"
+        )
+
+    risk_budget = risk_row.get(
+        "risk_budget"
+    )
+
+    if risk_budget is None:
+
+        risk_budget = risk_row.get(
+            "allocated_budget"
+        )
+
+    if risk_budget is None:
+
+        fail(
+            f"Risk budget missing: {asset}"
+        )
+
+    position_size = risk_row.get(
+        "position_size"
+    )
+
+    if position_size is None:
+
+        position_size = risk_row.get(
+            "position_quantity"
+        )
+
+    if position_size is None:
+
+        fail(
+            f"Risk position size missing: {asset}"
+        )
+
+    if not is_finite_number(
+        position_size
+    ):
+
+        fail(
+            f"Risk position size invalid: {asset}"
+        )
+
+    if float(position_size) <= 0:
+
+        fail(
+            f"Risk position size must be > 0: {asset}"
+        )
+
+    quantity_unit = risk_row.get(
+        "quantity_unit"
+    )
+
+    if quantity_unit is None:
+
+        quantity_unit = POSITION_QUANTITY_UNIT
+
+    quantity_source = risk_row.get(
+        "quantity_source"
+    )
+
+    if quantity_source is None:
+
+        quantity_source = POSITION_QUANTITY_SOURCE
+
+    if quantity_unit != POSITION_QUANTITY_UNIT:
+
+        fail(
+            f"Risk quantity unit invalid: {asset}"
+        )
+
+    if quantity_source != POSITION_QUANTITY_SOURCE:
+
+        fail(
+            f"Risk quantity source invalid: {asset}"
+        )
+
+    for flag in (
+        "quantity_changed",
+        "quantity_recomputed",
+        "quantity_rescaled",
+        "quantity_rounded",
+        "quantity_clipped",
+    ):
+
+        if risk_row.get(flag, False) is not False:
+
+            fail(
+                f"Risk quantity transformation detected: "
+                f"{asset}.{flag}"
+            )
+
+    runtime = _resolve_market_data_provenance(
+        market_data_result,
+        asset,
+    )
+
+    risk_row["position_quantity"] = (
+        position_size
+    )
+
+    risk_row["quantity_unit"] = (
+        POSITION_QUANTITY_UNIT
+    )
+
+    risk_row["quantity_source"] = (
+        POSITION_QUANTITY_SOURCE
+    )
+
+    risk_row["quantity_changed"] = False
+    risk_row["quantity_recomputed"] = False
+    risk_row["quantity_rescaled"] = False
+    risk_row["quantity_rounded"] = False
+    risk_row["quantity_clipped"] = False
+
+    records[asset] = {
+        "snapshot_id": snapshot_id,
+        "asset": asset,
+        "timeframe": "1h",
+        "source": runtime[
+            "source"
+        ],
+        "latest_ohlcv_timestamp": runtime[
+            "latest_ohlcv_timestamp"
+        ],
+        "real_candle_count": runtime[
+            "real_candle_count"
+        ],
+        "atr14": runtime[
+            "atr14"
+        ],
+        "stop_distance": runtime[
+            "stop_distance"
+        ],
+        "risk_budget": risk_budget,
+        "entry_price": entry_price,
+        "position_size": position_size,
+        "risk_position_quantity": position_size,
+        "order_intent_quantity": None,
+        "canonical_order_request_quantity": None,
+        "quantity_unit": POSITION_QUANTITY_UNIT,
+        "quantity_source": POSITION_QUANTITY_SOURCE,
+        "quantity_changed": False,
+        "quantity_recomputed": False,
+        "quantity_rescaled": False,
+        "quantity_rounded": False,
+        "quantity_clipped": False,
+    }
+
+return records
+```
+
+# ============================================================================
+
+# QUANTITY OBSERVABILITY VALIDATION
+
+# ============================================================================
+
+def validate_runtime_quantity_records(
+quantity_records: dict,
+snapshot_id: str,
+) -> None:
+
+```
+if not isinstance(
+    quantity_records,
+    dict,
+):
+
+    fail(
+        "Quantity records must be dict"
+    )
+
+if (
+    not isinstance(
+        snapshot_id,
+        str,
+    )
+    or not snapshot_id
+):
+
+    fail(
+        "Quantity observability snapshot_id missing"
+    )
+
+for asset, record in quantity_records.items():
+
+    asset = normalize_asset(
+        asset
+    )
+
+    if asset not in EXPECTED_ASSET_SET:
+
+        fail(
+            f"Unexpected quantity asset: {asset}"
+        )
+
+    if not isinstance(
+        record,
+        dict,
+    ):
+
+        fail(
+            f"Quantity record must be dict: {asset}"
+        )
+
+    if record.get(
+        "snapshot_id"
+    ) != snapshot_id:
+
+        fail(
+            f"Quantity snapshot mismatch: {asset}"
+        )
+
+    if record.get(
+        "asset"
+    ) != asset:
+
+        fail(
+            f"Quantity asset mismatch: {asset}"
+        )
+
+    if record.get(
+        "timeframe"
+    ) != "1h":
+
+        fail(
+            f"Quantity timeframe invalid: {asset}"
+        )
+
+    if not record.get(
+        "source"
+    ):
+
+        fail(
+            f"Quantity source missing: {asset}"
+        )
+
+    if not record.get(
+        "latest_ohlcv_timestamp"
+    ):
+
+        fail(
+            "Quantity latest OHLCV timestamp missing: "
+            f"{asset}"
+        )
+
+    candle_count = record.get(
+        "real_candle_count"
+    )
+
+    if (
+        not isinstance(
+            candle_count,
+            int,
+        )
+        or isinstance(
+            candle_count,
+            bool,
+        )
+        or candle_count < 1
+    ):
+
+        fail(
+            f"Quantity candle count invalid: {asset}"
+        )
+
+    required_runtime_values = (
+        "atr14",
+        "stop_distance",
+        "risk_budget",
+        "entry_price",
+        "position_size",
+        "risk_position_quantity",
+        "order_intent_quantity",
+        "canonical_order_request_quantity",
+    )
+
+    for field in required_runtime_values:
+
+        if record.get(field) is None:
+
+            fail(
+                "Quantity observability runtime value "
+                f"missing: {asset}.{field}"
+            )
+
+    for field in required_runtime_values:
+
+        if not is_finite_number(
+            record.get(field)
+        ):
+
+            fail(
+                "Quantity runtime value invalid: "
+                f"{asset}.{field}"
+            )
+
+    if (
+        record.get(
+            "position_size"
+        )
+        != record.get(
+            "risk_position_quantity"
+        )
+    ):
+
+        fail(
+            f"Quantity Position/Risk mismatch: {asset}"
+        )
+
+    if (
+        record.get(
+            "risk_position_quantity"
+        )
+        != record.get(
+            "order_intent_quantity"
+        )
+    ):
+
+        fail(
+            f"Quantity Risk/OrderIntent mismatch: {asset}"
+        )
+
+    if (
+        record.get(
+            "order_intent_quantity"
+        )
+        != record.get(
+            "canonical_order_request_quantity"
+        )
+    ):
+
+        fail(
+            f"Quantity OrderIntent/Canonical mismatch: {asset}"
+        )
+
+    if record.get(
+        "quantity_unit"
+    ) != POSITION_QUANTITY_UNIT:
+
+        fail(
+            f"Quantity unit invalid: {asset}"
+        )
+
+    if record.get(
+        "quantity_source"
+    ) != POSITION_QUANTITY_SOURCE:
+
+        fail(
+            f"Quantity source invalid: {asset}"
+        )
+
+    for flag in (
+        "quantity_changed",
+        "quantity_recomputed",
+        "quantity_rescaled",
+        "quantity_rounded",
+        "quantity_clipped",
+    ):
+
+        if record.get(flag) is not False:
+
+            fail(

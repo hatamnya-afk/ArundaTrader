@@ -1,0 +1,356 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_TEMPORAL_COVERAGE_FORENSIC_v0.1",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "database_modified": false,
+  "decision": "FORBIDDEN",
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_contract_modified": false,
+  "forensic_status": "SAME_SYMBOL_TEMPORAL_COVERAGE_MISSING",
+  "hunter_schema": [
+    "id",
+    "timestamp",
+    "market",
+    "asset",
+    "hunter_score",
+    "book_score",
+    "galaxy_score",
+    "momentum_score",
+    "social_score",
+    "volume_score",
+    "catalyst_score",
+    "global_score",
+    "final_score",
+    "status",
+    "signal",
+    "entry_price",
+    "engine_version",
+    "snapshot_id"
+  ],
+  "identity": {
+    "feature": [
+      "asset_symbol",
+      "snapshot_timestamp"
+    ],
+    "hunter": [
+      "asset",
+      "timestamp"
+    ]
+  },
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "outcome": "NOT CALCULATED",
+  "prediction": "FORBIDDEN",
+  "predictive_claim": "NOT ESTABLISHED",
+  "records": [
+    {
+      "asset_symbol": "AAVE",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738562.619203,
+        "hunter_id": 15,
+        "hunter_timestamp": "2026-08-15T00:29:54.110870"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "ADA",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.318627,
+        "hunter_id": 8,
+        "hunter_timestamp": "2026-08-15T00:29:50.411446"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "AVAX",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.221152,
+        "hunter_id": 19,
+        "hunter_timestamp": "2026-08-15T00:29:50.508921"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "BTC",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.411978,
+        "hunter_id": 12,
+        "hunter_timestamp": "2026-08-15T00:29:50.318095"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "DOGE",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738565.545823,
+        "hunter_id": 9,
+        "hunter_timestamp": "2026-08-15T00:29:51.184250"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "DOT",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738564.829514,
+        "hunter_id": 34,
+        "hunter_timestamp": "2026-08-15T00:29:51.900559"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "ETH",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.313907,
+        "hunter_id": 13,
+        "hunter_timestamp": "2026-08-15T00:29:50.416166"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "LINK",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738565.532943,
+        "hunter_id": 10,
+        "hunter_timestamp": "2026-08-15T00:29:51.197130"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "LTC",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.647194,
+        "hunter_id": 17,
+        "hunter_timestamp": "2026-08-15T00:29:50.082879"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "NEAR",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738564.807764,
+        "hunter_id": 28,
+        "hunter_timestamp": "2026-08-15T00:29:51.922309"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "SHIB",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738564.376995,
+        "hunter_id": 5,
+        "hunter_timestamp": "2026-08-15T00:29:52.353078"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "SOL",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.640037,
+        "hunter_id": 7,
+        "hunter_timestamp": "2026-08-15T00:29:50.090036"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "SUI",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738562.906345,
+        "hunter_id": 25,
+        "hunter_timestamp": "2026-08-15T00:29:53.823728"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "UNI",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738564.395581,
+        "hunter_id": 36,
+        "hunter_timestamp": "2026-08-15T00:29:52.334492"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    },
+    {
+      "asset_symbol": "XRP",
+      "exact_timestamp_matches": [],
+      "feature_timestamp_parseable": true,
+      "feature_timestamp_raw": "2026-08-23T13:39:16.730073+00:00",
+      "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+      "hunter_candidates": 1,
+      "nearest_hunter": {
+        "delta_seconds": 738566.694304,
+        "hunter_id": 6,
+        "hunter_timestamp": "2026-08-15T00:29:50.035769"
+      },
+      "status": "SAME_SYMBOL_TEMPORAL_MISMATCH",
+      "within_tolerance": {
+        "120s": [],
+        "300s": [],
+        "600s": []
+      }
+    }
+  ],
+  "relationship_calculation": "NOT PERFORMED",
+  "summary": {
+    "exact_timestamp_matches": 0,
+    "feature_identities": 15,
+    "feature_timestamp_unparseable": 0,
+    "hunter_rows_total": 50,
+    "hunter_symbols_total": 50,
+    "nearest_delta_seconds": {
+      "maximum": 738566.694304,
+      "mean": 738565.3507578,
+      "median": 738565.545823,
+      "minimum": 738562.619203
+    },
+    "no_same_symbol_hunter": 0,
+    "same_symbol_temporal_mismatch": 15,
+    "timestamp_unavailable": 0,
+    "within_120s": 0,
+    "within_300s": 0,
+    "within_600s": 0
+  },
+  "tolerances_seconds": [
+    120,
+    300,
+    600
+  ]
+}

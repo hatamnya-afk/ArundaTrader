@@ -1,0 +1,2096 @@
+{
+  "artifact": {
+    "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "producer": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "consumer": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py"
+  },
+  "forensic": {
+    "version": "v0.1",
+    "mode": "READ-ONLY FORENSIC",
+    "started_utc": "2026-08-24T17:45:50.167661+00:00",
+    "completed_utc": "2026-08-24T17:46:01.536904+00:00",
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader"
+  },
+  "inventory": {
+    "files_discovered": 864
+  },
+  "exact_artifact": {
+    "found": false,
+    "matches": []
+  },
+  "runtime_evidence_chain": {
+    "found": true,
+    "candidate_count": 19,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_v0.1.py",
+        "score": 286,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 40,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "returncode",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "invoke",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "output_path",
+          "report",
+          "capture",
+          "subprocess",
+          "Popen",
+          "run(",
+          "check_output",
+          "check_call",
+          "communicate"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "report_path",
+          "report_file",
+          "output_file",
+          "json_path",
+          "artifact_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "subprocess",
+          "Popen",
+          "subprocess.run",
+          "subprocess.Popen",
+          "os.system",
+          "entrypoint",
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "===========================================================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n   "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "=============================================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "ut_path\",\n    \"report\",\n    \"capture\",\n    \"subprocess\",\n    \"Popen\",\n    \"run(\",\n    \"check_output\",\n    \"check_call\",\n    \"communicate\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n    \"eligib"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "=================================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.p"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "=\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n    PROJECT_ROOT,\n    \"HISTORICAL_ELIGIBILITY_RUNTIME_"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "  \"report\",\n    \"capture\",\n    \"subprocess\",\n    \"Popen\",\n    \"run(\",\n    \"check_output\",\n    \"check_call\",\n    \"communicate\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n "
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "cess\",\n    \"Popen\",\n    \"run(\",\n    \"check_output\",\n    \"check_call\",\n    \"communicate\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"candidate_cre"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "S = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"candidate_created\",\n    \"eligibility_executed\",\n]\n\nOUTPUT_PATH_TERMS = [\n    \"output_path\",\n    \"report_path\",\n    \"re"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "========================================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPO"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "========\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n    PROJECT_ROOT,\n    \"HISTORICAL_ELIGIBILITY"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "th\",\n    \"report\",\n    \"capture\",\n    \"subprocess\",\n    \"Popen\",\n    \"run(\",\n    \"check_output\",\n    \"check_call\",\n    \"communicate\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_r"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "(\",\n    \"check_output\",\n    \"check_call\",\n    \"communicate\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"candidate_created\",\n    \"eligibility_ex"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "ER_TERMS = [\n    PRODUCER,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"candidate_created\",\n    \"eligibility_executed\",\n]\n\nOUTPUT_PATH_TERMS = [\n    \"output_path\",\n    \"report_path\""
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+            "snippet": "=============\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n    PROJECT_ROOT,\n    \"HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHA"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+            "snippet": "=============\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = r\"C:\\Users\\ASUS\\ArundaTrader\"\n\nPRODUCER = \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\nCONSUMER = \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n\nOUTPUT_REPORT = os.path.join(\n    PROJECT_ROOT,\n    \"HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENC"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 224,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 29,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "returncode",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "output_path",
+          "report",
+          "capture",
+          "subprocess",
+          "Popen",
+          "check_output",
+          "check_call"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "subprocess",
+          "Popen",
+          "entrypoint",
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "NSIC v0.1\n# =============================================================================\n\nVERSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "===========================================================================\n\nVERSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "\",\n    \".md\",\n    \".xml\",\n    \".ini\",\n    \".cfg\",\n    \".yaml\",\n    \".yml\",\n}\n\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\nPROVENANCE_TERMS = [\n    TARGET_REPORT,\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\nRUNTIME_TERMS = [\n    \"stdout\",\n    "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "            if term == TARGET_REPORT:\n                score += 50\n\n            elif term == PRODUCER_NAME:\n                score += 40\n\n            elif term in {\n                \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n                \"SIGNAL_ELIGIBILITY\",\n                \"ELIGIBILITY_NO_TRADE\",\n            }:\n                score += 15\n\n            elif term in {\n                \"stdout\",\n  "
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "===============================================================\n\nVERSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUT"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "RSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    \"HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENA"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": ",\n    \".xml\",\n    \".ini\",\n    \".cfg\",\n    \".yaml\",\n    \".yml\",\n}\n\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\nPROVENANCE_TERMS = [\n    TARGET_REPORT,\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\nRUNTIME_TERMS = [\n    \"std"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "\n\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\nPROVENANCE_TERMS = [\n    TARGET_REPORT,\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\nRUNTIME_TERMS = [\n    \"stdout\",\n    \"stderr\",\n    \"runtime\",\n    \"execution\",\n    \"execute"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "if term == TARGET_REPORT:\n                score += 50\n\n            elif term == PRODUCER_NAME:\n                score += 40\n\n            elif term in {\n                \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n                \"SIGNAL_ELIGIBILITY\",\n                \"ELIGIBILITY_NO_TRADE\",\n            }:\n                score += 15\n\n            elif term in {\n                \"s"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "_NAME:\n                score += 40\n\n            elif term in {\n                \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n                \"SIGNAL_ELIGIBILITY\",\n                \"ELIGIBILITY_NO_TRADE\",\n            }:\n                score += 15\n\n            elif term in {\n                \"stdout\",\n                \"stderr\",\n                \"runtime\",\n                \"execution\""
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "======================================================================\n\nVERSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.p"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "===\n\nVERSION = \"v0.1\"\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    \"HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIM"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "  \".md\",\n    \".xml\",\n    \".ini\",\n    \".cfg\",\n    \".yaml\",\n    \".yml\",\n}\n\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\nPROVENANCE_TERMS = [\n    TARGET_REPORT,\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\nRUNTIME_TERMS = ["
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "    \".yaml\",\n    \".yml\",\n}\n\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\nPROVENANCE_TERMS = [\n    TARGET_REPORT,\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\nRUNTIME_TERMS = [\n    \"stdout\",\n    \"stderr\",\n    \"runtime\",\n "
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "       if term == TARGET_REPORT:\n                score += 50\n\n            elif term == PRODUCER_NAME:\n                score += 40\n\n            elif term in {\n                \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n                \"SIGNAL_ELIGIBILITY\",\n                \"ELIGIBILITY_NO_TRADE\",\n            }:\n                score += 15\n\n            elif term in {\n         "
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py",
+        "score": 203,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 24,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "returncode",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "subprocess"
+        ],
+        "output_path_terms": [
+          "report_file",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "subprocess",
+          "entrypoint",
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "==========================================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPO"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "============================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_R"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "irectory\",\n    \"cwd\",\n    \"output\",\n    \"report\",\n    \"capture\",\n    \"isolated\",\n    \"subprocess\",\n    \"returncode\",\n    \"exit code\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUM"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "NSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    PROJECT_ROOT\n    / \"HISTORICAL_ELIGIBILITY_RUNTI"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "   \"cwd\",\n    \"output\",\n    \"report\",\n    \"capture\",\n    \"isolated\",\n    \"subprocess\",\n    \"returncode\",\n    \"exit code\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBIL"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "    \"capture\",\n    \"isolated\",\n    \"subprocess\",\n    \"returncode\",\n    \"exit code\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\n\n# ================="
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "=======================================================\n\nMODE = \"READ-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "LY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    PROJECT_ROOT\n    / \"HISTORICAL_ELIGIBIL"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "ory\",\n    \"cwd\",\n    \"output\",\n    \"report\",\n    \"capture\",\n    \"isolated\",\n    \"subprocess\",\n    \"returncode\",\n    \"exit code\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "\",\n    \"subprocess\",\n    \"returncode\",\n    \"exit code\",\n]\n\nPRODUCER_TERMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\n\n# ==========================================="
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+            "snippet": "AD-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    PROJECT_ROOT\n    / \"HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_A"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+            "snippet": "AD-ONLY FORENSIC\"\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\")\n\nPRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_REPORT_NAME = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nCONSUMER_NAME = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nOUTPUT_REPORT = (\n    PROJECT_ROOT\n    / \"HISTORICAL_ELIGIBILITY_RUNTIME_CAPT"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "RMS = [\n    PRODUCER_NAME,\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\n\n# =============================================================================\n# SAFETY\n# ========================"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"SIGNAL_ELIGIBILITY\",\n]\n\nREPORT_TERMS = [\n    TARGET_REPORT_NAME,\n    \"eligibility_report\",\n    \"eligible_pool\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n]\n\n\n# =============================================================================\n# SAFETY\n# ============================================="
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_REPORT.json",
+        "score": 188,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 19,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "returncode",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "subprocess"
+        ],
+        "output_path_terms": [
+          "report_file",
+          "write"
+        ],
+        "invocation_terms": [
+          "subprocess",
+          "entrypoint"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "665+00:00\",\n    \"finished_at_utc\": \"2026-08-24T17:43:46.193865+00:00\"\n  },\n  \"objective\": {\n    \"target_artifact\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n    \"producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n    \"consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n    \"purpose\": \"Determine whether historical runtime capture provenance or recoverable his"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "Y_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py\",\n        \"score\": 265,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "IME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py\",\n        \"score\": 265,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json\",\n        \"score\": 265,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "UTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json\",\n        \"score\": 225,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py\",\n        \"score\": 210,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "IFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json\",\n        \"score\": 200,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py\",\n        \"score\": 190,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIG"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "\",\n          \"executed\",\n          \"launch\",\n          \"output\",\n          \"report\",\n          \"capture\"\n        ]\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 130,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n "
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "         \"invocation\",\n          \"launch\",\n          \"report\",\n          \"capture\",\n          \"isolated\"\n        ]\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 126,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"runtime_terms\": [\n          \"runtime\",\n          \"execution\",\n          \"exe"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "         }\n        ],\n        \"errors\": []\n      }\n    ]\n  },\n  \"timeline\": {\n    \"candidate_count\": 1,\n    \"candidates\": [\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"mtime\": \"2026-08-23T16:54:08.642490+00:00\",\n        \"producer_reference\": true,\n        \"report_reference\": false\n      }\n    ]\n  },\n  \"recovery_decision\": {\n    \"statu"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "  \"finished_at_utc\": \"2026-08-24T17:43:46.193865+00:00\"\n  },\n  \"objective\": {\n    \"target_artifact\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n    \"producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n    \"consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n    \"purpose\": \"Determine whether historical runtime capture provenance or recoverable "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "TIME_PROVENANCE_FORENSIC_v0.1.py\",\n        \"score\": 265,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "      \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"eligib"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "TIFACT_RECOVERY_FORENSIC_v0.1.py\",\n        \"score\": 265,\n        \"producer_reference\": true,\n        \"report_reference\": true,\n        \"producer_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"SIGNAL_ELIGIBILITY\"\n        ],\n        \"report_terms\": [\n          \"LIVE_"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "score": 183,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 18,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "returncode",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "subprocess"
+        ],
+        "output_path_terms": [
+          "write"
+        ],
+        "invocation_terms": [
+          "subprocess",
+          "entrypoint"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ive\": \"Historical runtime provenance forensic for the verified eligibility producer and report.\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"safety_policy\": {\n    \"production_db_writes\": false,\n    \"production_db_access\": \"READ_ON"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ry_staging\": \"NONE\"\n  },\n  \"baseline\": {\n    \"project_root\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n    \"producer\": {\n      \"exists\": true,\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"analysis\": {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ITY_NO_TRADE_GATE_v0.1.py\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"analysis\": {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"parse\": \"PASS\",\n        \"report_references\": [\n          {\n            \"line\": 698,\n            \"value\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n          }\n    "
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py\",\n        \"score\": 193,\n        \"matched_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "\",\n        \"relative_path\": \"VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json\",\n        \"score\": 168,\n        \"matched_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "NSIC_REPORT.json\",\n        \"relative_path\": \"HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json\",\n        \"score\": 164,\n        \"matched_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": " \"relative_path\": \"ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py\",\n        \"score\": 159,\n        \"matched_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py\",\n        \"score\": 157,\n        \"matched_terms\": [\n          \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n          \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "report\",\n          \"runtime\"\n        ],\n        \"mtime\": \"2026-08-23T17:02:52.416966+00:00\",\n        \"size\": 24552\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 115,\n        \"matched_terms\": [\n          \"ELIGIBILITY_NO_TRADE\",\n      "
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "00\",\n        \"size\": 24552\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 115,\n        \"matched_terms\": [\n          \"ELIGIBILITY_NO_TRADE\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n          \"LIVE_SIGNAL_ELIGIBILITY_NO_"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "          \"capture\"\n        ],\n        \"runtime_signal\": true,\n        \"mtime\": \"2026-08-23T17:02:52.416966+00:00\"\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 71,\n        \"producer_reference\": false,\n        \"report_reference\": tru"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "-23T17:02:52.416966+00:00\"\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"score\": 71,\n        \"producer_reference\": false,\n        \"report_reference\": true,\n        \"runtime_terms\": [\n          \"runtime\",\n          \"execution\",\n          \"exe"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": ":02:52.416966+00:00\",\n        \"size\": 24552,\n        \"producer_reference\": false,\n        \"report_reference\": true\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"mtime\": \"2026-08-23T16:54:08.642490+00:00\",\n        \"size\": 21139,\n        \"prod"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "  \"report_reference\": true\n      },\n      {\n        \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"relative_path\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n        \"mtime\": \"2026-08-23T16:54:08.642490+00:00\",\n        \"size\": 21139,\n        \"producer_reference\": false,\n        \"report_reference\": true\n      }\n    ]\n  },\n  \"decision\""
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "cal runtime provenance forensic for the verified eligibility producer and report.\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"safety_policy\": {\n    \"production_db_writes\": false,\n    \"production_db_access\": \"READ"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 172,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 14,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "output_path",
+          "report"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "===============================\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nRECOVERY_PREFIX = \"arunda_historical_eligibility_recovery_\"\n\n# Never scan thes"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "=================\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nRECOVERY_PREFIX = \"arunda_historical_eligibility_recovery_\"\n\n# Never scan t"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "==============================\n\nMODE\nREAD-ONLY FORENSIC + ISOLATED RECOVERY STAGING\n\nOBJECTIVE\nLocate and provenance the historical verified eligibility artifact:\n\n    LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\n\nNo eligibility execution is performed.\nNo eligibility logic is reconstructed.\nNo report is regenerated.\nNo synthetic report is created.\nNo production DB is modified.\n"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "===========================================================================================\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_AS"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "=====\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nRECOVERY_PREFIX = \"arunda_historical_eligibility_recovery_\"\n\n# Ne"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "huge scans.\nEXCLUDED_FILE_EXTENSIONS = {\n    \".db-wal\",\n    \".db-shm\",\n    \".tmp\",\n    \".log\",\n}\n\n# Candidate artifact naming fragments.\nREPORT_NAME_FRAGMENTS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MARKERS = (\n"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "S = {\n    \".db-wal\",\n    \".db-shm\",\n    \".tmp\",\n    \".log\",\n}\n\n# Candidate artifact naming fragments.\nREPORT_NAME_FRAGMENTS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MARKERS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRA"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "IGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MARKERS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"eligible_pool\",\n    \"eligibility\",\n    \"snapshot\",\n    \"eligible\",\n)\n\n# Backup/archive extensions.\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\n# ============================"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "\n    score += len(keys.intersection(expected_keys)) * 10\n\n    if isinstance(obj.get(\"eligible_pool\"), list):\n        score += 15\n\n    if \"frontier\" in obj:\n        if \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\" in str(\n            obj.get(\"frontier\")\n        ):\n            score += 25\n\n    if \"eligibility_report\" in obj:\n        score += 10\n\n    if \"snapshot_id\" in obj:\n        sco"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "=====================================\n\nMODE\nREAD-ONLY FORENSIC + ISOLATED RECOVERY STAGING\n\nOBJECTIVE\nLocate and provenance the historical verified eligibility artifact:\n\n    LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\n\nNo eligibility execution is performed.\nNo eligibility logic is reconstructed.\nNo report is regenerated.\nNo synthetic report is created.\nNo production DB is m"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "# ================================================================================================\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "============\n\nBASE_DIR = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nTARGET_CONSUMER = (\n    \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nRECOVERY_PREFIX = \"arunda_historical_eligibility_recover"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "roduce huge scans.\nEXCLUDED_FILE_EXTENSIONS = {\n    \".db-wal\",\n    \".db-shm\",\n    \".tmp\",\n    \".log\",\n}\n\n# Candidate artifact naming fragments.\nREPORT_NAME_FRAGMENTS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MAR"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "\n    \".tmp\",\n    \".log\",\n}\n\n# Candidate artifact naming fragments.\nREPORT_NAME_FRAGMENTS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MARKERS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"eligible_pool\",\n  "
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "    \"ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY\",\n)\n\n# Content markers that strongly indicate the target report schema.\nCONTENT_MARKERS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"eligible_pool\",\n    \"eligibility\",\n    \"snapshot\",\n    \"eligible\",\n)\n\n# Backup/archive extensions.\nARCHIVE_EXTENSIONS = {\n    \".zip\",\n}\n\n# ==================="
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 147,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 13,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "output_path",
+          "report"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "======================\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nSELF_NAME = Path(__file__).name\n\nFORENSIC_REPORT_NAME ="
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "========\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nSELF_NAME = Path(__file__).name\n\nFORENSIC_REPORT_NAM"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "===================================================\n\nMODE\n    READ-ONLY FORENSIC\n\nOBJECTIVE\n    Resolve the real producer / historical artifact provenance of:\n\n        LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\n\nSAFETY\n    Production DB writes : FORBIDDEN\n    Production DB access  : READ ONLY\n    Source modification   : FORBIDDEN\n    Eligibility execution : FORBIDDEN\n    Elig"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "=======================================================================================\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRAD"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "OJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nSELF_NAME = Path(__file__).name\n\nFORENSIC_"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": " \"output\",\n    \"outputs\",\n    \"artifacts\",\n    \"artifact\",\n    \"state\",\n    \"states\",\n    \"temp\",\n    \"tmp\",\n    \"_reports\",\n    \"_report\",\n}\n\nREPORT_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRA"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "  \"state\",\n    \"states\",\n    \"temp\",\n    \"tmp\",\n    \"_reports\",\n    \"_report\",\n}\n\nREPORT_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRADE_GATE\",\n    \"SIGNAL_ELIGIBILITY\",\n)\n\nCONSUMER_PATTERNS = (\n"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRADE_GATE\",\n    \"SIGNAL_ELIGIBILITY\",\n)\n\nCONSUMER_PATTERNS = (\n    \"LIVE_TRADE_CANDIDATE_RANKING\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n    \"eligible_p"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "IGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRADE_GATE\",\n    \"SIGNAL_ELIGIBILITY\",\n)\n\nCONSUMER_PATTERNS = (\n    \"LIVE_TRADE_CANDIDATE_RANKING\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n    \"eligible_pool\",\n    \"eligibility_report\",\n)"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "==========================================================\n\nMODE\n    READ-ONLY FORENSIC\n\nOBJECTIVE\n    Resolve the real producer / historical artifact provenance of:\n\n        LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\n\nSAFETY\n    Production DB writes : FORBIDDEN\n    Production DB access  : READ ONLY\n    Source modification   : FORBIDDEN\n    Eligibility execution : FORBIDDEN"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "==============================================================================================\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "===\n\nPROJECT_ROOT = Path(r\"C:\\Users\\ASUS\\ArundaTrader\").resolve()\n\nTARGET_REPORT = \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n\nTARGET_PRODUCER_NAME = (\n    \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\"\n)\n\nDOWNSTREAM_FRONTIER = (\n    PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nSELF_NAME = Path(__file__).name\n\n"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "g\",\n    \"output\",\n    \"outputs\",\n    \"artifacts\",\n    \"artifact\",\n    \"state\",\n    \"states\",\n    \"temp\",\n    \"tmp\",\n    \"_reports\",\n    \"_report\",\n}\n\nREPORT_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILI"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "facts\",\n    \"artifact\",\n    \"state\",\n    \"states\",\n    \"temp\",\n    \"tmp\",\n    \"_reports\",\n    \"_report\",\n}\n\nREPORT_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRADE_GATE\",\n    \"SIGNAL_ELIGIBILITY"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "\nREPORT_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT\",\n    \"SIGNAL_ELIGIBILITY\",\n    \"ELIGIBILITY_NO_TRADE\",\n    \"ELIGIBLE_SIGNAL\",\n)\n\nPRODUCER_PATTERNS = (\n    \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n    \"ELIGIBILITY_NO_TRADE_GATE\",\n    \"SIGNAL_ELIGIBILITY\",\n)\n\nCONSUMER_PATTERNS = (\n    \"LIVE_TRADE_CANDIDATE_RANKING\",\n    \"UPSTREAM_ELIGIBILITY_CONSUMED\",\n    \"e"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 141,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 8,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "write"
+        ],
+        "invocation_terms": [],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "D_ONLY_FORENSIC_ISOLATED_RECOVERY\",\n  \"timestamp_utc\": \"2026-08-24T17:35:22.462477+00:00\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"target_consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"base_dir\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"production_source_modified\": false,"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "\": false,\n  \"report_reconstructed\": false,\n  \"synthetic_report_created\": false,\n  \"candidate_created\": false,\n  \"candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false,\n      \"sche"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "ated\": false,\n  \"candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false,\n      \"schema_score\": 0\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\PREREQUISITE_RESOLUTION_"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "  \"recovery_candidates\": [],\n  \"recovery_staged\": [],\n  \"verdict\": \"HISTORICAL_ARTIFACT_NOT_FOUND\",\n  \"producer\": {\n    \"exists\": true,\n    \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n    \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n    \"report_write_reference_detected\": true,\n    \"report_name_reference_count\": 1\n  },\n  \"files"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "TE\",\n        \"eligible_pool\",\n        \"eligibility\",\n        \"snapshot\",\n        \"eligible\"\n      ],\n      \"size\": 56587\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 45,\n      \"markers\": [\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n        \"eligibility\",\n        \"snapshot\",\n        \"eligible\"\n      ],\n      \"size\": 21139"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "C_ISOLATED_RECOVERY\",\n  \"timestamp_utc\": \"2026-08-24T17:35:22.462477+00:00\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"target_consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"base_dir\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"production_source_modified\": fal"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "eport_reconstructed\": false,\n  \"synthetic_report_created\": false,\n  \"candidate_created\": false,\n  \"candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false,\n      \"s"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "  \"candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false,\n      \"schema_score\": 0\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\PREREQUISITE_RESOLUTI"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "ndidates\": [],\n  \"recovery_staged\": [],\n  \"verdict\": \"HISTORICAL_ARTIFACT_NOT_FOUND\",\n  \"producer\": {\n    \"exists\": true,\n    \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n    \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n    \"report_write_reference_detected\": true,\n    \"report_name_reference_count\": 1\n  },\n  \"fi"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "eligible_pool\",\n        \"eligibility\",\n        \"snapshot\",\n        \"eligible\"\n      ],\n      \"size\": 56587\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 45,\n      \"markers\": [\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n        \"eligibility\",\n        \"snapshot\",\n        \"eligible\"\n      ],\n      \"size\": 21"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "ACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py\",\n  \"mode\": \"READ_ONLY_FORENSIC_ISOLATED_RECOVERY\",\n  \"timestamp_utc\": \"2026-08-24T17:35:22.462477+00:00\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"target_consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "ECOVERY\",\n  \"timestamp_utc\": \"2026-08-24T17:35:22.462477+00:00\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"target_consumer\": \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"base_dir\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"production_source_modi"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "tructed\": false,\n  \"synthetic_report_created\": false,\n  \"candidate_created\": false,\n  \"candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "s\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"score\": 20,\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"sha256\": null,\n      \"json_valid\": false,\n      \"schema_score\": 0\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\PREREQUISIT"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "],\n  \"recovery_staged\": [],\n  \"verdict\": \"HISTORICAL_ARTIFACT_NOT_FOUND\",\n  \"producer\": {\n    \"exists\": true,\n    \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n    \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n    \"report_write_reference_detected\": true,\n    \"report_name_reference_count\": 1\n"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 139,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 14,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "  \"timestamp_utc\":\n            utc_now(),\n\n        \"engine\":\n            EXPECTED_ENGINE,\n\n        \"snapshot_id\":\n            snapshot_id,\n\n        \"source_frontier\":\n            \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n\n        \"eligibility_report\":\n            eligibility_report_path,\n\n        \"ranking_configuration\": {\n\n            \"weight_confidence\":\n                WEIGHT_CONFIDENCE,\n\n   "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "\"\n            \"was not found.\"\n        )\n\n    print()\n    print(\"=\" * 100)\n    print(\"UPSTREAM FRONTIER\")\n    print(\"=\" * 100)\n\n    print(\n        \"Eligibility source : \"\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\"\n    )\n\n    print(\n        f\"Report : {eligibility_report}\"\n    )\n\n    report = load_eligibility_report(\n        eligibility_report\n    )\n\n    snapshot_id = report.get(\n        \"s"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "------------------------------------------------------------------\n\ndef locate_eligibility_report(capture_dir):\n\n    path = os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n    return path\n\n\ndef load_eligibility_report(path):\n\n    with open(\n        path,\n        \"r\",\n        e"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "_utc\":\n            utc_now(),\n\n        \"engine\":\n            EXPECTED_ENGINE,\n\n        \"snapshot_id\":\n            snapshot_id,\n\n        \"source_frontier\":\n            \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n\n        \"eligibility_report\":\n            eligibility_report_path,\n\n        \"ranking_configuration\": {\n\n            \"weight_confidence\":\n                WEIGHT_CONFID"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": "  \"was not found.\"\n        )\n\n    print()\n    print(\"=\" * 100)\n    print(\"UPSTREAM FRONTIER\")\n    print(\"=\" * 100)\n\n    print(\n        \"Eligibility source : \"\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\"\n    )\n\n    print(\n        f\"Report : {eligibility_report}\"\n    )\n\n    report = load_eligibility_report(\n        eligibility_report\n    )\n\n    snapshot_id = report.get(\n"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "-------------------------------------------------------------------------\n\ndef locate_eligibility_report(capture_dir):\n\n    path = os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n    return path\n\n\ndef load_eligibility_report(path):\n\n    with open(\n        path,\n        \"r\",\n"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "mestamp_utc\":\n            utc_now(),\n\n        \"engine\":\n            EXPECTED_ENGINE,\n\n        \"snapshot_id\":\n            snapshot_id,\n\n        \"source_frontier\":\n            \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n\n        \"eligibility_report\":\n            eligibility_report_path,\n\n        \"ranking_configuration\": {\n\n            \"weight_confidence\":\n                WEIG"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "         \"was not found.\"\n        )\n\n    print()\n    print(\"=\" * 100)\n    print(\"UPSTREAM FRONTIER\")\n    print(\"=\" * 100)\n\n    print(\n        \"Eligibility source : \"\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\"\n    )\n\n    print(\n        f\"Report : {eligibility_report}\"\n    )\n\n    report = load_eligibility_report(\n        eligibility_report\n    )\n\n    snapshot_id = rep"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+            "snippet": "------------------------------------------------------------------------------\n\ndef locate_eligibility_report(capture_dir):\n\n    path = os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n    return path\n\n\ndef load_eligibility_report(path):\n\n    with open(\n        path,\n        \"r\",\n        encoding=\"utf"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+            "snippet": "------------------------------------------------------------------------------\n\ndef locate_eligibility_report(capture_dir):\n\n    path = os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n    return path\n\n\ndef load_eligibility_report(path):\n\n    with open(\n        path,\n        \"r\",\n        encoding"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "g\n# the eligibility logic.\n#\n# This prevents Frontier duplication.\n# --------------------------------------------------------------------------------------------------\n\ndef locate_eligibility_report(capture_dir):\n\n    path = os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n  "
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "= os.path.join(\n        capture_dir,\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    if not os.path.isfile(path):\n        return None\n\n    return path\n\n\ndef load_eligibility_report(path):\n\n    with open(\n        path,\n        \"r\",\n        encoding=\"utf-8\"\n    ) as f:\n\n        return json.load(f)\n\n\n# -----------------------------------------------------------"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "-----------------------------------------------------------------------------------------------\n\ndef build_report(\n    production_before,\n    production_after,\n    capture_db,\n    eligibility_report_path,\n    snapshot_id,\n    all_eligible,\n    selected,\n    rejected,\n):\n\n    return {\n\n        \"frontier\":\n            \"LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1\",\n\n     "
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "ine\":\n            EXPECTED_ENGINE,\n\n        \"snapshot_id\":\n            snapshot_id,\n\n        \"source_frontier\":\n            \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n\n        \"eligibility_report\":\n            eligibility_report_path,\n\n        \"ranking_configuration\": {\n\n            \"weight_confidence\":\n                WEIGHT_CONFIDENCE,\n\n            \"weight_available_weig"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": ",\n\n        \"snapshot_id\":\n            snapshot_id,\n\n        \"source_frontier\":\n            \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n\n        \"eligibility_report\":\n            eligibility_report_path,\n\n        \"ranking_configuration\": {\n\n            \"weight_confidence\":\n                WEIGHT_CONFIDENCE,\n\n            \"weight_available_weight\":\n                WEIGHT_AVAIL"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 135,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 11,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "report_path",
+          "write"
+        ],
+        "invocation_terms": [
+          "entrypoint"
+        ],
+        "contexts": [
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "2026-08-24T17:31:52.120346+00:00\",\n  \"project_root\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer_name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"downstream_frontier\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"downstream_frontier_sha256_before\": \"bab964f7ba"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "b4ab68ec8ab6927da5bd1a8e6d9\",\n  \"production_source_invariant\": true,\n  \"exact_report_artifacts\": [],\n  \"producer_candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e27"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "_report_artifacts\": [],\n  \"producer_candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"name_m"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "nces\": []\n    }\n  ],\n  \"producer_resolution\": {\n    \"status\": \"RESOLVED\",\n    \"method\": \"EXACT_PRODUCER_FILENAME\",\n    \"candidate\": {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e27"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": " \"method\": \"EXACT_PRODUCER_FILENAME\",\n    \"candidate\": {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"name_m"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "    \"line\": 228,\n      \"matches\": [\n        \"CONSUMER_PATTERN:eligible_pool\"\n      ],\n      \"text\": \"\\\"eligible_pool\\\",\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"line\": 381,\n      \"matches\": [\n        \"PRODUCER_PATTERN:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n        \"PRODUCER_PATTERN:ELIGIBILITY_NO_TRADE_GATE\",\n        \"PRODUCER_P"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "DUCER_PATTERN:SIGNAL_ELIGIBILITY\"\n      ],\n      \"text\": \"\\\"frontier\\\": \\\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\\\",\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"line\": 698,\n      \"matches\": [\n        \"EXACT_REPORT_NAME\",\n        \"PRODUCER_PATTERN:SIGNAL_ELIGIBILITY\"\n      ],\n      \"text\": \"\\\"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPOR"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "b3fc\",\n      \"historical_path_hints\": [\n        \"_report\",\n        \"report\"\n      ]\n    }\n  ],\n  \"possible_report_artifacts\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e27"
+          },
+          {
+            "term": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+            "snippet": "     ]\n    }\n  ],\n  \"possible_report_artifacts\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"score\""
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "31:52.120346+00:00\",\n  \"project_root\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"target_report\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\",\n  \"target_producer_name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n  \"downstream_frontier\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\",\n  \"downstream_frontier_sha256_before\": \"bab964f"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "7da5bd1a8e6d9\",\n  \"production_source_invariant\": true,\n  \"exact_report_artifacts\": [],\n  \"producer_candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \""
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "cts\": [],\n  \"producer_candidates\": [\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"nam"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "}\n  ],\n  \"producer_resolution\": {\n    \"status\": \"RESOLVED\",\n    \"method\": \"EXACT_PRODUCER_FILENAME\",\n    \"candidate\": {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \""
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "ACT_PRODUCER_FILENAME\",\n    \"candidate\": {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"name\": \"ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"size\": 21139,\n      \"modified_time\": \"2026-08-23T16:54:08.642490+00:00\",\n      \"sha256\": \"e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b\",\n      \"nam"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "8,\n      \"matches\": [\n        \"CONSUMER_PATTERN:eligible_pool\"\n      ],\n      \"text\": \"\\\"eligible_pool\\\",\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py\",\n      \"line\": 381,\n      \"matches\": [\n        \"PRODUCER_PATTERN:LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE\",\n        \"PRODUCER_PATTERN:ELIGIBILITY_NO_TRADE_GATE\",\n        \"PRODUCE"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 119,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 14,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+            "snippet": "       x for x in evaluations\n        if x[\"eligible\"]\n    ]\n\n    no_trade = [\n        x for x in evaluations\n        if not x[\"eligible\"]\n    ]\n\n    return {\n        \"frontier\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n        \"timestamp_utc\": utc_now().isoformat(),\n\n        \"production_db\": {\n            \"path\": PRODUCTION_DB,\n            \"before\": production_before,\n            \"after\": prod"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": " x in evaluations\n        if x[\"eligible\"]\n    ]\n\n    no_trade = [\n        x for x in evaluations\n        if not x[\"eligible\"]\n    ]\n\n    return {\n        \"frontier\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n        \"timestamp_utc\": utc_now().isoformat(),\n\n        \"production_db\": {\n            \"path\": PRODUCTION_DB,\n            \"before\": production_before,\n            \"af"
+          },
+          {
+            "term": "ELIGIBILITY_NO_TRADE",
+            "snippet": " = build_report(\n        production_before,\n        production_after,\n        capture_db,\n        snapshot_id,\n        evaluations,\n    )\n\n    report_name = (\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )\n\n    with open(\n        report_path,\n        \"w\",\n        encoding=\"utf-8\"\n    )"
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": "  x for x in evaluations\n        if x[\"eligible\"]\n    ]\n\n    no_trade = [\n        x for x in evaluations\n        if not x[\"eligible\"]\n    ]\n\n    return {\n        \"frontier\": \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1\",\n        \"timestamp_utc\": utc_now().isoformat(),\n\n        \"production_db\": {\n            \"path\": PRODUCTION_DB,\n            \"before\": production_before,\n      "
+          },
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": " report = build_report(\n        production_before,\n        production_after,\n        capture_db,\n        snapshot_id,\n        evaluations,\n    )\n\n    report_name = (\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )\n\n    with open(\n        report_path,\n        \"w\",\n        encoding=\"utf"
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+            "snippet": "\n\n    report = build_report(\n        production_before,\n        production_after,\n        capture_db,\n        snapshot_id,\n        evaluations,\n    )\n\n    report_name = (\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )\n\n    with open(\n        report_path,\n        \"w\",\n        encoding=\"utf-8\"\n    ) as f:\n     "
+          },
+          {
+            "term": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT",
+            "snippet": "\n\n    report = build_report(\n        production_before,\n        production_after,\n        capture_db,\n        snapshot_id,\n        evaluations,\n    )\n\n    report_name = (\n        \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"\n    )\n\n    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )\n\n    with open(\n        report_path,\n        \"w\",\n        encoding=\"utf-8\"\n    ) as f:\n"
+          },
+          {
+            "term": "runtime",
+            "snippet": "NOT NULL\n        GROUP BY snapshot_id\n        ORDER BY MAX(timestamp) DESC\n        LIMIT 1\n        \"\"\",\n        (EXPECTED_ENGINE,),\n    ).fetchone()\n\n    if not row:\n        raise RuntimeError(\"No FUSION_v0.5 snapshot found.\")\n\n    snapshot_id = row[0]\n\n    rows = conn.execute(\n        \"\"\"\n        SELECT\n            id,\n            timestamp,\n            asset,\n   "
+          },
+          {
+            "term": "runtime",
+            "snippet": " CAPTURE\n    # ----------------------------------------------------------------------------------------------\n\n    latest = find_latest_capture()\n\n    if not latest:\n        raise RuntimeError(\n            \"No disposable live capture DB found.\"\n        )\n\n    capture_dir, capture_db = latest\n\n    print()\n    print(\"=\" * 100)\n    print(\"LIVE CAPTURE\")\n    print(\"=\" "
+          },
+          {
+            "term": "runtime",
+            "snippet": "t(\"ELIGIBILITY INPUT CONTRACT\")\n        print(\"=\" * 100)\n\n        if missing:\n            print(\"CONTRACT : FAIL\")\n            print(\"Missing columns:\", missing)\n            raise RuntimeError(\n                f\"Eligibility contract failed: {missing}\"\n            )\n\n        print(\"CONTRACT : PASS\")\n\n        snapshot_id, rows = load_latest_snapshot(conn)\n\n        pr"
+          },
+          {
+            "term": "runtime",
+            "snippet": "rint(\"CURRENT LIVE SNAPSHOT\")\n        print(\"=\" * 100)\n\n        print(f\"Snapshot : {snapshot_id}\")\n        print(f\"Rows     : {len(rows)}\")\n\n        if not rows:\n            raise RuntimeError(\n                \"Current FUSION_v0.5 snapshot contains no rows.\"\n            )\n\n        # -----------------------------------------------------------------------------------"
+          },
+          {
+            "term": "runtime",
+            "snippet": "A256  : {production_after['sha256']}\"\n    )\n\n    print(\n        \"PRODUCTION DB INVARIANT : \"\n        + (\"PASS\" if unchanged else \"FAIL\")\n    )\n\n    if not unchanged:\n        raise RuntimeError(\n            \"CRITICAL: Production DB changed.\"\n        )\n\n    # ----------------------------------------------------------------------------------------------\n    # FINAL VE"
+          },
+          {
+            "term": "runtime",
+            "snippet": "     : \"\n            \"TRADE_CANDIDATES_PRESENT\"\n        )\n    else:\n        print(\n            \"FRONTIER VERDICT       : \"\n            \"NO_TRADE\"\n        )\n\n    print()\n    print(\"Runtime report :\", report_path)\n\n    print()\n    print(\"=\" * 100)\n    print(\"FINAL SAFETY VERDICT\")\n    print(\"=\" * 100)\n\n    print(\"Production DB writes : NONE\")\n    print(\"INSERT       "
+          },
+          {
+            "term": "execution",
+            "snippet": "         \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"order_execution\": False,\n        },\n    }\n\n\n# --------------------------------------------------------------------------------------------------\n# MAIN\n# -----------------------------------------"
+          },
+          {
+            "term": "execution",
+            "snippet": "        : NONE\")\n    print(\"Score reconstruction       : NONE\")\n    print(\"Synthetic data             : FORBIDDEN\")\n    print(\"Live data injection        : NONE\")\n    print(\"Order execution            : NONE\")\n\n    print()\n    print(\"=\" * 100)\n    print(\"PRODUCTION BASELINE\")\n    print(\"=\" * 100)\n\n    production_before = production_baseline()\n\n    print(f\"Rows   : {p"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "score": 77,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_strength": 12,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "output",
+          "output_path",
+          "report"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "SIGNAL_ELIGIBILITY",
+            "snippet": " be the prerequisite report.\nELIGIBILITY_TERMS = (\n    \"eligibility\",\n    \"eligible\",\n    \"eligibility_report\",\n    \"eligible_signal\",\n    \"eligible_signals\",\n    \"no_trade\",\n    \"signal_eligibility\",\n)\n\nVERIFIED_TERMS = (\n    \"verified\",\n    \"verification\",\n    \"forensic\",\n    \"reconciliation\",\n    \"readiness\",\n    \"gate\",\n)\n\nREPORT_TERMS = (\n    \"report\",\n    \"result\",\n    "
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": " PROJECT_ROOT\n    / \"ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py\"\n)\n\nSELF_NAME = Path(__file__).name\n\nREPORT_NAME = (\n    \"PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY\"\n    \"_ISOLATED_STAGING_REPORT.json\"\n)\n\nMAX_FILE_SIZE = 50 * 1024 * 1024\n\nIGNORED_DIR_NAMES = {\n    \"__pycache__\",\n    \".git\",\n    \".venv\",\n    \"venv\",\n    \"env\",\n    \"n"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "n\",\n    \".txt\",\n    \".log\",\n    \".csv\",\n    \".md\",\n}\n\n# Strong indicators that a file may be the prerequisite report.\nELIGIBILITY_TERMS = (\n    \"eligibility\",\n    \"eligible\",\n    \"eligibility_report\",\n    \"eligible_signal\",\n    \"eligible_signals\",\n    \"no_trade\",\n    \"signal_eligibility\",\n)\n\nVERIFIED_TERMS = (\n    \"verified\",\n    \"verification\",\n    \"forensic\",\n    \"reconcili"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "=========\n\ndef analyze_frontier() -> dict:\n    result = {\n        \"exists\": TARGET_FRONTIER.exists(),\n        \"path\": str(TARGET_FRONTIER),\n        \"python_parse\": False,\n        \"eligibility_report_references\": [],\n        \"path_references\": [],\n        \"open_references\": [],\n        \"environment_references\": [],\n        \"string_literals\": [],\n    }\n\n    if not TARGET_FRONTI"
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "isitor.strings\n\n    for value in visitor.strings:\n        normalized = normalize_text(value)\n\n        if any(term in normalized for term in ELIGIBILITY_TERMS):\n            result[\"eligibility_report_references\"].append(value)\n\n        if (\n            \"report\" in normalized\n            or \"eligible\" in normalized\n            or \"eligibility\" in normalized\n        ):\n         "
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "       {\n                    \"line\": line_number,\n                    \"text\": line.strip(),\n                }\n            )\n\n    # De-duplicate while preserving order.\n    result[\"eligibility_report_references\"] = list(\n        dict.fromkeys(result[\"eligibility_report_references\"])\n    )\n\n    result[\"path_references\"] = list(\n        dict.fromkeys(result[\"path_references\"])\n "
+          },
+          {
+            "term": "eligibility_report",
+            "snippet": "\"text\": line.strip(),\n                }\n            )\n\n    # De-duplicate while preserving order.\n    result[\"eligibility_report_references\"] = list(\n        dict.fromkeys(result[\"eligibility_report_references\"])\n    )\n\n    result[\"path_references\"] = list(\n        dict.fromkeys(result[\"path_references\"])\n    )\n\n    return result\n\n\n# =========================================="
+          },
+          {
+            "term": "runtime",
+            "snippet": "       or \"eligible\" in normalized\n            or \"eligibility\" in normalized\n        ):\n            result[\"path_references\"].append(value)\n\n    # Search source itself for likely runtime constructions.\n    lines = source.splitlines()\n\n    for line_number, line in enumerate(lines, 1):\n        normalized = normalize_text(line)\n\n        if (\n            \"report\" in n"
+          },
+          {
+            "term": "runtime",
+            "snippet": "======================================\n# ISOLATED STAGING\n# ==================================================================================================\n\ndef create_isolated_runtime() -> tuple[Path, Path]:\n    runtime_dir = Path(\n        tempfile.mkdtemp(\n            prefix=\"arunda_verified_eligibility_isolated_\"\n        )\n    ).resolve()\n\n    staging_dir = r"
+          },
+          {
+            "term": "runtime",
+            "snippet": "==\n# ISOLATED STAGING\n# ==================================================================================================\n\ndef create_isolated_runtime() -> tuple[Path, Path]:\n    runtime_dir = Path(\n        tempfile.mkdtemp(\n            prefix=\"arunda_verified_eligibility_isolated_\"\n        )\n    ).resolve()\n\n    staging_dir = runtime_dir / \"prerequisite\"\n    stag"
+          },
+          {
+            "term": "runtime",
+            "snippet": "e() -> tuple[Path, Path]:\n    runtime_dir = Path(\n        tempfile.mkdtemp(\n            prefix=\"arunda_verified_eligibility_isolated_\"\n        )\n    ).resolve()\n\n    staging_dir = runtime_dir / \"prerequisite\"\n    staging_dir.mkdir(\n        parents=True,\n        exist_ok=True,\n    )\n\n    return runtime_dir, staging_dir\n\n\ndef stage_candidate(\n    source_path: Path,\n "
+          },
+          {
+            "term": "runtime",
+            "snippet": "gibility_isolated_\"\n        )\n    ).resolve()\n\n    staging_dir = runtime_dir / \"prerequisite\"\n    staging_dir.mkdir(\n        parents=True,\n        exist_ok=True,\n    )\n\n    return runtime_dir, staging_dir\n\n\ndef stage_candidate(\n    source_path: Path,\n    staging_dir: Path,\n) -> dict:\n\n    staged_path = staging_dir / source_path.name\n\n    shutil.copy2(\n        sourc"
+          },
+          {
+            "term": "runtime",
+            "snippet": " root : {PROJECT_ROOT}\")\n    print(f\"Target       : {TARGET_FRONTIER}\")\n    print(f\"Target exists: {TARGET_FRONTIER.exists()}\")\n\n    if not TARGET_FRONTIER.exists():\n        raise RuntimeError(\n            \"Target frontier was not found.\"\n        )\n\n    before_frontier_hash = sha256_file(TARGET_FRONTIER)\n\n    print(f\"Target SHA256: {before_frontier_hash}\")\n\n    ban"
+          },
+          {
+            "term": "runtime",
+            "snippet": "E\")\n        print(\"Production DB writes    : NONE\")\n        print(\"Synthetic report        : NONE\")\n        print(\"Network access          : NONE\")\n        print()\n        print(f\"Runtime report : {output_path}\")\n\n        return\n\n    print(\"STATUS : RESOLVED\")\n    print()\n    print(f\"SELECTED REPORT : {selected['path']}\")\n    print(f\"SCORE           : {selected['sc"
+          },
+          {
+            "term": "runtime",
+            "snippet": "ELECTED REPORT : {selected['path']}\")\n    print(f\"SCORE           : {selected['score']}\")\n    print(f\"SHA256          : {selected['sha256']}\")\n\n    banner(\"ISOLATED STAGING\")\n\n    runtime_dir, staging_dir = create_isolated_runtime()\n\n    print(f\"Runtime directory : {runtime_dir}\")\n    print(f\"Staging directory : {staging_dir}\")\n\n    staged = stage_candidate(\n      "
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "score": 82,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 16,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "output_path",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "--------------------------------\n\n    candidate_pool = normalize_count(\n        first_present(\n            report,\n            [\n                \"candidate_pool\",\n                \"eligible_pool\",\n                \"candidates_received\",\n                \"candidate_count\",\n                \"pool_size\",\n            ],\n            0,\n        )\n    )\n\n    selected_count = normal"
+          },
+          {
+            "term": "runtime",
+            "snippet": "ION DB INVARIANT : \"\n        + (\n            \"PASS\"\n            if invariant[\"unchanged\"]\n            else \"FAIL\"\n        )\n    )\n\n    if not invariant[\"unchanged\"]:\n        raise RuntimeError(\n            \"Production database changed unexpectedly.\"\n        )\n\n    # =========================================================================\n    # Verdict\n    # ======"
+          },
+          {
+            "term": "runtime",
+            "snippet": "  )\n\n    print(\n        f\"FRONTIER VERDICT           : \"\n        f\"{frontier_verdict}\"\n    )\n\n    # =========================================================================\n    # Runtime report\n    # =========================================================================\n\n    output_path = (\n        capture_dir\n        / OUTPUT_REPORT_NAME\n    )\n\n    output = {\n"
+          },
+          {
+            "term": "runtime",
+            "snippet": "oding=\"utf-8\",\n    ) as f:\n\n        json.dump(\n            output,\n            f,\n            indent=2,\n            ensure_ascii=False,\n        )\n\n    print()\n    print(\n        f\"Runtime report : \"\n        f\"{output_path}\"\n    )\n\n    # =========================================================================\n    # Final safety\n    # ==============================="
+          },
+          {
+            "term": "execution",
+            "snippet": "# -*- coding: utf-8 -*-\n\n\"\"\"\nARUNDA TRADER\nLIVE PAPER EXECUTION SAFETY GATE v0.2\n\nPurpose:\n    Consume ONLY the output of the verified\n    LIVE TRADE PLAN + STOP/TP CONTRACT frontier.\n\n    This gate does NOT execute real orders.\n\nSafety:\n    -"
+          },
+          {
+            "term": "execution",
+            "snippet": "ngine NEVER executed\n    - No historical repair\n    - No direction inference\n    - No score reconstruction\n    - No synthetic data\n    - No live data injection\n    - No real order execution\n    - Paper execution is analytical only\n\"\"\"\n\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport os\nimport sqlite3\nfrom datetime import datetime, timezone\nfrom "
+          },
+          {
+            "term": "execution",
+            "snippet": "   - No historical repair\n    - No direction inference\n    - No score reconstruction\n    - No synthetic data\n    - No live data injection\n    - No real order execution\n    - Paper execution is analytical only\n\"\"\"\n\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport os\nimport sqlite3\nfrom datetime import datetime, timezone\nfrom pathlib import Path\nfr"
+          },
+          {
+            "term": "execution",
+            "snippet": "E_CAPTURE_ROOT\",\n        r\"C:\\Users\\ASUS\\AppData\\Local\\Temp\",\n    )\n)\n\nUPSTREAM_REPORT_NAME = (\n    \"LIVE_TRADE_PLAN_STOP_TP_REPORT.json\"\n)\n\nOUTPUT_REPORT_NAME = (\n    \"LIVE_PAPER_EXECUTION_SAFETY_GATE_REPORT.json\"\n)\n\nEXPECTED_ENGINE = \"FUSION_v0.5\"\n\nEXPECTED_UPSTREAM_FRONTIERS = {\n    \"LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1\",\n    \"LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0."
+          },
+          {
+            "term": "execution",
+            "snippet": "-------------------------------\n    # Empty upstream is VALID.\n    #\n    # This is important:\n    # The current project state has no eligible candidate.\n    # That must produce NO_EXECUTION, not a schema crash.\n    # -------------------------------------------------------------------------\n\n    if (\n        candidate_pool == 0\n        and selected_count == 0\n    ):\n "
+          },
+          {
+            "term": "execution",
+            "snippet": "_ENTRY\"\n                )\n\n    return (\n        len(reasons) == 0,\n        reasons,\n    )\n\n\n# =============================================================================\n# PAPER EXECUTION EVALUATION\n# =============================================================================\n\ndef evaluate_candidates(\n    upstream: dict[str, Any],\n) -> tuple[\n    str,\n    list[di"
+          },
+          {
+            "term": "execution",
+            "snippet": "rrent project state:\n    # no candidates.\n    # -------------------------------------------------------------------------\n\n    if not candidates:\n\n        return (\n            \"NO_EXECUTION\",\n            [],\n            [],\n        )\n\n    accepted: list[dict[str, Any]] = []\n    rejected: list[dict[str, Any]] = []\n\n    for index, candidate in enumerate(\n        candid"
+          },
+          {
+            "term": "execution",
+            "snippet": "ons,\n                }\n            )\n\n    if accepted:\n\n        return (\n            \"PAPER_READY\",\n            accepted,\n            rejected,\n        )\n\n    return (\n        \"NO_EXECUTION\",\n        accepted,\n        rejected,\n    )\n\n\n# =============================================================================\n# PRODUCTION INVARIANT\n# ============================"
+          },
+          {
+            "term": "execution",
+            "snippet": "====\n# MAIN\n# =============================================================================\n\ndef main() -> None:\n\n    print(\"=\" * 100)\n    print(\n        \"ARUNDA TRADER LIVE PAPER EXECUTION \"\n        \"SAFETY GATE v0.2\"\n    )\n    print(\"=\" * 100)\n\n    print()\n    print(\"OBJECTIVE:\")\n    print(\n        \"  Consume ONLY candidates already passed by the\"\n    )\n    print(\n"
+          },
+          {
+            "term": "execution",
+            "snippet": "\"  Consume ONLY candidates already passed by the\"\n    )\n    print(\n        \"  LIVE TRADE PLAN + STOP/TP CONTRACT frontier.\"\n    )\n    print()\n    print(\n        \"  Determine PAPER execution readiness only.\"\n    )\n    print(\n        \"  No real order is created or submitted.\"\n    )\n\n    print()\n    print(\"=\" * 100)\n    print(\"SAFETY POLICY\")\n    print(\"=\" * 100)\n\n    p"
+          },
+          {
+            "term": "execution",
+            "snippet": "n       : NONE\"\n    )\n    print(\n        \"Synthetic data             : FORBIDDEN\"\n    )\n    print(\n        \"Live data injection        : NONE\"\n    )\n    print(\n        \"REAL ORDER EXECUTION       : NONE\"\n    )\n    print(\n        \"PAPER EXECUTION            : ANALYTICAL ONLY\"\n    )\n\n    # =========================================================================\n    # "
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "score": 82,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 16,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "output_path",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "plementation.\n\n    Empty collections are valid and mean NO_TRADE.\n    \"\"\"\n\n    candidate_keys = [\n        \"selected_candidates\",\n        \"selected\",\n        \"candidates\",\n        \"eligible_pool\",\n    ]\n\n    for key in candidate_keys:\n        value = report.get(key)\n\n        if isinstance(value, list):\n            return value\n\n    # Explicitly empty upstream pool.\n    ca"
+          },
+          {
+            "term": "runtime",
+            "snippet": "----------------------------------------\n    # Print\n    # ------------------------------------------------------------\n\n    print_report(output)\n\n    print()\n    print(\n        f\"Runtime report : {output_path}\"\n    )\n\n    # ------------------------------------------------------------\n    # Hard safety assertion\n    # -----------------------------------------------"
+          },
+          {
+            "term": "runtime",
+            "snippet": "---------------------------\n    # Hard safety assertion\n    # ------------------------------------------------------------\n\n    if baseline_before != baseline_after:\n        raise RuntimeError(\n            \"CRITICAL SAFETY FAILURE: \"\n            \"Production database changed.\"\n        )\n\n\nif __name__ == \"__main__\":\n    main()"
+          },
+          {
+            "term": "execution",
+            "snippet": "es\n      - never injects synthetic/live data\n      - does not re-audit previously verified frontiers\n\nSafety:\n    Production DB = READ ONLY\n    Capture DB     = READ ONLY\n    Real execution = FORBIDDEN\n\"\"\"\n\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport os\nimport sqlite3\nimport sys\nfrom datetime import datetime, timezone\nfrom pathlib import Pat"
+          },
+          {
+            "term": "execution",
+            "snippet": "] = pnl_pct\n\n    # ------------------------------------------------------------\n    # Stop / TP observation\n    #\n    # IMPORTANT:\n    # A single close price cannot prove intrabar execution order.\n    # Therefore we only classify an exact stop/TP hit when the\n    # observed close equals/crosses the configured level.\n    # Otherwise the position remains observationall"
+          },
+          {
+            "term": "execution",
+            "snippet": "    \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"real_order_execution\": False,\n            \"paper_execution_only\": True,\n        },\n\n        \"verdict\": {\n            \"upstream_consumed\": True,\n            \"outcome_reconciliation\": (\n                "
+          },
+          {
+            "term": "execution",
+            "snippet": "        \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"real_order_execution\": False,\n            \"paper_execution_only\": True,\n        },\n\n        \"verdict\": {\n            \"upstream_consumed\": True,\n            \"outcome_reconciliation\": (\n                \"NOT_PERFORMED\"\n                if not"
+          },
+          {
+            "term": "execution",
+            "snippet": "    : NONE\")\n    print(\"Score reconstruction      : NONE\")\n    print(\"Synthetic data             : FORBIDDEN\")\n    print(\"Live data injection        : NONE\")\n    print(\"REAL ORDER EXECUTION       : NONE\")\n    print(\"PAPER EXECUTION            : ANALYTICAL ONLY\")\n\n    print()\n    print(\"=\" * 100)\n    print(\"PRODUCTION BASELINE\")\n    print(\"=\" * 100)\n\n    before = repo"
+          },
+          {
+            "term": "execution",
+            "snippet": "on      : NONE\")\n    print(\"Synthetic data             : FORBIDDEN\")\n    print(\"Live data injection        : NONE\")\n    print(\"REAL ORDER EXECUTION       : NONE\")\n    print(\"PAPER EXECUTION            : ANALYTICAL ONLY\")\n\n    print()\n    print(\"=\" * 100)\n    print(\"PRODUCTION BASELINE\")\n    print(\"=\" * 100)\n\n    before = report[\"production_database\"][\"before\"]\n\n    p"
+          },
+          {
+            "term": "execution",
+            "snippet": "int(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    if not report[\"results\"]:\n        print()\n        print(\n            \"No eligible upstream candidate exists.\"\n   "
+          },
+          {
+            "term": "execution",
+            "snippet": "   print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    if not report[\"results\"]:\n        print()\n        print(\n            \"No eligible upstream candidate exists.\"\n        )\n        print(\n            \"N"
+          },
+          {
+            "term": "executed",
+            "snippet": "ed\": (\n                baseline_before == baseline_after\n            ),\n        },\n\n        \"safety\": {\n            \"production_db_modified\": False,\n            \"production_engine_executed\": False,\n            \"historical_repair\": False,\n            \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n        "
+          },
+          {
+            "term": "executed",
+            "snippet": "print(\"UPDATE               : NONE\")\n    print(\"DELETE               : NONE\")\n    print(\"DDL                  : NONE\")\n    print(\n        \"Production engine    : \"\n        f\"{'NOT EXECUTED' if not safety['production_engine_executed'] else 'EXECUTED'}\"\n    )\n    print(\"Historical repair    : NONE\")\n    print(\"Direction inference  : NONE\")\n    print(\"Score reconstruct"
+          },
+          {
+            "term": "executed",
+            "snippet": "int(\"DELETE               : NONE\")\n    print(\"DDL                  : NONE\")\n    print(\n        \"Production engine    : \"\n        f\"{'NOT EXECUTED' if not safety['production_engine_executed'] else 'EXECUTED'}\"\n    )\n    print(\"Historical repair    : NONE\")\n    print(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data     "
+          },
+          {
+            "term": "executed",
+            "snippet": "         : NONE\")\n    print(\"DDL                  : NONE\")\n    print(\n        \"Production engine    : \"\n        f\"{'NOT EXECUTED' if not safety['production_engine_executed'] else 'EXECUTED'}\"\n    )\n    print(\"Historical repair    : NONE\")\n    print(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    pr"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "score": 77,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 15,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "output_path",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "output_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "       \"eligible_candidates\",\n        \"candidates\",\n    )\n\n    if any(\n        isinstance(report.get(field), list)\n        for field in candidate_fields\n    ):\n        return\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, (dict, list)):\n        return\n\n    # Known zero-candidate reports can legitimately expose\n    # the result only thr"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": ",\n        \"candidates\",\n    )\n\n    if any(\n        isinstance(report.get(field), list)\n        for field in candidate_fields\n    ):\n        return\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, (dict, list)):\n        return\n\n    # Known zero-candidate reports can legitimately expose\n    # the result only through summary metadata.\n    s"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "if any(\n        isinstance(report.get(field), list)\n        for field in candidate_fields\n    ):\n        return\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, (dict, list)):\n        return\n\n    # Known zero-candidate reports can legitimately expose\n    # the result only through summary metadata.\n    summary_fields = (\n        \"selected"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "     value = report.get(field)\n\n        if isinstance(value, list):\n            return [\n                x for x in value\n                if isinstance(x, dict)\n            ]\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, list):\n        return [\n            x for x in eligible_pool\n            if isinstance(x, dict)\n        ]\n\n    if i"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "d)\n\n        if isinstance(value, list):\n            return [\n                x for x in value\n                if isinstance(x, dict)\n            ]\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, list):\n        return [\n            x for x in eligible_pool\n            if isinstance(x, dict)\n        ]\n\n    if isinstance(eligible_pool, dic"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "st):\n            return [\n                x for x in value\n                if isinstance(x, dict)\n            ]\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, list):\n        return [\n            x for x in eligible_pool\n            if isinstance(x, dict)\n        ]\n\n    if isinstance(eligible_pool, dict):\n        for field in (\n        "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "             if isinstance(x, dict)\n            ]\n\n    eligible_pool = report.get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, list):\n        return [\n            x for x in eligible_pool\n            if isinstance(x, dict)\n        ]\n\n    if isinstance(eligible_pool, dict):\n        for field in (\n            \"candidates\",\n            \"eligible_candidates\",\n         "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "get(\"eligible_pool\")\n\n    if isinstance(eligible_pool, list):\n        return [\n            x for x in eligible_pool\n            if isinstance(x, dict)\n        ]\n\n    if isinstance(eligible_pool, dict):\n        for field in (\n            \"candidates\",\n            \"eligible_candidates\",\n            \"selected_candidates\",\n            \"items\",\n        ):\n            value = "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": ", dict):\n        for field in (\n            \"candidates\",\n            \"eligible_candidates\",\n            \"selected_candidates\",\n            \"items\",\n        ):\n            value = eligible_pool.get(field)\n\n            if isinstance(value, list):\n                return [\n                    x for x in value\n                    if isinstance(x, dict)\n                ]\n\n   "
+          },
+          {
+            "term": "runtime",
+            "snippet": "_before == production_after\n    )\n\n    print(\n        \"PRODUCTION DB INVARIANT : \"\n        + (\"PASS\" if invariant_pass else \"FAIL\")\n    )\n\n    if not invariant_pass:\n        raise RuntimeError(\n            \"Production DB changed unexpectedly.\"\n        )\n\n    # ---------------------------------------------------------------------------------------------\n    # Report"
+          },
+          {
+            "term": "runtime",
+            "snippet": "ES_AVAILABLE\"\n        )\n    else:\n        frontier_verdict = \"NO_TRADE_RISK\"\n\n    print(\n        f\"FRONTIER VERDICT             : {frontier_verdict}\"\n    )\n\n    print(\n        f\"\\nRuntime report : {output_path}\"\n    )\n\n    print(\"\\n\" + \"=\" * 100)\n    print(\"FINAL SAFETY VERDICT\")\n    print(\"=\" * 100)\n\n    print(\"Production DB writes : NONE\")\n    print(\"INSERT      "
+          },
+          {
+            "term": "execution",
+            "snippet": "ction DB.\n- Do NOT reconstruct direction.\n- Do NOT reconstruct scores.\n- Do NOT inject live data.\n- Do NOT repair historical data.\n- Do NOT place orders.\n- Do NOT perform exchange execution.\n- Do NOT invent candidates.\n- Empty upstream candidate pool => NO_TRADE.\n\nUpstream frontier:\n    ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING + MULTI-ASSET DECISION GATE v0.1\n\nOutp"
+          },
+          {
+            "term": "execution",
+            "snippet": "         \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"order_execution\": False,\n        },\n\n        \"production_baseline\": production_before,\n\n        \"production_after\": production_after,\n\n        \"production_invariant\": (\n            production_bef"
+          },
+          {
+            "term": "execution",
+            "snippet": "evaluations\": evaluated,\n\n        \"frontier_verdict\": (\n            \"RISK_CANDIDATES_AVAILABLE\"\n            if accepted\n            else \"NO_TRADE_RISK\"\n        ),\n\n        \"order_execution\": False,\n    }\n\n\n# =================================================================================================\n# MAIN\n# ====================================================="
+          },
+          {
+            "term": "execution",
+            "snippet": "duction engine run : NO\nHistorical repair     : NONE\nDirection inference   : NONE\nScore reconstruction  : NONE\nSynthetic data        : FORBIDDEN\nLive data injection   : NONE\nOrder execution       : NONE\n\"\"\"\n    )\n\n    # ---------------------------------------------------------------------------------------------\n    # Production baseline\n    # -----------------------"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "score": 73,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 14,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "tr, Any]]:\n    \"\"\"\n    Accept candidate collections emitted by the existing upstream reports.\n\n    Supported forms:\n      selected\n      selected_candidates\n      candidates\n      eligible_pool\n      candidate_pool\n    \"\"\"\n\n    candidates = first_present(\n        report,\n        \"selected\",\n        \"selected_candidates\",\n        \"candidates\",\n        \"eligible_pool\",\n   "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "      eligible_pool\n      candidate_pool\n    \"\"\"\n\n    candidates = first_present(\n        report,\n        \"selected\",\n        \"selected_candidates\",\n        \"candidates\",\n        \"eligible_pool\",\n        \"candidate_pool\",\n    )\n\n    if candidates is None:\n        return []\n\n    if isinstance(candidates, list):\n        return [\n            x for x in candidates\n          "
+          },
+          {
+            "term": "runtime",
+            "snippet": " print(f\"After SHA256  : {after['sha256']}\")\n    print(\n        \"PRODUCTION DB INVARIANT : \"\n        + (\"PASS\" if unchanged else \"FAIL\")\n    )\n\n    if not unchanged:\n        raise RuntimeError(\n            \"Production DB invariant violated.\"\n        )\n\n    report_out = {\n        \"frontier\": (\n            \"LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1\"\n      "
+          },
+          {
+            "term": "runtime",
+            "snippet": "    : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"Runtime report : \"\n        f\"{OUTPUT_REPORT}\"\n    )\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n\nif __name__ == \"__main_"
+          },
+          {
+            "term": "execution",
+            "snippet": "is READ ONLY.\n- Production engine is NOT executed.\n- No historical repair.\n- No direction inference.\n- No score reconstruction.\n- No synthetic/live data injection.\n- No real order execution.\n- No production writes.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport os\nimport sqlite3\nfrom datetime import datetime, timezone\nfrom pathlib import P"
+          },
+          {
+            "term": "execution",
+            "snippet": "    \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"real_order_execution\": False,\n            \"paper_execution\": \"analytical_only\",\n        },\n    }\n\n    CAPTURE_ROOT.mkdir(\n        parents=True,\n        exist_ok=True,\n    )\n\n    with OUTPUT_REPORT.ope"
+          },
+          {
+            "term": "execution",
+            "snippet": "        \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"real_order_execution\": False,\n            \"paper_execution\": \"analytical_only\",\n        },\n    }\n\n    CAPTURE_ROOT.mkdir(\n        parents=True,\n        exist_ok=True,\n    )\n\n    with OUTPUT_REPORT.open(\n        \"w\",\n        encoding=\"utf-"
+          },
+          {
+            "term": "execution",
+            "snippet": "int(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"Runtime report : \"\n        f\"{OUTPUT_REPORT}\"\n    )\n\n    print()\n    print(\n        \""
+          },
+          {
+            "term": "execution",
+            "snippet": "   print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"Runtime report : \"\n        f\"{OUTPUT_REPORT}\"\n    )\n\n    print()\n    print(\n        \"No real trading order was created, \""
+          },
+          {
+            "term": "executed",
+            "snippet": "R positions from the upstream lifecycle/outcome\nfrontiers and evaluate dynamic exit / mark-to-market state.\n\nSafety\n------\n- Production DB is READ ONLY.\n- Production engine is NOT executed.\n- No historical repair.\n- No direction inference.\n- No score reconstruction.\n- No synthetic/live data injection.\n- No real order execution.\n- No production writes.\n\"\"\"\n\nfrom __fu"
+          },
+          {
+            "term": "executed",
+            "snippet": "before,\n            \"after\": after,\n            \"unchanged\": unchanged,\n        },\n\n        \"safety\": {\n            \"production_db_modified\": False,\n            \"production_engine_executed\": False,\n            \"historical_repair\": False,\n            \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n        "
+          },
+          {
+            "term": "executed",
+            "snippet": "          : NONE\")\n    print(\"UPDATE               : NONE\")\n    print(\"DELETE               : NONE\")\n    print(\"DDL                  : NONE\")\n    print(\"Production engine    : NOT EXECUTED\")\n    print(\"Historical repair    : NONE\")\n    print(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Li"
+          },
+          {
+            "term": "executed",
+            "snippet": ")\n\n    print()\n    print(\n        \"Runtime report : \"\n        f\"{OUTPUT_REPORT}\"\n    )\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n\nif __name__ == \"__main__\":\n    main()"
+          },
+          {
+            "term": "launch",
+            "snippet": "= Path(r\"C:\\Users\\ASUS\\ArundaTrader\\arunda.db\")\n\nCAPTURE_ROOT = Path(\n    os.environ.get(\n        \"ARUNDA_LIVE_CAPTURE_DIR\",\n        r\"C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_76134ecc\",\n    )\n)\n\nOUTCOME_REPORT = (\n    CAPTURE_ROOT\n    / \"LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_REPORT.json\"\n)\n\nLIFECYCLE_REPORT = (\n    CAPTURE_ROOT\n    / \"LIVE_PAPER_"
+          },
+          {
+            "term": "output",
+            "snippet": "ROOT\n    / \"LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_REPORT.json\"\n)\n\nLIFECYCLE_REPORT = (\n    CAPTURE_ROOT\n    / \"LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_REPORT.json\"\n)\n\nOUTPUT_REPORT = (\n    CAPTURE_ROOT\n    / \"LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_REPORT.json\"\n)\n\n\ndef sha256_file(path: Path) -> str:\n    h = hashlib.sha256()\n\n    with path.ope"
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "score": 73,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 14,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "report_path",
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "\"\"\"\n    Correctly handles the actual upstream report structure.\n\n    Actual upstream structure:\n\n        candidate_pool       : integer\n        selected             : list\n        eligible_pool        : list\n        rejected             : list\n\n    Candidate collection priority:\n        1. selected\n        2. eligible_pool\n\n    If both are empty, this is a valid NO_TRADE"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "eger\n        selected             : list\n        eligible_pool        : list\n        rejected             : list\n\n    Candidate collection priority:\n        1. selected\n        2. eligible_pool\n\n    If both are empty, this is a valid NO_TRADE state.\n\n    IMPORTANT:\n    candidate_pool is a COUNT, not a candidate collection.\n    \"\"\"\n\n    selected = report.get(\"selected\", ["
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "f both are empty, this is a valid NO_TRADE state.\n\n    IMPORTANT:\n    candidate_pool is a COUNT, not a candidate collection.\n    \"\"\"\n\n    selected = report.get(\"selected\", [])\n    eligible_pool = report.get(\"eligible_pool\", [])\n\n    if selected is None:\n        selected = []\n\n    if eligible_pool is None:\n        eligible_pool = []\n\n    if not isinstance(selected, list):"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "valid NO_TRADE state.\n\n    IMPORTANT:\n    candidate_pool is a COUNT, not a candidate collection.\n    \"\"\"\n\n    selected = report.get(\"selected\", [])\n    eligible_pool = report.get(\"eligible_pool\", [])\n\n    if selected is None:\n        selected = []\n\n    if eligible_pool is None:\n        eligible_pool = []\n\n    if not isinstance(selected, list):\n        raise ValueError(\n "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "andidate collection.\n    \"\"\"\n\n    selected = report.get(\"selected\", [])\n    eligible_pool = report.get(\"eligible_pool\", [])\n\n    if selected is None:\n        selected = []\n\n    if eligible_pool is None:\n        eligible_pool = []\n\n    if not isinstance(selected, list):\n        raise ValueError(\n            \"Upstream 'selected' field must be a list.\"\n        )\n\n    if not"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "   selected = report.get(\"selected\", [])\n    eligible_pool = report.get(\"eligible_pool\", [])\n\n    if selected is None:\n        selected = []\n\n    if eligible_pool is None:\n        eligible_pool = []\n\n    if not isinstance(selected, list):\n        raise ValueError(\n            \"Upstream 'selected' field must be a list.\"\n        )\n\n    if not isinstance(eligible_pool, list"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "      eligible_pool = []\n\n    if not isinstance(selected, list):\n        raise ValueError(\n            \"Upstream 'selected' field must be a list.\"\n        )\n\n    if not isinstance(eligible_pool, list):\n        raise ValueError(\n            \"Upstream 'eligible_pool' field must be a list.\"\n        )\n\n    # The ranking gate's selected candidates are the preferred source.\n  "
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "  raise ValueError(\n            \"Upstream 'selected' field must be a list.\"\n        )\n\n    if not isinstance(eligible_pool, list):\n        raise ValueError(\n            \"Upstream 'eligible_pool' field must be a list.\"\n        )\n\n    # The ranking gate's selected candidates are the preferred source.\n    if selected:\n        candidates = selected\n    else:\n        candidat"
+          },
+          {
+            "term": "eligible_pool",
+            "snippet": "ld must be a list.\"\n        )\n\n    # The ranking gate's selected candidates are the preferred source.\n    if selected:\n        candidates = selected\n    else:\n        candidates = eligible_pool\n\n    normalized: list[dict[str, Any]] = []\n\n    for item in candidates:\n\n        if not isinstance(item, dict):\n            raise ValueError(\n                \"Every upstream candi"
+          },
+          {
+            "term": "runtime",
+            "snippet": "' if invariant else 'FAIL'}\"\n        )\n\n        print(\n            \"FRONTIER VERDICT             : \"\n            \"NO_TRADE\"\n        )\n\n        print()\n        print(\n            f\"Runtime report : {REPORT_PATH}\"\n        )\n\n        print()\n        print(\"=\" * 100)\n        print(\"FINAL SAFETY VERDICT\")\n        print(\"=\" * 100)\n\n        print(\"Production DB writes : N"
+          },
+          {
+            "term": "runtime",
+            "snippet": "      f\"Analytical plans : \"\n        f\"{len(analytical_plans)}\"\n    )\n\n    print(\n        f\"NO_TRADE plans   : \"\n        f\"{len(no_trade)}\"\n    )\n\n    print()\n    print(\n        f\"Runtime report : {REPORT_PATH}\"\n    )\n\n    print()\n    print(\"=\" * 100)\n    print(\"FINAL SAFETY VERDICT\")\n    print(\"=\" * 100)\n\n    print(\"Production DB writes : NONE\")\n    print(\"INSERT "
+          },
+          {
+            "term": "execution",
+            "snippet": "\"Direction inference   : NONE\")\n    print(\"Score reconstruction  : NONE\")\n    print(\"Synthetic data        : FORBIDDEN\")\n    print(\"Live data injection   : NONE\")\n    print(\"Order execution       : NONE\")\n    print()\n\n\ndef main() -> None:\n\n    print_header()\n\n    # -------------------------------------------------------------------------\n    # Production baseline\n   "
+          },
+          {
+            "term": "execution",
+            "snippet": "ion_inference\": False,\n                \"score_reconstruction\": False,\n                \"synthetic_data\": False,\n                \"live_data_injection\": False,\n                \"order_execution\": False,\n            },\n        }\n\n        write_report(report)\n\n        print()\n        print(\"=\" * 100)\n        print(\n            \"LIVE TRADE PLAN + STOP/TP CONTRACT VERDICT\"\n "
+          },
+          {
+            "term": "execution",
+            "snippet": "ion inference  : NONE\")\n        print(\"Score reconstruction : NONE\")\n        print(\"Synthetic data       : NONE\")\n        print(\"Live data injection  : NONE\")\n        print(\"Order execution      : NONE\")\n        print()\n        print(\n            \"No eligible upstream candidate exists.\"\n        )\n        print(\n            \"No trade plan, stop, or TP was constructed."
+          },
+          {
+            "term": "execution",
+            "snippet": "         \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"order_execution\": False,\n        },\n    }\n\n    write_report(report)\n\n    print()\n    print(\"=\" * 100)\n    print(\n        \"LIVE TRADE PLAN + STOP/TP CONTRACT VERDICT\"\n    )\n    print(\"=\" * 100)\n\n "
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "score": 68,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 13,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ],
+        "output_path_terms": [
+          "write",
+          "dump",
+          "json.dump",
+          "open("
+        ],
+        "invocation_terms": [
+          "main(",
+          "__main__"
+        ],
+        "contexts": [
+          {
+            "term": "eligible_pool",
+            "snippet": "lready produced upstream.\n    It NEVER creates candidates.\n    \"\"\"\n\n    possible = [\n        report.get(\"selected\"),\n        report.get(\"selected_candidates\"),\n        report.get(\"eligible_pool\"),\n        report.get(\"candidates\"),\n        report.get(\"positions\"),\n        report.get(\"paper_positions\"),\n    ]\n\n    for value in possible:\n        if isinstance(value, list):\n"
+          },
+          {
+            "term": "runtime",
+            "snippet": " EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n    print()\n    print(\n        f\"Runtime report : {OUTPUT_REPORT}\"\n    )\n\n\nif __name__ == \"__main__\":\n    main()"
+          },
+          {
+            "term": "execution",
+            "snippet": "\"Direction inference   : NONE\")\n    print(\"Score reconstruction  : NONE\")\n    print(\"Synthetic data        : FORBIDDEN\")\n    print(\"Live data injection   : NONE\")\n    print(\"Order execution       : NONE\")\n\n    # -------------------------------------------------------------------------\n    # BASELINE\n    # --------------------------------------------------------------"
+          },
+          {
+            "term": "execution",
+            "snippet": "         \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"order_execution\": False,\n            \"paper_execution\": \"ANALYTICAL_ONLY\",\n        },\n    }\n\n    write_report(report)\n\n    # ----------------------------------------------------------------------"
+          },
+          {
+            "term": "execution",
+            "snippet": "\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n            \"live_data_injection\": False,\n            \"order_execution\": False,\n            \"paper_execution\": \"ANALYTICAL_ONLY\",\n        },\n    }\n\n    write_report(report)\n\n    # -------------------------------------------------------------------------\n    # FINAL SAFETY\n    # ---------"
+          },
+          {
+            "term": "execution",
+            "snippet": "int(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n    pri"
+          },
+          {
+            "term": "execution",
+            "snippet": "   print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Live data injection  : NONE\")\n    print(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n    print()\n    print(\n        f\"Runtime re"
+          },
+          {
+            "term": "executed",
+            "snippet": "ciliation,\n\n        \"verdict\": verdict,\n\n        \"production_database\": invariant,\n\n        \"safety\": {\n            \"production_db_modified\": False,\n            \"production_engine_executed\": False,\n            \"historical_repair\": False,\n            \"direction_inference\": False,\n            \"score_reconstruction\": False,\n            \"synthetic_data\": False,\n        "
+          },
+          {
+            "term": "executed",
+            "snippet": "          : NONE\")\n    print(\"UPDATE               : NONE\")\n    print(\"DELETE               : NONE\")\n    print(\"DDL                  : NONE\")\n    print(\"Production engine    : NOT EXECUTED\")\n    print(\"Historical repair    : NONE\")\n    print(\"Direction inference  : NONE\")\n    print(\"Score reconstruction : NONE\")\n    print(\"Synthetic data       : NONE\")\n    print(\"Li"
+          },
+          {
+            "term": "executed",
+            "snippet": "int(\"REAL ORDER EXECUTION : NONE\")\n    print(\"PAPER EXECUTION      : ANALYTICAL ONLY\")\n\n    print()\n    print(\n        \"No real trading order was created, \"\n        \"submitted, or executed.\"\n    )\n\n    print()\n    print(\n        f\"Runtime report : {OUTPUT_REPORT}\"\n    )\n\n\nif __name__ == \"__main__\":\n    main()"
+          },
+          {
+            "term": "launch",
+            "snippet": "der\")\n\nPRODUCTION_DB = PROJECT_DIR / \"arunda.db\"\n\nCAPTURE_DIR = Path(\n    os.environ.get(\n        \"ARUNDA_LIVE_CAPTURE_DIR\",\n        r\"C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_76134ecc\",\n    )\n)\n\nUPSTREAM_RISK_REPORT = (\n    CAPTURE_DIR\n    / \"LIVE_TRADE_RISK_POSITION_SIZING_REPORT.json\"\n)\n\nUPSTREAM_PLAN_REPORT = (\n    CAPTURE_DIR\n    / \"LIVE_TRADE_PLAN"
+          },
+          {
+            "term": "output",
+            "snippet": "*- coding: utf-8 -*-\n\n\"\"\"\nARUNDA TRADER\nLIVE PAPER PORTFOLIO STATE + EXPOSURE / RISK RECONCILIATION v0.1\n\nPurpose:\n    Consume ONLY already-verified upstream paper-trade lifecycle outputs.\n\n    This frontier does NOT:\n      - execute production engine\n      - modify production DB\n      - reconstruct signals\n      - infer direction\n      - inject live data\n      - "
+          },
+          {
+            "term": "output",
+            "snippet": "  / \"LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_REPORT.json\"\n)\n\nUPSTREAM_MONITOR_REPORT = (\n    CAPTURE_DIR\n    / \"LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_REPORT.json\"\n)\n\nOUTPUT_REPORT = (\n    CAPTURE_DIR\n    / \"LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_REPORT.json\"\n)\n\nFRONTIER_NAME = (\n    \"LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILI"
+          },
+          {
+            "term": "output",
+            "snippet": "json\"\n)\n\nFRONTIER_NAME = (\n    \"LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1\"\n)\n\n\n# =============================================================================\n# OUTPUT\n# =============================================================================\n\ndef line(char=\"=\", n=100):\n    print(char * n)\n\n\ndef section(title: str):\n    print()\n    line(\"=\""
+          },
+          {
+            "term": "output",
+            "snippet": "EPORT\n# =============================================================================\n\ndef write_report(report: dict):\n    CAPTURE_DIR.mkdir(parents=True, exist_ok=True)\n\n    with OUTPUT_REPORT.open(\n        \"w\",\n        encoding=\"utf-8\",\n    ) as f:\n        json.dump(\n            report,\n            f,\n            indent=2,\n            ensure_ascii=False,\n       "
+          }
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "score": 19,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_strength": 2,
+        "runtime_terms": [
+          "report"
+        ],
+        "output_path_terms": [
+          "write"
+        ],
+        "invocation_terms": [],
+        "contexts": [
+          {
+            "term": "eligibility_report",
+            "snippet": "{\n  \"script\": \"ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py\",\n  \"version\": \"v0.1\",\n  \"status\": \"BLOCKED\",\n  \"reason\": \"Verified eligibility report could not be resolved uniquely and safely.\",\n  \"project_r"
+          },
+          {
+            "term": "report",
+            "snippet": "{\n  \"script\": \"ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py\",\n  \"version\": \"v0.1\",\n  \"status\": \"BLOCKED\",\n  \"reason\": \"Verified eligibility report could not be resolved uniquely and safely.\",\n  \"project_r"
+          },
+          {
+            "term": "report",
+            "snippet": "RUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py\",\n  \"version\": \"v0.1\",\n  \"status\": \"BLOCKED\",\n  \"reason\": \"Verified eligibility report could not be resolved uniquely and safely.\",\n  \"project_root\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\",\n  \"target_frontier\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\ARUNDA_TRADER_LIVE_TRADE_CANDI"
+          },
+          {
+            "term": "report",
+            "snippet": "\n        \"content:forensic\"\n      ],\n      \"sha256\": \"c7ac572287395cea2ff49fd5ef717e3e3b2ad7c03a224fdda8d2f5442cb3a810\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\_report_block.txt\",\n      \"name\": \"_report_block.txt\",\n      \"suffix\": \".txt\",\n      \"size\": 1640,\n      \"score\": 3,\n      \"reasons\": [\n        \"filename:report\"\n      ],\n      \"sha256\": "
+          },
+          {
+            "term": "report",
+            "snippet": ",\n      \"sha256\": \"c7ac572287395cea2ff49fd5ef717e3e3b2ad7c03a224fdda8d2f5442cb3a810\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\_report_block.txt\",\n      \"name\": \"_report_block.txt\",\n      \"suffix\": \".txt\",\n      \"size\": 1640,\n      \"score\": 3,\n      \"reasons\": [\n        \"filename:report\"\n      ],\n      \"sha256\": \"391b7ceff0c92f5e8a69cea083ea9608f4"
+          },
+          {
+            "term": "report",
+            "snippet": "sers\\\\ASUS\\\\ArundaTrader\\\\_report_block.txt\",\n      \"name\": \"_report_block.txt\",\n      \"suffix\": \".txt\",\n      \"size\": 1640,\n      \"score\": 3,\n      \"reasons\": [\n        \"filename:report\"\n      ],\n      \"sha256\": \"391b7ceff0c92f5e8a69cea083ea9608f48f94a5a0598a299402a0a0a6c2b3fc\"\n    },\n    {\n      \"path\": \"C:\\\\Users\\\\ASUS\\\\ArundaTrader\\\\CODE_STRUCTURE.txt\",\n      "
+          },
+          {
+            "term": "report",
+            "snippet": "\n      ],\n      \"sha256\": \"82742d5f65a7934d7db70a93affacc041365866f4eb2e2977c00af48eca30467\"\n    }\n  ],\n  \"production_modification\": false,\n  \"database_write\": false,\n  \"synthetic_report\": false,\n  \"network_access\": false,\n  \"timestamp_utc\": \"2026-08-24T17:28:02.850673+00:00\"\n}"
+          },
+          {
+            "term": "write",
+            "snippet": "s\": [\n        \"content:gate\"\n      ],\n      \"sha256\": \"82742d5f65a7934d7db70a93affacc041365866f4eb2e2977c00af48eca30467\"\n    }\n  ],\n  \"production_modification\": false,\n  \"database_write\": false,\n  \"synthetic_report\": false,\n  \"network_access\": false,\n  \"timestamp_utc\": \"2026-08-24T17:28:02.850673+00:00\"\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "json_evidence": {
+    "candidate_count": 5,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "size": 28812,
+        "mtime_utc": "2026-08-24T17:35:22.682433+00:00",
+        "sha256": "8f955f64855cb176a2228d0e46cd3765bf4cbaef422dadf6ba2d2fcd7485ff57",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "script",
+          "mode",
+          "timestamp_utc",
+          "target_report",
+          "target_producer",
+          "target_consumer",
+          "base_dir",
+          "production_source_modified",
+          "production_db_modified",
+          "network_access",
+          "eligibility_executed",
+          "report_reconstructed",
+          "synthetic_report_created",
+          "candidate_created",
+          "candidates",
+          "archive_candidates",
+          "exact_matches",
+          "schema_matches",
+          "recovery_candidates",
+          "recovery_staged",
+          "verdict",
+          "producer",
+          "filesystem_files_discovered",
+          "content_candidates",
+          "recovery_decision",
+          "runtime_seconds",
+          "forensic_report"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "size": 72326,
+        "mtime_utc": "2026-08-24T17:39:53.129996+00:00",
+        "sha256": "249fe9b249fd8770b493f9f1872234e0f13caaec19ff54c8ca53944bc98648a4",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "script",
+          "version",
+          "generated_at_utc",
+          "started_at_utc",
+          "mode",
+          "objective",
+          "target_report",
+          "producer",
+          "consumer",
+          "safety_policy",
+          "baseline",
+          "filesystem",
+          "content_provenance",
+          "runtime_provenance",
+          "json_forensics",
+          "archive_forensics",
+          "timeline",
+          "decision",
+          "integrity",
+          "recovery"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_REPORT.json",
+        "size": 27662,
+        "mtime_utc": "2026-08-24T17:43:46.194574+00:00",
+        "sha256": "c4d2c1ae6c5111aa14268dbd6cded1277ceb8b526e3cf26404cf703bb53297a6",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "forensic_identity",
+          "objective",
+          "safety_policy",
+          "filesystem",
+          "source_integrity",
+          "content_provenance",
+          "runtime_capture_provenance",
+          "json_provenance",
+          "archive_provenance",
+          "timeline",
+          "recovery_decision",
+          "recovery_staging",
+          "final_verdict"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "size": 2554,
+        "mtime_utc": "2026-08-24T17:28:02.847892+00:00",
+        "sha256": "420101ee4acd13577fc391dd0eece0d1c19a97e3f32faa0dd90ea3ea6201b7d9",
+        "valid_json": true,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "script",
+          "version",
+          "status",
+          "reason",
+          "project_root",
+          "target_frontier",
+          "target_frontier_sha256",
+          "candidate_count",
+          "candidates",
+          "production_modification",
+          "database_write",
+          "synthetic_report",
+          "network_access",
+          "timestamp_utc"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "size": 56587,
+        "mtime_utc": "2026-08-24T17:31:52.117490+00:00",
+        "sha256": "b0672a71eb3ce413e6413e44f6847136f8d1462bf8920706e051d61276dba752",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_type": "dict",
+        "top_level_keys": [
+          "script",
+          "version",
+          "mode",
+          "timestamp_started_utc",
+          "timestamp_finished_utc",
+          "project_root",
+          "target_report",
+          "target_producer_name",
+          "downstream_frontier",
+          "downstream_frontier_sha256_before",
+          "downstream_frontier_sha256_after",
+          "production_source_invariant",
+          "exact_report_artifacts",
+          "producer_candidates",
+          "producer_resolution",
+          "all_references",
+          "historical_artifacts",
+          "possible_report_artifacts",
+          "final_status",
+          "final_reason",
+          "safety",
+          "next_action"
+        ]
+      }
+    ]
+  },
+  "archive_forensic": {
+    "archives_inspected": 1,
+    "exact_archive_artifact_found": false,
+    "archives": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_BACKUP_20260818_003611.zip",
+        "size": 25860838,
+        "mtime_utc": "2026-08-17T21:06:17.038665+00:00",
+        "archive_type": ".zip",
+        "target_member_found": false,
+        "producer_member_found": false,
+        "runtime_evidence_members": [
+          {
+            "member": "execution_contract.py",
+            "score": 1
+          },
+          {
+            "member": "execution_engine.py",
+            "score": 1
+          },
+          {
+            "member": "_report_block.txt",
+            "score": 1
+          }
+        ],
+        "members_inspected": 108
+      }
+    ]
+  },
+  "historical_timeline": {
+    "candidate_count": 19,
+    "signals": [
+      {
+        "timestamp_utc": "2026-08-24T17:45:26.715215+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_v0.1.py",
+        "score": 286,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:43:46.194574+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_REPORT.json",
+        "score": 188,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:43:40.329191+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py",
+        "score": 203,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:39:53.129996+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "score": 183,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:39:24.732337+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 224,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:35:22.682433+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 141,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:34:59.014421+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 172,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:31:52.117490+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 135,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:31:20.274980+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 147,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:28:02.847892+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "score": 19,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-24T17:27:52.966150+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "score": 77,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T20:09:03.422911+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "score": 68,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T20:07:09.750281+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "score": 73,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T20:04:55.453942+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "score": 82,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T17:14:50.457079+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "score": 82,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T17:11:27.493837+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "score": 73,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T17:06:56.582399+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "score": 77,
+        "producer_reference": false,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T17:02:52.416966+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 139,
+        "producer_reference": true,
+        "report_reference": true
+      },
+      {
+        "timestamp_utc": "2026-08-23T16:54:08.642490+00:00",
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 119,
+        "producer_reference": true,
+        "report_reference": true
+      }
+    ]
+  },
+  "recovery_decision": {
+    "status": "RUNTIME_EVIDENCE_CHAIN_FOUND_ARTIFACT_UNRECOVERED",
+    "exact_artifact_recovered": false,
+    "exact_archive_artifact_found": false,
+    "runtime_evidence_chain_found": true,
+    "artifact_content_recovered": false,
+    "recovery_staging_performed": false
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact_created": false,
+    "production_db_writes": "NONE",
+    "production_source_modified": "NONE",
+    "network_access": "NONE",
+    "recovery_staging_performed": false
+  },
+  "final_verdict": {
+    "historical_eligibility_runtime_evidence": "RUNTIME_EVIDENCE_CHAIN_FOUND_ARTIFACT_UNRECOVERED",
+    "artifact_recovered": false,
+    "runtime_evidence_found": true,
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "production_source_modification": "NONE",
+    "network_access": "NONE"
+  },
+  "report_path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_FORENSIC_REPORT.json"
+}

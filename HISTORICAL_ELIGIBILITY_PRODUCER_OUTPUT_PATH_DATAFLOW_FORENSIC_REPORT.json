@@ -1,0 +1,159 @@
+{
+  "artifact": {
+    "name": "ARUNDA TRADER HISTORICAL ELIGIBILITY PRODUCER OUTPUT PATH DATAFLOW FORENSIC v0.1",
+    "mode": "READ-ONLY FORENSIC",
+    "timestamp_utc": "2026-08-24T18:11:01.829345+00:00"
+  },
+  "project": {
+    "root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "filesystem": {
+    "target_artifact_exists": false
+  },
+  "static_dataflow": {
+    "target_definitions": [
+      {
+        "line": 697,
+        "targets": [
+          "report_name"
+        ],
+        "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+      }
+    ],
+    "writer_calls": [
+      {
+        "line": 91,
+        "type": "open",
+        "mode": "rb",
+        "target_literal": false
+      },
+      {
+        "line": 706,
+        "type": "open",
+        "mode": "w",
+        "target_literal": false
+      },
+      {
+        "line": 711,
+        "type": "json.dump",
+        "target_literal": false
+      }
+    ]
+  },
+  "function_dataflow": [
+    {
+      "function": "sha256_file",
+      "line": 88,
+      "target_assignments": [],
+      "writer_calls": [
+        {
+          "line": 91,
+          "type": "open",
+          "mode": "rb"
+        }
+      ],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "find_latest_capture",
+      "line": 103,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "open_readonly",
+      "line": 138,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "get_columns",
+      "line": 143,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "utc_now",
+      "line": 151,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "production_baseline",
+      "line": 159,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "load_latest_snapshot",
+      "line": 183,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "evaluate_row",
+      "line": 237,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "build_report",
+      "line": 363,
+      "target_assignments": [],
+      "writer_calls": [],
+      "target_to_writer_verified": false
+    },
+    {
+      "function": "main",
+      "line": 448,
+      "target_assignments": [
+        {
+          "line": 697,
+          "value": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+        }
+      ],
+      "writer_calls": [
+        {
+          "line": 706,
+          "type": "open",
+          "mode": "w"
+        },
+        {
+          "line": 711,
+          "type": "json.dump"
+        }
+      ],
+      "target_to_writer_verified": true
+    }
+  ],
+  "decision": {
+    "status": "PRODUCER_OUTPUT_PATH_DATAFLOW_VERIFIED",
+    "target_definition_found": true,
+    "writer_found": true,
+    "target_to_writer_dataflow_verified": true
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "production_source_modified": false,
+    "network_access": false
+  },
+  "final_verdict": {
+    "historical_eligibility_output_path_dataflow": "PRODUCER_OUTPUT_PATH_DATAFLOW_VERIFIED",
+    "forensic_report": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_OUTPUT_PATH_DATAFLOW_FORENSIC_REPORT.json"
+  }
+}

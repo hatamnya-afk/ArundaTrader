@@ -1,0 +1,62 @@
+==========================================================================================
+ARUNDA SNAPSHOT FEATURE EXTRA SYMBOL DECISION CONTRACT ORIGIN PATH FORENSIC v0.1
+==========================================================================================
+Database       : C:\Users\ASUS\ArundaTrader\arunda.db
+Mode           : READ ONLY
+Network        : FORBIDDEN
+Database Write : FORBIDDEN
+Repair         : FORBIDDEN
+Prediction     : FORBIDDEN
+Decision       : FORENSIC STATUS ONLY
+------------------------------------------------------------------------------------------
+
+SYMBOL : 4
+DATABASE OBSERVED : True
+DATABASE TABLE COUNT : 7
+DATABASE TOTAL ROWS : 1420
+SEMANTIC CLASSES : NUMERIC_IDENTIFIER_CANDIDATE
+ORIGIN CLASSES : NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL
+EXPLICIT ORIGIN PATHS : None
+ORIGIN PATH ESTABLISHED : False
+CONSISTENCY : False
+CONTRADICTIONS :
+  - ORIGIN_PROPAGATION_CLASS_MISSING
+  - ORIGIN_PATH_NOT_EXPLICITLY_ESTABLISHED
+
+SYMBOL : ASSET
+DATABASE OBSERVED : True
+DATABASE TABLE COUNT : 7
+DATABASE TOTAL ROWS : 1420
+SEMANTIC CLASSES : GENERIC_FIELD_LABEL
+ORIGIN CLASSES : NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL
+EXPLICIT ORIGIN PATHS : None
+ORIGIN PATH ESTABLISHED : False
+CONSISTENCY : False
+CONTRADICTIONS :
+  - ORIGIN_PROPAGATION_CLASS_MISSING
+  - ORIGIN_PATH_NOT_EXPLICITLY_ESTABLISHED
+
+==========================================================================================
+CROSS-SYMBOL SUMMARY
+==========================================================================================
+Target Symbols             : 2
+Origin Paths Established   : 0
+Consistent Targets         : 0
+Unresolved Targets         : 2
+
+==========================================================================================
+FORENSIC STATUS
+==========================================================================================
+FORENSIC STATUS : DECISION_ORIGIN_PATH_NOT_ESTABLISHED
+PREDICTIVE CLAIM : NOT ESTABLISHED
+RELATIONSHIP CALCULATION : NOT PERFORMED
+DATABASE WRITE : NOT PERFORMED
+DATABASE REPAIR : NOT PERFORMED
+UNIVERSE REBUILD : NOT PERFORMED
+SYMBOL DELETION : NOT PERFORMED
+TRADING DECISION : NOT PERFORMED
+
+==========================================================================================
+ARTIFACT
+==========================================================================================
+Artifact : C:\Users\ASUS\ArundaTrader\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1.json

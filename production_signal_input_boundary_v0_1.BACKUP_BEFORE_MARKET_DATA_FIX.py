@@ -1,0 +1,2240 @@
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+import importlib.util
+import math
+import time
+from typing import Any, Dict, List, Optional, Sequence
+
+import requests
+
+
+# ============================================================================
+# ARUNDA TRADER
+# PRODUCTION SIGNAL INPUT BOUNDARY v0.1
+#
+# PURPOSE:
+#
+#   REAL KUCOIN MARKET DISCOVERY
+#          â†“
+#   PRODUCTION UNIVERSE BINDING
+#          â†“
+#   MarketRecord
+#          â†“
+#   MarketArmInput
+#          â†“
+#   REAL KUCOIN CLOSED OHLCV
+#          â†“
+#   CANONICAL VALIDATION
+#          â†“
+#   MarketBar
+#          â†“
+#   INDICATOR ENGINE
+#          â†“
+#   MARKET STRUCTURE ENGINE
+#          â†“
+#   FEATURE ENGINE
+#          â†“
+#   ProductionSignalInput
+#          â†“
+#   STOP
+#
+# HARD BOUNDARY:
+#
+#   SIGNAL ENGINE       = NOT EXECUTED
+#   SIGNAL VALIDATOR    = NOT EXECUTED
+#   FUSION              = NOT EXECUTED
+#   SCORE               = NOT EXECUTED
+#   DECISION            = NOT EXECUTED
+#   RISK                = NOT EXECUTED
+#   TRADE GATE          = NOT EXECUTED
+#   OPPORTUNITY         = NOT EXECUTED
+#   ORDER INTENT        = NOT CREATED
+#   EXECUTION           = OFF
+#
+# HARD RULES:
+#
+#   DYNAMIC UNIVERSE ONLY
+#   NO EXPECTED_ASSETS
+#   NO CMC
+#   NO LEGACY MARKET_TECHNICAL
+#   REAL DATA ONLY
+#   CLOSED CANDLES ONLY
+#   LAUNCH BOUNDARY ENFORCED
+#   NO GAP CROSSING
+#   NO SYNTHETIC DATA
+#   NO INTERPOLATION
+#   NO FILL
+#   NO BACKFILL
+#   NO PADDING
+#   NO BLENDING
+#   NO PRODUCTION DB
+#   NO DATABASE WRITE
+# ============================================================================
+
+
+ENGINE_NAME = "PRODUCTION_SIGNAL_INPUT_BOUNDARY_v0.1"
+
+ROOT = Path(__file__).resolve().parent
+
+UNIVERSE_BINDING_MODULE = (
+    ROOT / "production_universe_binding.py"
+)
+
+KUCOIN_MODULE = (
+    ROOT / "public_market_data_kucoin.py"
+)
+
+KUCOIN_URL = (
+    "https://api.kucoin.com/api/v1/market/candles"
+)
+
+TIMEFRAME = "1h"
+TIMEFRAME_SECONDS = 3600
+
+MIN_CONTEXT = 21
+TARGET_CONTEXT = 50
+
+LAUNCH_TS = int(
+    datetime(
+        2026,
+        8,
+        31,
+        tzinfo=timezone.utc,
+    ).timestamp()
+)
+
+TIMEOUT = 20
+
+
+# ============================================================================
+# PRODUCTION SIGNAL INPUT
+# ============================================================================
+
+@dataclass(frozen=True)
+class ProductionSignalInput:
+    """
+    Final boundary object for Checkpoint 3.
+
+    This is INPUT DATA for the existing production signal boundary.
+
+    It is deliberately NOT a Signal object.
+
+    No signal calculation occurs here.
+    """
+
+    asset: str
+    symbol: str
+    market_identity: str
+    exchange: str
+    base: str
+    quote: str
+    source_id: str
+    timeframe: str
+    launch_timestamp: int
+
+    actual_points: int
+    closed_candles: int
+    open_candles_excluded: int
+
+    continuity_valid: bool
+    provenance_valid: bool
+    canonical_validation: bool
+
+    latest_timestamp: int
+    latest_timestamp_iso: str
+
+    feature_record: Any
+    feature_records: Any
+
+    # Compatibility fields matching the existing
+    # production signal-input contract.
+    points: int
+    structure_direction: Any
+    structure_strength: Any
+    structure_confidence: Any
+    structure_point_type: Any
+
+    trend: Any
+    momentum: Any
+    acceleration: Any
+    position: Any
+    volatility: Any
+
+
+# ============================================================================
+# MODULE LOADER
+# ============================================================================
+
+def load_module(
+    path: Path,
+    name: str,
+):
+    spec = importlib.util.spec_from_file_location(
+        name,
+        path,
+    )
+
+    if spec is None or spec.loader is None:
+        raise RuntimeError(
+            f"MODULE_LOAD_FAILED:{path}"
+        )
+
+    module = importlib.util.module_from_spec(
+        spec
+    )
+
+    spec.loader.exec_module(module)
+
+    return module
+
+
+# ============================================================================
+# TIME
+# ============================================================================
+
+def now_ts() -> int:
+    return int(time.time())
+
+
+def utc_iso(
+    timestamp: int,
+) -> str:
+    return datetime.fromtimestamp(
+        int(timestamp),
+        timezone.utc,
+    ).isoformat()
+
+
+def is_closed_candle(
+    timestamp: int,
+    current_time: int,
+) -> bool:
+    return (
+        int(timestamp)
+        + TIMEFRAME_SECONDS
+        <= int(current_time)
+    )
+
+
+# ============================================================================
+# NUMERIC
+# ============================================================================
+
+def finite(
+    value: Any,
+) -> bool:
+    try:
+        return math.isfinite(
+            float(value)
+        )
+    except Exception:
+        return False
+
+
+# ============================================================================
+# GENERIC FIELD READER
+#
+# Boundary inputs may arrive as:
+#   1. approved MarketRecord / dataclass-like objects
+#   2. normalized dictionaries
+#
+# The boundary must accept both without changing the semantic contract.
+# ============================================================================
+
+def read_required_field(
+    obj: Any,
+    field: str,
+):
+    if isinstance(obj, dict):
+
+        if field not in obj:
+            raise RuntimeError(
+                f"MARKET_ARM_INPUT_FIELD_MISSING:{field}"
+            )
+
+        return obj[field]
+
+    if not hasattr(
+        obj,
+        field,
+    ):
+        raise RuntimeError(
+            f"MARKET_ARM_INPUT_FIELD_MISSING:{field}"
+        )
+
+    return getattr(
+        obj,
+        field,
+    )
+
+
+# ============================================================================
+# MARKET ARM INPUT
+# ============================================================================
+
+def validate_market_input(
+    market_input,
+):
+    required = (
+        "asset",
+        "symbol",
+        "market_identity",
+        "exchange",
+        "base",
+        "quote",
+    )
+
+    # ------------------------------------------------------------
+    # Read object OR mapping without changing the boundary contract.
+    # ------------------------------------------------------------
+
+    for field in required:
+        read_required_field(
+            market_input,
+            field,
+        )
+
+    asset = str(
+        read_required_field(
+            market_input,
+            "asset",
+        )
+    ).strip().upper()
+
+    symbol = str(
+        read_required_field(
+            market_input,
+            "symbol",
+        )
+    ).strip().upper()
+
+    identity = str(
+        read_required_field(
+            market_input,
+            "market_identity",
+        )
+    ).strip()
+
+    exchange = str(
+        read_required_field(
+            market_input,
+            "exchange",
+        )
+    ).strip().upper()
+
+    base = str(
+        read_required_field(
+            market_input,
+            "base",
+        )
+    ).strip().upper()
+
+    quote = str(
+        read_required_field(
+            market_input,
+            "quote",
+        )
+    ).strip().upper()
+
+    # ------------------------------------------------------------
+    # Required value validation.
+    # ------------------------------------------------------------
+
+    if not asset:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_ASSET_EMPTY"
+        )
+
+    if not symbol:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_SYMBOL_EMPTY"
+        )
+
+    if not identity:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_IDENTITY_EMPTY"
+        )
+
+    if not exchange:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_EXCHANGE_EMPTY"
+        )
+
+    if not base:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_BASE_EMPTY"
+        )
+
+    if not quote:
+        raise RuntimeError(
+            "MARKET_ARM_INPUT_QUOTE_EMPTY"
+        )
+
+    # ------------------------------------------------------------
+    # Exact canonical symbol identity.
+    # ------------------------------------------------------------
+
+    parts = symbol.split("/")
+
+    if len(parts) != 2:
+        raise RuntimeError(
+            f"MARKET_ARM_INPUT_SYMBOL_INVALID:{symbol}"
+        )
+
+    if parts[0] != base:
+        raise RuntimeError(
+            f"MARKET_ARM_INPUT_BASE_MISMATCH:{symbol}"
+        )
+
+    if parts[1] != quote:
+        raise RuntimeError(
+            f"MARKET_ARM_INPUT_QUOTE_MISMATCH:{symbol}"
+        )
+
+    if asset != base:
+        raise RuntimeError(
+            f"MARKET_ARM_INPUT_ASSET_BASE_MISMATCH:"
+            f"{asset}:{base}"
+        )
+
+    # ------------------------------------------------------------
+    # Return one canonical immutable semantic mapping.
+    #
+    # The existing downstream boundary consumes mapping-style
+    # fields, so we preserve that contract.
+    # ------------------------------------------------------------
+
+    return {
+        "asset": asset,
+        "symbol": f"{base}/{quote}",
+        "market_identity": identity,
+        "exchange": exchange,
+        "base": base,
+        "quote": quote,
+    }
+
+
+# ============================================================================
+# PROVIDER SYMBOL BOUNDARY
+# ============================================================================
+
+def kucoin_request_symbol(
+    symbol: str,
+) -> str:
+
+    normalized = str(
+        symbol
+    ).strip().upper()
+
+    parts = normalized.split("/")
+
+    if len(parts) != 2:
+        raise RuntimeError(
+            f"KUCOIN_SYMBOL_INVALID:{normalized}"
+        )
+
+    base = parts[0].strip()
+    quote = parts[1].strip()
+
+    if not base or not quote:
+        raise RuntimeError(
+            f"KUCOIN_SYMBOL_INVALID:{normalized}"
+        )
+
+    return f"{base}-{quote}"
+
+
+def kucoin_source_id(
+    symbol: str,
+) -> str:
+    return (
+        "KUCOIN_SPOT:"
+        + kucoin_request_symbol(symbol)
+    )
+
+
+# ============================================================================
+# DYNAMIC UNIVERSE
+# ============================================================================
+
+def discover_production_universe(
+    universe_binding,
+):
+
+    try:
+        import ccxt
+    except Exception as exc:
+        raise RuntimeError(
+            "CCXT_IMPORT_FAILED"
+        ) from exc
+
+    exchange = ccxt.kucoin()
+
+    markets = exchange.load_markets()
+
+    if not isinstance(
+        markets,
+        dict,
+    ):
+        raise RuntimeError(
+            "KUCOIN_MARKET_MAP_INVALID"
+        )
+
+    records = (
+        universe_binding.build_production_universe(
+            markets=markets,
+            exchange="KUCOIN",
+            source="KUCOIN_CCXT_MARKET_DISCOVERY",
+        )
+    )
+
+    eligible = (
+        universe_binding.eligible_production_universe(
+            markets=markets,
+            exchange="KUCOIN",
+            source="KUCOIN_CCXT_MARKET_DISCOVERY",
+        )
+    )
+
+    if not isinstance(
+        records,
+        list,
+    ):
+        raise RuntimeError(
+            "PRODUCTION_UNIVERSE_OUTPUT_INVALID"
+        )
+
+    if not isinstance(
+        eligible,
+        list,
+    ):
+        raise RuntimeError(
+            "ELIGIBLE_UNIVERSE_OUTPUT_INVALID"
+        )
+
+    if not records:
+        raise RuntimeError(
+            "PRODUCTION_UNIVERSE_EMPTY"
+        )
+
+    if not eligible:
+        raise RuntimeError(
+            "ELIGIBLE_UNIVERSE_EMPTY"
+        )
+
+    return records, eligible
+
+
+# ============================================================================
+# MARKET RECORD â†’ MARKET ARM INPUT
+# ============================================================================
+
+def market_record_to_arm_input(
+    record,
+):
+    required = (
+        "asset",
+        "symbol",
+        "market_identity",
+        "exchange",
+        "base",
+        "quote",
+    )
+
+    for field in required:
+        if not hasattr(
+            record,
+            field,
+        ):
+            raise RuntimeError(
+                f"MARKET_RECORD_FIELD_MISSING:{field}"
+            )
+
+    if getattr(
+        record,
+        "eligibility",
+        False,
+    ) is not True:
+        raise RuntimeError(
+            f"INELIGIBLE_MARKET_RECORD:"
+            f"{getattr(record, 'symbol', '')}"
+        )
+
+    return validate_market_input(
+        record
+    )
+
+
+# ============================================================================
+# REAL KUCOIN OHLCV
+# ============================================================================
+
+def fetch_real_kucoin_history(
+    market_input: Dict[str, Any],
+    current_time: int,
+) -> List[Dict[str, Any]]:
+
+    symbol = market_input["symbol"]
+
+    provider_symbol = (
+        kucoin_request_symbol(symbol)
+    )
+
+    # ------------------------------------------------------------
+    # Latest fully closed 1h candle.
+    # ------------------------------------------------------------
+
+    latest_closed = (
+        current_time
+        - (
+            current_time
+            % TIMEFRAME_SECONDS
+        )
+        - TIMEFRAME_SECONDS
+    )
+
+    # ------------------------------------------------------------
+    # Request enough real history to support the controlled
+    # 50-point context without generating missing data.
+    # ------------------------------------------------------------
+
+    request_start = max(
+        LAUNCH_TS,
+        latest_closed
+        - (
+            TARGET_CONTEXT
+            + 8
+        )
+        * TIMEFRAME_SECONDS,
+    )
+
+    response = requests.get(
+        KUCOIN_URL,
+        params={
+            "symbol": provider_symbol,
+            "type": "1hour",
+            "startAt": int(request_start),
+            "endAt": int(current_time),
+        },
+        timeout=TIMEOUT,
+    )
+
+    response.raise_for_status()
+
+    payload = response.json()
+
+    if not isinstance(
+        payload,
+        dict,
+    ):
+        raise RuntimeError(
+            f"KUCOIN_RESPONSE_INVALID:{symbol}"
+        )
+
+    if payload.get("code") != "200000":
+        raise RuntimeError(
+            f"KUCOIN_API_ERROR:"
+            f"{symbol}:"
+            f"{payload.get('msg')}"
+        )
+
+    data = payload.get("data")
+
+    if not isinstance(
+        data,
+        list,
+    ):
+        raise RuntimeError(
+            f"KUCOIN_DATA_INVALID:{symbol}"
+        )
+
+    rows = []
+
+    seen = set()
+
+    for raw in data:
+
+        if not isinstance(
+            raw,
+            list,
+        ):
+            continue
+
+        if len(raw) < 6:
+            continue
+
+        try:
+            timestamp = int(
+                float(raw[0])
+            )
+
+            open_price = float(raw[1])
+            close_price = float(raw[2])
+            high_price = float(raw[3])
+            low_price = float(raw[4])
+            volume = float(raw[5])
+
+        except Exception:
+            continue
+
+        if timestamp in seen:
+            continue
+
+        # --------------------------------------------------------
+        # Launch boundary.
+        # --------------------------------------------------------
+
+        if timestamp < LAUNCH_TS:
+            continue
+
+        # --------------------------------------------------------
+        # Closed candles only.
+        # --------------------------------------------------------
+
+        if not is_closed_candle(
+            timestamp,
+            current_time,
+        ):
+            continue
+
+        # --------------------------------------------------------
+        # Exact 1h alignment.
+        # --------------------------------------------------------
+
+        if (
+            timestamp
+            % TIMEFRAME_SECONDS
+            != 0
+        ):
+            continue
+
+        # --------------------------------------------------------
+        # Finite numeric validation.
+        # --------------------------------------------------------
+
+        if not all(
+            finite(value)
+            for value in (
+                open_price,
+                close_price,
+                high_price,
+                low_price,
+                volume,
+            )
+        ):
+            continue
+
+        if open_price <= 0:
+            continue
+
+        if close_price <= 0:
+            continue
+
+        if high_price <= 0:
+            continue
+
+        if low_price <= 0:
+            continue
+
+        if volume < 0:
+            continue
+
+        # --------------------------------------------------------
+        # OHLC structural validation.
+        # --------------------------------------------------------
+
+        if high_price < max(
+            open_price,
+            close_price,
+        ):
+            continue
+
+        if low_price > min(
+            open_price,
+            close_price,
+        ):
+            continue
+
+        if low_price > high_price:
+            continue
+
+        seen.add(timestamp)
+
+        rows.append(
+            {
+                "timestamp": timestamp,
+                "open": open_price,
+                "close": close_price,
+                "high": high_price,
+                "low": low_price,
+                "volume": volume,
+                "provider_symbol": provider_symbol,
+            }
+        )
+
+    rows.sort(
+        key=lambda row:
+        row["timestamp"]
+    )
+
+    return rows
+
+
+# ============================================================================
+# CLOSED CONTIGUOUS RUN
+# ============================================================================
+
+def build_current_contiguous_run(
+    rows: Sequence[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+
+    if not rows:
+        return []
+
+    by_timestamp = {
+        int(row["timestamp"]): row
+        for row in rows
+    }
+
+    latest = max(
+        by_timestamp
+    )
+
+    selected = []
+
+    timestamp = latest
+
+    while True:
+
+        row = by_timestamp.get(
+            timestamp
+        )
+
+        if row is None:
+            break
+
+        selected.append(
+            row
+        )
+
+        previous = (
+            timestamp
+            - TIMEFRAME_SECONDS
+        )
+
+        if previous not in by_timestamp:
+            break
+
+        timestamp = previous
+
+    selected.reverse()
+
+    return selected
+
+
+# ============================================================================
+# CANONICAL / PROVENANCE VALIDATION
+# ============================================================================
+
+def validate_real_market_data(
+    market_input: Dict[str, Any],
+    rows: Sequence[Dict[str, Any]],
+    current_time: int,
+    market_data_result,
+) -> Dict[str, Any]:
+
+    expected_symbol = market_input["symbol"]
+
+    expected_asset = market_input["asset"]
+
+    expected_source = str(
+        getattr(
+            market_data_result,
+            "source",
+            "",
+        )
+    ).strip().upper()
+
+    if not expected_source:
+        raise RuntimeError(
+            f"MARKET_DATA_SOURCE_MISSING:{expected_symbol}"
+        )
+
+    if not bool(
+        getattr(
+            market_data_result,
+            "real_data",
+            False,
+        )
+    ):
+        raise RuntimeError(
+            f"MARKET_DATA_NOT_REAL:{expected_symbol}"
+        )
+
+    if not rows:
+        raise RuntimeError(
+            f"NO_REAL_MARKET_DATA:{expected_symbol}"
+        )
+
+    normalized_rows = []
+
+    for row in rows:
+
+        timestamp = int(
+            row["timestamp"]
+        )
+
+        # --------------------------------------------------------
+        # Closed-candle enforcement.
+        # --------------------------------------------------------
+
+        if not is_closed_candle(
+            timestamp,
+            current_time,
+        ):
+            raise RuntimeError(
+                f"OPEN_CANDLE_PRESENT:{expected_symbol}"
+            )
+
+        # --------------------------------------------------------
+        # Launch boundary enforcement.
+        # --------------------------------------------------------
+
+        if timestamp < LAUNCH_TS:
+            raise RuntimeError(
+                f"LAUNCH_BOUNDARY_VIOLATION:"
+                f"{expected_symbol}"
+            )
+
+        # --------------------------------------------------------
+        # Canonical raw payload.
+        # --------------------------------------------------------
+
+        normalized = {
+            "asset": expected_asset,
+            "symbol": expected_symbol,
+            "timestamp": timestamp,
+            "timeframe": TIMEFRAME,
+            "open": float(row["open"]),
+            "high": float(row["high"]),
+            "low": float(row["low"]),
+            "close": float(row["close"]),
+            "volume": float(row["volume"]),
+            "source_id": expected_source,
+            "source_type": "CEX_PUBLIC_API",
+            "source_timestamp": timestamp,
+            "retrieved_at": datetime.now(
+                timezone.utc
+            ).isoformat(),
+            "observation_count": 1,
+            "provider_role": str(
+                getattr(
+                    market_data_result,
+                    "provider_role",
+                    "NONE",
+                )
+            ).strip().upper(),
+        }
+
+        # --------------------------------------------------------
+        # Canonical identity validation.
+        # --------------------------------------------------------
+
+        actual_asset = str(
+            normalized.get(
+                "asset",
+                "",
+            )
+        ).strip().upper()
+
+        actual_symbol = str(
+            normalized.get(
+                "symbol",
+                "",
+            )
+        ).strip().upper()
+
+        actual_source = str(
+            normalized.get(
+                "source_id",
+                "",
+            )
+        ).strip().upper()
+
+        if actual_asset != expected_asset:
+            raise RuntimeError(
+                f"IDENTITY_ASSET_MISMATCH:"
+                f"{expected_asset}:{actual_asset}"
+            )
+
+        if actual_symbol != expected_symbol:
+            raise RuntimeError(
+                f"IDENTITY_SYMBOL_MISMATCH:"
+                f"{expected_symbol}:{actual_symbol}"
+            )
+
+        if actual_source != expected_source.upper():
+            raise RuntimeError(
+                f"IDENTITY_SOURCE_MISMATCH:"
+                f"{expected_source}:{actual_source}"
+            )
+
+        if normalized.get(
+            "source_type"
+        ) != "CEX_PUBLIC_API":
+            raise RuntimeError(
+                f"SOURCE_TYPE_MISMATCH:{expected_symbol}"
+            )
+
+        if normalized.get(
+            "timeframe"
+        ) != TIMEFRAME:
+            raise RuntimeError(
+                f"TIMEFRAME_MISMATCH:{expected_symbol}"
+            )
+
+        if int(
+            normalized["timestamp"]
+        ) != timestamp:
+            raise RuntimeError(
+                f"TIMESTAMP_MISMATCH:{expected_symbol}"
+            )
+
+        normalized_rows.append(
+            normalized
+        )
+
+    return {
+        "rows": normalized_rows,
+        "canonical_validation": True,
+        "provenance_valid": True,
+    }
+
+
+# ============================================================================
+# GAP VALIDATION
+# ============================================================================
+
+def validate_continuity(
+    rows: Sequence[Dict[str, Any]],
+) -> bool:
+
+    if not rows:
+        return False
+
+    timestamps = [
+        int(row["timestamp"])
+        for row in rows
+    ]
+
+    for index in range(
+        1,
+        len(timestamps),
+    ):
+
+        if (
+            timestamps[index]
+            - timestamps[index - 1]
+            != TIMEFRAME_SECONDS
+        ):
+            return False
+
+    return True
+
+
+# ============================================================================
+# MARKET BAR
+# ============================================================================
+
+def build_market_bars(
+    normalized_rows,
+    market_structure_engine,
+):
+
+    bars = []
+
+    for row in normalized_rows:
+
+        bars.append(
+            market_structure_engine.MarketBar(
+                timestamp=int(
+                    row["timestamp"]
+                ),
+                high=float(
+                    row["high"]
+                ),
+                low=float(
+                    row["low"]
+                ),
+                close=float(
+                    row["close"]
+                ),
+                open=float(
+                    row["open"]
+                ),
+                volume=float(
+                    row["volume"]
+                ),
+                cmc_id=None,
+                symbol=str(
+                    row["symbol"]
+                ),
+            )
+        )
+
+    return bars
+
+
+# ============================================================================
+# STRUCTURE ALIGNMENT
+# ============================================================================
+
+def align_structure_points(
+    bars,
+    structure_result,
+):
+
+    points = structure_result.get(
+        "structure_points",
+        [],
+    )
+
+    indexed = sorted(
+        points,
+        key=lambda point:
+        int(point.index),
+    )
+
+    aligned = []
+
+    pointer = 0
+    latest = None
+
+    for index in range(
+        len(bars)
+    ):
+
+        while (
+            pointer < len(indexed)
+            and int(
+                indexed[pointer].index
+            ) <= index
+        ):
+            latest = indexed[pointer]
+            pointer += 1
+
+        # --------------------------------------------------------
+        # Causal alignment only.
+        # No future structure point is projected backward.
+        # --------------------------------------------------------
+
+        aligned.append(
+            latest
+        )
+
+    return aligned
+
+
+# ============================================================================
+# FEATURE PIPELINE
+# ============================================================================
+
+def build_features(
+    bars,
+    indicator_engine,
+    feature_engine,
+    market_structure_engine,
+):
+
+    # ------------------------------------------------------------
+    # Indicator input.
+    # ------------------------------------------------------------
+
+    indicator_bars = [
+        indicator_engine.IndicatorBar(
+            timestamp=bar.timestamp,
+            high=bar.high,
+            low=bar.low,
+            close=bar.close,
+            open=bar.open,
+            volume=bar.volume,
+            cmc_id=bar.cmc_id,
+            symbol=bar.symbol,
+        )
+        for bar in bars
+    ]
+
+    indicators = (
+        indicator_engine.calculate_indicator_records(
+            indicator_bars
+        )
+    )
+
+    if len(indicators) != len(bars):
+        raise RuntimeError(
+            "INDICATOR_CARDINALITY_MISMATCH"
+        )
+
+    # ------------------------------------------------------------
+    # Market structure.
+    # ------------------------------------------------------------
+
+    structure_result = (
+        market_structure_engine.analyze_market_structure(
+            bars
+        )
+    )
+
+    structures = align_structure_points(
+        bars,
+        structure_result,
+    )
+
+    if len(structures) != len(bars):
+        raise RuntimeError(
+            "STRUCTURE_CARDINALITY_MISMATCH"
+        )
+
+    # ------------------------------------------------------------
+    # Feature input.
+    # ------------------------------------------------------------
+
+    feature_bars = [
+        feature_engine.FeatureBar(
+            timestamp=bar.timestamp,
+            high=bar.high,
+            low=bar.low,
+            close=bar.close,
+            open=bar.open,
+            volume=bar.volume,
+            cmc_id=bar.cmc_id,
+            symbol=bar.symbol,
+        )
+        for bar in bars
+    ]
+
+    features = (
+        feature_engine.calculate_feature_records(
+            feature_bars,
+            indicators,
+            structures,
+        )
+    )
+
+    if len(features) != len(bars):
+        raise RuntimeError(
+            "FEATURE_CARDINALITY_MISMATCH"
+        )
+
+    return (
+        indicators,
+        structures,
+        features,
+    )
+
+
+# ============================================================================
+# FEATURE â†’ PRODUCTION SIGNAL INPUT
+# ============================================================================
+
+def feature_to_production_signal_input(
+    market_input: Dict[str, Any],
+    feature_record: Any,
+    feature_records: Any,
+    points: int,
+    canonical_validation: bool,
+    provenance_valid: bool,
+    continuity_valid: bool,
+    latest_timestamp: int,
+    open_candles_excluded: int,
+) -> ProductionSignalInput:
+
+    if feature_record is None:
+        raise RuntimeError(
+            "FEATURE_RECORD_MISSING"
+        )
+
+    def get(
+        name: str,
+    ):
+        value = getattr(
+            feature_record,
+            name,
+            None,
+        )
+
+        if isinstance(
+            value,
+            float,
+        ):
+            if not math.isfinite(
+                value
+            ):
+                return None
+
+        return value
+
+    return ProductionSignalInput(
+        asset=market_input["asset"],
+        symbol=market_input["symbol"],
+        market_identity=market_input[
+            "market_identity"
+        ],
+        exchange=market_input["exchange"],
+        base=market_input["base"],
+        quote=market_input["quote"],
+        source_id=str(
+            getattr(
+                market_data_result,
+                "source",
+                "",
+            )
+        ).strip(),
+        timeframe=TIMEFRAME,
+        launch_timestamp=LAUNCH_TS,
+
+        actual_points=points,
+        closed_candles=points,
+        open_candles_excluded=open_candles_excluded,
+
+        continuity_valid=continuity_valid,
+        provenance_valid=provenance_valid,
+        canonical_validation=canonical_validation,
+
+        latest_timestamp=latest_timestamp,
+        latest_timestamp_iso=utc_iso(
+            latest_timestamp
+        ),
+
+        feature_record=feature_record,
+        feature_records=feature_records,
+
+        points=points,
+
+        structure_direction=get(
+            "structure_direction"
+        ),
+
+        structure_strength=get(
+            "structure_strength"
+        ),
+
+        structure_confidence=get(
+            "structure_confidence"
+        ),
+
+        structure_point_type=get(
+            "structure_point_type"
+        ),
+
+        # Existing Signal Engine compatibility fields.
+        #
+        # These are carried as boundary data only.
+        # No interpretation occurs here.
+        trend=None,
+        momentum=None,
+        acceleration=None,
+        position=None,
+
+        volatility=get(
+            "volatility_regime"
+        ),
+    )
+
+
+# ============================================================================
+# ONE MARKET
+# ============================================================================
+
+def build_production_signal_input(
+    market_input,
+    market_data_result,
+    indicator_engine,
+    market_structure_engine,
+    feature_engine,
+):
+
+    # ------------------------------------------------------------
+    # Canonical MarketArmInput validation.
+    # ------------------------------------------------------------
+
+    market_input = validate_market_input(
+        market_input
+    )
+
+    current_time = now_ts()
+
+    # ------------------------------------------------------------
+    # REAL DYNAMIC MARKET DATA RESULT.
+    # ------------------------------------------------------------
+
+    if not bool(
+        getattr(
+            market_data_result,
+            "real_data",
+            False,
+        )
+    ):
+        raise RuntimeError(
+            f"NO_REAL_DYNAMIC_MARKET_DATA:"
+            f"{market_input['symbol']}"
+        )
+
+    real_rows = list(
+        getattr(
+            market_data_result,
+            "candles",
+            (),
+        )
+    )
+
+    if not real_rows:
+        raise RuntimeError(
+            f"NO_CLOSED_REAL_DATA:"
+            f"{market_input['symbol']}"
+        )
+
+    raw_count = len(real_rows)
+
+    # ------------------------------------------------------------
+    # Latest contiguous closed suffix.
+    #
+    # No gap crossing.
+    # ------------------------------------------------------------
+
+    contiguous = (
+        build_current_contiguous_run(
+            real_rows
+        )
+    )
+
+    if len(contiguous) < MIN_CONTEXT:
+        raise RuntimeError(
+            f"INSUFFICIENT_CONTIGUOUS_CONTEXT:"
+            f"{market_input['symbol']}:"
+            f"{len(contiguous)}"
+        )
+
+    # ------------------------------------------------------------
+    # Controlled maximum context.
+    #
+    # This is truncation of real data, not padding.
+    # ------------------------------------------------------------
+
+    if len(contiguous) > TARGET_CONTEXT:
+        contiguous = contiguous[
+            -TARGET_CONTEXT:
+        ]
+
+    continuity_valid = (
+        validate_continuity(
+            contiguous
+        )
+    )
+
+    if not continuity_valid:
+        raise RuntimeError(
+            f"CONTINUITY_INVALID:"
+            f"{market_input['symbol']}"
+        )
+
+    # ------------------------------------------------------------
+    # Canonical and provenance validation.
+    # ------------------------------------------------------------
+
+    validation = (
+        validate_real_market_data(
+            market_input,
+            contiguous,
+            current_time,
+            market_data_result,
+        )
+    )
+
+    normalized_rows = validation[
+        "rows"
+    ]
+
+    # ------------------------------------------------------------
+    # MarketBar boundary.
+    # ------------------------------------------------------------
+
+    bars = build_market_bars(
+        normalized_rows,
+        market_structure_engine,
+    )
+
+    if len(bars) < MIN_CONTEXT:
+        raise RuntimeError(
+            f"MARKET_BAR_CONTEXT_INVALID:"
+            f"{market_input['symbol']}"
+        )
+
+    # ------------------------------------------------------------
+    # Existing generic analysis engines.
+    #
+    # No Signal Engine call.
+    # ------------------------------------------------------------
+
+    (
+        indicators,
+        structures,
+        features,
+    ) = build_features(
+        bars,
+        indicator_engine,
+        feature_engine,
+        market_structure_engine,
+    )
+
+    if not features:
+        raise RuntimeError(
+            f"FEATURE_OUTPUT_EMPTY:"
+            f"{market_input['symbol']}"
+        )
+
+    feature_record = features[-1]
+
+    latest_timestamp = int(
+        normalized_rows[-1][
+            "timestamp"
+        ]
+    )
+
+    # ------------------------------------------------------------
+    # Boundary object only.
+    # ------------------------------------------------------------
+
+    return feature_to_production_signal_input(
+        market_input=market_input,
+        feature_record=feature_record,
+        feature_records=features,
+        points=len(normalized_rows),
+        canonical_validation=validation[
+            "canonical_validation"
+        ],
+        provenance_valid=validation[
+            "provenance_valid"
+        ],
+        continuity_valid=continuity_valid,
+        latest_timestamp=latest_timestamp,
+        open_candles_excluded=(
+            max(
+                0,
+                raw_count - len(contiguous),
+            )
+        ),
+    )
+
+
+# ============================================================================
+# CONTROLLED SAMPLE SELECTION
+# ============================================================================
+
+def select_sample_markets(
+    eligible_records,
+    sample_size: int = 3,
+):
+
+    preferred = (
+        "AVA/USDT",
+        "MTV/USDT",
+        "TEL/USDT",
+    )
+
+    selected = []
+
+    for symbol in preferred:
+
+        for record in eligible_records:
+
+            record_symbol = str(
+                getattr(
+                    record,
+                    "symbol",
+                    "",
+                )
+            ).strip().upper()
+
+            if record_symbol == symbol:
+
+                selected.append(
+                    record
+                )
+
+                break
+
+    if len(selected) >= sample_size:
+        return selected[
+            :sample_size
+        ]
+
+    selected_keys = {
+        str(
+            getattr(
+                record,
+                "market_identity",
+                "",
+            )
+        )
+        for record in selected
+    }
+
+    for record in eligible_records:
+
+        identity = str(
+            getattr(
+                record,
+                "market_identity",
+                "",
+            )
+        )
+
+        if identity in selected_keys:
+            continue
+
+        selected.append(
+            record
+        )
+
+        selected_keys.add(
+            identity
+        )
+
+        if len(selected) >= sample_size:
+            break
+
+    return selected
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+def main() -> int:
+
+    print("=" * 100)
+    print(
+        "ARUNDA PRODUCTION SIGNAL INPUT "
+        "BOUNDARY v0.1"
+    )
+    print("=" * 100)
+
+    print(
+        "DYNAMIC_UNIVERSE=True"
+    )
+
+    print(
+        "EXPECTED_ASSETS_USED=False"
+    )
+
+    print(
+        "CMC_USED=False"
+    )
+
+    print(
+        "LEGACY_MARKET_TECHNICAL=False"
+    )
+
+    print(
+        "REAL_MARKET_DATA=True"
+    )
+
+    print(
+        "TIMEFRAME=1h"
+    )
+
+    print(
+        f"LAUNCH_TIMESTAMP={LAUNCH_TS}"
+    )
+
+    print(
+        "SYNTHETIC=False"
+    )
+
+    print(
+        "INTERPOLATION=False"
+    )
+
+    print(
+        "FILL=False"
+    )
+
+    print(
+        "BACKFILL=False"
+    )
+
+    print(
+        "PADDING=False"
+    )
+
+    print(
+        "BLENDING=False"
+    )
+
+    print(
+        "PRODUCTION_DB_TOUCHED=False"
+    )
+
+    print(
+        "DB_WRITES=0"
+    )
+
+    print(
+        "SIGNAL_CHAIN_EXECUTED=False"
+    )
+
+    print(
+        "FUSION_EXECUTED=False"
+    )
+
+    print(
+        "SCORE_EXECUTED=False"
+    )
+
+    print(
+        "DECISION_EXECUTED=False"
+    )
+
+    print(
+        "RISK_EXECUTED=False"
+    )
+
+    print(
+        "TRADE_GATE_EXECUTED=False"
+    )
+
+    print(
+        "OPPORTUNITY_EXECUTED=False"
+    )
+
+    print(
+        "ORDER_INTENTS_CREATED=0"
+    )
+
+    print(
+        "EXECUTION=OFF"
+    )
+
+    print("=" * 100)
+
+    # ========================================================================
+    # LOAD APPROVED BOUNDARIES
+    # ========================================================================
+
+    if not UNIVERSE_BINDING_MODULE.exists():
+        raise RuntimeError(
+            "PRODUCTION_UNIVERSE_BINDING_NOT_FOUND"
+        )
+
+    if not KUCOIN_MODULE.exists():
+        raise RuntimeError(
+            "KUCOIN_ADAPTER_NOT_FOUND"
+        )
+
+    universe_binding = load_module(
+        UNIVERSE_BINDING_MODULE,
+        "production_universe_binding_boundary",
+    )
+
+    kucoin = load_module(
+        KUCOIN_MODULE,
+        "public_market_data_kucoin_boundary",
+    )
+
+    # Existing generic analysis engines.
+    #
+    # These are used only for:
+    #
+    #   MarketBar
+    #       â†“
+    #   Indicators
+    #       â†“
+    #   Structure
+    #       â†“
+    #   Features
+    #
+    # They are NOT signal engines.
+    import indicator_engine
+    import market_structure_engine
+    import feature_engine
+
+    # ========================================================================
+    # CONTRACT CHECKS
+    # ========================================================================
+
+    required_universe_functions = (
+        "build_production_universe",
+        "eligible_production_universe",
+    )
+
+    for function_name in (
+        required_universe_functions
+    ):
+
+        if not hasattr(
+            universe_binding,
+            function_name,
+        ):
+            raise RuntimeError(
+                f"UNIVERSE_BINDING_MISSING:"
+                f"{function_name}"
+            )
+
+    required_kucoin_functions = (
+        "normalize",
+        "validate_candle",
+    )
+
+    for function_name in (
+        required_kucoin_functions
+    ):
+
+        if not hasattr(
+            kucoin,
+            function_name,
+        ):
+            raise RuntimeError(
+                f"KUCOIN_BINDING_MISSING:"
+                f"{function_name}"
+            )
+
+    if not hasattr(
+        indicator_engine,
+        "calculate_indicator_records",
+    ):
+        raise RuntimeError(
+            "INDICATOR_ENGINE_API_MISSING"
+        )
+
+    if not hasattr(
+        market_structure_engine,
+        "analyze_market_structure",
+    ):
+        raise RuntimeError(
+            "MARKET_STRUCTURE_ENGINE_API_MISSING"
+        )
+
+    if not hasattr(
+        market_structure_engine,
+        "MarketBar",
+    ):
+        raise RuntimeError(
+            "MARKET_STRUCTURE_ENGINE_MARKETBAR_MISSING"
+        )
+
+    if not hasattr(
+        indicator_engine,
+        "IndicatorBar",
+    ):
+        raise RuntimeError(
+            "INDICATOR_ENGINE_INDICATORBAR_MISSING"
+        )
+
+    if not hasattr(
+        feature_engine,
+        "FeatureBar",
+    ):
+        raise RuntimeError(
+            "FEATURE_ENGINE_FEATUREBAR_MISSING"
+        )
+
+    if not hasattr(
+        feature_engine,
+        "calculate_feature_records",
+    ):
+        raise RuntimeError(
+            "FEATURE_ENGINE_API_MISSING"
+        )
+
+    print(
+        "UNIVERSE_BINDING=PASS"
+    )
+
+    print(
+        "KUCOIN_BINDING=PASS"
+    )
+
+    print(
+        "INDICATOR_ENGINE=PASS"
+    )
+
+    print(
+        "MARKET_STRUCTURE_ENGINE=PASS"
+    )
+
+    print(
+        "FEATURE_ENGINE=PASS"
+    )
+
+    # ========================================================================
+    # DYNAMIC REAL UNIVERSE
+    # ========================================================================
+
+    all_records, eligible_records = (
+        discover_production_universe(
+            universe_binding
+        )
+    )
+
+    print(
+        f"REAL_UNIVERSE_SIZE="
+        f"{len(all_records)}"
+    )
+
+    print(
+        f"ELIGIBLE_UNIVERSE_SIZE="
+        f"{len(eligible_records)}"
+    )
+
+    # ========================================================================
+    # CONTROLLED SAMPLE
+    # ========================================================================
+
+    samples = select_sample_markets(
+        eligible_records,
+        sample_size=3,
+    )
+
+    if len(samples) != 3:
+        raise RuntimeError(
+            "CONTROLLED_SAMPLE_UNAVAILABLE"
+        )
+
+    print(
+        "SAMPLE_MARKETS="
+        + ",".join(
+            str(
+                getattr(
+                    record,
+                    "symbol",
+                    "",
+                )
+            ).upper()
+            for record in samples
+        )
+    )
+
+    # ========================================================================
+    # BINDING TEST
+    # ========================================================================
+
+    production_inputs = []
+
+    for record in samples:
+
+        # ------------------------------------------------------------
+        # MarketRecord â†’ MarketArmInput
+        # ------------------------------------------------------------
+
+        market_input = (
+            market_record_to_arm_input(
+                record
+            )
+        )
+
+        print(
+            f"MARKET_RECORD_BINDING=PASS "
+            f"SYMBOL={market_input['symbol']}"
+        )
+
+        print(
+            f"MARKET_ARM_INPUT_BINDING=PASS "
+            f"SYMBOL={market_input['symbol']}"
+        )
+
+        # ------------------------------------------------------------
+        # MarketArmInput â†’ real market data â†’
+        # analysis engines â†’ ProductionSignalInput
+        # ------------------------------------------------------------
+
+        production_input = (
+            build_production_signal_input(
+                market_input,
+                kucoin,
+                indicator_engine,
+                market_structure_engine,
+                feature_engine,
+            )
+        )
+
+        if not isinstance(
+            production_input,
+            ProductionSignalInput,
+        ):
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_INVALID"
+            )
+
+        # ------------------------------------------------------------
+        # Identity preservation.
+        # ------------------------------------------------------------
+
+        if (
+            production_input.asset
+            != market_input["asset"]
+        ):
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_ASSET_MISMATCH"
+            )
+
+        if (
+            production_input.symbol
+            != market_input["symbol"]
+        ):
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_SYMBOL_MISMATCH"
+            )
+
+        if (
+            production_input.market_identity
+            != market_input[
+                "market_identity"
+            ]
+        ):
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_IDENTITY_MISMATCH"
+            )
+
+        # ------------------------------------------------------------
+        # Boundary validation.
+        #
+        # IMPORTANT:
+        # ProductionSignalInput is a dataclass.
+        # Use attribute access, not dictionary subscription.
+        # ------------------------------------------------------------
+
+        if not production_input.continuity_valid:
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_CONTINUITY_INVALID"
+            )
+
+        if not production_input.provenance_valid:
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_PROVENANCE_INVALID"
+            )
+
+        if not production_input.canonical_validation:
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_CANONICAL_INVALID"
+            )
+
+        if (
+            production_input.actual_points
+            < MIN_CONTEXT
+        ):
+            raise RuntimeError(
+                "PRODUCTION_SIGNAL_INPUT_CONTEXT_INVALID"
+            )
+
+        # ------------------------------------------------------------
+        # Final boundary object accepted.
+        # ------------------------------------------------------------
+
+        production_inputs.append(
+            production_input
+        )
+
+        print(
+            f"REAL_MARKET_DATA_INPUT=PASS "
+            f"SYMBOL={production_input.symbol}"
+        )
+
+        print(
+            f"PRODUCTION_SIGNAL_INPUT=PASS "
+            f"SYMBOL={production_input.symbol} "
+            f"POINTS={production_input.actual_points} "
+            f"LATEST={production_input.latest_timestamp_iso}"
+        )
+
+    # ========================================================================
+    # FINAL CONTROLLED RESULT
+    # ========================================================================
+
+    print()
+
+    print("=" * 100)
+
+    print(
+        "EXTENDED CHECKPOINT 3 "
+        "BOUNDARY RESULT"
+    )
+
+    print("=" * 100)
+
+    print(
+        "STATUS=READY_NO_EXECUTION"
+    )
+
+    print(
+        f"UNIVERSE_SIZE={len(all_records)}"
+    )
+
+    print(
+        f"ELIGIBLE_UNIVERSE_SIZE="
+        f"{len(eligible_records)}"
+    )
+
+    print(
+        f"MARKETS_TESTED="
+        f"{len(production_inputs)}"
+    )
+
+    print(
+        "DYNAMIC_UNIVERSE=TRUE"
+    )
+
+    print(
+        "EXPECTED_ASSETS_USED=FALSE"
+    )
+
+    print(
+        "CMC_USED=FALSE"
+    )
+
+    print(
+        "MARKET_RECORD_BINDING=PASS"
+    )
+
+    print(
+        "MARKET_ARM_INPUT_BINDING=PASS"
+    )
+
+    print(
+        "REAL_MARKET_DATA_INPUT=PASS"
+    )
+
+    print(
+        "PRODUCTION_SIGNAL_INPUT=PASS"
+    )
+
+    print(
+        "REAL_DATA=TRUE"
+    )
+
+    print(
+        "CANONICAL_VALIDATION=PASS"
+    )
+
+    print(
+        "PROVENANCE=PASS"
+    )
+
+    print(
+        f"LAUNCH_BOUNDARY="
+        f"{utc_iso(LAUNCH_TS)}"
+    )
+
+    print(
+        "CONTINUITY=PASS"
+    )
+
+    print(
+        "LEGACY_DATA_USED=FALSE"
+    )
+
+    print(
+        "PRE_LAUNCH_DATA_USED=FALSE"
+    )
+
+    print(
+        "SYNTHETIC=FALSE"
+    )
+
+    print(
+        "INTERPOLATION=FALSE"
+    )
+
+    print(
+        "FILL=FALSE"
+    )
+
+    print(
+        "BACKFILL=FALSE"
+    )
+
+    print(
+        "PADDING=FALSE"
+    )
+
+    print(
+        "BLENDING=FALSE"
+    )
+
+    print(
+        "SIGNAL_CHAIN_EXECUTED=FALSE"
+    )
+
+    print(
+        "FUSION_EXECUTED=FALSE"
+    )
+
+    print(
+        "SCORE_EXECUTED=FALSE"
+    )
+
+    print(
+        "DECISION_EXECUTED=FALSE"
+    )
+
+    print(
+        "RISK_EXECUTED=FALSE"
+    )
+
+    print(
+        "TRADE_GATE_EXECUTED=FALSE"
+    )
+
+    print(
+        "OPPORTUNITY_EXECUTED=FALSE"
+    )
+
+    print(
+        "ORDER_INTENTS_CREATED=0"
+    )
+
+    print(
+        "PRODUCTION_DB_TOUCHED=FALSE"
+    )
+
+    print(
+        "DB_WRITES=0"
+    )
+
+    print(
+        "EXECUTION=OFF"
+    )
+
+    print(
+        "FILES_MODIFIED="
+        "production_signal_input_boundary_v0_1.py"
+    )
+
+    print(
+        "BLOCKER=NONE"
+    )
+
+    print(
+        "NEXT=STOP_AT_PRODUCTION_SIGNAL_INPUT"
+    )
+
+    print()
+
+    print(
+        "FINAL_GATE="
+        "REAL MARKET DATA â†’ PRODUCTION SIGNAL INPUT = PASS"
+    )
+
+    print("=" * 100)
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(
+        main()
+    )

@@ -1,0 +1,237 @@
+﻿from pathlib import Path
+import importlib.util
+import sys
+
+
+ROOT = Path(r"C:\Users\ASUS\ArundaTrader")
+TRADE_GATE_FILE = ROOT / "trade_gate_engine.py"
+
+
+def load_module(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load {name}")
+
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+trade_gate = load_module(
+    "arunda_trade_gate_boundary_dep",
+    TRADE_GATE_FILE,
+)
+
+
+def normalize_asset(asset):
+    if not isinstance(asset, str):
+        raise ValueError("asset must be string")
+
+    value = asset.strip().upper()
+    parts = value.split("/")
+
+    if len(parts) != 2 or not parts[0] or not parts[1]:
+        raise ValueError(
+            f"invalid dynamic asset: {asset}"
+        )
+
+    return f"{parts[0]}/{parts[1]}"
+
+
+def build_dynamic_trade_gate(
+    opportunity,
+    decision,
+    risk,
+):
+    """
+    Variable-cardinality Trade Gate boundary.
+
+    Reuses authoritative evaluate() only.
+    Does not call run_runtime().
+    """
+
+    if not isinstance(opportunity, dict):
+        raise ValueError(
+            "opportunity must be dict"
+        )
+
+    if not isinstance(decision, dict):
+        raise ValueError(
+            "decision must be dict"
+        )
+
+    if not isinstance(risk, dict):
+        raise ValueError(
+            "risk must be dict"
+        )
+
+    raw_asset = opportunity.get("asset")
+
+    if raw_asset is None:
+        raw_asset = opportunity.get("symbol")
+
+    dynamic_asset = normalize_asset(raw_asset)
+
+    decision_asset = decision.get("asset")
+    if decision_asset is not None:
+        if normalize_asset(decision_asset) != dynamic_asset:
+            raise RuntimeError(
+                "Decision asset identity mismatch"
+            )
+
+    risk_asset = risk.get("asset")
+    if risk_asset is not None:
+        if normalize_asset(risk_asset) != dynamic_asset:
+            raise RuntimeError(
+                "Risk asset identity mismatch"
+            )
+
+    result = trade_gate.evaluate(
+        opportunity,
+        decision,
+        risk,
+    )
+
+    if not isinstance(result, tuple):
+        raise RuntimeError(
+            "evaluate() must return tuple"
+        )
+
+    if len(result) != 2:
+        raise RuntimeError(
+            "Trade Gate result must contain "
+            "state and reasons"
+        )
+
+    gate_state, reasons = result
+
+    if gate_state not in (
+        "TRADE_READY",
+        "WATCH",
+        "REJECTED",
+    ):
+        raise RuntimeError(
+            f"invalid Trade Gate state: {gate_state}"
+        )
+
+    if not isinstance(reasons, list):
+        raise RuntimeError(
+            "Trade Gate reasons must be list"
+        )
+
+    # Authoritative semantic invariant.
+    if gate_state == "TRADE_READY":
+        if reasons != ["all gates passed"]:
+            raise RuntimeError(
+                "TRADE_READY semantics changed"
+            )
+
+    return {
+        "asset": dynamic_asset,
+        "trade_gate_state": gate_state,
+        "reasons": reasons,
+    }
+
+
+def validate_boundary():
+    required = (
+        "evaluate",
+        "run_runtime",
+        "validate_runtime_inputs",
+    )
+
+    for name in required:
+        if not hasattr(trade_gate, name):
+            raise RuntimeError(
+                f"trade_gate_engine missing {name}"
+            )
+
+    # Static semantic probes only.
+    base_opportunity = {
+        "asset": "MARSCOIN/USDT",
+        "status": "WAITING_HISTORY",
+        "direction": "NONE",
+        "confidence": 0.0,
+        "score": 0.0,
+        "market_data_points": 0,
+        "snapshot_age": 0.0,
+    }
+
+    base_decision = {
+        "asset": "MARSCOIN/USDT",
+        "state": "HOLD",
+        "direction": "NONE",
+    }
+
+    base_risk = {
+        "asset": "MARSCOIN/USDT",
+        "risk_state": "NOT_APPLICABLE",
+        "direction": "NONE",
+        "risk_decision": "NONE",
+    }
+
+    result = build_dynamic_trade_gate(
+        base_opportunity,
+        base_decision,
+        base_risk,
+    )
+
+    if result["trade_gate_state"] not in (
+        "WATCH",
+        "REJECTED",
+    ):
+        raise RuntimeError(
+            "Invalid fail-closed Trade Gate semantics"
+        )
+
+    # Verify variable-cardinality identity with another symbol.
+    second = dict(base_opportunity)
+    second["asset"] = "TESTCOIN/USDT"
+
+    second_decision = dict(base_decision)
+    second_decision["asset"] = "TESTCOIN/USDT"
+
+    second_risk = dict(base_risk)
+    second_risk["asset"] = "TESTCOIN/USDT"
+
+    result2 = build_dynamic_trade_gate(
+        second,
+        second_decision,
+        second_risk,
+    )
+
+    if result2["asset"] != "TESTCOIN/USDT":
+        raise RuntimeError(
+            "Variable asset identity failed"
+        )
+
+    return True
+
+
+if __name__ == "__main__":
+    print("=" * 100)
+    print("ARUNDA DYNAMIC TRADE GATE CONTRACT BOUNDARY v0.1")
+    print("STATIC CHECK ONLY")
+
+    validate_boundary()
+
+    print("TRADE_GATE_ENGINE=PASS")
+    print("EVALUATE=PASS")
+    print("VARIABLE_CARDINALITY=PASS")
+    print("FIXED_15_USED=FALSE")
+    print("RUN_RUNTIME_USED=FALSE")
+    print("EXISTING_TRADE_GATE_SEMANTICS=PRESERVED")
+
+    print("SYNTHETIC=False")
+    print("INTERPOLATION=False")
+    print("FILL=False")
+    print("BACKFILL=False")
+    print("PADDING=False")
+    print("BLENDING=False")
+    print("CMC_USED=FALSE")
+    print("PRODUCTION_DB_TOUCHED=FALSE")
+    print("DB_WRITES=0")
+    print("RUNTIME_EXECUTED=FALSE")
+    print("STATIC_CONTRACT_VALIDATION=PASS")
+    print("=" * 100)

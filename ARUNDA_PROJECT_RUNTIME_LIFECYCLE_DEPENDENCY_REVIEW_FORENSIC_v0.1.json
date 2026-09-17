@@ -1,0 +1,61 @@
+{
+  "artifact_name": "ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.json",
+  "artifact_sha256": "cb6ed42cfb8d9e55c16cd9f830bbe13f9cb0d397f691a8c3b45f9d9b59dded7e",
+  "artifact_version": "v0.1",
+  "classification": "SYNTAX_FAILURE_REQUIRES_REPAIR_OR_QUARANTINE",
+  "database": "NOT USED",
+  "database_write": false,
+  "deletion": false,
+  "execution": "STATIC ANALYSIS ONLY",
+  "file_modification": "FORBIDDEN",
+  "finished_utc": "2026-08-26T20:53:33.435471+00:00",
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "production_run": false,
+  "project_directory": "C:\\Users\\ASUS\\ArundaTrader",
+  "python_files_scanned": 448,
+  "quarantine": false,
+  "references": [
+    {
+      "file": "ARUNDA_PROJECT_RUNTIME_LIFECYCLE_DEPENDENCY_REVIEW_FORENSIC_v0.1.py",
+      "matched_token": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py"
+    },
+    {
+      "file": "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.py",
+      "matched_token": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py"
+    }
+  ],
+  "started_utc": "2026-08-26T20:53:33.323719+00:00",
+  "target": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+  "target_analysis": {
+    "calls": [],
+    "class_names": [],
+    "exists": true,
+    "function_names": [],
+    "imports": [],
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+    "read_error": null,
+    "runtime_markers": [
+      "LIVE",
+      "PAPER",
+      "EXECUTION",
+      "PRODUCTION",
+      "ORDER",
+      "TRADE"
+    ],
+    "sha256": "778ce10bcb280cdd28f9ca89d06276ce502e42b36e8d04dff7dd413cccb6f409",
+    "sqlite_markers": [
+      "SQLITE3_IMPORT",
+      "SQLITE_CONNECT",
+      "SQLITE_DATABASE_REFERENCE",
+      "SQL_SELECT"
+    ],
+    "syntax": {
+      "error_type": "IndentationError",
+      "line": 27,
+      "message": "expected an indented block after function definition on line 26 (<unknown>, line 27)",
+      "pass": false
+    },
+    "target": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py"
+  }
+}

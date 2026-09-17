@@ -1,0 +1,67 @@
+==============================================================================
+ARUNDA TRADER — DB WRITE FORENSIC v0.1
+==============================================================================
+MODE                       : READ ONLY
+DATABASE                   : C:\Users\ASUS\ArundaTrader\arunda.db
+INTEGRITY                  : ok
+TABLE COUNT                : 27
+CURRENT STRUCTURAL HASH    : 025d4936af816c45544013089948927367e9bf964f43dcf7271768dd66da0ff3
+
+TABLE ROW COUNTS
+------------------------------------------------------------------------------
+fusion_signals                                48
+hunter_signals                                50
+market_data                                   3032
+market_history                                709935
+market_history_legacy                         703935
+market_microstructure                         987
+market_news                                   99
+market_news_intelligence                      99
+market_opportunity                            987
+market_records                                34737
+market_state                                  1017
+market_technical                              6909
+market_universe                               1000
+market_whale                                  0
+news_data                                     281
+news_signals                                  16
+opportunity_candidates                        438
+opportunity_signals                           2
+positioning_data                              2
+risk_decisions                                6
+scheduler_runs                                1
+signal_outcomes                               74
+social_metrics                                0
+source_status                                 24
+sqlite_sequence                               24
+trade_decisions                               4
+trade_gate_decisions                          6
+
+PRODUCTION-RELEVANT TABLES
+------------------------------------------------------------------------------
+market_data                                   3032
+market_history                                709935
+market_records                                34737
+market_state                                  1017
+fusion_signals                                48
+signal_outcomes                               74
+
+==============================================================================
+FORENSIC INTERPRETATION
+==============================================================================
+DB FINGERPRINT CHANGED DURING CONTROLLED TEST : YES
+ORDER SUBMISSION                              : NONE
+EXCHANGE WRITE                                : NONE
+EXECUTION ACTIVATION                          : NONE
+CURRENT DB ACCESS                             : READ ONLY
+
+IMPORTANT:
+Fingerprint change alone does NOT prove an unauthorized write.
+Determine the affected table(s) before any production conclusion.
+
+NO MODIFICATION
+NO DELETE
+NO RUNTIME
+NO EXCHANGE
+NO ORDER
+==============================================================================

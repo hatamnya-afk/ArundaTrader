@@ -1,0 +1,107 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ELIGIBLE SIGNAL PATH VERIFICATION",
+  "version": "v0.1",
+  "mode": "READ_ONLY",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "exchange_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "artifact_mutation": false,
+    "synthetic_data": false,
+    "live_data_injection": false
+  },
+  "sources": {
+    "artifact": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+      "sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417"
+    },
+    "generation": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_GENERATION_REPORT.json",
+      "sha256": "e3bd49dd5239b37ad9e1611d7df0a30ccc87ff9a74a4218abadf830bd701af7e"
+    },
+    "validation": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+      "sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582"
+    },
+    "execution_gate": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_REPORT.json",
+      "sha256": "ab19975b57f5d09b9f51f5a6753fc644ec5e7ad256eb1e12f563f9e44637f136"
+    },
+    "preflight": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_PREFLIGHT_REPORT.json",
+      "sha256": "96a0e12f7a3378c4aca083032fe8e70c37e6f59a2ffa396458495188d8c5c2f6"
+    }
+  },
+  "artifact_contract": {
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "row_results_count": 4,
+    "eligible_detected": 0,
+    "eligible_count_matches": true,
+    "decision": "NO_TRADE",
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "eligible_rows_data": []
+  },
+  "generation_contract": {
+    "contract": true,
+    "verified": true,
+    "reason": "GENERATION_CONTRACT_VERIFIED",
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "intents_count": 0
+  },
+  "validation_contract": {
+    "contract": false,
+    "verified": false,
+    "reason": "VALIDATION_CONTRACT_NOT_VERIFIED"
+  },
+  "execution_gate_contract": {
+    "contract": false,
+    "verified": false,
+    "execution_allowed": false,
+    "reason": "EXECUTION_GATE_VERDICT_INVALID"
+  },
+  "execution_preflight_contract": {
+    "contract": true,
+    "verified": true,
+    "execution_allowed": false,
+    "reason": "PREFLIGHT_CONTRACT_VERIFIED"
+  },
+  "eligible_signal_path": {
+    "status": "NO_ELIGIBLE_SIGNAL",
+    "eligible_signals": 0,
+    "signals": [],
+    "path_verified": false
+  },
+  "safety_verification": {
+    "safe": false,
+    "artifact_safety": {
+      "production_db_modified": false,
+      "engine_executed": false,
+      "historical_repair": false,
+      "direction_inference": false,
+      "score_reconstruction": false,
+      "synthetic_data": false,
+      "live_data_injection": false,
+      "order_execution": false
+    },
+    "execution_allowed": false,
+    "preflight_execution_allowed": false
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0,
+    "execution_allowed": false
+  },
+  "final_verdict": "LIVE_SIGNAL_ELIGIBLE_SIGNAL_PATH_VERIFICATION_READY",
+  "next_stage": "WAIT_FOR_ELIGIBLE_SIGNAL"
+}

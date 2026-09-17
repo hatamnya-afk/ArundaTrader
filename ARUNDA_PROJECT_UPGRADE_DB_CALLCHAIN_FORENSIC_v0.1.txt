@@ -1,0 +1,144 @@
+====================================================================================================
+ARUNDA PROJECT UPGRADE DB CALLCHAIN FORENSIC v0.1
+====================================================================================================
+Project Directory : C:\Users\ASUS\ArundaTrader
+Target            : upgrade_db.py
+Started UTC       : 2026-08-27T00:27:11.146661+00:00
+Mode              : READ ONLY
+Database          : NOT USED
+Network           : NOT USED
+Execution         : STATIC ANALYSIS ONLY
+File Modification : FORBIDDEN
+Quarantine        : NOT USED
+
+====================================================================================================
+TARGET
+====================================================================================================
+EXISTS            : True
+SYNTAX PASS       : True
+SHA256            : 8bc0eb6c90236a47b7d90a62e9baed645d950a48a551fbdcb2f1793be5907727
+MAIN FUNCTION     : False
+MAIN GUARD        : False
+
+FUNCTIONS
+  - None
+
+IMPORTS
+  - sqlite3 (line 1)
+
+====================================================================================================
+DATABASE CONNECTIVITY
+====================================================================================================
+CONNECT CALLS : 1
+DB PATHS      : 1
+----------------------------------------------------------------------------------------------------
+LINE   : 5
+SOURCE : conn = sqlite3.connect(DB)
+----------------------------------------------------------------------------------------------------
+LINE  : 3
+VALUE : arunda.db
+
+====================================================================================================
+WRITE OPERATIONS
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+LINE   : 17
+TYPE   : CREATE TABLE
+SOURCE : CREATE TABLE IF NOT EXISTS social_metrics (
+----------------------------------------------------------------------------------------------------
+LINE   : 43
+TYPE   : CREATE TABLE
+SOURCE : CREATE TABLE IF NOT EXISTS hunter_signals (
+----------------------------------------------------------------------------------------------------
+LINE   : 70
+TYPE   : CREATE TABLE
+SOURCE : CREATE TABLE IF NOT EXISTS signal_outcomes (
+----------------------------------------------------------------------------------------------------
+LINE   : 104
+TYPE   : CREATE INDEX
+SOURCE : CREATE INDEX IF NOT EXISTS idx_market_records_market_time
+----------------------------------------------------------------------------------------------------
+LINE   : 109
+TYPE   : CREATE INDEX
+SOURCE : CREATE INDEX IF NOT EXISTS idx_social_asset_time
+----------------------------------------------------------------------------------------------------
+LINE   : 114
+TYPE   : CREATE INDEX
+SOURCE : CREATE INDEX IF NOT EXISTS idx_signals_market_time
+----------------------------------------------------------------------------------------------------
+LINE   : 119
+TYPE   : CREATE INDEX
+SOURCE : CREATE INDEX IF NOT EXISTS idx_outcomes_market_time
+
+====================================================================================================
+DIRECT PROJECT REFERENCES
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.broken.py
+LINE   : 11
+TYPE   : TEXT_REFERENCE
+SOURCE : TARGET = "upgrade_db.py"
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.broken.py
+LINE   : 363
+TYPE   : TEXT_REFERENCE
+SOURCE : "upgrade_db.py WAS NOT EXECUTED",
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.py
+LINE   : 11
+TYPE   : TEXT_REFERENCE
+SOURCE : TARGET_NAME = "upgrade_db.py"
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.py
+LINE   : 639
+TYPE   : TEXT_REFERENCE
+SOURCE : "This artifact does NOT execute upgrade_db.py.",
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.py
+LINE   : 12
+TYPE   : TEXT_REFERENCE
+SOURCE : TARGET_NAME = "upgrade_db.py"
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.py
+LINE   : 490
+TYPE   : TEXT_REFERENCE
+SOURCE : ["upgrade_db.py_not_found"],
+----------------------------------------------------------------------------------------------------
+FILE   : ARUNDA_PROJECT_UPGRADE_DB_DEPENDENCY_REVIEW_FORENSIC_v0.1.py
+LINE   : 1084
+TYPE   : TEXT_REFERENCE
+SOURCE : "This artifact does NOT execute upgrade_db.py."
+
+====================================================================================================
+PRODUCTION PATH CANDIDATES
+====================================================================================================
+LINE 3 : arunda.db
+
+====================================================================================================
+CALLCHAIN CLASSIFICATION
+====================================================================================================
+CLASSIFICATION : LAUNCH_REACHABLE_REFERENCE_FOUND
+
+====================================================================================================
+FORENSIC VERDICT
+====================================================================================================
+FORENSIC STATUS : LAUNCH_REACHABLE_REFERENCE_FOUND
+PREDICTIVE CLAIM : NOT_ESTABLISHED
+DATABASE USED    : False
+NETWORK USED     : False
+EXECUTION        : False
+FILE MODIFICATION: False
+QUARANTINE USED  : False
+
+IMPORTANT:
+This artifact does NOT execute upgrade_db.py.
+This artifact does NOT open arunda.db.
+This artifact does NOT execute SQL.
+This artifact does NOT modify production state.
+
+====================================================================================================
+ARTIFACT
+====================================================================================================
+Artifact : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.json
+Report   : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_UPGRADE_DB_CALLCHAIN_FORENSIC_v0.1.txt
+====================================================================================================

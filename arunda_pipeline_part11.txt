@@ -1,0 +1,222 @@
+﻿    if set(d_map.keys()) != set(r_map.keys()):
+        fail(
+            "Decision/Risk asset coverage mismatch"
+        )
+
+    # ------------------------------------------------------------------------
+    # CURRENT RUNTIME QUANTITY
+    # ------------------------------------------------------------------------
+
+    quantity_records = (
+        build_runtime_quantity_bridge(
+            snapshot_id=snapshot_id,
+            opportunity_rows=opportunity_rows,
+            risk_snapshot=risk_snapshot,
+            market_data_result=market_data_result,
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # TRADE GATE
+    # ------------------------------------------------------------------------
+
+    gate_results = (
+        trade_gate_engine.run_runtime(
+            opportunity_rows,
+            decision_snapshot,
+            risk_snapshot,
+        )
+    )
+
+    if not isinstance(
+        gate_results,
+        list,
+    ):
+        fail(
+            "Trade Gate runtime result must be list"
+        )
+
+    gate_results = exact_asset_rows(
+        gate_results,
+        "TRADE GATE",
+    )
+
+    # ------------------------------------------------------------------------
+    # CURRENT MARKET REGIME
+    # ------------------------------------------------------------------------
+
+    regime_snapshot = (
+        load_current_market_regime()
+    )
+
+    # ------------------------------------------------------------------------
+    # ORDER INTENT
+    # ------------------------------------------------------------------------
+
+    order_intents = (
+        build_current_order_intents(
+            gate_results=gate_results,
+            opportunity_rows=opportunity_rows,
+            snapshot_id=snapshot_id,
+            regime_snapshot=regime_snapshot,
+            risk_snapshot=risk_snapshot,
+        )
+    )
+
+    validated_order_intents = (
+        validate_current_order_intents(
+            intents=order_intents,
+            gate_results=gate_results,
+            opportunity_rows=opportunity_rows,
+            snapshot_id=snapshot_id,
+            regime_snapshot=regime_snapshot,
+            decision_rows=decision_rows,
+            risk_rows=risk_rows,
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # CANONICAL ORDER REQUEST
+    # ------------------------------------------------------------------------
+
+    canonical_order_requests = (
+        build_canonical_order_requests(
+            order_intents=order_intents,
+            risk_snapshot=risk_snapshot,
+            snapshot_id=snapshot_id,
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # QUANTITY OBSERVABILITY
+    # ------------------------------------------------------------------------
+
+    bind_order_intent_quantity_observability(
+        order_intents=order_intents,
+        quantity_records=quantity_records,
+        canonical_order_requests=canonical_order_requests,
+    )
+
+    # ------------------------------------------------------------------------
+    # QUANTITY VALIDATION
+    #
+    # Only positive-path assets have complete
+    # OrderIntent / Canonical quantities.
+    # ------------------------------------------------------------------------
+
+    for asset, record in quantity_records.items():
+        if asset not in canonical_order_requests:
+            continue
+
+        validate_runtime_quantity_records(
+            {
+                asset: record
+            },
+            snapshot_id,
+        )
+
+    # ------------------------------------------------------------------------
+    # FINAL PREFLIGHT
+    # ------------------------------------------------------------------------
+
+    trade_ready_count, eligible_count = (
+        validate_final_preflight_integrity(
+            opportunity_rows=opportunity_rows,
+            gate_results=gate_results,
+            order_intents=order_intents,
+            validated_order_intents=(
+                validated_order_intents
+            ),
+        )
+    )
+
+    _ = trade_ready_count
+    _ = eligible_count
+
+    # ------------------------------------------------------------------------
+    # EXECUTION BOUNDARY
+    # ------------------------------------------------------------------------
+
+    execution_boundary_status = (
+        verify_execution_boundary_integration(
+            canonical_order_requests
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # FINAL EXECUTION SAFETY
+    # ------------------------------------------------------------------------
+
+    assert_no_execution_boundary(
+        order_intents
+    )
+
+    # ------------------------------------------------------------------------
+    # FINAL REPORT
+    # ------------------------------------------------------------------------
+
+    print_final_report(
+        snapshot_id=snapshot_id,
+        opportunity_rows=opportunity_rows,
+        decision_rows=decision_rows,
+        risk_rows=risk_rows,
+        gate_results=gate_results,
+        order_intents=order_intents,
+        validated_order_intents=(
+            validated_order_intents
+        ),
+        quantity_records=quantity_records,
+        execution_boundary_status=(
+            execution_boundary_status
+        ),
+    )
+
+    return 0
+
+
+# ============================================================================
+# ENTRY POINT
+# ============================================================================
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(
+            main()
+        )
+
+    except Exception as exc:
+        print()
+        print("=" * 90)
+        print(
+            "ARUNDA TRADER â€” "
+            "PRODUCTION PIPELINE FAILURE"
+        )
+        print("=" * 90)
+
+        print(
+            f"ERROR : {exc}"
+        )
+
+        print()
+        print(
+            "EXECUTION          : DISABLED"
+        )
+        print(
+            "ORDER SUBMISSION   : NONE"
+        )
+        print(
+            "EXCHANGE WRITE     : NONE"
+        )
+        print(
+            "DB_WRITES          : 0"
+        )
+        print(
+            "FAIL-CLOSED        : YES"
+        )
+        print(
+            "EXECUTION BOUNDARY : FAIL-CLOSED"
+        )
+
+        print("=" * 90)
+
+        raise

@@ -1,0 +1,367 @@
+{
+  "artifact_version": "v0.1",
+  "artifact_name": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_ORIGIN_PATH_FORENSIC_v0.1",
+  "generated_at_utc": "2026-08-26T17:21:38.473488+00:00",
+  "mode": "READ_ONLY",
+  "network": "FORBIDDEN",
+  "database_write": "NOT_PERFORMED",
+  "repair": false,
+  "prediction": false,
+  "trading_decision": "NOT_PERFORMED",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "expected_universe": null,
+  "target_symbols": [
+    "4",
+    "ASSET"
+  ],
+  "database_inventory": {
+    "table_count": 26,
+    "tables": [
+      "fusion_signals",
+      "hunter_signals",
+      "market_data",
+      "market_history",
+      "market_history_legacy",
+      "market_microstructure",
+      "market_news",
+      "market_news_intelligence",
+      "market_opportunity",
+      "market_records",
+      "market_state",
+      "market_technical",
+      "market_universe",
+      "market_whale",
+      "news_data",
+      "news_signals",
+      "opportunity_signals",
+      "positioning_data",
+      "risk_decisions",
+      "scheduler_runs",
+      "signal_outcomes",
+      "social_metrics",
+      "source_status",
+      "sqlite_sequence",
+      "trade_decisions",
+      "trade_gate_decisions"
+    ],
+    "symbols": {
+      "4": {
+        "observed": true,
+        "table_count": 7,
+        "total_rows": 1420,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ]
+      },
+      "ASSET": {
+        "observed": true,
+        "table_count": 7,
+        "total_rows": 1420,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ]
+      }
+    }
+  },
+  "input_artifacts": {
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    },
+    "semantic": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856"
+    },
+    "origin": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "f3554f92cb117876ca9e3883ba84bb74d5f28e5dbdca48f6dead86365f949c33"
+    },
+    "first_insertion": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "07b1d31cf3dc84ce2cceb4f5ef0ffb2d4d427b77898194c51e7d6c4ae15d4aee"
+    },
+    "cmc_identity": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "305191d517122fee4c0d5b83f8f63bea64fc8450c6dc07ed783c9636eab8882c"
+    },
+    "expected_status": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "78e4bc900dd9b91f879bd8946b9aa9da6c8ed0f93a17cc597837c988f0de8861"
+    },
+    "decision": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "4ec43e218e835c329aa31659458bda00ec025ba62d1f8c23f572ba40b519e09b"
+    },
+    "contract_repair": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+      "exists": true,
+      "sha256": "b38402c0c695b1db070d0fbb52651fd127c556fe1476ed6bb5d470a1da08d1b7"
+    }
+  },
+  "results": {
+    "4": {
+      "symbol": "4",
+      "database": {
+        "observed": true,
+        "table_count": 7,
+        "total_rows": 1420,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ]
+      },
+      "semantic_classes_observed": [
+        "NUMERIC_IDENTIFIER_CANDIDATE"
+      ],
+      "origin_classes_observed": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "explicit_origin_paths": [],
+      "decision_origin_classes": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "repair_origin_classes": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "origin_propagation_classes": [],
+      "stages": [
+        {
+          "stage": "INPUT_PROVENANCE",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "records_found": 0,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "SEMANTIC",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "NUMERIC_IDENTIFIER_CANDIDATE"
+          ],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "ORIGIN_PROPAGATION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "records_found": 19,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "FIRST_INSERTION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "records_found": 43,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "CMC_IDENTITY",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "records_found": 14,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "EXPECTED_UNIVERSE_STATUS",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "DECISION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "NUMERIC_IDENTIFIER_CANDIDATE"
+          ],
+          "origin_classes": [
+            "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+          ],
+          "origin_paths": []
+        },
+        {
+          "stage": "CONTRACT_REPAIR",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "NUMERIC_IDENTIFIER_CANDIDATE"
+          ],
+          "origin_classes": [
+            "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+          ],
+          "origin_paths": []
+        }
+      ],
+      "origin_path_established": false,
+      "contradictions": [
+        "ORIGIN_PROPAGATION_CLASS_MISSING",
+        "ORIGIN_PATH_NOT_EXPLICITLY_ESTABLISHED"
+      ],
+      "consistency": false
+    },
+    "ASSET": {
+      "symbol": "ASSET",
+      "database": {
+        "observed": true,
+        "table_count": 7,
+        "total_rows": 1420,
+        "tables": [
+          "market_history",
+          "market_history_legacy",
+          "market_microstructure",
+          "market_opportunity",
+          "market_state",
+          "market_technical",
+          "market_universe"
+        ]
+      },
+      "semantic_classes_observed": [
+        "GENERIC_FIELD_LABEL"
+      ],
+      "origin_classes_observed": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "explicit_origin_paths": [],
+      "decision_origin_classes": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "repair_origin_classes": [
+        "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+      ],
+      "origin_propagation_classes": [],
+      "stages": [
+        {
+          "stage": "INPUT_PROVENANCE",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+          "records_found": 0,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "SEMANTIC",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "GENERIC_FIELD_LABEL"
+          ],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "ORIGIN_PROPAGATION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+          "records_found": 19,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "FIRST_INSERTION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_FIRST_INSERTION_FORENSIC_v0.1.json",
+          "records_found": 43,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "CMC_IDENTITY",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_CMC_IDENTITY_FORENSIC_v0.1.json",
+          "records_found": 14,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "EXPECTED_UNIVERSE_STATUS",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_STATUS_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [],
+          "origin_classes": [],
+          "origin_paths": []
+        },
+        {
+          "stage": "DECISION",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_EXPECTED_UNIVERSE_DECISION_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "NUMERIC_IDENTIFIER_CANDIDATE"
+          ],
+          "origin_classes": [
+            "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+          ],
+          "origin_paths": []
+        },
+        {
+          "stage": "CONTRACT_REPAIR",
+          "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DECISION_CONTRACT_REPAIR_FORENSIC_v0.1.json",
+          "records_found": 1,
+          "semantic_classes": [
+            "GENERIC_FIELD_LABEL",
+            "NUMERIC_IDENTIFIER_CANDIDATE"
+          ],
+          "origin_classes": [
+            "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL"
+          ],
+          "origin_paths": []
+        }
+      ],
+      "origin_path_established": false,
+      "contradictions": [
+        "ORIGIN_PROPAGATION_CLASS_MISSING",
+        "ORIGIN_PATH_NOT_EXPLICITLY_ESTABLISHED"
+      ],
+      "consistency": false
+    }
+  },
+  "summary": {
+    "target_symbols": 2,
+    "origin_paths_established": 0,
+    "consistent_targets": 0,
+    "unresolved_targets": 2,
+    "forensic_status": "DECISION_ORIGIN_PATH_NOT_ESTABLISHED"
+  },
+  "forensic_status": "DECISION_ORIGIN_PATH_NOT_ESTABLISHED",
+  "predictive_claim": "NOT_ESTABLISHED",
+  "relationship_calculation": "NOT_PERFORMED",
+  "database_repair": "NOT_PERFORMED",
+  "universe_rebuild": "NOT_PERFORMED",
+  "symbol_deletion": "NOT_PERFORMED"
+}

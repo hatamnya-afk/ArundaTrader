@@ -1,0 +1,123 @@
+{
+  "artifact": {
+    "asset_identity": true,
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "decision_contract": true,
+    "direction_identity": true,
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "eligible_contract": true,
+    "no_trade_contract": true,
+    "reason_contract": true,
+    "reason_count": 20,
+    "row_count": 4,
+    "rows_contract": true,
+    "snapshot_identity": true,
+    "top_contract": true
+  },
+  "chain_seal": {
+    "all_expected_reports_present": true,
+    "artifact_contract": true,
+    "chain_hash_match": true,
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "evidence_chain_contract": true,
+    "runtime_identity": true,
+    "verified": true
+  },
+  "forensic": {
+    "name": "HISTORICAL ELIGIBILITY RUNTIME EVIDENCE CHAIN RELEASE GATE FINAL",
+    "read_only": true,
+    "version": "v0.1"
+  },
+  "identity": {
+    "artifact_identity": true,
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "producer_identity": true,
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "producer_syntax": true
+  },
+  "production_db": {
+    "after_sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+    "after_size": 521883648,
+    "before_after_present": true,
+    "before_sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+    "before_size": 521883648,
+    "contract": true,
+    "exists": true,
+    "sha256_match": true,
+    "size_match": true,
+    "unchanged": true
+  },
+  "runtime_identity": true,
+  "safety": {
+    "artifact_delete": false,
+    "artifact_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false
+  },
+  "safety_contract": {
+    "exists": true,
+    "fields": {
+      "direction_inference": false,
+      "engine_executed": false,
+      "historical_repair": false,
+      "live_data_injection": false,
+      "order_execution": false,
+      "production_db_modified": false,
+      "score_reconstruction": false,
+      "synthetic_data": false
+    },
+    "semantic_contract": true
+  },
+  "semantic_binding": {
+    "artifact_contract": true,
+    "artifact_seal_match": true,
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "chain_hash_match": true,
+    "chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "evidence_contract": true,
+    "evidence_files": true,
+    "expected_chain_sha256": "d32d35d36485090bc1ead1d90d03ca91b2fb34bea6f915a124c3e7388e3e54b4",
+    "explicit_verified": true,
+    "mapping_verified": false,
+    "producer_seal_match": true,
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "real_field_mapping": {
+      "artifact_contract_source": "verification.artifact_contract",
+      "artifact_sha256_source": "chain_seal.canonical_material.artifact_sha256",
+      "chain_sha256_source": "chain_seal.chain_sha256",
+      "evidence_contract_source": "verification.evidence_chain_contract",
+      "evidence_files_source": "evidence_chain.all_expected_reports_present",
+      "producer_sha256_source": "chain_seal.canonical_material.producer_sha256",
+      "runtime_identity_source": "verification.runtime_identity",
+      "verified_source": "verification.verified"
+    },
+    "repair_required": false,
+    "report_contract": true,
+    "runtime_identity": true
+  },
+  "verdict": "HISTORICAL_ELIGIBILITY_RUNTIME_EVIDENCE_CHAIN_RELEASE_GATE_VERIFIED",
+  "verification": {
+    "artifact_contract": true,
+    "chain_seal_contract": true,
+    "operational_safety": true,
+    "production_db_contract": true,
+    "release_gate_verified": true,
+    "runtime_identity_contract": true,
+    "safety_contract": true,
+    "semantic_binding_contract": true
+  }
+}

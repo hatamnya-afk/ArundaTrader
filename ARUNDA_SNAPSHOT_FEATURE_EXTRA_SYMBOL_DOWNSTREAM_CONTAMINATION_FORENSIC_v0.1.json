@@ -1,0 +1,168 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_DOWNSTREAM_CONTAMINATION_FORENSIC_v0.1.json",
+  "generated_at_utc": "2026-08-26T17:34:34.830375+00:00",
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "database_write": "NOT PERFORMED",
+  "repair": false,
+  "prediction": false,
+  "decision": false,
+  "target_symbols": [
+    "4",
+    "ASSET"
+  ],
+  "excluded_upstream_tables": [
+    "market_history",
+    "market_history_legacy",
+    "market_microstructure",
+    "market_opportunity",
+    "market_state",
+    "market_technical",
+    "market_universe"
+  ],
+  "downstream_tables_scanned": [
+    "fusion_signals",
+    "hunter_signals",
+    "market_data",
+    "market_news",
+    "market_news_intelligence",
+    "market_records",
+    "market_whale",
+    "news_data",
+    "news_signals",
+    "opportunity_signals",
+    "positioning_data",
+    "risk_decisions",
+    "scheduler_runs",
+    "signal_outcomes",
+    "social_metrics",
+    "source_status",
+    "trade_decisions",
+    "trade_gate_decisions"
+  ],
+  "results": {
+    "4": {
+      "target_symbol": "4",
+      "cmc_ids": [
+        "38557"
+      ],
+      "artifact_presence": {
+        "normalization": {
+          "artifact_exists": true,
+          "records_found": 0
+        },
+        "provenance": {
+          "artifact_exists": true,
+          "records_found": 3
+        },
+        "semantic": {
+          "artifact_exists": true,
+          "records_found": 4
+        },
+        "origin": {
+          "artifact_exists": true,
+          "records_found": 20
+        },
+        "first_insertion": {
+          "artifact_exists": true,
+          "records_found": 44
+        },
+        "cmc_identity": {
+          "artifact_exists": true,
+          "records_found": 16
+        },
+        "expected_status": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "decision": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "contract_repair": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "source_trace": {
+          "artifact_exists": true,
+          "records_found": 3
+        }
+      },
+      "downstream_symbol_hits": [],
+      "downstream_cmc_hits": [],
+      "direct_symbol_contamination": false,
+      "cmc_identity_contamination": false,
+      "downstream_contamination": false,
+      "classification": "NO_DOWNSTREAM_CONTAMINATION_OBSERVED"
+    },
+    "ASSET": {
+      "target_symbol": "ASSET",
+      "cmc_ids": [
+        "39922"
+      ],
+      "artifact_presence": {
+        "normalization": {
+          "artifact_exists": true,
+          "records_found": 0
+        },
+        "provenance": {
+          "artifact_exists": true,
+          "records_found": 3
+        },
+        "semantic": {
+          "artifact_exists": true,
+          "records_found": 4
+        },
+        "origin": {
+          "artifact_exists": true,
+          "records_found": 20
+        },
+        "first_insertion": {
+          "artifact_exists": true,
+          "records_found": 44
+        },
+        "cmc_identity": {
+          "artifact_exists": true,
+          "records_found": 16
+        },
+        "expected_status": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "decision": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "contract_repair": {
+          "artifact_exists": true,
+          "records_found": 2
+        },
+        "source_trace": {
+          "artifact_exists": true,
+          "records_found": 3
+        }
+      },
+      "downstream_symbol_hits": [],
+      "downstream_cmc_hits": [],
+      "direct_symbol_contamination": false,
+      "cmc_identity_contamination": false,
+      "downstream_contamination": false,
+      "classification": "NO_DOWNSTREAM_CONTAMINATION_OBSERVED"
+    }
+  },
+  "cross_symbol_summary": {
+    "target_symbols": 2,
+    "contaminated_targets": 0,
+    "clean_targets": 2,
+    "unresolved_cmc_identity": 0,
+    "contaminated_symbols": []
+  },
+  "forensic_status": "NO_DOWNSTREAM_CONTAMINATION_OBSERVED",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "database_repair": "NOT PERFORMED",
+  "universe_rebuild": "NOT PERFORMED",
+  "symbol_deletion": "NOT PERFORMED",
+  "trading_decision": "NOT PERFORMED"
+}

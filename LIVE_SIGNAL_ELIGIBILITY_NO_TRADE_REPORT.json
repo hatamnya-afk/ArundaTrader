@@ -1,0 +1,152 @@
+{
+  "frontier": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+  "timestamp_utc": "2026-08-29T21:22:54.883655+00:00",
+  "production_db": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+    "before": {
+      "size": 521883648,
+      "sha256": "920e837d9b3b87431b613e1fc3ad845b4be2193918da189081925ba5b4667a78",
+      "rows": 48
+    },
+    "after": {
+      "size": 521883648,
+      "sha256": "920e837d9b3b87431b613e1fc3ad845b4be2193918da189081925ba5b4667a78",
+      "rows": 48
+    },
+    "unchanged": true
+  },
+  "capture_db": "C:\\Users\\ASUS\\AppData\\Local\\Temp\\arunda_live_launch_zf2lqqx6\\arunda_live_capture.db",
+  "engine": "FUSION_v0.5",
+  "snapshot_id": "FUSION-20260829T211731247498+0000-4407139fee1a93f9",
+  "gate_configuration": {
+    "min_confidence": 0.6,
+    "min_available_weight": 1.0,
+    "required_data_quality": "VERIFIED",
+    "required_safety": "FULL_INPUT",
+    "blocked_signal_strength": [
+      "WEAK"
+    ],
+    "blocked_directions": [
+      "FLAT"
+    ],
+    "required_arms": [
+      "market",
+      "positioning",
+      "news"
+    ]
+  },
+  "rows": 4,
+  "eligible_rows": 0,
+  "no_trade_rows": 4,
+  "decision": "NO_TRADE",
+  "row_results": [
+    {
+      "id": 49,
+      "asset": "BTC",
+      "timestamp": "2026-08-29T21:17:31.247498+00:00",
+      "direction": "FLAT",
+      "confidence": 0.5111733333333334,
+      "regime": "NEUTRAL",
+      "signal_strength": "WEAK",
+      "data_quality": "VERIFIED",
+      "entry_price": 77480.07812213081,
+      "available_weight": 1.0,
+      "missing_arm_penalty": 1.0,
+      "market_available": 1,
+      "positioning_available": 1,
+      "news_available": 1,
+      "status": "NO_TRADE",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL"
+      ]
+    },
+    {
+      "id": 50,
+      "asset": "ETH",
+      "timestamp": "2026-08-29T21:17:31.247498+00:00",
+      "direction": "LONG",
+      "confidence": 0.3723362505104726,
+      "regime": "BULLISH",
+      "signal_strength": "WEAK",
+      "data_quality": "PARTIAL",
+      "entry_price": 2456.102036335366,
+      "available_weight": 0.65,
+      "missing_arm_penalty": 0.82,
+      "market_available": 1,
+      "positioning_available": 0,
+      "news_available": 1,
+      "status": "NO_TRADE",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    },
+    {
+      "id": 51,
+      "asset": "SOL",
+      "timestamp": "2026-08-29T21:17:31.247498+00:00",
+      "direction": "LONG",
+      "confidence": 0.512806102133995,
+      "regime": "BULLISH",
+      "signal_strength": "WEAK",
+      "data_quality": "PARTIAL",
+      "entry_price": 94.96376013119013,
+      "available_weight": 0.65,
+      "missing_arm_penalty": 0.82,
+      "market_available": 1,
+      "positioning_available": 0,
+      "news_available": 1,
+      "status": "NO_TRADE",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    },
+    {
+      "id": 52,
+      "asset": "XRP",
+      "timestamp": "2026-08-29T21:17:31.247498+00:00",
+      "direction": "LONG",
+      "confidence": 0.5297275827201609,
+      "regime": "BULLISH",
+      "signal_strength": "WEAK",
+      "data_quality": "PARTIAL",
+      "entry_price": 1.5071077171240488,
+      "available_weight": 0.65,
+      "missing_arm_penalty": 0.82,
+      "market_available": 1,
+      "positioning_available": 0,
+      "news_available": 1,
+      "status": "NO_TRADE",
+      "eligible": false,
+      "reasons": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    }
+  ],
+  "safety": {
+    "production_db_modified": false,
+    "engine_executed": false,
+    "historical_repair": false,
+    "direction_inference": false,
+    "score_reconstruction": false,
+    "synthetic_data": false,
+    "live_data_injection": false,
+    "order_execution": false
+  }
+}

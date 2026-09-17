@@ -1,0 +1,317 @@
+ARUNDA TRADER — PRODUCTION BASELINE FREEZE v0.1
+====================================================================================================
+
+MODE                         : READ ONLY
+PRODUCTION LOGIC CHANGE     : NONE
+FILE DELETION               : NONE
+BOM MODIFICATION            : NONE
+CP RE-AUDIT                 : NONE
+DB MODIFICATION             : NONE
+PRODUCTION RUNTIME EXECUTE  : NONE
+EXCHANGE CALL               : NONE
+ORDER SUBMISSION             : NONE
+EXECUTION_ENABLED            : False
+
+====================================================================================================
+1 — PRODUCTION ENTRYPOINT
+====================================================================================================
+PROJECT_ROOT : C:\Users\ASUS\ArundaTrader
+PRODUCTION_DB: C:\Users\ASUS\ArundaTrader\arunda.db
+PYTHON       : C:\Users\ASUS\AppData\Local\Programs\Python\Python313\python.exe
+PYTHON_VER   : 3.13.15
+ENVIRONMENT  : SYSTEM / UNKNOWN
+ENTRYPOINT   : arunda_pipeline.py
+EXEC COMMAND : repository command not inferred/executed
+
+====================================================================================================
+2 — PRODUCTION DEPENDENCY MANIFEST
+====================================================================================================
+STATIC PRODUCTION CLOSURE : 21 modules
+
+FILE        : arunda_pipeline.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : ENTRYPOINT / ROOT
+PRODUCTION  : YES
+
+FILE        : decision_contract.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : decision_engine.py
+PRODUCTION  : YES
+
+FILE        : decision_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : DECISION_REAL_SCORE_RUNTIME_CALLCHAIN_VERIFY_v0.1.py, arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py, execution_engine.py
+PRODUCTION  : YES
+
+FILE        : feature_contract.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : feature_snapshot_reader.py, runtime_feature_producer.py
+PRODUCTION  : YES
+
+FILE        : feature_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, feature_contract.py, m2_real_signal_to_production_scorer_runtime_v0_3.py, m2_real_signal_to_production_scorer_runtime_v0_4.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, runtime_feature_producer.py
+PRODUCTION  : YES
+
+FILE        : indicator_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : runtime_feature_producer.py
+PRODUCTION  : YES
+
+FILE        : market_regime.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : ARUNDA_BUILD_STRUCTURE_INPUT_FORENSIC_v0.1.py, M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, market_regime_contract.py, signal_engine.py, trace_structural_feature_mapping.py
+PRODUCTION  : YES
+
+FILE        : market_regime_contract.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : m2_real_signal_to_production_scorer_runtime_v0_3.py, m2_real_signal_to_production_scorer_runtime_v0_4.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, score_producer.py, signal_scorer_pre_step18_fix.py
+PRODUCTION  : YES
+
+FILE        : market_regime_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, arunda_pipeline.py, forensic_market_data_count.py, market_regime.py, trace_structural_feature_mapping.py, trace_structure_direction_unknown.py
+PRODUCTION  : YES
+
+FILE        : market_state_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, m2_real_signal_to_production_scorer_runtime_v0_3.py, m2_real_signal_to_production_scorer_runtime_v0_4.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, score_producer.py, signal_scorer_pre_step18_fix.py
+PRODUCTION  : YES
+
+FILE        : market_structure_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : runtime_feature_producer.py
+PRODUCTION  : YES
+
+FILE        : risk_contract.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : risk_engine.py
+PRODUCTION  : YES
+
+FILE        : risk_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : DECISION_REAL_SCORE_RUNTIME_CALLCHAIN_VERIFY_v0.1.py, arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py, execution_engine.py, market_entry_stop_adapter.py, risk_budget_engine.py
+PRODUCTION  : YES
+
+FILE        : runtime_feature_producer.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : feature_snapshot_reader.py, real_score_producer.py, score_producer.py
+PRODUCTION  : YES
+
+FILE        : score_producer.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py, score_forensic.py
+PRODUCTION  : YES
+
+FILE        : signal_contract.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : signal_engine.py, signal_semantic_boundary_audit.py, signal_validator.py, step15a_signal_engine_contract_audit.py, step15c_signal_dependency_information_flow_audit.py, step15e_signal_output_consistency_cross_asset_contract_audit.py, step15f_signal_failure_mode_recovery_audit.py, step15g_signal_contract_engine_integration_audit.py, step15h_signal_end_to_end_behavioral_audit.py, step15j_signal_temporal_consistency_sequence_integrity_audit.py, step15k_signal_determinism_reproducibility_audit.py, step15m_signal_contract_engine_stress_resilience_audit.py, step15n_signal_final_architectural_consistency_audit.py, step16_signal_validator_audit.py
+PRODUCTION  : YES
+
+FILE        : signal_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : ARUNDA_BUILD_STRUCTURE_INPUT_FORENSIC_v0.1.py, M2_REAL_SIGNAL_STATE_BLOCKER_LOCATOR_v0.1.py, M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, m2_real_signal_to_production_scorer_runtime_v0_2.py, m2_real_signal_to_production_scorer_runtime_v0_3.py, m2_real_signal_to_production_scorer_runtime_v0_4.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, signal_semantic_boundary_audit.py, signal_validator.py, step15a_signal_engine_contract_audit.py, step15c_signal_dependency_information_flow_audit.py, step15e_signal_output_consistency_cross_asset_contract_audit.py, step15f_signal_failure_mode_recovery_audit.py, step15g_signal_contract_engine_integration_audit.py, step15h_signal_end_to_end_behavioral_audit.py, step15j_signal_temporal_consistency_sequence_integrity_audit.py, step15k_signal_determinism_reproducibility_audit.py, step15m_signal_contract_engine_stress_resilience_audit.py, step15n_signal_final_architectural_consistency_audit.py, step16_signal_validator_audit.py, trace_build_signal_branches.py, trace_build_signal_ready_gate.py, trace_build_signal_runtime.py, trace_live_eligible_signal.py, trace_regime_asset_entry.py, trace_runtime_regime_binding.py, trace_signal_logic_trend_contract.py, trace_structural_trend_contract.py, trace_validate_structure_trend_contract.py, verify_build_signal_ready_binding.py
+PRODUCTION  : YES
+
+FILE        : signal_logic.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : signal_engine.py, signal_semantic_boundary_audit.py, step15a_signal_engine_contract_audit.py, step15c_signal_dependency_information_flow_audit.py, step15e_signal_output_consistency_cross_asset_contract_audit.py, step15f_signal_failure_mode_recovery_audit.py, step15g_signal_contract_engine_integration_audit.py, step15h_signal_end_to_end_behavioral_audit.py, step15j_signal_temporal_consistency_sequence_integrity_audit.py, step15k_signal_determinism_reproducibility_audit.py, step15m_signal_contract_engine_stress_resilience_audit.py, step15n_signal_final_architectural_consistency_audit.py, step16_signal_validator_audit.py, trace_signal_logic_trend_contract.py, trace_structural_trend_contract.py, trace_trend_expected_contract.py, trace_validate_structure_trend_contract.py
+PRODUCTION  : YES
+
+FILE        : signal_scorer.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : ARUNDA_M11_FEATURE_TO_SCORER_RUNTIME_FORENSIC_v0.1.py, DECISION_REAL_SCORE_RUNTIME_CALLCHAIN_VERIFY_v0.1.py, M2_REAL_SIGNAL_TO_PRODUCTION_SCORER_RUNTIME_v0_6.py, arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py, m2_real_signal_to_production_scorer_runtime_v0_2.py, m2_real_signal_to_production_scorer_runtime_v0_3.py, m2_real_signal_to_production_scorer_runtime_v0_4.py, m2_real_signal_to_production_scorer_runtime_v0_5.py, signal_score_contract.py
+PRODUCTION  : YES
+
+FILE        : signal_validator.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py, score_forensic.py, signal_scorer_pre_step18_fix.py
+PRODUCTION  : YES
+
+FILE        : trade_gate_engine.py
+ROLE        : PRODUCTION_RUNTIME
+IMPORTED BY : arunda_pipeline.py, arunda_pipeline_CP7G_BACKUP.py
+PRODUCTION  : YES
+
+====================================================================================================
+3 — ARTIFACT FINGERPRINT
+====================================================================================================
+FILE   : arunda_pipeline.py
+SIZE   : 57887
+SHA256 : 82a510fd637354b84e2c48b1a9fdb75c883866adfb6d3d7cff74666da96ba733
+
+FILE   : decision_contract.py
+SIZE   : 5948
+SHA256 : a3b2f08fdd0ce67fc6d89ef65093d7bcaf02e791005cb703655293aea89879df
+
+FILE   : decision_engine.py
+SIZE   : 27734
+SHA256 : f33e7fa4c2adaffa5acd76ce9fe76cfb2a48585541542b562ae15a1d1348b6dc
+
+FILE   : feature_contract.py
+SIZE   : 27544
+SHA256 : 4f1f430e7613b27f716212010412ed6da7ec1ad2b3ca4e13ddcf0916ca97b668
+
+FILE   : feature_engine.py
+SIZE   : 49985
+SHA256 : 1ba992cb401981c823bb1bbb53f6b462255166766fb8e1ef0d0c0a8eaa8e599a
+
+FILE   : feature_snapshot_reader.py
+SIZE   : 23752
+SHA256 : ade268d839e3bf5bdeb3fe7bbc68c8752a78b30b5df47048ec97b37ff2651336
+
+FILE   : indicator_engine.py
+SIZE   : 62302
+SHA256 : 2a68fa60bf6200c992a9bcdd4ad4f182735dea6d03a2ab0290a617f9d344ddeb
+
+FILE   : market_regime.py
+SIZE   : 3970
+SHA256 : dcf8987250862204c7e3e4793522d77da9f30e7da893426344f2cc39772946de
+
+FILE   : market_regime_contract.py
+SIZE   : 12495
+SHA256 : ce03de74e4307221549ec4fed8b4941843536292530f712203ecda5239f03ac7
+
+FILE   : market_regime_engine.py
+SIZE   : 35313
+SHA256 : 56a3170f9105737a4f9fe026d6a622e3d281e2cf20e86f1b67b7e071be5dd55f
+
+FILE   : market_state_engine.py
+SIZE   : 31394
+SHA256 : 31b3cf8735572f35fdbef271ef721407ca7d6acb84d8711db094384f840f4fcf
+
+FILE   : market_structure_engine.py
+SIZE   : 36714
+SHA256 : d03089c99f7ace878e6e59105fccbe00f7f90a78fac150ba5872afe28707af02
+
+FILE   : risk_contract.py
+SIZE   : 6983
+SHA256 : 9412a2a9bec475fc9413e53b5aa599473ffb72199838f73d430f6b1ef5ecce85
+
+FILE   : risk_engine.py
+SIZE   : 18159
+SHA256 : d69b3062c6d9b07133eaa8eab045ee1ebec6846225fe6c4517e25089f541cc78
+
+FILE   : runtime_feature_producer.py
+SIZE   : 34978
+SHA256 : 8263fe04050dd491f3522a811817c6131c589af0e8ce8e47369e26b2f43e6c7f
+
+FILE   : score_producer.py
+SIZE   : 35835
+SHA256 : af8cdef373e3a9fc92abac88f007ee2e6ddf50c4db8a82b15fd07dbf5a544b82
+
+FILE   : signal_contract.py
+SIZE   : 16648
+SHA256 : c0510077d19aaa296f12330fcfdea5a82c91f3985aa4bfda8ee2914e71bf53bc
+
+FILE   : signal_engine.py
+SIZE   : 26942
+SHA256 : 41c9dc095678743f17bae569836a359a9e268b8ca6f3fa511ab34cc167c54a98
+
+FILE   : signal_logic.py
+SIZE   : 10399
+SHA256 : 4f4663d2c81d3408eab149905a52260a37faaa1dffbc1e76543197d047b57a4c
+
+FILE   : signal_scorer.py
+SIZE   : 20908
+SHA256 : ce84ca6fcb78442b1f4de8026b92c6c8c8cefaeabf3801a1b9e759ca74c4cab6
+
+FILE   : signal_validator.py
+SIZE   : 15353
+SHA256 : ea05f6c6f12243ff30b33052f8a217352296eeb957385ea2462813c31f0054d7
+
+FILE   : trade_gate_engine.py
+SIZE   : 27201
+SHA256 : 7c33a3ca5764bf138faef39406ad8926fe8891d367cae0d4abb124bbfa2ecba6
+
+OWNER STATUS
+----------------------------------------------------------------------------------------------------
+feature_contract.py                      : YES
+feature_snapshot_reader.py               : REVIEW_REQUIRED
+score_producer.py                        : YES
+signal_engine.py                         : YES
+signal_validator.py                      : YES
+signal_scorer.py                         : YES
+decision_engine.py                       : YES
+risk_engine.py                           : YES
+trade_gate_engine.py                     : YES
+
+====================================================================================================
+4 — CONTROLLED CHANGE RECORD
+====================================================================================================
+MAX_CANDIDATES : 10 -> 15
+CLASSIFICATION : MINIMAL / VERIFIED
+OTHER RELEASE BASELINE CHANGES : NONE
+
+====================================================================================================
+5 — EXECUTION SAFETY BASELINE
+====================================================================================================
+EXECUTION_ENABLED : False
+ORDER SUBMISSION  : DISABLED
+EXCHANGE WRITE    : DISABLED
+EXECUTION BYPASS  : NONE
+RELEASE AUTHORITY : NONE GRANTED BY THIS BASELINE
+
+STATIC EXECUTION FLAG OBSERVATIONS
+arunda_pipeline.py : EXECUTION_ENABLED=False
+arunda_pipeline_CP7G_BACKUP.py : EXECUTION_ENABLED=False
+ARUNDA_PRODUCTION_BASELINE_FREEZE_v0.1.py : EXECUTION_ENABLED=True
+cleanup_controlled_inventory_v0.1.py : EXECUTION_ENABLED=True
+cp10_live_observation.py : EXECUTION_ENABLED=False
+cp11_execution_release_preflight.py : EXECUTION_ENABLED=False
+cp11_execution_release_preflight.py : EXECUTION_ENABLED=False
+cp11_execution_release_preflight.py : EXECUTION_ENABLED=False
+cp11_execution_release_preflight.py : EXECUTION_ENABLED=False
+cp9_production_safety_gate.py : EXECUTION_ENABLED=False
+cp9_production_safety_gate.py : EXECUTION_ENABLED=True
+opportunity_engine.py : EXECUTION_ENABLED=False
+trade_gate_engine.py : EXECUTION_ENABLED=False
+
+====================================================================================================
+6 — DATABASE BASELINE
+====================================================================================================
+DB PATH       : C:\Users\ASUS\ArundaTrader\arunda.db
+INTEGRITY     : ok
+TABLE COUNT   : 27
+
+PRODUCTION-RELEVANT TABLES
+----------------------------------------------------------------------------------------------------
+fusion_signals : 48 rows
+hunter_signals : 50 rows
+market_data : 3002 rows
+market_history : 709935 rows
+market_history_legacy : 703935 rows
+market_opportunity : 987 rows
+market_state : 1017 rows
+market_universe : 1000 rows
+news_signals : 16 rows
+opportunity_candidates : 423 rows
+opportunity_signals : 2 rows
+risk_decisions : 6 rows
+signal_outcomes : 74 rows
+trade_decisions : 4 rows
+trade_gate_decisions : 6 rows
+
+====================================================================================================
+7 — LEGACY / MUSEUM STATUS
+====================================================================================================
+LEGACY / MUSEUM : ISOLATED
+BOM FILES       : 17
+BOM STATUS      : RETAIN / REVIEW_BY_ROLE
+SAFE_TO_REMOVE  : 0
+BOM MODIFICATION: NONE
+
+====================================================================================================
+8 — FINAL BASELINE STATUS
+====================================================================================================
+BASELINE = BLOCKED
+
+REAL BLOCKERS
+- EXECUTION_ENABLED=True found in repository
+
+====================================================================================================
+HARD STOP
+====================================================================================================
+NO REAL-ENVIRONMENT TEST EXECUTED
+NO EXECUTION ACTIVATION
+NO ORDER SENT

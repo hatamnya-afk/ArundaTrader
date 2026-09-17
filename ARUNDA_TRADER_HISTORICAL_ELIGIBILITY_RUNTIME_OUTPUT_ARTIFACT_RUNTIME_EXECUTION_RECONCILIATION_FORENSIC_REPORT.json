@@ -1,0 +1,310 @@
+{
+  "forensic": {
+    "name": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_FORENSIC_v0.1",
+    "mode": "READ_ONLY FORENSIC",
+    "timestamp_utc": "2026-08-24T18:57:30.438843+00:00"
+  },
+  "paths": {
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+  },
+  "identity": {
+    "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+    "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "producer_syntax_valid": true
+  },
+  "artifact": {
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "frontier": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+    "row_results_count": 4,
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "reasons_by_asset": {
+      "BTC": [
+        "CONFIDENCE_BELOW_GATE",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL"
+      ],
+      "ETH": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ],
+      "SOL": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ],
+      "XRP": [
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ]
+    },
+    "reason_count": 20,
+    "row_level_result_keys": 0
+  },
+  "artifact_contract": {
+    "top_level_contract": true,
+    "rows_contract": true,
+    "eligible_rows_contract": true,
+    "no_trade_rows_contract": true,
+    "asset_identity": true,
+    "direction_identity": true,
+    "decision_contract": true,
+    "reason_evidence": true,
+    "row_level_result_field_not_required": true
+  },
+  "production_db": {
+    "exists": true,
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+    "before_present": true,
+    "after_present": true,
+    "unchanged": true,
+    "sha256_match": true,
+    "size_match": true,
+    "semantic_contract": true,
+    "before": {
+      "size": 521883648,
+      "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "rows": 36
+    },
+    "after": {
+      "size": 521883648,
+      "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "rows": 36
+    }
+  },
+  "safety": {
+    "exists": true,
+    "production_db_modified": false,
+    "engine_executed": false,
+    "historical_repair": false,
+    "direction_inference": false,
+    "score_reconstruction": false,
+    "synthetic_data": false,
+    "live_data_injection": false,
+    "order_execution": false,
+    "semantic_contract": true,
+    "keys": [
+      "direction_inference",
+      "engine_executed",
+      "historical_repair",
+      "live_data_injection",
+      "order_execution",
+      "production_db_modified",
+      "score_reconstruction",
+      "synthetic_data"
+    ]
+  },
+  "runtime_evidence": {
+    "candidate_reports": [
+      "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_REPORT.json",
+      "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_REPORT.json"
+    ],
+    "loaded_reports": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_OUTPUT_ARTIFACT_GENERATION_RETRY_FORENSIC_REPORT.json",
+        "valid_json": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTENT_FORENSIC_REPORT.json",
+        "valid_json": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FORENSIC_REPORT.json",
+        "valid_json": true
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC_REPORT.json",
+        "valid_json": true
+      }
+    ],
+    "snapshot_ids": [
+      "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+      "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+      "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+    ],
+    "assets": [
+      [
+        "BTC",
+        "ETH",
+        "SOL",
+        "XRP"
+      ],
+      [
+        "BTC",
+        "ETH",
+        "SOL",
+        "XRP"
+      ],
+      [
+        "BTC",
+        "ETH",
+        "SOL",
+        "XRP"
+      ],
+      [
+        "BTC",
+        "ETH",
+        "SOL",
+        "XRP"
+      ],
+      true
+    ],
+    "directions": [
+      [
+        "FLAT",
+        "SHORT",
+        "FLAT",
+        "FLAT"
+      ],
+      [
+        "FLAT",
+        "SHORT",
+        "FLAT",
+        "FLAT"
+      ],
+      [
+        "FLAT",
+        "SHORT",
+        "FLAT",
+        "FLAT"
+      ]
+    ],
+    "row_counts": [
+      4,
+      4,
+      36,
+      36,
+      4,
+      true
+    ],
+    "eligible_counts": [
+      0,
+      0,
+      true,
+      0,
+      true
+    ],
+    "no_trade_counts": [
+      4,
+      4,
+      true,
+      4,
+      true
+    ],
+    "decisions": [
+      "NO_TRADE",
+      "NO_TRADE"
+    ],
+    "reasons": [
+      [
+        "CONFIDENCE_BELOW_GATE",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ],
+      [
+        "CONFIDENCE_BELOW_GATE",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET",
+        "CONFIDENCE_BELOW_GATE",
+        "INSUFFICIENT_AVAILABLE_WEIGHT",
+        "DATA_QUALITY_NOT_VERIFIED",
+        "FLAT_DIRECTION",
+        "WEAK_SIGNAL",
+        "INCOMPLETE_ARM_SET"
+      ],
+      true
+    ],
+    "production_db_sha256": [
+      "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+      "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7"
+    ],
+    "production_db_sizes": [
+      521883648,
+      521883648,
+      521883648,
+      521883648
+    ],
+    "safety_flags": []
+  },
+  "runtime_reconciliation": {
+    "snapshot_identity": true,
+    "asset_identity": true,
+    "direction_identity": true,
+    "aggregate_result_identity": true,
+    "reason_identity": true,
+    "contract": true
+  },
+  "safety_execution": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "artifact_modified": false,
+    "artifact_deleted": false,
+    "production_db_written": false,
+    "network_accessed": false
+  },
+  "final": {
+    "artifact_contract": true,
+    "production_db_contract": true,
+    "safety_contract": true,
+    "runtime_reconciliation": true,
+    "verdict": "RUNTIME_OUTPUT_ARTIFACT_RUNTIME_EXECUTION_RECONCILIATION_VERIFIED"
+  }
+}

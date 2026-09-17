@@ -1,0 +1,581 @@
+{
+  "artifact_sha256": "f7f6b2826345b1a77251fbb41fc72fdc2260d7fbfffb43bd5b4a018eb509e136",
+  "database_modified": false,
+  "decision": false,
+  "feature_contract_modified": false,
+  "forensic": "ARUNDA_SNAPSHOT_FEATURE_HUNTER_TIMESTAMP_NORMALIZATION_FORENSIC_v0.2",
+  "identity_path": "Feature asset_symbol + snapshot_timestamp -> hunter_signals asset + timestamp",
+  "mode": "READ_ONLY",
+  "network": false,
+  "normalization_policy": {
+    "aware_naive": "NOT_COMPARABLE",
+    "aware_timestamp": "CANONICALIZED_TO_UTC",
+    "iso8601": true,
+    "matching_tolerance": null,
+    "naive_timestamp": "PRESERVED_AS_WALL_CLOCK",
+    "rounding": false,
+    "timezone_invention": false,
+    "truncation": false,
+    "utc_z_suffix": "CONVERTED_TO_UTC"
+  },
+  "outcome": "NOT_CALCULATED",
+  "prediction": false,
+  "records": [
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "AAVE",
+          "hunter_id": 15,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:54.110870",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:54.110870",
+            "raw": "2026-08-15T00:29:54.110870"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:54.110870"
+        }
+      ],
+      "asset_symbol": "AAVE",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "ADA",
+          "hunter_id": 8,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.411446",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.411446",
+            "raw": "2026-08-15T00:29:50.411446"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.411446"
+        }
+      ],
+      "asset_symbol": "ADA",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "AVAX",
+          "hunter_id": 19,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.508921",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.508921",
+            "raw": "2026-08-15T00:29:50.508921"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.508921"
+        }
+      ],
+      "asset_symbol": "AVAX",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "BTC",
+          "hunter_id": 12,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.318095",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.318095",
+            "raw": "2026-08-15T00:29:50.318095"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.318095"
+        }
+      ],
+      "asset_symbol": "BTC",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "DOGE",
+          "hunter_id": 9,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:51.184250",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:51.184250",
+            "raw": "2026-08-15T00:29:51.184250"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.184250"
+        }
+      ],
+      "asset_symbol": "DOGE",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "DOT",
+          "hunter_id": 34,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:51.900559",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:51.900559",
+            "raw": "2026-08-15T00:29:51.900559"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.900559"
+        }
+      ],
+      "asset_symbol": "DOT",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "ETH",
+          "hunter_id": 13,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.416166",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.416166",
+            "raw": "2026-08-15T00:29:50.416166"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.416166"
+        }
+      ],
+      "asset_symbol": "ETH",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "LINK",
+          "hunter_id": 10,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:51.197130",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:51.197130",
+            "raw": "2026-08-15T00:29:51.197130"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.197130"
+        }
+      ],
+      "asset_symbol": "LINK",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "LTC",
+          "hunter_id": 17,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.082879",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.082879",
+            "raw": "2026-08-15T00:29:50.082879"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.082879"
+        }
+      ],
+      "asset_symbol": "LTC",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "NEAR",
+          "hunter_id": 28,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:51.922309",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:51.922309",
+            "raw": "2026-08-15T00:29:51.922309"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:51.922309"
+        }
+      ],
+      "asset_symbol": "NEAR",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SHIB",
+          "hunter_id": 5,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:52.353078",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:52.353078",
+            "raw": "2026-08-15T00:29:52.353078"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:52.353078"
+        }
+      ],
+      "asset_symbol": "SHIB",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SOL",
+          "hunter_id": 7,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.090036",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.090036",
+            "raw": "2026-08-15T00:29:50.090036"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.090036"
+        }
+      ],
+      "asset_symbol": "SOL",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "SUI",
+          "hunter_id": 25,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:53.823728",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:53.823728",
+            "raw": "2026-08-15T00:29:53.823728"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:53.823728"
+        }
+      ],
+      "asset_symbol": "SUI",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "UNI",
+          "hunter_id": 36,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:52.334492",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:52.334492",
+            "raw": "2026-08-15T00:29:52.334492"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:52.334492"
+        }
+      ],
+      "asset_symbol": "UNI",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    },
+    {
+      "all_candidates": [
+        {
+          "comparison_status": "AWARE_NAIVE_MISMATCH",
+          "delta_minutes": null,
+          "delta_seconds": null,
+          "hunter_asset": "XRP",
+          "hunter_id": 6,
+          "hunter_parsed": {
+            "canonical_iso_utc": "2026-08-15T00:29:50.035769",
+            "epoch_seconds": null,
+            "error": null,
+            "input_kind": "NAIVE",
+            "parseable": true,
+            "parsed_iso": "2026-08-15T00:29:50.035769",
+            "raw": "2026-08-15T00:29:50.035769"
+          },
+          "hunter_raw_timestamp": "2026-08-15T00:29:50.035769"
+        }
+      ],
+      "asset_symbol": "XRP",
+      "candidate_count": 1,
+      "comparable_candidate_count": 0,
+      "feature_parsed": {
+        "canonical_iso_utc": "2026-08-23T13:39:16.730073+00:00",
+        "epoch_seconds": 1787492356.730073,
+        "error": null,
+        "input_kind": "AWARE",
+        "parseable": true,
+        "parsed_iso": "2026-08-23T13:39:16.730073+00:00",
+        "raw": "2026-08-23T13:39:16.730073+00:00"
+      },
+      "feature_raw_timestamp": "2026-08-23T13:39:16.730073+00:00",
+      "nearest_hunter": null,
+      "same_symbol_hunter_count": 1
+    }
+  ],
+  "relationship_calculation": false,
+  "summary": {
+    "aware_naive_mismatch": 0,
+    "aware_utc_comparable": 0,
+    "comparable_pairs": 0,
+    "feature_identities": 15,
+    "hunter_candidates": 15,
+    "maximum_delta_seconds": null,
+    "mean_delta_seconds": null,
+    "median_delta_seconds": null,
+    "minimum_delta_seconds": null,
+    "naive_wall_clock_comparable": 0,
+    "nearest_delta_available": 0,
+    "nearest_delta_unavailable": 15,
+    "unparseable": 0
+  }
+}

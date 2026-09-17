@@ -1,0 +1,500 @@
+﻿    return f"RS-{digest}"
+
+
+# ============================================================================
+# OPPORTUNITY
+# ============================================================================
+
+def parse_opportunity_runtime_snapshot(
+    output: str,
+) -> dict:
+    snapshot = extract_marker_payload(
+        output,
+        "ARUNDA_RUNTIME_OPPORTUNITY_SNAPSHOT=",
+    )
+
+    if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
+        fail(
+            "Opportunity snapshot is not current-run"
+        )
+
+    if not snapshot.get("engine_version"):
+        fail(
+            "Opportunity engine_version missing"
+        )
+
+    opportunities = snapshot.get("opportunities")
+
+    if not isinstance(opportunities, list):
+        fail(
+            "Opportunity opportunities must be list"
+        )
+
+    if len(opportunities) != len(EXPECTED_ASSETS):
+        fail(
+            "Opportunity coverage mismatch"
+        )
+
+    seen = set()
+
+    for row in opportunities:
+        if not isinstance(row, dict):
+            fail(
+                "Opportunity row must be dict"
+            )
+
+        asset = normalize_asset(
+            row.get(
+                "symbol",
+                row.get("asset"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                "Opportunity asset missing"
+            )
+
+        if asset in seen:
+            fail(
+                f"Duplicate Opportunity asset: {asset}"
+            )
+
+        seen.add(asset)
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Unexpected Opportunity asset: {asset}"
+            )
+
+    if seen != EXPECTED_ASSET_SET:
+        fail(
+            "Opportunity exact asset coverage failed"
+        )
+
+    return snapshot
+
+
+def opportunity_map(
+    opportunity_snapshot: dict,
+) -> dict[str, dict]:
+    result = {}
+
+    for row in opportunity_snapshot["opportunities"]:
+        asset = normalize_asset(
+            row.get(
+                "symbol",
+                row.get("asset"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                "Opportunity map encountered missing asset"
+            )
+
+        if asset in result:
+            fail(
+                f"Duplicate Opportunity asset: {asset}"
+            )
+
+        result[asset] = row
+
+    return result
+
+
+def get_opportunity_status(
+    row: dict,
+) -> str | None:
+    return normalize_status(
+        row.get("status")
+    )
+
+
+# ============================================================================
+# SIGNAL VALIDATOR
+# ============================================================================
+
+def validate_signal_coverage(
+    signals: dict,
+) -> None:
+    if not isinstance(signals, dict):
+        fail(
+            "Validated signals must be a dict."
+        )
+
+    if len(signals) != len(EXPECTED_ASSETS):
+        fail(
+            "Validated signal coverage mismatch"
+        )
+
+    seen = set()
+
+    for key, row in signals.items():
+        asset = normalize_asset(key)
+
+        if asset is None:
+            fail(
+                "Validated signal contains empty asset key"
+            )
+
+        if asset in seen:
+            fail(
+                f"Duplicate normalized signal asset: {asset}"
+            )
+
+        seen.add(asset)
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Unexpected validated signal asset: {asset}"
+            )
+
+        if not isinstance(row, dict):
+            fail(
+                f"Validated signal row must be dict: {asset}"
+            )
+
+        row_asset = normalize_asset(
+            row.get("asset")
+        )
+
+        row_symbol = normalize_asset(
+            row.get("symbol")
+        )
+
+        if (
+            row_asset != asset
+            and row_symbol != asset
+        ):
+            fail(
+                f"Validated signal identity mismatch: {asset}"
+            )
+
+        if row.get("valid") is not True:
+            fail(
+                f"Validated signal is not valid: {asset}"
+            )
+
+    if seen != EXPECTED_ASSET_SET:
+        fail(
+            "Validated signal exact coverage failed"
+        )
+
+
+def normalize_validated_signals(
+    value: Any,
+) -> dict[str, dict]:
+    if not isinstance(value, dict):
+        fail(
+            "Validated signals must be a dict."
+        )
+
+    normalized = {}
+
+    for original_key, row in value.items():
+        asset = normalize_asset(original_key)
+
+        if asset is None:
+            fail(
+                "Validated signals contains empty asset key"
+            )
+
+        if asset in normalized:
+            fail(
+                f"Duplicate normalized asset: {asset}"
+            )
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Unexpected validated asset: {asset}"
+            )
+
+        if not isinstance(row, dict):
+            fail(
+                f"Validated signal row must be dict: {asset}"
+            )
+
+        row_asset = normalize_asset(
+            row.get("asset")
+        )
+
+        row_symbol = normalize_asset(
+            row.get("symbol")
+        )
+
+        if (
+            row_asset != asset
+            and row_symbol != asset
+        ):
+            fail(
+                f"Validated signal identity mismatch: {asset}"
+            )
+
+        if row.get("valid") is not True:
+            fail(
+                f"Validated signal is not valid: {asset}"
+            )
+
+        normalized[asset] = row
+
+    if set(normalized.keys()) != EXPECTED_ASSET_SET:
+        fail(
+            "Validated signal exact coverage failed"
+        )
+
+    return normalized
+
+
+# ============================================================================
+# GENERIC ROW EXTRACTION
+# ============================================================================
+
+def extract_rows(
+    value: Any,
+    preferred_keys: tuple[str, ...] = (),
+) -> list[dict]:
+    if isinstance(value, list):
+        if all(
+            isinstance(item, dict)
+            for item in value
+        ):
+            return value
+
+        return []
+
+    if isinstance(value, dict):
+        for key in preferred_keys:
+            candidate = value.get(key)
+
+            if isinstance(candidate, list):
+                if all(
+                    isinstance(item, dict)
+                    for item in candidate
+                ):
+                    return candidate
+
+        for key in (
+            "rows",
+            "assets",
+            "signals",
+            "validated_signals",
+            "decisions",
+            "risk",
+            "risk_decisions",
+            "results",
+            "data",
+            "snapshot",
+            "market_data",
+            "ohlcv",
+        ):
+            candidate = value.get(key)
+
+            if isinstance(candidate, list):
+                if all(
+                    isinstance(item, dict)
+                    for item in candidate
+                ):
+                    return candidate
+
+        if (
+            len(value) == len(EXPECTED_ASSETS)
+            and all(
+                normalize_asset(k) in EXPECTED_ASSET_SET
+                and isinstance(v, dict)
+                for k, v in value.items()
+            )
+        ):
+            return list(value.values())
+
+    return []
+
+
+def exact_asset_rows(
+    rows: list[dict],
+    stage_name: str,
+) -> list[dict]:
+    if len(rows) != len(EXPECTED_ASSETS):
+        fail(
+            f"{stage_name} row count mismatch: "
+            f"expected={len(EXPECTED_ASSETS)} "
+            f"actual={len(rows)}"
+        )
+
+    seen = set()
+
+    for row in rows:
+        if not isinstance(row, dict):
+            fail(
+                f"{stage_name}: row must be dict"
+            )
+
+        asset = normalize_asset(
+            row.get(
+                "asset",
+                row.get("symbol"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                f"{stage_name}: missing asset"
+            )
+
+        if asset in seen:
+            fail(
+                f"{stage_name}: duplicate asset {asset}"
+            )
+
+        seen.add(asset)
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"{stage_name}: unexpected asset {asset}"
+            )
+
+    if seen != EXPECTED_ASSET_SET:
+        fail(
+            f"{stage_name}: exact asset coverage failed"
+        )
+
+    return rows
+
+
+def decision_map(
+    rows: list[dict],
+) -> dict[str, dict]:
+    result = {}
+
+    for row in rows:
+        asset = normalize_asset(
+            row.get(
+                "asset",
+                row.get("symbol"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                "Decision row missing asset"
+            )
+
+        if asset in result:
+            fail(
+                f"Duplicate Decision asset: {asset}"
+            )
+
+        result[asset] = row
+
+    return result
+
+
+def risk_map(
+    rows: list[dict],
+) -> dict[str, dict]:
+    result = {}
+
+    for row in rows:
+        asset = normalize_asset(
+            row.get(
+                "asset",
+                row.get("symbol"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                "Risk row missing asset"
+            )
+
+        if asset in result:
+            fail(
+                f"Duplicate Risk asset: {asset}"
+            )
+
+        result[asset] = row
+
+    return result
+
+
+# ============================================================================
+# FUSION v0.6 â†’ FUSED SCORE BINDING v0.1
+# ============================================================================
+
+def build_production_fusion_snapshot(
+    validated_signals: dict,
+) -> dict:
+    validate_signal_coverage(
+        validated_signals
+    )
+
+    fusion_snapshot = fusion_engine.run()
+
+    if not isinstance(
+        fusion_snapshot,
+        dict,
+    ):
+        fail(
+            "FUSION_v0.6 runtime result must be dict"
+        )
+
+    return fusion_snapshot
+
+
+def bind_fused_scores(
+    validated_signals: dict,
+    fusion_snapshot: dict,
+) -> dict:
+    validate_signal_coverage(
+        validated_signals
+    )
+
+    if not isinstance(
+        fusion_snapshot,
+        dict,
+    ):
+        fail(
+            "Fusion snapshot must be dict"
+        )
+
+    try:
+        score_snapshot = (
+            production_fused_score_binding_v0_1.run(
+                validated_signals,
+                fusion_snapshot,
+            )
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            "PRODUCTION FUSED-SCORE BINDING FAILED: "
+            f"{exc}"
+        ) from exc
+
+    if not isinstance(
+        score_snapshot,
+        dict,
+    ):
+        fail(
+            "Fused-score binding must return dict"
+        )
+
+    return score_snapshot
+
+
+# ============================================================================
+# MARKET REGIME
+# ============================================================================
+
+def load_current_market_regime() -> dict:
+    regime_snapshot = (
+        market_regime_engine.load_market_regime()
+    )
+
+    if not isinstance(
+        regime_snapshot,
+        dict,
+    ):
+        fail(
+            "CURRENT_MARKET_REGIME must be a dict"
+        )
+

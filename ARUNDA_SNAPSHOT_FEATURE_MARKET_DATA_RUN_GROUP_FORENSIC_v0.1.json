@@ -1,0 +1,795 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_GROUP_FORENSIC_v0.1",
+  "cross_symbol_groups": [
+    {
+      "coherent": true,
+      "cross_symbol": true,
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe": "SNAPSHOT",
+      "timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "coherent": true,
+      "cross_symbol": true,
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe": "SNAPSHOT",
+      "timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "coherent": true,
+      "cross_symbol": true,
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe": "SNAPSHOT",
+      "timestamp": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "coherent": true,
+      "cross_symbol": true,
+      "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "COINMARKETCAP",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe": "SNAPSHOT",
+      "timestamp": "2026-08-23T13:39:16.730073+00:00"
+    }
+  ],
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "decision": "FORBIDDEN",
+  "exact_match_summary": {
+    "exact_symbols": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "rows": 60,
+    "unique_row_fingerprints": 60
+  },
+  "execution_groups": [
+    {
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+      "execution_fingerprint": "2fa8f93d0c2d4cdd384265f30bacfeb45a7c5b060bb31b486618330762a1bf11",
+      "group_coherent": true,
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe_count": 1,
+      "timeframes": [
+        "SNAPSHOT"
+      ],
+      "timestamp_count": 1,
+      "timestamps": [
+        "2026-08-23T13:39:16.730073+00:00"
+      ]
+    },
+    {
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+      "execution_fingerprint": "9ecb944c745714d816474df46e0d27722fa06a7ceed98bc91cd8298567bb82a0",
+      "group_coherent": true,
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe_count": 1,
+      "timeframes": [
+        "SNAPSHOT"
+      ],
+      "timestamp_count": 1,
+      "timestamps": [
+        "2026-08-23T13:39:16.730073+00:00"
+      ]
+    },
+    {
+      "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+      "execution_fingerprint": "f06a3748a86a2dc401b9e5e92aaaeed4ff597bb81b50f82df63f9e20eee50a5a",
+      "group_coherent": true,
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe_count": 1,
+      "timeframes": [
+        "SNAPSHOT"
+      ],
+      "timestamp_count": 1,
+      "timestamps": [
+        "2026-08-23T13:39:16.730073+00:00"
+      ]
+    },
+    {
+      "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+      "execution_fingerprint": "75e4c437fcd3e9e2dcff9e47f54ed439111204537a7940972b545617f238dbec",
+      "group_coherent": true,
+      "row_count": 15,
+      "run_key_count": 15,
+      "source": "COINMARKETCAP",
+      "symbol_count": 15,
+      "symbols": [
+        "AAVE",
+        "ADA",
+        "AVAX",
+        "BTC",
+        "DOGE",
+        "DOT",
+        "ETH",
+        "LINK",
+        "LTC",
+        "NEAR",
+        "SHIB",
+        "SOL",
+        "SUI",
+        "UNI",
+        "XRP"
+      ],
+      "timeframe_count": 1,
+      "timeframes": [
+        "SNAPSHOT"
+      ],
+      "timestamp_count": 1,
+      "timestamps": [
+        "2026-08-23T13:39:16.730073+00:00"
+      ]
+    }
+  ],
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_input": {
+    "symbols": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "unique_timestamps": [
+      "2026-08-23T13:39:16.730073+00:00"
+    ]
+  },
+  "forensic_status": "MARKET_DATA_RUN_GROUP_IDENTITY_ESTABLISHED",
+  "generated_at_utc": "2026-08-25T18:49:02.853573+00:00",
+  "market_data_inventory": {
+    "market_symbols": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "parseable_timestamps": 1795,
+    "rows_loaded": 1795
+  },
+  "match_tolerances_seconds": [
+    0,
+    120,
+    300,
+    600
+  ],
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "outcome": "NOT CALCULATED",
+  "per_symbol": {
+    "AAVE": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "ba45b550035229c10915e1f42691b010f9fb004f39c7718e1099aae9d0a6becc",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "8c5b3887150f023f8394229e24957ab8bfd95b081f769f55a43b5e0b6834e9b3",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "93e812d3c77a0747e9567546d64f636b8138106d9d8e4d0fc95130e77e737ba2",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "f5728f70ff9615929dae74f4445f88592398993b5f29f926b0b6ec09f69d4468",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "ADA": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "dee0f11e143b827edbe1a0d9d3b5cd67f32c665596d74a9fd54fa00ac1ebeeb0",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "e050052e5b002052aca72ee5938b47e2f18f6e6435f0b4aa9550eec945710001",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "fda58b95a1119306267b9dd4989ca38eb5b6d5ccf395002dc396b73d61bc9624",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "f3ac94d6464500792d73d596f14de74e46a103d8e6d687df978086d82c9c1ac1",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "AVAX": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "b83ff884df0f3bcfa1cd0b1850e4f93fe827ce053979f82cb75a6a596d4ebfe1",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "782bc88412321681333bcabe5d290c26d614153a7805e22509e99770327f108a",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "149ab20a7817aa786c3b134acb7c9a9d74693f7e9d2c21eb9308a8a2f1917760",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "a853a508887afff21cd784b0d15f1df643571e932d4c77a2fc92d72ddcac0046",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "BTC": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "f5467261075b1382c624b076a9c33eaf38e71e7a0ada953d4e5231d8909c1597",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "4512e4d3d9f16b10c3c67d918ec73f131baea689f2bee30d8c4e4083e7ea94d6",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "1c03aa1faf90315f88a043536b0eb0f20a81dcd133ada16bd71252e9c0559dd4",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "54070d6ceae0f9caeb60d9aa59c05298b2c843a4e87a551d3277d7b207333c91",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "DOGE": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "d7bb51efccad0244202ae0ce0b589f72c492fa255c7c18688056053c9266582e",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "13fef36f329be6e8716f7142bc1acb2f38988de5e194c647431c37cda4f4b7ea",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "09997dcbead198a788a284909c8f64c7bbd471801a072c68ecc9dcec13cd0795",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "42f3eff3a80b100da4266debec52fc8207eb2af620d3a67fc0a6394d10a871f6",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "DOT": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "975a6146dfa9e65af878e03c83182dd35d59b13d2646ac9bdcfc68034101011b",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "f35498f4136951a0562ddab6dc9648c5790e2b4053e3cb9da3d129206f04e2ec",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "a7c19897ea591a5fa79744172e1f3ac94bb32d02a626deb9c3b72c8715190be1",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "b809207414852a207928d3a6516a970e97e7c46d2bcdcb4fcb227e2b628d8fe0",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "ETH": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "637733134701b139c8eb9f4f806fdf55185886c872d696866d8e95418712c43a",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "b2d049187a0f237eea3c706917327600d4f63b4580640c507830f247ec1e6048",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "e17a99c24002587ac64ce088f7cc6f1ba6e4970782231c9cad52c5f3beba6158",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "a03d9491d8d2c92265f73f04f93a77a5dd59400b84668d9dcc16403031e77819",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "LINK": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "930f2b8135260d3bf1d73b8e3b0ca55e3a95c5f815468942409d00f7d0c9ee0a",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "5b829610eb642b1d881b2e05c3d56bf29661120251f198dd2f2b67efd9c6f494",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "e9d652f31dcb8e1b060e990f674d82eb3e7ec93c432352bed55f5efb11abe3cb",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "959c6859888d7999ffda55e30d5e58fe92f1d9c8c793c271620600c0b1b48a63",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "LTC": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "99044efe0a62234a41365b6c24a49124457cfb1cc1bd45fbda719587ad491d9d",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "61e39db3b6e3a7acd0d7649c2f47a34dd596d2784d7c41188721c03194ef0090",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "0af34752ce61e2248e127ac1e198c1f0560616438c8b98798ae6fc26eeed1042",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "82e51e6ed47d2e831343e561036499544088466954f33a9f19c619cc84e34eb0",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "NEAR": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "8aa24367a35b8592f227d3a9d2c73ee369f2553da9636c49f12751be468688b3",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "fc450987afff1af4584dffca46b0f1a5a82a8eb24fe720db92d94a26d970badf",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "e62d058e299fe6b1f8427d979ed4d74ef66e79a26a3f4a65f69d1fdb2c0acb2c",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "bc14c2cc35dc41f1b7e48b542c04d945dfac693ab52418c0d0ff4b52703e70e0",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "SHIB": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "bc53bf5530d6fc1ce16611d3bb10efd6f371d2e58ea64d9ed0e2949c40e61155",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "ca601109cc6b64a767acee32529c6a119080ac7c141c586acb626cc72c70f23c",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "c8071b5210f78207ccaa927ff006c1574231be4de2bea4a7557ad25dd49e60c1",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "6e37f96ec7696abddc45f5826bff56d33951710dc1ea14e54cad73470b8c2223",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "SOL": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "dc44e6480079f9a4d0adf8b69faeb987555eb6ce11394fe837355c6b5484f35a",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "9b334f935c4186d808ccb10fcc1247bd0638e463e66e977cb72f8fce965690a7",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "630487d2a337fa951c9de0abcb8bc196af629f49d0c2c1b0716f6f199cbb1971",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "c39164b759a2345e18b735eed7e0fb7d033bedd2ff561d6d2db7098525d212ef",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "SUI": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "ce78166149605901f46ac636366729193047e9cce913d3ee5c110898b7f043af",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "db50e8956bd706f7e455791c66f80e9e54416fd41eec5819710366d9baaf4fc1",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "5b21fcf438ed92927260843c0a8d422872d4185e25880a3a6b03c3f42f4f48ae",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "0743961e68dbefa2889fff7655f846ddf06c580e53efcf81842a77828a88d538",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "UNI": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "f78dfbd3b31fdaff0387b2dafd94848dfea6bf47acc4e443ecfcf441710587d7",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "7e2c7fe94db08b8a9409f23109fb931e35d66c89f6def505b2bf834dfe1094c7",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "04998377e51516d5199535caed0b3fc083cbabc94fa1fa6037fd6388e0c2257e",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "779f3a28e202ccb55634118b5c1aad26e60e6844f2d959ea523bbe6358dbd8b9",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ],
+    "XRP": [
+      {
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "run_key_fingerprint": "c6b1c8f4b77947eef5d69acd0d7b5e4e724028ea419da9c78a674944002988c3",
+        "source": "COINMARKETCAP",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "run_key_fingerprint": "f87efc6ef28b38086109821b80a7e110d08e10aac8de416f22cf2045cdc1a9dd",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "run_key_fingerprint": "ad7891d9a4c0327ac3db57dc866ab6859a00919e89a8a7384a9e876426d4f291",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      },
+      {
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "run_key_fingerprint": "df9e845c45720b1b884875eb5806773e73df9c250d4b5f9b578a472962770570",
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe": "SNAPSHOT",
+        "timestamp": "2026-08-23T13:39:16.730073+00:00"
+      }
+    ]
+  },
+  "prediction": "FORBIDDEN",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "temporal_coverage": {
+    "0": 60,
+    "120": 60,
+    "300": 60,
+    "600": 60
+  },
+  "version": "v0.1"
+}

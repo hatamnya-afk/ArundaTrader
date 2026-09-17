@@ -1,0 +1,333 @@
+﻿import sqlite3
+import os
+import requests
+import time
+import math
+
+DB = "arunda.db"
+
+LUNAR_URL = "https://lunarcrush.com/api4/public"
+API_KEY = os.getenv("LUNARCRUSH_API_KEY")
+
+
+# ============================================================
+# BITPIN DATA
+# ============================================================
+
+def get_latest_markets(limit=50):
+
+    conn = sqlite3.connect(DB)
+
+    rows = conn.execute("""
+        SELECT
+            market,
+            asset,
+            price,
+            change_24h,
+            volume_24h,
+            spread_pct,
+            bid_volume,
+            ask_volume,
+            pressure,
+            hunter_score,
+            timestamp
+        FROM market_records
+        WHERE id IN (
+            SELECT MAX(id)
+            FROM market_records
+            GROUP BY market
+        )
+        ORDER BY hunter_score DESC
+        LIMIT ?
+    """, (limit,)).fetchall()
+
+    conn.close()
+
+    columns = [
+        "market",
+        "asset",
+        "price",
+        "change_24h",
+        "volume_24h",
+        "spread_pct",
+        "bid_volume",
+        "ask_volume",
+        "pressure",
+        "hunter_score",
+        "timestamp"
+    ]
+
+    return [dict(zip(columns, r)) for r in rows]
+
+
+# ============================================================
+# LUNARCRUSH
+# ============================================================
+
+def get_lunar(symbol, retries=2):
+
+    url = f"{LUNAR_URL}/coins/{symbol.upper()}/v1"
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}"
+    }
+
+    for attempt in range(retries + 1):
+
+        try:
+
+            r = requests.get(
+                url,
+                headers=headers,
+                timeout=15
+            )
+
+            if r.status_code == 200:
+
+                data = r.json().get("data", {})
+
+                return {
+                    "available": True,
+                    "galaxy": data.get("galaxy_score"),
+                    "change_24h": data.get("percent_change_24h"),
+                    "change_7d": data.get("percent_change_7d"),
+                    "volume_24h": data.get("volume_24h"),
+                    "market_cap": data.get("market_cap")
+                }
+
+            if r.status_code == 401 and attempt < retries:
+                time.sleep(1)
+                continue
+
+            return {
+                "available": False
+            }
+
+        except Exception:
+
+            if attempt < retries:
+                time.sleep(1)
+                continue
+
+            return {
+                "available": False
+            }
+
+
+# ============================================================
+# NORMALIZATION
+# ============================================================
+
+def clamp(x, low=0, high=100):
+
+    return max(low, min(high, x))
+
+
+def pressure_score(p):
+
+    if p is None:
+        return 50
+
+    return clamp(p)
+
+
+def spread_score(spread):
+
+    if spread is None:
+        return 50
+
+    # lower spread = better liquidity
+    if spread <= 0.10:
+        return 100
+
+    if spread <= 0.20:
+        return 85
+
+    if spread <= 0.50:
+        return 65
+
+    if spread <= 1.0:
+        return 40
+
+    return 20
+
+
+def momentum_score(change):
+
+    if change is None:
+        return 50
+
+    # moderate positive momentum is preferred
+    score = 50 + (change * 8)
+
+    return clamp(score)
+
+
+def galaxy_score(galaxy):
+
+    if galaxy is None:
+        return 50
+
+    # LunarCrush Galaxy generally behaves roughly
+    # like a 0-100 score
+    return clamp(galaxy)
+
+
+# ============================================================
+# DIVERGENCE
+# ============================================================
+
+def divergence_score(price_change, galaxy):
+
+    if price_change is None or galaxy is None:
+        return 50
+
+    social_strength = galaxy - 50
+
+    # Social strength high while price hasn't moved much
+    # can indicate an early-stage divergence.
+
+    if social_strength > 10 and abs(price_change) < 2:
+        return 85
+
+    if social_strength > 5 and abs(price_change) < 3:
+        return 75
+
+    if social_strength < -10 and price_change > 3:
+        return 30
+
+    return 50
+
+
+# ============================================================
+# FINAL SCORE
+# ============================================================
+
+def calculate_score(market, lunar):
+
+    liquidity = spread_score(
+        market["spread_pct"]
+    )
+
+    orderbook = pressure_score(
+        market["pressure"]
+    )
+
+    momentum = momentum_score(
+        market["change_24h"]
+    )
+
+    if lunar["available"]:
+
+        galaxy = galaxy_score(
+            lunar["galaxy"]
+        )
+
+        divergence = divergence_score(
+            market["change_24h"],
+            lunar["galaxy"]
+        )
+
+    else:
+
+        galaxy = 50
+        divergence = 50
+
+    hunter = clamp(
+        market["hunter_score"]
+        if market["hunter_score"] is not None
+        else 50
+    )
+
+    final = (
+        hunter * 0.20 +
+        liquidity * 0.15 +
+        orderbook * 0.20 +
+        momentum * 0.15 +
+        galaxy * 0.15 +
+        divergence * 0.15
+    )
+
+    return {
+        "final": round(final, 2),
+        "hunter": round(hunter, 2),
+        "liquidity": round(liquidity, 2),
+        "orderbook": round(orderbook, 2),
+        "momentum": round(momentum, 2),
+        "galaxy": round(galaxy, 2),
+        "divergence": round(divergence, 2),
+    }
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+if __name__ == "__main__":
+
+    print()
+    print("=" * 80)
+    print("              ARUNDA FUSION ENGINE v0.1")
+    print("=" * 80)
+
+    markets = get_latest_markets(50)
+
+    print(f"Markets loaded : {len(markets)}")
+    print()
+
+    results = []
+
+    for i, market in enumerate(markets, 1):
+
+        symbol = market["asset"]
+
+        lunar = get_lunar(symbol)
+
+        score = calculate_score(
+            market,
+            lunar
+        )
+
+        result = {
+            "market": market["market"],
+            "price": market["price"],
+            "bitpin_change": market["change_24h"],
+            "pressure": market["pressure"],
+            "galaxy": lunar.get("galaxy")
+            if lunar["available"]
+            else None,
+            "final": score["final"],
+            **score
+        }
+
+        results.append(result)
+
+        print(
+            f"{i:02d} | "
+            f"{market['market']:12} | "
+            f"FINAL {score['final']:6.2f} | "
+            f"BOOK {score['orderbook']:5.1f} | "
+            f"GALAXY {score['galaxy']:5.1f} | "
+            f"DIV {score['divergence']:5.1f}"
+        )
+
+    print()
+    print("=" * 80)
+    print("TOP OPPORTUNITIES")
+    print("=" * 80)
+
+    results.sort(
+        key=lambda x: x["final"],
+        reverse=True
+    )
+
+    for i, r in enumerate(results[:15], 1):
+
+        print(
+            f"{i:02d} | "
+            f"{r['market']:12} | "
+            f"SCORE {r['final']:6.2f} | "
+            f"Galaxy {r['galaxy']}"
+        )
+
+    print("=" * 80)

@@ -1,0 +1,3161 @@
+{
+  "artifact": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1.json",
+  "artifact_sha256": "8e22be6dcc73f94809e317983f40f8c4cca50cae2671b295c771ffd9e436e5a8",
+  "causality_policy": {
+    "first_insertion_point_requires_direct_evidence": true,
+    "no_symbol_reclassification_performed": true,
+    "no_universe_rebuild_performed": true,
+    "rowid_is_not_treated_as_causal_proof": true,
+    "shared_presence_is_not_causality": true,
+    "timestamp_is_not_treated_as_causal_proof": true
+  },
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "database_fingerprint": {
+    "database_size_bytes": 521883648
+  },
+  "database_inventory": {
+    "table_count": 25,
+    "tables": [
+      "fusion_signals",
+      "hunter_signals",
+      "market_data",
+      "market_history",
+      "market_history_legacy",
+      "market_microstructure",
+      "market_news",
+      "market_news_intelligence",
+      "market_opportunity",
+      "market_records",
+      "market_state",
+      "market_technical",
+      "market_universe",
+      "market_whale",
+      "news_data",
+      "news_signals",
+      "opportunity_signals",
+      "positioning_data",
+      "risk_decisions",
+      "scheduler_runs",
+      "signal_outcomes",
+      "social_metrics",
+      "source_status",
+      "trade_decisions",
+      "trade_gate_decisions"
+    ]
+  },
+  "database_repair": "NOT PERFORMED",
+  "database_write": "FORBIDDEN",
+  "database_write_status": "NOT PERFORMED",
+  "decision": "FORBIDDEN",
+  "first_origin_assessment": {
+    "4": {
+      "exact_first_insertion_point_established": false,
+      "id_evidence": [
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": 846
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": 38557
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": "MARKET_HISTORY_CMC_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history_legacy",
+          "value": 846
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history_legacy",
+          "value": "MARKET_HISTORY_CMC_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": 4
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": 0.2334528008319588
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": "MARKET_MICROSTRUCTURE_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 4
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.0
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": "MARKET_OPPORTUNITY_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.3325
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.25
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": 1129
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": 0.25
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": "MARKET_STATE_UNIFIED_v0.2.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_technical",
+          "value": 16
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_technical",
+          "value": "MARKET_TECHNICAL_CMC_v0.2"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": 854
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": 38557
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": "MARKET_UNIVERSE_CMC_v0.3.1"
+        }
+      ],
+      "reason": "Timestamp-like fields were found, but timestamp values alone do not establish the original source insertion point.",
+      "rowid_evidence": [
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_history",
+          "value": 846
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_history_legacy",
+          "value": 846
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_microstructure",
+          "value": 4
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_opportunity",
+          "value": 4
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_state",
+          "value": 1129
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_technical",
+          "value": 16
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_universe",
+          "value": 854
+        }
+      ],
+      "status": "TEMPORAL_EVIDENCE_AVAILABLE",
+      "timestamp_evidence": [
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-17T15:41:14.816566+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-18T03:47:24.363735+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:39:33.608988+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:44:17.013255+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-17T15:41:14.816566+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-18T03:47:24.363735+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_microstructure",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_microstructure",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:13:27.211242+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:13:27.211242+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:35:43.841719+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:35:43.841719+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-17T01:05:10.420944+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-17T01:05:10.420944+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-17T15:20:08.940469+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-17T15:20:08.940469+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:15.706948+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:49:25.747891+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:49:25.747891+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:56.699536+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:56.699536+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-17T20:33:44.273540+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T20:33:44.367193+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2025-10-02T09:38:05.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2025-10-02T09:38:05.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:32:17.309031+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:32:17.309031+00:00"
+        }
+      ]
+    },
+    "ASSET": {
+      "exact_first_insertion_point_established": false,
+      "id_evidence": [
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": 342
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": 39922
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history",
+          "value": "MARKET_HISTORY_CMC_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history_legacy",
+          "value": 342
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_history_legacy",
+          "value": "MARKET_HISTORY_CMC_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": 77
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": 0.0233232351126875
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_microstructure",
+          "value": "MARKET_MICROSTRUCTURE_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 77
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.0
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": "MARKET_OPPORTUNITY_v0.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.3325
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_opportunity",
+          "value": 0.25
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": 1633
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": 0.25
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_state",
+          "value": "MARKET_STATE_UNIFIED_v0.2.1"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_technical",
+          "value": 381
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_technical",
+          "value": "MARKET_TECHNICAL_CMC_v0.2"
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": 343
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": 39922
+        },
+        {
+          "column": "symbol",
+          "method": "id_ascending",
+          "table": "market_universe",
+          "value": "MARKET_UNIVERSE_CMC_v0.3.1"
+        }
+      ],
+      "reason": "Timestamp-like fields were found, but timestamp values alone do not establish the original source insertion point.",
+      "rowid_evidence": [
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_history",
+          "value": 342
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_history_legacy",
+          "value": 342
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_microstructure",
+          "value": 77
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_opportunity",
+          "value": 77
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_state",
+          "value": 1633
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_technical",
+          "value": 381
+        },
+        {
+          "column": "symbol",
+          "method": "sqlite_rowid_ascending",
+          "table": "market_universe",
+          "value": 343
+        }
+      ],
+      "status": "TEMPORAL_EVIDENCE_AVAILABLE",
+      "timestamp_evidence": [
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history",
+          "value": "2026-08-17T15:41:14.816566+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history",
+          "value": "2026-08-18T12:25:45.754732+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-18T03:47:24.363735+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:39:28.148100+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-16T23:44:11.480246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_history_legacy",
+          "value": "2026-08-17T15:41:14.816566+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_history_legacy",
+          "value": "2026-08-18T03:47:24.363735+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_microstructure",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_microstructure",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:13:27.211446+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:13:27.211446+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:35:43.845538+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_opportunity",
+          "value": "2026-08-17T15:35:43.845538+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-16T23:44:06.601246+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-17T01:05:10.421667+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-17T01:05:10.421667+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_state",
+          "value": "2026-08-17T15:20:08.976439+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_state",
+          "value": "2026-08-17T15:20:08.976439+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:39:23.581942+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:15.706948+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:49:25.747891+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-16T23:49:25.747891+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:56.714564+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T15:57:56.714564+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_technical",
+          "value": "2026-08-17T20:33:44.280607+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_technical",
+          "value": "2026-08-17T20:33:44.369380+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2026-04-30T07:15:03.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2026-04-30T07:15:03.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:31:00.000Z"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_ascending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:32:16.045814+00:00"
+        },
+        {
+          "column": "symbol",
+          "method": "timestamp_descending",
+          "table": "market_universe",
+          "value": "2026-08-16T23:32:16.045814+00:00"
+        }
+      ]
+    }
+  },
+  "forensic_status": "EXTRA_SYMBOL_ORIGIN_AND_PROPAGATION_OBSERVED",
+  "generated_at_utc": "2026-08-25T20:21:56.568084+00:00",
+  "input_artifacts": {
+    "normalization": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXPECTED_UNIVERSE_NORMALIZATION_FORENSIC_v0.1.json",
+      "root_type": "dict",
+      "sha256": "88f4a98a282d112aa5a49c815e5acae8b154dda6d176925db41751ecf567c871"
+    },
+    "provenance": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+      "root_type": "dict",
+      "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+    },
+    "semantic": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+      "root_type": "dict",
+      "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856"
+    }
+  },
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "ordering_evidence": {
+    "4": [
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "cmc_id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:41:14.816566+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 846
+            },
+            {
+              "column": "cmc_id",
+              "method": "id_ascending",
+              "value": 38557
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_HISTORY_CMC_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 846
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "source_timestamp",
+            "created_at"
+          ]
+        },
+        "table": "market_history"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T03:47:24.363735+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:33.608988+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:17.013255+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:41:14.816566+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T03:47:24.363735+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 846
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_HISTORY_CMC_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 846
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "source_timestamp",
+            "created_at"
+          ]
+        },
+        "table": "market_history_legacy"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "liquidity_proxy",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 4
+            },
+            {
+              "column": "liquidity_proxy",
+              "method": "id_ascending",
+              "value": 0.2334528008319588
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_MICROSTRUCTURE_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 4
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp"
+          ]
+        },
+        "table": "market_microstructure"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "confidence",
+            "engine_version",
+            "opportunity_confidence",
+            "state_confidence",
+            "opportunity_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:13:27.211242+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:13:27.211242+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:35:43.841719+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:35:43.841719+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 4
+            },
+            {
+              "column": "confidence",
+              "method": "id_ascending",
+              "value": 0.0
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_OPPORTUNITY_v0.1"
+            },
+            {
+              "column": "opportunity_confidence",
+              "method": "id_ascending",
+              "value": 0.3325
+            },
+            {
+              "column": "state_confidence",
+              "method": "id_ascending",
+              "value": 0.25
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 4
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        "table": "market_opportunity"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "news_confidence",
+            "microstructure_liquidity",
+            "state_confidence",
+            "state_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T01:05:10.420944+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T01:05:10.420944+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:20:08.940469+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:20:08.940469+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 1129
+            },
+            {
+              "column": "state_confidence",
+              "method": "id_ascending",
+              "value": 0.25
+            },
+            {
+              "column": "state_version",
+              "method": "id_ascending",
+              "value": "MARKET_STATE_UNIFIED_v0.2.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 1129
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "news_event",
+            "news_sentiment",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        "table": "market_state"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "engine_version",
+            "bb_middle",
+            "bb_width",
+            "technical_version",
+            "ichimoku_conversion",
+            "technical_validation_score",
+            "technical_validation_status",
+            "technical_validation_flags",
+            "technical_validation_version",
+            "technical_validated_at"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:57:15.706948+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:49:25.747891+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:49:25.747891+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:57:56.699536+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:57:56.699536+00:00"
+            },
+            {
+              "column": "technical_validated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T20:33:44.273540+00:00"
+            },
+            {
+              "column": "technical_validated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T20:33:44.367193+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 16
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_TECHNICAL_CMC_v0.2"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 16
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "created_at",
+            "updated_at",
+            "technical_validated_at"
+          ]
+        },
+        "table": "market_technical"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "cmc_id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "date_added",
+              "method": "timestamp_ascending",
+              "value": "2025-10-02T09:38:05.000Z"
+            },
+            {
+              "column": "date_added",
+              "method": "timestamp_descending",
+              "value": "2025-10-02T09:38:05.000Z"
+            },
+            {
+              "column": "last_updated",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "last_updated",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:32:17.309031+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:32:17.309031+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 854
+            },
+            {
+              "column": "cmc_id",
+              "method": "id_ascending",
+              "value": 38557
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_UNIVERSE_CMC_v0.3.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 854
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "date_added",
+            "last_updated",
+            "updated_at"
+          ]
+        },
+        "table": "market_universe"
+      }
+    ],
+    "ASSET": [
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "cmc_id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:41:14.816566+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T12:25:45.754732+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 342
+            },
+            {
+              "column": "cmc_id",
+              "method": "id_ascending",
+              "value": 39922
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_HISTORY_CMC_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 342
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "source_timestamp",
+            "created_at"
+          ]
+        },
+        "table": "market_history"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T03:47:24.363735+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:28.148100+00:00"
+            },
+            {
+              "column": "source_timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:11.480246+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:41:14.816566+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-18T03:47:24.363735+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 342
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_HISTORY_CMC_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 342
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "source_timestamp",
+            "created_at"
+          ]
+        },
+        "table": "market_history_legacy"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "liquidity_proxy",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 77
+            },
+            {
+              "column": "liquidity_proxy",
+              "method": "id_ascending",
+              "value": 0.0233232351126875
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_MICROSTRUCTURE_v0.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 77
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp"
+          ]
+        },
+        "table": "market_microstructure"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "confidence",
+            "engine_version",
+            "opportunity_confidence",
+            "state_confidence",
+            "opportunity_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:13:27.211446+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:13:27.211446+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:35:43.845538+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:35:43.845538+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 77
+            },
+            {
+              "column": "confidence",
+              "method": "id_ascending",
+              "value": 0.0
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_OPPORTUNITY_v0.1"
+            },
+            {
+              "column": "opportunity_confidence",
+              "method": "id_ascending",
+              "value": 0.3325
+            },
+            {
+              "column": "state_confidence",
+              "method": "id_ascending",
+              "value": 0.25
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 77
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        "table": "market_opportunity"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "news_confidence",
+            "microstructure_liquidity",
+            "state_confidence",
+            "state_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:44:06.601246+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T01:05:10.421667+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T01:05:10.421667+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:20:08.976439+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:20:08.976439+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 1633
+            },
+            {
+              "column": "state_confidence",
+              "method": "id_ascending",
+              "value": 0.25
+            },
+            {
+              "column": "state_version",
+              "method": "id_ascending",
+              "value": "MARKET_STATE_UNIFIED_v0.2.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 1633
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "news_event",
+            "news_sentiment",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        "table": "market_state"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "engine_version",
+            "bb_middle",
+            "bb_width",
+            "technical_version",
+            "ichimoku_conversion",
+            "technical_validation_score",
+            "technical_validation_status",
+            "technical_validation_flags",
+            "technical_validation_version",
+            "technical_validated_at"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "timestamp",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:39:23.581942+00:00"
+            },
+            {
+              "column": "timestamp",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:57:15.706948+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:49:25.747891+00:00"
+            },
+            {
+              "column": "created_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:49:25.747891+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T15:57:56.714564+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T15:57:56.714564+00:00"
+            },
+            {
+              "column": "technical_validated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-17T20:33:44.280607+00:00"
+            },
+            {
+              "column": "technical_validated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-17T20:33:44.369380+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 381
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_TECHNICAL_CMC_v0.2"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 381
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "timestamp",
+            "created_at",
+            "updated_at",
+            "technical_validated_at"
+          ]
+        },
+        "table": "market_technical"
+      },
+      {
+        "column": "symbol",
+        "evidence": {
+          "id_columns": [
+            "id",
+            "cmc_id",
+            "engine_version"
+          ],
+          "ordering_attempts": [
+            {
+              "column": "date_added",
+              "method": "timestamp_ascending",
+              "value": "2026-04-30T07:15:03.000Z"
+            },
+            {
+              "column": "date_added",
+              "method": "timestamp_descending",
+              "value": "2026-04-30T07:15:03.000Z"
+            },
+            {
+              "column": "last_updated",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "last_updated",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:31:00.000Z"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_ascending",
+              "value": "2026-08-16T23:32:16.045814+00:00"
+            },
+            {
+              "column": "updated_at",
+              "method": "timestamp_descending",
+              "value": "2026-08-16T23:32:16.045814+00:00"
+            },
+            {
+              "column": "id",
+              "method": "id_ascending",
+              "value": 343
+            },
+            {
+              "column": "cmc_id",
+              "method": "id_ascending",
+              "value": 39922
+            },
+            {
+              "column": "engine_version",
+              "method": "id_ascending",
+              "value": "MARKET_UNIVERSE_CMC_v0.3.1"
+            },
+            {
+              "column": "rowid",
+              "method": "sqlite_rowid_ascending",
+              "value": 343
+            }
+          ],
+          "rowid_available": true,
+          "timestamp_columns": [
+            "date_added",
+            "last_updated",
+            "updated_at"
+          ]
+        },
+        "table": "market_universe"
+      }
+    ]
+  },
+  "origin_classification": {
+    "4": {
+      "confidence": "HIGH",
+      "origin_class": "NUMERIC_IDENTIFIER_PROPAGATED_AS_SYMBOL",
+      "reason": "4 is a pure numeric token and is therefore not established as a canonical market symbol."
+    },
+    "ASSET": {
+      "confidence": "HIGH",
+      "origin_class": "GENERIC_FIELD_LABEL_PROPAGATED_AS_SYMBOL",
+      "reason": "ASSET is a generic field label and appears in multiple symbol-like columns; this pattern is inconsistent with a canonical market symbol."
+    }
+  },
+  "outcome": {
+    "symbols_analyzed": [
+      "4",
+      "ASSET"
+    ],
+    "symbols_not_observed": [],
+    "symbols_observed": [
+      "4",
+      "ASSET"
+    ]
+  },
+  "prediction": "FORBIDDEN",
+  "predictive_claim": "NOT ESTABLISHED",
+  "propagation_graph": {
+    "4": {
+      "edges": [
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_history_legacy"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_microstructure"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_microstructure"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_state",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_state",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_technical",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        }
+      ],
+      "tables": [
+        "market_history",
+        "market_history_legacy",
+        "market_microstructure",
+        "market_opportunity",
+        "market_state",
+        "market_technical",
+        "market_universe"
+      ]
+    },
+    "ASSET": {
+      "edges": [
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_history_legacy"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_microstructure"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_microstructure"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_history_legacy",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_opportunity"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_microstructure",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_state"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_opportunity",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_state",
+          "relationship": "CO_PRESENT",
+          "to": "market_technical"
+        },
+        {
+          "causality_established": false,
+          "from": "market_state",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        },
+        {
+          "causality_established": false,
+          "from": "market_technical",
+          "relationship": "CO_PRESENT",
+          "to": "market_universe"
+        }
+      ],
+      "tables": [
+        "market_history",
+        "market_history_legacy",
+        "market_microstructure",
+        "market_opportunity",
+        "market_state",
+        "market_technical",
+        "market_universe"
+      ]
+    }
+  },
+  "provenance_input": {
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_INPUT_EXTRA_UNIVERSE_PROVENANCE_FORENSIC_v0.1.json",
+    "sha256": "9b994bf09ab21ae4eff01a28a3c1e550b0b5eb052f743d027f9685d601f422dd"
+  },
+  "relationship_calculation": "NOT PERFORMED",
+  "script_version": "ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_ORIGIN_PROPAGATION_FORENSIC_v0.1",
+  "semantic_input": {
+    "artifact": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_EXTRA_SYMBOL_SEMANTIC_FORENSIC_v0.1.json",
+    "sha256": "3d5b7b9fa8b6e991fb63e41e957e9c397203d02af4633cf1d095049afd789856",
+    "target_symbols": [
+      "4",
+      "ASSET"
+    ]
+  },
+  "table_inventory_with_targets": [
+    {
+      "row_count": 705935,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_history",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 706
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 706
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 703935,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_history_legacy",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 704
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 704
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 987,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_microstructure",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 987,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_opportunity",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 987,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_state",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 5922,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_technical",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 6
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 6
+          }
+        ]
+      }
+    },
+    {
+      "row_count": 1000,
+      "symbol_like_columns": [
+        "symbol"
+      ],
+      "table": "market_universe",
+      "targets": {
+        "4": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ],
+        "ASSET": [
+          {
+            "column": "symbol",
+            "count": 1
+          }
+        ]
+      }
+    }
+  ],
+  "target_contract": {
+    "all_targets_extra": true,
+    "normalized_expected_universe_count": 985,
+    "targets": [
+      "4",
+      "ASSET"
+    ],
+    "targets_outside_expected_universe": [
+      "4",
+      "ASSET"
+    ]
+  },
+  "target_database_provenance": {
+    "4": [
+      {
+        "column": "symbol",
+        "count": 706,
+        "samples": [
+          {
+            "change_1h": -0.0610962,
+            "change_24h": 4.59152192,
+            "change_7d": -20.25647435,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 846,
+            "market_cap": 10783487.25162235,
+            "name": "4",
+            "price": 0.010783487251622351,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:33.608988+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 2518581.15379046
+          },
+          {
+            "change_1h": -0.05963615,
+            "change_24h": 4.58825619,
+            "change_7d": -20.86759765,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1833,
+            "market_cap": 10783559.988166494,
+            "name": "4",
+            "price": 0.010783559988166495,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:44.661983+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 2518780.54174929
+          },
+          {
+            "change_1h": 0.15738152,
+            "change_24h": 4.71106288,
+            "change_7d": -20.92155613,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2820,
+            "market_cap": 10790733.940043163,
+            "name": "4",
+            "price": 0.010790733940043162,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:55.268165+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 2518761.29320224
+          },
+          {
+            "change_1h": -0.0457848,
+            "change_24h": 4.60678359,
+            "change_7d": -20.96721976,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3807,
+            "market_cap": 10776944.499590924,
+            "name": "4",
+            "price": 0.010776944499590924,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:05.589397+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 2518700.93293491
+          },
+          {
+            "change_1h": 0.11001148,
+            "change_24h": 4.70113029,
+            "change_7d": -20.9116004,
+            "cmc_id": 38557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4794,
+            "market_cap": 10786979.023102477,
+            "name": "4",
+            "price": 0.010786979023102477,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:17.013255+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 2518250.46545886
+          }
+        ],
+        "table": "market_history"
+      },
+      {
+        "column": "symbol",
+        "count": 704,
+        "samples": [
+          {
+            "change_1h": -0.0610962,
+            "change_24h": 4.59152192,
+            "change_7d": -20.25647435,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 846,
+            "market_cap": 10783487.25162235,
+            "name": "4",
+            "price": 0.010783487251622351,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:33.608988+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 2518581.15379046
+          },
+          {
+            "change_1h": -0.05963615,
+            "change_24h": 4.58825619,
+            "change_7d": -20.86759765,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1833,
+            "market_cap": 10783559.988166494,
+            "name": "4",
+            "price": 0.010783559988166495,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:44.661983+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 2518780.54174929
+          },
+          {
+            "change_1h": 0.15738152,
+            "change_24h": 4.71106288,
+            "change_7d": -20.92155613,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2820,
+            "market_cap": 10790733.940043163,
+            "name": "4",
+            "price": 0.010790733940043162,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:55.268165+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 2518761.29320224
+          },
+          {
+            "change_1h": -0.0457848,
+            "change_24h": 4.60678359,
+            "change_7d": -20.96721976,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3807,
+            "market_cap": 10776944.499590924,
+            "name": "4",
+            "price": 0.010776944499590924,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:05.589397+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 2518700.93293491
+          },
+          {
+            "change_1h": 0.11001148,
+            "change_24h": 4.70113029,
+            "change_7d": -20.9116004,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4794,
+            "market_cap": 10786979.023102477,
+            "name": "4",
+            "price": 0.010786979023102477,
+            "rank": 854,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:17.013255+00:00",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 2518250.46545886
+          }
+        ],
+        "table": "market_history_legacy"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "change_1h": 0.11001148,
+            "change_24h": 4.70113029,
+            "data_source": "CMC_HISTORICAL",
+            "engine_version": "MARKET_MICROSTRUCTURE_v0.1",
+            "id": 4,
+            "liquidity_proxy": 0.2334528008319588,
+            "market_cap": 10786979.023102477,
+            "market_pressure_proxy": 1.487347123,
+            "momentum_proxy": 0.1443590595,
+            "price": 0.010786979023102477,
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volatility_proxy": 0.11001148,
+            "volume_24h": 2518250.46545886
+          }
+        ],
+        "table": "market_microstructure"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "confidence": 0.0,
+            "created_at": "2026-08-17T15:13:27.211242+00:00",
+            "data_completeness": 0.25,
+            "engine_version": "MARKET_OPPORTUNITY_v0.1",
+            "id": 4,
+            "microstructure_available": 0,
+            "microstructure_score": null,
+            "name": "4",
+            "news_available": 0,
+            "news_score": null,
+            "opportunity": "INSUFFICIENT_DATA",
+            "opportunity_confidence": 0.3325,
+            "opportunity_score": 0.5012231079358249,
+            "opportunity_status": "NEUTRAL",
+            "opportunity_version": "MARKET_OPPORTUNITY_v0.2.1",
+            "reason": "No usable state components",
+            "source": "market_state",
+            "state_confidence": 0.25,
+            "state_score": null,
+            "symbol": "4",
+            "technical_available": 1,
+            "technical_score": null,
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": "2026-08-17T15:35:43.841719+00:00",
+            "whale_available": 0,
+            "whale_score": null
+          }
+        ],
+        "table": "market_opportunity"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "created_at": "2026-08-17T01:05:10.420944+00:00",
+            "id": 1129,
+            "microstructure_liquidity": null,
+            "news_confidence": null,
+            "news_event": null,
+            "news_sentiment": null,
+            "state_confidence": 0.25,
+            "state_version": "MARKET_STATE_UNIFIED_v0.2.1",
+            "symbol": "4",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": "2026-08-17T15:20:08.940469+00:00"
+          }
+        ],
+        "table": "market_state"
+      },
+      {
+        "column": "symbol",
+        "count": 6,
+        "samples": [
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 16,
+            "symbol": "4",
+            "technical_validated_at": "2026-08-17T20:33:44.273540+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 17,
+            "symbol": "4",
+            "technical_validated_at": "2026-08-17T20:33:44.273560+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 18,
+            "symbol": "4",
+            "technical_validated_at": "2026-08-17T20:33:44.273595+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 19,
+            "symbol": "4",
+            "technical_validated_at": "2026-08-17T20:33:44.273614+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 20,
+            "symbol": "4",
+            "technical_validated_at": "2026-08-17T20:33:44.273635+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": null
+          }
+        ],
+        "table": "market_technical"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "circulating_supply": 1000000000.0,
+            "cmc_id": 38557,
+            "cmc_rank": 854,
+            "date_added": "2025-10-02T09:38:05.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "id": 854,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "market_cap": 10788479.457453717,
+            "max_supply": 1000000000.0,
+            "name": "4",
+            "num_market_pairs": 180,
+            "percent_change_1h": -0.21396725,
+            "percent_change_24h": 4.72043937,
+            "percent_change_7d": -20.39574243,
+            "price": 0.010788479457453717,
+            "rank": null,
+            "slug": "4four",
+            "source": "COINMARKETCAP",
+            "symbol": "4",
+            "total_supply": 1000000000.0,
+            "updated_at": "2026-08-16T23:32:17.309031+00:00",
+            "volume_24h": 2516222.12933637
+          }
+        ],
+        "table": "market_universe"
+      }
+    ],
+    "ASSET": [
+      {
+        "column": "symbol",
+        "count": 706,
+        "samples": [
+          {
+            "change_1h": 0.13888834,
+            "change_24h": -0.20005887,
+            "change_7d": 1.0309557,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 342,
+            "market_cap": 46076925.77449055,
+            "name": "REAL",
+            "price": 0.2617450506760727,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:28.148100+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 1072505.39922362
+          },
+          {
+            "change_1h": 0.09623458,
+            "change_24h": -0.1901015,
+            "change_7d": 1.08969721,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1329,
+            "market_cap": 46081523.02405535,
+            "name": "REAL",
+            "price": 0.261771165858457,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:39.066734+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 1072501.86106066
+          },
+          {
+            "change_1h": 0.10437227,
+            "change_24h": -0.16138529,
+            "change_7d": 1.10823536,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2316,
+            "market_cap": 46093758.21081405,
+            "name": "REAL",
+            "price": 0.26184066918413157,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:50.200473+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 1075791.27296629
+          },
+          {
+            "change_1h": 0.15110721,
+            "change_24h": -0.12146495,
+            "change_7d": 1.40235138,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3303,
+            "market_cap": 46095641.743370935,
+            "name": "REAL",
+            "price": 0.26185136879822835,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:00.511712+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 1075600.40726396
+          },
+          {
+            "change_1h": 0.19159,
+            "change_24h": -0.12965145,
+            "change_7d": 1.77672642,
+            "cmc_id": 39922,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4290,
+            "market_cap": 46109590.78612574,
+            "name": "REAL",
+            "price": 0.26193060787161204,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:11.480246+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 1075424.82685462
+          }
+        ],
+        "table": "market_history"
+      },
+      {
+        "column": "symbol",
+        "count": 704,
+        "samples": [
+          {
+            "change_1h": 0.13888834,
+            "change_24h": -0.20005887,
+            "change_7d": 1.0309557,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 342,
+            "market_cap": 46076925.77449055,
+            "name": "REAL",
+            "price": 0.2617450506760727,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:39:28.148100+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "volume_24h": 1072505.39922362
+          },
+          {
+            "change_1h": 0.09623458,
+            "change_24h": -0.1901015,
+            "change_7d": 1.08969721,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 1329,
+            "market_cap": 46081523.02405535,
+            "name": "REAL",
+            "price": 0.261771165858457,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:40:39.066734+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "volume_24h": 1072501.86106066
+          },
+          {
+            "change_1h": 0.10437227,
+            "change_24h": -0.16138529,
+            "change_7d": 1.10823536,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 2316,
+            "market_cap": 46093758.21081405,
+            "name": "REAL",
+            "price": 0.26184066918413157,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:41:50.200473+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "volume_24h": 1075791.27296629
+          },
+          {
+            "change_1h": 0.15110721,
+            "change_24h": -0.12146495,
+            "change_7d": 1.40235138,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 3303,
+            "market_cap": 46095641.743370935,
+            "name": "REAL",
+            "price": 0.26185136879822835,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:43:00.511712+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "volume_24h": 1075600.40726396
+          },
+          {
+            "change_1h": 0.19159,
+            "change_24h": -0.12965145,
+            "change_7d": 1.77672642,
+            "created_at": null,
+            "engine_version": "MARKET_HISTORY_CMC_v0.1",
+            "id": 4290,
+            "market_cap": 46109590.78612574,
+            "name": "REAL",
+            "price": 0.26193060787161204,
+            "rank": 343,
+            "source": "COINMARKETCAP",
+            "source_timestamp": "2026-08-16T23:44:11.480246+00:00",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volume_24h": 1075424.82685462
+          }
+        ],
+        "table": "market_history_legacy"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "change_1h": 0.19159,
+            "change_24h": -0.12965145,
+            "data_source": "CMC_HISTORICAL",
+            "engine_version": "MARKET_MICROSTRUCTURE_v0.1",
+            "id": 77,
+            "liquidity_proxy": 0.0233232351126875,
+            "market_cap": 46109590.78612574,
+            "market_pressure_proxy": 0.095217565,
+            "momentum_proxy": 0.1127931425,
+            "price": 0.26193060787161204,
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "volatility_proxy": 0.19159,
+            "volume_24h": 1075424.82685462
+          }
+        ],
+        "table": "market_microstructure"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "confidence": 0.0,
+            "created_at": "2026-08-17T15:13:27.211446+00:00",
+            "data_completeness": 0.25,
+            "engine_version": "MARKET_OPPORTUNITY_v0.1",
+            "id": 77,
+            "microstructure_available": 0,
+            "microstructure_score": null,
+            "name": "REAL",
+            "news_available": 0,
+            "news_score": null,
+            "opportunity": "INSUFFICIENT_DATA",
+            "opportunity_confidence": 0.3325,
+            "opportunity_score": 0.5019637984339582,
+            "opportunity_status": "NEUTRAL",
+            "opportunity_version": "MARKET_OPPORTUNITY_v0.2.1",
+            "reason": "No usable state components",
+            "source": "market_state",
+            "state_confidence": 0.25,
+            "state_score": null,
+            "symbol": "ASSET",
+            "technical_available": 1,
+            "technical_score": null,
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": "2026-08-17T15:35:43.845538+00:00",
+            "whale_available": 0,
+            "whale_score": null
+          }
+        ],
+        "table": "market_opportunity"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "created_at": "2026-08-17T01:05:10.421667+00:00",
+            "id": 1633,
+            "microstructure_liquidity": null,
+            "news_confidence": null,
+            "news_event": null,
+            "news_sentiment": null,
+            "state_confidence": 0.25,
+            "state_version": "MARKET_STATE_UNIFIED_v0.2.1",
+            "symbol": "ASSET",
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": "2026-08-17T15:20:08.976439+00:00"
+          }
+        ],
+        "table": "market_state"
+      },
+      {
+        "column": "symbol",
+        "count": 6,
+        "samples": [
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 381,
+            "symbol": "ASSET",
+            "technical_validated_at": "2026-08-17T20:33:44.280607+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:39:23.581942+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 382,
+            "symbol": "ASSET",
+            "technical_validated_at": "2026-08-17T20:33:44.280626+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:40:34.668681+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 383,
+            "symbol": "ASSET",
+            "technical_validated_at": "2026-08-17T20:33:44.280644+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:41:45.849863+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 384,
+            "symbol": "ASSET",
+            "technical_validated_at": "2026-08-17T20:33:44.280663+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:42:56.312879+00:00",
+            "updated_at": null
+          },
+          {
+            "bb_middle": null,
+            "bb_width": null,
+            "created_at": "2026-08-16T23:49:25.747891+00:00",
+            "engine_version": "MARKET_TECHNICAL_CMC_v0.2",
+            "ichimoku_conversion": null,
+            "id": 385,
+            "symbol": "ASSET",
+            "technical_validated_at": "2026-08-17T20:33:44.280685+00:00",
+            "technical_validation_flags": "HISTORY_COUNT_UNKNOWN",
+            "technical_validation_score": 0.51,
+            "technical_validation_status": "UNAVAILABLE",
+            "technical_validation_version": "0.4.1",
+            "technical_version": null,
+            "timestamp": "2026-08-16T23:44:06.601246+00:00",
+            "updated_at": null
+          }
+        ],
+        "table": "market_technical"
+      },
+      {
+        "column": "symbol",
+        "count": 1,
+        "samples": [
+          {
+            "circulating_supply": 176037429.0,
+            "cmc_id": 39922,
+            "cmc_rank": 343,
+            "date_added": "2026-04-30T07:15:03.000Z",
+            "engine_version": "MARKET_UNIVERSE_CMC_v0.3.1",
+            "first_seen": null,
+            "id": 343,
+            "is_active": 1,
+            "last_seen": null,
+            "last_updated": "2026-08-16T23:31:00.000Z",
+            "market_cap": 46074112.067913316,
+            "max_supply": 1000000000.0,
+            "name": "REAL",
+            "num_market_pairs": 9,
+            "percent_change_1h": 0.00861589,
+            "percent_change_24h": -0.3338151,
+            "percent_change_7d": 1.00562806,
+            "price": 0.26172906710602617,
+            "rank": null,
+            "slug": "real-finance",
+            "source": "COINMARKETCAP",
+            "symbol": "ASSET",
+            "total_supply": 1000000000.0,
+            "updated_at": "2026-08-16T23:32:16.045814+00:00",
+            "volume_24h": 1072104.94807767
+          }
+        ],
+        "table": "market_universe"
+      }
+    ]
+  }
+}

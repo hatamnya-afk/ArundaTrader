@@ -1,0 +1,493 @@
+{
+  "artifact": {
+    "generated_at_utc": "2026-08-25T19:00:59.646387+00:00",
+    "name": "ARUNDA_SNAPSHOT_FEATURE_MARKET_DATA_RUN_GROUP_COVERAGE_REPAIR_FORENSIC_v0.1",
+    "version": "v0.1"
+  },
+  "constraints": {
+    "back_fill": "FORBIDDEN",
+    "database_write": "FORBIDDEN",
+    "decision": "FORBIDDEN",
+    "forward_fill": "FORBIDDEN",
+    "interpolation": "FORBIDDEN",
+    "outcome": "NOT CALCULATED",
+    "prediction": "FORBIDDEN",
+    "synthetic_data": "FORBIDDEN"
+  },
+  "cross_symbol_coverage": {
+    "group_count": 4,
+    "records": [
+      {
+        "coverage_complete": false,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "execution_fingerprint": "31e79700bba7363a5549cbf006d44a827a8afd9f872a35029248e27025f8155f",
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4"
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "execution_fingerprint": "329db795224ded6662bc92841b9f386628324035282a6fa824bcfab9fffef759",
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3"
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "execution_fingerprint": "a997f07a9745616c1109ad5a9edcc8e8dff226ec98c9f5ba48f15f41a6ca946e",
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2"
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "execution_fingerprint": "af3950ad6b8b7be65746ea843282ee4201de5a9d115ddae3ea54a9bf17cf2cc5",
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "source": "COINMARKETCAP"
+      }
+    ]
+  },
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "execution_groups": {
+    "complete_count": 0,
+    "count": 4,
+    "incomplete_count": 4,
+    "records": [
+      {
+        "coverage_complete": false,
+        "covered_symbol_count": 15,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.4",
+        "execution_fingerprint": "31e79700bba7363a5549cbf006d44a827a8afd9f872a35029248e27025f8155f",
+        "expected_symbol_count": 0,
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "repair_required": true,
+        "row_count": 15,
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.4",
+        "timeframe_count": 1,
+        "timeframes": [
+          "SNAPSHOT"
+        ],
+        "timestamp_count": 1,
+        "timestamps": [
+          "2026-08-23T13:39:16.730073+00:00"
+        ]
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbol_count": 15,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.3",
+        "execution_fingerprint": "329db795224ded6662bc92841b9f386628324035282a6fa824bcfab9fffef759",
+        "expected_symbol_count": 0,
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "repair_required": true,
+        "row_count": 15,
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.3",
+        "timeframe_count": 1,
+        "timeframes": [
+          "SNAPSHOT"
+        ],
+        "timestamp_count": 1,
+        "timestamps": [
+          "2026-08-23T13:39:16.730073+00:00"
+        ]
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbol_count": 15,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_DATA_CMC_SNAPSHOT_v0.2",
+        "execution_fingerprint": "a997f07a9745616c1109ad5a9edcc8e8dff226ec98c9f5ba48f15f41a6ca946e",
+        "expected_symbol_count": 0,
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "repair_required": true,
+        "row_count": 15,
+        "source": "CMC_SNAPSHOT_ANALYSIS_v0.2",
+        "timeframe_count": 1,
+        "timeframes": [
+          "SNAPSHOT"
+        ],
+        "timestamp_count": 1,
+        "timestamps": [
+          "2026-08-23T13:39:16.730073+00:00"
+        ]
+      },
+      {
+        "coverage_complete": false,
+        "covered_symbol_count": 15,
+        "covered_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4",
+        "execution_fingerprint": "af3950ad6b8b7be65746ea843282ee4201de5a9d115ddae3ea54a9bf17cf2cc5",
+        "expected_symbol_count": 0,
+        "expected_symbols": [],
+        "extra_symbols": [
+          "AAVE",
+          "ADA",
+          "AVAX",
+          "BTC",
+          "DOGE",
+          "DOT",
+          "ETH",
+          "LINK",
+          "LTC",
+          "NEAR",
+          "SHIB",
+          "SOL",
+          "SUI",
+          "UNI",
+          "XRP"
+        ],
+        "missing_symbols": [],
+        "repair_required": true,
+        "row_count": 15,
+        "source": "COINMARKETCAP",
+        "timeframe_count": 1,
+        "timeframes": [
+          "SNAPSHOT"
+        ],
+        "timestamp_count": 1,
+        "timestamps": [
+          "2026-08-23T13:39:16.730073+00:00"
+        ]
+      }
+    ]
+  },
+  "expected_universe": {
+    "count": 0,
+    "source": "UNRESOLVED",
+    "source_path": null,
+    "symbols": []
+  },
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_timestamp_input": {
+    "count": 1,
+    "timestamps": [
+      "2026-08-23T13:39:16.730073+00:00"
+    ]
+  },
+  "forensic_status": "MARKET_DATA_RUN_GROUP_COVERAGE_REPAIR_BLOCKED",
+  "market_data_inventory": {
+    "market_symbol_count": 15,
+    "market_symbols": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ],
+    "parseable_timestamps": 1795,
+    "rows_loaded": 1795
+  },
+  "mode": "READ ONLY",
+  "network": "FORBIDDEN",
+  "per_symbol_coverage": [],
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED",
+  "repair_reconciliation": {
+    "complete_execution_groups": 0,
+    "covered_symbol_count": 15,
+    "database_modified": false,
+    "expected_universe_count": 0,
+    "incomplete_execution_groups": 4,
+    "repair_is_forensic_only": true,
+    "uncovered_symbol_count": 0,
+    "uncovered_symbols": []
+  },
+  "source_symbol_forensic": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_SOURCE_SYMBOL_INPUT_FORENSIC_v0.1.json",
+  "temporal_coverage": {
+    "counts": {
+      "0": 60,
+      "120": 60,
+      "300": 60,
+      "600": 60
+    },
+    "exact_matches": 60,
+    "exact_symbol_count": 15,
+    "exact_symbols": [
+      "AAVE",
+      "ADA",
+      "AVAX",
+      "BTC",
+      "DOGE",
+      "DOT",
+      "ETH",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "SHIB",
+      "SOL",
+      "SUI",
+      "UNI",
+      "XRP"
+    ]
+  }
+}

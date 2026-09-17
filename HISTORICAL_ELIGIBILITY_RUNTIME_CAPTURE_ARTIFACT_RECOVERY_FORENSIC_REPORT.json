@@ -1,0 +1,960 @@
+{
+  "forensic_identity": {
+    "title": "ARUNDA TRADER HISTORICAL ELIGIBILITY RUNTIME CAPTURE ARTIFACT RECOVERY FORENSIC v0.1",
+    "mode": "READ-ONLY FORENSIC",
+    "started_at_utc": "2026-08-24T17:43:45.756665+00:00",
+    "finished_at_utc": "2026-08-24T17:43:46.193865+00:00"
+  },
+  "objective": {
+    "target_artifact": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "producer": "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+    "consumer": "ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+    "purpose": "Determine whether historical runtime capture provenance or recoverable historical artifact evidence exists."
+  },
+  "safety_policy": {
+    "production_db_writes": "FORBIDDEN",
+    "production_source_modification": "FORBIDDEN",
+    "producer_execution": "FORBIDDEN",
+    "producer_import": "FORBIDDEN",
+    "eligibility_execution": "FORBIDDEN",
+    "eligibility_reconstruction": "FORBIDDEN",
+    "report_regeneration": "FORBIDDEN",
+    "synthetic_artifact": "FORBIDDEN",
+    "network_access": "FORBIDDEN",
+    "recovery_staging": "ISOLATED ONLY"
+  },
+  "filesystem": {
+    "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+    "files_discovered": 372,
+    "exact_report_files": []
+  },
+  "source_integrity": {
+    "producer_exists": true,
+    "consumer_exists": true,
+    "producer_sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "consumer_sha256": "bab964f7ba0cca29a6c7eb1974a18aceeec66b4ab68ec8ab6927da5bd1a8e6d9"
+  },
+  "content_provenance": {
+    "candidate_count": 17,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 265,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py",
+        "score": 265,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "score": 265,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 225,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "output",
+          "report",
+          "capture",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 210,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 200,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "report",
+          "capture",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 190,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 190,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+          "eligibility_report",
+          "eligible_pool",
+          "UPSTREAM_ELIGIBILITY_CONSUMED"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 130,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+          "ELIGIBILITY_NO_TRADE",
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "score": 70,
+        "producer_reference": true,
+        "report_reference": true,
+        "producer_terms": [
+          "SIGNAL_ELIGIBILITY"
+        ],
+        "report_terms": [
+          "eligibility_report"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "score": 55,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligible_pool"
+        ],
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "score": 30,
+        "producer_reference": false,
+        "report_reference": true,
+        "producer_terms": [],
+        "report_terms": [
+          "eligibility_report"
+        ],
+        "runtime_terms": [
+          "report",
+          "isolated"
+        ]
+      }
+    ]
+  },
+  "runtime_capture_provenance": {
+    "candidate_count": 17,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_v0.1.py",
+        "score": 206,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_CAPTURE_ARTIFACT_RECOVERY_FORENSIC_v0.1.py",
+        "score": 206,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "score": 206,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "stdout",
+          "stderr",
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "working directory",
+          "cwd",
+          "output",
+          "report",
+          "capture",
+          "isolated",
+          "subprocess",
+          "returncode",
+          "exit code"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "score": 142,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "invocation",
+          "launch",
+          "entrypoint",
+          "output",
+          "report",
+          "capture",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "score": 134,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "invocation",
+          "launch",
+          "report",
+          "capture",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "score": 126,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py",
+        "score": 126,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_v0.1.py",
+        "score": 118,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_v0.1.py",
+        "score": 118,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py",
+        "score": 110,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "output",
+          "report",
+          "isolated"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py",
+        "score": 91,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "runtime",
+          "execution",
+          "executed",
+          "launch",
+          "output",
+          "report",
+          "capture"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "score": 51,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_terms": [
+          "report",
+          "isolated"
+        ]
+      }
+    ]
+  },
+  "json_provenance": {
+    "candidate_count": 4,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_ARTIFACT_PROVENANCE_RECOVERY_FORENSIC_REPORT.json",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_keys": [
+          "script",
+          "mode",
+          "timestamp_utc",
+          "target_report",
+          "target_producer",
+          "target_consumer",
+          "base_dir",
+          "production_source_modified",
+          "production_db_modified",
+          "network_access",
+          "eligibility_executed",
+          "report_reconstructed",
+          "synthetic_report_created",
+          "candidate_created",
+          "candidates",
+          "archive_candidates",
+          "exact_matches",
+          "schema_matches",
+          "recovery_candidates",
+          "recovery_staged",
+          "verdict",
+          "producer",
+          "filesystem_files_discovered",
+          "content_candidates",
+          "recovery_decision",
+          "runtime_seconds",
+          "forensic_report"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\HISTORICAL_ELIGIBILITY_PRODUCER_RUNTIME_PROVENANCE_FORENSIC_REPORT.json",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_keys": [
+          "script",
+          "version",
+          "generated_at_utc",
+          "started_at_utc",
+          "mode",
+          "objective",
+          "target_report",
+          "producer",
+          "consumer",
+          "safety_policy",
+          "baseline",
+          "filesystem",
+          "content_provenance",
+          "runtime_provenance",
+          "json_forensics",
+          "archive_forensics",
+          "timeline",
+          "decision",
+          "integrity",
+          "recovery"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_REPORT.json",
+        "valid_json": true,
+        "producer_reference": false,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_keys": [
+          "script",
+          "version",
+          "status",
+          "reason",
+          "project_root",
+          "target_frontier",
+          "target_frontier_sha256",
+          "candidate_count",
+          "candidates",
+          "production_modification",
+          "database_write",
+          "synthetic_report",
+          "network_access",
+          "timestamp_utc"
+        ]
+      },
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\VERIFIED_ELIGIBILITY_REPORT_PRODUCER_RESOLUTION_HISTORICAL_ARTIFACT_FORENSIC_REPORT.json",
+        "valid_json": true,
+        "producer_reference": true,
+        "report_reference": true,
+        "runtime_reference": true,
+        "top_level_keys": [
+          "script",
+          "version",
+          "mode",
+          "timestamp_started_utc",
+          "timestamp_finished_utc",
+          "project_root",
+          "target_report",
+          "target_producer_name",
+          "downstream_frontier",
+          "downstream_frontier_sha256_before",
+          "downstream_frontier_sha256_after",
+          "production_source_invariant",
+          "exact_report_artifacts",
+          "producer_candidates",
+          "producer_resolution",
+          "all_references",
+          "historical_artifacts",
+          "possible_report_artifacts",
+          "final_status",
+          "final_reason",
+          "safety",
+          "next_action"
+        ]
+      }
+    ]
+  },
+  "archive_provenance": {
+    "archives_inspected": 1,
+    "archives": [
+      {
+        "archive": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_BACKUP_20260818_003611.zip",
+        "readable": true,
+        "target_members": [],
+        "producer_members": [],
+        "runtime_related_members": [
+          {
+            "name": "execution_contract.py",
+            "size": 12873,
+            "date_time": [
+              2026,
+              8,
+              17,
+              0,
+              7,
+              4
+            ],
+            "terms": [
+              "execution"
+            ]
+          },
+          {
+            "name": "execution_engine.py",
+            "size": 27662,
+            "date_time": [
+              2026,
+              8,
+              17,
+              1,
+              6,
+              20
+            ],
+            "terms": [
+              "execution"
+            ]
+          },
+          {
+            "name": "_report_block.txt",
+            "size": 1640,
+            "date_time": [
+              2026,
+              8,
+              15,
+              23,
+              49,
+              52
+            ],
+            "terms": [
+              "report"
+            ]
+          }
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "timeline": {
+    "candidate_count": 1,
+    "candidates": [
+      {
+        "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+        "mtime": "2026-08-23T16:54:08.642490+00:00",
+        "producer_reference": true,
+        "report_reference": false
+      }
+    ]
+  },
+  "recovery_decision": {
+    "status": "RUNTIME_CAPTURE_PROVENANCE_FOUND_ARTIFACT_UNRECOVERED",
+    "exact_artifact_present": false,
+    "exact_archive_artifact_present": false,
+    "runtime_provenance_reference": true,
+    "json_provenance_reference": true,
+    "artifact_recovered": false
+  },
+  "recovery_staging": {
+    "staged": false,
+    "reason": "No exact historical runtime capture artifact was copied or reconstructed. This forensic stage does not generate or rebuild eligibility reports.",
+    "staged_path": null
+  },
+  "final_verdict": {
+    "historical_runtime_capture_provenance": "RUNTIME_CAPTURE_PROVENANCE_FOUND_ARTIFACT_UNRECOVERED",
+    "exact_artifact_recovered": false,
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "production_source_modification": "NONE",
+    "network_access": "NONE"
+  }
+}

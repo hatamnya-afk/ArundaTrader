@@ -1,0 +1,101 @@
+==========================================================================================
+ARUNDA PROJECT SYNTAX FAILURE CLASSIFICATION FORENSIC v0.1
+==========================================================================================
+Project Directory : C:\Users\ASUS\ArundaTrader
+Mode              : READ ONLY
+Database          : NOT USED
+Network           : FORBIDDEN
+Production Run    : NOT PERFORMED
+File Modification : FORBIDDEN
+Deletion          : FORBIDDEN
+Quarantine        : FORBIDDEN
+
+==========================================================================================
+CROSS-TARGET SUMMARY
+==========================================================================================
+Target Files                          : 5
+Non-Production Quarantine Candidates : 3
+Runtime Review Candidates             : 1
+Forensic Dependency Candidates        : 0
+Manual Review Candidates              : 1
+
+==========================================================================================
+CLASSIFICATION
+==========================================================================================
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.2.py
+CLASS : FORENSIC_ONLY_REPAIR_OR_QUARANTINE_CANDIDATE
+SYNTAX : FAIL
+ERROR : invalid syntax
+LINE : 10
+REFERENCED BY : None
+MARKERS : None
+REASONS:
+  - filename_identifies_forensic_artifact
+  - no_direct_python_reference_found
+------------------------------------------------------------------------------------------
+FILE : ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py
+CLASS : RUNTIME_ARTIFACT_REVIEW_REQUIRED
+SYNTAX : FAIL
+ERROR : expected an indented block after function definition on line 26
+LINE : 27
+REFERENCED BY : None
+MARKERS : SQLITE_USAGE
+REASONS:
+  - filename_contains_runtime_lifecycle_terms
+  - no_direct_python_reference_found
+------------------------------------------------------------------------------------------
+FILE : history_feature_extractor_corrupted_backup.py
+CLASS : NON_PRODUCTION_QUARANTINE_CANDIDATE
+SYNTAX : FAIL
+ERROR : invalid syntax
+LINE : 1
+REFERENCED BY : None
+MARKERS : POWERSHELL_CD_COMMAND, POWERSHELL_HERE_STRING, SQL_ALTER_TABLE_TEXT, SQL_CREATE_TABLE_TEXT
+REASONS:
+  - filename_identifies_backup_artifact
+------------------------------------------------------------------------------------------
+FILE : INDICATOR_POST_REPAIR_PRODUCTION_PRICE_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py
+CLASS : NON_PRODUCTION_QUARANTINE_CANDIDATE
+SYNTAX : FAIL
+ERROR : unterminated string literal (detected at line 1)
+LINE : 1
+REFERENCED BY : None
+MARKERS : POWERSHELL_HERE_STRING, SQLITE_USAGE
+REASONS:
+  - filename_identifies_forensic_artifact
+  - contains_non_python_shell_or_test_content
+------------------------------------------------------------------------------------------
+FILE : prediction_test.py
+CLASS : NON_PRODUCTION_QUARANTINE_CANDIDATE
+SYNTAX : FAIL
+ERROR : invalid syntax
+LINE : 2
+REFERENCED BY : None
+MARKERS : PLAIN_TEXT_TEST_EXPRESSION
+REASONS:
+  - filename_identifies_test_artifact
+
+==========================================================================================
+FORENSIC STATUS
+==========================================================================================
+FORENSIC STATUS : RUNTIME_REVIEW_REQUIRED
+PREDICTIVE CLAIM : NOT ESTABLISHED
+DATABASE WRITE   : NOT PERFORMED
+NETWORK          : NOT USED
+PRODUCTION RUN   : NOT PERFORMED
+DELETION         : NOT PERFORMED
+QUARANTINE       : NOT PERFORMED
+
+==========================================================================================
+NEXT ACTION
+==========================================================================================
+Runtime/lifecycle candidates exist.
+Do NOT quarantine them before runtime dependency review.
+
+==========================================================================================
+ARTIFACT
+==========================================================================================
+Artifact : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.json
+Report   : C:\Users\ASUS\ArundaTrader\ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.txt
+==========================================================================================

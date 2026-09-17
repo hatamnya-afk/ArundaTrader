@@ -1,0 +1,3145 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL ORDER-INTENT VALIDATION CONTRACT FORENSICS",
+  "version": "v0.4",
+  "mode": "READ_ONLY",
+  "safety": {
+    "database_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "signal_creation": false,
+    "signal_injection": false,
+    "replay_execution": false,
+    "artifact_mutation": false
+  },
+  "sources": {
+    "validation_report": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_REPORT.json",
+    "validation_report_sha256": "68e8d0ad7292078f43a71236147b886424a2e12bd6dcaf12afbbd19d581bc582",
+    "replay_consumer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py",
+    "replay_consumer_sha256": "8728be5aea45c11c3d332a62187c0040d6bf3d101433f5bd12781d4a4b192651"
+  },
+  "actual_validation_report": {
+    "root_type": "dict",
+    "top_level_keys": [
+      "project",
+      "component",
+      "version",
+      "safety",
+      "sources",
+      "generation_contract",
+      "runtime_contract",
+      "artifact_contract",
+      "order_intent_validation",
+      "execution_safety",
+      "execution",
+      "final_verdict",
+      "next_stage"
+    ],
+    "tree": [
+      {
+        "path": "$",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.project",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.component",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.version",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.safety",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.safety.producer_execution",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.producer_import",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.production_db_write",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.network_access",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.order_execution",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.order_creation",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.order_submission",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.artifact_mutation",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.safety.operational_safety",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.sources",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.sources.generation",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.sources.generation_sha256",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.generation_contract",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.generation_contract.contract",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.generation_contract.verified",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.generation_contract.status",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.generation_contract.eligible_signals",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.generation_contract.order_intents_generated",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.generation_contract.validated_intents",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.generation_contract.invalid_intents",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.runtime_contract",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.runtime_contract.contract",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.runtime_contract.runtime_ready",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.runtime_contract.upstream_verified",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.runtime_contract.artifact_verified",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.runtime_contract.operational_safety",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.runtime_contract.verdict",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.artifact_contract",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.artifact_contract.contract",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.artifact_contract.verified",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.artifact_contract.rows",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.artifact_contract.eligible_rows",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.artifact_contract.no_trade_rows",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.artifact_contract.decision",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.artifact_contract.snapshot_id",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.order_intent_validation",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.order_intent_validation.status",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.order_intent_validation.reason",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.order_intent_validation.eligible_signals",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.order_intent_validation.order_intents",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.order_intent_validation.validated_intents",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.order_intent_validation.invalid_intents",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.order_intent_validation.intents",
+        "exists": true,
+        "type": "list"
+      },
+      {
+        "path": "$.order_intent_validation.invalid_details",
+        "exists": true,
+        "type": "list"
+      },
+      {
+        "path": "$.execution_safety",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.execution_safety.network_access",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution_safety.order_creation",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution_safety.order_submission",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution_safety.order_execution",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution_safety.production_db_write",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution",
+        "exists": true,
+        "type": "dict"
+      },
+      {
+        "path": "$.execution.executed",
+        "exists": true,
+        "type": "bool"
+      },
+      {
+        "path": "$.execution.orders_created",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.execution.orders_submitted",
+        "exists": true,
+        "type": "int"
+      },
+      {
+        "path": "$.final_verdict",
+        "exists": true,
+        "type": "str"
+      },
+      {
+        "path": "$.next_stage",
+        "exists": true,
+        "type": "str"
+      }
+    ]
+  },
+  "replay_consumer_contract": {
+    "consumer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py",
+    "consumer_sha256": "8728be5aea45c11c3d332a62187c0040d6bf3d101433f5bd12781d4a4b192651",
+    "literal_access_count": 54,
+    "literal_accesses": [
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "contract_valid",
+        "line": 183,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "status",
+        "line": 184,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "runtime_contract",
+        "key": "contract",
+        "line": 189,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "contract",
+        "line": 193,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "verified",
+        "line": 194,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate",
+        "key": "final_verdict",
+        "line": 222,
+        "column": 18,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.final_verdict",
+            "exists": true,
+            "type": "str",
+            "value_preview": "LIVE_SIGNAL_ORDER_INTENT_VALIDATION_READY"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "validation_final",
+        "key": "contract",
+        "line": 228,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_runtime",
+        "key": "contract",
+        "line": 233,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_artifact",
+        "key": "contract",
+        "line": 235,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "intents",
+        "line": 238,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "decision",
+        "line": 266,
+        "column": 15,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "snapshot_id",
+        "line": 270,
+        "column": 18,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "intents",
+        "line": 302,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_valid",
+        "line": 398,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_valid",
+        "line": 404,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "gate_valid",
+        "line": 407,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_valid",
+        "line": 415,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "rows",
+        "line": 418,
+        "column": 20,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "eligible_rows",
+        "line": 419,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "no_trade_rows",
+        "line": 422,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "decision",
+        "line": 425,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "snapshot_id",
+        "line": 426,
+        "column": 27,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_valid",
+        "line": 430,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract",
+        "line": 433,
+        "column": 22,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract",
+            "exists": true,
+            "type": "dict",
+            "value_preview": {
+              "contract": true,
+              "verified": true,
+              "status": "READY_NO_ELIGIBLE_SIGNALS",
+              "eligible_signals": 0,
+              "order_intents_generated": 0,
+              "validated_intents": 0,
+              "invalid_intents": 0
+            }
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "artifact_contract",
+        "line": 478,
+        "column": 15,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract",
+            "exists": true,
+            "type": "dict",
+            "value_preview": {
+              "contract": true,
+              "verified": true,
+              "rows": 4,
+              "eligible_rows": 0,
+              "no_trade_rows": 4,
+              "decision": "NO_TRADE",
+              "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+            }
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "eligible_signal_path",
+        "line": 482,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "execution_safety",
+        "line": 486,
+        "column": 13,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.execution_safety",
+            "exists": true,
+            "type": "dict",
+            "value_preview": {
+              "network_access": false,
+              "order_creation": false,
+              "order_submission": false,
+              "order_execution": false,
+              "production_db_write": false
+            }
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "execution",
+        "line": 490,
+        "column": 16,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.execution",
+            "exists": true,
+            "type": "dict",
+            "value_preview": {
+              "executed": false,
+              "orders_created": 0,
+              "orders_submitted": 0
+            }
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "source_chain",
+        "line": 557,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_verified",
+        "line": 561,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_verified",
+        "line": 566,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_verified",
+        "line": 571,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_contract_verified",
+        "line": 576,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "execution_gate_verified",
+        "line": 581,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "contract",
+        "line": 592,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "verified",
+        "line": 597,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "rows",
+        "line": 602,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "eligible_rows",
+        "line": 607,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "no_trade_rows",
+        "line": 612,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "decision",
+        "line": 617,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "snapshot_id",
+        "line": 622,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "status",
+        "line": 633,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "eligible_signals",
+        "line": 638,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          },
+          {
+            "path": "$.order_intent_validation.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "order_intents",
+        "line": 643,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.order_intents",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "path_verified",
+        "line": 648,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "replay_performed",
+        "line": 653,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "reason",
+        "line": 657,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.reason",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_ORDER_INTENTS_TO_VALIDATE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "execution_allowed",
+        "line": 668,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_creation",
+        "line": 673,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_submission",
+        "line": 678,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "network_access",
+        "line": 683,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "production_db_write",
+        "line": 688,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "final_verdict",
+        "line": 699,
+        "column": 11,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.final_verdict",
+            "exists": true,
+            "type": "str",
+            "value_preview": "LIVE_SIGNAL_ORDER_INTENT_VALIDATION_READY"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "next_stage",
+        "line": 704,
+        "column": 11,
+        "top_level_exists": true,
+        "actual_paths": [
+          {
+            "path": "$.next_stage",
+            "exists": true,
+            "type": "str",
+            "value_preview": "WAIT_FOR_ELIGIBLE_SIGNAL"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      }
+    ],
+    "required_literal_keys": [
+      "artifact_contract",
+      "artifact_contract_valid",
+      "artifact_contract_verified",
+      "contract",
+      "contract_valid",
+      "decision",
+      "eligible_rows",
+      "eligible_signal_path",
+      "eligible_signals",
+      "execution",
+      "execution_allowed",
+      "execution_gate_verified",
+      "execution_safety",
+      "final_verdict",
+      "gate_valid",
+      "generation_contract",
+      "generation_contract_valid",
+      "generation_contract_verified",
+      "intents",
+      "network_access",
+      "next_stage",
+      "no_trade_rows",
+      "order_creation",
+      "order_intents",
+      "order_submission",
+      "path_verified",
+      "production_db_write",
+      "reason",
+      "replay_performed",
+      "rows",
+      "runtime_contract_valid",
+      "runtime_contract_verified",
+      "snapshot_id",
+      "source_chain",
+      "status",
+      "validation_contract_verified",
+      "validation_valid",
+      "verified"
+    ]
+  },
+  "exact_contract_comparison": {
+    "status": "NESTED_VS_TOP_LEVEL_REPRESENTATION_MISMATCH",
+    "top_level_missing_count": 47,
+    "nested_exists_count": 31,
+    "completely_missing_count": 16,
+    "top_level_missing": [
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "contract_valid",
+        "line": 183,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "status",
+        "line": 184,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "runtime_contract",
+        "key": "contract",
+        "line": 189,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "contract",
+        "line": 193,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "verified",
+        "line": 194,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "validation_final",
+        "key": "contract",
+        "line": 228,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_runtime",
+        "key": "contract",
+        "line": 233,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_artifact",
+        "key": "contract",
+        "line": 235,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "intents",
+        "line": 238,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "decision",
+        "line": 266,
+        "column": 15,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "snapshot_id",
+        "line": 270,
+        "column": 18,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "intents",
+        "line": 302,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_valid",
+        "line": 398,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_valid",
+        "line": 404,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "gate_valid",
+        "line": 407,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_valid",
+        "line": 415,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "rows",
+        "line": 418,
+        "column": 20,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "eligible_rows",
+        "line": 419,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "no_trade_rows",
+        "line": 422,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "decision",
+        "line": 425,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "snapshot_id",
+        "line": 426,
+        "column": 27,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_valid",
+        "line": 430,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "eligible_signal_path",
+        "line": 482,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "source_chain",
+        "line": 557,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_verified",
+        "line": 561,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_verified",
+        "line": 566,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_verified",
+        "line": 571,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_contract_verified",
+        "line": 576,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "execution_gate_verified",
+        "line": 581,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "contract",
+        "line": 592,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "verified",
+        "line": 597,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "rows",
+        "line": 602,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "eligible_rows",
+        "line": 607,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "no_trade_rows",
+        "line": 612,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "decision",
+        "line": 617,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "snapshot_id",
+        "line": 622,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "status",
+        "line": 633,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "eligible_signals",
+        "line": 638,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          },
+          {
+            "path": "$.order_intent_validation.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "order_intents",
+        "line": 643,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.order_intents",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "path_verified",
+        "line": 648,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "replay_performed",
+        "line": 653,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "reason",
+        "line": 657,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.reason",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_ORDER_INTENTS_TO_VALIDATE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "execution_allowed",
+        "line": 668,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_creation",
+        "line": 673,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_submission",
+        "line": 678,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "network_access",
+        "line": 683,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "production_db_write",
+        "line": 688,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      }
+    ],
+    "nested_exists": [
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "status",
+        "line": 184,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "runtime_contract",
+        "key": "contract",
+        "line": 189,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "contract",
+        "line": 193,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "verified",
+        "line": 194,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "validation_final",
+        "key": "contract",
+        "line": 228,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_runtime",
+        "key": "contract",
+        "line": 233,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "gate_artifact",
+        "key": "contract",
+        "line": 235,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "intents",
+        "line": 238,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "decision",
+        "line": 266,
+        "column": 15,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "get",
+        "base": "artifact_contract",
+        "key": "snapshot_id",
+        "line": 270,
+        "column": 18,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "intents",
+        "line": 302,
+        "column": 14,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.intents",
+            "exists": true,
+            "type": "list",
+            "value_preview": []
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "rows",
+        "line": 418,
+        "column": 20,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "eligible_rows",
+        "line": 419,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "no_trade_rows",
+        "line": 422,
+        "column": 29,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "decision",
+        "line": 425,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "snapshot_id",
+        "line": 426,
+        "column": 27,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "contract",
+        "line": 592,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.runtime_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.contract",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 3,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "verified",
+        "line": 597,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          },
+          {
+            "path": "$.artifact_contract.verified",
+            "exists": true,
+            "type": "bool",
+            "value_preview": true
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "rows",
+        "line": 602,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "eligible_rows",
+        "line": 607,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.eligible_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "no_trade_rows",
+        "line": 612,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.no_trade_rows",
+            "exists": true,
+            "type": "int",
+            "value_preview": 4
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "decision",
+        "line": 617,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.decision",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_TRADE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "artifact",
+        "key": "snapshot_id",
+        "line": 622,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.artifact_contract.snapshot_id",
+            "exists": true,
+            "type": "str",
+            "value_preview": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "status",
+        "line": 633,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          },
+          {
+            "path": "$.order_intent_validation.status",
+            "exists": true,
+            "type": "str",
+            "value_preview": "READY_NO_ELIGIBLE_SIGNALS"
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "eligible_signals",
+        "line": 638,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.generation_contract.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          },
+          {
+            "path": "$.order_intent_validation.eligible_signals",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "order_intents",
+        "line": 643,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.order_intents",
+            "exists": true,
+            "type": "int",
+            "value_preview": 0
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "reason",
+        "line": 657,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.order_intent_validation.reason",
+            "exists": true,
+            "type": "str",
+            "value_preview": "NO_ORDER_INTENTS_TO_VALIDATE"
+          }
+        ],
+        "actual_path_count": 1,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_creation",
+        "line": 673,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_creation",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "order_submission",
+        "line": 678,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.order_submission",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "network_access",
+        "line": 683,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.network_access",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "production_db_write",
+        "line": 688,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [
+          {
+            "path": "$.safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          },
+          {
+            "path": "$.execution_safety.production_db_write",
+            "exists": true,
+            "type": "bool",
+            "value_preview": false
+          }
+        ],
+        "actual_path_count": 2,
+        "resolved_anywhere": true
+      }
+    ],
+    "completely_missing": [
+      {
+        "kind": "get",
+        "base": "generation_contract",
+        "key": "contract_valid",
+        "line": 183,
+        "column": 8,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_valid",
+        "line": 398,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_valid",
+        "line": 404,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "gate_valid",
+        "line": 407,
+        "column": 16,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_valid",
+        "line": 415,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_valid",
+        "line": 430,
+        "column": 24,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "eligible_signal_path",
+        "line": 482,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "report",
+        "key": "source_chain",
+        "line": 557,
+        "column": 12,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "generation_contract_verified",
+        "line": 561,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "runtime_contract_verified",
+        "line": 566,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "artifact_contract_verified",
+        "line": 571,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "validation_contract_verified",
+        "line": 576,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "chain",
+        "key": "execution_gate_verified",
+        "line": 581,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "path_verified",
+        "line": 648,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "path",
+        "key": "replay_performed",
+        "line": 653,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      },
+      {
+        "kind": "subscript",
+        "base": "safety",
+        "key": "execution_allowed",
+        "line": 668,
+        "column": 11,
+        "top_level_exists": false,
+        "actual_paths": [],
+        "actual_path_count": 0,
+        "resolved_anywhere": false
+      }
+    ]
+  },
+  "repair": {
+    "performed": false,
+    "minimum_targeted_repair": false,
+    "reason": "FORENSICS_ONLY; NO FILE MODIFICATION"
+  },
+  "final_verdict": "MISMATCH_IDENTIFIED",
+  "next_frontier": "MINIMUM_TARGETED_VALIDATION_CONTRACT_REPAIR"
+}

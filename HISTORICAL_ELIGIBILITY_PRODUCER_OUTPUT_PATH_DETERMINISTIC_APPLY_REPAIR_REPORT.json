@@ -1,0 +1,49 @@
+{
+  "timestamp_utc": "2026-08-24T18:17:29.928187+00:00",
+  "mode": "CONTROLLED SOURCE REPAIR",
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "target_report": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "repair": {
+    "type": "DETERMINISTIC_ABSOLUTE_PROJECT_ROOT_PATH",
+    "status": "APPLIED",
+    "target_expression": "PROJECT_ROOT / \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\"",
+    "old_assignment": "    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )",
+    "new_assignment": "    report_path = PROJECT_ROOT / \"LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json\""
+  },
+  "pre_repair": {
+    "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "syntax_valid": true,
+    "report_path_assignment_line": 701,
+    "report_path_assignment_end_line": 704,
+    "original_assignment": "    report_path = os.path.join(\n        capture_dir,\n        report_name\n    )"
+  },
+  "post_repair": {
+    "sha256": "4e78d6e0a6b09861a39133c99273638fdea516bb25a78ff54a7b984a0b585074",
+    "syntax_valid": true
+  },
+  "backup": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\_backups\\ArundaTrader_PRE_OUTPUT_PATH_REPAIR_20260824_214729.py",
+    "sha256": "e2720ac0443169e9c9f08e61a4776e1100d43334bd2e4bcc18e8c6fb2fe41a6b",
+    "integrity": "VERIFIED"
+  },
+  "safety": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "eligibility_executed": false,
+    "eligibility_rebuilt": false,
+    "report_regenerated": false,
+    "synthetic_artifact": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE",
+    "source_modified": true,
+    "repair_applied": true
+  },
+  "verification": {
+    "original_sha256_preserved_in_backup": true,
+    "post_repair_sha256_changed": true,
+    "syntax_valid_after_repair": true,
+    "deterministic_report_path": true
+  },
+  "verdict": "DETERMINISTIC_OUTPUT_PATH_REPAIR_APPLIED_VERIFIED"
+}

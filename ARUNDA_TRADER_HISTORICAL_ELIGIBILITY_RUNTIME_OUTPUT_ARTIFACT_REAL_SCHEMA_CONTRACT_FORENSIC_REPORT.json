@@ -1,0 +1,137 @@
+{
+  "timestamp_utc": "2026-08-24T18:51:37.446346+00:00",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+  "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+  "producer_syntax_valid": true,
+  "artifact_is_object": true,
+  "top_level_keys": [
+    "capture_db",
+    "decision",
+    "eligible_rows",
+    "engine",
+    "frontier",
+    "gate_configuration",
+    "no_trade_rows",
+    "production_db",
+    "row_results",
+    "rows",
+    "safety",
+    "snapshot_id",
+    "timestamp_utc"
+  ],
+  "row_schema": {
+    "count": 4,
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "results": [],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "reasons": [
+      "CONFIDENCE_BELOW_GATE",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET",
+      "CONFIDENCE_BELOW_GATE",
+      "INSUFFICIENT_AVAILABLE_WEIGHT",
+      "DATA_QUALITY_NOT_VERIFIED",
+      "FLAT_DIRECTION",
+      "WEAK_SIGNAL",
+      "INCOMPLETE_ARM_SET"
+    ]
+  },
+  "result_identity": false,
+  "production_db": {
+    "exists": true,
+    "keys": [
+      "after",
+      "before",
+      "path",
+      "unchanged"
+    ],
+    "values": {
+      "path": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+      "before": {
+        "size": 521883648,
+        "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+        "rows": 36
+      },
+      "after": {
+        "size": 521883648,
+        "sha256": "3e4e64aa87e80d36f2987992b7eb365b449cabb36413314b2af739424bd28eb7",
+        "rows": 36
+      },
+      "unchanged": true
+    },
+    "evidence": false
+  },
+  "safety": {
+    "exists": true,
+    "keys": [
+      "direction_inference",
+      "engine_executed",
+      "historical_repair",
+      "live_data_injection",
+      "order_execution",
+      "production_db_modified",
+      "score_reconstruction",
+      "synthetic_data"
+    ],
+    "values": {
+      "production_db_modified": false,
+      "engine_executed": false,
+      "historical_repair": false,
+      "direction_inference": false,
+      "score_reconstruction": false,
+      "synthetic_data": false,
+      "live_data_injection": false,
+      "order_execution": false
+    },
+    "production_db_modified": false,
+    "order_execution": false,
+    "synthetic_data": false,
+    "semantic_no_write": true,
+    "semantic_no_order": true,
+    "semantic_no_synthetic": true
+  },
+  "checks": {
+    "snapshot_identity": true,
+    "rows_identity": true,
+    "eligible_rows": true,
+    "no_trade_rows": true,
+    "result_identity": false,
+    "decision_identity": true,
+    "reason_evidence": true,
+    "core_contract": false,
+    "production_db_evidence": false,
+    "safety_contract": true
+  },
+  "verdict": "RUNTIME_OUTPUT_ARTIFACT_REAL_SCHEMA_CONTRACT_FAILED",
+  "safety_boundary": {
+    "producer_executed": false,
+    "producer_imported": false,
+    "artifact_modified": false,
+    "artifact_deleted": false,
+    "production_db_writes": "NONE",
+    "network_access": "NONE"
+  }
+}

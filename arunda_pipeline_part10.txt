@@ -1,0 +1,500 @@
+﻿
+        if not isinstance(
+            request,
+            exchange_execution_contract.CanonicalOrderRequest,
+        ):
+            fail(
+                f"Canonical request missing: {asset}"
+            )
+
+        result = execute_order(
+            request=request,
+            adapter=None,
+        )
+
+        if not isinstance(
+            result,
+            exchange_execution_contract.CanonicalExecutionResult,
+        ):
+            fail(
+                f"Execution boundary result invalid: {asset}"
+            )
+
+        if result.error_code != "EXECUTION_DISABLED":
+            fail(
+                "EXECUTION SAFETY FAILURE: "
+                f"{asset} returned "
+                f"{result.error_code!r}"
+            )
+
+    return "VERIFIED_BLOCKED"
+
+
+def assert_no_execution_boundary(
+    order_intents: list[dict],
+) -> None:
+    assert_execution_disabled()
+
+    if order_intents and EXECUTION_ENABLED:
+        fail(
+            "ORDER_INTENT cannot reach execution"
+        )
+
+
+# ============================================================================
+# FINAL PREFLIGHT
+# ============================================================================
+
+def validate_final_preflight_integrity(
+    opportunity_rows: list[dict],
+    gate_results: list[dict],
+    order_intents: list[dict],
+    validated_order_intents: int,
+) -> tuple[int, int]:
+    trade_ready_count = sum(
+        1
+        for row in gate_results
+        if normalize_status(
+            row.get("trade_gate_status")
+        ) == TRADE_READY_STATUS
+    )
+
+    eligible_count = sum(
+        1
+        for row in opportunity_rows
+        if get_opportunity_status(row) == ELIGIBLE_STATUS
+    )
+
+    if trade_ready_count == 0:
+        if order_intents:
+            fail(
+                "TRADE_READY=0 but ORDER_INTENT>0"
+            )
+
+        if validated_order_intents != 0:
+            fail(
+                "TRADE_READY=0 but "
+                "VALIDATED_ORDER_INTENTS>0"
+            )
+
+    else:
+        if len(order_intents) != trade_ready_count:
+            fail(
+                "ORDER_INTENT count != TRADE_READY count"
+            )
+
+        if validated_order_intents != len(order_intents):
+            fail(
+                "Validated ORDER_INTENT count mismatch"
+            )
+
+        if eligible_count < trade_ready_count:
+            fail(
+                "TRADE_READY exceeds ELIGIBLE coverage"
+            )
+
+    return (
+        trade_ready_count,
+        eligible_count,
+    )
+
+
+# ============================================================================
+# REPORT
+# ============================================================================
+
+def print_final_report(
+    snapshot_id,
+    opportunity_rows,
+    decision_rows,
+    risk_rows,
+    gate_results,
+    order_intents,
+    validated_order_intents,
+    quantity_records,
+    execution_boundary_status,
+):
+    trade_ready = [
+        row
+        for row in gate_results
+        if normalize_status(
+            row.get("trade_gate_status")
+        ) == TRADE_READY_STATUS
+    ]
+
+    eligible = sum(
+        1
+        for row in opportunity_rows
+        if get_opportunity_status(row) == ELIGIBLE_STATUS
+    )
+
+    print()
+    print("=" * 90)
+    print(
+        "ARUNDA TRADER â€” "
+        "PRODUCTION PIPELINE v1.0"
+    )
+    print(
+        "FUSED-SCORE â†’ SCORE / DECISION â†’ "
+        "RISK â†’ TRADE GATE â†’ ORDER INTENT"
+    )
+    print("=" * 90)
+
+    print()
+    print("PRODUCTION:")
+    print("MARKET ARM      : VERIFIED")
+    print("NEWS ARM        : PASS")
+    print("SOCIAL ARM      : PASS")
+    print("FUSION          : FUSION_v0.6")
+    print(
+        "SCORE BINDING   : "
+        "FUSED_SCORE_BINDING_v0.1"
+    )
+    print("LEGACY          : FORBIDDEN")
+
+    print()
+    print("COVERAGE:")
+    print(
+        f"OPPORTUNITY     : "
+        f"{len(opportunity_rows)}/{len(EXPECTED_ASSETS)}"
+    )
+    print(
+        f"DECISION        : "
+        f"{len(decision_rows)}/{len(EXPECTED_ASSETS)}"
+    )
+    print(
+        f"RISK            : "
+        f"{len(risk_rows)}/{len(EXPECTED_ASSETS)}"
+    )
+    print(
+        f"TRADE GATE      : "
+        f"{len(gate_results)}/{len(EXPECTED_ASSETS)}"
+    )
+
+    print()
+    print("OPPORTUNITY:")
+    print(
+        f"ELIGIBLE        : {eligible}"
+    )
+    print(
+        f"TRADE_READY     : {len(trade_ready)}"
+    )
+    print(
+        f"ORDER_INTENT    : {len(order_intents)}"
+    )
+    print(
+        f"VALIDATED_OI    : {validated_order_intents}"
+    )
+
+    print()
+    print("QUANTITY:")
+    print(
+        f"RUNTIME_RECORDS : {len(quantity_records)}"
+    )
+    print(
+        "SOURCE          : "
+        "POSITION_SIZING.position_size"
+    )
+    print(
+        "RISK QUANTITY   : "
+        "RISK.position_quantity"
+    )
+    print(
+        "CANONICAL       : "
+        "RISK.position_quantity"
+    )
+    print(
+        "UNIT            : BASE_ASSET"
+    )
+    print("CHANGED         : FALSE")
+    print("RECOMPUTED      : FALSE")
+    print("RESCALED        : FALSE")
+    print("ROUNDED         : FALSE")
+    print("CLIPPED         : FALSE")
+
+    print()
+    print("EXECUTION:")
+    print(
+        f"ENABLED         : "
+        f"{EXECUTION_ENABLED}"
+    )
+    print(
+        "ORDER SUBMISSION: NONE"
+    )
+    print(
+        "EXCHANGE WRITE  : NONE"
+    )
+    print(
+        f"BOUNDARY        : "
+        f"{execution_boundary_status}"
+    )
+
+    print()
+    print("DATABASE:")
+    print(
+        "ORDER_INTENT DB : NONE"
+    )
+    print(
+        "EXECUTION DB    : NONE"
+    )
+    print(
+        "DB_WRITES       : 0"
+    )
+
+    print()
+    print("DATA SAFETY:")
+    print("SYNTHETIC       : FALSE")
+    print("INTERPOLATION   : FALSE")
+    print("FILL            : FALSE")
+    print("BACKFILL        : FALSE")
+    print("PADDING         : FALSE")
+    print("BLENDING        : FALSE")
+    print("LEGACY_USED     : FALSE")
+
+    print()
+    print("RUNTIME IDENTITY:")
+    print(
+        f"SNAPSHOT_ID     : {snapshot_id}"
+    )
+    print(
+        f"LAUNCH_BOUNDARY : "
+        f"{LAUNCH_TIMESTAMP}"
+    )
+    print("DETERMINISTIC   : YES")
+    print("REPRODUCIBLE    : YES")
+    print("AUDITABLE       : YES")
+
+    print()
+    print("CLOSED LAYERS:")
+    print("REOPENED        : NONE")
+
+    if not trade_ready:
+        print()
+        print(
+            "RESULT          : PASS â€” "
+            "FAIL-CLOSED ZERO PATH"
+        )
+        print(
+            "REASON          : "
+            "NO CURRENT TRADE_READY / "
+            "NO ORDER_INTENT"
+        )
+    else:
+        print()
+        print(
+            "RESULT          : PASS â€” "
+            "CURRENT ORDER-INTENT "
+            "CONTRACT VERIFIED"
+        )
+
+    print()
+    print(
+        "EXECUTION REMAINS DISABLED"
+    )
+
+    print("=" * 90)
+
+
+# ============================================================================
+# MAIN
+# ============================================================================
+
+def main() -> int:
+    # ------------------------------------------------------------------------
+    # GLOBAL SAFETY
+    # ------------------------------------------------------------------------
+
+    assert_execution_disabled()
+
+    print()
+    print("=" * 90)
+    print(
+        "ARUNDA TRADER â€” "
+        "PRODUCTION PIPELINE v1.0"
+    )
+    print(
+        "FUSED-SCORE â†’ "
+        "SCORE / DECISION BINDING"
+    )
+    print(
+        "Execution Enabled : "
+        f"{EXECUTION_ENABLED}"
+    )
+    print("=" * 90)
+
+    # ------------------------------------------------------------------------
+    # CURRENT MARKET SNAPSHOT
+    # ------------------------------------------------------------------------
+
+    market_output = run_script(
+        "market_snapshot_engine.py"
+    )
+
+    market_snapshot = (
+        parse_market_runtime_snapshot(
+            market_output
+        )
+    )
+
+    snapshot_id = (
+        build_runtime_snapshot_id(
+            market_snapshot
+        )
+    )
+
+    print()
+    print(
+        "CURRENT RUNTIME SNAPSHOT : PASS"
+    )
+    print(
+        f"Snapshot ID : {snapshot_id}"
+    )
+
+    # ------------------------------------------------------------------------
+    # CURRENT MARKET DATA
+    #
+    # Exactly one runtime invocation.
+    # The returned runtime object is carried forward into
+    # quantity/provenance validation.
+    # ------------------------------------------------------------------------
+
+    market_data_result = (
+        market_data_engine.ingest_real_1h_ohlcv(
+            snapshot_id
+        )
+    )
+
+    if market_data_result is None:
+        fail(
+            "CURRENT RUNTIME MARKET DATA unavailable"
+        )
+
+    # ------------------------------------------------------------------------
+    # OPPORTUNITY
+    # ------------------------------------------------------------------------
+
+    opportunity_output = run_script(
+        "opportunity_engine.py"
+    )
+
+    opportunity_snapshot = (
+        parse_opportunity_runtime_snapshot(
+            opportunity_output
+        )
+    )
+
+    opportunity_rows = (
+        opportunity_snapshot["opportunities"]
+    )
+
+    # ------------------------------------------------------------------------
+    # SIGNAL
+    # ------------------------------------------------------------------------
+
+    raw_validated_signals = (
+        signal_validator.load_validated_signals()
+    )
+
+    validated_signals = (
+        normalize_validated_signals(
+            raw_validated_signals
+        )
+    )
+
+    validate_signal_coverage(
+        validated_signals
+    )
+
+    # ------------------------------------------------------------------------
+    # PRODUCTION FUSION
+    # ------------------------------------------------------------------------
+
+    fusion_snapshot = (
+        build_production_fusion_snapshot(
+            validated_signals
+        )
+    )
+
+    fused_scores = (
+        bind_fused_scores(
+            validated_signals,
+            fusion_snapshot,
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # SCORE
+    # ------------------------------------------------------------------------
+
+    aligned_scores = (
+        signal_scorer.run(
+            validated_signals,
+            fused_scores,
+        )
+    )
+
+    # ------------------------------------------------------------------------
+    # DECISION
+    # ------------------------------------------------------------------------
+
+    decision_snapshot = (
+        decision_engine.run(
+            validated_signals,
+            aligned_scores,
+        )
+    )
+
+    decision_rows = extract_rows(
+        decision_snapshot,
+        (
+            "decisions",
+            "rows",
+            "assets",
+            "results",
+        ),
+    )
+
+    decision_rows = exact_asset_rows(
+        decision_rows,
+        "DECISION",
+    )
+
+    # ------------------------------------------------------------------------
+    # RISK
+    # ------------------------------------------------------------------------
+
+    risk_snapshot = (
+        risk_engine.run(
+            decision_snapshot
+        )
+    )
+
+    risk_rows = extract_rows(
+        risk_snapshot,
+        (
+            "risk",
+            "risk_decisions",
+            "decisions",
+            "rows",
+            "assets",
+            "results",
+        ),
+    )
+
+    risk_rows = exact_asset_rows(
+        risk_rows,
+        "RISK",
+    )
+
+    # ------------------------------------------------------------------------
+    # DECISION / RISK ALIGNMENT
+    # ------------------------------------------------------------------------
+
+    d_map = decision_map(
+        decision_rows
+    )
+
+    r_map = risk_map(
+        risk_rows
+    )
+

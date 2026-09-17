@@ -1,0 +1,124 @@
+{
+  "artifact": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+  "artifact_error": null,
+  "artifact_info": {
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "decision": "NO_TRADE",
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "reason_count": 20,
+    "result_field_values": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "result_key_presence": [
+      false,
+      false,
+      false,
+      false
+    ],
+    "row_results_count": 4,
+    "rows": 4,
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa"
+  },
+  "artifact_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+  "artifact_valid_json": true,
+  "core_runtime_contract": {
+    "aggregate_result_contract": true,
+    "assets": true,
+    "core_contract": true,
+    "decision": true,
+    "eligible_rows": true,
+    "no_trade_rows": true,
+    "reasons": true,
+    "rows": true
+  },
+  "mode": "READ_ONLY_REAL_SCHEMA_RESULT_CONTRACT_FORENSIC",
+  "producer": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py",
+  "producer_contract_discovery": {
+    "comparisons": [],
+    "json_writers": [
+      {
+        "function": "dump",
+        "location": "line=709, col=8",
+        "source": "json.dump(\n            report,\n            f,\n            indent=2,\n            ensure_ascii=False,\n        )"
+      }
+    ],
+    "no_trade_constants": [
+      {
+        "location": "line=337, col=17",
+        "source": "\"NO_TRADE\""
+      },
+      {
+        "location": "line=427, col=17",
+        "source": "\"NO_TRADE\""
+      }
+    ],
+    "report_builders": [],
+    "result_assignments": [],
+    "result_dicts": [],
+    "row_result_builders": []
+  },
+  "producer_sha256": "71ff6dcdd5c49ef6ce06c6085794ceeaf22376e5e0f9dd97d906711e4cc4bdf0",
+  "producer_syntax_valid": true,
+  "production_db_contract": {
+    "before_after_present": true,
+    "contract": true,
+    "exists": true,
+    "sha256_match": true,
+    "unchanged": true
+  },
+  "project_root": "C:\\Users\\ASUS\\ArundaTrader",
+  "result_contract": {
+    "aggregate_result_contract": true,
+    "explicit_no_trade_count": 0,
+    "explicit_result_count": 0,
+    "missing_result_key_rows": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "producer_comparisons": 0,
+    "producer_has_result_dict": false,
+    "producer_no_trade_literal_count": 2,
+    "producer_result_assignments": 0,
+    "result_key_count": 0,
+    "row_level_result_contract": false,
+    "row_result_count": 4
+  },
+  "safety": {
+    "artifact_delete": false,
+    "artifact_write": false,
+    "network_access": false,
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false
+  },
+  "safety_contract": {
+    "direction_inference": false,
+    "engine_executed": false,
+    "exists": true,
+    "historical_repair": false,
+    "live_data_injection": false,
+    "order_execution": false,
+    "production_db_modified": false,
+    "score_reconstruction": false,
+    "semantic_contract": true,
+    "synthetic_data": false
+  },
+  "verdict": "RUNTIME_ARTIFACT_AGGREGATE_RESULT_CONTRACT_VERIFIED"
+}

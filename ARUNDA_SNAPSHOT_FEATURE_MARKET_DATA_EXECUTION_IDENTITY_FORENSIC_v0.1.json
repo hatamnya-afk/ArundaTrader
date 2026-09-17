@@ -1,0 +1,936 @@
+{
+  "forensic": {
+    "name": "ARUNDA SNAPSHOT FEATURE -> MARKET DATA EXECUTION IDENTITY FORENSIC",
+    "version": "v0.1",
+    "mode": "READ ONLY",
+    "network": "FORBIDDEN",
+    "outcome": "NOT CALCULATED",
+    "prediction": "FORBIDDEN",
+    "decision": "FORBIDDEN"
+  },
+  "database": "C:\\Users\\ASUS\\ArundaTrader\\arunda.db",
+  "feature_contract": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_SNAPSHOT_FEATURE_CONTRACT_v0.1.json",
+  "feature_timestamp": "2026-08-23T13:39:16.730073",
+  "feature_timestamp_utc": "2026-08-23T13:39:16.730073+00:00",
+  "feature_timestamp_contract_candidates": [
+    {
+      "path": "root.records[0].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[9].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[10].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[11].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[12].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[13].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[0].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[1].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[2].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[3].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[4].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[5].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[6].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[7].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].features[8].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    },
+    {
+      "path": "root.records[14].snapshot_timestamp",
+      "value": "2026-08-23T13:39:16.730073+00:00"
+    }
+  ],
+  "schema": {
+    "symbol_column": "symbol",
+    "timestamp_column": "timestamp",
+    "all_columns": [
+      "id",
+      "timestamp",
+      "symbol",
+      "timeframe",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "ema20",
+      "ema50",
+      "rsi14",
+      "macd",
+      "macd_signal",
+      "macd_hist",
+      "atr14",
+      "adx14",
+      "bb_middle",
+      "bb_upper",
+      "bb_lower",
+      "bb_width",
+      "volume_sma20",
+      "volume_ratio",
+      "volatility",
+      "technical_score",
+      "source",
+      "source_timestamp",
+      "price_change_1h",
+      "price_change_24h",
+      "market_cap",
+      "volume_24h",
+      "source_latency_ms",
+      "engine_version"
+    ]
+  },
+  "execution_identity_columns": [
+    "source",
+    "engine_version"
+  ],
+  "inventory": {
+    "market_data_rows_loaded": 1795,
+    "parseable_timestamp_rows": 1795,
+    "market_symbols": 15
+  },
+  "temporal_coverage": {
+    "exact_timestamp_matches": 60,
+    "within_120_seconds": 60,
+    "within_300_seconds": 60,
+    "within_600_seconds": 60
+  },
+  "exact_match_summary": {
+    "exact_rows": 60,
+    "unique_row_fingerprints": 60,
+    "unique_execution_fingerprints": 4,
+    "execution_fingerprints": [
+      "364e6309b323257beda6d7c72811310787d70f7b518d38842597132612259665",
+      "571a8d9597178628cc4cb2015af11c516f413a40bb8b4f5b8fc7e80ff8a0ba77",
+      "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "e06c04d922eb497674549dc91e2634fa81f135d2cda50c9c259807ea3952d8e0"
+    ],
+    "all_symbols_same_execution_identity": true
+  },
+  "execution_fingerprint_counts": {
+    "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c": 15,
+    "571a8d9597178628cc4cb2015af11c516f413a40bb8b4f5b8fc7e80ff8a0ba77": 15,
+    "364e6309b323257beda6d7c72811310787d70f7b518d38842597132612259665": 15,
+    "e06c04d922eb497674549dc91e2634fa81f135d2cda50c9c259807ea3952d8e0": 15
+  },
+  "row_fingerprint_counts": {
+    "6573b897ad857055f7f7bdc822056cef039f0685e29cd1c6679a0f05f1d36fa5": 1,
+    "494f5a005d060a587b8cc5b7f7c5e20367e2ebdc99a624f35213b5f856bd38b2": 1,
+    "12a8dc68be0976c2d3969f1955f6953f23bb5cac8fdd830494eafa7d3c1d7b42": 1,
+    "27e3aedaa56b5220a5b594cb1efd7f4f4437d084f13598dd1a69c34d058dcb94": 1,
+    "6f5e1a9d053fb9408dfcddf8d759a006f36ad59d55b972d0cfb681d8b4fd113a": 1,
+    "44366996a95d0d11293d7228ad3346e1683dc2ed9247346fed27e5005e77e621": 1,
+    "6ca2c2081f81df8810c1d0740e0c4b2ee9f9e953e00438461ca36f580c199796": 1,
+    "12122172e869eafb43a400cb0ab75e0359b4cb27ea359ddf38b24fb5b3ec32eb": 1,
+    "4caa9ad0ef50464df5bd0143ddb82b5cef1f695d70b7acbefe865360138bd16a": 1,
+    "49a7b7a76c73a5672e8aea02b895fe0b77d4da7790d982a4cf4cae60b9224dba": 1,
+    "0f4eb2a82768ab0c8e4ea9e28177f0d1804f3beae083a1fdcdb0f47f2c1458a8": 1,
+    "b5caac3271849898a9c90ac79da856a991468068f386eef22bbc6d3b1bce3c23": 1,
+    "701f94bd29bd02e83c18ccb08859cb6ceac345b0c11067a67b402b5cf6fd48fe": 1,
+    "80269458c31f51e5db8ff6fc9109b7e0a0f10ade623ed5ecc79d6edfe7767d39": 1,
+    "c6173e61d7a68ea0e073f207c63fe936259d4bc913686537a91030d0d9de13ff": 1,
+    "cca3a75e63d4c574c151ff7c45248dfca73e8235a96b2f922e74d8ae6077dd5e": 1,
+    "76c989ea4d3dfdcba902cb6bb2969864b076dd55e424e0be121c6b0a26b7b8d4": 1,
+    "e0971e8e09bad532500e2cd7ef8676a51a82c6aca483dbe98335787b0516def3": 1,
+    "93578899a4c69ea5a0f0c54fce315f9563c2112f3be53e0ddf662a87e9577c88": 1,
+    "9e74bfef09e4868318489204caa8c54d0fb0d0982257e78c7c4967bce2745dfa": 1,
+    "0fda8404b40eec78209efe97036533e378260b66fbf10e1d7380f93a89b1da7a": 1,
+    "1f8f653c3171520190cd0cb18ca572bd65fa19a0297099d195d2ca8508abd8e0": 1,
+    "19c63fbd591ec13ab25202deab5d965c83d9311706749a1b3d5f6d55727944dc": 1,
+    "a3ceb2086d8d38cc517c17eeaa3e3e23428b28b24fe560e12fa9abeef0b9d462": 1,
+    "cbb6b501122e6d62cb39fc035dc3a696ae4e9e98d40dbd981c47406210d4d58d": 1,
+    "06e2479f4c09ad69031d86f55207e1397807da695c36c5a57d1c71d77adae1b9": 1,
+    "07291f955d6fcc5e297396d287f966c2c7f18ca7cc759d34a9e0c4dd2f405585": 1,
+    "42542f155f6df3d760b27d792e92efa56dada4149ccdb718adbd3ce517e3a4b5": 1,
+    "0caf51f3876f9427544b45ee6df2a7589bf26859a0575170b133a2dd6c6fd5c7": 1,
+    "b1333a6f2585a74faa7d7a16c7f731bd582edc0336d1c46865b9315aaa291d43": 1,
+    "a23fb3d9fdfd542b479743133fdaa5d05a6a3670e9aa8eeafff7481b0dd6bd7c": 1,
+    "8294db6c4a65e8e9da28c6a39b81b410dbf206ff580705e98a2bfbd972f51d2b": 1,
+    "a9f34b2e8e7620500a58e243749d4ac0878ae13de4d8d3af8051a1301b6279e4": 1,
+    "62d4d5b87ffcae1643406caf7afc846ac5548ff9c555e9a8ee3c83083bfea49f": 1,
+    "45f92d807193c8b7148275b046de818ce92f21fa80b509f78fce68c283ea6a00": 1,
+    "450351ddf1b5e7627507a2e4055574a72b7ac78f5750d010cc3f655ed7ca9c85": 1,
+    "5ce670209e742b3877a45a52f74a2e41308adc953cef6e4c919ea9ad7a7c5e75": 1,
+    "120e92d6124d2c65415d2b9580e4fbc844f7d83080e2b6e43f169e74ac954c34": 1,
+    "b2eae21e04c3ed2e8b0b5ee003fd5a375d47f6b438c564fa97e6b6ed10fa6142": 1,
+    "b2355ab98986a2a4d083fa3f0a8932689c668a8dbd2acc5cdaff15b63c98d1b1": 1,
+    "aa7afc2c96bf1d15b6bd61e74d53727ae92d55ff128ef421ea87622d8ce82eb4": 1,
+    "7379a12a78999e61527e7851421e04ea78ab097f56466f7cedd11f3a444a2a04": 1,
+    "75d04e64b33b6514552167d47a177b7848fdd5403f8a425725acaed4e6b3b735": 1,
+    "7c96f65893f2cf38c8d46af4bacf9d4c39ddb0dae8cbcc8d7f1a3977135a0595": 1,
+    "a2d4400a0bd685de531944dcaefa0625d18bb44f49a33f0cfd1ca51695d30698": 1,
+    "8d7cd449a4dd5a741df1b1f34d9201ab74677227c832a24b1fe5d263f4e9c139": 1,
+    "9611adeec3c565045d4db2831c8cf42c655084b38916ff02f538c4738e06ffbd": 1,
+    "3cf9d81d1ae65d5c16b71b48c82aef37238c09d56e2d75a2a5cd5d3d3aec4a9b": 1,
+    "61a7d3591638974b9c923cdb681d759e9c8efdf6df172f73119ecf6215f57634": 1,
+    "0293834e8bbe059dfb8dbe8ac24ce4ceaef80277fac7a5f9c219e874c85197fd": 1,
+    "c4c60f6842d828aaf984e431fb7d5bffa2fb764fb6c3025f6ad84cbbcafbb6fb": 1,
+    "d9fce48df88486e427bf0783afee0a14a9e1b1d0211371d6339c629b6cd3f1f5": 1,
+    "81ad502215f7ca285af50cb919136e56c68bcfdadbe989b5ca494013607e04e2": 1,
+    "72a1b2cb8acee3edeb5a5376c8df547796e9103593ac1b93ac1958829895524a": 1,
+    "0e11fb30737f904ecbe7776ab5cd0cdd2d9905141215ffc99f34853495c6933a": 1,
+    "20b840036df8080c2379f65b8ae3593f2a0ca7655f5c9a523b7a963bc428001b": 1,
+    "a0ac677ccfc427af8bbd944ea3cc07788ad4d5c3cb65f2099b530d2b55fdd84e": 1,
+    "2b3e311ae8b6b796e288584972c5643ca4d3cc5e5f1d6da5cf43a0b828975ead": 1,
+    "6cbed94ec11ae3293efb1ac98ba8174342319d0b403084828bf6f6ceaf802579": 1,
+    "a73f73088496ac898e5f2947dbe6d7023641f5fe112cc99fefcbc09f414707b4": 1
+  },
+  "per_symbol": [
+    {
+      "symbol": "AAVE",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "ADA",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "AVAX",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "BTC",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "DOGE",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "DOT",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "ETH",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "LINK",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "LTC",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "NEAR",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "SHIB",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "SOL",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "SUI",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "UNI",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    },
+    {
+      "symbol": "XRP",
+      "exact_row_count": 4,
+      "distinct_row_fingerprints": 4,
+      "distinct_execution_fingerprints": 4,
+      "dominant_execution_fingerprint": "a15c629dd7d1534267f530668507aa62e89e8a7ba4b17246358776d5d962b24c",
+      "dominant_execution_count": 1,
+      "dominant_execution_payload": {
+        "source": "COINMARKETCAP",
+        "engine_version": "MARKET_SNAPSHOT_CMC_v0.4"
+      }
+    }
+  ],
+  "forensic_status": "MARKET_DATA_EXECUTION_IDENTITY_AMBIGUOUS",
+  "predictive_claim": "NOT ESTABLISHED",
+  "relationship_calculation": "NOT PERFORMED"
+}

@@ -1,0 +1,147 @@
+{
+  "project": "ARUNDA TRADER",
+  "component": "LIVE SIGNAL EXECUTION DRY-RUN / ORDER-INTENT LAYER",
+  "version": "v0.2",
+  "safety": {
+    "producer_execution": false,
+    "producer_import": false,
+    "production_db_write": false,
+    "network_access": false,
+    "order_execution": false,
+    "order_creation": false,
+    "order_submission": false,
+    "artifact_mutation": false
+  },
+  "upstream_runtime": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_REPORT.json",
+    "runtime_ready": true,
+    "operational_safety": true,
+    "upstream_verified": true,
+    "artifact_verified": true,
+    "execution_allowed": false,
+    "verdict_verified": true,
+    "runtime_verified": true,
+    "verdict": "LIVE_SIGNAL_EXECUTION_RUNTIME_READY"
+  },
+  "artifact": {
+    "path": "C:\\Users\\ASUS\\ArundaTrader\\LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_REPORT.json",
+    "sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "expected_sha256": "f77c1b1cc98982b8edcb89c923a7c2ef52e40a654ba5e705a4a0be95490b5417",
+    "contract": true,
+    "verified": true,
+    "rows": 4,
+    "eligible_rows": 0,
+    "no_trade_rows": 4,
+    "decision": "NO_TRADE",
+    "assets": [
+      "BTC",
+      "ETH",
+      "SOL",
+      "XRP"
+    ],
+    "directions": [
+      "FLAT",
+      "SHORT",
+      "FLAT",
+      "FLAT"
+    ],
+    "snapshot_id": "FUSION-20260824T153800744724+0000-b4f75221aa02defa",
+    "source_shape": "ROOT_ROW_RESULTS",
+    "artifact_identity": true,
+    "frontier": "LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1",
+    "timestamp_utc": "2026-08-24T18:34:37.914306+00:00",
+    "row_results": [
+      {
+        "id": 37,
+        "asset": "BTC",
+        "timestamp": "2026-08-24T15:38:00.744724+00:00",
+        "direction": "FLAT",
+        "eligible": false,
+        "status": "NO_TRADE",
+        "reasons": [
+          "CONFIDENCE_BELOW_GATE",
+          "FLAT_DIRECTION",
+          "WEAK_SIGNAL"
+        ],
+        "confidence": 0.5901933333333333,
+        "entry_price": 72719.42995131218
+      },
+      {
+        "id": 38,
+        "asset": "ETH",
+        "timestamp": "2026-08-24T15:38:00.744724+00:00",
+        "direction": "SHORT",
+        "eligible": false,
+        "status": "NO_TRADE",
+        "reasons": [
+          "CONFIDENCE_BELOW_GATE",
+          "INSUFFICIENT_AVAILABLE_WEIGHT",
+          "DATA_QUALITY_NOT_VERIFIED",
+          "WEAK_SIGNAL",
+          "INCOMPLETE_ARM_SET"
+        ],
+        "confidence": 0.4854675001907309,
+        "entry_price": 2318.4172346993723
+      },
+      {
+        "id": 39,
+        "asset": "SOL",
+        "timestamp": "2026-08-24T15:38:00.744724+00:00",
+        "direction": "FLAT",
+        "eligible": false,
+        "status": "NO_TRADE",
+        "reasons": [
+          "CONFIDENCE_BELOW_GATE",
+          "INSUFFICIENT_AVAILABLE_WEIGHT",
+          "DATA_QUALITY_NOT_VERIFIED",
+          "FLAT_DIRECTION",
+          "WEAK_SIGNAL",
+          "INCOMPLETE_ARM_SET"
+        ],
+        "confidence": 0.39190069532428357,
+        "entry_price": 87.53783801784637
+      },
+      {
+        "id": 40,
+        "asset": "XRP",
+        "timestamp": "2026-08-24T15:38:00.744724+00:00",
+        "direction": "FLAT",
+        "eligible": false,
+        "status": "NO_TRADE",
+        "reasons": [
+          "CONFIDENCE_BELOW_GATE",
+          "INSUFFICIENT_AVAILABLE_WEIGHT",
+          "DATA_QUALITY_NOT_VERIFIED",
+          "FLAT_DIRECTION",
+          "WEAK_SIGNAL",
+          "INCOMPLETE_ARM_SET"
+        ],
+        "confidence": 0.4329772730514519,
+        "entry_price": 1.2672013228297714
+      }
+    ],
+    "artifact_file_match": true
+  },
+  "order_intent": {
+    "status": "READY",
+    "order_intents": [],
+    "validated_intents": 0,
+    "invalid_intents": 0
+  },
+  "execution": {
+    "executed": false,
+    "orders_created": 0,
+    "orders_submitted": 0
+  },
+  "dry_run": {
+    "ready": true,
+    "status": "READY_NO_ELIGIBLE_SIGNALS",
+    "network_access": false,
+    "order_creation": false,
+    "order_submission": false,
+    "order_execution": false,
+    "production_db_write": false
+  },
+  "final_verdict": "LIVE_SIGNAL_EXECUTION_DRY_RUN_READY",
+  "next_stage": "LIVE_SIGNAL_EXECUTION_ORDER_INTENT_VALIDATION"
+}

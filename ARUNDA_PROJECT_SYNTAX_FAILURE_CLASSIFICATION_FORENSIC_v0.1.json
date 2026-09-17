@@ -1,0 +1,156 @@
+{
+  "artifact": "ARUNDA_PROJECT_SYNTAX_FAILURE_CLASSIFICATION_FORENSIC_v0.1.json",
+  "version": "v0.1",
+  "project_directory": "C:\\Users\\ASUS\\ArundaTrader",
+  "mode": "READ_ONLY",
+  "database_used": false,
+  "database_write": false,
+  "network_used": false,
+  "production_run": false,
+  "file_modification": false,
+  "deletion": false,
+  "quarantine": false,
+  "started_at_utc": "2026-08-26T20:51:04.224808+00:00",
+  "finished_at_utc": "2026-08-26T20:51:16.086574+00:00",
+  "targets": [
+    "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.2.py",
+    "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+    "history_feature_extractor_corrupted_backup.py",
+    "INDICATOR_POST_REPAIR_PRODUCTION_PRICE_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py",
+    "prediction_test.py"
+  ],
+  "summary": {
+    "targets": 5,
+    "non_production_quarantine_candidates": 3,
+    "runtime_review_candidates": 1,
+    "forensic_dependency_candidates": 0,
+    "manual_review_candidates": 1
+  },
+  "records": [
+    {
+      "file": "ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_FORENSIC_v0.2.py",
+      "exists": true,
+      "size_bytes": 1294,
+      "sha256": "71e598ca532a8ec23b601af7632ae04609587f4d893427bfcf32f70db1ecbf50",
+      "filename_class": "FORENSIC_ARTIFACT",
+      "launch_relevance": "FORENSIC_ONLY_REPAIR_OR_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "message": "invalid syntax",
+        "line": 10,
+        "column": 102,
+        "source": "import ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_RUNTIME_OUTPUT_ARTIFACT_CONTRACT_RECONCILIATION_REPAIR_v0.1 as repair"
+      },
+      "content_markers": [],
+      "imports": [],
+      "referenced_by": [],
+      "reason": [
+        "filename_identifies_forensic_artifact",
+        "no_direct_python_reference_found"
+      ]
+    },
+    {
+      "file": "ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py",
+      "exists": true,
+      "size_bytes": 13532,
+      "sha256": "a439e6a019d495a80e9a3cc9e85ea89ac9da59ee182318bb7817c62aa79afb59",
+      "filename_class": "RUNTIME_LIFECYCLE_ARTIFACT",
+      "launch_relevance": "RUNTIME_ARTIFACT_REVIEW_REQUIRED",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "message": "expected an indented block after function definition on line 26",
+        "line": 27,
+        "column": 1,
+        "source": "h = hashlib.sha256()"
+      },
+      "content_markers": [
+        "SQLITE_USAGE"
+      ],
+      "imports": [],
+      "referenced_by": [],
+      "reason": [
+        "filename_contains_runtime_lifecycle_terms",
+        "no_direct_python_reference_found"
+      ]
+    },
+    {
+      "file": "history_feature_extractor_corrupted_backup.py",
+      "exists": true,
+      "size_bytes": 6045,
+      "sha256": "935b6ef3b82a24b6d0083fed33dbc28568c931940ae1662f4759ebd1d1d26c8a",
+      "filename_class": "BACKUP_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "message": "invalid syntax",
+        "line": 1,
+        "column": 4,
+        "source": "cd C:\\Users\\ASUS\\ArundaTrader"
+      },
+      "content_markers": [
+        "POWERSHELL_CD_COMMAND",
+        "POWERSHELL_HERE_STRING",
+        "SQL_ALTER_TABLE_TEXT",
+        "SQL_CREATE_TABLE_TEXT"
+      ],
+      "imports": [],
+      "referenced_by": [],
+      "reason": [
+        "filename_identifies_backup_artifact"
+      ]
+    },
+    {
+      "file": "INDICATOR_POST_REPAIR_PRODUCTION_PRICE_INPUT_SOURCE_FORENSIC_AUDIT_v0.1.py",
+      "exists": true,
+      "size_bytes": 14877,
+      "sha256": "9e6ec1d7b6d54f772d830ce48e90f9dfcf8a7528c60e49e856e4f080df460367",
+      "filename_class": "FORENSIC_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "message": "unterminated string literal (detected at line 1)",
+        "line": 1,
+        "column": 2,
+        "source": "@'"
+      },
+      "content_markers": [
+        "POWERSHELL_HERE_STRING",
+        "SQLITE_USAGE"
+      ],
+      "imports": [],
+      "referenced_by": [],
+      "reason": [
+        "filename_identifies_forensic_artifact",
+        "contains_non_python_shell_or_test_content"
+      ]
+    },
+    {
+      "file": "prediction_test.py",
+      "exists": true,
+      "size_bytes": 48,
+      "sha256": "5513feefe38a18aae3b0ae01503f0d47d637bfc52956c58348c8121fb09c2f06",
+      "filename_class": "TEST_ARTIFACT",
+      "launch_relevance": "NON_PRODUCTION_QUARANTINE_CANDIDATE",
+      "syntax": {
+        "syntax_status": "FAIL",
+        "error_type": "SyntaxError",
+        "message": "invalid syntax",
+        "line": 2,
+        "column": 8,
+        "source": "t + 10 sec"
+      },
+      "content_markers": [
+        "PLAIN_TEXT_TEST_EXPRESSION"
+      ],
+      "imports": [],
+      "referenced_by": [],
+      "reason": [
+        "filename_identifies_test_artifact"
+      ]
+    }
+  ]
+}

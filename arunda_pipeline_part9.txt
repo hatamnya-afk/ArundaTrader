@@ -1,0 +1,500 @@
+﻿        gate_row = gate_map.get(asset)
+
+        if gate_row is None:
+            fail(
+                f"ORDER_INTENT lacks Gate provenance: {asset}"
+            )
+
+        gate_direction = normalize_status(
+            gate_row.get("direction")
+        )
+
+        if direction != gate_direction:
+            fail(
+                "ORDER_INTENT direction provenance mismatch: "
+                f"{asset}"
+            )
+
+        opportunity = opportunities.get(asset)
+
+        if opportunity is None:
+            fail(
+                f"ORDER_INTENT opportunity missing: {asset}"
+            )
+
+        if get_opportunity_status(
+            opportunity
+        ) != ELIGIBLE_STATUS:
+            fail(
+                f"ORDER_INTENT opportunity not ELIGIBLE: {asset}"
+            )
+
+        if intent["entry_price"] != opportunity.get("price"):
+            fail(
+                f"ORDER_INTENT entry_price mismatch: {asset}"
+            )
+
+        if intent["confidence"] != opportunity.get("confidence"):
+            fail(
+                f"ORDER_INTENT confidence mismatch: {asset}"
+            )
+
+        if intent["timestamp"] != opportunity.get("timestamp"):
+            fail(
+                f"ORDER_INTENT timestamp mismatch: {asset}"
+            )
+
+        if intent["regime"] != get_current_regime(
+            regime_snapshot,
+            asset,
+        ):
+            fail(
+                f"ORDER_INTENT regime mismatch: {asset}"
+            )
+
+        if intent["snapshot_id"] != snapshot_id:
+            fail(
+                f"ORDER_INTENT snapshot mismatch: {asset}"
+            )
+
+        expected_id = f"OI-{snapshot_id}-{asset}"
+
+        if intent["intent_id"] != expected_id:
+            fail(
+                "ORDER_INTENT deterministic ID mismatch: "
+                f"{asset}"
+            )
+
+        if d_map is not None:
+            decision_row = d_map.get(asset)
+
+            if decision_row is None:
+                fail(
+                    f"Decision provenance missing: {asset}"
+                )
+
+            decision_state = normalize_status(
+                get_row_value(
+                    decision_row,
+                    "decision",
+                    "decision_state",
+                    "state",
+                )
+            )
+
+            if decision_state not in ACTIONABLE_DECISIONS:
+                fail(
+                    "Decision provenance not actionable: "
+                    f"{asset} -> {decision_state}"
+                )
+
+        if r_map is not None:
+            risk_row = r_map.get(asset)
+
+            if risk_row is None:
+                fail(
+                    f"Risk provenance missing: {asset}"
+                )
+
+            risk_status = normalize_status(
+                get_row_value(
+                    risk_row,
+                    "risk_status",
+                    "status",
+                    "decision",
+                    "risk_state",
+                )
+            )
+
+            if risk_status not in APPROVED_RISK_STATUSES:
+                fail(
+                    "Risk provenance not approved: "
+                    f"{asset} -> {risk_status}"
+                )
+
+            risk_quantity = risk_row.get(
+                "position_quantity"
+            )
+
+            if risk_quantity is None:
+                fail(
+                    f"Risk quantity missing: {asset}"
+                )
+
+            if risk_quantity != getattr(
+                intent,
+                "quantity",
+                None,
+            ):
+                fail(
+                    "ORDER_INTENT quantity provenance mismatch: "
+                    f"{asset}"
+                )
+
+    if seen != set(gate_map.keys()):
+        fail(
+            "ORDER_INTENT final coverage mismatch"
+        )
+
+    return len(intents)
+
+
+# ============================================================================
+# CANONICAL ORDER REQUEST
+# ============================================================================
+
+def build_canonical_order_requests(
+    order_intents: list[dict],
+    risk_snapshot: dict,
+    snapshot_id: str,
+) -> dict[str, dict]:
+    risk_rows = extract_rows(
+        risk_snapshot,
+        (
+            "risk",
+            "risk_decisions",
+            "decisions",
+            "rows",
+            "assets",
+            "results",
+        ),
+    )
+
+    risk_rows = exact_asset_rows(
+        risk_rows,
+        "RISK",
+    )
+
+    r_map = risk_map(
+        risk_rows
+    )
+
+    result = {}
+
+    for intent in order_intents:
+        asset = normalize_asset(
+            intent.get("asset")
+        )
+
+        if asset is None:
+            fail(
+                "Canonical request asset missing"
+            )
+
+        if asset in result:
+            fail(
+                f"Duplicate Canonical request asset: {asset}"
+            )
+
+        risk_row = r_map.get(asset)
+
+        if risk_row is None:
+            fail(
+                f"Canonical request Risk missing: {asset}"
+            )
+
+        risk_status = normalize_status(
+            get_row_value(
+                risk_row,
+                "risk_status",
+                "status",
+                "decision",
+                "risk_state",
+            )
+        )
+
+        if risk_status not in APPROVED_RISK_STATUSES:
+            fail(
+                "Canonical request risk status not approved: "
+                f"{asset} -> {risk_status}"
+            )
+
+        quantity = risk_row.get(
+            "position_quantity"
+        )
+
+        if quantity != getattr(
+            intent,
+            "quantity",
+            None,
+        ):
+            fail(
+                f"Canonical quantity mismatch: {asset}"
+            )
+
+        if risk_row.get(
+            "quantity_unit",
+            POSITION_QUANTITY_UNIT,
+        ) != POSITION_QUANTITY_UNIT:
+            fail(
+                f"Canonical source quantity unit invalid: "
+                f"{asset}"
+            )
+
+        if risk_row.get(
+            "quantity_source",
+            POSITION_QUANTITY_SOURCE,
+        ) != POSITION_QUANTITY_SOURCE:
+            fail(
+                "Canonical source quantity provenance invalid: "
+                f"{asset}"
+            )
+
+        request = (
+            exchange_execution_contract.build_order_request(
+                asset=asset,
+                direction=intent["direction"],
+                order_type="MARKET",
+                quantity=quantity,
+                risk=risk_row,
+                entry_price=intent["entry_price"],
+                intent_id=intent["intent_id"],
+                snapshot_id=snapshot_id,
+                timestamp=intent["timestamp"],
+            )
+        )
+
+        if not isinstance(
+            request,
+            exchange_execution_contract.CanonicalOrderRequest,
+        ):
+            fail(
+                "CanonicalOrderRequest type invalid: "
+                f"{asset}"
+            )
+
+        exchange_execution_contract.validate_order_request(
+            request
+        )
+
+        if request.quantity != quantity:
+            fail(
+                f"Canonical quantity != Risk quantity: {asset}"
+            )
+
+        if request.quantity_unit != CANONICAL_QUANTITY_UNIT:
+            fail(
+                f"Canonical quantity unit invalid: {asset}"
+            )
+
+        if request.quantity_source != CANONICAL_QUANTITY_SOURCE:
+            fail(
+                f"Canonical quantity source invalid: {asset}"
+            )
+
+        if request.snapshot_id != snapshot_id:
+            fail(
+                f"Canonical snapshot mismatch: {asset}"
+            )
+
+        if request.intent_id != intent["intent_id"]:
+            fail(
+                f"Canonical intent_id mismatch: {asset}"
+            )
+
+        result[asset] = {
+            "request": request,
+            "quantity": request.quantity,
+            "quantity_unit": request.quantity_unit,
+            "quantity_source": request.quantity_source,
+        }
+
+    return result
+
+
+# ============================================================================
+# QUANTITY OBSERVABILITY
+# ============================================================================
+
+def bind_order_intent_quantity_observability(
+    order_intents: list[dict],
+    quantity_records: dict,
+    canonical_order_requests: dict,
+) -> None:
+    if not isinstance(
+        order_intents,
+        list,
+    ):
+        fail(
+            "Quantity observability order_intents must be list"
+        )
+
+    if not isinstance(
+        quantity_records,
+        dict,
+    ):
+        fail(
+            "Quantity observability records must be dict"
+        )
+
+    if not isinstance(
+        canonical_order_requests,
+        dict,
+    ):
+        fail(
+            "Quantity observability canonical requests "
+            "must be dict"
+        )
+
+    for intent in order_intents:
+        if not isinstance(
+            intent,
+            RuntimeOrderIntent,
+        ):
+            fail(
+                "Quantity observability requires "
+                "RuntimeOrderIntent"
+            )
+
+        asset = normalize_asset(
+            intent.get("asset")
+        )
+
+        record = quantity_records.get(asset)
+
+        if not isinstance(
+            record,
+            dict,
+        ):
+            fail(
+                "Quantity observability record missing: "
+                f"{asset}"
+            )
+
+        canonical = canonical_order_requests.get(asset)
+
+        if not isinstance(
+            canonical,
+            dict,
+        ):
+            fail(
+                f"Canonical request missing: {asset}"
+            )
+
+        request = canonical.get("request")
+
+        if not isinstance(
+            request,
+            exchange_execution_contract.CanonicalOrderRequest,
+        ):
+            fail(
+                f"Canonical request object missing: {asset}"
+            )
+
+        risk_quantity = record.get(
+            "risk_position_quantity"
+        )
+
+        if risk_quantity is None:
+            fail(
+                f"Risk.position_quantity missing: {asset}"
+            )
+
+        quantity = intent.quantity
+
+        if quantity != risk_quantity:
+            fail(
+                f"Quantity Risk/OrderIntent mismatch: {asset}"
+            )
+
+        if quantity != request.quantity:
+            fail(
+                f"Quantity OrderIntent/Canonical mismatch: {asset}"
+            )
+
+        if intent.quantity_unit != POSITION_QUANTITY_UNIT:
+            fail(
+                f"OrderIntent quantity unit invalid: {asset}"
+            )
+
+        if intent.quantity_source != POSITION_QUANTITY_SOURCE:
+            fail(
+                f"OrderIntent quantity source invalid: {asset}"
+            )
+
+        for flag in (
+            "quantity_changed",
+            "quantity_recomputed",
+            "quantity_rescaled",
+            "quantity_rounded",
+            "quantity_clipped",
+        ):
+            if getattr(intent, flag) is not False:
+                fail(
+                    "OrderIntent quantity transformation: "
+                    f"{asset}.{flag}"
+                )
+
+        record["order_intent_quantity"] = quantity
+        record["canonical_order_request_quantity"] = (
+            request.quantity
+        )
+
+        record["quantity_changed"] = False
+        record["quantity_recomputed"] = False
+        record["quantity_rescaled"] = False
+        record["quantity_rounded"] = False
+        record["quantity_clipped"] = False
+
+
+# ============================================================================
+# EXECUTION SAFETY
+# ============================================================================
+
+def assert_execution_disabled() -> None:
+    if EXECUTION_ENABLED:
+        fail(
+            "SAFETY VIOLATION: EXECUTION_ENABLED must remain False"
+        )
+
+    safety = (
+        exchange_execution_contract.safety_contract()
+    )
+
+    if not isinstance(
+        safety,
+        dict,
+    ):
+        fail(
+            "SAFETY CONTRACT must be dict"
+        )
+
+    for key, value in safety.items():
+        if value is not False:
+            fail(
+                f"SAFETY VIOLATION: {key} must be False"
+            )
+
+
+def verify_execution_boundary_integration(
+    canonical_order_requests: dict,
+) -> str:
+    assert_execution_disabled()
+
+    if not isinstance(
+        canonical_order_requests,
+        dict,
+    ):
+        fail(
+            "Execution Boundary canonical requests "
+            "must be dict"
+        )
+
+    if not canonical_order_requests:
+        return "DEFERRED_NO_CANONICAL_REQUESTS"
+
+    for asset, record in canonical_order_requests.items():
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"Execution Boundary unexpected asset: {asset}"
+            )
+
+        if not isinstance(
+            record,
+            dict,
+        ):
+            fail(
+                f"Execution Boundary record invalid: {asset}"
+            )
+
+        request = record.get("request")

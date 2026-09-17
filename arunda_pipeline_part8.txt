@@ -1,0 +1,500 @@
+﻿            )
+
+        if not isinstance(
+            record,
+            dict,
+        ):
+            fail(
+                f"Quantity record must be dict: {asset}"
+            )
+
+        if record.get("snapshot_id") != snapshot_id:
+            fail(
+                f"Quantity snapshot mismatch: {asset}"
+            )
+
+        if record.get("asset") != asset:
+            fail(
+                f"Quantity asset mismatch: {asset}"
+            )
+
+        if record.get("timeframe") != TIMEFRAME:
+            fail(
+                f"Quantity timeframe invalid: {asset}"
+            )
+
+        if not record.get("source"):
+            fail(
+                f"Quantity source missing: {asset}"
+            )
+
+        if not record.get("latest_ohlcv_timestamp"):
+            fail(
+                "Quantity latest OHLCV timestamp missing: "
+                f"{asset}"
+            )
+
+        candle_count = record.get(
+            "real_candle_count"
+        )
+
+        if (
+            not isinstance(candle_count, int)
+            or isinstance(candle_count, bool)
+            or candle_count < 1
+        ):
+            fail(
+                f"Quantity candle count invalid: {asset}"
+            )
+
+        required_runtime_values = (
+            "atr14",
+            "stop_distance",
+            "risk_budget",
+            "entry_price",
+            "position_size",
+            "risk_position_quantity",
+            "order_intent_quantity",
+            "canonical_order_request_quantity",
+        )
+
+        for field in required_runtime_values:
+            if record.get(field) is None:
+                fail(
+                    "Quantity observability runtime value "
+                    f"missing: {asset}.{field}"
+                )
+
+        for field in required_runtime_values:
+            if not is_finite_number(
+                record.get(field)
+            ):
+                fail(
+                    "Quantity runtime value invalid: "
+                    f"{asset}.{field}"
+                )
+
+        if (
+            record.get("position_size")
+            != record.get("risk_position_quantity")
+        ):
+            fail(
+                f"Quantity Position/Risk mismatch: {asset}"
+            )
+
+        if (
+            record.get("risk_position_quantity")
+            != record.get("order_intent_quantity")
+        ):
+            fail(
+                f"Quantity Risk/OrderIntent mismatch: {asset}"
+            )
+
+        if (
+            record.get("order_intent_quantity")
+            != record.get(
+                "canonical_order_request_quantity"
+            )
+        ):
+            fail(
+                f"Quantity OrderIntent/Canonical mismatch: {asset}"
+            )
+
+        if record.get("quantity_unit") != POSITION_QUANTITY_UNIT:
+            fail(
+                f"Quantity unit invalid: {asset}"
+            )
+
+        if record.get("quantity_source") != POSITION_QUANTITY_SOURCE:
+            fail(
+                f"Quantity source invalid: {asset}"
+            )
+
+        for flag in (
+            "quantity_changed",
+            "quantity_recomputed",
+            "quantity_rescaled",
+            "quantity_rounded",
+            "quantity_clipped",
+        ):
+            if record.get(flag) is not False:
+                fail(
+                    "Quantity transformation detected: "
+                    f"{asset}.{flag}"
+                )
+
+
+# ============================================================================
+# ORDER INTENT
+# ============================================================================
+
+def build_current_order_intents(
+    gate_results: list[dict],
+    opportunity_rows: list[dict],
+    snapshot_id: str,
+    regime_snapshot: dict,
+    risk_snapshot: dict,
+) -> list[dict]:
+    gate_rows = exact_asset_rows(
+        gate_results,
+        "TRADE GATE",
+    )
+
+    opportunities = opportunity_map(
+        {
+            "opportunities": opportunity_rows,
+        }
+    )
+
+    risk_rows = extract_rows(
+        risk_snapshot,
+        (
+            "risk",
+            "risk_decisions",
+            "decisions",
+            "rows",
+            "assets",
+            "results",
+        ),
+    )
+
+    risk_rows = exact_asset_rows(
+        risk_rows,
+        "RISK",
+    )
+
+    r_map = risk_map(
+        risk_rows
+    )
+
+    trade_ready_rows = [
+        row
+        for row in gate_rows
+        if normalize_status(
+            row.get("trade_gate_status")
+        ) == TRADE_READY_STATUS
+    ]
+
+    if not trade_ready_rows:
+        return []
+
+    intents = []
+
+    for gate_row in trade_ready_rows:
+        asset = normalize_asset(
+            gate_row.get(
+                "asset",
+                gate_row.get("symbol"),
+            )
+        )
+
+        if asset is None:
+            fail(
+                "TRADE_READY row has no asset"
+            )
+
+        opportunity = opportunities.get(asset)
+
+        if not isinstance(
+            opportunity,
+            dict,
+        ):
+            fail(
+                f"Opportunity missing: {asset}"
+            )
+
+        if get_opportunity_status(
+            opportunity
+        ) != ELIGIBLE_STATUS:
+            fail(
+                "ORDER-INTENT Opportunity not ELIGIBLE: "
+                f"{asset}"
+            )
+
+        direction = normalize_status(
+            gate_row.get("direction")
+        )
+
+        if direction not in VALID_DIRECTIONS:
+            fail(
+                f"TRADE_READY direction invalid: {asset}"
+            )
+
+        risk_row = r_map.get(asset)
+
+        if not isinstance(
+            risk_row,
+            dict,
+        ):
+            fail(
+                f"Risk provenance missing: {asset}"
+            )
+
+        risk_status = normalize_status(
+            get_row_value(
+                risk_row,
+                "risk_status",
+                "status",
+                "decision",
+                "risk_state",
+            )
+        )
+
+        if risk_status not in APPROVED_RISK_STATUSES:
+            fail(
+                "ORDER-INTENT risk status not approved: "
+                f"{asset} -> {risk_status}"
+            )
+
+        quantity = risk_row.get(
+            "position_quantity"
+        )
+
+        if quantity is None:
+            fail(
+                f"Risk.position_quantity missing: {asset}"
+            )
+
+        if not is_finite_number(quantity):
+            fail(
+                f"Risk.position_quantity invalid: {asset}"
+            )
+
+        if float(quantity) <= 0:
+            fail(
+                f"Risk.position_quantity <= 0: {asset}"
+            )
+
+        if risk_row.get(
+            "quantity_unit",
+            POSITION_QUANTITY_UNIT,
+        ) != POSITION_QUANTITY_UNIT:
+            fail(
+                f"Risk quantity unit invalid: {asset}"
+            )
+
+        if risk_row.get(
+            "quantity_source",
+            POSITION_QUANTITY_SOURCE,
+        ) != POSITION_QUANTITY_SOURCE:
+            fail(
+                f"Risk quantity source invalid: {asset}"
+            )
+
+        for flag in (
+            "quantity_changed",
+            "quantity_recomputed",
+            "quantity_rescaled",
+            "quantity_rounded",
+            "quantity_clipped",
+        ):
+            if risk_row.get(flag, False) is not False:
+                fail(
+                    "Risk quantity transformation flag: "
+                    f"{asset}.{flag}"
+                )
+
+        regime = get_current_regime(
+            regime_snapshot,
+            asset,
+        )
+
+        if regime is None:
+            fail(
+                f"CURRENT_MARKET_REGIME missing: {asset}"
+            )
+
+        entry_price = opportunity.get("price")
+        confidence = opportunity.get("confidence")
+        timestamp = opportunity.get("timestamp")
+
+        if entry_price is None:
+            fail(
+                f"Opportunity entry_price missing: {asset}"
+            )
+
+        if confidence is None:
+            fail(
+                f"Opportunity confidence missing: {asset}"
+            )
+
+        if timestamp is None:
+            fail(
+                f"Opportunity timestamp missing: {asset}"
+            )
+
+        if not is_finite_number(entry_price):
+            fail(
+                f"Opportunity entry_price invalid: {asset}"
+            )
+
+        if not is_finite_number(confidence):
+            fail(
+                f"Opportunity confidence invalid: {asset}"
+            )
+
+        intent_id = f"OI-{snapshot_id}-{asset}"
+
+        intent = RuntimeOrderIntent(
+            quantity=quantity,
+            quantity_unit=POSITION_QUANTITY_UNIT,
+            quantity_source=POSITION_QUANTITY_SOURCE,
+            asset=asset,
+            direction=direction,
+            entry_price=entry_price,
+            confidence=confidence,
+            regime=regime,
+            timestamp=timestamp,
+            snapshot_id=snapshot_id,
+            intent_id=intent_id,
+        )
+
+        if set(intent.keys()) != set(
+            CURRENT_ORDER_INTENT_REQUIRED_FIELDS
+        ):
+            fail(
+                "ORDER_INTENT exact field contract failed: "
+                f"{asset}"
+            )
+
+        forbidden = (
+            set(intent.keys())
+            & set(CURRENT_ORDER_INTENT_FORBIDDEN_FIELDS)
+        )
+
+        if forbidden:
+            fail(
+                f"Forbidden ORDER_INTENT fields: {forbidden}"
+            )
+
+        intents.append(intent)
+
+    return intents
+
+
+def validate_current_order_intents(
+    intents: list[dict],
+    gate_results: list[dict],
+    opportunity_rows: list[dict],
+    snapshot_id: str,
+    regime_snapshot: dict,
+    decision_rows: list[dict] | None = None,
+    risk_rows: list[dict] | None = None,
+) -> int:
+    gate_rows = exact_asset_rows(
+        gate_results,
+        "TRADE GATE",
+    )
+
+    opportunities = opportunity_map(
+        {
+            "opportunities": opportunity_rows,
+        }
+    )
+
+    trade_ready_rows = [
+        row
+        for row in gate_rows
+        if normalize_status(
+            row.get("trade_gate_status")
+        ) == TRADE_READY_STATUS
+    ]
+
+    if not trade_ready_rows:
+        if intents:
+            fail(
+                "FAIL-CLOSED: ORDER_INTENT exists "
+                "without TRADE_READY"
+            )
+
+        return 0
+
+    if len(intents) != len(trade_ready_rows):
+        fail(
+            "ORDER_INTENT coverage mismatch"
+        )
+
+    gate_map = {}
+
+    for row in trade_ready_rows:
+        asset = normalize_asset(
+            row.get(
+                "asset",
+                row.get("symbol"),
+            )
+        )
+
+        if asset in gate_map:
+            fail(
+                f"Duplicate TRADE_READY asset: {asset}"
+            )
+
+        gate_map[asset] = row
+
+    d_map = None
+    r_map = None
+
+    if decision_rows is not None:
+        d_map = decision_map(
+            exact_asset_rows(
+                decision_rows,
+                "DECISION",
+            )
+        )
+
+    if risk_rows is not None:
+        r_map = risk_map(
+            exact_asset_rows(
+                risk_rows,
+                "RISK",
+            )
+        )
+
+    seen = set()
+
+    for intent in intents:
+        if not isinstance(
+            intent,
+            dict,
+        ):
+            fail(
+                "ORDER_INTENT must be dict"
+            )
+
+        if set(intent.keys()) != set(
+            CURRENT_ORDER_INTENT_REQUIRED_FIELDS
+        ):
+            fail(
+                "ORDER_INTENT exact field mismatch"
+            )
+
+        asset = normalize_asset(
+            intent.get("asset")
+        )
+
+        if asset is None:
+            fail(
+                "ORDER_INTENT asset missing"
+            )
+
+        if asset not in EXPECTED_ASSET_SET:
+            fail(
+                f"ORDER_INTENT unexpected asset: {asset}"
+            )
+
+        direction = normalize_status(
+            intent.get("direction")
+        )
+
+        if direction not in VALID_DIRECTIONS:
+            fail(
+                f"ORDER_INTENT direction invalid: {asset}"
+            )
+
+        if asset in seen:
+            fail(
+                f"Duplicate ORDER_INTENT asset: {asset}"
+            )
+
+        seen.add(asset)
+

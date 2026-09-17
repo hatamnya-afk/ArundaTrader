@@ -1,0 +1,364 @@
+ARUNDA LIVE DATA ENTRYPOINT FORENSIC v0.2
+====================================================================================================
+Project Directory : C:\Users\ASUS\ArundaTrader
+Started UTC       : 2026-08-26T23:59:15.793856+00:00
+Finished UTC      : 2026-08-26T23:59:24.136959+00:00
+Mode              : READ ONLY
+Database          : NOT USED
+Network           : NOT USED
+Production Run    : NOT PERFORMED
+File Modification : NOT PERFORMED
+====================================================================================================
+Python Files Scanned : 853
+Syntax PASS          : 802
+Syntax FAIL          : 51
+====================================================================================================
+LIVE DATA ENTRYPOINT CANDIDATES
+====================================================================================================
+.venv\Lib\site-packages\pip\_internal\build_env\installer.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\build_env\venv.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\cli\req_command.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\cli\spinners.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_internal\index\collector.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\metadata\base.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\metadata\importlib\_dists.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\models\index.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\models\link.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\models\search_scope.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\network\auth.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\network\download.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\network\lazy_wheel.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\network\session.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_internal\network\utils.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\network\xmlrpc.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\operations\install\wheel.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\operations\prepare.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\req\req_file.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_internal\resolution\resolvelib\provider.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\utils\entrypoints.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\utils\logging.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\utils\misc.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\utils\pylock.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\utils\subprocess.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_internal\utils\urls.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_internal\vcs\git.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_internal\vcs\versioncontrol.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\__init__.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\cachecontrol\_cmd.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\cachecontrol\adapter.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\cachecontrol\controller.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\distlib\compat.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\distlib\resources.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\distlib\scripts.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\distlib\util.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\distro\distro.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\idna\cli.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\idna\codec.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\msgpack\__init__.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\msgpack\exceptions.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\msgpack\fallback.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\_tokenizer.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\direct_url.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\errors.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\licenses\_spdx.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\pylock.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\specifiers.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\packaging\tags.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pkg_resources\__init__.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\platformdirs\android.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\platformdirs\unix.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\filter.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\filters\__init__.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\formatter.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\formatters\_mapping.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\lexer.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\pygments\lexers\_mapping.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\_types.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\adapters.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\api.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\compat.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\exceptions.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\requests\models.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\requests\sessions.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\requests\utils.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\rich\__main__.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\_emoji_codes.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\color.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\console.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\rich\default_styles.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\errors.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\live.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\rich\live_render.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\progress.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\rich\prompt.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\spinner.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\rich\status.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\truststore\_api.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\__init__.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\_request_methods.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\connection.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\urllib3\connectionpool.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\emscripten\connection.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\emscripten\fetch.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\emscripten\response.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\pyopenssl.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\socks.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\exceptions.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\fields.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\http2\connection.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\poolmanager.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\response.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\connection.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\request.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\ssl_.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\ssl_match_hostname.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\ssltransport.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\timeout.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\wait.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+analyze_market.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_CLEANUP_CANDIDATE_INVENTORY_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_LIVE_SNAPSHOT_FRESHNESS_CAUSALITY_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+arunda_pipeline.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_PROJECT_STATE_BACKUP_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+arunda_recorder.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+arunda_snapshot_feature_contract_v0_1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_SNAPSHOT_FEATURE_FUTURE_OUTCOME_RELATIONSHIP_VALIDATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_SNAPSHOT_FEATURE_HUNTER_SIGNAL_IDENTITY_TRACE_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_SNAPSHOT_INDICATOR_VALIDATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+arunda_source_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_HISTORICAL_ELIGIBILITY_UPSTREAM_CONTRACT_CONSUMER_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_ELIGIBILITY_FRONTIER_DISCOVERY_ISOLATION_EXECUTION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_INFORMATION_ARMS_EXACT_ENTRYPOINT_TRACE_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_BOUNDARY_TRACE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_VERIFICATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_FROM_LAUNCH_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_INDEPENDENT_SNAPSHOT_LAUNCH_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_LAUNCH_LIFECYCLE_PIPELINE_EXECUTION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_EXECUTION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_ISOLATION_ADAPTER_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_LIFECYCLE_STATE_CAPTURE_FROM_ISOLATED_LAUNCH_v0.2.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_DRAWDOWN_EQUITY_CURVE_PERFORMANCE_RISK_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_ATTRIBUTION_PNL_CONSISTENCY_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_METRICS_TRADE_STATISTICS_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_STABILITY_RISK_ADJUSTED_METRICS_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_GOVERNANCE_READINESS_GATE_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_LIMITS_CIRCUIT_BREAKER_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_STABILITY_STRESS_RESPONSE_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_TRANSITION_STRESS_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_PATH_VERIFICATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBLE_SIGNAL_REPLAY_VERIFICATION_v0.3.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_DRY_RUN_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_GATE_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_ORDER_INTENT_VALIDATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_EXECUTION_RUNTIME_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_GATE_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_EXECUTION_PREFLIGHT_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_GENERATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_RELEASE_PREFLIGHT_v0.2.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SIGNAL_ORDER_INTENT_VALIDATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_SNAPSHOT_FRESHNESS_SOURCE_ROW_CAUSALITY_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_DECISION_GATE_ISOLATION_EXECUTION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+ARUNDA_TRADER_PREREQUISITE_RESOLUTION_VERIFIED_ELIGIBILITY_REPORT_DISCOVERY_ISOLATED_STAGING_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+backup_project.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+catalyst_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+check_market.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+coinalyze_positioning.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+data_quality.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+execution_contract.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+execution_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+feature_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+fusion_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+history_query_layer.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+hunter_filter.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+hunter_recorder.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+indicator_convention_reconstruction_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+indicator_repair_backups\20260821_173909\market_data_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+indicator_standard_convention_reconstruction_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+indicator_standard_convention_reconstruction_v0.2.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+inspect_db.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+LIVE_LAUNCH_HARNESS_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+lunar_hunter.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+lunarcrush.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+market_adapter.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+market_data.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+market_data_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+market_entry_stop_adapter.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+market_recorder.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+market_scanner.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+news_adapter.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+opportunity_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+orderbook.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+orderbook_weighted.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+OUTCOME_v0.3_HORIZON_RUNTIME_VERIFICATION_v0.1.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+OUTCOME_v0.3_LAUNCH_READINESS_GATE_v0.3.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+OUTCOME_v0.3_LIVE_DATA_SOURCE_HEALTH_ARM_AVAILABILITY_CONTRACT_v0.1.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+portfolio_risk_contract.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+portfolio_risk_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+position_sizing_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+signal_outcome_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+social_engine.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+step10b_regime_quality_cross_feature_validation.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+step11b_market_structure_quality_causal_validation.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+step12b_indicator_engine_quality_causal_validation.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+step13b_feature_engine_quality_validation.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+step7b_history_analysis_validation.py | LIVE_DATA_ENTRYPOINT_CANDIDATE | HIGH
+trade_gate_engine.py | LIVE_DATA_SQL_WRITE_CANDIDATE | CRITICAL
+====================================================================================================
+LIVE + SQL WRITE CANDIDATES
+====================================================================================================
+.venv\Lib\site-packages\pip\_internal\cli\spinners.py | ['update ']
+.venv\Lib\site-packages\pip\_internal\network\session.py | ['update ']
+.venv\Lib\site-packages\pip\_internal\req\req_file.py | ['update ']
+.venv\Lib\site-packages\pip\_internal\utils\subprocess.py | ['update ']
+.venv\Lib\site-packages\pip\_internal\vcs\git.py | ['update ']
+.venv\Lib\site-packages\pip\_internal\vcs\versioncontrol.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\cachecontrol\adapter.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\cachecontrol\controller.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\distlib\compat.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\pkg_resources\__init__.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\requests\models.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\requests\sessions.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\requests\utils.py | ['insert into']
+.venv\Lib\site-packages\pip\_vendor\rich\console.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\rich\live.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\rich\progress.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\rich\status.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\urllib3\connection.py | ['update ']
+.venv\Lib\site-packages\pip\_vendor\urllib3\connectionpool.py | ['update ']
+ARUNDA_CLEANUP_CANDIDATE_INVENTORY_v0.1.py | ['update ']
+ARUNDA_LIVE_SNAPSHOT_FRESHNESS_CAUSALITY_v0.1.py | ['update ']
+ARUNDA_PROJECT_NONPRODUCTION_SYNTAX_FAILURE_QUARANTINE_GATE_v0.1.py | ['alter table', 'create table', 'drop table']
+arunda_recorder.py | ['alter table', 'insert into']
+arunda_source_engine.py | ['create table', 'insert into']
+ARUNDA_TRADER_LIVE_INFORMATION_ARMS_RUNTIME_BOUNDARY_TRACE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_EXECUTION_SAFETY_GATE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_LAUNCH_LIFECYCLE_PIPELINE_EXECUTION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_EXECUTION_v0.1.py | ['alter table', 'create table', 'delete from', 'drop table', 'insert into', 'update ']
+ARUNDA_TRADER_LIVE_PAPER_ISOLATED_TRADE_PLAN_STOP_TP_ISOLATION_ADAPTER_v0.1.py | ['alter table', 'create table', 'delete from', 'drop table', 'insert into', 'update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_DRAWDOWN_EQUITY_CURVE_PERFORMANCE_RISK_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_ATTRIBUTION_PNL_CONSISTENCY_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_METRICS_TRADE_STATISTICS_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_PERFORMANCE_STABILITY_RISK_ADJUSTED_METRICS_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_LIMITS_CIRCUIT_BREAKER_GATE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_STABILITY_STRESS_RESPONSE_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_RISK_REGIME_TRANSITION_STRESS_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_SNAPSHOT_CAPTURE_TEMPORAL_CONTINUITY_OBSERVATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_STATE_EXPOSURE_RISK_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_EVIDENCE_ACCUMULATION_SNAPSHOT_COHERENCE_GATE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_PERFORMANCE_WINDOW_RISK_REGIME_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_PORTFOLIO_TEMPORAL_STATE_RISK_TRANSITION_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_POSITION_MONITORING_DYNAMIC_EXIT_MTM_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_TRADE_OUTCOME_PNL_RECONCILIATION_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_PAPER_TRADE_SIMULATION_POSITION_LIFECYCLE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_SIGNAL_ELIGIBILITY_NO_TRADE_GATE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_SNAPSHOT_FRESHNESS_SOURCE_ROW_CAUSALITY_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_TRADE_CANDIDATE_RANKING_MULTI_ASSET_GATE_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_TRADE_PLAN_STOP_TP_CONTRACT_v0.1.py | ['update ']
+ARUNDA_TRADER_LIVE_TRADE_RISK_POSITION_SIZING_GATE_v0.1.py | ['update ']
+coinalyze_positioning.py | ['create table', 'replace into']
+fusion_engine.py | ['alter table', 'insert into']
+indicator_repair_backups\20260821_173909\market_data_engine.py | ['create table', 'insert into']
+market_adapter.py | ['create table', 'insert into']
+market_data_engine.py | ['create table', 'insert into']
+news_adapter.py | ['alter table', 'create table', 'insert into']
+opportunity_engine.py | ['alter table', 'create table', 'insert into']
+OUTCOME_v0.3_LAUNCH_READINESS_GATE_v0.3.py | ['update ']
+OUTCOME_v0.3_LIVE_DATA_SOURCE_HEALTH_ARM_AVAILABILITY_CONTRACT_v0.1.py | ['update ']
+signal_outcome_engine.py | ['alter table', 'insert into', 'update ']
+step12b_indicator_engine_quality_causal_validation.py | ['create table']
+step13b_feature_engine_quality_validation.py | ['create table', 'drop table', 'update ']
+trade_gate_engine.py | ['create table', 'insert into']
+====================================================================================================
+NETWORK CANDIDATES
+====================================================================================================
+.venv\Lib\site-packages\pip\_internal\index\collector.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\models\index.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\models\link.py | ['urllib.parse', 'urllib.request']
+.venv\Lib\site-packages\pip\_internal\models\search_scope.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\network\auth.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\network\session.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\network\utils.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\network\xmlrpc.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\req\req_file.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\utils\misc.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\utils\pylock.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_internal\utils\urls.py | ['urllib.parse', 'urllib.request']
+.venv\Lib\site-packages\pip\_internal\vcs\git.py | ['urllib.parse', 'urllib.request']
+.venv\Lib\site-packages\pip\_internal\vcs\versioncontrol.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_vendor\distlib\compat.py | ['urllib', 'urllib.error', 'urllib.parse', 'urllib.request']
+.venv\Lib\site-packages\pip\_vendor\distlib\util.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\packaging\direct_url.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_vendor\packaging\pylock.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_vendor\requests\adapters.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\requests\compat.py | ['urllib.parse', 'urllib.request']
+.venv\Lib\site-packages\pip\_vendor\requests\utils.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\truststore\_api.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\_request_methods.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_vendor\urllib3\connection.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\connectionpool.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\pyopenssl.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\contrib\socks.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\exceptions.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\poolmanager.py | ['urllib.parse']
+.venv\Lib\site-packages\pip\_vendor\urllib3\response.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\connection.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\ssl_.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\ssltransport.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\timeout.py | ['socket']
+.venv\Lib\site-packages\pip\_vendor\urllib3\util\wait.py | ['socket']
+arunda_recorder.py | ['requests']
+arunda_source_engine.py | ['urllib.error', 'urllib.request']
+catalyst_engine.py | ['requests']
+coinalyze_positioning.py | ['requests']
+hunter_filter.py | ['requests']
+hunter_recorder.py | ['requests']
+LIVE_LAUNCH_HARNESS_v0.1.py | ['urllib.request']
+lunar_hunter.py | ['requests']
+lunarcrush.py | ['requests']
+market_adapter.py | ['urllib.error', 'urllib.request']
+market_data.py | ['requests']
+market_recorder.py | ['requests']
+market_scanner.py | ['requests']
+news_adapter.py | ['urllib.request']
+opportunity_engine.py | ['requests']
+orderbook.py | ['requests']
+orderbook_weighted.py | ['requests']
+social_engine.py | ['requests']
+====================================================================================================
+ORDER BOUNDARY CANDIDATES
+====================================================================================================
+NONE
+====================================================================================================
+FORENSIC STATUS
+====================================================================================================
+FORENSIC STATUS : SYNTAX_GATE_NOT_CLEAN
+Live entrypoint candidates : 205
+Live + SQL write candidates : 62
+Network candidates : 53
+Order candidates : 0
+DATABASE WRITE : NOT PERFORMED
+NETWORK : NOT USED
+PRODUCTION RUN : NOT PERFORMED
+LIVE SOURCE RUN : NOT PERFORMED
+====================================================================================================
+ARTIFACT
+====================================================================================================
+JSON : C:\Users\ASUS\ArundaTrader\ARUNDA_LIVE_DATA_ENTRYPOINT_FORENSIC_v0.2.json
+TXT  : C:\Users\ASUS\ArundaTrader\ARUNDA_LIVE_DATA_ENTRYPOINT_FORENSIC_v0.2.txt
