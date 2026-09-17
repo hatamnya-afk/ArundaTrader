@@ -69,6 +69,12 @@ The Local Original at `C:\Users\ASUS\ArundaTrader` remains the primary operation
 GitHub is the controlled durable project-management, state, provenance, and Builder-handoff source.
 The synchronization branch `sync/local-project-20260917` is authorized only for this controlled Local→GitHub consolidation task.
 
+Repository organization is now conservative and classification-first:
+- Governance/control documents remain at repository root because their paths are part of the control contract.
+- Operational source paths are preserved; no mass relocation is performed without dependency/path audit.
+- Verification, evidence/forensic, and historical material have explicit navigation/classification locations.
+- `README.md` is the repository entrypoint and `REPOSITORY_STRUCTURE.md` defines organization rules.
+
 No Local database or Local backup is to be deleted or altered by this synchronization.
 Database files are excluded from the GitHub synchronization snapshot.
 
