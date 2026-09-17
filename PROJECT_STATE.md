@@ -7,6 +7,16 @@ Canonical repository-level source of truth for ArundaTrader. Chat memory is not 
 ArundaTrader is a modular, layered, exchange-agnostic real-market analysis and trading-decision system.
 Toobit is an exchange adapter/environment, not the project core.
 
+## FINAL PROJECT OBJECTIVE
+The project goal is real trading, but the project must first reach completion as an exchange-agnostic system.
+The mandatory lifecycle is:
+1. COMPLETE the exchange-agnostic project/core according to the roadmap.
+2. Only after explicit project-completion closure, BIND an exchange through an adapter/environment boundary.
+3. Perform final real-market exchange integration and controlled testing.
+4. Only after final acceptance and explicit Management authorization may real trading be enabled.
+
+No Builder, Manager, or future implementation agent may move these stages earlier, merge them, or introduce exchange-specific architecture into the core merely to accelerate the path to trading.
+
 ## CORE FLOW
 REAL DYNAMIC UNIVERSE → REAL MARKET DATA → REAL OPPORTUNITY → REAL SIGNAL → REAL DECISION → SMART RISK MANAGEMENT → TRADE GATE → ORDER INTENT → EXECUTION → REAL TRADE → REAL OUTCOME → REAL OBSERVATION → CALIBRATION
 
@@ -120,11 +130,36 @@ Generated artifacts, backups, quarantine trees, forensic/review outputs, and unr
 - Do not modify arunda_pipeline.py without explicit authorization.
 - Do not modify the production DB without explicit authorization.
 - Do not reopen closed checkpoints without proven regression.
-- No Builder or Manager may create a new project branch outside an explicitly authorized checkpoint scope.
-- No Builder or Manager may introduce files outside the authorized scope.
-- No personal/experimental branch, temporary file, backup, quarantine, forensic artifact, generated output, or unrelated code may become project truth.
-- Every authorized branch or new file must have a documented purpose and be connected to the active roadmap/frontier.
-- Canonical state is advanced only through the Management-approved roadmap.
+- No Builder, Manager, or implementation agent may create a new project branch outside an explicitly authorized roadmap/checkpoint scope.
+- No Builder, Manager, or implementation agent may introduce files outside the authorized scope.
+- No personal/experimental branch, temporary file, backup, quarantine, forensic artifact, generated output, review dump, or unrelated code may become project truth.
+- Every authorized branch or new file must have a documented purpose and be connected to the active roadmap/frontier before use as project work.
+- The roadmap is the only path for project advancement.
+- At the end of every checkpoint, the repository state MUST be synchronized before the checkpoint can be treated as CLOSED.
+- At every route/frontier change, the roadmap and repository state MUST be updated before the new route is treated as active.
+- Reporting to Management does not substitute for repository state synchronization.
+- If the required state update is missing, the checkpoint remains open/incomplete for governance purposes and the next frontier must not start.
+
+## MANDATORY CHECKPOINT / ROUTE SYNCHRONIZATION
+At the end of every checkpoint, the responsible Builder/Manager must update, as applicable:
+1. PROJECT_STATE.md
+2. CURRENT_FRONTIER.md
+3. CHECKPOINTS.md
+4. MANAGEMENT_ROADMAP.md
+
+The update must record:
+- BUILT
+- VERIFIED
+- CLOSED / BLOCKED / NOT VERIFIED as applicable
+- evidence and verification result
+- blocker, if any
+- CURRENT FRONTIER
+- NEXT ACTION
+- authorized branch/file scope, if changed
+
+For any route change, the same synchronization is mandatory immediately, including the reason for the route change and its Management authorization.
+
+Until synchronization is complete and internally consistent, the work is NOT a valid completed checkpoint and no next-frontier implementation may begin.
 
 ## SOURCE-OF-TRUTH ORDER
 1. Repository state documents
@@ -139,7 +174,8 @@ Before acting, read:
 - CHECKPOINTS.md
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
+- MANAGEMENT_ROADMAP.md
 
-Continue only from the active frontier recorded in CURRENT_FRONTIER.md. If repository documents and chat disagree, stop and escalate to Management; do not silently create a parallel truth.
+Continue only from the active frontier recorded in CURRENT_FRONTIER.md and MANAGEMENT_ROADMAP.md. If repository documents and chat disagree, stop and escalate to Management; do not silently create a parallel truth.
 
 # END PROJECT STATE
