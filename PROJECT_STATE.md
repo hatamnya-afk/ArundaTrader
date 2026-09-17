@@ -37,7 +37,7 @@ CP38-K = CLOSED / VERIFIED / PASS
 CP38-L = CLOSED / VERIFIED / PASS
 CP38-N = CLOSED / VERIFIED / PASS
 
-CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL. Smart Risk remains provider-neutral.
+CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL.
 
 ## CP39 STATE
 CP39 = CLOSED / VERIFIED / PASS
@@ -67,10 +67,34 @@ Verification evidence:
 - Static compile verification: PASS.
 - Forbidden API/import scan for Decision implementation: PASS.
 - No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
-- Local Windows workspace is not directly accessible from this environment; isolated verification is not represented as a local C:\Users\ASUS\ArundaTrader runtime claim.
+
+## CP41 STATE — DECISION → TRADE INTENT
+CP41 = ACTIVE / IMPLEMENTED / VERIFICATION PENDING
+
+Scope = DECISION OUTPUT → TRADE INTENT
+
+Implementation:
+- decision_trade_intent_boundary_v0_1.py
+- test_cp41_decision_trade_intent_boundary_v0_1.py
+
+The CP41 implementation is a provider-neutral boundary/validation layer. It consumes independently validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs. It requires Decision `READY` + `VALID`, dynamic asset identity, valid non-forbidden provenance, approved Trade Gate/Risk state, and semantic agreement for direction, entry, stop, quantity, exposure, and policy version. It rejects execution/API/order surfaces.
+
+CP41 does not calculate or invent price, stop, quantity, exposure, capital, portfolio state, risk policy, exchange constraints, or execution authorization. It does not submit orders, call APIs, execute trades, or write the database.
+
+The existing CP38-I Trade Gate → Order Intent boundary remains a separate downstream contract and is not duplicated or modified by CP41. CP41 is specifically the Decision → Trade Intent boundary.
+
+Verification status:
+- CP41 implementation present.
+- Focused CP41 test file present.
+- Final fresh verification has not yet been recorded in this repository state.
+- Local Windows runtime verification is not claimed from this environment.
+
+CP41 closure requires fresh evidence for compile, focused tests, static inspection, diff-check, scope, contamination, and all CP41 safety assertions. Until then CP41 remains ACTIVE / IMPLEMENTED / VERIFICATION PENDING.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP40 — CLOSED / VERIFIED
+CURRENT FRONTIER: CP41 — DECISION → TRADE INTENT BOUNDARY
+CP40 = CLOSED / VERIFIED
+CP41 = IMPLEMENTED / VERIFICATION PENDING
 
 EXECUTION = NOT AUTHORIZED
 REAL TRADE = NOT EXECUTED
@@ -101,7 +125,7 @@ Closed areas are not re-audited unless a real regression is demonstrated.
 
 ## TOOBIT STATUS
 TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital path blocker and was not resolved by CP39 or CP40. Do not repeat private Toobit diagnostics without explicit authorization.
+This remains an independent Account/Real-Capital path blocker. Do not repeat private Toobit diagnostics without explicit authorization.
 
 ## NON-NEGOTIABLE PROJECT RULES
 - Real data only.
@@ -130,6 +154,6 @@ A new Builder session must read:
 - CHECKPOINTS.md
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
-Then continue only from CURRENT_FRONTIER.md.
+Then continue from the active frontier recorded in CURRENT_FRONTIER.md.
 
 # END PROJECT STATE
