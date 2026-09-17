@@ -1,100 +1,92 @@
 # CP42 — PRODUCTION TRADE-INTENT READINESS / REAL SOURCE BINDING
 
-## STATUS
-BLOCKED — REAL CAPITAL SOURCE GAP
+## MANAGEMENT STATUS
+**INTERPRETATION CORRECTED — EXCHANGE ACCOUNT/CAPITAL IS DEFERRED, NOT A CORE BLOCKER**
 
-## SCOPE
-REAL PRODUCTION SOURCES → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT
+## ORIGINAL INSPECTION
+CP42 inspected the production-source lineage required by Trade Intent and identified that the repository did not prove a live exchange Account/Balance producer bound into the complete production path.
 
-## INSPECTION RESULT
-Repository State was loaded first from PROJECT_STATE.md, ARCHITECTURE.md, CHECKPOINTS.md, CURRENT_FRONTIER.md, and BUILDER_PROTOCOL.md. Closed checkpoints CP38–CP41 were treated as historical truth and not re-audited.
+That observation remains technically true for the exchange-binding layer, but Management has now explicitly determined that a live exchange Account/Balance source is NOT required to complete the exchange-agnostic Core.
 
-The repository contains the required provider-neutral contract surfaces for Real Capital Observation, Real Portfolio State, validated Entry/Stop/Risk Policy, Smart Risk, Trade Gate, and Decision → Trade Intent. The inspected state does not, however, prove a complete real production-source binding from a live account/balance producer through the required upstream chain into Trade Intent.
+## AUTHORITATIVE DECISION
+The Core must advance independently of Toobit or any exchange.
 
-## FIELD TRACE
+The required Core path is:
 
-| Trade Intent field | Source | Producer | Contract / validation | Production boundary | CP42 result |
-|---|---|---|---|---|---|
-| asset | verified upstream Decision / Gate / Sizing / Stop-Risk outputs | existing upstream producers/boundaries | CP41 cross-check | provider-neutral | BLOCKED: end-to-end real producer lineage not demonstrated |
-| direction | Trade Gate / Smart Risk / Stop-Risk outputs | existing upstream risk path | direction validation + cross-check | provider-neutral | BLOCKED: production lineage not demonstrated |
-| entry | validated Entry/Stop input | existing upstream market/risk path | Entry validation | provider-neutral | BLOCKED: complete real producer binding not demonstrated |
-| stop | validated Stop/Risk observation | existing Stop/Risk contract | observation + risk-policy validation | provider-neutral | BLOCKED: complete real producer binding not demonstrated |
-| quantity | Smart Risk `position_size` | `smart_risk_engine_v0_1.py` | real capital + entry + stop + policy + portfolio inputs | provider-neutral | BLOCKED: upstream production inputs not fully bound |
-| exposure | Smart Risk `exposure` | `smart_risk_engine_v0_1.py` | derived from validated position size and entry | provider-neutral | BLOCKED: upstream production inputs not fully bound |
-| risk_state | Smart Risk / Trade Gate | existing risk boundaries | APPROVED validation | provider-neutral | BLOCKED: production-bound end-to-end path not demonstrated |
-| decision_state | Decision output | verified CP40/CP41 path | READY + VALID | provider-neutral | PASS as existing verified boundary; no regression audit |
-| policy_version | Risk / Gate / Stop-Risk outputs | existing policy path | cross-check | provider-neutral | BLOCKED: production source lineage not demonstrated |
-| provenance | upstream validated observations | existing contracts | forbidden TEST/LEGACY/SIMULATED rejection | provider-neutral | PASS at contract level; real producer lineage missing |
-| timestamp / snapshot identity | observation metadata | existing observation contracts | non-empty observed_at / source metadata | production trace | BLOCKED: complete source/snapshot lineage not demonstrated |
+REAL MARKET DATA → ANALYSIS → OPPORTUNITY → SIGNAL → SCORE → DECISION → RISK → POSITION SIZE → TRADE GATE → TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE
 
-## REAL CAPITAL
-Production capital must originate from REAL ACCOUNT / BALANCE OBSERVATION.
+After that:
 
-Existing contract surfaces:
-- `real_capital_observation_contract_v0_1.py`
-- `real_capital_source_contract_v0_1.py`
-- `real_portfolio_state_source_contract_v0_1.py`
+PROJECT VERIFICATION → FULL TEST / CLEANUP → PACKAGE → SERIOUS PORTABLE BACKUP
 
-These contracts validate explicit real-capital/portfolio observations and reject forbidden sources/states. They are not a live account producer.
+Only then:
 
-The known Toobit Account path remains blocked by HTTP 400 / API `-1022 INVALID_SIGNATURE`. No alternative verified real-account producer is established in the inspected CP42 branch.
+EXCHANGE BINDING → EXCHANGE-SPECIFIC TESTS → MANAGEMENT AUTHORIZATION → USER CAPITAL → CONTROLLED REAL TEST
 
-Therefore:
+## CAPITAL INTERPRETATION
+Live exchange capital is intentionally deferred.
 
-**BLOCKED — REAL CAPITAL SOURCE GAP**
+For the current Core:
+- no live exchange account is required
+- no live exchange balance is required
+- no private exchange API is required
+- no signature is required
+- no user capital is required
+- provider-neutral Capital/Portfolio abstractions may be used where the Core requires capital/portfolio state
 
-`capital_config.py` remains TEST / LEGACY / NON-PRODUCTION and cannot be promoted.
+For the later Exchange Binding phase:
+- Account/Balance binding is implemented at the provider boundary
+- exchange-specific constraints are integrated and tested
+- private API/authentication/signature work is performed only there
+- user capital enters only after Management authorization and exchange verification
 
-## ENTRY / STOP
-Existing provider-neutral Entry/Stop and Stop/Risk contracts require explicit validated values and provenance. CP42 found no verified complete real production producer binding for these values in the path to Trade Intent.
+`capital_config.py` remains TEST / LEGACY / NON-PRODUCTION and must never be promoted to production capital.
 
-Forbidden workarounds remain:
-- latest-price fallback
-- inferred stop
-- ATR-derived fallback without validated upstream source
-- interpolation
-- forward-fill / back-fill
-- padding
-- fabricated defaults
+## TRADE INTENT FIELD TRACE
+The Core still requires every Trade Intent field to have a valid upstream contract and producer lineage. The absence of a live exchange source does not permit invention or fallback.
 
-## QUANTITY / EXPOSURE
-`smart_risk_engine_v0_1.py` deterministically calculates `position_size` and `exposure` from upstream capital, entry, stop distance, risk policy, and portfolio state. The calculation is provider-neutral and side-effect-free, but the engine is not itself a real account source. Without a verified real-capital and production-bound upstream chain, CP42 cannot certify production quantity/exposure readiness.
+| Field | Core requirement | Current routing |
+|---|---|---|
+| asset | dynamic, validated identity | Core/upstream provider-neutral chain |
+| direction | validated LONG/SHORT semantics | Decision/Risk/Gate chain |
+| entry | explicit validated market observation | real market-data chain |
+| stop | explicit validated Stop/Risk observation | risk chain |
+| quantity | deterministic Smart Risk output | provider-neutral capital/portfolio abstraction + risk inputs |
+| exposure | deterministic Smart Risk output | provider-neutral capital/portfolio abstraction + risk inputs |
+| risk_state | validated APPROVED state | Smart Risk / Trade Gate |
+| decision_state | READY + VALID | verified CP40/CP41 boundary |
+| policy_version | explicit and cross-checked | risk/gate/stop contracts |
+| provenance | required, non-test production lineage | existing validation contracts |
+| timestamp/snapshot identity | explicit observation identity | observation contracts / source metadata |
 
-## DECISION → TRADE INTENT
-The existing CP41 boundary remains the consumer boundary. It validates and cross-checks upstream Decision, Trade Gate, Position Sizing, and Stop/Risk outputs; it does not invent missing production values. CP42 does not modify or re-audit CP41.
+No field may be fabricated, interpolated, padded, forward-filled, back-filled, or replaced with a hardcoded/fixed-15 value.
 
-## PROVIDER BOUNDARY
-Core / Decision / Smart Risk / Trade Intent remain provider-neutral.
-Toobit remains an adapter/environment.
-The `-1022 INVALID_SIGNATURE` condition is not moved into Core, bypassed with Test Capital, or treated as resolved.
+## TOOBIT
+Known Toobit Account failure: HTTP 400 / API `-1022 INVALID_SIGNATURE`.
 
-## IMPLEMENTATION
-No Production Code changed.
-No new producer was invented.
-No workaround or redesign was introduced.
-The active frontier stops at the smallest provable source gap.
+This is a future exchange-binding issue. It is not a reason to stop the Core, and it must not be moved into Core or bypassed with test capital.
 
-## ACCEPTANCE
-- REAL_SOURCE_BINDING = BLOCKED
-- TRADE_INTENT_INPUTS = BLOCKED
-- REAL_CAPITAL_FIREWALL = PASS (contract-level)
-- ENTRY_SOURCE = BLOCKED
-- STOP_SOURCE = BLOCKED
-- QUANTITY_SOURCE = BLOCKED
-- EXPOSURE_SOURCE = BLOCKED
-- PROVENANCE = PASS (contract-level)
-- DECISION_CONSISTENCY = PASS (existing CP41 boundary; not re-audited)
-- FAIL_CLOSED = PASS (existing boundaries)
-- DYNAMIC_ASSET = PASS (existing CP41 boundary)
-- PROVIDER_NEUTRAL = PASS
-- NO_TEST_DATA = PASS
-- NO_FIXED_15 = PASS
-- NO_ORDER = PASS
-- NO_AUTHORIZATION = PASS
-- NO_EXECUTION = PASS
-- NO_API = PASS
-- NO_DB_WRITE = PASS
+## FORBIDDEN DURING CORE
+- user capital
+- live exchange account requirement
+- Toobit/private API
+- signature generation
+- order submission
+- execution authorization
+- exchange write
+- production DB write
+- synthetic/fabricated/fallback values
+- fixed-15 logic
+- unauthorized `arunda_pipeline.py` modification
+- reopening closed checkpoints
 
-## NEXT ACTION
-Remain blocked at the real production-source gap.
-A future Management command may authorize the minimal investigation/integration needed to bind a verified real account/balance producer and any other missing production source. Until then CP42 remains the current frontier and CP43 must not start.
+## NEXT MANAGEMENT FRONTIER
+Do not remain stopped at the exchange Account/Balance gap.
+
+Continue the exchange-agnostic Core from:
+
+**TRADE INTENT → PRE-EXECUTION READY → EXECUTION-READY PACKAGE**
+
+Then perform the project verification / cleanup / package / serious backup phase before any exchange binding.
+
+# END CP42 STATUS
