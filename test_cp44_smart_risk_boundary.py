@@ -1,10 +1,11 @@
-"""Focused CP44 tests for dynamic Risk and Smart Risk boundaries.
+"""Focused CP44 tests for dynamic Entry/Invalidation and Smart Risk boundaries.
 
 These tests are side-effect free and do not execute the trading pipeline.
 """
 
 from dynamic_risk_contract_boundary_v0_1 import build_dynamic_risk
 from dynamic_smart_risk_contract_boundary_v0_1 import build_dynamic_smart_risk
+from entry_invalidation_boundary_v0_1 import normalize_entry_invalidation
 
 
 POLICY = {
@@ -25,6 +26,7 @@ def observation(asset: str, direction: str, allocation_fraction: float, capital:
         "usable_capital": capital,
         "allocation_fraction": allocation_fraction,
         "concurrent_positions": 0,
+        "source": "VALIDATED_UPSTREAM_OBSERVATION",
     }
 
 
@@ -55,6 +57,30 @@ def test_dynamic_risk_preserves_dynamic_asset_identity():
     assert result["asset"] == "NEWASSET/USDT"
     assert result["dynamic_universe"] is True
     assert result["fixed_15_used"] is False
+
+
+def test_entry_invalidation_boundary_requires_explicit_values():
+    result = normalize_entry_invalidation(
+        "ALPHA/USDT",
+        {"state": "ACTIONABLE", "direction": "LONG"},
+        {"source": "VALIDATED_UPSTREAM_OBSERVATION"},
+    )
+    assert result.state == "BLOCKED"
+    assert result.reason == "ENTRY_OR_INVALIDATION_NOT_EXPLICIT"
+
+
+def test_entry_invalidation_boundary_validates_directional_geometry():
+    result = normalize_entry_invalidation(
+        "ALPHA/USDT",
+        {"state": "ACTIONABLE", "direction": "LONG"},
+        {
+            "entry_price": 100.0,
+            "invalidation_price": 95.0,
+            "source": "VALIDATED_UPSTREAM_OBSERVATION",
+        },
+    )
+    assert result.state == "READY"
+    assert result.stop_distance == 5.0
 
 
 def test_long_allocation_sizes_from_explicit_invalidation():
@@ -144,10 +170,12 @@ def test_zero_allocation_fails_closed():
 if __name__ == "__main__":
     test_dynamic_risk_fails_closed_without_real_capital_context()
     test_dynamic_risk_preserves_dynamic_asset_identity()
+    test_entry_invalidation_boundary_requires_explicit_values()
+    test_entry_invalidation_boundary_validates_directional_geometry()
     test_long_allocation_sizes_from_explicit_invalidation()
     test_short_allocation_uses_directional_invalidation()
     test_full_allocation_is_allowed_when_validated()
     test_capital_scale_does_not_change_allocation_logic()
     test_invalid_long_invalidation_fails_closed()
     test_zero_allocation_fails_closed()
-    print("CP44 SMART-RISK BOUNDARY TESTS: PASS")
+    print("CP44 ENTRY/INVALIDATION + SMART-RISK BOUNDARY TESTS: PASS")
