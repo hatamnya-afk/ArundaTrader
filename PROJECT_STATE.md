@@ -5,7 +5,6 @@ Canonical repository-level source of truth for ArundaTrader. Chat memory is not 
 
 ## PROJECT IDENTITY
 ArundaTrader is a modular, layered, exchange-agnostic real-market analysis and trading-decision system.
-
 Toobit is an exchange adapter/environment, not the project core.
 
 ## CORE FLOW
@@ -16,120 +15,105 @@ LAUNCH_TIMESTAMP = 2026-08-31T00:00:00+00:00
 Production analysis uses real post-launch data only.
 
 ## EXECUTION SAFETY
-Execution is disabled unless Management explicitly authorizes it.
+EXECUTION AUTHORIZATION = FALSE
 ORDER WRITE = FORBIDDEN
 WITHDRAW = FORBIDDEN
 DATABASE WRITE = FORBIDDEN unless explicitly authorized
 Credentials and secrets must never be exposed.
 
-## CP38 STATE — PRE-EXECUTION ARCHITECTURE COMPLETE
-CP38-A = CLOSED / VERIFIED / PASS
-CP38-B = DESIGN PASS
-CP38-C = CLOSED / VERIFIED / PASS
-CP38-D = CLOSED / VERIFIED / PASS
-CP38-E = CLOSED / VERIFIED / PASS
-CP38-F = CLOSED / VERIFIED / PASS
-CP38-G = CLOSED / VERIFIED / PASS
-CP38-H = CLOSED / VERIFIED / PASS
-CP38-I = CLOSED / VERIFIED / PASS
-CP38-J = CLOSED / VERIFIED / PASS
-CP38-K = CLOSED / VERIFIED / PASS
-CP38-L = CLOSED / VERIFIED / PASS
-CP38-N = CLOSED / VERIFIED / PASS
-
-CP38 establishes the provider-neutral Smart Risk through Pre-Execution architecture. Execution is NOT BUILT and NOT AUTHORIZED. No order submission occurred, no production DB mutation occurred, and no execution flag was enabled. Test/Legacy capital was not used as REAL_CAPITAL.
-
-## CP39 STATE
+## CLOSED / VERIFIED CHECKPOINTS
+CP38 = CLOSED / VERIFIED / PASS
 CP39 = CLOSED / VERIFIED / PASS
-Scope = Pre-Execution Readiness → Decision Handoff
-PRE-EXECUTION READINESS = SEALED
+CP40 = CLOSED / VERIFIED / PASS
+CP41 = CLOSED / VERIFIED / PASS
+CP43 = CLOSED / VERIFIED / PASS
 
-Verified CP39 chain:
-REAL PRODUCTION OBSERVATIONS → READINESS INTEGRATION → HANDOFF → INTEGRITY → CERTIFICATION → BOUNDARY SEAL → READINESS-TO-DECISION HANDOFF
-
-The verified CP39 chain is provider-neutral, fail-closed, and contains no execution surface.
-
-## CP40 STATE
-CP40 = CLOSED / VERIFIED (CONTRACT + ISOLATED TEST VERIFICATION)
-DECISION CONTRACT = VERIFIED
-DECISION ENGINE = VERIFIED
-DECISION INPUT = SEALED-INPUT ONLY
-
-Implementation:
-- decision_contract_v0_1.py
-- decision_engine_v0_1.py
-- test_cp40_decision_v0_1.py
-
-CP40 validates the CP39 sealed Decision input, rejects TEST/LEGACY/SIMULATED or otherwise unverified provenance, rejects provider/execution coupling, enforces dynamic asset identity, validates timezone-aware observation timestamps, and applies an explicit deterministic staleness window. Valid input produces only a provider-neutral Decision status/result.
-
-Verification evidence:
-- Focused CP40 suite: 12 passed in isolated verification environment.
-- Static compile verification: PASS.
-- Forbidden API/import scan for Decision implementation: PASS.
-- No production runtime, DB mutation, exchange API call, order, or execution authorization performed.
+Closed checkpoints are historical truth. They must not be reopened or re-audited unless Management identifies a direct, provable regression.
 
 ## CP41 STATE — DECISION → TRADE INTENT
-CP41 = ACTIVE / IMPLEMENTED / VERIFICATION PENDING
-
+CP41 = CLOSED / VERIFIED / PASS
 Scope = DECISION OUTPUT → TRADE INTENT
 
 Implementation:
 - decision_trade_intent_boundary_v0_1.py
 - test_cp41_decision_trade_intent_boundary_v0_1.py
 
-The CP41 implementation is a provider-neutral boundary/validation layer. It consumes independently validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs. It requires Decision `READY` + `VALID`, dynamic asset identity, valid non-forbidden provenance, approved Trade Gate/Risk state, and semantic agreement for direction, entry, stop, quantity, exposure, and policy version. It rejects execution/API/order surfaces.
+Verified requirements include provider-neutrality, dynamic asset identity, provenance validation, fail-closed behavior, semantic consistency of direction/entry/stop/quantity/exposure/policy, and rejection of execution/API/order surfaces.
 
-CP41 does not calculate or invent price, stop, quantity, exposure, capital, portfolio state, risk policy, exchange constraints, or execution authorization. It does not submit orders, call APIs, execute trades, or write the database.
+Verification evidence recorded for CP41:
+- 12 focused tests passed.
+- Compile/static verification passed.
+- Scope/diff verification passed.
+- No order, execution, API write, or production DB write occurred.
 
-The existing CP38-I Trade Gate → Order Intent boundary remains a separate downstream contract and is not duplicated or modified by CP41. CP41 is specifically the Decision → Trade Intent boundary.
+## CP43 STATE — PRE-EXECUTION READY PACKAGE
+CP43 = CLOSED / VERIFIED / PASS
+Scope = PRE-EXECUTION READINESS → EXECUTION-READY PACKAGE
 
-Verification status:
-- CP41 implementation present.
-- Focused CP41 test file present.
-- Final fresh verification has not yet been recorded in this repository state.
-- Local Windows runtime verification is not claimed from this environment.
+Implementation:
+- pre_execution_readiness_v0_1.py
+- execution_ready_package_v0_1.py
+- test_cp43_pre_execution_readiness_v0_1.py
+- test_cp43_execution_ready_package_v0_1.py
 
-CP41 closure requires fresh evidence for compile, focused tests, static inspection, diff-check, scope, contamination, and all CP41 safety assertions. Until then CP41 remains ACTIVE / IMPLEMENTED / VERIFICATION PENDING.
+Verification evidence:
+- 77/77 focused tests passed.
+- Compile verification passed.
+- Diff-check passed.
+- Worktree clean at closure.
+- EXECUTION AUTHORIZATION = FALSE.
+- No runtime order, API write, execution, or DB mutation occurred.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP41 — DECISION → TRADE INTENT BOUNDARY
-CP40 = CLOSED / VERIFIED
-CP41 = IMPLEMENTED / VERIFICATION PENDING
+CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
 
-EXECUTION = NOT AUTHORIZED
-REAL TRADE = NOT EXECUTED
-TOOBIT -1022 = INDEPENDENT BLOCKER / NOT RESOLVED BY CP39 OR CP40
+CP44 is NOT VERIFIED or CLOSED yet.
+Repository consolidation is a temporary management gate and takes precedence over CP44 runtime execution until Canonical repository governance is finalized.
 
-## VERIFIED / CLOSED AREAS
-- Data Fabric
-- Dynamic Universe
-- Real Market
-- Dynamic Signal
-- Opportunity
-- Fusion
-- Score
-- Decision
-- Risk
-- Trade Gate
-- Risk Contracts
-- RiskContext
-- Trade Lifecycle
-- Exit Evidence
-- PortfolioRisk Contract
-- Account/Balance Producer
-- CP37-J — Toobit Position Wiring
-- CP37-KA — Toobit Position Reader compatibility
-- REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — CLOSED / VERIFIED / PASS
+CP44 runtime must not be executed during consolidation.
 
-Closed areas are not re-audited unless a real regression is demonstrated.
+## CP44 ACCEPTANCE BOUNDARY
+REAL_MARKET_DATA
+VALIDATED_OBSERVATIONS
+REAL_CAPITAL_BOUNDARY
+VALID_ENTRY
+VALID_STOP
+VALID_QUANTITY
+VALID_EXPOSURE
+DECISION_CONSISTENCY
+TRADE_INTENT_CONSISTENCY
+CONSTRAINT_READINESS
+PROVENANCE
+FAIL_CLOSED
+NO_TEST_DATA
+NO_FIXED_15
+NO_ORDER
+NO_AUTHORIZATION
+NO_EXECUTION
+NO_API_WRITE
+NO_DB_WRITE
 
-## TOOBIT STATUS
-TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital path blocker. Do not repeat private Toobit diagnostics without explicit authorization.
+## REPOSITORY CONSOLIDATION STATE
+CANONICAL COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
+CANONICAL BRANCH = main
+REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
+
+CP42 is preserved as historical/source-binding lineage and is NOT merged into Canonical core. Historical branches remain preserved until provenance is explicitly safe.
+
+Generated artifacts, backups, quarantine trees, forensic/review outputs, and unrelated temporary files are not project truth and must not enter Canonical.
+
+## PROTECTED SURFACES
+- arunda_pipeline.py
+- production database
+- execution controls
+- order submission/cancellation
+- withdrawal
+- closed/verified contracts
+- backup/quarantine artifacts
 
 ## NON-NEGOTIABLE PROJECT RULES
 - Real data only.
-- No synthetic data, interpolation, forward-fill, back-fill, padding, or fabricated fallback values.
+- No synthetic data, interpolation, forward-fill, back-fill, padding, fabricated fallback, or silent source blending.
 - One candle = one source; provenance is required.
 - Fail closed when required real data cannot be verified.
 - Global Universe is not Toobit Universe.
@@ -140,6 +124,11 @@ This remains an independent Account/Real-Capital path blocker. Do not repeat pri
 - Do not modify arunda_pipeline.py without explicit authorization.
 - Do not modify the production DB without explicit authorization.
 - Do not reopen closed checkpoints without proven regression.
+- No Builder or Manager may create a new project branch outside an explicitly authorized checkpoint scope.
+- No Builder or Manager may introduce files outside the authorized scope.
+- No personal/experimental branch, temporary file, backup, quarantine, forensic artifact, generated output, or unrelated code may become project truth.
+- Every authorized branch or new file must have a documented purpose and be connected to the active roadmap/frontier.
+- Canonical state is advanced only through the Management-approved roadmap.
 
 ## SOURCE-OF-TRUTH ORDER
 1. Repository state documents
@@ -147,13 +136,14 @@ This remains an independent Account/Real-Capital path blocker. Do not repeat pri
 3. Git history
 4. Chat context
 
-## BUILDER START RULE
-A new Builder session must read:
+## BUILDER / MANAGEMENT START RULE
+Before acting, read:
 - PROJECT_STATE.md
 - ARCHITECTURE.md
 - CHECKPOINTS.md
 - CURRENT_FRONTIER.md
 - BUILDER_PROTOCOL.md
-Then continue from the active frontier recorded in CURRENT_FRONTIER.md.
+
+Continue only from the active frontier recorded in CURRENT_FRONTIER.md. If repository documents and chat disagree, stop and escalate to Management; do not silently create a parallel truth.
 
 # END PROJECT STATE
