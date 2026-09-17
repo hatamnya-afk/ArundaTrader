@@ -32,7 +32,6 @@ Closed checkpoints are historical truth. They must not be reopened or re-audited
 
 ## CP41 STATE — DECISION → TRADE INTENT
 CP41 = CLOSED / VERIFIED / PASS
-Scope = DECISION OUTPUT → TRADE INTENT
 
 Implementation:
 - decision_trade_intent_boundary_v0_1.py
@@ -46,7 +45,6 @@ Verification evidence:
 
 ## CP43 STATE — PRE-EXECUTION READY PACKAGE
 CP43 = CLOSED / VERIFIED / PASS
-Scope = PRE-EXECUTION READINESS → EXECUTION-READY PACKAGE
 
 Implementation:
 - pre_execution_readiness_v0_1.py
@@ -93,7 +91,7 @@ NO_DB_WRITE
 
 ## REPOSITORY CONSOLIDATION STATE
 CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
-CANONICAL GOVERNANCE HEAD = 154d81a4542b835aad16a07ecbf6bb8c54e67a4b
+CANONICAL GOVERNANCE HEAD = d2618822b845f61928df3a202fec15c8dc443399
 CANONICAL BRANCH = main
 REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
 
