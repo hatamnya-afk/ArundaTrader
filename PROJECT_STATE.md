@@ -101,8 +101,8 @@ NO_DB_WRITE
 
 ## REPOSITORY CONSOLIDATION STATE
 CANONICAL BASE COMMIT = 8945316ae1fec74ecfab40ac33ec9593e6d7ca8b
-CANONICAL GOVERNANCE HEAD = cd182d906ddc7115e9441bed11ddd6b3ae14d178
 CANONICAL BRANCH = main
+CANONICAL GOVERNANCE STATE = maintained on main; exact commit provenance is preserved in Git history
 REMOTE VERIFICATION BRANCH = consolidation-canonical-8945316
 
 CP42 is preserved as historical/source-binding lineage and is NOT merged into Canonical core. Historical branches remain preserved until provenance is explicitly safe.
