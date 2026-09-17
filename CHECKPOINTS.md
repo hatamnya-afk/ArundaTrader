@@ -1,20 +1,18 @@
 # ARUNDA TRADER — CHECKPOINT LEDGER
 
 ## PURPOSE
-Compact historical truth. Detailed forensic reports remain historical artifacts and are not repeated in every Builder session.
+Compact historical truth and active checkpoint control. Detailed forensic reports remain historical artifacts and are not repeated in every Builder session.
 
-## FINAL PROJECT LIFECYCLE — MANDATORY
-The project goal is real trading, but completion must occur independently of any exchange.
+## MASTER LIFECYCLE
+`REAL INFORMATION → DATA FABRIC → DYNAMIC UNIVERSE → OPPORTUNITY → SIGNAL → VALIDATION → FUSION → SCORE → DECISION → ENTRY/INVALIDATION → SMART RISK/ALLOCATION/POSITION SIZING → TRADE GATE → TRADE READY → ORDER INTENT → CONSTRAINTS → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-Mandatory order:
-1. Complete and close the exchange-agnostic ArundaTrader project/core according to the roadmap.
-2. Bind an exchange only after explicit project-completion closure.
-3. Perform final real-market exchange integration and controlled testing.
-4. Enable real trading only after final acceptance and explicit Management authorization.
+## ARCHITECTURE BOUNDARIES
+- Market Information Arm providers: KuCoin, Bybit, Gate, and other authorized market-information sources.
+- News Arm and Social Arm: established information prerequisites; not current unless direct regression is proven.
+- Core: provider-neutral and exchange-agnostic.
+- Toobit: execution exchange/environment, connected only through the replaceable exchange adapter boundary after project-completion closure.
 
-Exchange-specific work must remain outside the exchange-agnostic core until the binding stage is explicitly opened by Management.
-
-## CLOSED / VERIFIED
+## CLOSED / VERIFIED HISTORICAL FOUNDATION
 - Data Fabric
 - Dynamic Universe
 - Real Market
@@ -35,6 +33,8 @@ Exchange-specific work must remain outside the exchange-agnostic core until the 
 - CP37-KA — Toobit Position Reader compatibility
 - REAL-ENVIRONMENT CONTROLLED RELEASE TEST v0.1 — PASS
 
+These are historical truth. Do not reopen or re-audit without direct, provable regression.
+
 ## CP38 — SMART RISK / PRE-EXECUTION
 - CP38-A — CLOSED / VERIFIED / PASS
 - CP38-B — DESIGN PASS
@@ -51,114 +51,178 @@ Exchange-specific work must remain outside the exchange-agnostic core until the 
 - CP38-N — CLOSED / VERIFIED / PASS
 
 ## CP39 — PRE-EXECUTION READINESS → DECISION HANDOFF
-- CP39 = CLOSED / VERIFIED / PASS
+`CLOSED / VERIFIED / PASS`
 
 ## CP40 — DECISION IMPLEMENTATION
-- CP40 = CLOSED / VERIFIED / PASS
+`CLOSED / VERIFIED / PASS`
 
 ## CP41 — DECISION → TRADE INTENT BOUNDARY
-- CP41 = CLOSED / VERIFIED / PASS
+`CLOSED / VERIFIED / PASS`
 
-Implementation:
-- `decision_trade_intent_boundary_v0_1.py`
-- `test_cp41_decision_trade_intent_boundary_v0_1.py`
-
-Verification evidence:
-- 12 focused CP41 tests passed.
-- Compile/static verification passed.
-- Scope/diff verification passed.
-- No order, execution, API write, or production DB write occurred.
+Evidence:
+- 12 focused tests passed.
+- Compile/static and scope/diff verification passed.
+- No order, execution, API write, or production DB write.
 
 ## CP43 — PRE-EXECUTION READY PACKAGE
-- CP43 = CLOSED / VERIFIED / PASS
+`CLOSED / VERIFIED / PASS`
 
 Implementation:
 - `pre_execution_readiness_v0_1.py`
 - `execution_ready_package_v0_1.py`
-- `test_cp43_pre_execution_readiness_v0_1.py`
-- `test_cp43_execution_ready_package_v0_1.py`
+- focused CP43 tests
 
-Verification evidence:
-- 77/77 focused CP43 tests passed.
-- Compile verification — PASS
-- git diff --check — PASS
+Evidence:
+- 77/77 focused tests passed.
+- Compile verification passed.
+- `git diff --check` passed.
 - Worktree clean at closure.
-- EXECUTION AUTHORIZATION = FALSE.
-- No runtime order, execution, API write, or production DB mutation occurred.
+- Execution authorization false.
+- No runtime order, execution, API write, or production DB mutation.
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
-- CP44 = CURRENT FRONTIER
-- CP44 = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+Status:
+`CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED`
 
 Required chain:
-REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT
+`REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT`
 
-Required evidence:
-REAL_MARKET_DATA
-VALIDATED_OBSERVATIONS
-REAL_CAPITAL_BOUNDARY
-VALID_ENTRY
-VALID_STOP
-VALID_QUANTITY
-VALID_EXPOSURE
-DECISION_CONSISTENCY
-TRADE_INTENT_CONSISTENCY
-CONSTRAINT_READINESS
-PROVENANCE
-FAIL_CLOSED
-DYNAMIC_ASSET
-NO_TEST_DATA
-NO_FIXED_15
-NO_ORDER
-NO_AUTHORIZATION
-NO_EXECUTION
-NO_API_WRITE
-NO_DB_WRITE
+Current downstream route:
+`ELIGIBLE[N] → REAL/VALIDATED ENTRY → REAL/VALIDATED INVALIDATION → SMART RISK → RISK[N] → TRADE_GATE[N] → TRADE_READY[N] → ORDER INTENT → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY`
 
-Repository consolidation gate = CLOSED by Management.
-CP44 controlled-test runtime is now authorized to proceed within the stated safety boundary.
+Acceptance evidence:
+- REAL_MARKET_DATA
+- VALIDATED_OBSERVATIONS
+- REAL_CAPITAL_BOUNDARY
+- VALID_ENTRY
+- VALID_STOP / INVALIDATION
+- VALID_QUANTITY
+- VALID_EXPOSURE
+- DECISION_CONSISTENCY
+- TRADE_INTENT_CONSISTENCY
+- CONSTRAINT_READINESS
+- PROVENANCE
+- FAIL_CLOSED
+- DYNAMIC_ASSET
+- NO_TEST_DATA
+- NO_FIXED_15
+- NO_ORDER
+- NO_AUTHORIZATION
+- NO_EXECUTION
+- NO_API_WRITE
+- NO_DB_WRITE
 
-## TOOBIT DIAGNOSTIC HISTORY
-CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
-CP37-MA: -1022 confirmed; root cause not proven.
-CP37-MB: local signing diagnostic PASS: payload match, parameter order match, HMAC match.
-CP37-MC: official Toobit signing contract reviewed; root cause remained NOT_PROVEN.
+Rules:
+- use established downstream ELIGIBLE boundary
+- do not rebuild upstream Opportunity/Signal/Fusion/Score/Decision
+- one controlled runtime only; no retry/second runtime
+- protected `arunda_pipeline.py` remains untouched unless separately authorized
 
-The Toobit -1022 INVALID_SIGNATURE remains an independent Account/Real-Capital path blocker. Do not reopen or repeat private diagnostics without explicit authorization.
+## CP45 — EXECUTION AUTHORIZATION BOUNDARY
+Purpose:
+Separate technical `PRE-EXECUTION READY` from permission to execute.
 
-## GOVERNANCE — MANDATORY FOR ALL BUILDERS / MANAGERS / IMPLEMENTATION AGENTS
-Closed/Verified checkpoints are historical state. They become current only if Management explicitly identifies a regression.
-No repeated runtime diagnostics merely to reproduce an already-known failure unless explicitly authorized.
+Required:
+- explicit Management authorization boundary
+- fail closed by default
+- no inferred authorization
+- no order during checkpoint
 
-### ROADMAP IS THE ONLY PATH
-All work must map to MANAGEMENT_ROADMAP.md and the active checkpoint. No Builder, Manager, coding agent, or future implementation agent may create a parallel project truth.
+Status:
+`NOT STARTED`
 
-### BRANCH RULE
-No Builder, Manager, or implementation agent may create a project branch for personal workflow, experimentation, convenience, or an unapproved parallel path.
-A branch may exist for project work only when Management explicitly authorizes it and its purpose, source, target checkpoint, and relationship to Canonical are recorded in repository state before use.
+## PROJECT COMPLETION GATE
+Purpose:
+Explicitly close the exchange-agnostic project/core before exchange binding.
 
-### FILE RULE
-No unapproved file may enter Canonical project truth.
-A new file is allowed only when it has a defined responsibility, is required by the active checkpoint, and is recorded in the authorized scope.
-Temporary, generated, backup, quarantine, forensic, review, and unrelated artifacts are not project truth.
+Status:
+`NOT STARTED`
 
-### CHECKPOINT CLOSURE GATE
-At the end of EVERY checkpoint, the responsible Builder/Manager MUST synchronize:
-1. PROJECT_STATE.md
-2. CURRENT_FRONTIER.md
-3. CHECKPOINTS.md
-4. MANAGEMENT_ROADMAP.md
+## PHASE B — TOOBIT EXCHANGE BINDING
+Only after Project Completion Gate is CLOSED.
 
-The synchronization MUST record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker if any, CURRENT FRONTIER, NEXT ACTION, and any authorized branch/file scope change.
-A checkpoint is NOT governance-complete until these state documents are synchronized and internally consistent.
+Purpose:
+- bind Toobit through the existing replaceable adapter boundary
+- preserve provider-neutral Core
+- keep Market Information Arm providers separate from execution
 
-### ROUTE-CHANGE GATE
-Any change of route, frontier, architecture boundary, or checkpoint sequence requires immediate update of the roadmap and repository state, including the reason and Management authorization.
-No next-frontier implementation may begin while the route/state update is missing.
+Status:
+`NOT STARTED`
 
-### REPORTING DOES NOT SUBSTITUTE FOR STATE
-A message or report to Management never substitutes for updating the repository state documents.
+## PHASE C — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+Verify authorized Toobit account/capital/position/constraint paths and final exchange readiness while preserving fail-closed behavior.
 
-The roadmap is the only path for project advancement.
+Status:
+`NOT STARTED`
+
+Known independent blocker:
+`HTTP 400 / -1022 INVALID_SIGNATURE` on the Toobit private/account path. Do not bypass or repeat diagnostics without explicit authorization.
+
+## CP46 — FIRST REAL ORDER
+Prerequisites:
+- Project Completion CLOSED / VERIFIED
+- Toobit binding CLOSED / VERIFIED
+- final real-market integration CLOSED / VERIFIED
+- CP45 CLOSED / VERIFIED
+- real capital and opportunity-specific Entry/Invalidation/Quantity/Exposure valid
+- exchange constraints valid
+- explicit Management authorization
+
+Status:
+`NOT STARTED`
+
+## FIRST REAL FILL
+Verify actual exchange acceptance/fill and record actual execution evidence. Never assume a fill.
+
+Status:
+`NOT STARTED`
+
+## REAL OUTCOME
+Capture actual lifecycle outcome, realized result, fees/slippage where available, and exit/invalidation evidence.
+
+Status:
+`NOT STARTED`
+
+## OBSERVATION
+Transform the completed real trade into a structured, provenance-preserving observation.
+
+Status:
+`NOT STARTED`
+
+## CALIBRATION
+Empirically evaluate accumulated real observations and change policy/parameters only through a future authorized checkpoint.
+
+Status:
+`NOT STARTED`
+
+## CARDINALITY CONTRACT
+Production remains dynamic:
+`ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`
+
+`15` = legacy/test residue.
+`6` = observed runtime cardinality only.
+Neither is a production target or fixed contract.
+
+## SAFETY CONTRACT
+`EXECUTION AUTHORIZATION = FALSE`
+`ORDER WRITE = FORBIDDEN`
+`WITHDRAW = FORBIDDEN`
+`DATABASE WRITE = FORBIDDEN unless explicitly authorized`
+
+No synthetic data, interpolation, forward-fill, back-fill, padding, fabrication, or silent source blending.
+
+## GOVERNANCE CONTRACT
+At the end of EVERY checkpoint, synchronize:
+1. `PROJECT_STATE.md`
+2. `CURRENT_FRONTIER.md`
+3. `CHECKPOINTS.md`
+4. `MANAGEMENT_ROADMAP.md`
+
+Record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT FRONTIER, NEXT ACTION, and authorized branch/file scope.
+
+No next checkpoint starts before synchronization is complete.
+
+## CURRENT NEXT ACTION
+Execute the single controlled CP44 runtime from the established downstream ELIGIBLE boundary under the no-write/no-order safety boundary.
 
 # END CHECKPOINTS
