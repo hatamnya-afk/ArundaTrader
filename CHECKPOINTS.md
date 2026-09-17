@@ -79,10 +79,27 @@ Evidence:
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
 CP44 = CURRENT FRONTIER
-CP44 = MANAGEMENT-AUTHORIZED / EXECUTED / OBSERVED / NOT VERIFIED / NOT CLOSED
+CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST PENDING / NOT CLOSED
+
+### Implementation verification
+Authorized implementation is present on `sync/local-project-20260917` at `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
+Verified surfaces:
+- `dynamic_smart_risk_contract_boundary_v0_1.py`
+- `entry_invalidation_boundary_v0_1.py`
+- `smart_risk_contract_v0_1.py`
+- `smart_risk_engine_v0_1.py`
+- `test_smart_risk_engine_v0_1.py`
+
+Evidence:
+- Five CP44 surfaces compiled successfully with Python 3.13.15.
+- Existing Smart Risk test exited `0`.
+- Corrected Dynamic Smart Risk boundary test exited `0` with `CP44_DYNAMIC_BOUNDARY_PASS`.
+- Explicit `BTC/USDT` LONG entry `100000.0`, invalidation `99000.0`, stop distance `1000.0`, APPROVED risk state, and snapshot cardinality `1 → 1` were verified.
+- No order, execution, API write, or production DB write occurred.
+- `__pycache__` generated during testing is temporary and not project truth.
 
 ### Runtime observation
-A controlled real-market runtime was executed from the established downstream eligibility boundary.
+A controlled real-market runtime was previously executed from the established downstream eligibility boundary.
 **Observed: 6 assets reached ELIGIBLE.**
 
 This is runtime evidence only. It does not define cardinality and does not independently close or verify CP44.
@@ -137,7 +154,7 @@ NO_EXCHANGE_DEPENDENCY_BEFORE_BOUNDARY
 The established ELIGIBLE path is the operational boundary for forward work. Do not rebuild, redesign, or re-audit upstream layers merely to reproduce the observed six-asset ELIGIBLE state.
 
 ### Current blocker
-Production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk for dynamic `ELIGIBLE[N]`. The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling.
+Implementation boundary verification is complete, but production-compatible real Entry + Invalidation/Stop is not yet proven as the input to Smart Risk for dynamic `ELIGIBLE[N]` during the authorized real-market runtime. The active Smart Risk route must also prove opportunity-driven capital allocation semantics rather than a universal fixed allocation ceiling.
 
 ## TOOBIT DIAGNOSTIC HISTORY
 CP37-M: real read-only account call returned HTTP 400 / API -1022 INVALID_SIGNATURE.
