@@ -1,119 +1,84 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-ACTIVE — CP41 IMPLEMENTED / VERIFICATION PENDING
+CURRENT FRONTIER — CP44 / REAL-MARKET CONTROLLED TEST
+
+## GOVERNANCE GATE
+Repository consolidation is currently the active management gate. CP44 runtime execution is forbidden until Canonical repository governance is finalized.
 
 ## CURRENT FRONTIER
-CP41 — DECISION → TRADE INTENT BOUNDARY
+CP44 — REAL-MARKET CONTROLLED TEST
 
-## CP40 CLOSED STATE
-CP40 = CLOSED / VERIFIED
-DECISION CONTRACT = VERIFIED
-DECISION ENGINE = VERIFIED
-SEALED INPUT ONLY = PASS
-FAIL_CLOSED = PASS
-DYNAMIC ASSET = PASS
-PROVIDER_NEUTRAL = PASS
-REAL/PRODUCTION PROVENANCE = PASS
-NO TEST CAPITAL = PASS
-NO ORDER = PASS
-NO EXECUTION = PASS
-NO DB WRITE = PASS
-NO API = PASS
-NO FIXED_15 = PASS
+CP41 = CLOSED / VERIFIED / PASS
+CP43 = CLOSED / VERIFIED / PASS
+CP44 = NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
 
-CP40 remains historical truth and is not to be re-audited unless Management identifies a regression.
+## CP43 CLOSED STATE
+CP43 = CLOSED / VERIFIED / PASS
+Scope = PRE-EXECUTION READINESS → EXECUTION-READY PACKAGE
 
-## CP41 OBJECTIVE
-DECISION OUTPUT ↓ TRADE INTENT
+Evidence recorded:
+- 77/77 focused tests passed.
+- Compile verification passed.
+- git diff --check passed.
+- Worktree clean at closure.
+- EXECUTION AUTHORIZATION = FALSE.
+- No order, execution, API write, or production DB mutation occurred.
 
-Establish a provider-neutral, fail-closed contract boundary that consumes validated Decision, Trade Gate, Position Sizing, and Stop/Risk outputs and exposes a Trade Intent-shaped downstream payload without creating or authorizing an order.
+CP43 remains historical truth and is not to be re-audited unless Management identifies a direct regression.
 
-## CP41 IMPLEMENTATION PRESENT
-- `decision_trade_intent_boundary_v0_1.py`
-- `test_cp41_decision_trade_intent_boundary_v0_1.py`
+## CP44 OBJECTIVE
+REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT
 
-Implementation status:
-- Decision READY + VALID required.
-- Dynamic asset identity required across all upstream sources.
-- Direction, entry, stop, quantity, exposure, and policy values are sourced from upstream and cross-checked.
-- Provenance is required and TEST / LEGACY / SIMULATED are rejected.
-- Trade Gate and Risk approval are required.
-- Stop/Risk validation state is required.
-- Provider/execution surfaces are rejected.
-- No capital, price, stop, quantity, exposure, risk policy, portfolio state, or exchange constraint is invented.
-- No order object, authorization, execution, API call, or DB write is performed.
+## CP44 ACCEPTANCE REQUIREMENTS
+- REAL_MARKET_DATA
+- VALIDATED_OBSERVATIONS
+- REAL_CAPITAL_BOUNDARY
+- VALID_ENTRY
+- VALID_STOP
+- VALID_QUANTITY
+- VALID_EXPOSURE
+- DECISION_CONSISTENCY
+- TRADE_INTENT_CONSISTENCY
+- CONSTRAINT_READINESS
+- PROVENANCE
+- FAIL_CLOSED
+- DYNAMIC_ASSET
+- NO_TEST_DATA
+- NO_FIXED_15
+- NO_ORDER
+- NO_AUTHORIZATION
+- NO_EXECUTION
+- NO_API_WRITE
+- NO_DB_WRITE
 
-## CP41 VERIFICATION STATUS
-IMPLEMENTATION = PRESENT
-FOCUSED TEST FILE = PRESENT
-REPOSITORY STATIC REVIEW = PENDING FINAL MANAGEMENT VERIFICATION
-LOCAL WINDOWS TEST EXECUTION = NOT VERIFIED FROM THIS ENVIRONMENT
-CP41 = NOT YET CLOSED / VERIFIED
-
-Required verification before closure:
-1. compile
-2. focused CP41 tests
-3. static inspection
-4. git diff --check
-5. scope check
-6. contamination check
-
-Required evidence:
-DECISION_TO_INTENT
-FAIL_CLOSED
-DYNAMIC_ASSET
-PROVIDER_NEUTRAL
-PROVENANCE
-NO_TEST_DATA
-NO_FIXED_15
-NO_CAPITAL_FABRICATION
-NO_ORDER
-NO_EXECUTION
-NO_AUTHORIZATION
-NO_API
-NO_DB_WRITE
-
-## ARCHITECTURAL BOUNDARIES
-Trade Intent ≠ Decision
-Trade Intent ≠ Smart Risk
-Trade Intent ≠ Trade Gate
-Trade Intent ≠ Exchange Constraints
-Trade Intent ≠ Execution Authorization
-Trade Intent ≠ Execution
-
-CP41 does not modify:
-- `arunda_pipeline.py`
-- Risk engine
-- Portfolio producers
-- Decision engine
-- Production DB
-- Exchange/API integration
-- Execution controls
-- Capital configuration
-
-## TOOBIT
-TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
-This remains an independent Account/Real-Capital blocker. CP41 does not resolve or bypass it.
-
-## NEXT ACTION
-Management verification of the existing CP41 implementation.
-If and only if all required evidence passes, update CP41 to CLOSED / VERIFIED and establish CP42 as the next frontier by a new Management command.
-
-## FORBIDDEN
+## CP44 FORBIDDEN DURING CONSOLIDATION
 - runtime execution
-- real API
-- Toobit API
-- DB write
+- real API calls
+- DB writes
 - order submission/cancellation
 - execution authorization
 - signature work
-- exchange write
+- exchange writes
 - test capital
 - modification of `arunda_pipeline.py`
-- risk/portfolio/decision engine modification unless a direct CP41 gap is proven and separately authorized
-- fixed-15 logic
-- synthetic/fabricated/fallback values
+- architecture redesign
 - reopening closed checkpoints
+
+## REPOSITORY GOVERNANCE
+Canonical branch is `main`.
+Canonical commit before governance synchronization = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`.
+
+No Builder or Manager may create a project branch merely for personal workflow, experimentation, or parallel project truth.
+No new branch is permitted unless Management has explicitly authorized it as part of the active roadmap/checkpoint and its purpose is recorded in repository state.
+No unapproved file may be added to Canonical. Temporary, generated, backup, quarantine, forensic, review, or unrelated files remain outside project truth.
+All work must map to the active roadmap and checkpoint scope.
+
+## TOOBIT
+TOOBIT ACCOUNT SIGNATURE = BLOCKED / -1022 INVALID_SIGNATURE
+This remains an independent Account/Real-Capital blocker. CP44 does not authorize bypassing or repeating private diagnostics.
+
+## NEXT ACTION
+Finish repository governance synchronization and remote verification. Only after the consolidation gate is closed may Management issue the explicit CP44 runtime command.
 
 # END CURRENT FRONTIER
