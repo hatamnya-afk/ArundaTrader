@@ -212,9 +212,6 @@ Latest accumulation attempt aborted at `BSV/USDT:Unsupported trading pair`. The 
 NEXT ACTION:
 Compile/static-verify this exact patch. Do not execute the second CP44 controlled runtime until the real-data continuity blocker is resolved and Management explicitly authorizes readiness.
 
-# END CURRENT FRONTIER
-
-
 ## CP44 BOOTSTRAP SCHEMA INITIALIZATION — 2026-09-18
 
 Authorized minimal follow-up repair implemented after static review identified that the approved Store module exposes CREATE_SQL but initializes its schema only inside its fixture verification main().
@@ -243,3 +240,5 @@ NEXT ACTION:
 
 SAFETY:
 No arunda.db access/write, no arunda_pipeline.py modification, no order, no execution, no API write, no exchange write, and no second CP44 runtime occurred.
+
+# END CURRENT FRONTIER
