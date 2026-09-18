@@ -262,9 +262,6 @@ Latest accumulation attempt reached `FABRIC_SCHEMA_BOOTSTRAP=PASS`, dynamic univ
 NEXT ACTION:
 Local compile/static verification. Continue accumulation only after verification. The second CP44 controlled runtime remains forbidden until `MHA/USDT` real contiguous context is resolved and Management explicitly authorizes readiness.
 
-# END CHECKPOINTS
-
-
 ## CP44 BOOTSTRAP SCHEMA INITIALIZATION — 2026-09-18
 
 Authorized minimal follow-up repair implemented after static review identified that the approved Store module exposes CREATE_SQL but initializes its schema only inside its fixture verification main().
@@ -293,3 +290,5 @@ NEXT ACTION:
 
 SAFETY:
 No arunda.db access/write, no arunda_pipeline.py modification, no order, no execution, no API write, no exchange write, and no second CP44 runtime occurred.
+
+# END CHECKPOINTS
