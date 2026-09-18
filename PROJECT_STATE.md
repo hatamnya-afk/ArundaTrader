@@ -273,9 +273,6 @@ NEXT ACTION:
 SAFETY:
 No second CP44 controlled runtime, no production DB write, no order, no execution, no API write, and no exchange write occurred during this patch.
 
-# END PROJECT STATE
-
-
 ## CP44 BOOTSTRAP SCHEMA INITIALIZATION — 2026-09-18
 
 Authorized minimal follow-up repair implemented after static review identified that the approved Store module exposes CREATE_SQL but initializes its schema only inside its fixture verification main().
@@ -304,3 +301,5 @@ NEXT ACTION:
 
 SAFETY:
 No arunda.db access/write, no arunda_pipeline.py modification, no order, no execution, no API write, no exchange write, and no second CP44 runtime occurred.
+
+# END PROJECT STATE
