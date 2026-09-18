@@ -147,4 +147,34 @@ Toobit is not part of the Core Risk/Allocation architecture.
 4. Preserve all execution, order, API-write, and DB-write prohibitions.
 5. Synchronize all four governance documents at CP44 completion before any VERIFIED/PASS/CLOSED claim.
 
+## CP44 BOOTSTRAP PATCH VERIFICATION — 2026-09-17
+
+Authorized minimal bootstrap repair was applied to market_arm_contiguous_history_accumulation_v1_1.py.
+
+Repair:
+- removed the premature FABRIC_DB_NOT_FOUND existence failure;
+- preserved the approved Store module as the owner of Fabric initialization.
+
+Verification:
+- Python compile completed with exit code 0;
+- CP44_BOOTSTRAP_PATCH_COMPILE=PASS.
+
+No runtime was executed after this compile verification.
+
+No changes were made to:
+- Dynamic Universe / Eligibility;
+- KuCoin discovery or real historical fetch;
+- CEX/DEX architecture;
+- arunda.db;
+- arunda_pipeline.py;
+- order/execution paths.
+
+The generated __pycache__ is temporary and not canonical.
+
+CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED. The previous authoritative runtime blocker remains:
+INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7 with MIN_CONTEXT = 21.
+
+## NEXT ACTION
+Static/diff verification of the exact authorized patch, followed by explicit Management readiness before any second CP44 runtime.
+
 # END CURRENT FRONTIER
