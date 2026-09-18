@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -1471,12 +1470,15 @@ def main() -> int:
     # FILE CHECKS
     # ========================================================
 
-    if not FABRIC_DB.exists():
+    # Fabric DB is a runtime-created local canonical store.
+    # It is intentionally allowed to be absent on first bootstrap.
+    # The approved store module owns schema/storage initialization.
+    if not STORE_MODULE.exists():
         raise RuntimeError(
-            "FABRIC_DB_NOT_FOUND"
+            "STORE_MODULE_NOT_FOUND"
         )
 
-    if not STORE_MODULE.exists():
+    if not KUCOIN_MODULE.exists():
         raise RuntimeError(
             "STORE_MODULE_NOT_FOUND"
         )
