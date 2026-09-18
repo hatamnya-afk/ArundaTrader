@@ -242,6 +242,26 @@ No runtime, order, execution, API write, exchange write, or production DB write 
 NEXT ACTION:
 Static/diff verification, then real-data continuity accumulation for `MHA/USDT`; only after explicit Management readiness may the single next controlled CP44 runtime occur.
 
+## CP44 PROVIDER-CONSISTENCY PATCH — 2026-09-18
+
+BUILT:
+`market_arm_contiguous_history_accumulation_v1_1.py` now catches only the exact `KUCOIN_API_ERROR:*:Unsupported trading pair` condition and records `PROVIDER_UNSUPPORTED_PAIR=SKIPPED_FAIL_CLOSED` for that market, allowing the dynamic accumulation loop to continue.
+
+VERIFIED:
+- Patch scope is limited to the accumulation loop.
+- Dynamic Universe / Eligibility and KuCoin discovery are unchanged.
+- No manual asset removal, fallback provider, synthetic/interpolated/fill/padded/backfilled data, or symbol reconstruction was introduced.
+- No `arunda.db`, `arunda_pipeline.py`, order, execution, API-write, or exchange-write path was touched.
+
+STATUS:
+CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+EVIDENCE:
+Latest accumulation attempt reached `FABRIC_SCHEMA_BOOTSTRAP=PASS`, dynamic universe count `993`, then failed closed at `BSV/USDT:Unsupported trading pair`. This patch addresses that exact provider-consistency failure; it does not close CP44.
+
+NEXT ACTION:
+Local compile/static verification. Continue accumulation only after verification. The second CP44 controlled runtime remains forbidden until `MHA/USDT` real contiguous context is resolved and Management explicitly authorizes readiness.
+
 # END CHECKPOINTS
 
 
