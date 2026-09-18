@@ -247,6 +247,32 @@ No CP44 real-market runtime was executed by this verification. No order, executi
 NEXT ACTION:
 Static/diff verification of the exact authorized patch, then resolve the real contiguous-context blocker for `MHA/USDT`. A second CP44 runtime remains forbidden until blocker resolution and explicit Management readiness.
 
+## CP44 PROVIDER-CONSISTENCY PATCH — 2026-09-18
+
+BUILT:
+- `market_arm_contiguous_history_accumulation_v1_1.py` now handles the exact KuCoin response `Unsupported trading pair` as a per-market fail-closed skip.
+- Other dynamically discovered markets continue processing; no candle is fabricated or substituted.
+
+VERIFIED:
+- `production_universe_binding.py` remains unchanged; dynamic discovery/eligibility remains intact.
+- No hardcoded asset removal, provider fallback, symbol reconstruction, synthetic data, interpolation, fill, padding, or backfill was introduced.
+- Production DB, `arunda_pipeline.py`, order, execution, and exchange-write paths remain untouched.
+- Patch is isolated to the accumulation loop.
+
+STATUS:
+CP44 remains MANAGEMENT-AUTHORIZED / IMPLEMENTATION PATCHED / NOT RUNTIME-VERIFIED / BLOCKED / NOT CLOSED.
+
+CURRENT BLOCKER:
+The latest accumulation attempt aborted at `BSV/USDT:Unsupported trading pair`; this patch converts that exact condition to explicit `PROVIDER_UNSUPPORTED_PAIR=SKIPPED_FAIL_CLOSED` rather than aborting the whole dynamic run. The authoritative CP44 runtime blocker remains `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`, `MIN_CONTEXT=21`.
+
+NEXT ACTION:
+1. Local compile/static verification of this exact patch.
+2. If compile/static verification passes, continue real-data accumulation; no second CP44 controlled runtime yet.
+3. Only after the real-data blocker is resolved and Management explicitly authorizes readiness may the next single CP44 controlled runtime occur.
+
+SAFETY:
+No second CP44 controlled runtime, no production DB write, no order, no execution, no API write, and no exchange write occurred during this patch.
+
 # END PROJECT STATE
 
 
