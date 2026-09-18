@@ -1565,6 +1565,35 @@ def main() -> int:
     )
 
     # ========================================================
+    # FABRIC SCHEMA BOOTSTRAP
+    #
+    # Initialize ONLY the approved canonical Fabric schema.
+    # Do NOT execute store.main() and do NOT insert fixture data.
+    # Production DB remains untouched.
+    # ========================================================
+
+    if not hasattr(store, "CREATE_SQL"):
+        raise RuntimeError(
+            "STORE_SCHEMA_CREATE_SQL_MISSING"
+        )
+
+    FABRIC_DB.parent.mkdir(parents=True, exist_ok=True)
+
+    schema_conn = sqlite3.connect(
+        str(FABRIC_DB)
+    )
+
+    try:
+        schema_conn.execute(store.CREATE_SQL)
+        schema_conn.commit()
+    finally:
+        schema_conn.close()
+
+    print(
+        "FABRIC_SCHEMA_BOOTSTRAP=PASS"
+    )
+
+    # ========================================================
     # REAL PRODUCTION UNIVERSE
     #
     # Real market discovery.
