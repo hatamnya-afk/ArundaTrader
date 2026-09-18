@@ -239,6 +239,36 @@ NEXT ACTION:
 2. Resolve the real contiguous-context blocker without fabrication/fill/backfill.
 3. Only after explicit Management readiness, execute the single next controlled CP44 runtime.
 
+## CP44 PROVIDER-CONSISTENCY PATCH — 2026-09-18
+
+AUTHORIZED REPAIR:
+Handle the exact direct-KuCoin `Unsupported trading pair` condition as a per-market fail-closed skip inside the dynamic accumulation loop.
+
+RATIONALE:
+The Production Universe is dynamically discovered through CCXT, while the direct KuCoin candles endpoint can reject an otherwise discovered market. One provider-inconsistent market must not abort accumulation for every other dynamically discovered market.
+
+CONSTRAINTS PRESERVED:
+- dynamic universe remains dynamic;
+- no hardcoded BSV removal;
+- no provider fallback;
+- no synthetic/interpolated/fill/padded/backfilled data;
+- no symbol reconstruction from asset;
+- no production DB access/write;
+- no `arunda_pipeline.py` modification;
+- no order/execution/API/exchange writes.
+
+STATUS:
+CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+CURRENT BLOCKER:
+The latest accumulation attempt aborted at `BSV/USDT:Unsupported trading pair`. The patch addresses that exact failure. The authoritative CP44 runtime blocker remains `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7`, `MIN_CONTEXT=21`.
+
+NEXT ACTION:
+1. Local compile/static verification of the exact patch.
+2. Continue real-data accumulation after verification.
+3. Resolve `MHA/USDT` contiguous-context blocker without fabrication/fill/backfill.
+4. Only after explicit Management readiness, execute the single next CP44 controlled runtime.
+
 # END MANAGEMENT ROADMAP
 
 
