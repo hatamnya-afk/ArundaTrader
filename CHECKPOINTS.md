@@ -198,4 +198,33 @@ At the end of EVERY checkpoint, synchronize:
 
 The synchronization must record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT FRONTIER, NEXT ACTION, and authorized branch/file scope.
 
+## CP44 — BOOTSTRAP PATCH VERIFICATION — 2026-09-17
+
+Authorized repair:
+market_arm_contiguous_history_accumulation_v1_1.py
+
+Change:
+- remove the premature Fabric DB existence failure so first-run local Fabric initialization can proceed through the approved Store module.
+
+Evidence:
+- python -m py_compile .\\market_arm_contiguous_history_accumulation_v1_1.py
+- CP44_BOOTSTRAP_PATCH_COMPILE=PASS
+- exit code 0.
+
+Safety verification:
+- no Dynamic Universe / Eligibility modification;
+- no KuCoin discovery/fetch modification;
+- no CEX/DEX architecture modification;
+- no arunda.db access/write;
+- no arunda_pipeline.py modification;
+- no order submission;
+- no execution;
+- no API write;
+- no second CP44 runtime.
+
+This is implementation/compile evidence only. CP44 remains BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+## NEXT ACTION
+Complete static/diff verification of the authorized patch. A second CP44 runtime remains forbidden until blocker resolution and explicit Management readiness.
+
 # END CHECKPOINTS
