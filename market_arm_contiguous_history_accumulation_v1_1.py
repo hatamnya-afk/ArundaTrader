@@ -1628,12 +1628,52 @@ def main() -> int:
 
         for market_input in market_inputs:
 
-            result = process_market(
-                conn,
-                store,
-                kucoin,
-                market_input,
-            )
+            try:
+                result = process_market(
+                    conn,
+                    store,
+                    kucoin,
+                    market_input,
+                )
+
+            except RuntimeError as exc:
+                error_text = str(exc)
+
+                # CCXT discovery can expose a market that the
+                # direct KuCoin candles endpoint rejects as an
+                # unsupported trading pair. This is a provider-
+                # consistency condition, not a reason to abort
+                # the entire dynamic accumulation run.
+                #
+                # Fail closed for this market only:
+                # - no candle is synthesized
+                # - no symbol is reconstructed
+                # - no fallback provider is used
+                # - no market is manually removed from the universe
+                # - all other discovered markets continue normally
+                if (
+                    error_text.startswith(
+                        "KUCOIN_API_ERROR:"
+                    )
+                    and error_text.endswith(
+                        ":Unsupported trading pair"
+                    )
+                ):
+                    print(
+                        f"{market_input.symbol}: "
+                        "PROVIDER_UNSUPPORTED_PAIR="
+                        "SKIPPED_FAIL_CLOSED"
+                    )
+                    summary.append(
+                        (
+                            market_input,
+                            0,
+                            0,
+                        )
+                    )
+                    continue
+
+                raise
 
             summary.append(result)
 
