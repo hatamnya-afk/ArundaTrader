@@ -481,3 +481,37 @@ Do not invent BUY threshold, score threshold, confidence threshold, signal formu
 Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
 Continue only from the remaining ACTIVE CP44 blockers documented in PROJECT_STATE / CURRENT_FRONTIER / CHECKPOINTS.
 CP45 MUST NOT START.
+
+
+
+## CP44 — PIPELINE SMART RISK WIRING CHAPTER — 2026-09-21
+
+### MANAGEMENT DECISION
+The CP44 Pipeline risk wiring was authorized for a minimal provider-neutral repair with Runtime explicitly protected.
+
+### IMPLEMENTATION
+- Added `cp44_smart_risk_pipeline_boundary_v0_1.py`.
+- Rewired `arunda_pipeline.py` from legacy Dynamic Risk to Dynamic Smart Risk.
+- Entry/Invalidation remains an explicit upstream contract; no inference is permitted.
+- Capital remains dynamic and must come from an explicit real observation.
+- Smart Risk policy must be explicitly validated.
+- Missing capital/policy/Entry/Invalidation fails closed.
+- Toobit remains outside Core and is not introduced into the Smart Risk path.
+
+### COMMITS
+- `b9394237085be15ed10d98c477befd387c4491d4` — boundary module
+- `fda84acd03edb0837cabd3a2ca1c447b217031d4` — Pipeline wiring
+
+### GATE STATE
+**IMPLEMENTATION COMPLETE FOR THIS CHAPTER / STATIC VERIFICATION PENDING / RUNTIME = 0**
+
+### REQUIRED NEXT STEP
+Builder performs local compile + static/diff verification only. If green, Management reviews readiness. Only then may the single authorized CP44 controlled Runtime proceed.
+
+### CONTINUATION RULE
+The next Builder must not assume that implementation verification equals Runtime readiness. The new wiring is deliberately fail-closed until real dynamic capital, explicit Entry/Invalidation, and validated policy are proven on the actual production-compatible path.
+
+### FORBIDDEN
+No fixed capital. No test fixture capital. No Runtime retry. No second Runtime. No DB write. No order. No API/exchange write. No Toobit dependency in Core. No closed-stage re-audit.
+
+# END CP44 PIPELINE SMART RISK WIRING CHAPTER
