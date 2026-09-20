@@ -476,3 +476,52 @@ Do not invent BUY threshold, score threshold, confidence threshold, signal formu
 Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
 Continue only from the remaining ACTIVE CP44 blockers documented in the governance files.
 CP45 MUST NOT START.
+
+
+
+## CP44 — PIPELINE SMART RISK WIRING CHAPTER — 2026-09-21
+
+### MANAGEMENT AUTHORIZATION
+Explicit Management authorization was received to repair the CP44 downstream Pipeline wiring while protecting Runtime. The authorized scope was:
+- replace the legacy Dynamic Risk call path with the provider-neutral CP44 Smart Risk boundary;
+- do not introduce fixed capital, test capital, synthetic values, or exchange dependencies;
+- do not execute Runtime during this implementation chapter;
+- preserve fail-closed behavior when real capital, Entry/Invalidation, or validated policy is absent.
+
+### BUILT
+1. Added `cp44_smart_risk_pipeline_boundary_v0_1.py`.
+2. Rewired `arunda_pipeline.py` CP44 downstream risk stage to call `build_cp44_smart_risk()` instead of `build_dynamic_risk()`.
+3. The new boundary consumes only explicit upstream Entry/Invalidation, real-capital fields, and validated Smart Risk policy fields.
+4. Missing required inputs produce an explicit `BLOCKED` risk result; no legacy-risk fallback is used.
+5. Dynamic asset cardinality is preserved.
+6. No Toobit/exchange adapter was introduced into Core/Pipeline Smart Risk.
+
+### IMPORTANT CAPITAL RULE
+No fixed capital was introduced. No `AVAILABLE_CAPITAL`, fixture, historical value, synthetic value, inferred valuation, or hardcoded capital amount is used by the new boundary.
+
+### VERIFICATION STATUS
+- GitHub commit for boundary module: `b9394237085be15ed10d98c477befd387c4491d4`
+- GitHub commit for Pipeline wiring: `fda84acd03edb0837cabd3a2ca1c447b217031d4`
+- Exact comparison of the two implementation commits shows only `arunda_pipeline.py` changed in the second commit.
+- Runtime was NOT executed.
+- Production DB was NOT intentionally accessed or modified.
+- No order, execution, API write, or exchange write was performed.
+- Local Python compile has NOT yet been claimed from this management turn.
+
+### CURRENT STATUS
+CP44 = IMPLEMENTATION PATCHED / STATIC-VERIFICATION PENDING / RUNTIME NOT EXECUTED / NOT CLOSED.
+
+### BUILDER HANDOFF
+Next Builder must:
+1. Start from commit `fda84acd03edb0837cabd3a2ca1c447b217031d4` on `sync/local-project-20260917`.
+2. Inspect only the new CP44 boundary and the modified Pipeline risk block first.
+3. Run local compile/static verification only; do NOT run CP44 Runtime yet.
+4. Verify that the modified Pipeline no longer imports/calls `dynamic_risk_contract_boundary_v0_1.build_dynamic_risk` in the CP44 downstream stage.
+5. Verify the new boundary never invents capital or Entry/Invalidation and fails closed when those inputs are absent.
+6. If static verification passes, update all four governance documents with the verification evidence.
+7. Only after Management readiness is explicitly established may the single authorized CP44 Runtime be considered. A failed/blocked static gate means STOP.
+
+### SAFETY
+`EXECUTION_ENABLED = FALSE`. No Runtime authorization is implied by this chapter.
+
+# END CP44 PIPELINE SMART RISK WIRING CHAPTER
