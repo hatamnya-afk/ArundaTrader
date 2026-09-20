@@ -430,3 +430,54 @@ No order creation.
 Execution remains OFF.
 
 # END CP44 SMART RISK COMPATIBILITY REPAIR
+
+
+## CP44 — HISTORICAL BUY RULE RECOVERY CLOSURE — 2026-09-20
+
+### GOVERNANCE RESULT
+BUY RULE RECOVERY:
+`STATUS = COMPLETE`
+`RESULT = PARTIAL / NOT RECOVERED`
+`AUTHORITATIVE_MARKET_BUY_TRIGGER = NOT RECOVERED`
+
+Historical lineage recovered:
+`Signal → Validation → Fusion → Score → Decision → downstream`
+
+Historical source:
+- `arunda_pipeline.py`
+- commit `7eef0fb7868e84c9b85570d9a7bfab5ce9f8f314`
+
+Historical `ACTIONABLE_DECISIONS = {"BUY", "LONG", "SHORT", "ACTIONABLE"}` is classification/acceptance of an already-produced decision and is not a Market BUY Trigger.
+
+### NOT RECOVERED
+No authoritative independent rule of the form:
+`SIGNAL CONDITIONS + SCORE THRESHOLD + CONFIDENCE THRESHOLD → BUY`
+or an equivalent historical Market BUY Trigger was recovered.
+
+No threshold/formula/condition was invented.
+
+### CAPITAL GOVERNANCE
+Capital remains variable. Historical `CAPITAL = 1,000,000` and historical risk constants remain historical/test/review artifacts and are not restored as Production Policy.
+
+### CP44 STATE
+BUY Rule Recovery is complete as an investigation result.
+CP44 remains:
+`ACTIVE / BLOCKED / NOT VERIFIED / NOT CLOSED`
+
+The current frontier remains:
+`ELIGIBLE[N] → ENTRY/INVALIDATION → SMART RISK → OPPORTUNITY-DRIVEN CAPITAL ALLOCATION / ALLOCATED-RISK PROVENANCE → POSITION SIZING → TRADE GATE → TRADE READY`.
+
+No upstream Opportunity/Signal/Fusion/Score/Decision reconstruction is authorized for this closure.
+
+Known independent Toobit private-account blocker:
+`HTTP 400 / -1022 INVALID_SIGNATURE`.
+It remains outside the provider-neutral CP44 core frontier and must not be bypassed or repeated without explicit authorization.
+
+### HANDOFF
+NEXT BUILDER MUST NOT RE-RUN HISTORICAL BUY-RULE RECOVERY.
+Historical BUY Rule Recovery is COMPLETE.
+Authoritative Market BUY Trigger was NOT recovered.
+Do not invent BUY threshold, score threshold, confidence threshold, signal formula, or entry trigger.
+Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
+Continue only from the remaining ACTIVE CP44 blockers documented in PROJECT_STATE / CURRENT_FRONTIER / CHECKPOINTS.
+CP45 MUST NOT START.
