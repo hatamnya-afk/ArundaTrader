@@ -483,3 +483,50 @@ Do not invent BUY threshold, score threshold, confidence threshold, signal formu
 Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
 Continue only from the remaining ACTIVE CP44 blockers.
 CP45 MUST NOT START.
+
+
+
+## CP44 — PIPELINE SMART RISK WIRING CHAPTER — 2026-09-21
+
+### STATUS
+**IMPLEMENTATION PATCHED / STATIC-VERIFICATION PENDING / RUNTIME NOT EXECUTED / NOT CLOSED**
+
+### MANAGEMENT AUTHORIZATION
+Authorized to repair downstream Pipeline wiring while preserving Runtime safety.
+
+### BUILT
+- New `cp44_smart_risk_pipeline_boundary_v0_1.py`.
+- `arunda_pipeline.py` downstream risk stage now routes through `build_cp44_smart_risk()`.
+- Legacy `build_dynamic_risk()` is no longer the intended CP44 downstream risk producer.
+- Explicit Entry/Invalidation is required.
+- Explicit real capital fields are required.
+- Explicit validated Smart Risk policy is required.
+- Missing inputs fail closed.
+- No fixed capital, fixture, synthetic data, inference, or exchange dependency was introduced.
+
+### EVIDENCE
+- Boundary commit: `b9394237085be15ed10d98c477befd387c4491d4`
+- Pipeline commit: `fda84acd03edb0837cabd3a2ca1c447b217031d4`
+- `b939423... -> fda84acd...` contains only the Pipeline modification.
+- Runtime count added by this chapter: **0**.
+- Execution remains OFF.
+
+### NOT YET VERIFIED
+Local Python compilation and exact working-tree/static verification have not yet been performed in this management turn.
+
+### BLOCKER / GATE
+Before Runtime:
+- local compile must pass;
+- diff must be reviewed;
+- no fixed-capital path may exist;
+- real dynamic capital producer must be proven;
+- Entry/Invalidation provenance must be proven;
+- validated policy source must be proven.
+
+### NEXT ACTION
+Static verification only. No CP44 Runtime until Management explicitly confirms readiness after all gates are green.
+
+### BUILDER HANDOFF
+Start at `fda84acd03edb0837cabd3a2ca1c447b217031d4`. Do not reset/rebase/merge/clean/checkout. Do not modify closed contracts. Do not touch production DB. Do not run Runtime.
+
+# END CP44 PIPELINE SMART RISK WIRING CHAPTER
