@@ -5220,60 +5220,92 @@ def main() -> int:
                 validated_signal,
                 score_snapshot[asset],
             )
-        # 10. DYNAMIC RISK
+        # 10. CP44 DYNAMIC SMART RISK
         # ------------------------------------------------------------------
-        from dynamic_risk_contract_boundary_v0_1 import (
-            build_dynamic_risk,
+        # Provider-neutral CP44 path. No fixed capital, no legacy Dynamic
+        # Risk fallback, and no exchange dependency is introduced here.
+        from cp44_smart_risk_pipeline_boundary_v0_1 import (
+            build_cp44_smart_risk,
         )
 
         risk_snapshot = {}
 
         for asset in decision_snapshot:
-            risk_snapshot[asset] = build_dynamic_risk(
+            # Preserve all explicit upstream observations without inventing
+            # capital, Entry/Invalidation, or policy values.
+            smart_risk_observation = dict(market_signal_map.get(asset, {}))
+            smart_risk_observation.update(
+                {
+                    key: value
+                    for key, value in decision_snapshot[asset].items()
+                    if key in (
+                        "entry_price",
+                        "invalidation_price",
+                        "capital_state",
+                        "portfolio_capital",
+                        "usable_capital",
+                        "allocated_risk",
+                        "concurrent_positions",
+                        "policy_version",
+                        "policy_validation",
+                        "risk_per_trade",
+                        "max_portfolio_risk",
+                        "max_concurrent_positions",
+                        "source",
+                        "observed_at",
+                        "provenance",
+                    )
+                }
+            )
+
+            opportunity = opportunity_by_asset.get(asset)
+            if isinstance(opportunity, dict):
+                smart_risk_observation.update(
+                    {
+                        key: value
+                        for key, value in opportunity.items()
+                        if key in (
+                            "entry_price",
+                            "invalidation_price",
+                            "capital_state",
+                            "portfolio_capital",
+                            "usable_capital",
+                            "allocated_risk",
+                            "concurrent_positions",
+                            "policy_version",
+                            "policy_validation",
+                            "risk_per_trade",
+                            "max_portfolio_risk",
+                            "max_concurrent_positions",
+                            "source",
+                            "observed_at",
+                            "provenance",
+                        )
+                    }
+                )
+
+            policy = {
+                key: smart_risk_observation[key]
+                for key in (
+                    "policy_version",
+                    "policy_validation",
+                    "risk_per_trade",
+                    "max_portfolio_risk",
+                    "max_concurrent_positions",
+                )
+                if key in smart_risk_observation
+            }
+
+            risk_snapshot[asset] = build_cp44_smart_risk(
                 f"{asset}/USDT",
                 decision_snapshot[asset],
+                smart_risk_observation,
+                policy,
             )
 
         if set(risk_snapshot) != set(decision_snapshot):
-            fail("Dynamic Risk cardinality mismatch")
+            fail("CP44 Smart Risk cardinality mismatch")
 
-        # ------------------------------------------------------------------
-        # 11. DYNAMIC TRADE GATE
-        # ------------------------------------------------------------------
-        from dynamic_trade_gate_contract_boundary_v0_1 import (
-            build_dynamic_trade_gate,
-        )
-
-        trade_gate_snapshot = {}
-
-        for asset in risk_snapshot:
-            opportunity = opportunity_by_asset.get(asset)
-
-            if opportunity is None:
-                # No real Opportunity for this asset => fail closed.
-                trade_gate_snapshot[asset] = {
-                    "asset": asset,
-                    "trade_gate_state": "REJECTED",
-                    "reasons": ["opportunity unavailable"],
-                }
-                continue
-
-            trade_gate_snapshot[asset] = build_dynamic_trade_gate(
-                opportunity,
-                decision_snapshot[asset],
-                risk_snapshot[asset],
-            )
-
-        if set(trade_gate_snapshot) != set(risk_snapshot):
-            fail("Dynamic Trade Gate cardinality mismatch")
-
-        trade_ready_assets = [
-            asset
-            for asset, result in trade_gate_snapshot.items()
-            if result.get("trade_gate_state") == "TRADE_READY"
-        ]
-
-        # ------------------------------------------------------------------
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
         # ------------------------------------------------------------------
         assert_execution_disabled()
@@ -5365,7 +5397,6 @@ if __name__ == "__main__":
         print("=" * 90)
 
         raise
-
 
 
 
