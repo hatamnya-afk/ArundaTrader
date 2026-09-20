@@ -677,18 +677,62 @@ def fetch_kucoin_history(
         market_input.symbol
     )
 
-    response = requests.get(
-        KUCOIN_URL,
-        params={
-            "symbol": request_symbol,
-            "type": "1hour",
-            "startAt": int(start_ts),
-            "endAt": int(end_ts),
-        },
-        timeout=TIMEOUT,
-    )
+    response = None
+    last_transport_error = None
 
-    response.raise_for_status()
+    for attempt in range(1, 4):
+        try:
+            response = requests.get(
+                KUCOIN_URL,
+                params={
+                    "symbol": request_symbol,
+                    "type": "1hour",
+                    "startAt": int(start_ts),
+                    "endAt": int(end_ts),
+                },
+                timeout=TIMEOUT,
+            )
+
+            if response.status_code == 429 or response.status_code >= 500:
+                last_transport_error = (
+                    f"HTTP_{response.status_code}"
+                )
+
+                if attempt < 3:
+                    time.sleep(2 ** attempt)
+                    continue
+
+                raise RuntimeError(
+                    f"KUCOIN_TRANSPORT_ERROR:"
+                    f"{market_input.symbol}:"
+                    f"{last_transport_error}"
+                )
+
+            response.raise_for_status()
+            break
+
+        except (
+            requests.exceptions.ConnectionError,
+            requests.exceptions.Timeout,
+        ) as exc:
+
+            last_transport_error = str(exc)
+
+            if attempt >= 3:
+                raise RuntimeError(
+                    f"KUCOIN_TRANSPORT_ERROR:"
+                    f"{market_input.symbol}:"
+                    f"{type(exc).__name__}"
+                ) from exc
+
+            time.sleep(2 ** attempt)
+
+    if response is None:
+        raise RuntimeError(
+            f"KUCOIN_TRANSPORT_ERROR:"
+            f"{market_input.symbol}:"
+            f"{last_transport_error or 'UNKNOWN'}"
+        )
 
     payload = response.json()
 
@@ -861,7 +905,30 @@ def build_backward_sequence(
     selected = []
     missing = []
 
-    timestamp = int(latest_closed)
+    # CP44 REAL-DATA ANCHOR
+    # Use latest_closed when available.
+    # Otherwise use the latest actually available closed real candle.
+    # No fill, interpolation, padding, or gap bridging.
+
+    latest_closed = int(latest_closed)
+
+    if latest_closed in by_timestamp:
+
+        timestamp = latest_closed
+
+    else:
+
+        available_timestamps = [
+            ts
+            for ts in by_timestamp
+            if ts <= latest_closed
+        ]
+
+        if not available_timestamps:
+
+            return [], [latest_closed]
+
+        timestamp = max(available_timestamps)
 
     while len(selected) < target_run:
 
@@ -1046,6 +1113,58 @@ def process_market(
         )
 
         if not bootstrap_candidates:
+
+            # CP44 HISTORICAL DISCOVERY FALLBACK
+            # The initial bootstrap window remains unchanged.
+            # Only when it is empty, progressively search older
+            # REAL closed candles for this exact provider symbol.
+            #
+            # No fill, interpolation, padding, gap bridging,
+            # symbol substitution, or synthetic data is allowed.
+
+            discovery_windows_hours = (
+                24 * 7,
+                24 * 14,
+                24 * 30,
+                24 * 60,
+                24 * 120,
+            )
+
+            for window_hours in discovery_windows_hours:
+
+                historical_start = max(
+                    LAUNCH_TS,
+                    discovery_end
+                    - (
+                        window_hours
+                        * 3600
+                    ),
+                )
+
+                historical_candidates = (
+                    fetch_kucoin_history(
+                        market_input,
+                        historical_start,
+                        discovery_end,
+                        current_time,
+                    )
+                )
+
+                if historical_candidates:
+
+                    bootstrap_candidates = (
+                        historical_candidates
+                    )
+
+                    print(
+                        f"{market_input.symbol}: "
+                        f"HISTORICAL_DISCOVERY="
+                        f"{window_hours}h"
+                    )
+
+                    break
+
+        if not bootstrap_candidates:
             raise RuntimeError(
                 f"NO_CLOSED_CONTEXT:"
                 f"{market_input.symbol}"
@@ -1173,17 +1292,30 @@ def process_market(
                 f"INSUFFICIENT_CLOSED_HISTORY"
             )
 
-        return (
-            market_input,
-            run,
-            0,
+        if not selected:
+
+            return (
+                market_input,
+                run,
+                0,
+            )
+
+        print(
+            f"{market_input.symbol}: "
+            f"PARTIAL_CONTIGUOUS_CHECKPOINT="
+            f"{len(selected)}"
         )
+
 
     # --------------------------------------------------------
     # HARD BACKWARD CONTINUITY
     # --------------------------------------------------------
 
-    expected = latest_closed
+    expected = (
+        int(selected[0][0])
+        if selected
+        else int(latest_closed)
+    )
 
     for timestamp, raw in selected:
 
@@ -1471,12 +1603,15 @@ def main() -> int:
     # FILE CHECKS
     # ========================================================
 
-    if not FABRIC_DB.exists():
+    # Fabric DB is a runtime-created local canonical store.
+    # It is intentionally allowed to be absent on first bootstrap.
+    # The approved store module owns schema/storage initialization.
+    if not STORE_MODULE.exists():
         raise RuntimeError(
-            "FABRIC_DB_NOT_FOUND"
+            "STORE_MODULE_NOT_FOUND"
         )
 
-    if not STORE_MODULE.exists():
+    if not KUCOIN_MODULE.exists():
         raise RuntimeError(
             "STORE_MODULE_NOT_FOUND"
         )
@@ -1587,28 +1722,191 @@ def main() -> int:
     # FABRIC ONLY
     # ========================================================
 
+    # ========================================================
+    # FABRIC SCHEMA BOOTSTRAP
+    #
+    # Initialize ONLY the approved canonical Fabric schema.
+    # Do NOT execute store.main().
+    # Do NOT insert fixture data.
+    # Production DB remains untouched.
+    # ========================================================
+
+    if not hasattr(store, "CREATE_SQL"):
+        raise RuntimeError(
+            "STORE_SCHEMA_CREATE_SQL_MISSING"
+        )
+
+    FABRIC_DB.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    schema_conn = sqlite3.connect(
+        str(FABRIC_DB)
+    )
+
+    try:
+        schema_conn.execute(
+            store.CREATE_SQL
+        )
+        schema_conn.commit()
+    finally:
+        schema_conn.close()
+
+    print(
+        "FABRIC_SCHEMA_BOOTSTRAP=PASS"
+    )
+
     conn = sqlite3.connect(
         str(FABRIC_DB)
     )
 
     summary = []
+    arm_excluded_unsupported = set()
 
     try:
 
         for market_input in market_inputs:
 
-            result = process_market(
-                conn,
-                store,
-                kucoin,
-                market_input,
-            )
+            try:
 
-            summary.append(result)
+                result = process_market(
+                    conn,
+                    store,
+                    kucoin,
+                    market_input,
+                )
+
+                # ------------------------------------------------
+                # MARKET-LEVEL DURABLE CHECKPOINT
+                #
+                # A successfully processed market becomes durable
+                # immediately. A later market failure cannot erase
+                # this market's committed progress.
+                # ------------------------------------------------
+
+                conn.commit()
+
+                summary.append(result)
+
+                print(
+                    f"CHECKPOINT_COMMITTED="
+                    f"{market_input.symbol}"
+                )
+
+            except RuntimeError as exc:
+
+                # Never allow a failed transaction to contaminate
+                # subsequent markets.
+
+                conn.rollback()
+
+                error_text = str(exc)
+
+                # ------------------------------------------------
+                # EXPECTED / RECOVERABLE MARKET CONDITIONS
+                # ------------------------------------------------
+
+                if error_text.startswith(
+                    "KUCOIN_API_ERROR:"
+                ) and error_text.endswith(
+                    ":Unsupported trading pair."
+                ):
+
+                    print(
+                        f"{market_input.symbol}: "
+                        "PROVIDER_UNSUPPORTED_PAIR="
+                        "SKIPPED_FAIL_CLOSED"
+                    )
+
+                    arm_excluded_unsupported.add(
+                        market_input.symbol
+                    )
+
+                    summary.append(
+                        (
+                            market_input,
+                            0,
+                            0,
+                        )
+                    )
+
+                    continue
+
+                if error_text.startswith(
+                    "KUCOIN_TRANSPORT_ERROR:"
+                ):
+
+                    print(
+                        f"{market_input.symbol}: "
+                        "TRANSPORT_DEFERRED="
+                        "RESUME_NEXT_RUN"
+                    )
+
+                    summary.append(
+                        (
+                            market_input,
+                            0,
+                            0,
+                        )
+                    )
+
+                    continue
+
+                if error_text.startswith(
+                    "NO_CLOSED_CONTEXT:"
+                ):
+
+                    print(
+                        f"{market_input.symbol}: "
+                        "NO_CLOSED_CONTEXT="
+                        "DEFERRED_RESUME_NEXT_RUN"
+                    )
+
+                    summary.append(
+                        (
+                            market_input,
+                            0,
+                            0,
+                        )
+                    )
+
+                    continue
+
+                # ------------------------------------------------
+                # CONTRACT / INTEGRITY FAILURE
+                #
+                # Do NOT swallow these.
+                # ------------------------------------------------
+
+                raise
+
+            except (
+                requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout,
+            ) as exc:
+
+                conn.rollback()
+
+                print(
+                    f"{market_input.symbol}: "
+                    "TRANSPORT_EXCEPTION="
+                    f"{type(exc).__name__}:"
+                    "DEFERRED_RESUME_NEXT_RUN"
+                )
+
+                summary.append(
+                    (
+                        market_input,
+                        0,
+                        0,
+                    )
+                )
+
+                continue
 
         # ====================================================
         # FINAL VALIDATION
-        # ====================================================
 
         print()
         print("=" * 100)
@@ -1623,12 +1921,13 @@ def main() -> int:
             inserted,
         ) in summary:
 
-            if run >= TARGET_RUN:
+            if market_input.symbol in arm_excluded_unsupported:
+                status = "SKIPPED_UNSUPPORTED"
+            elif run >= TARGET_RUN:
                 status = "READY"
             else:
                 status = "PARTIAL"
                 all_ready = False
-
             print(
                 f"{market_input.asset} "
                 f"{market_input.symbol}: "
@@ -1728,7 +2027,12 @@ def main() -> int:
 
     finally:
 
-        conn.close()
+        # Preserve every already-committed market.
+        # Roll back only an incomplete transaction.
+        try:
+            conn.rollback()
+        finally:
+            conn.close()
 
 
 if __name__ == "__main__":
