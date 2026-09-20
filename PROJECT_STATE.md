@@ -434,3 +434,45 @@ No order creation.
 Execution remains OFF.
 
 # END CP44 SMART RISK COMPATIBILITY REPAIR
+
+
+## CP44 — HISTORICAL BUY RULE RECOVERY CLOSURE — 2026-09-20
+
+### BUY RULE RECOVERY
+- STATUS = COMPLETE
+- RESULT = PARTIAL / NOT RECOVERED
+- AUTHORITATIVE_MARKET_BUY_TRIGGER = NOT RECOVERED
+
+### HISTORICAL LINEAGE RECOVERED
+Historical Git evidence establishes:
+`PRODUCTION SIGNAL INPUT → DYNAMIC SIGNAL → VALIDATION → FUSION → DYNAMIC SCORE → DYNAMIC DECISION → downstream Entry/Invalidation → Smart Risk → Trade Gate → Trade Intent`
+
+Historical source:
+- `arunda_pipeline.py`
+- commit `7eef0fb7868e84c9b85570d9a7bfab5ce9f8f314`
+
+Historical `ACTIONABLE_DECISIONS = {"BUY", "LONG", "SHORT", "ACTIONABLE"}` is classification/acceptance of an already-produced decision. It is not an authoritative Market BUY Trigger.
+
+### NOT RECOVERED
+No authoritative historical rule of the form:
+`SIGNAL CONDITIONS + SCORE THRESHOLD + CONFIDENCE THRESHOLD → BUY`
+or an equivalent independent Market BUY Trigger was recovered from Git history.
+
+No threshold, formula, signal condition, confidence threshold, or BUY rule has been invented or reconstructed.
+
+### CAPITAL GOVERNANCE
+Capital is variable and remains a runtime/input boundary. Historical fixed capital values and historical risk constants are not Production Policy and are not restored by this closure.
+
+### CURRENT FRONTIER
+CP44 remains `ACTIVE / BLOCKED / NOT VERIFIED / NOT CLOSED`.
+The remaining frontier is the downstream production-compatible controlled verification from established real-data eligibility through Entry/Invalidation, Smart Risk, opportunity-driven capital allocation / allocated-risk provenance, Position Sizing, Trade Gate, and Trade Ready.
+
+Independent Toobit private-account `HTTP 400 / -1022 INVALID_SIGNATURE` remains documented outside the provider-neutral CP44 core frontier; it must not be bypassed or re-investigated without explicit authorization.
+
+### HANDOFF — MANDATORY
+Historical BUY Rule Recovery is COMPLETE.
+Authoritative Market BUY Trigger was NOT recovered.
+Do not invent BUY threshold, score threshold, confidence threshold, signal formula, or entry trigger.
+Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
+Continue only from the remaining ACTIVE CP44 blockers documented in the governance files.
+CP45 MUST NOT START.
