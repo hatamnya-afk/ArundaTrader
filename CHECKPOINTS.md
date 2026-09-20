@@ -423,3 +423,63 @@ No order creation.
 Execution remains OFF.
 
 # END CP44 SMART RISK COMPATIBILITY REPAIR
+
+
+## CP44 — HISTORICAL BUY RULE RECOVERY CLOSURE — 2026-09-20
+
+BUY RULE RECOVERY:
+`COMPLETE`
+
+RESULT:
+`PARTIAL / NOT RECOVERED`
+
+AUTHORITATIVE MARKET BUY TRIGGER:
+`NOT RECOVERED`
+
+HISTORICAL LINEAGE:
+`Signal → Validation → Fusion → Score → Decision → downstream`
+
+HISTORICAL SOURCE:
+`arunda_pipeline.py`
+`7eef0fb7868e84c9b85570d9a7bfab5ce9f8f314`
+
+ACTIONABLE ≠ BUY TRIGGER:
+`CONFIRMED`
+
+THRESHOLD / FORMULA INVENTED:
+`NO`
+
+RECOVERED:
+- Dynamic Signal
+- LONG / SHORT / NONE
+- Validation
+- Fusion
+- Dynamic Score
+- Dynamic Decision
+- downstream Entry/Invalidation
+- Smart Risk
+- Trade Gate
+- Trade Intent
+
+NOT RECOVERED:
+`SIGNAL CONDITIONS + SCORE THRESHOLD + CONFIDENCE THRESHOLD → BUY`
+or any equivalent authoritative independent Market BUY Trigger.
+
+### CURRENT CP44 FRONTIER AFTER BUY-RULE CLOSURE
+The BUY-rule investigation is closed as a historical recovery result. CP44 itself remains:
+`ACTIVE / BLOCKED / NOT VERIFIED / NOT CLOSED`
+
+Remaining downstream verification boundary:
+`ESTABLISHED REAL-DATA ELIGIBILITY → ENTRY/INVALIDATION → SMART RISK → OPPORTUNITY-DRIVEN CAPITAL ALLOCATION / ALLOCATED-RISK PROVENANCE → POSITION SIZING → TRADE GATE → TRADE READY`
+
+Independent Toobit private-account `-1022 INVALID_SIGNATURE` remains a documented downstream/exchange blocker and is not reopened here.
+
+### CAPITAL RULE
+Capital remains variable. Historical fixed capital and historical risk constants are not Production Policy and are not restored by this closure.
+
+### HANDOFF
+NEXT BUILDER MUST NOT RE-RUN HISTORICAL BUY-RULE RECOVERY.
+Do not invent BUY threshold, score threshold, confidence threshold, signal formula, or entry trigger.
+Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
+Continue only from the remaining ACTIVE CP44 blockers.
+CP45 MUST NOT START.
