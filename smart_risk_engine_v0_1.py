@@ -1,7 +1,7 @@
 """ARUNDA SMART RISK ENGINE v0.1.
-Deterministic, side-effect-free allocation validation, invalidation risk,
-and position sizing.
+Deterministic, side-effect-free portfolio-risk budgeting and position sizing.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -25,14 +25,26 @@ def _positive(value: Any) -> float | None:
     return number
 
 
-def _fraction(value: Any) -> float | None:
+def _non_negative(value: Any) -> float | None:
     if isinstance(value, bool):
         return None
     try:
         number = float(value)
     except (TypeError, ValueError):
         return None
-    if not isfinite(number) or number < 0 or number > 1:
+    if not isfinite(number) or number < 0:
+        return None
+    return number
+
+
+def _adjustment(value: Any) -> float | None:
+    if isinstance(value, bool):
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not isfinite(number) or number <= 0 or number > 1:
         return None
     return number
 
@@ -43,22 +55,20 @@ def _blocked(
     policy_version: str | None = None,
 ) -> SmartRiskDecision:
     result = SmartRiskDecision(
-        asset,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        "BLOCKED",
-        reason,
-        policy_version,
+        asset=asset,
+        direction=None,
+        entry_price=None,
+        stop_distance=None,
+        risk_budget=None,
+        position_size=None,
+        exposure=None,
+        remaining_portfolio_risk=None,
+        concurrent_positions=None,
+        max_concurrent_positions=None,
+        risk_state="BLOCKED",
+        reason=reason,
+        policy_version=policy_version,
+        invalidation_price=None,
     )
     result.validate()
     return result
@@ -68,13 +78,38 @@ def build_smart_risk(
     observation: Mapping[str, Any],
     policy: Mapping[str, Any],
 ) -> SmartRiskDecision:
-    """Validate an upstream allocation and explicit invalidation boundary.
+    """Build deterministic Smart Risk from explicit upstream inputs.
 
-    No capital, opportunity, stop, or market value is inferred. Allocation is
-    an upstream intelligence output expressed as 0..1 of the supplied real
-    portfolio capital. The engine converts that allocation into exposure and
-    loss-at-invalidation, then fails closed on invalid geometry/capacity.
+    Frozen CP38 semantics:
+
+        Base Risk =
+            portfolio_capital * risk_per_trade
+
+        Remaining Portfolio Risk =
+            (portfolio_capital * max_portfolio_risk) - allocated_risk
+
+        Risk Budget =
+            min(
+                Base Risk * correlation_adjustment
+                          * liquidity_adjustment
+                          * execution_adjustment,
+                Remaining Portfolio Risk,
+            )
+
+        Position Size = Risk Budget / Stop Distance
+        Exposure      = Position Size * Entry Price
+
+    CP38-D compatibility:
+        invalidation_price is optional when direct Engine input supplies
+        validated entry_price + stop_distance.
+
+    CP44:
+        when invalidation_price is supplied, its directional geometry and
+        consistency with stop_distance are validated.
+
+    No allocation_fraction or allocated_capital semantics are used.
     """
+
     if not isinstance(observation, Mapping) or not isinstance(policy, Mapping):
         return _blocked("UNKNOWN", "INVALID_INPUT")
 
@@ -85,8 +120,10 @@ def build_smart_risk(
     policy_version = policy.get("policy_version")
     if not isinstance(policy_version, str) or not policy_version.strip():
         return _blocked(asset, "RISK_POLICY_VERSION_MISSING")
+
     if policy.get("policy_validation") != "VALID":
         return _blocked(asset, "RISK_POLICY_UNVALIDATED", policy_version)
+
     if observation.get("capital_state") != REAL_CAPITAL:
         return _blocked(asset, "REAL_CAPITAL_NOT_AVAILABLE", policy_version)
 
@@ -95,81 +132,226 @@ def build_smart_risk(
         return _blocked(asset, "DIRECTION_INVALID", policy_version)
 
     entry = _positive(observation.get("entry_price"))
-    invalidation = _positive(observation.get("invalidation_price"))
+    invalidation_raw = observation.get("invalidation_price")
+    invalidation = (
+        _positive(invalidation_raw)
+        if invalidation_raw is not None
+        else None
+    )
+    stop_distance = _positive(observation.get("stop_distance"))
     portfolio_capital = _positive(observation.get("portfolio_capital"))
     usable_capital = _positive(observation.get("usable_capital"))
-    allocation_fraction = _fraction(observation.get("allocation_fraction"))
+    allocated_risk = _non_negative(observation.get("allocated_risk"))
+
     concurrent = observation.get("concurrent_positions")
 
     if entry is None:
         return _blocked(asset, "ENTRY_PRICE_NOT_EXPLICIT", policy_version)
-    if invalidation is None:
-        return _blocked(asset, "INVALIDATION_PRICE_NOT_EXPLICIT", policy_version)
+
+    if stop_distance is None:
+        return _blocked(asset, "STOP_DISTANCE_NOT_EXPLICIT", policy_version)
+
+    if invalidation_raw is not None and invalidation is None:
+        return _blocked(asset, "INVALIDATION_PRICE_INVALID", policy_version)
+
     if portfolio_capital is None:
         return _blocked(asset, "PORTFOLIO_CAPITAL_INVALID", policy_version)
-    if usable_capital is None or usable_capital > portfolio_capital:
+
+    if usable_capital is None:
         return _blocked(asset, "USABLE_CAPITAL_INVALID", policy_version)
-    if allocation_fraction is None:
-        return _blocked(asset, "ALLOCATION_FRACTION_INVALID", policy_version)
-    if allocation_fraction <= EPSILON:
-        return _blocked(asset, "ALLOCATION_IS_ZERO", policy_version)
-    if not isinstance(concurrent, int) or isinstance(concurrent, bool) or concurrent < 0:
-        return _blocked(asset, "CONCURRENT_POSITIONS_INVALID", policy_version)
+
+    if usable_capital > portfolio_capital + EPSILON:
+        return _blocked(asset, "USABLE_CAPITAL_EXCEEDED", policy_version)
+
+    if allocated_risk is None:
+        return _blocked(asset, "ALLOCATED_RISK_INVALID", policy_version)
+
+    risk_per_trade = _positive(policy.get("risk_per_trade"))
+    max_portfolio_risk = _positive(policy.get("max_portfolio_risk"))
+
+    if risk_per_trade is None:
+        return _blocked(asset, "RISK_PER_TRADE_INVALID", policy_version)
+
+    if max_portfolio_risk is None:
+        return _blocked(asset, "MAX_PORTFOLIO_RISK_INVALID", policy_version)
+
+    if risk_per_trade > max_portfolio_risk + EPSILON:
+        return _blocked(
+            asset,
+            "RISK_PER_TRADE_EXCEEDS_PORTFOLIO_CAP",
+            policy_version,
+        )
+
+    if (
+        not isinstance(concurrent, int)
+        or isinstance(concurrent, bool)
+        or concurrent < 0
+    ):
+        return _blocked(
+            asset,
+            "CONCURRENT_POSITIONS_INVALID",
+            policy_version,
+        )
 
     max_concurrent = policy.get("max_concurrent_positions")
+
     if (
         not isinstance(max_concurrent, int)
         or isinstance(max_concurrent, bool)
         or max_concurrent < 1
     ):
-        return _blocked(asset, "MAX_CONCURRENT_POSITIONS_POLICY_INVALID", policy_version)
+        return _blocked(
+            asset,
+            "MAX_CONCURRENT_POSITIONS_POLICY_INVALID",
+            policy_version,
+        )
+
     if concurrent >= max_concurrent:
-        return _blocked(asset, "MAX_CONCURRENT_POSITIONS_REACHED", policy_version)
+        return _blocked(
+            asset,
+            "MAX_CONCURRENT_POSITIONS_REACHED",
+            policy_version,
+        )
 
-    if direction == "LONG" and invalidation >= entry:
-        return _blocked(asset, "LONG_INVALIDATION_MUST_BE_BELOW_ENTRY", policy_version)
-    if direction == "SHORT" and invalidation <= entry:
-        return _blocked(asset, "SHORT_INVALIDATION_MUST_BE_ABOVE_ENTRY", policy_version)
+    # CP44 explicit invalidation geometry.
+    # CP38-D direct compatibility remains valid when invalidation is absent.
+    if invalidation is not None:
+        if direction == "LONG" and invalidation >= entry:
+            return _blocked(
+                asset,
+                "LONG_INVALIDATION_MUST_BE_BELOW_ENTRY",
+                policy_version,
+            )
 
-    stop_distance = abs(entry - invalidation)
-    if not isfinite(stop_distance) or stop_distance <= EPSILON:
-        return _blocked(asset, "STOP_DISTANCE_INVALID", policy_version)
+        if direction == "SHORT" and invalidation <= entry:
+            return _blocked(
+                asset,
+                "SHORT_INVALIDATION_MUST_BE_ABOVE_ENTRY",
+                policy_version,
+            )
 
-    allocated_capital = portfolio_capital * allocation_fraction
-    if allocated_capital > usable_capital + EPSILON:
-        return _blocked(asset, "ALLOCATED_CAPITAL_EXCEEDS_USABLE_CAPITAL", policy_version)
+        expected_stop_distance = abs(entry - invalidation)
 
-    position_size = allocated_capital / entry
+        if (
+            not isfinite(expected_stop_distance)
+            or expected_stop_distance <= EPSILON
+        ):
+            return _blocked(
+                asset,
+                "STOP_DISTANCE_INVALID",
+                policy_version,
+            )
+
+        if abs(stop_distance - expected_stop_distance) > EPSILON:
+            return _blocked(
+                asset,
+                "STOP_DISTANCE_INCONSISTENT_WITH_INVALIDATION",
+                policy_version,
+            )
+
+    correlation_adjustment = _adjustment(
+        observation.get("correlation_adjustment", 1.0)
+    )
+    liquidity_adjustment = _adjustment(
+        observation.get("liquidity_adjustment", 1.0)
+    )
+    execution_adjustment = _adjustment(
+        observation.get("execution_adjustment", 1.0)
+    )
+
+    if correlation_adjustment is None:
+        return _blocked(
+            asset,
+            "CORRELATION_ADJUSTMENT_INVALID",
+            policy_version,
+        )
+
+    if liquidity_adjustment is None:
+        return _blocked(
+            asset,
+            "LIQUIDITY_ADJUSTMENT_INVALID",
+            policy_version,
+        )
+
+    if execution_adjustment is None:
+        return _blocked(
+            asset,
+            "EXECUTION_ADJUSTMENT_INVALID",
+            policy_version,
+        )
+
+    max_portfolio_risk_amount = (
+        portfolio_capital * max_portfolio_risk
+    )
+    remaining_portfolio_risk = (
+        max_portfolio_risk_amount - allocated_risk
+    )
+
+    if remaining_portfolio_risk <= EPSILON:
+        return _blocked(
+            asset,
+            "PORTFOLIO_RISK_CAPACITY_EXHAUSTED",
+            policy_version,
+        )
+
+    base_risk = portfolio_capital * risk_per_trade
+
+    adjusted_risk = (
+        base_risk
+        * correlation_adjustment
+        * liquidity_adjustment
+        * execution_adjustment
+    )
+
+    risk_budget = min(
+        adjusted_risk,
+        remaining_portfolio_risk,
+    )
+
+    if risk_budget <= EPSILON or not isfinite(risk_budget):
+        return _blocked(
+            asset,
+            "RISK_BUDGET_INVALID",
+            policy_version,
+        )
+
+    if risk_budget > usable_capital + EPSILON:
+        return _blocked(
+            asset,
+            "USABLE_CAPITAL_EXCEEDED",
+            policy_version,
+        )
+
+    position_size = risk_budget / stop_distance
     exposure = position_size * entry
-    risk_budget = position_size * stop_distance
 
     if not all(
         isfinite(value) and value > EPSILON
-        for value in (position_size, exposure, risk_budget)
+        for value in (position_size, exposure)
     ):
-        return _blocked(asset, "RISK_CALCULATION_INVALID", policy_version)
-
-    if risk_budget > allocated_capital + EPSILON:
-        return _blocked(asset, "INVALIDATION_LOSS_EXCEEDS_ALLOCATED_CAPITAL", policy_version)
+        return _blocked(
+            asset,
+            "RISK_CALCULATION_INVALID",
+            policy_version,
+        )
 
     result = SmartRiskDecision(
-        asset,
-        direction,
-        entry,
-        invalidation,
-        stop_distance,
-        allocation_fraction,
-        allocated_capital,
-        risk_budget,
-        position_size,
-        exposure,
-        None,
-        concurrent,
-        max_concurrent,
-        "APPROVED",
-        "ALLOCATION_AND_INVALIDATION_VALID",
-        policy_version,
+        asset=asset,
+        direction=direction,
+        entry_price=entry,
+        stop_distance=stop_distance,
+        risk_budget=risk_budget,
+        position_size=position_size,
+        exposure=exposure,
+        remaining_portfolio_risk=remaining_portfolio_risk,
+        concurrent_positions=concurrent,
+        max_concurrent_positions=max_concurrent,
+        risk_state="APPROVED",
+        reason="RISK_BUDGET_VALIDATED",
+        policy_version=policy_version,
+        invalidation_price=invalidation,
     )
+
     result.validate()
     return result
 

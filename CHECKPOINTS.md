@@ -348,3 +348,78 @@ No premature CP44 closure is permitted.
 
 The previous MHA/USDT:7 blocker and the earlier no-second-runtime restriction remain
 historical records; they do not override this newer verified accumulation evidence.
+
+## CP44 — SMART RISK COMPATIBILITY REPAIR — 2026-09-20
+
+### VERIFIED
+
+The authorized CP44 minimal Smart Risk compatibility repair has completed
+technical verification.
+
+VERIFIED EVIDENCE:
+- CP38-D direct Smart Risk compatibility = PASS.
+- CP38-H SmartRiskDecision constructor compatibility = PASS.
+- CP44 explicit LONG Entry + Invalidation = PASS.
+- CP44 explicit SHORT Entry + Invalidation = PASS.
+- Invalid LONG/SHORT invalidation geometry = BLOCKED / FAIL-CLOSED.
+- Dynamic Smart Risk LONG = PASS.
+- Dynamic Smart Risk SHORT = PASS.
+- Missing explicit invalidation at the Dynamic Boundary = BLOCKED / FAIL-CLOSED.
+- Dynamic Smart Risk snapshot asset identity N-to-N = PASS.
+- Frozen risk-budget semantics preserved:
+  Base Risk = Portfolio Capital × Risk Per Trade.
+  Remaining Portfolio Risk = Max Portfolio Risk − Already Allocated Risk.
+  Risk Budget = min(Base Risk × Risk Adjustments, Remaining Portfolio Risk).
+  Position Size = Risk Budget / Stop Distance.
+  Exposure = Position Size × Entry Price.
+- No allocation_fraction / allocated_capital sizing semantics restored.
+- Dynamic Boundary retains ACTIONABLE decision prerequisite.
+- SmartRiskDecision remains constructor-compatible with optional invalidation_price.
+
+SCOPE:
+Only the two Management-authorized files were modified:
+- smart_risk_contract_v0_1.py
+- smart_risk_engine_v0_1.py
+
+PROTECTED:
+- arunda.db = UNTOUCHED
+- arunda_pipeline.py = UNTOUCHED
+- market_arm_contiguous_history_accumulation_v1_1.py = UNTOUCHED
+- public_market_data_fabric/canonical_store_v0.1.sqlite = UNTOUCHED
+
+SAFETY:
+- Production runtime = NOT EXECUTED
+- Fabric runtime = NOT EXECUTED
+- Execution = OFF
+- Order intents = 0
+- API/exchange writes = 0
+
+### STATUS
+
+CP44 SMART RISK COMPATIBILITY REPAIR = VERIFIED.
+
+CP44 = NOT CLOSED.
+
+CP45 = NOT STARTED.
+
+### CURRENT FRONTIER
+
+The Smart Risk compatibility boundary is technically verified.
+The remaining CP44 work is the downstream production-compatible controlled
+verification boundary: established real-data eligibility → Entry /
+Invalidation-Stop → Smart Risk → Trade Gate → Trade Ready.
+
+No premature CP44 closure is permitted.
+
+### NEXT ACTION
+
+Only after explicit Management readiness, proceed to the single authorized
+CP44 real-market controlled verification of the established downstream path.
+
+No production DB modification.
+No arunda_pipeline.py modification.
+No synthetic/fill/interpolation/padding/backfill.
+No order creation.
+Execution remains OFF.
+
+# END CP44 SMART RISK COMPATIBILITY REPAIR
