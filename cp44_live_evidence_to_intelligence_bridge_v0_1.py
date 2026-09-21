@@ -6,6 +6,27 @@ formula freezing, DB writes, runtime, or execution.
 """
 from typing import Any, Mapping
 
+
+SEMANTIC_FORBIDDEN_PROVENANCE_FIELDS = frozenset(
+    {
+        "outcome",
+        "label",
+    }
+)
+
+
+def _reject_semantic_leakage(value: Any) -> None:
+    """Reject semantic outcome/label fields anywhere in provenance mappings."""
+    if isinstance(value, Mapping):
+        for key, nested in value.items():
+            normalized_key = str(key).strip().lower()
+            if normalized_key in SEMANTIC_FORBIDDEN_PROVENANCE_FIELDS:
+                raise ValueError(f"FORBIDDEN_LIVE_FIELD:{normalized_key}")
+            _reject_semantic_leakage(nested)
+    elif isinstance(value, (list, tuple)):
+        for nested in value:
+            _reject_semantic_leakage(nested)
+
 from cp44_live_predictive_evidence_producer_v0_1 import (
     LiveEvidenceObservation,
     build_live_predictive_evidence,
@@ -24,6 +45,7 @@ def build_live_intelligence_from_explicit_evidence(
     provenance: Mapping[str, Any],
 ) -> LiveIntelligenceResult:
     """Produce PredictiveEvidence explicitly, then enter the candidate boundary."""
+    _reject_semantic_leakage(provenance)
     predictive_evidence = build_live_predictive_evidence(
         observation=observation,
     )
