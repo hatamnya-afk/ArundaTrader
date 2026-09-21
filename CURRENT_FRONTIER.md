@@ -373,3 +373,83 @@ No order creation.
 Execution remains OFF.
 
 # END CP44 SMART RISK COMPATIBILITY REPAIR
+
+
+## CP44 — HISTORICAL BUY RULE RECOVERY CLOSURE — 2026-09-20
+
+### BUY RULE RECOVERY
+- STATUS = COMPLETE
+- RESULT = PARTIAL / NOT RECOVERED
+- AUTHORITATIVE_MARKET_BUY_TRIGGER = NOT RECOVERED
+
+Historical lineage recovered:
+`Signal → Validation → Fusion → Score → Decision → downstream`
+
+Historical source:
+- `arunda_pipeline.py`
+- commit `7eef0fb7868e84c9b85570d9a7bfab5ce9f8f314`
+
+`ACTIONABLE` and decision labels such as `BUY/LONG/SHORT` are not independently accepted as proof of a Market BUY Trigger.
+
+NOT RECOVERED:
+`SIGNAL CONDITIONS + SCORE THRESHOLD + CONFIDENCE THRESHOLD → BUY`
+or an equivalent authoritative independent Market BUY Trigger.
+
+No threshold/formula/condition was invented.
+
+### CURRENT FRONTIER
+CP44 remains `ACTIVE / BLOCKED / NOT VERIFIED / NOT CLOSED`.
+The next work boundary is:
+`ESTABLISHED REAL-DATA ELIGIBILITY → ENTRY/INVALIDATION → SMART RISK → OPPORTUNITY-DRIVEN CAPITAL ALLOCATION / ALLOCATED-RISK PROVENANCE → POSITION SIZING → TRADE GATE → TRADE READY`.
+
+Remaining acceptance gaps include the real-capital boundary and end-to-end downstream evidence; no upstream BUY-rule reconstruction is authorized.
+
+Known independent Toobit private-account blocker:
+`HTTP 400 / -1022 INVALID_SIGNATURE`.
+This remains outside the provider-neutral CP44 core frontier and is not to be re-investigated without authorization.
+
+### HANDOFF — MANDATORY
+NEXT BUILDER MUST NOT RE-RUN HISTORICAL BUY-RULE RECOVERY.
+Historical BUY Rule Recovery is COMPLETE.
+Authoritative Market BUY Trigger was NOT recovered.
+Do not invent BUY threshold, score threshold, confidence threshold, signal formula, or entry trigger.
+Do not reopen Smart Risk, Decision, Entry/Stop, Trade Gate, Trade Intent, or CP43.
+Continue only from the remaining ACTIVE CP44 blockers documented here and in the other governance documents.
+CP45 MUST NOT START.
+
+
+
+## CP44 — PIPELINE SMART RISK WIRING CHAPTER — 2026-09-21
+
+**STATUS:** IMPLEMENTATION PATCHED / STATIC-VERIFICATION PENDING / RUNTIME NOT EXECUTED / NOT CLOSED
+
+### BUILT
+- Added `cp44_smart_risk_pipeline_boundary_v0_1.py`.
+- Rewired the CP44 Pipeline downstream risk stage from legacy Dynamic Risk to provider-neutral Dynamic Smart Risk.
+- Explicit Entry/Invalidation is consumed through the existing boundary contract.
+- Real capital is accepted only when explicitly present upstream.
+- Validated policy is accepted only when explicitly present upstream.
+- Missing inputs fail closed to BLOCKED; there is no fixed-capital or legacy-risk fallback.
+- Core remains exchange-agnostic.
+
+### VERIFIED SO FAR
+- Boundary module commit: `b9394237085be15ed10d98c477befd387c4491d4`
+- Pipeline wiring commit: `fda84acd03edb0837cabd3a2ca1c447b217031d4`
+- Commit-to-commit diff confirms the second commit modifies only `arunda_pipeline.py`.
+- No Runtime executed in this chapter.
+
+### CURRENT FRONTIER
+Static/local verification of the exact two-file implementation:
+`cp44_smart_risk_pipeline_boundary_v0_1.py` + modified `arunda_pipeline.py`.
+
+### NEXT ACTION
+1. Local `py_compile` for the new boundary and modified Pipeline.
+2. Static/diff check of the exact wiring.
+3. Confirm no fixed capital or fallback risk path.
+4. Synchronize governance documents with the verification result.
+5. Stop. Runtime requires a separate explicit Management readiness decision.
+
+### BUILDER HANDOFF
+Do not redesign the Smart Risk engine, Entry/Invalidation contract, or exchange adapter. Do not add Toobit to Core. Continue exactly from commit `fda84acd03edb0837cabd3a2ca1c447b217031d4`.
+
+# END CP44 PIPELINE SMART RISK WIRING CHAPTER
