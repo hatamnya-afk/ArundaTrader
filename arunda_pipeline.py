@@ -5163,6 +5163,75 @@ def main() -> int:
         print(f"FUSION_READY={len(fusion_snapshot)}")
 
         # ------------------------------------------------------------------
+        # CP44 LIVE INTELLIGENCE CONSUMPTION — CANDIDATE ONLY
+        # ------------------------------------------------------------------
+        from cp44_live_predictive_evidence_mapping_v0_1 import (
+            build_live_predictive_evidence_mapping,
+        )
+
+        live_intelligence_observations = {}
+
+        for asset in market_signal_map:
+            opportunity = opportunity_by_asset.get(asset)
+            production_input = production_signal_inputs.get(asset)
+
+            if opportunity is None or production_input is None:
+                continue
+
+            observation = {
+                "asset": f"{asset}/USDT",
+                "direction": market_signal_map[asset]["direction"],
+                "opportunity_score": opportunity.get(
+                    "score",
+                    opportunity.get("opportunity_score", 0.0),
+                ),
+                "momentum_1h": opportunity.get("momentum_1h", 0.0),
+                "momentum_24h": opportunity.get("momentum_24h", 0.0),
+                "rsi14": opportunity.get("rsi14", 0.0),
+                "structure_direction": (
+                    production_input.structure_direction
+                ),
+                "structure_strength": (
+                    production_input.structure_strength
+                ),
+                "structure_confidence": (
+                    production_input.structure_confidence
+                ),
+                "source": "CP44_LIVE_RUNTIME",
+                "observed_at": opportunity.get(
+                    "observed_at",
+                    opportunity.get("timestamp"),
+                ),
+                "provenance": {
+                    "runtime_asset": asset,
+                    "source_layer": "REAL_MARKET_OPPORTUNITY",
+                    "candidate_only": True,
+                },
+            }
+
+            live_intelligence_observations[asset] = (
+                build_live_predictive_evidence_mapping(
+                    observation=observation
+                )
+            )
+
+        if set(live_intelligence_observations).difference(
+            set(market_signal_map)
+        ):
+            fail(
+                "CP44 Live Intelligence identity mismatch"
+            )
+
+        print(
+            "CP44_LIVE_INTELLIGENCE_CONSUMPTION="
+            f"{len(live_intelligence_observations)}"
+        )
+        print("CP44_LIVE_INTELLIGENCE_FORMULA_FROZEN=FALSE")
+        print("CP44_LIVE_INTELLIGENCE_DB_WRITES=0")
+        print("CP44_LIVE_INTELLIGENCE_EXECUTION=OFF")
+
+
+        # ------------------------------------------------------------------
         # 8. DYNAMIC SCORE
         # ------------------------------------------------------------------
         from dynamic_score_contract_boundary_v0_1 import (
