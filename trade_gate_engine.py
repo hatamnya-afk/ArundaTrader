@@ -256,7 +256,7 @@ def adapt_opportunity(opportunity, decision):
     )
 
     adapted["direction"] = get_direction(
-        decision
+        opportunity
     )
 
     score = get_score(opportunity)
@@ -534,6 +534,21 @@ def evaluate(
     opportunity_reasons = check_opportunity(
         opportunity
     )
+
+    opportunity_direction = get_direction(
+        opportunity
+    )
+    decision_direction = get_direction(
+        decision
+    )
+
+    if (
+        opportunity_direction
+        != decision_direction
+    ):
+        opportunity_reasons.append(
+            "opportunity / decision direction mismatch"
+        )
 
     decision_reasons = check_decision(
         decision
