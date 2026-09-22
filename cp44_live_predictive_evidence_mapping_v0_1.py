@@ -21,6 +21,19 @@ FORBIDDEN_LIVE_FIELDS = frozenset(
 
 
 @dataclass(frozen=True)
+class NoPredictiveEvidence:
+    """Explicit neutral-signal state; this is not directional evidence."""
+
+    asset: str
+    direction: str
+    status: str
+    source: str
+    observed_at: str
+    provenance: str
+    predictive_evidence: None = None
+
+
+@dataclass(frozen=True)
 class LivePredictiveEvidenceMapping:
     asset: str
     direction: str
@@ -75,7 +88,7 @@ def _finite(
 def build_live_predictive_evidence_mapping(
     *,
     observation: Mapping[str, Any],
-) -> LivePredictiveEvidenceMapping:
+) -> LivePredictiveEvidenceMapping | NoPredictiveEvidence:
 
     _reject_forbidden_live_input(observation)
 
@@ -115,6 +128,16 @@ def build_live_predictive_evidence_mapping(
 
     if not asset or not source or not observed_at or not provenance:
         raise ValueError("EMPTY_REQUIRED_FIELD")
+
+    if direction == "NONE":
+        return NoPredictiveEvidence(
+            asset=asset,
+            direction="NONE",
+            status="NO_PREDICTIVE_EVIDENCE",
+            source=source,
+            observed_at=observed_at,
+            provenance=provenance,
+        )
 
     if direction not in {"LONG", "SHORT"}:
         raise ValueError("INVALID_DIRECTION")
@@ -169,6 +192,7 @@ def inspect_governance() -> dict[str, Any]:
         "component": (
             "CP44_LIVE_PREDICTIVE_EVIDENCE_MAPPING_V0_1"
         ),
+        "neutral_state": "NO_PREDICTIVE_EVIDENCE",
         "semantic_role": (
             "LIVE_CAUSAL_PREDICTIVE_EVIDENCE_MAPPING_BOUNDARY"
         ),
