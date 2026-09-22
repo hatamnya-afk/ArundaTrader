@@ -525,3 +525,58 @@ Next Builder must:
 `EXECUTION_ENABLED = FALSE`. No Runtime authorization is implied by this chapter.
 
 # END CP44 PIPELINE SMART RISK WIRING CHAPTER
+
+
+## CP44 — NEUTRAL-SIGNAL BOUNDARY REPAIR — 2026-09-22
+
+### ROOT CAUSE
+The single authorized CP44 runtime reached:
+`UNIVERSE_SIZE=833`, `OPPORTUNITY_READY=420`, `SIGNAL_READY=420`, `VALIDATION_READY=420`, `VALIDATION_FAILED=0`, `FUSION_READY=420`, then failed closed with `INVALID_DIRECTION`.
+
+Inspection established the exact contract gap:
+- Dynamic Signal permits `LONG / SHORT / NONE`.
+- Dynamic Validation permits `LONG / SHORT / NONE`, with `NONE` representing neutral.
+- CP44 Live Predictive Evidence Mapping previously permitted only `LONG / SHORT`.
+
+No BUY/SELL mapping was inferred or introduced.
+
+### BUILT
+- `cp44_live_predictive_evidence_mapping_v0_1.py` now has an explicit immutable `NoPredictiveEvidence` state.
+- `NONE` returns `status=NO_PREDICTIVE_EVIDENCE` and `predictive_evidence=None`.
+- `LONG / SHORT` retain the existing directional mapping path.
+- Invalid directions remain fail-closed with `INVALID_DIRECTION`.
+- Existing outcome/future-information guards remain unchanged.
+- `test_cp44_live_predictive_evidence_mapping_v0_1.py` was added with direct contract tests for LONG, SHORT, NONE, neutral signal state, invalid direction, leakage guard, provenance, asset identity, and 420-observation cardinality.
+
+### SCOPE
+Changed files only:
+- `cp44_live_predictive_evidence_mapping_v0_1.py`
+- `test_cp44_live_predictive_evidence_mapping_v0_1.py`
+
+Protected and unchanged:
+- `arunda_pipeline.py`
+- `signal_logic.py`
+- `dynamic_validation_boundary_v0_1.py`
+- Opportunity / Signal / Validation / Fusion / Score / Decision / Risk / Smart Risk / Allocation / Capital / Trade Gate
+- production DB
+- exchange / Toobit paths
+
+### VERIFICATION GATE
+GitHub-side structural inspection confirms the intended two-file delta only.
+Direct local Python execution/compile has NOT been performed by this management turn; therefore test PASS and targeted compile PASS are not claimed yet.
+
+### SAFETY
+- CP44 runtime count for this repair = 0.
+- Total CP44 real-market runtime count remains 1.
+- No second runtime.
+- Execution OFF.
+- No order intent.
+- No exchange/API write.
+- No production DB write.
+
+### STATUS
+CP44 = BLOCKED / NOT VERIFIED / NOT CLOSED.
+
+### NEXT ACTION
+Run targeted compile and the new direct boundary tests locally only. Do not execute CP44 Runtime. Do not modify protected surfaces. If verification is green, record the evidence and request explicit Management readiness before any future controlled runtime.
+
