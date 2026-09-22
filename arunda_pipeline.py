@@ -113,6 +113,9 @@ CURRENT_ORDER_INTENT_REQUIRED_FIELDS = (
 "asset",
 "direction",
 "entry_price",
+"quantity",
+"quantity_unit",
+"quantity_source",
 "confidence",
 "regime",
 "timestamp",
@@ -1909,10 +1912,10 @@ def validate_runtime_quantity_records(
                 )
 class RuntimeOrderIntent(dict):
         """
-        Visible ORDER_INTENT contract remains exactly eight fields.
+        Visible ORDER_INTENT contract contains exactly eleven fields.
 
-        Quantity observability is runtime-only metadata and is intentionally
-        excluded from the visible dict contract.
+        Quantity observability is also retained as runtime metadata for
+        downstream invariants and transformation guards.
         """
 
         def __init__(
@@ -1934,6 +1937,9 @@ class RuntimeOrderIntent(dict):
                 asset=asset,
                 direction=direction,
                 entry_price=entry_price,
+                quantity=quantity,
+                quantity_unit=quantity_unit,
+                quantity_source=quantity_source,
                 confidence=confidence,
                 regime=regime,
                 timestamp=timestamp,
