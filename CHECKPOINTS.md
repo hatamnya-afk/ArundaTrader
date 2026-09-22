@@ -530,3 +530,36 @@ Static verification only. No CP44 Runtime until Management explicitly confirms r
 Start at `fda84acd03edb0837cabd3a2ca1c447b217031d4`. Do not reset/rebase/merge/clean/checkout. Do not modify closed contracts. Do not touch production DB. Do not run Runtime.
 
 # END CP44 PIPELINE SMART RISK WIRING CHAPTER
+
+
+## CP44 — NEUTRAL-SIGNAL BOUNDARY REPAIR — 2026-09-22
+
+STATUS:
+**IMPLEMENTATION PATCHED / VERIFICATION PENDING / BLOCKED / NOT CLOSED**
+
+ROOT CAUSE:
+The single authorized CP44 runtime reached 420 validated signals and failed at the CP44 Live Predictive Evidence Mapping boundary because Dynamic Signal/Validation legitimately permit `NONE` for neutral state while the mapping accepted only `LONG/SHORT`.
+
+PATCH:
+- `NONE` → explicit `NoPredictiveEvidence(status=NO_PREDICTIVE_EVIDENCE)`
+- `LONG/SHORT` → existing directional mapping
+- invalid direction → `INVALID_DIRECTION` fail-closed
+- no BUY/SELL inference
+- outcome/future-information guards preserved
+- asset and provenance preserved
+
+FILES:
+- `cp44_live_predictive_evidence_mapping_v0_1.py`
+- `test_cp44_live_predictive_evidence_mapping_v0_1.py`
+
+CARDINALITY:
+Direct test coverage includes 420 observations with explicit directional vs no-evidence classification and asset identity preservation.
+
+VERIFICATION:
+GitHub-side structural inspection confirms the intended two-file delta only. Local Python compile and direct test execution have not yet been performed in this management turn; no PASS is claimed.
+
+SAFETY:
+Runtime for this repair = 0. Total CP44 runtime count remains 1. No second runtime, DB write, exchange/API write, order, or execution.
+
+NEXT ACTION:
+Targeted local compile + direct boundary tests only. Then Management readiness review. CP45 remains forbidden.
