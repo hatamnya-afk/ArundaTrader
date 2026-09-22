@@ -61,9 +61,10 @@ CP43 = CLOSED / VERIFIED / PASS
 Closed checkpoints are historical truth. They must not be reopened or re-audited unless Management identifies a direct, provable regression.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP44 — REAL-MARKET CONTROLLED TEST
+CURRENT FRONTIER: CP45 — MANAGEMENT SCOPE DEFINITION GATE
 
-CP44 = MANAGEMENT-AUTHORIZED / IMPLEMENTATION VERIFIED / REAL-MARKET CONTROLLED TEST EXECUTED / BLOCKED / NOT VERIFIED / NOT CLOSED.
+CP44 = VERIFIED / PASS / CLOSED.
+CP45 = NEXT FRONTIER / MANAGEMENT SCOPE DEFINITION PENDING.
 
 ## CP44 IMPLEMENTATION VERIFICATION
 The authorized CP44 downstream implementation is present on branch `sync/local-project-20260917` at HEAD `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
@@ -618,3 +619,60 @@ CP45 = **NOT STARTED / FORBIDDEN**.
 ### NEXT ACTION
 Only upon explicit runtime authorization, execute the single next CP44 real-market controlled verification from the established downstream ELIGIBLE boundary. Preserve all existing safety constraints: execution OFF, no order, no exchange write, no production DB write.
 
+
+
+## CP44 — FINAL GOVERNANCE CLOSURE — 2026-09-22
+
+### STATUS
+**CP44 = VERIFIED / PASS / CLOSED**
+
+### FINAL CONTROLLED RUNTIME EVIDENCE
+Runtime #3 completed the authorized real-market controlled verification successfully:
+
+- UNIVERSE_SIZE=835
+- OPPORTUNITY_READY=422
+- SIGNAL_READY=422
+- VALIDATION_READY=422
+- VALIDATION_FAILED=0
+- FUSION_READY=422
+- CP44_LIVE_INTELLIGENCE_CONSUMPTION=422
+- SCORE_READY=422
+- DECISION_READY=422
+- RISK_READY=422
+- TRADE_GATE_READY=422
+- TRADE_READY=0
+- ORDER_INTENTS_CREATED=0
+- REAL_ORDER=FALSE
+- REAL_TRADE=FALSE
+- EXECUTION=OFF
+- DB_WRITES=0
+- FAIL_CLOSED=TRUE
+
+### CLOSURE DETERMINATION
+The complete provider-neutral CP44 downstream controlled chain was traversed at dynamic cardinality 422 without runtime failure.
+
+TRADE_READY=0 is a valid fail-closed/no-trade outcome, not a runtime failure. No order intent or execution was created.
+
+### SAFETY
+- Execution remains OFF.
+- No order submission occurred.
+- No exchange/API write occurred.
+- No production DB write occurred.
+- No synthetic, interpolated, filled, padded, or backfilled production data was introduced.
+- arunda.db remains protected.
+- Closed checkpoints are not reopened or re-audited.
+
+### GOVERNANCE DETERMINATION
+CP44 is now formally closed. Its historical blockers and repair chapters remain historical evidence only and must not be interpreted as current blockers.
+
+The next frontier is CP45. CP45 may now be opened only through its own explicit Management scope definition and acceptance gate. No CP45 implementation or runtime is implied by this closure.
+
+## CP45 — CURRENT FRONTIER OPENING — 2026-09-22
+
+**STATUS:** NEXT FRONTIER / MANAGEMENT SCOPE DEFINITION PENDING
+
+CP44 is formally closed by the final controlled runtime and the four-document governance closure above.
+
+CP45 is now the active frontier. No implementation scope is inferred from CP45's number alone. The first CP45 action is to define its authoritative objective, acceptance requirements, authorized file scope, safety gates, and first verification action from the roadmap and repository state.
+
+**NEXT ACTION:** Management scope definition only. No CP45 runtime, production DB modification, exchange/API write, order creation, execution enablement, or implementation change is implied until the CP45 scope is explicitly authorized.
