@@ -5375,6 +5375,53 @@ def main() -> int:
         if set(risk_snapshot) != set(decision_snapshot):
             fail("CP44 Smart Risk cardinality mismatch")
 
+        # ------------------------------------------------------------------
+        # 11. DYNAMIC TRADE GATE
+        # ------------------------------------------------------------------
+        # Authoritative Trade Gate only. No status inference, no synthetic
+        # readiness, and no OrderIntent creation occurs at this boundary.
+        trade_gate_snapshot = {}
+
+        for asset in decision_snapshot:
+            opportunity = opportunity_by_asset.get(asset)
+            decision = decision_snapshot[asset]
+            risk = risk_snapshot[asset]
+
+            if not isinstance(opportunity, dict):
+                fail(f"Trade Gate Opportunity missing: {asset}")
+
+            trade_gate_status, gate_reasons = trade_gate_engine.evaluate(
+                opportunity,
+                decision,
+                risk,
+            )
+
+            trade_gate_snapshot[asset] = {
+                "asset": asset,
+                "symbol": f"{asset}/USDT",
+                "direction": trade_gate_engine.get_direction(decision),
+                "trade_gate_status": trade_gate_status,
+                "reasons": list(gate_reasons),
+                "source": "TRADE_GATE_v0.1",
+                "execution": False,
+                "db_writes": 0,
+            }
+
+        if set(trade_gate_snapshot) != set(decision_snapshot):
+            fail("Dynamic Trade Gate cardinality mismatch")
+
+        trade_ready_assets = {
+            asset
+            for asset, gate_row in trade_gate_snapshot.items()
+            if gate_row.get("trade_gate_status") == TRADE_READY_STATUS
+        }
+
+        if not trade_ready_assets.issubset(set(trade_gate_snapshot)):
+            fail("Trade Ready asset identity mismatch")
+
+        print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
+        print(f"TRADE_READY={len(trade_ready_assets)}")
+
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
         # ------------------------------------------------------------------
         assert_execution_disabled()
@@ -5466,7 +5513,6 @@ if __name__ == "__main__":
         print("=" * 90)
 
         raise
-
 
 
 
