@@ -1282,3 +1282,53 @@ Proceed to the visual Command Center / Desktop Shell implementation under CP48, 
 
 NEXT VERIFICATION GATE:
 Visual shell implementation → local compile/tests → desktop launch verification → UI/projection integrity verification → four-document governance synchronization before final CP48 closure of the complete UI surface.
+
+
+## CP48 — VISUAL COMMAND CENTER SHELL — IMPLEMENTATION BUILT / VERIFICATION PENDING — 2026-09-23
+
+### STATUS
+**VISUAL SHELL = BUILT / LOCAL VERIFICATION PENDING / EXECUTION OFF**
+
+### BUILT
+- Added `cp48_command_center_app_v0_1.py` as the first Windows-native read-only Command Center shell.
+- Added `test_cp48_command_center_app_v0_1.py` focused shell/projection tests.
+- Added `Aroonda Command Center.pyw` as the user-facing GUI entrypoint.
+- The shell uses the verified CP48 contract as its projection boundary.
+- The shell does not create, modify, submit, cancel, or authorize orders.
+- When no canonical event stream exists, the UI explicitly shows a waiting state rather than inventing activity, decisions, outcomes, profitability, or lessons.
+- Canonical event data is read-only and must validate through CP48 provenance rules before display.
+
+### UI SURFACE
+The first shell exposes:
+- LIVE ACTIVITY
+- AROONDA AI SUPERVISOR
+- ARUNDATRADER
+- SYSTEM HEALTH
+- DAILY REPORT
+- AUDIT / DECISION ID
+
+### DESKTOP PRINCIPLE
+`Aroonda Command Center.pyw` is the application entrypoint. A final Windows Desktop shortcut/entry will point directly to this GUI entrypoint so normal use does not require PowerShell or manually typed Python commands. The one-time desktop shortcut creation remains part of local launch verification.
+
+### SAFETY
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+- no exchange/API write;
+- no order submission;
+- no production DB write;
+- no execution-state mutation.
+
+### VERIFICATION GATE
+Local verification must establish:
+1. Python compile;
+2. focused CP48 shell tests;
+3. CP48 contract regression;
+4. static/diff verification;
+5. GUI launch without PowerShell as a normal-use dependency;
+6. projection integrity;
+7. four-document governance synchronization before complete CP48 UI closure.
+
+### NEXT ACTION
+Synchronize local branch, run the focused shell/contract verification, then perform one controlled desktop launch check. Do not execute the trading pipeline as part of UI verification.
