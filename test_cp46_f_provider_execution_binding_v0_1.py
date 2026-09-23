@@ -159,6 +159,7 @@ def test_spot_short_blocks():
     canonical = CanonicalOrderRequest(
         asset="BTC",
         direction="SHORT",
+        quantity_unit="BASE_ASSET",
         order_type="MARKET",
         quantity=1,
         quantity_source="RISK.position_quantity",
@@ -183,6 +184,7 @@ def test_futures_short_passes():
         quantity=1,
         quantity_source="RISK.position_quantity",
         entry_price=100,
+        reference_price=100,
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
