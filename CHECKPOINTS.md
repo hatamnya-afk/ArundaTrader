@@ -659,3 +659,55 @@ CP44 is formally closed by the final controlled runtime and the four-document go
 CP45 is now the active frontier. No implementation scope is inferred from CP45's number alone. The first CP45 action is to define its authoritative objective, acceptance requirements, authorized file scope, safety gates, and first verification action from the roadmap and repository state.
 
 **NEXT ACTION:** Management scope definition only. No CP45 runtime, production DB modification, exchange/API write, order creation, execution enablement, or implementation change is implied until the CP45 scope is explicitly authorized.
+## CP45 — MANAGEMENT SCOPE RECONCILIATION — 2026-09-23
+
+CP45 management scope-definition gate = **VERIFIED / CLOSED**.
+
+The reconciliation used the verified CP46-A1 through CP46-D technical evidence and the current execution/preflight contracts.
+
+### RECONCILIATION RESULT
+CP46-D ends at:
+
+`ProviderOrderRequest → ProviderOrderPreflightRequest → CP46-A6 → PASS / BLOCK`
+
+The execution boundary begins at:
+
+`CanonicalOrderRequest → validate → execution safety gates → adapter`
+
+No existing contract makes provider-preflight PASS a mandatory predecessor of execution-boundary eligibility.
+
+Therefore the missing responsibility is independently identified as:
+
+`Provider Preflight PASS → Execution Eligibility Gate → Canonical Execution Boundary`
+
+No code or runtime was performed during this reconciliation.
+
+## CP46-E — PROVIDER PREFLIGHT → EXECUTION ELIGIBILITY GATE
+
+**STATUS: CURRENT FRONTIER / MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT AUTHORIZED**
+
+### OBJECTIVE
+Add the explicit missing handoff/eligibility contract between provider preflight and the existing execution boundary.
+
+### REQUIRED INVARIANTS
+- CP46-D translation/preflight handoff must PASS.
+- ProviderPreflightResult must be PASS.
+- Canonical identity, intent_id, snapshot_id, asset/direction, and quantity provenance must match deterministically.
+- Canonical quantity must remain unchanged.
+- Missing, stale, ambiguous, or conflicting state must BLOCK.
+- No provider I/O, exchange write, DB write, order submission, or execution.
+- Existing execution safety flags remain false.
+
+### OUT OF SCOPE
+- CP46-A1 through CP46-D changes.
+- CanonicalOrderRequest / CanonicalExecutionResult schema changes.
+- Provider translation/preflight semantic changes.
+- Execution enablement.
+- Live exchange requests.
+- Quantity estimation, rounding, or mutation.
+
+### ACCEPTANCE
+Focused tests, Python compile, and diff verification must pass. Closure requires synchronization of PROJECT_STATE.md, CURRENT_FRONTIER.md, CHECKPOINTS.md, and MANAGEMENT_ROADMAP.md.
+
+### NEXT ACTION
+Implementation authorization for CP46-E only; then focused verification. No runtime or live execution.
