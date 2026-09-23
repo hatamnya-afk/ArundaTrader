@@ -44,7 +44,7 @@ def test_execution_boundary_blocks_before_adapter_interaction():
     )
 
     assert isinstance(result, CanonicalExecutionResult)
-    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.error_code == "CP46_E_REQUIRED"
     assert adapter.capabilities_called is False
     assert adapter.submit_called is False
 
@@ -59,7 +59,7 @@ def test_execution_boundary_preserves_request():
         adapter=adapter,
     )
 
-    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.error_code == "CP46_E_REQUIRED"
     assert request.quantity == original
     assert request.quantity == 1
     assert request.asset == "BTCUSDT"
@@ -75,4 +75,4 @@ def test_execution_boundary_is_fail_closed_without_adapter():
     )
 
     assert isinstance(result, CanonicalExecutionResult)
-    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.error_code == "CP46_E_REQUIRED"
