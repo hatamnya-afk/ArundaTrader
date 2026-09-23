@@ -645,3 +645,98 @@ CP44 is formally closed by the final controlled runtime and the four-document go
 CP45 is now the active frontier. No implementation scope is inferred from CP45's number alone. The first CP45 action is to define its authoritative objective, acceptance requirements, authorized file scope, safety gates, and first verification action from the roadmap and repository state.
 
 **NEXT ACTION:** Management scope definition only. No CP45 runtime, production DB modification, exchange/API write, order creation, execution enablement, or implementation change is implied until the CP45 scope is explicitly authorized.
+## CP45 — MANAGEMENT SCOPE RECONCILIATION — 2026-09-23
+
+### STATUS
+**CP45 MANAGEMENT SCOPE-DEFINITION GATE = VERIFIED / CLOSED**
+
+CP45 is closed as a governance reconciliation gate. No CP45 implementation or runtime remains pending.
+
+The reconciliation reviewed the canonical governance documents together with the verified CP46-A1 through CP46-D technical evidence already present on `sync/local-project-20260917`.
+
+### MANAGEMENT DETERMINATION
+The existing CP46-D boundary ends at:
+
+`ProviderOrderRequest → ProviderOrderPreflightRequest → CP46-A6 → PASS / BLOCK`
+
+The existing execution boundary begins at:
+
+`CanonicalOrderRequest → validate → execution safety gates → adapter`
+
+The repository contains no explicit contract that makes a successful provider preflight a mandatory predecessor of the execution boundary.
+
+Therefore the following responsibility is independently required:
+
+`Provider Preflight PASS → Execution Eligibility Gate → Canonical Execution Boundary`
+
+This is a real architectural responsibility gap, not a missing implementation detail inside CP46-D or inside the execution boundary.
+
+### GOVERNANCE RESULT
+**CP46-E IS FORMALLY OPENED AS THE CURRENT FRONTIER.**
+
+No implementation is authorized by this opening alone.
+
+### SAFETY
+- EXECUTION_ENABLED = FALSE
+- ORDER_SUBMISSION_ENABLED = FALSE
+- EXCHANGE_WRITE_ENABLED = FALSE
+- DATABASE_WRITE_ENABLED = FALSE
+- No order creation.
+- No execution.
+- No exchange/API write.
+- No production DB write.
+- Closed contracts remain closed.
+
+## CP46-E — PROVIDER PREFLIGHT → EXECUTION ELIGIBILITY GATE — 2026-09-23
+
+### STATUS
+**CURRENT FRONTIER / MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT AUTHORIZED**
+
+### OBJECTIVE
+Create an explicit, provider-neutral execution-eligibility gate that proves:
+
+`Provider Translation PASS → Provider Preflight PASS → Execution Eligibility PASS → Canonical Execution Boundary`
+
+The gate must prevent the execution boundary from being reachable through any path that has not produced a verified provider-preflight PASS.
+
+### RESPONSIBILITY
+CP46-E owns only the missing handoff/eligibility contract.
+
+It must:
+- require a successful CP46-D provider handoff;
+- require `ProviderPreflightResult.status = PASS`;
+- preserve exact canonical identity/provenance linkage;
+- preserve quantity and quantity provenance without conversion, rounding, normalization, or mutation;
+- fail closed on missing, stale, inconsistent, or mismatched handoff state;
+- return an execution-eligible canonical request or equivalent explicitly authorized eligibility contract for the existing execution boundary;
+- contain no network, database, exchange write, order submission, or execution behavior.
+
+### OUT OF SCOPE
+- changing `CanonicalOrderRequest`;
+- changing `CanonicalExecutionResult`;
+- changing CP46-A1 through CP46-D contracts;
+- changing provider translation semantics;
+- changing provider preflight rules;
+- changing the execution boundary's existing safety locks;
+- enabling execution or order submission;
+- production DB modification;
+- live exchange requests;
+- quantity estimation or provider-specific quantity conversion.
+
+### ACCEPTANCE GATES
+1. CP46-D PASS is mandatory.
+2. Provider preflight PASS is mandatory.
+3. Translation/preflight/canonical identity must match deterministically.
+4. Quantity and quantity provenance must remain unchanged.
+5. Any missing/ambiguous/conflicting state must BLOCK.
+6. No adapter call or exchange I/O occurs.
+7. Existing execution safety flags remain false.
+8. Focused tests, compile verification, and diff verification must pass.
+9. No closed checkpoint is reopened.
+10. Four governance documents must be synchronized at closure.
+
+### FIRST VERIFICATION ACTION
+Static interface verification of the exact CP46-E boundary and its consumers. No runtime, no DB write, no exchange/API write, and no execution.
+
+### NEXT ACTION
+Implementation authorization for the explicitly scoped CP46-E contract only, followed by focused verification.
