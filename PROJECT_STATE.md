@@ -766,3 +766,64 @@ CP46-E is no longer the active frontier. The next checkpoint requires its own ex
 Proceed only through the next explicit Management gate. Do not infer implementation, runtime, order, exchange write, or DB write from checkpoint numbering.
 
 # END CP46-E FINAL GOVERNANCE CLOSURE
+
+
+## CP46-F — PROVIDER EXECUTION TRANSPORT BINDING — 2026-09-23
+
+### STATUS
+**CURRENT FRONTIER / MANAGEMENT SCOPE DEFINED / IMPLEMENTATION AUTHORIZED**
+
+### OBJECTIVE
+Create an explicit provider-neutral binding contract that joins a verified CP46-E execution eligibility result to the already-verified provider-specific `ProviderOrderRequest`, without changing canonical request/result schemas or enabling execution.
+
+Required chain:
+
+`CP46-E Eligibility PASS + ProviderOrderRequest → Provider Execution Binding PASS → Future Adapter/Transport Consumer`
+
+### RESPONSIBILITY
+CP46-F owns only the binding identity/provenance contract. It must:
+- require CP46-E status PASS;
+- require a valid provider order request;
+- require deterministic `intent_id`, `snapshot_id`, direction, and canonical/provider identity consistency;
+- preserve provider quantity and quantity unit exactly as produced by CP46-C/D;
+- preserve canonical request unchanged;
+- fail closed on missing, ambiguous, stale, or mismatched binding state;
+- remain immutable and provider-transport agnostic;
+- perform no network, DB, exchange write, order submission, or execution.
+
+### OUT OF SCOPE
+- modifying CP46-A1 through CP46-E contracts;
+- modifying CanonicalOrderRequest or CanonicalExecutionResult schemas;
+- enabling execution/order submission;
+- implementing live HTTP transport;
+- changing Toobit signing/serialization semantics;
+- quantity conversion, rounding, estimation, or mutation;
+- production DB changes;
+- runtime execution.
+
+### ACCEPTANCE GATES
+1. CP46-E PASS is mandatory.
+2. ProviderOrderRequest is present and valid.
+3. intent/snapshot identity matches deterministically.
+4. direction/venue identity is consistent with the canonical eligible request.
+5. provider quantity and quantity unit are preserved exactly.
+6. canonical request identity is preserved unchanged.
+7. missing/ambiguous/conflicting state BLOCKS.
+8. no adapter/network/DB/exchange I/O occurs.
+9. execution safety flags remain false.
+10. focused tests, py_compile, and diff verification pass.
+11. no closed checkpoint is reopened.
+
+### FIRST VERIFICATION ACTION
+Static interface verification and focused contract tests only. No runtime or live exchange request.
+
+### CURRENT PROJECT STATE
+
+**CURRENT FRONTIER: CP46-F — PROVIDER EXECUTION TRANSPORT BINDING**
+
+CP46-E remains VERIFIED / CLOSED / CANONICAL and is not reopened.
+
+### NEXT ACTION
+Implement only the CP46-F binding contract and its focused tests, then perform local compile/test/diff verification. Closure requires four-document governance synchronization.
+
+# END CP46-F MANAGEMENT SCOPE
