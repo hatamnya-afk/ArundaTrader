@@ -986,3 +986,106 @@ Implement/verify only the minimum CP46-H read-only connectivity/preflight contra
 After CP46-H read-only verification, a separate management gate will define whether and under what exact conditions the first real order may ever be authorized.
 
 # END CP46-H MANAGEMENT SCOPE
+
+## CP46-H ? FINAL GOVERNANCE CLOSURE ? 2026-09-23
+
+### STATUS
+**CP46-H = VERIFIED / PASS / CLOSED / CANONICAL**
+
+### LIVE READ-ONLY VERIFICATION
+
+The single explicitly authorized CP46-H live read-only verification completed successfully against the real Toobit environment.
+
+Verified evidence:
+
+- API credential pair present and distinct.
+- API key and API secret are not identical.
+- Credential values were never printed or persisted.
+- Toobit public server time = PASS.
+- Toobit exchange information = PASS.
+- BTC symbol verification = PASS.
+- BTC trading constraints = PASS.
+- Authenticated account read = PASS.
+- Authenticated balance read = PASS.
+- Authenticated API-key check = PASS.
+- Adapter type = `ToobitTradingAdapter`.
+- Safety gates remained OFF throughout the runtime.
+- `EXECUTION_ENABLED = False`.
+- `ORDER_SUBMISSION_ENABLED = False`.
+- `ORDER_CANCELLATION_ENABLED = False`.
+- `WITHDRAW_ENABLED = False`.
+- `EXCHANGE_WRITE_ENABLED = False`.
+- `DATABASE_WRITE_ENABLED = False`.
+- Order submission = NOT EXECUTED.
+- Order cancellation = NOT EXECUTED.
+- Withdrawal = NOT EXECUTED.
+- Exchange/API write = NOT EXECUTED.
+- Production database write = NOT EXECUTED.
+- Retry = 0.
+- Loop = 0.
+- Secret printed = FALSE.
+- `CP46-H LIVE RESULT = PASS`.
+- `CP46-H FAIL_CLOSED = TRUE`.
+
+### AUTHENTICATION FINDING
+
+The earlier `HTTP 400 / -1022 INVALID_SIGNATURE` condition was resolved after replacement of the invalid credential pair.
+
+The final credential integrity verification established:
+
+`KEY_SECRET_EQUAL = False`
+
+The independent raw official signing test and the final adapter-mediated authenticated account read both subsequently succeeded.
+
+No signing-code modification was required.
+
+### SCOPE DETERMINATION
+
+CP46-H successfully establishes controlled, authenticated, read-only connectivity from the existing Toobit adapter boundary to the real provider environment.
+
+CP46-H does NOT authorize:
+
+- execution enablement;
+- order submission;
+- order cancellation;
+- withdrawal;
+- exchange writes;
+- production DB writes;
+- modification of canonical order/request contracts;
+- quantity estimation, rounding, normalization, or mutation.
+
+The execution safety boundary remains fail-closed.
+
+### GOVERNANCE DETERMINATION
+
+**CP46-H is formally VERIFIED / PASS / CLOSED / CANONICAL.**
+
+CP46-A1 through CP46-G remain CLOSED / VERIFIED / CANONICAL and are not reopened or re-audited.
+
+No closed checkpoint was reopened.
+
+### CURRENT FRONTIER
+
+The next frontier requires its own explicit Management scope definition.
+
+CP46-H closure does not authorize the first real order and does not enable execution.
+
+The next management gate must explicitly determine the conditions and verification required before any real-order authorization can be considered.
+
+### SAFETY
+
+Execution remains OFF.
+
+No order was submitted.
+
+No exchange write occurred.
+
+No production DB write occurred.
+
+No withdrawal occurred.
+
+No secret was exposed or persisted.
+
+No automatic retry or execution loop was introduced.
+
+# END CP46-H FINAL GOVERNANCE CLOSURE
