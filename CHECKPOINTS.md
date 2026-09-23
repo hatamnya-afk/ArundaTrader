@@ -864,3 +864,62 @@ CP46-A1 through CP46-F remain closed and are not reopened or re-audited.
 The next checkpoint requires its own explicit Management scope definition. No implementation or execution is implied by CP46-G closure.
 
 # END CP46-G FINAL GOVERNANCE CLOSURE
+
+
+## CP46-H — CONTROLLED EXCHANGE CONNECTIVITY & LIVE READ-ONLY PREFLIGHT — 2026-09-23
+
+### STATUS
+**CURRENT FRONTIER / MANAGEMENT SCOPE DEFINED / IMPLEMENTATION AUTHORIZATION**
+
+### OBJECTIVE
+Establish the first controlled connection path from the verified CP46-G handoff toward the real exchange environment, while remaining strictly read-only and fail-closed.
+
+Target chain:
+`CP46-G PASS → Provider Execution Consumer → Toobit Adapter/Transport → LIVE READ-ONLY CONNECTIVITY/PREFLIGHT`
+
+### RESPONSIBILITY
+- verify provider credentials/configuration through the existing adapter boundary without persisting secrets;
+- establish authenticated read-only connectivity to the configured Toobit account endpoints where required for preflight;
+- verify account, balance, symbol/contract, position/open-order, timestamp, and provider-state evidence needed by the existing CP46-A6 preflight;
+- preserve canonical identity, provider identity, quantity and quantity provenance;
+- fail closed on authentication failure, stale/ambiguous provider state, symbol/contract mismatch, balance/margin/position conflict, duplicate/open-order conflict, timestamp failure, or any safety-state inconsistency;
+- produce auditable PASS/BLOCK evidence only.
+
+### STRICT OUT OF SCOPE
+- enabling `EXECUTION_ENABLED`;
+- enabling `ORDER_SUBMISSION_ENABLED`;
+- enabling `EXCHANGE_WRITE_ENABLED`;
+- creating, submitting, cancelling, or modifying any real order;
+- production database writes;
+- changing canonical order/request contracts;
+- quantity estimation, rounding, normalization, or mutation;
+- storing API secrets in the repository or production DB;
+- any automatic retry/loop.
+
+### SAFETY BASELINE
+`EXECUTION_ENABLED = FALSE`
+`ORDER_SUBMISSION_ENABLED = FALSE`
+`EXCHANGE_WRITE_ENABLED = FALSE`
+`DATABASE_WRITE_ENABLED = FALSE`
+
+### ACCEPTANCE GATES
+1. CP46-G PASS is mandatory.
+2. Existing Toobit adapter/transport boundary is used; no parallel execution path.
+3. Authentication/configuration is explicit and secrets are not persisted.
+4. Only authorized read-only provider endpoints may be contacted.
+5. Provider evidence is timestamped and internally consistent.
+6. No order endpoint is called.
+7. No exchange write occurs.
+8. No production DB write occurs.
+9. No canonical/provider quantity mutation occurs.
+10. Focused tests, compile, and controlled live read-only verification pass.
+11. Any ambiguity produces BLOCK.
+12. No closed checkpoint is reopened.
+
+### FIRST ACTION
+Implement/verify only the minimum CP46-H read-only connectivity/preflight contract and its tests. Then perform static verification first. Live provider connectivity requires a separate explicit runtime authorization at the execution step and must not be inferred from this scope alone.
+
+### NEXT FRONTIER
+After CP46-H read-only verification, a separate management gate will define whether and under what exact conditions the first real order may ever be authorized.
+
+# END CP46-H MANAGEMENT SCOPE
