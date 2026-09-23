@@ -1052,3 +1052,68 @@ The next management-approved frontier is the **Aroonda Command Center / decision
 CP47 closure does not authorize the first real order or capital deployment. Any live execution attempt requires a separate explicit Management authorization and runtime gate.
 
 # END CP47 FINAL IMPLEMENTATION VERIFICATION
+
+
+## CP48 — AROONDA COMMAND CENTER / DESKTOP ENTRY — 2026-09-23
+
+### STATUS
+**IMPLEMENTATION BUILT / LOCAL VERIFICATION PENDING / EXECUTION OFF**
+
+### MANAGEMENT OBJECTIVE
+Create the first real supervision surface for the ArundaTrader ecosystem:
+- one desktop entry point opens the Aroonda Command Center;
+- the user does not need PowerShell or manual Python commands for normal operation;
+- the UI is a read-only projection of canonical decision/event state;
+- the UI is not a source of truth and cannot mutate execution state;
+- the architecture remains compatible with future Aroonda AI supervision.
+
+### REQUIRED CHAIN
+`REAL MARKET DATA → ARUNDATRADER → DECISION ID → IMMUTABLE EVENT CHAIN → COMMAND CENTER → AROONDA AI SUPERVISOR → OBSERVATION / ANALYSIS / LESSON`
+
+### CP48 CONTRACT BUILT
+Files:
+- `cp48_command_center_contract_v0_1.py`
+- `test_cp48_command_center_contract_v0_1.py`
+
+The contract defines:
+- immutable event records with decision-time provenance;
+- decision trace identity and source provenance;
+- read-only Command Center projections;
+- explicit PASS/BLOCK/INCONCLUSIVE state;
+- desktop entry contract with no terminal/manual-command dependency;
+- Aroonda supervisor observation linkage with history mutation forbidden.
+
+### UI SURFACE
+The eventual Command Center must expose:
+- LIVE ACTIVITY;
+- AROONDA SUPERVISOR;
+- SYSTEM HEALTH;
+- DAILY REPORT;
+- AUDIT / DECISION ID.
+
+The visual shell is a projection layer only. It must not invent decisions, outcomes, profitability, or lessons.
+
+### SAFETY
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+- no order/execution runtime;
+- no exchange/API write;
+- no production DB write;
+- no closed checkpoint reopened.
+
+### DESKTOP REQUIREMENT
+The final user-facing shell is required to launch from a desktop icon/entry point without requiring PowerShell or a manually typed command. Packaging/installer and visual implementation are subsequent CP48 work; they are not yet claimed complete.
+
+### VERIFICATION GATE
+Before CP48 closure:
+1. local `py_compile`;
+2. focused CP48 tests;
+3. regression check against CP47;
+4. static/diff verification;
+5. four-document governance synchronization;
+6. only then proceed to visual/UI implementation.
+
+### NEXT ACTION
+Run local CP48 compile/tests from the synchronized branch. No runtime, exchange, order, or production DB write is authorized by this scope.
