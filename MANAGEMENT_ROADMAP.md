@@ -1160,3 +1160,94 @@ The scope must explicitly determine:
 No real order is authorized by this roadmap entry alone.
 
 # END MASTER GROWTH PATH
+
+
+## NEXT MANAGEMENT SCOPE — AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT — 2026-09-23
+
+### STATUS
+**MANAGEMENT SCOPE = DEFINED / READY FOR EXPLICIT IMPLEMENTATION AUTHORIZATION**
+
+### OBJECTIVE
+Establish the smallest auditable bridge from the closed CP46-H read-only provider boundary to a system that can autonomously select a real-market opportunity, complete its own Decision → Risk → Allocation → Position Size → Trade Gate → Trade Ready → Order Intent chain, and, only after a separate explicit execution authorization, make one controlled first real execution attempt.
+
+### 1. AUTONOMY BOUNDARY
+ArundaTrader owns the market decision process from the market-first universe through Order Intent:
+`REAL MARKET DATA → OPPORTUNITY → SIGNAL → VALIDATION/FUSION → SCORE → DECISION → ENTRY/INVALIDATION → RISK → ALLOCATION → POSITION SIZE → TRADE GATE → TRADE READY → ORDER INTENT`
+The system must choose the asset, direction, entry, invalidation, allocation, quantity, and venue candidate from its own validated state. No scripted BTC/ETH selection, fixed symbol, forced direction, or manually injected trade thesis is permitted.
+
+### 2. MARKET-FIRST SIGNAL BOUNDARY
+The intelligence universe is exchange-agnostic and market-first. Toobit is the current execution venue only.
+Assets that are eligible in the market-first intelligence universe but unavailable on Toobit remain valid analysis candidates. They must not be silently removed from the signal universe merely because they cannot currently be executed on Toobit.
+Non-Toobit opportunities are analysis-only unless a separately authorized execution venue exists.
+Any analysis of such opportunities must use decision-time information only and preserve timestamp/provenance so future market information cannot leak backward.
+
+### 3. EXECUTION SAFETY CONTRACT
+Safety rules are protective invariants, not trading intelligence:
+- never estimate, guess, round, normalize, or mutate canonical/provider quantity outside an explicitly authorized deterministic provider translation contract;
+- unresolved symbol/contract, precision, balance/margin, position, duplicate/open-order, timestamp, or provider-state ambiguity = BLOCK;
+- execution safety flags must be explicitly enabled before any order submission;
+- no order may be created from an incomplete or contradictory decision chain;
+- one decision must not silently become multiple orders;
+- no automatic retry/loop for a failed real-order attempt;
+- all exchange writes remain forbidden until the separate first-execution authorization gate is opened.
+
+### 4. FIRST REAL EXECUTION ATTEMPT
+The first attempt is an observation experiment, not a promise of profitability.
+Required chain:
+`MARKET → OWN DECISION → RISK → ALLOCATION → POSITION SIZE → TRADE GATE → ORDER INTENT → PROVIDER PREFLIGHT → EXECUTION BOUNDARY → TOOBIT → EXCHANGE RESPONSE`
+The first attempt must be autonomous in asset/direction/size selection. The expected outcome is open: accepted, rejected, blocked, or otherwise inconclusive.
+An insufficient-balance rejection, if it occurs, is preserved as a real-world execution outcome and must not be rewritten as a software failure unless the evidence shows a software defect.
+No real order is authorized by this scope definition alone.
+
+### 5. AROONDA AI OBSERVATION BOUNDARY
+Aroonda AI acts as supervisor, observer, analyst, and learner. It must:
+- observe the complete decision/execution chain;
+- preserve decision-time knowledge separately from post-outcome knowledge;
+- analyze why decisions passed, blocked, were rejected, or produced outcomes;
+- identify anomalies, contradictions, recurring failure modes, and learning opportunities;
+- state uncertainty and use an explicit "I don't know" state when evidence is insufficient;
+- produce lessons and management recommendations without rewriting historical records.
+Aroonda AI does not silently alter a completed decision, execution record, or historical market state.
+Human Management retains final authority over architecture changes, execution enablement, capital, and policy.
+
+### 6. COMMAND CENTER / PROVENANCE REQUIREMENTS
+Every autonomous decision must have a unique Decision ID and a traceable immutable chain:
+`Market Snapshot → Opportunity → Signal → Decision → Risk → Allocation → Position Size → Trade Gate → Order Intent → Provider Preflight → Execution Attempt → Exchange Response → Aroonda Observation → Lesson`
+The Command Center may present a simple human-readable surface, but the underlying record must preserve timestamps, identities, inputs, outputs, status transitions, and provenance sufficient for audit.
+
+### 7. NON-TOOBIT ANALYSIS REQUIREMENT
+For each market-first eligible opportunity not executable on Toobit, the system may record an analysis-only opportunity outcome.
+A hypothetical execution/profit result may be computed only through an explicitly defined timestamp-safe evaluation contract. No future price, future signal, later-listed venue, or post-outcome state may be used as decision-time evidence.
+
+### 8. ACCEPTANCE / RESULT STATES
+Use explicit states:
+- **PASS** — all required evidence and contracts are satisfied for the scoped action;
+- **BLOCK** — a safety, data, contract, provider, or authorization condition prevents the action;
+- **INCONCLUSIVE** — the system reached the observation boundary but evidence is insufficient to determine the requested property.
+No INCONCLUSIVE result may be promoted to PASS by interpretation.
+
+### 9. HUMAN AUTHORIZATION REMAINS REQUIRED FOR
+- enabling real execution/order submission;
+- any real exchange write;
+- any production DB write outside an already-authorized write contract;
+- introduction of real capital or increasing capital exposure;
+- changing canonical trading/risk/safety contracts;
+- expanding beyond the single controlled first execution attempt.
+
+### 10. REQUIRED IMPLEMENTATION/VERIFICATION ORDER
+1. Define the autonomous decision contract and decision-time snapshot/provenance boundary.
+2. Define the first-attempt authorization gate and one-attempt lifecycle.
+3. Define analysis-only non-Toobit outcome/evaluation contract.
+4. Define Command Center event/provenance contract.
+5. Define Aroonda observation/learning contract.
+6. Add focused tests and compile/static verification.
+7. Only after implementation verification, obtain separate explicit runtime authorization.
+8. Only after that runtime authorization, consider the first real execution attempt.
+
+### OUT OF SCOPE
+No reset/rearchitecture; no reopening of closed checkpoints; no synthetic/fill/backfill/interpolation/padding; no forced symbol selection; no customer execution product; no automatic capital scaling; no autonomous change to governance; no live execution by implication.
+
+### MANAGEMENT DETERMINATION
+This section defines the next implementation boundary. It does **not** authorize a real order, execution enablement, capital deployment, production DB write, or live runtime.
+
+# END NEXT MANAGEMENT SCOPE — AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT
