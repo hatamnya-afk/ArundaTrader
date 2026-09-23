@@ -67,7 +67,9 @@ def load_projection() -> tuple[CommandCenterProjection | None, str]:
             execution_controls_visible=True,
             execution_controls_writable=False,
         )
-        projection.validate()
+        validation = projection.validate()
+        if validation is not ProjectionState.PASS:
+            return None, f"BLOCK — CANONICAL PROJECTION VALIDATION: {validation.value}"
         return projection, "PASS — CANONICAL EVENT STREAM"
     except (KeyError, TypeError, ValueError, OSError) as exc:
         return None, f"BLOCK — INVALID CANONICAL EVENT STREAM: {exc}"
