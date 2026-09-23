@@ -1082,3 +1082,48 @@ DATABASE_WRITE_ENABLED = FALSE
 No real order is authorized by this roadmap reconciliation.
 
 # END MASTER GROWTH PATH RECONCILIATION
+
+
+## NEXT FRONTIER — AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT — 2026-09-23
+
+**STATUS:** MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT YET AUTHORIZED / EXECUTION OFF
+
+### CURRENT FRONTIER
+Build the auditable autonomy and observation boundary after CP46-H without reopening any closed checkpoint.
+
+### BUILT / VERIFIED FOUNDATION
+CP44 and CP46-A1..H remain CLOSED / VERIFIED / CANONICAL. CP46-H proves authenticated read-only Toobit connectivity only. No execution authorization follows from that closure.
+
+### AUTONOMY CONTRACT
+ArundaTrader must select its own real-market opportunity and complete:
+`MARKET → OPPORTUNITY → SIGNAL → DECISION → ENTRY/INVALIDATION → RISK → ALLOCATION → POSITION SIZE → TRADE GATE → TRADE READY → ORDER INTENT`
+No fixed BTC/ETH or manually injected trade thesis is allowed.
+
+### MARKET-FIRST CONTRACT
+Signal intelligence is exchange-agnostic. Toobit is only the current execution venue. Eligible non-Toobit assets remain analysis candidates and must be evaluated without decision-time leakage.
+
+### FIRST ATTEMPT CONTRACT
+A separate explicit authorization is required before any real order. The first attempt is a controlled observation experiment; accepted/rejected/blocked/inconclusive are all legitimate observed states. No automatic retry.
+
+### AROONDA AI CONTRACT
+Aroonda AI observes, analyzes, learns, records uncertainty, and recommends to Human Management. It preserves decision-time evidence and never rewrites historical decisions after outcomes are known.
+
+### COMMAND CENTER CONTRACT
+Every decision receives a unique Decision ID and a traceable immutable chain from Market Snapshot through Exchange Response and Aroonda Lesson.
+
+### ACCEPTANCE
+PASS = required evidence satisfied.
+BLOCK = safety/data/provider/authorization condition prevents action.
+INCONCLUSIVE = observation completed but evidence cannot establish the requested property.
+
+### HUMAN AUTHORITY
+Human Management alone authorizes execution enablement, capital, production writes, canonical policy changes, and expansion beyond the first controlled attempt.
+
+### SAFETY
+`EXECUTION_ENABLED = FALSE`
+`ORDER_SUBMISSION_ENABLED = FALSE`
+`EXCHANGE_WRITE_ENABLED = FALSE`
+`DATABASE_WRITE_ENABLED = FALSE`
+
+### NEXT ACTION
+Implement only the scoped autonomy/provenance/first-attempt/observation contracts after explicit implementation authorization. No live runtime or real order is implied.
