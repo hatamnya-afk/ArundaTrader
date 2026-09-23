@@ -61,10 +61,11 @@ CP43 = CLOSED / VERIFIED / PASS
 Closed checkpoints are historical truth. They must not be reopened or re-audited unless Management identifies a direct, provable regression.
 
 ## CURRENT PROJECT STATE
-CURRENT FRONTIER: CP45 — MANAGEMENT SCOPE DEFINITION GATE
+CURRENT FRONTIER: AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS
 
 CP44 = VERIFIED / PASS / CLOSED.
-CP45 = NEXT FRONTIER / MANAGEMENT SCOPE DEFINITION PENDING.
+CP45 = MANAGEMENT SCOPE RECONCILIATION CLOSED.
+CP46-A1..H = VERIFIED / PASS / CLOSED / CANONICAL.
 
 ## CP44 IMPLEMENTATION VERIFICATION
 The authorized CP44 downstream implementation is present on branch `sync/local-project-20260917` at HEAD `b9c029ed7ef1da9a7d7fb53617769a35b8280246`.
@@ -1048,3 +1049,36 @@ No secret was exposed or persisted.
 No automatic retry or execution loop was introduced.
 
 # END CP46-H FINAL GOVERNANCE CLOSURE
+
+
+
+## MASTER GROWTH PATH RECONCILIATION — 2026-09-23
+
+CP46-H is **VERIFIED / PASS / CLOSED / CANONICAL**.
+
+The project now adopts the following management-level direction:
+- ArundaTrader is the first real-world trading arm and learning environment of Aroonda AI.
+- Aroonda AI is the supervisory/intelligence layer; it must observe, analyze, learn, and preserve uncertainty rather than merely justify Trader outcomes.
+- Signal intelligence is **market-first and exchange-agnostic**. Toobit is the current execution venue only.
+- Eligible assets not listed/tradable on Toobit remain valid market-analysis candidates and are explicitly represented as **ANALYSIS-ONLY / NO CURRENT EXECUTION VENUE** when execution is unavailable.
+- Such non-Toobit opportunities may be evaluated for hypothetical/observational profitability only through an explicit, timestamp-safe, auditable outcome methodology; no future information may leak into the decision assessment.
+- The first real execution attempt, if separately authorized, must be autonomous in trade selection. It is not a scripted trade scenario.
+- Insufficient funds or exchange rejection is evidence for analysis, not automatically a system failure.
+- A simple external Aroonda Command Center will become the human-facing supervision shell; deep provenance remains underneath.
+- Daily intelligence reporting will support human review and learning.
+- Capital introduction is conditional on multi-dimensional maturity evidence; no success or profitability is guaranteed.
+- Future Signal Software and any blockchain/digital-asset expansion are conditional outcomes, not assumptions.
+
+### CURRENT FRONTIER
+**NEW MANAGEMENT SCOPE DEFINITION REQUIRED:**
+AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS
+
+### SAFETY
+EXECUTION_ENABLED = FALSE
+ORDER_SUBMISSION_ENABLED = FALSE
+EXCHANGE_WRITE_ENABLED = FALSE
+DATABASE_WRITE_ENABLED = FALSE
+
+No real order is authorized by this roadmap reconciliation.
+
+# END MASTER GROWTH PATH RECONCILIATION
