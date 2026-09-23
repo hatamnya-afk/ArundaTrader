@@ -1301,6 +1301,79 @@ class ToobitTradingAdapter:
     # ORDER CANCELLATION — HARD BLOCK
     # ========================================================
 
+    # ========================================================
+    # CANONICAL ORDER SUBMISSION ? FAIL CLOSED
+    # CP46-A1
+    # ========================================================
+
+    def submit_order(
+        self,
+        request,
+    ):
+        """
+        Canonical exchange-agnostic submission boundary.
+
+        CP46-A1:
+            - accepts only the canonical order request
+            - performs no exchange HTTP request
+            - performs no database write
+            - remains fail-closed while execution is disabled
+            - does not mutate request quantity
+        """
+
+        from exchange_execution_contract import (
+            CanonicalOrderRequest,
+            blocked_execution_result,
+        )
+
+        if not isinstance(
+            request,
+            CanonicalOrderRequest,
+        ):
+            return blocked_execution_result(
+                error_code="INVALID_REQUEST",
+                error_message="CanonicalOrderRequest is required.",
+                adapter=EXCHANGE_NAME,
+            )
+
+        if self.execution_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="EXECUTION_DISABLED",
+                error_message="Toobit canonical order submission is disabled.",
+            )
+
+        if self.order_submission_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="ORDER_SUBMISSION_DISABLED",
+                error_message="Toobit order submission is disabled.",
+            )
+
+        if self.exchange_write_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="EXCHANGE_WRITE_DISABLED",
+                error_message="Toobit exchange write is disabled.",
+            )
+
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=EXCHANGE_NAME,
+            error_code="SUBMISSION_TRANSPORT_UNAVAILABLE",
+            error_message=(
+                "Canonical Toobit submission transport "
+                "is not implemented in CP46-A1."
+            ),
+        )
+
     def cancel_order(
         self,
         order_id: str,
