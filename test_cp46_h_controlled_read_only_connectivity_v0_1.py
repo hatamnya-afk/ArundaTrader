@@ -62,7 +62,7 @@ def test_balance_capability_required():
 
 def test_missing_read_method_blocks():
     adapter = ToobitTradingAdapter(api_key="k", api_secret="s")
-    adapter.server_time = None
+    adapter.get_server_time = None
     result = verify_read_only_connectivity_contract(adapter)
     assert result.reason == "READ_METHOD_MISSING"
 
