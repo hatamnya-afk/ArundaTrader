@@ -942,3 +942,27 @@ No secret was exposed or persisted.
 No automatic retry or execution loop was introduced.
 
 # END CP46-H FINAL GOVERNANCE CLOSURE
+
+
+
+## CANONICAL CURRENT FRONTIER RECONCILIATION — 2026-09-23
+
+CP46-H = **VERIFIED / PASS / CLOSED / CANONICAL**.
+
+### CURRENT FRONTIER
+**AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS**
+
+### CORE PRINCIPLES
+1. Signal intelligence is market-first and exchange-agnostic.
+2. Toobit is the current execution venue, not the definition of the market.
+3. Non-Toobit eligible assets remain analysis candidates and are explicitly classified when no current execution venue exists.
+4. Any hypothetical profitability evaluation must be timestamp-safe, auditable, and free of future-information leakage.
+5. The first real order attempt, if authorized, must be selected by ArundaTrader itself rather than scripted by Management.
+6. Aroonda AI observes and analyzes; human Management retains final authority over execution enablement and capital.
+7. The Command Center must provide a simple live supervision surface with deep underlying provenance.
+8. No success, profitability, or future expansion is guaranteed.
+
+### IMMEDIATE NEXT ACTION
+Management scope definition only. No implementation, runtime, execution enablement, exchange write, order submission, or production DB write is implied by this reconciliation.
+
+# END CANONICAL CURRENT FRONTIER RECONCILIATION
