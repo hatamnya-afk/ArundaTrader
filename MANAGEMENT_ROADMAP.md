@@ -78,7 +78,9 @@ Current position:
 - CP41 = CLOSED / VERIFIED / PASS
 - CP43 = CLOSED / VERIFIED / PASS
 - CP44 = CLOSED / VERIFIED / PASS
-- CP45 = NEXT FRONTIER / MANAGEMENT SCOPE DEFINITION PENDING
+- CP45 = MANAGEMENT SCOPE RECONCILIATION CLOSED
+- CP46-A1..H = VERIFIED / PASS / CLOSED / CANONICAL
+- NEXT FRONTIER = AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS
 
 ### PHASE B — EXCHANGE BINDING
 May begin only after Phase A completion is explicitly closed and recorded in all four governance documents.
@@ -1089,3 +1091,72 @@ No secret was exposed or persisted.
 No automatic retry or execution loop was introduced.
 
 # END CP46-H FINAL GOVERNANCE CLOSURE
+
+
+
+## MASTER GROWTH PATH — MANAGEMENT APPROVED — 2026-09-23
+
+### GOVERNING PRINCIPLE
+ArundaTrader and Aroonda AI are being developed with an explicit experimental posture:
+**success is pursued, never assumed or guaranteed.**
+Real-world evidence determines whether the project advances.
+
+The project does not treat failure, rejection, or lack of capital during a controlled real-world test as automatically meaning system failure. Such events are evidence to be analyzed.
+
+### PRODUCT / ARCHITECTURE VISION
+- **Aroonda AI** = intelligence, supervision, analysis, learning, and future multi-domain expansion.
+- **ArundaTrader** = the first real-world trading arm and learning environment of Aroonda AI.
+- **Arunda Signal** = a future customer-facing signal-intelligence product; it is not a retail order-execution terminal.
+- Future expansion, including blockchain/digital-asset directions, is conditional on evidence of real maturity and is not assumed.
+
+### MARKET-FIRST, VENUE-AGNOSTIC SIGNAL PRINCIPLE
+Signal intelligence is defined against the **market and eligible universe**, not against Toobit.
+
+Therefore:
+- an asset may be eligible for ArundaTrader analysis even when it is not listed or tradable on Toobit;
+- non-Toobit eligible assets must not be silently removed from the intelligence universe merely because the current execution venue cannot trade them;
+- ArundaTrader must preserve and analyze such opportunities as market intelligence;
+- where an eligible asset cannot be executed by the current venue, its downstream status is explicitly **ANALYSIS-ONLY / NO CURRENT EXECUTION VENUE**;
+- where authoritative evidence permits, the system should evaluate whether those non-Toobit opportunities would have been economically/profitably valid using the same decision, entry, invalidation, risk, and outcome framework;
+- no retrospective outcome may use future information unavailable at the original decision timestamp;
+- no hypothetical profit claim is accepted without an explicit, auditable outcome methodology and provenance.
+
+**Toobit is the current execution venue, not the definition of the market.**
+
+### MASTER GROWTH PATH
+1. **Autonomous Real-Market Decision** — ArundaTrader independently observes real market conditions and carries its own opportunity → signal → score → decision → risk → allocation → trade-gate chain.
+2. **Controlled First Real Execution Attempt** — a separately authorized management gate may permit the first real order attempt. The trade itself is not scripted. The system chooses the opportunity. Insufficient funds or exchange rejection is recorded as a real-world test outcome, not automatically classified as intelligence failure.
+3. **Aroonda Command Center** — build a simple, elegant, understandable supervision shell outside PowerShell. It exposes live ArundaTrader activity, Aroonda AI observations, decision/outcome history, system state, and daily intelligence reporting without becoming a complex trading terminal.
+4. **Complete Decision Record** — every meaningful decision/attempt is traceable from market observation through decision, risk, order intent, execution attempt, provider response, outcome, Aroonda AI observation, and lesson.
+5. **Aroonda AI Supervision and Learning** — Aroonda AI observes without rewriting history. Decision-time knowledge remains distinguishable from post-outcome analysis. The supervisor can record uncertainty and disagreement.
+6. **Daily Intelligence Report** — generate an end-of-day report covering activity, decisions, attempts, blocks, exchange outcomes, non-Toobit analysis-only opportunities, Aroonda AI observations, lessons, unresolved questions, and items requiring human review.
+7. **Maturity Evaluation** — evaluate Decision Quality, Signal Quality, Entry/Invalidation Quality, Risk, Allocation, Consistency, Robustness across market regimes, Failure Behavior, and Learning Quality. No single accuracy or profit metric alone authorizes capital expansion.
+8. **Controlled Capital Ladder** — only after sufficient evidence and a separate management decision may capital progress from no-capital testing to small controlled capital and, only if evidence continues to support it, larger exposure.
+9. **Arunda Signal Product** — if real-world evidence supports productization, expose market-based signals and evidence/risk context to subscribers without coupling the customer-facing product to a single exchange. Historical performance and failures remain auditable.
+10. **Aroonda Expansion** — revenue and evidence may fund stronger infrastructure, compute, capabilities, and additional environments. ArundaTrader remains the first environment, not the ceiling of Aroonda AI.
+11. **Future Blockchain Gate** — blockchain/digital-asset expansion remains a future conditional gate and is pursued only if preceding technical, operational, and economic evidence supports it.
+
+### NON-GUARANTEE / EXPERIMENTAL DOCTRINE
+The project makes no promise of profitability, commercial success, or eventual blockchain deployment.
+
+The governing loop is:
+BUILD → REAL-WORLD TEST → EVIDENCE → ANALYSIS → LEARNING → MANAGEMENT DECISION
+
+### CURRENT FRONTIER AFTER CP46-H
+CP46-H = **VERIFIED / PASS / CLOSED / CANONICAL**.
+
+The next frontier is a **new Management Scope Definition** for:
+**AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS**
+
+The scope must explicitly determine:
+- what ArundaTrader may decide autonomously;
+- mandatory execution safety conditions;
+- how the first real attempt is constrained and observed;
+- how non-Toobit eligible opportunities are analyzed;
+- what evidence the Command Center records;
+- what Aroonda AI may observe/recommend versus what remains human-authorized;
+- PASS, BLOCK, and inconclusive evidence criteria.
+
+No real order is authorized by this roadmap entry alone.
+
+# END MASTER GROWTH PATH
