@@ -151,7 +151,7 @@ def run_cp46_b() -> list[CP46BResult]:
             passed=(
                 result.accepted is False
                 and result.status == "FAIL_CLOSED"
-                and result.error_code == "EXECUTION_DISABLED"
+                and result.error_code == "CP46_E_REQUIRED"
             ),
             detail=(
                 f"{result.status}:"
