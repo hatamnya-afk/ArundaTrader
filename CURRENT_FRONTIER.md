@@ -583,3 +583,52 @@ CP44 is formally closed by the final controlled runtime and the four-document go
 CP45 is now the active frontier. No implementation scope is inferred from CP45's number alone. The first CP45 action is to define its authoritative objective, acceptance requirements, authorized file scope, safety gates, and first verification action from the roadmap and repository state.
 
 **NEXT ACTION:** Management scope definition only. No CP45 runtime, production DB modification, exchange/API write, order creation, execution enablement, or implementation change is implied until the CP45 scope is explicitly authorized.
+## CP45 — MANAGEMENT SCOPE RECONCILIATION — 2026-09-23
+
+CP45 management scope-definition gate is **VERIFIED / CLOSED**.
+
+The reconciliation proved that CP46-D terminates at provider preflight PASS/BLOCK while the existing execution boundary starts from CanonicalOrderRequest and does not explicitly require provider-preflight PASS.
+
+Therefore the independent current frontier is:
+
+# CP46-E — PROVIDER PREFLIGHT → EXECUTION ELIGIBILITY GATE
+
+**STATUS: CURRENT FRONTIER / MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT AUTHORIZED**
+
+### OBJECTIVE
+Encode the missing mandatory predecessor:
+
+`Provider Translation PASS → Provider Preflight PASS → Execution Eligibility PASS → Existing Execution Boundary`
+
+### SCOPE
+CP46-E owns only the eligibility handoff.
+
+Required:
+- CP46-D PASS;
+- ProviderPreflightResult PASS;
+- deterministic identity/provenance matching;
+- exact quantity/quantity-source preservation;
+- fail-closed mismatch handling;
+- explicit eligibility result consumable by the existing execution boundary.
+
+Forbidden:
+- execution;
+- order submission;
+- exchange/API I/O;
+- DB write;
+- quantity conversion/rounding/estimation;
+- changes to CP46-A1..D;
+- changes to canonical request/result contracts;
+- weakening existing execution safety gates.
+
+### ACCEPTANCE
+- PASS only when translation and provider preflight are both proven PASS.
+- Any missing/ambiguous/conflicting handoff state = BLOCK.
+- Canonical quantity and provenance unchanged.
+- No adapter or exchange call.
+- Existing execution flags remain false.
+- Focused tests + compile + diff verification pass.
+- Four governance documents synchronized at closure.
+
+### FIRST ACTION
+Static interface verification, followed by implementation of only the scoped CP46-E contract after explicit implementation authorization.
