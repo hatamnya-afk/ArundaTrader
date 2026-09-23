@@ -78,7 +78,7 @@ def test_cp46_b_submit_order_fails_closed_without_http():
 
     assert result.accepted is False
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.error_code == "CP46_E_REQUIRED"
 
     assert result.exchange_order_id is None
     assert result.executed_quantity is None
