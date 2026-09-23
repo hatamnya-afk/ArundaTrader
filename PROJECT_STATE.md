@@ -1240,3 +1240,56 @@ Before CP48 closure:
 
 ### NEXT ACTION
 Run local CP48 compile/tests from the synchronized branch. No runtime, exchange, order, or production DB write is authorized by this scope.
+
+
+## CP48 — COMMAND CENTER CONTRACT — VERIFIED / PASS / CLOSED — 2026-09-23
+
+STATUS:
+CP48 CONTRACT = VERIFIED / PASS / CLOSED / CANONICAL
+
+LOCAL VERIFICATION:
+- LOCAL_HEAD = c8ae7d59a81cbaec08c41733faf8759e09fa33c0
+- LOCAL_HEAD == REMOTE_HEAD = PASS
+- CP48 py_compile = PASS
+- CP48 focused tests = 9/9 PASS
+- CP47 regression tests = 16/16 PASS
+- Working tree contains only the pre-existing untracked artifacts:
+  - __pycache__/
+  - cp45_local_before_sync.diff
+  - cp45_staged.diff
+  - public_market_data_fabric/__pycache__/
+
+CP48 CONTRACT VERIFIED:
+- immutable decision/event provenance;
+- decision-time knowledge cutoff;
+- read-only Command Center projection;
+- cross-decision event rejection;
+- explicit PASS/BLOCK/INCONCLUSIVE states;
+- desktop entry contract without terminal/manual-command dependency;
+- execution controls visible but non-writable;
+- Aroonda supervisor observation linkage with history mutation forbidden.
+
+SAFETY:
+- EXECUTION_ENABLED = FALSE
+- ORDER_SUBMISSION_ENABLED = FALSE
+- EXCHANGE_WRITE_ENABLED = FALSE
+- DATABASE_WRITE_ENABLED = FALSE
+- no runtime execution;
+- no order submission;
+- no exchange/API write;
+- no production DB write;
+- no quantity mutation;
+- no closed checkpoint reopened.
+
+CP47 REGRESSION:
+The CP47 autonomous decision/observation contract remains verified: 16/16 tests PASS. No CP47 re-audit is required.
+
+GOVERNANCE:
+CP48 contract implementation is now governance-complete and canonical.
+This closure does NOT authorize the first real order, execution enablement, capital deployment, or production DB write.
+
+NEXT FRONTIER:
+Proceed to the visual Command Center / Desktop Shell implementation under CP48, preserving the verified contract as the source-of-truth boundary. The final user-facing surface must launch from a desktop entry point without requiring PowerShell or manually typed Python commands for normal operation.
+
+NEXT VERIFICATION GATE:
+Visual shell implementation → local compile/tests → desktop launch verification → UI/projection integrity verification → four-document governance synchronization before final CP48 closure of the complete UI surface.
