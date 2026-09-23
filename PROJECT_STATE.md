@@ -729,3 +729,40 @@ These are historical technical evidence and are not reopened.
 
 ### NEXT ACTION
 Implement only the explicitly scoped CP46-E execution-eligibility contract after implementation authorization, then run focused compile/test/diff verification. No live runtime.
+
+
+## CP46-E — FINAL GOVERNANCE CLOSURE — 2026-09-23
+
+### STATUS
+**VERIFIED / PASS / CLOSED / CANONICAL**
+
+### BUILT AND VERIFIED
+CP46-E established the explicit execution-eligibility predecessor between CP46-D provider preflight and the canonical execution boundary.
+
+Verified local evidence:
+- branch synchronized at `f065f044eaa58a6720109412b8f3f37967c4eb85`;
+- production `arunda.db` unchanged in Git working tree;
+- required files tracked;
+- execution/order/exchange/DB writes not executed;
+- Python compile PASS;
+- focused tests **16/16 PASS**;
+- final integrity and closure precheck PASS.
+
+### CONTRACT
+`Provider Translation PASS → Provider Preflight PASS → Execution Eligibility PASS → Existing Execution Boundary`
+
+CP46-E requires successful CP46-D handoff and provider-preflight PASS, preserves canonical identity linkage and canonical quantity, and fails closed on missing or mismatched eligibility state. It performs no provider I/O or execution.
+
+### SAFETY
+Execution remains OFF. Order submission remains OFF. Exchange write remains OFF. Database write remains OFF. No runtime was executed.
+
+### GOVERNANCE DETERMINATION
+CP46-E is now **VERIFIED / CLOSED / CANONICAL**. CP46-A1 through CP46-D remain closed and are not reopened.
+
+### CURRENT FRONTIER
+CP46-E is no longer the active frontier. The next checkpoint requires its own explicit Management scope definition and authorization.
+
+### NEXT ACTION
+Proceed only through the next explicit Management gate. Do not infer implementation, runtime, order, exchange write, or DB write from checkpoint numbering.
+
+# END CP46-E FINAL GOVERNANCE CLOSURE
