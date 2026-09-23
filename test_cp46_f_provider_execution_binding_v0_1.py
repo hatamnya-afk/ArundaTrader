@@ -180,6 +180,7 @@ def test_futures_short_passes():
     canonical = CanonicalOrderRequest(
         asset="BTC",
         direction="SHORT",
+        quantity_unit="BASE_ASSET",
         order_type="MARKET",
         quantity=1,
         quantity_source="RISK.position_quantity",
