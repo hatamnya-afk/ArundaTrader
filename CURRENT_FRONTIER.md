@@ -724,3 +724,23 @@ CP46-E is closed and remains historical canonical evidence. No CP46-G scope is i
 Implement only the CP46-F binding contract and its focused tests, then perform local compile/test/diff verification. Closure requires four-document governance synchronization.
 
 # END CP46-F MANAGEMENT SCOPE
+
+
+## CP46-F — FINAL GOVERNANCE CLOSURE — 2026-09-23
+
+**STATUS: VERIFIED / PASS / CLOSED / CANONICAL**
+
+CP46-F has completed its authorized provider execution binding scope.
+
+Verified:
+- focused suite **26/26 PASS**;
+- Python compilation PASS;
+- closure precheck PASS;
+- branch synchronized at `bde211124d0d36bfab3f45df5a608e8bafcefbd1`;
+- no runtime, order, exchange/API write, or database write;
+- execution remains OFF;
+- canonical request identity and provider quantity/unit preserved unchanged.
+
+CP46-F is closed. A new CURRENT FRONTIER requires explicit Management scope definition and authorization.
+
+# END CP46-F CURRENT FRONTIER CLOSURE
