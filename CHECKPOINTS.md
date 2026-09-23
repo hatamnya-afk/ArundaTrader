@@ -1064,3 +1064,55 @@ The eventual customer-facing product is intended to be a simple market-based sig
 Success is pursued, not assumed. Failure and rejection are preserved as evidence. No profitability or commercial success is guaranteed.
 
 # END MASTER GROWTH PATH — MANAGEMENT RECONCILIATION
+
+
+## CP47 — AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT — MANAGEMENT SCOPE — 2026-09-23
+
+### STATUS
+**MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT AUTHORIZED / EXECUTION OFF**
+
+CP46-H remains VERIFIED / PASS / CLOSED / CANONICAL and is not reopened.
+
+### OBJECTIVE
+Establish an auditable autonomous decision path and the governance boundary for one controlled first real execution attempt.
+
+### SCOPE
+1. **Autonomous decision:** ArundaTrader must select the asset/opportunity, direction, entry, invalidation, allocation, position size, and venue candidate from its own real-market state. No fixed BTC/ETH, scripted trade, or manual thesis injection.
+2. **Market-first intelligence:** the signal universe is exchange-agnostic. Toobit is the current execution venue only. Eligible non-Toobit opportunities remain analysis candidates.
+3. **Decision-time integrity:** every decision must preserve the information available at decision time. Post-outcome information must never be used to rewrite or contaminate the original decision record.
+4. **Execution safety:** unresolved symbol/contract, quantity provenance, precision, balance/margin, position, duplicate/open-order, timestamp, or provider-state ambiguity blocks the attempt. No quantity guessing/estimation/rounding/mutation.
+5. **First attempt:** exactly one controlled real execution attempt after a separate explicit runtime authorization. No automatic retry or loop. The result may be accepted, rejected, blocked, or inconclusive.
+6. **Aroonda AI:** observe, analyze, learn, flag anomalies, record uncertainty, and recommend to Human Management. It must not silently modify historical decisions or independently authorize capital/execution.
+7. **Command Center:** every decision gets a unique Decision ID and immutable provenance chain from Market Snapshot through Exchange Response and Aroonda Lesson.
+8. **Non-Toobit evaluation:** analysis-only opportunities may be evaluated under a separately defined timestamp-safe contract; hypothetical outcome must never be presented as realized execution.
+
+### ACCEPTANCE GATES
+- autonomy contract is deterministic and auditable;
+- decision-time snapshot/provenance is complete;
+- market-first/non-Toobit boundary is explicit;
+- execution safety invariants remain fail-closed;
+- first-attempt gate is separate from implementation verification;
+- Command Center event schema is sufficient for full traceability;
+- Aroonda observation contract preserves decision/outcome separation;
+- focused tests and Python compile pass;
+- no closed checkpoint is reopened;
+- execution remains OFF until a separate runtime authorization.
+
+### RESULT STATES
+**PASS:** required evidence satisfied.
+**BLOCK:** safety, data, provider, contract, or authorization condition prevents action.
+**INCONCLUSIVE:** observation boundary reached but evidence is insufficient to establish the requested property.
+
+### HUMAN-AUTHORIZED ONLY
+Real execution enablement, order submission, exchange writes, capital deployment, production DB writes outside an explicitly approved write contract, canonical policy changes, and expansion beyond the first controlled attempt.
+
+### OUT OF SCOPE
+Reset/restart/rearchitecture; reopening CP46; synthetic/fill/backfill/interpolation/padding; fixed-symbol execution; automatic retry; autonomous capital scaling; customer order execution.
+
+### FIRST VERIFICATION ACTION
+Implement and statically verify the minimum CP47 contracts and focused tests only. No live runtime and no real order are implied.
+
+### NEXT GATE
+After implementation verification, Management must separately authorize the controlled runtime/first execution attempt. That authorization must specify the exact runtime boundary and confirm the execution safety flags that may be enabled.
+
+# END CP47 MANAGEMENT SCOPE
