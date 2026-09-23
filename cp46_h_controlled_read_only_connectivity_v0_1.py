@@ -29,7 +29,7 @@ REQUIRED_READ_METHODS = (
     "get_balances",
     "symbol_check",
     "trading_constraints",
-    "server_time",
+    "get_server_time",
 )
 
 
