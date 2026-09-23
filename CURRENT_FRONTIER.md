@@ -966,3 +966,41 @@ CP46-H = **VERIFIED / PASS / CLOSED / CANONICAL**.
 Management scope definition only. No implementation, runtime, execution enablement, exchange write, order submission, or production DB write is implied by this reconciliation.
 
 # END CANONICAL CURRENT FRONTIER RECONCILIATION
+
+
+## CANONICAL CURRENT FRONTIER — AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION ATTEMPT
+
+**DATE:** 2026-09-23
+
+**STATUS:** MANAGEMENT SCOPE DEFINED / IMPLEMENTATION NOT AUTHORIZED / EXECUTION OFF
+
+### TARGET
+Bridge the closed CP46-H read-only provider boundary to autonomous market decision-making and a separately authorized single first real execution attempt.
+
+### REQUIRED CHAIN
+`REAL MARKET DATA → MARKET-FIRST UNIVERSE → OPPORTUNITY → SIGNAL → VALIDATION/FUSION → SCORE → DECISION → ENTRY/INVALIDATION → RISK → ALLOCATION → POSITION SIZE → TRADE GATE → TRADE READY → ORDER INTENT → PROVIDER PREFLIGHT → EXECUTION`
+
+### AUTONOMY
+ArundaTrader selects the opportunity itself. No fixed asset, direction, trade thesis, or manually injected order is permitted.
+
+### MARKET-FIRST
+The signal universe is not Toobit-bound. Non-Toobit eligible assets remain analysis-only candidates. Their evaluation must be timestamp-safe and provenance-preserving.
+
+### AROONDA AI
+Supervisor/observer/analyst/learner only. Preserve decision-time evidence, analyze outcomes, detect anomalies, state uncertainty, and produce lessons. Do not rewrite history. Human Management retains authority.
+
+### FIRST EXECUTION ATTEMPT
+One controlled attempt only after separate explicit runtime authorization. Outcome may be accepted, rejected, blocked, or inconclusive. No automatic retry. An exchange rejection such as insufficient funds is recorded as an observed provider outcome, not automatically classified as a software failure.
+
+### COMMAND CENTER EVIDENCE
+Unique Decision ID plus immutable event chain:
+`Market Snapshot → Opportunity → Signal → Decision → Risk → Allocation → Position Size → Trade Gate → Order Intent → Provider Preflight → Execution Attempt → Exchange Response → Aroonda Observation → Lesson`
+
+### RESULT STATES
+PASS / BLOCK / INCONCLUSIVE must be explicit and evidence-backed. Ambiguity fails closed and cannot be upgraded by interpretation.
+
+### HUMAN GATE
+Execution enablement, capital deployment, production writes, canonical policy changes, and expansion beyond the first attempt remain human-authorized actions.
+
+### NEXT ACTION
+Implement the minimum scoped contracts and focused tests only after explicit implementation authorization. Then obtain a separate runtime authorization before any real execution attempt.
