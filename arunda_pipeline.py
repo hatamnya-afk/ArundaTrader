@@ -4379,7 +4379,7 @@ def verify_execution_boundary_integration(
                     f"Execution boundary result invalid: {asset}"
                 )
 
-            if result.error_code != "EXECUTION_DISABLED":
+            if result.error_code != "CP46_E_REQUIRED":
                 fail(
                     "EXECUTION SAFETY FAILURE: "
                     f"{asset} returned "
