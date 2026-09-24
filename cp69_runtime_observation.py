@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+from dataclasses import fields, is_dataclass
 from pathlib import Path
 from typing import Any
 
@@ -69,6 +71,7 @@ def build_observation(
         "social_items": social_items,
         "launch_timestamp": launch_timestamp,
     }
+    state = _project_observation_state(state)
     _assert_json_safe(state, "state")
 
     canonical_state = json.dumps(
@@ -173,6 +176,23 @@ def _validate_observation(observation: dict[str, Any]) -> None:
         "DB_WRITES": 0,
     }:
         raise ValueError("unsafe execution state")
+
+
+def _project_observation_state(value: Any) -> Any:
+    """Project runtime domain objects into JSON-safe observation values."""
+    if is_dataclass(value) and not isinstance(value, type):
+        return {
+            field.name: _project_observation_state(getattr(value, field.name))
+            for field in fields(value)
+        }
+    if isinstance(value, dict):
+        return {
+            key: _project_observation_state(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_project_observation_state(item) for item in value]
+    return value
 
 
 def _assert_json_safe(value: Any, name: str) -> None:
