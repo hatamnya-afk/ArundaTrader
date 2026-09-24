@@ -61,6 +61,7 @@ FAILOVER_ADAPTER_FILE = (
 
 TIMEFRAME = "1h"
 QUOTE = "USDT"
+MIN_CONTIGUOUS_CONTEXT = 21
 
 CANONICAL_PROVIDER = "KUCOIN_SPOT_PUBLIC"
 FAILOVER_PROVIDER = "BITGET_SPOT_PUBLIC"
@@ -636,6 +637,12 @@ def _fetch_bitget_historical(
             "BITGET_HISTORICAL_NO_CONTIGUOUS_CONTEXT"
         )
 
+    if len(contiguous) < MIN_CONTIGUOUS_CONTEXT:
+        raise RuntimeError(
+            "INSUFFICIENT_CONTIGUOUS_CONTEXT:"
+            f"{symbol}:{len(contiguous)}"
+        )
+
     return contiguous
 
 
@@ -687,14 +694,20 @@ def fetch_market(
         )
 
         if kucoin_candles:
-            return _canonicalize(
-                symbol,
-                kucoin_candles,
-                CANONICAL_PROVIDER,
-                "CANONICAL_ACTIVE",
-            )
+            if len(kucoin_candles) >= MIN_CONTIGUOUS_CONTEXT:
+                return _canonicalize(
+                    symbol,
+                    kucoin_candles,
+                    CANONICAL_PROVIDER,
+                    "CANONICAL_ACTIVE",
+                )
 
-        kucoin_error = "NO_VALID_REAL_CANDLES"
+            kucoin_error = (
+                "INSUFFICIENT_CONTIGUOUS_CONTEXT:"
+                f"{symbol}:{len(kucoin_candles)}"
+            )
+        else:
+            kucoin_error = "NO_VALID_REAL_CANDLES"
 
     except Exception as exc:
         kucoin_error = (
@@ -719,14 +732,20 @@ def fetch_market(
         )
 
         if bitget_candles:
-            return _canonicalize(
-                symbol,
-                bitget_candles,
-                FAILOVER_PROVIDER,
-                "FAILOVER",
-            )
+            if len(bitget_candles) >= MIN_CONTIGUOUS_CONTEXT:
+                return _canonicalize(
+                    symbol,
+                    bitget_candles,
+                    FAILOVER_PROVIDER,
+                    "FAILOVER",
+                )
 
-        bitget_error = "NO_VALID_REAL_CANDLES"
+            bitget_error = (
+                "INSUFFICIENT_CONTIGUOUS_CONTEXT:"
+                f"{symbol}:{len(bitget_candles)}"
+            )
+        else:
+            bitget_error = "NO_VALID_REAL_CANDLES"
 
     except Exception as exc:
         bitget_error = (
