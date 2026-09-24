@@ -183,6 +183,10 @@ import market_data_engine
 import exchange_execution_contract
 import fusion_engine
 import production_fused_score_binding_v0_1
+from cp69_runtime_observation import (
+    append_observation,
+    build_observation,
+)
 
 from exchange_execution_boundary import execute_order
 
@@ -5427,6 +5431,30 @@ def main() -> int:
 
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
+
+        # ------------------------------------------------------------------
+        # 12. CP69 CANONICAL RUNTIME OBSERVATION
+        # ------------------------------------------------------------------
+        cp69_observation = build_observation(
+            emitted_at=utc_now_iso(),
+            universe_assets=universe_assets,
+            market_data_results=market_data_results,
+            opportunity_by_asset=opportunity_by_asset,
+            dynamic_signals=dynamic_signals,
+            validation_results=validation_results,
+            fusion_snapshot=fusion_snapshot,
+            score_snapshot=score_snapshot,
+            decision_snapshot=decision_snapshot,
+            risk_snapshot=risk_snapshot,
+            trade_gate_snapshot=trade_gate_snapshot,
+            trade_ready_assets=trade_ready_assets,
+            news_items=news_items,
+            social_items=social_items,
+            launch_timestamp=LAUNCH_TIMESTAMP,
+        )
+        cp69_stream_path = append_observation(cp69_observation)
+        print(f"CP69_OBSERVATION_WRITTEN=1")
+        print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
 
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
         # ------------------------------------------------------------------
