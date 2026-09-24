@@ -1,4 +1,4 @@
-"""CP69 — canonical read-only runtime observation producer.
+"CP69 — canonical read-only runtime observation producer.
 
 Trader-side serialization only. This module writes an observation artifact;
 it never writes trading state, orders, exchange state, or the production DB.
@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -115,7 +116,6 @@ def build_observation(
             "DB_WRITES": 0,
         },
     }
-
 
 
 def build_failure_attribution(trade_gate_snapshot: Any) -> dict[str, Any]:
@@ -249,11 +249,41 @@ def _validate_observation(observation: dict[str, Any]) -> None:
 
 def _assert_json_safe(value: Any, name: str) -> None:
     try:
-        json.dumps(value, sort_keys=True, allow_nan=False)
+        _find_json_violation(value, name)
     except (TypeError, ValueError) as exc:
-        raise TypeError(
-            f"{name} contains non-JSON or non-finite runtime state"
-        ) from exc
+        raise TypeError(str(exc)) from exc
+
+
+def _find_json_violation(value: Any, path: str) -> None:
+    if value is None or isinstance(value, (str, bool, int)):
+        return
+
+    if isinstance(value, float):
+        if math.isfinite(value):
+            return
+        raise ValueError(
+            f"{path} contains non-JSON or non-finite runtime state: {value!r}"
+        )
+
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if not isinstance(key, str):
+                raise TypeError(
+                    f"{path}[{key!r}] contains non-JSON or non-finite runtime state: "
+                    "JSON object keys must be strings"
+                )
+            _find_json_violation(item, f"{path}.{key}")
+        return
+
+    if isinstance(value, (list, tuple)):
+        for index, item in enumerate(value):
+            _find_json_violation(item, f"{path}[{index}]")
+        return
+
+    raise TypeError(
+        f"{path} contains non-JSON or non-finite runtime state: "
+        f"{type(value).__name__}"
+    )
 
 
 __all__ = [
