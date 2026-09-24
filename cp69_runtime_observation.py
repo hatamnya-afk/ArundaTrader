@@ -40,7 +40,6 @@ def build_observation(
     risk_snapshot: Any,
     trade_gate_snapshot: Any,
     trade_ready_assets: Any,
-    runtime_snapshot_id: str | None = None,
     knowledge_cutoff: str | None = None,
     news_items: Any = (),
     social_items: Any = (),
