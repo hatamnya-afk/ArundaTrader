@@ -1,4 +1,4 @@
-"CP69 — canonical read-only runtime observation producer.
+"""CP69 — canonical read-only runtime observation producer.
 
 Trader-side serialization only. This module writes an observation artifact;
 it never writes trading state, orders, exchange state, or the production DB.
