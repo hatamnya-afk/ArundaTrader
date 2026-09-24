@@ -5281,9 +5281,7 @@ def main() -> int:
         # 12. CP69 CANONICAL RUNTIME OBSERVATION
         # ------------------------------------------------------------------
         cp69_observation = build_observation(
-            observation_id=f"obs:{runtime_snapshot_id}",
             emitted_at=utc_now_iso(),
-            runtime_snapshot_id=runtime_snapshot_id,
             universe_assets=universe_assets,
             market_data_results=market_data_results,
             opportunity_by_asset=opportunity_by_asset,
@@ -5295,6 +5293,9 @@ def main() -> int:
             risk_snapshot=risk_snapshot,
             trade_gate_snapshot=trade_gate_snapshot,
             trade_ready_assets=trade_ready_assets,
+            news_items=news_items,
+            social_items=social_items,
+            launch_timestamp=LAUNCH_TIMESTAMP,
         )
         cp69_stream_path = append_observation(cp69_observation)
         print(f"CP69_OBSERVATION_WRITTEN=1")
