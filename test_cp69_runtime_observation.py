@@ -161,7 +161,9 @@ def test_non_json_runtime_state_rejected() -> None:
             trade_gate_snapshot={},
             trade_ready_assets=[],
         )
-    except TypeError:
+    except TypeError as exc:
+        assert "state.universe_assets.BTC" in str(exc)
+        assert "object" in str(exc)
         return
     raise AssertionError("non-JSON state accepted")
 
