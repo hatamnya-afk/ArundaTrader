@@ -64,6 +64,7 @@ def build_observation(
         "decision_snapshot": decision_snapshot,
         "risk_snapshot": risk_snapshot,
         "trade_gate_snapshot": trade_gate_snapshot,
+        "failure_attribution": build_failure_attribution(trade_gate_snapshot),
         "trade_ready_assets": trade_ready_assets,
         "news_items": news_items,
         "social_items": social_items,
@@ -113,6 +114,77 @@ def build_observation(
             "REAL_TRADE": False,
             "DB_WRITES": 0,
         },
+    }
+
+
+
+def build_failure_attribution(trade_gate_snapshot: Any) -> dict[str, Any]:
+    """Aggregate existing Trade Gate predicate failures for CP69."""
+    rows: list[tuple[str, dict[str, Any]]] = []
+
+    if isinstance(trade_gate_snapshot, dict):
+        candidates = trade_gate_snapshot.get("results")
+        if isinstance(candidates, (list, tuple)):
+            iterable = candidates
+        else:
+            iterable = ()
+            for key, row in trade_gate_snapshot.items():
+                if isinstance(row, dict):
+                    rows.append((str(key), row))
+    elif isinstance(trade_gate_snapshot, (list, tuple)):
+        iterable = trade_gate_snapshot
+    else:
+        iterable = ()
+
+    for item in iterable:
+        if not isinstance(item, dict):
+            continue
+        asset = item.get("asset")
+        if asset is not None:
+            rows.append((str(asset), item))
+
+    predicate_failures: dict[str, int] = {}
+    status_counts: dict[str, int] = {}
+    reason_counts: dict[str, int] = {}
+    asset_failures: dict[str, list[str]] = {}
+    trade_ready_count = 0
+
+    for asset, row in rows:
+        status = row.get("trade_gate_status")
+        if status is not None:
+            status_key = str(status)
+            status_counts[status_key] = status_counts.get(status_key, 0) + 1
+            if status_key == "TRADE_READY":
+                trade_ready_count += 1
+
+        reason = row.get("status_reason")
+        if isinstance(reason, str) and reason.strip() and reason != "all gates passed":
+            reason_key = reason.strip()
+            reason_counts[reason_key] = reason_counts.get(reason_key, 0) + 1
+
+        failures: list[str] = []
+        predicates = row.get("gate_observability")
+        if isinstance(predicates, (list, tuple)):
+            for predicate in predicates:
+                if not isinstance(predicate, dict) or bool(predicate.get("pass")):
+                    continue
+                name = predicate.get("name")
+                if not isinstance(name, str) or not name.strip():
+                    continue
+                name = name.strip()
+                predicate_failures[name] = predicate_failures.get(name, 0) + 1
+                failures.append(name)
+
+        if failures:
+            asset_failures[asset] = sorted(set(failures))
+
+    return {
+        "candidate_count": len(rows),
+        "trade_ready_count": trade_ready_count,
+        "status_counts": dict(sorted(status_counts.items())),
+        "predicate_failures": dict(sorted(predicate_failures.items())),
+        "reason_counts": dict(sorted(reason_counts.items())),
+        "asset_failures": {asset: asset_failures[asset] for asset in sorted(asset_failures)},
     }
 
 
@@ -192,5 +264,6 @@ __all__ = [
     "CP69_SOURCE_SYSTEM",
     "DEFAULT_STREAM_PATH",
     "append_observation",
+    "build_failure_attribution",
     "build_observation",
 ]
