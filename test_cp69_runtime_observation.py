@@ -12,6 +12,7 @@ from cp69_runtime_observation import (
     CP69_SCHEMA,
     CP69_SCHEMA_VERSION,
     append_observation,
+    build_failure_attribution,
     build_observation,
 )
 
@@ -33,6 +34,58 @@ def make() -> dict:
         trade_gate_snapshot={"BTC": {"trade_gate_state": "REJECTED"}},
         trade_ready_assets=[],
     )
+
+
+
+def test_failure_attribution_aggregates_predicates() -> None:
+    snapshot = [
+        {
+            "asset": "BTC",
+            "trade_gate_status": "WATCH",
+            "status_reason": "confidence too low",
+            "gate_observability": [
+                {"name": "OPPORTUNITY_CONFIDENCE", "pass": False},
+                {"name": "MARKET_DATA_POINTS", "pass": True},
+            ],
+        },
+        {
+            "asset": "ETH",
+            "trade_gate_status": "WATCH",
+            "status_reason": "confidence too low",
+            "gate_observability": [
+                {"name": "OPPORTUNITY_CONFIDENCE", "pass": False},
+                {"name": "DECISION_STATE", "pass": False},
+            ],
+        },
+        {
+            "asset": "SOL",
+            "trade_gate_status": "TRADE_READY",
+            "status_reason": "all gates passed",
+            "gate_observability": [
+                {"name": "OPPORTUNITY_CONFIDENCE", "pass": True},
+            ],
+        },
+    ]
+    attribution = build_failure_attribution(snapshot)
+    assert attribution["candidate_count"] == 3
+    assert attribution["trade_ready_count"] == 1
+    assert attribution["predicate_failures"] == {
+        "DECISION_STATE": 1,
+        "OPPORTUNITY_CONFIDENCE": 2,
+    }
+    assert attribution["reason_counts"] == {"confidence too low": 2}
+    assert attribution["asset_failures"] == {
+        "BTC": ["OPPORTUNITY_CONFIDENCE"],
+        "ETH": ["DECISION_STATE", "OPPORTUNITY_CONFIDENCE"],
+    }
+
+
+def test_failure_attribution_is_embedded_in_observation() -> None:
+    item = make()
+    attribution = item["state"]["failure_attribution"]
+    assert attribution["candidate_count"] == 1
+    assert attribution["trade_ready_count"] == 0
+    assert attribution["predicate_failures"] == {}
 
 
 def test_schema() -> None:
