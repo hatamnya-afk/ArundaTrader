@@ -26,9 +26,9 @@ DEFAULT_STREAM_PATH = (
 
 def build_observation(
     *,
-    observation_id: str,
     emitted_at: str,
-    runtime_snapshot_id: str,
+    observation_id: str | None = None,
+    runtime_snapshot_id: str | None = None,
     universe_assets: Any,
     market_data_results: Any,
     opportunity_by_asset: Any,
@@ -46,13 +46,8 @@ def build_observation(
     social_items: Any = (),
     launch_timestamp: str | None = None,
 ) -> dict[str, Any]:
-    for name, value in (
-        ("observation_id", observation_id),
-        ("emitted_at", emitted_at),
-        ("runtime_snapshot_id", runtime_snapshot_id),
-    ):
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError(f"{name} must be a non-empty string")
+    if not isinstance(emitted_at, str) or not emitted_at.strip():
+        raise ValueError("emitted_at must be a non-empty string")
 
     if knowledge_cutoff is not None and (
         not isinstance(knowledge_cutoff, str) or not knowledge_cutoff.strip()
@@ -92,7 +87,11 @@ def build_observation(
             ).hexdigest()
         )
 
-    observation_id = f"obs:{runtime_snapshot_id}"
+    observation_id = (
+        observation_id
+        if isinstance(observation_id, str) and observation_id.strip()
+        else f"obs:{runtime_snapshot_id}"
+    )
 
     return {
         "schema": CP69_SCHEMA,
@@ -106,6 +105,7 @@ def build_observation(
         "provenance": {
             "source": "arunda_pipeline",
             "runtime_snapshot_id": runtime_snapshot_id,
+            "launch_boundary": launch_timestamp,
         },
         "state": state,
         "execution_state": {
