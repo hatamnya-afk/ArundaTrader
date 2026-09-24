@@ -6,6 +6,7 @@ it never writes trading state, orders, exchange state, or the production DB.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -39,7 +40,11 @@ def build_observation(
     risk_snapshot: Any,
     trade_gate_snapshot: Any,
     trade_ready_assets: Any,
+    runtime_snapshot_id: str | None = None,
     knowledge_cutoff: str | None = None,
+    news_items: Any = (),
+    social_items: Any = (),
+    launch_timestamp: str | None = None,
 ) -> dict[str, Any]:
     for name, value in (
         ("observation_id", observation_id),
@@ -66,8 +71,28 @@ def build_observation(
         "risk_snapshot": risk_snapshot,
         "trade_gate_snapshot": trade_gate_snapshot,
         "trade_ready_assets": trade_ready_assets,
+        "news_items": news_items,
+        "social_items": social_items,
+        "launch_timestamp": launch_timestamp,
     }
     _assert_json_safe(state, "state")
+
+    canonical_state = json.dumps(
+        state,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    )
+    if runtime_snapshot_id is None:
+        runtime_snapshot_id = (
+            "RS-"
+            + hashlib.sha256(
+                canonical_state.encode("utf-8")
+            ).hexdigest()
+        )
+
+    observation_id = f"obs:{runtime_snapshot_id}"
 
     return {
         "schema": CP69_SCHEMA,
