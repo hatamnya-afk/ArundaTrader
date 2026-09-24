@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
 
 from cp69_runtime_observation import (
@@ -89,6 +90,35 @@ def test_append_is_additive() -> None:
         append_observation(second, path)
         assert len(path.read_text(encoding="utf-8").splitlines()) == 2
 
+
+
+def test_dataclass_runtime_state_is_projected() -> None:
+    @dataclass(frozen=True)
+    class SampleMarketData:
+        symbol: str
+        status: str
+        points: int
+
+    item = build_observation(
+        observation_id="obs:dataclass",
+        emitted_at="2026-09-24T00:00:00+00:00",
+        runtime_snapshot_id="RS-dataclass",
+        universe_assets=["BTC"],
+        market_data_results=(SampleMarketData("BTC", "READY", 21),),
+        opportunity_by_asset={},
+        dynamic_signals={},
+        validation_results={},
+        fusion_snapshot={},
+        score_snapshot={},
+        decision_snapshot={},
+        risk_snapshot={},
+        trade_gate_snapshot={},
+        trade_ready_assets=[],
+    )
+    assert item["state"]["market_data_results"] == [
+        {"points": 21, "status": "READY", "symbol": "BTC"}
+    ]
+    json.dumps(item, allow_nan=False)
 
 def test_non_json_runtime_state_rejected() -> None:
     try:
