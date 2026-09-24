@@ -178,6 +178,10 @@ import risk_engine
 import risk_budget_engine
 import position_sizing_engine
 import trade_gate_engine
+from cp44_real_portfolio_composition_v0_1 import (
+    compose_real_portfolio_capital,
+)
+
 import market_regime_engine
 import market_data_engine
 import exchange_execution_contract
@@ -4691,6 +4695,58 @@ def main() -> int:
     assert_execution_disabled()
 
     try:
+        # --------------------------------------------------------------
+        # CP44 REAL READ-ONLY PORTFOLIO PRODUCER
+        # --------------------------------------------------------------
+        # This is the final read-only provider boundary.
+        # No order, execution, exchange write, or DB write is performed.
+        from toobit_trading_adapter import ToobitTradingAdapter
+        from account_balance_observation_v0_1 import (
+            build_account_balance_observation,
+        )
+        from toobit_position_reader_v0_1 import (
+            build_toobit_position_reader,
+        )
+        from portfolio_observation_v0_1 import (
+            build_portfolio_observation,
+        )
+
+        cp44_adapter = ToobitTradingAdapter()
+
+        cp44_connectivity = (
+            cp44_adapter.capabilities()
+        )
+
+        if cp44_connectivity.get("ACCOUNT_READ") is not True:
+            fail("CP44 ACCOUNT_READ capability unavailable")
+
+        if cp44_connectivity.get("BALANCE_READ") is not True:
+            fail("CP44 BALANCE_READ capability unavailable")
+
+        cp44_account_balance_observation = (
+            build_account_balance_observation(
+                cp44_adapter,
+            )
+        )
+
+        cp44_position_reader = build_toobit_position_reader(
+            cp44_adapter,
+        )
+
+        cp44_portfolio_observation = build_portfolio_observation(
+            cp44_account_balance_observation,
+            position_reader=cp44_position_reader,
+        )
+
+        # Explicitly expose the real observations to the CP44
+        # composition boundary below. No synthetic values are created.
+        cp44_account_balance_observation = (
+            cp44_account_balance_observation
+        )
+        cp44_portfolio_observation = (
+            cp44_portfolio_observation
+        )
+
         print("=" * 90)
         print("ARUNDA TRADER ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â FULL REAL DYNAMIC UNIVERSE PIPELINE")
         print("EXECUTION=OFF | REAL_ORDER=FALSE | REAL_TRADE=FALSE | DB_WRITES=0")
@@ -5299,10 +5355,107 @@ def main() -> int:
                 validated_signal,
                 score_snapshot[asset],
             )
-        # 10. CP44 DYNAMIC SMART RISK
         # ------------------------------------------------------------------
-        # Provider-neutral CP44 path. No fixed capital, no legacy Dynamic
-        # Risk fallback, and no exchange dependency is introduced here.
+        # 10. CP44 REAL PORTFOLIO COMPOSITION
+        # ------------------------------------------------------------------
+        # Compose only from explicitly produced real account/portfolio
+        # observations before Smart Risk is evaluated.
+        # No capital/risk fallback and no synthetic values are permitted.
+
+        from dataclasses import asdict
+        from cp44_balance_semantic_boundary_v0_1 import (
+            build_cp44_balance_semantics,
+        )
+
+        cp44_account_balance_mapping = asdict(
+            cp44_account_balance_observation
+        )
+        cp44_portfolio_mapping = asdict(
+            cp44_portfolio_observation
+        )
+
+        cp44_balances = tuple(
+            cp44_account_balance_observation.balances
+        )
+
+        usdt_balance = None
+        for balance in cp44_balances:
+            if str(balance.asset).upper() == "USDT":
+                usdt_balance = balance
+                break
+
+        cp44_balance_semantics = build_cp44_balance_semantics(
+            usdt_balance,
+        )
+
+        if cp44_balance_semantics.validation != "VALID":
+            fail(
+                "CP44 BALANCE SEMANTIC CONTRACT BLOCKED: "
+                + cp44_balance_semantics.reason
+            )
+
+        cp44_real_balance_mapping = (
+            cp44_balance_semantics.as_mapping()
+        )
+
+        cp44_account_balance_mapping.update(
+            {
+                key: cp44_real_balance_mapping[key]
+                for key in (
+                    "portfolio_capital",
+                    "usable_capital",
+                    "source",
+                    "observed_at",
+                    "provenance",
+                )
+                if key in cp44_real_balance_mapping
+            }
+        )
+
+        cp44_portfolio_mapping.update(
+            {
+                key: cp44_real_balance_mapping[key]
+                for key in (
+                    "portfolio_capital",
+                    "usable_capital",
+                )
+                if key in cp44_real_balance_mapping
+            }
+        )
+
+        cp44_positions = cp44_portfolio_observation.positions
+
+        if cp44_positions is None:
+            fail("CP44 REAL PORTFOLIO POSITIONS UNAVAILABLE")
+
+        cp44_portfolio_mapping["concurrent_positions"] = len(
+            tuple(cp44_positions)
+        )
+
+        cp44_real_risk_allocation_observation = None
+
+        cp44_real_portfolio_composition = compose_real_portfolio_capital(
+            cp44_account_balance_mapping,
+            cp44_portfolio_mapping,
+            cp44_real_risk_allocation_observation,
+        )
+
+        if cp44_real_portfolio_composition.state != "AVAILABLE":
+            fail(
+                "CP44 REAL PORTFOLIO COMPOSITION BLOCKED: "
+                + ",".join(cp44_real_portfolio_composition.gaps)
+            )
+
+        cp44_real_capital_observation = (
+            cp44_real_portfolio_composition.as_mapping()
+        )
+
+        # ------------------------------------------------------------------
+        # 11. CP44 DYNAMIC SMART RISK
+        # ------------------------------------------------------------------
+        # Smart Risk receives the real composed capital/portfolio
+        # observation explicitly. market_signal_map remains signal-only.
+
         from cp44_smart_risk_pipeline_boundary_v0_1 import (
             build_cp44_smart_risk,
         )
@@ -5310,9 +5463,10 @@ def main() -> int:
         risk_snapshot = {}
 
         for asset in decision_snapshot:
-            # Preserve all explicit upstream observations without inventing
-            # capital, Entry/Invalidation, or policy values.
-            smart_risk_observation = dict(market_signal_map.get(asset, {}))
+            smart_risk_observation = dict(
+                market_signal_map.get(asset, {})
+            )
+
             smart_risk_observation.update(
                 {
                     key: value
@@ -5320,11 +5474,6 @@ def main() -> int:
                     if key in (
                         "entry_price",
                         "invalidation_price",
-                        "capital_state",
-                        "portfolio_capital",
-                        "usable_capital",
-                        "allocated_risk",
-                        "concurrent_positions",
                         "policy_version",
                         "policy_validation",
                         "risk_per_trade",
@@ -5346,11 +5495,6 @@ def main() -> int:
                         if key in (
                             "entry_price",
                             "invalidation_price",
-                            "capital_state",
-                            "portfolio_capital",
-                            "usable_capital",
-                            "allocated_risk",
-                            "concurrent_positions",
                             "policy_version",
                             "policy_validation",
                             "risk_per_trade",
@@ -5362,6 +5506,20 @@ def main() -> int:
                         )
                     }
                 )
+
+            smart_risk_observation.update(
+                {
+                    key: cp44_real_capital_observation[key]
+                    for key in (
+                        "capital_state",
+                        "portfolio_capital",
+                        "usable_capital",
+                        "allocated_risk",
+                        "concurrent_positions",
+                    )
+                    if key in cp44_real_capital_observation
+                }
+            )
 
             policy = {
                 key: smart_risk_observation[key]
@@ -5385,8 +5543,7 @@ def main() -> int:
         if set(risk_snapshot) != set(decision_snapshot):
             fail("CP44 Smart Risk cardinality mismatch")
 
-        # ------------------------------------------------------------------
-        # 11. DYNAMIC TRADE GATE
+        # 12. DYNAMIC TRADE GATE
         # ------------------------------------------------------------------
         # Authoritative Trade Gate only. No status inference, no synthetic
         # readiness, and no OrderIntent creation occurs at this boundary.
