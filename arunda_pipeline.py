@@ -5412,6 +5412,14 @@ def main() -> int:
                 "direction": trade_gate_engine.get_direction(decision),
                 "trade_gate_status": trade_gate_status,
                 "reasons": list(gate_reasons),
+                "gate_observability": trade_gate_engine.build_gate_observability(
+                    trade_gate_engine.adapt_opportunity(
+                        opportunity,
+                        decision,
+                    ),
+                    decision,
+                    risk,
+                ),
                 "source": "TRADE_GATE_v0.1",
                 "execution": False,
                 "db_writes": 0,
