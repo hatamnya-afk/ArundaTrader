@@ -1467,3 +1467,62 @@ Local verification must establish:
 
 ### NEXT ACTION
 Synchronize local branch, run the focused shell/contract verification, then perform one controlled desktop launch check. Do not execute the trading pipeline as part of UI verification.
+
+# BUILDER HANDOFF LOCK — CANONICAL CURRENT FRONTIER — 2026-09-24
+
+## PURPOSE
+This section exists to prevent future builders/agents from reverting the project to an older checkpoint when context is lost or a new chat/builder takes over.
+
+## AUTHORITATIVE CURRENT STATE
+As of this entry, the canonical project position is:
+
+- CP46-H = **VERIFIED / PASS / CLOSED / CANONICAL**
+- CP47 = **VERIFIED / PASS / CLOSED / CANONICAL**
+- CP48 Command Center Contract = **VERIFIED / PASS / CLOSED / CANONICAL**
+- CP48 Visual Command Center Shell = **BUILT / LOCAL VERIFICATION PENDING**
+- Execution remains OFF.
+- No real order is authorized by this entry.
+
+## CURRENT FRONTIER — DO NOT REGRESS
+**CURRENT FRONTIER = CP48 VISUAL COMMAND CENTER SHELL VERIFICATION / CLOSURE.**
+
+The next builder MUST continue from this frontier. Do NOT return to CP46-H, CP47, or the already-verified CP48 contract unless an explicit regression authorization is recorded.
+
+## REQUIRED NEXT WORK
+Complete only the remaining CP48 Visual Shell verification/closure work defined above:
+1. synchronize/inspect the current branch state;
+2. run local compile and focused CP48 shell/contract regression tests;
+3. perform the controlled desktop GUI launch verification;
+4. verify read-only projection integrity and absence of execution-state mutation;
+5. synchronize the required governance documents and record the resulting CP48 closure state.
+
+Do not execute the trading pipeline as part of CP48 UI verification.
+
+## AFTER CP48 COMPLETE
+Once CP48 Visual Shell is explicitly VERIFIED / PASS / CLOSED / CANONICAL, advance directly to the already-defined management frontier:
+**AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST REAL EXECUTION ATTEMPT + OBSERVATION REQUIREMENTS.**
+
+Do not invent an intermediate checkpoint and do not reinterpret CP48 closure as real-order authorization.
+
+## SAFETY / AUTHORITY
+- Execution enablement remains human-authorized only.
+- Order submission remains human-authorized only.
+- Exchange writes remain forbidden until the separate first-execution authorization gate is explicitly opened.
+- Production DB writes remain forbidden unless explicitly authorized by the applicable contract.
+- No automatic retry/loop for a real-order attempt.
+- No synthetic/fill/backfill/interpolation/padding/blending.
+- No forced symbol, direction, quantity, or trade thesis.
+- Aroonda AI observes/analyzes/learns; it does not silently repair or mutate ArundaTrader history or contracts.
+
+## SOURCE-OF-TRUTH RULE FOR FUTURE BUILDERS
+When context is incomplete, the builder MUST inspect the latest state of this repository—especially this file and the latest commits on the active branch—before deciding the current frontier.
+
+**Never infer the current frontier from chat memory alone.**
+
+If multiple historical sections appear contradictory, use the latest explicit **BUILDER HANDOFF LOCK** entry and the latest repository state, then report any contradiction before changing governance.
+
+## MANAGEMENT PRINCIPLE
+**BUILD → VERIFY → CLOSE → ADVANCE.**
+Closed checkpoints stay closed. Context loss is not permission to reset, redesign, reopen, or re-audit them.
+
+# END BUILDER HANDOFF LOCK
