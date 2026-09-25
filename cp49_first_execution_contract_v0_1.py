@@ -75,6 +75,7 @@ class FirstExecutionAttempt:
         if self.started_at_ms <= 0:
             return AttemptState.BLOCKED
         if self.outcome not in {
+            AttemptState.READY,
             AttemptState.ACCEPTED,
             AttemptState.REJECTED,
             AttemptState.BLOCKED,
