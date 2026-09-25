@@ -3,7 +3,7 @@
 DATE: 2026-09-26
 
 ## STATUS
-DESIGN APPROVED FOR CONTRACT DEFINITION / ID ISSUANCE ALGORITHM UNSELECTED / RUNTIME OFF
+DESIGN APPROVED / UUIDv4 ISSUANCE SELECTED / RUNTIME OFF
 
 This artifact defines the ownership and lifecycle semantics of an authoritative Decision Birth. It does not introduce an identity-generation algorithm, execute the pipeline, write to the production database, or submit an exchange order.
 
@@ -33,7 +33,7 @@ It does NOT mean snapshot identity, provider identity, order-intent identity, ex
 ## 4. OWNERSHIP
 Owner of Decision ID issuance: Authoritative Decision Birth.
 The issuance operation is part of the Birth Contract. It MUST NOT be delegated implicitly to arunda_pipeline.py, CP49 validation/binding modules, Risk, Allocation, Position Sizing, Trade Gate, Order Intent, Execution, or Observation.
-The concrete issuer implementation remains a separate design decision.
+The concrete issuer is the CP49 Authoritative Decision Birth Issuer defined by the UUIDv4 issuance contract below.
 
 ## 5. ISSUANCE MOMENT
 The identity MUST be issued as part of the atomic logical transition that creates the canonical Decision Birth Event.
@@ -43,10 +43,14 @@ An ID MUST NOT be created merely to satisfy a downstream function signature.
 ## 6. CANONICALITY
 An identifier is canonical only when: it is issued under the authoritative Decision Birth contract; it identifies one Decision Birth instance; it is attached to that Birth Event at creation; downstream layers consume and propagate it unchanged; and no downstream layer is permitted to replace it.
 
-## 7. UNIQUENESS
-The final uniqueness mechanism is NOT YET SELECTED.
-Required property: no two distinct Decision Birth instances may legitimately share the same canonical decision_id within the defined system identity domain.
-The concrete mechanism for guaranteeing this property requires an explicit Management design decision.
+## 7. UNIQUENESS AND ISSUANCE SEMANTICS
+Management decision: canonical Decision IDs use UUIDv4 as opaque instance identities.
+
+The identity domain is the set of authoritative Decision Birth Events of this ArundaTrader decision system. UUIDv4 is selected for identity opacity and independence from asset, market timestamp, snapshot contents, score, risk, sizing, order, and execution state.
+
+Uniqueness is enforced operationally by the authoritative Birth persistence boundary: the persisted canonical Decision Birth record MUST have a UNIQUE constraint on decision_id. A collision is a Birth failure; the colliding candidate MUST NOT be accepted or substituted downstream. Before the Birth Event is committed, the issuer may retry issuance with a new UUIDv4 candidate. Once a Birth Event commits, its decision_id is immutable.
+
+The UUIDv4 value is not semantically derived from business data and is not used as a timestamp, asset, snapshot, intent, or counter identity.
 
 ## 8. STABILITY
 After Birth, decision_id is immutable.
@@ -85,14 +89,32 @@ No fallback identity is permitted.
 The blocked state must remain observable and must not be relabeled as a valid Decision.
 
 ## 13. REQUIRED FUTURE ISSUER CONTRACT
-Before concrete implementation, Management must select the actual issuance semantics:
-DecisionIdentityIssuer → issue(authoritative birth context) → canonical decision_id
+## 13. AUTHORITATIVE ISSUER CONTRACT
+The selected issuance semantics are:
 
-The selected issuer MUST specify: owner; issuance transaction/boundary; identity domain; uniqueness guarantee; persistence requirement; collision behavior; immutability; recovery behavior; provenance of issuance.
-This artifact deliberately does not select an algorithm for those properties.
+Decision Birth semantic result
+→ Authoritative Decision Birth Issuer
+→ UUIDv4 candidate
+→ Birth persistence uniqueness check
+→ canonical Decision Birth Event
+→ unchanged downstream propagation
+
+Issuer requirements:
+- owner: Authoritative Decision Birth
+- issuance boundary: the atomic logical Birth transition, after semantic decision evaluation and before the canonical Birth Event is committed
+- identity domain: all authoritative Decision Birth Events in this system
+- issuance mechanism: UUIDv4 opaque identifier
+- uniqueness enforcement: UNIQUE(decision_id) at the authoritative Birth persistence boundary
+- persistence: the canonical Birth Event persists the issued decision_id
+- collision behavior: collision prevents Birth completion; retry is allowed only before Birth commit
+- immutability: committed decision_id cannot change
+- recovery: an uncommitted/failed Birth has no canonical identity; a committed Birth is recovered by its persisted decision_id
+- provenance: the Birth Event records issuer contract/version and issuance event context; the UUID value itself carries no business provenance
+
+The issuer MUST NOT use UUID input from callers, random IDs supplied by the pipeline, timestamp/asset/snapshot derivation, counters, hashes, fallbacks, or downstream substitution.
 
 ## 14. IMPLEMENTATION GATE
-Only after the issuance semantics above are explicitly selected may implementation proceed.
+The issuance semantics are now selected. Implementation may proceed only at the authoritative Birth boundary; the current runtime remains OFF and no production schema migration or runtime execution is authorized by this artifact.
 Implementation must then be limited to: authoritative issuer; Birth Event construction; unchanged binding into existing CP49 boundary; unchanged downstream propagation; focused contract/static tests.
 No live runtime is required for contract implementation verification.
 
@@ -112,10 +134,10 @@ BIRTH EVENT CONTRACT = DEFINED
 ID OWNERSHIP = AUTHORITATIVE DECISION BIRTH
 ID STABILITY = IMMUTABLE AFTER BIRTH
 ID REPLACEMENT = FORBIDDEN
-ISSUANCE ALGORITHM = MANAGEMENT DECISION REQUIRED
-CONCRETE ISSUER = NOT IMPLEMENTED
+ISSUANCE ALGORITHM = UUIDv4 + PERSISTENT UNIQUE BIRTH CONSTRAINT
+CONCRETE ISSUER = IMPLEMENTED AS ISOLATED CONTRACT MODULE / PIPELINE INTEGRATION PENDING
 RUNTIME = OFF
 
-CP49 = BLOCKED / DESIGN BOUNDARY DEFINED / ISSUANCE SEMANTICS PENDING MANAGEMENT DECISION
+CP49 = BLOCKED / ISSUANCE SEMANTICS DEFINED / AUTHORITATIVE BIRTH INTEGRATION PENDING
 
 # END CP49 AUTHORITATIVE DECISION BIRTH CONTRACT
