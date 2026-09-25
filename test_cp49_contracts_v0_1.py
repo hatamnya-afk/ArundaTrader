@@ -35,6 +35,11 @@ def test_invalid_intent_fails_closed():
     assert OrderIntentBoundary("D1", "I1", "BTC/USDT", "LONG", 0.0, "x", "TOOBIT").validate() is AttemptState.BLOCKED
 
 
+def test_attempt_preserves_ready_transient_state():
+    attempt = FirstExecutionAttempt("A1", "D1", "I1", 100, AttemptState.READY)
+    assert attempt.validate() is AttemptState.READY
+
+
 def test_attempt_preserves_open_outcomes():
     for state in (AttemptState.ACCEPTED, AttemptState.REJECTED, AttemptState.BLOCKED, AttemptState.INCONCLUSIVE):
         attempt = FirstExecutionAttempt("A1", "D1", "I1", 100, state, latency_ms=12)
