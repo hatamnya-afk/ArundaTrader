@@ -185,6 +185,10 @@ from cp44_real_portfolio_composition_v0_1 import (
 import market_regime_engine
 import market_data_engine
 import exchange_execution_contract
+from zero_capital_research_trade_contract_v0_1 import (
+    RESEARCH_TRADE,
+    resolve_trade_quantity,
+)
 import fusion_engine
 import production_fused_score_binding_v0_1
 from cp69_runtime_observation import (
@@ -3501,6 +3505,8 @@ def build_current_order_intents(
         snapshot_id: str,
         regime_snapshot: dict,
         risk_snapshot: dict,
+        observed_real_capital: float | int | None = None,
+        research_quantity: float | int | None = None,
     ) -> list[dict]:
         gate_rows = exact_asset_rows(
             gate_results,
@@ -3533,6 +3539,11 @@ def build_current_order_intents(
         r_map = risk_map(
             risk_rows
         )
+
+        if observed_real_capital is None:
+            fail(
+                "REAL_CAPITAL_OBSERVATION_REQUIRED_FOR_ORDER_INTENT"
+            )
 
         trade_ready_rows = [
             row
@@ -3627,9 +3638,9 @@ def build_current_order_intents(
                     f"Risk.position_quantity invalid: {asset}"
                 )
 
-            if float(quantity) <= 0:
+            if float(quantity) < 0:
                 fail(
-                    f"Risk.position_quantity <= 0: {asset}"
+                    f"Risk.position_quantity < 0: {asset}"
                 )
 
             if risk_row.get(
@@ -3702,10 +3713,16 @@ def build_current_order_intents(
 
             intent_id = f"OI-{snapshot_id}-{asset}"
 
+            resolved_quantity = resolve_trade_quantity(
+                observed_real_capital=observed_real_capital,
+                risk_position_quantity=quantity,
+                research_quantity=research_quantity,
+            )
+
             intent = RuntimeOrderIntent(
-                quantity=quantity,
-                quantity_unit=POSITION_QUANTITY_UNIT,
-                quantity_source=POSITION_QUANTITY_SOURCE,
+                quantity=resolved_quantity["quantity"],
+                quantity_unit=resolved_quantity["quantity_unit"],
+                quantity_source=resolved_quantity["quantity_source"],
                 asset=asset,
                 direction=direction,
                 entry_price=entry_price,
@@ -3714,6 +3731,16 @@ def build_current_order_intents(
                 timestamp=timestamp,
                 snapshot_id=snapshot_id,
                 intent_id=intent_id,
+            )
+
+            intent.trade_type = resolved_quantity["trade_type"]
+            intent.observed_real_capital = (
+                resolved_quantity["observed_real_capital"]
+            )
+            intent.research_quantity = (
+                research_quantity
+                if resolved_quantity["trade_type"] == RESEARCH_TRADE
+                else None
             )
 
             if set(intent.keys()) != set(
@@ -3988,7 +4015,24 @@ def validate_current_order_intents(
                         f"Risk quantity missing: {asset}"
                     )
 
-                if risk_quantity != getattr(
+                if getattr(
+                    intent,
+                    "trade_type",
+                    None,
+                ) == RESEARCH_TRADE:
+                    if float(risk_quantity) != 0.0:
+                        fail(
+                            "RESEARCH_TRADE requires zero Risk.position_quantity: "
+                            f"{asset}"
+                        )
+                    if float(
+                        getattr(intent, "observed_real_capital", -1.0)
+                    ) != 0.0:
+                        fail(
+                            "RESEARCH_TRADE requires zero observed real capital: "
+                            f"{asset}"
+                        )
+                elif risk_quantity != getattr(
                     intent,
                     "quantity",
                     None,
