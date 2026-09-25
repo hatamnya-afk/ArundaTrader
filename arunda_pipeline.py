@@ -4334,24 +4334,40 @@ def bind_order_intent_quantity_observability(
 
             quantity = intent.quantity
 
-            if quantity != risk_quantity:
-                fail(
-                    f"Quantity Risk/OrderIntent mismatch: {asset}"
-                )
-
-            if quantity != request.quantity:
-                fail(
-                    f"Quantity OrderIntent/Canonical mismatch: {asset}"
-                )
+            if getattr(
+                intent,
+                "trade_type",
+                None,
+            ) == RESEARCH_TRADE:
+                if float(risk_quantity) != 0.0:
+                    fail(
+                        f"RESEARCH_TRADE Risk quantity must be zero: {asset}"
+                    )
+                if request.quantity != quantity:
+                    fail(
+                        f"Research quantity OrderIntent/Canonical mismatch: {asset}"
+                    )
+                if request.quantity_source != "RESEARCH_PREDEFINED":
+                    fail(
+                        f"Research quantity provenance invalid: {asset}"
+                    )
+            else:
+                if quantity != risk_quantity:
+                    fail(
+                        f"Quantity Risk/OrderIntent mismatch: {asset}"
+                    )
+                if quantity != request.quantity:
+                    fail(
+                        f"Quantity OrderIntent/Canonical mismatch: {asset}"
+                    )
+                if intent.quantity_source != POSITION_QUANTITY_SOURCE:
+                    fail(
+                        f"OrderIntent quantity source invalid: {asset}"
+                    )
 
             if intent.quantity_unit != POSITION_QUANTITY_UNIT:
                 fail(
                     f"OrderIntent quantity unit invalid: {asset}"
-                )
-
-            if intent.quantity_source != POSITION_QUANTITY_SOURCE:
-                fail(
-                    f"OrderIntent quantity source invalid: {asset}"
                 )
 
             for flag in (
