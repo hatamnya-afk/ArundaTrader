@@ -1509,3 +1509,34 @@ CP49 contract/integration verification is complete. The remaining gate is **actu
 
 ### NEXT ACTION
 Inspect and verify the actual production producer compatibility boundary. Do not execute the trading pipeline or enable execution until that gate is separately satisfied and explicitly authorized.
+
+
+## CP49 — ACTUAL RUNTIME PRODUCER COMPATIBILITY — 2026-09-26
+
+### STATUS
+**CP49 RUNTIME PRODUCER COMPATIBILITY = BLOCKED / NOT VERIFIED / NOT CLOSED / EXECUTION OFF**
+
+### VERIFIED FINDING
+Static inspection of the actual production call chain shows:
+
+- arunda_pipeline.py builds dynamic_signals[asset] from ProductionSignalInput and the dynamic signal direction.
+- The emitted dynamic_signals[asset] record contains no canonical decision_id.
+- The subsequent real producer explicitly requires validated_signal["decision_id"] and fail-closes with CANONICAL_DECISION_ID_MISSING_AT_REAL_PRODUCER.
+- dynamic_decision_contract_boundary_v0_1.py correctly requires and forwards an externally supplied canonical decision_id.
+- decision_engine.build_decision(...) correctly requires a canonical decision_id at birth.
+- No existing upstream canonical producer was identified that supplies this identity to the real production chain.
+- Therefore no synthetic derivation, timestamp/UUID/hash identity, snapshot-derived identity, or manual injection is permitted.
+
+### SECONDARY COMPATIBILITY GAP
+decision_engine.build_decision_snapshot(...) still invokes build_decision(...) without the now-required decision_id. This is a separate internal compatibility gap and must not be repaired by generating an identity.
+
+### DETERMINATION
+The CP49 contract layer remains VERIFIED/PASS, but **actual runtime producer compatibility is BLOCKED**.
+
+No pipeline wiring, runtime, order, exchange/API write, or production DB write was performed.
+
+### NEXT FRONTIER
+Establish the canonical decision_id at the real Decision Birth producer from an existing authoritative source, then propagate it unchanged through the production chain. Until that source exists, CP49 remains blocked.
+
+### SAFETY
+Execution remains OFF.
