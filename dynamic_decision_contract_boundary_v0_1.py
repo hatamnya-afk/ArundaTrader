@@ -184,6 +184,7 @@ def build_dynamic_decision(
             base_asset,
             legacy_signal,
             legacy_score,
+            decision_id=decision_id.strip(),
         )
 
     finally:
