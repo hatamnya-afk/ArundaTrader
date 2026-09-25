@@ -1512,3 +1512,20 @@ No synthetic identity may be introduced. No runtime or execution action occurred
 
 ### NEXT ACTION
 Establish the canonical decision identity at real Decision Birth from an authoritative existing source, propagate unchanged, then re-verify the complete producer chain.
+
+
+## CP49 — CANONICAL DECISION BIRTH SOURCE — 2026-09-26
+
+### STATUS
+**CONTRACT BUILT / RUNTIME SOURCE BLOCKED / NOT VERIFIED / NOT CLOSED**
+
+### EVIDENCE
+A dedicated CP49 canonical Decision Birth Source contract and focused tests were created. It requires an externally supplied decision_id plus authoritative birth metadata and never generates or derives identity.
+
+The real production producer remains missing the authoritative decision_id source.
+
+### GOVERNANCE DETERMINATION
+CP49 contract/integration verification remains VERIFIED/PASS. Actual runtime producer compatibility remains BLOCKED.
+
+### NEXT ACTION
+Establish the authoritative Decision Birth source and propagate its existing decision_id unchanged. No synthetic identity and no live runtime.
