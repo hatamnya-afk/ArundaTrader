@@ -1574,3 +1574,51 @@ CP48 closure does **not** authorize execution, order submission, exchange writes
 Any first real execution attempt requires a separate explicit Management/runtime authorization. Execution remains OFF until that gate is independently opened.
 
 ### END CP48 VISUAL COMMAND CENTER SHELL — FINAL VERIFICATION / CLOSURE
+
+
+## CP49 — IMPLEMENTATION BUILD — 2026-09-25
+
+### STATUS
+**CP49 MINIMUM CONTRACT IMPLEMENTATION = BUILT / VERIFICATION PENDING / EXECUTION OFF**
+
+### BUILT
+- `CP49_MANAGEMENT_SCOPE.md` defines the autonomous real-market decision, first-attempt, provider-preflight, observation, and Aroonda boundaries.
+- `cp49_first_execution_contract_v0_1.py` implements fail-closed execution authorization, Order Intent, and one-attempt lifecycle contracts.
+- `cp49_observation_envelope_v0_1.py` implements immutable decision/outcome-time observation metadata.
+- `test_cp49_contracts_v0_1.py` adds focused contract tests.
+- Implementation introduces no network, exchange, order, or database I/O.
+
+### CONTRACT BOUNDARY
+- One pipeline remains mandatory.
+- No manually injected market, direction, thesis, or quantity is accepted by the CP49 boundary.
+- Quantity provenance is explicit.
+- First execution requires separate human authorization.
+- Prior attempt or automatic retry blocks the gate.
+- Observation preserves decision-time knowledge cutoff and execution-time outcome separately.
+- Secret material is not part of the observation envelope.
+- CP48 remains read-only and is not modified.
+
+### SAFETY
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+- No real runtime was executed.
+- No order was submitted.
+- No exchange/API write occurred.
+- No production DB write occurred.
+
+### VERIFICATION STATE
+Focused CP49 compile/test verification remains **PENDING LOCAL EXECUTION**. No PASS claim is made until the local Builder verifies the new files and records actual evidence.
+
+### NEXT ACTION
+1. Local `py_compile` for the three CP49 Python surfaces.
+2. Local focused pytest for `test_cp49_contracts_v0_1.py`.
+3. Static/diff verification.
+4. If all pass, synchronize the four governance documents with the actual evidence.
+5. Stop at the implementation verification gate; do not execute the trading pipeline or enable execution.
+
+### GOVERNANCE DETERMINATION
+CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL and are not reopened or re-audited.
+
+# END CP49 IMPLEMENTATION BUILD
