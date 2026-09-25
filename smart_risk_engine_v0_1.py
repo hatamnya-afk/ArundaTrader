@@ -139,8 +139,10 @@ def build_smart_risk(
         else None
     )
     stop_distance = _positive(observation.get("stop_distance"))
-    portfolio_capital = _positive(observation.get("portfolio_capital"))
-    usable_capital = _positive(observation.get("usable_capital"))
+    # Capital is an observed input to sizing, not a pipeline gate.
+    # Zero is a valid real observation; negative/non-finite remains invalid.
+    portfolio_capital = _non_negative(observation.get("portfolio_capital"))
+    usable_capital = _non_negative(observation.get("usable_capital"))
     allocated_risk = _non_negative(observation.get("allocated_risk"))
 
     concurrent = observation.get("concurrent_positions")
@@ -287,7 +289,21 @@ def build_smart_risk(
         max_portfolio_risk_amount - allocated_risk
     )
 
-    if remaining_portfolio_risk <= EPSILON:
+    if remaining_portfolio_risk < -EPSILON:
+        return _blocked(
+            asset,
+            "PORTFOLIO_RISK_CAPACITY_INVALID",
+            policy_version,
+        )
+
+    # With zero observed real capital, the frozen sizing formula naturally
+    # produces zero remaining capacity. This is not a balance gate and does
+    # not change the pipeline route; it is the mathematical output of the
+    # same sizing function at Capital = 0.
+    if (
+        remaining_portfolio_risk <= EPSILON
+        and portfolio_capital > EPSILON
+    ):
         return _blocked(
             asset,
             "PORTFOLIO_RISK_CAPACITY_EXHAUSTED",
@@ -308,7 +324,14 @@ def build_smart_risk(
         remaining_portfolio_risk,
     )
 
-    if risk_budget <= EPSILON or not isfinite(risk_budget):
+    if not isfinite(risk_budget) or risk_budget < -EPSILON:
+        return _blocked(
+            asset,
+            "RISK_BUDGET_INVALID",
+            policy_version,
+        )
+
+    if risk_budget <= EPSILON and portfolio_capital > EPSILON:
         return _blocked(
             asset,
             "RISK_BUDGET_INVALID",
@@ -326,7 +349,7 @@ def build_smart_risk(
     exposure = position_size * entry
 
     if not all(
-        isfinite(value) and value > EPSILON
+        isfinite(value) and value >= 0
         for value in (position_size, exposure)
     ):
         return _blocked(
@@ -347,7 +370,11 @@ def build_smart_risk(
         concurrent_positions=concurrent,
         max_concurrent_positions=max_concurrent,
         risk_state="APPROVED",
-        reason="RISK_BUDGET_VALIDATED",
+        reason=(
+            "RISK_SIZING_ZERO_FROM_REAL_CAPITAL"
+            if portfolio_capital <= EPSILON
+            else "RISK_BUDGET_VALIDATED"
+        ),
         policy_version=policy_version,
         invalidation_price=invalidation,
     )
