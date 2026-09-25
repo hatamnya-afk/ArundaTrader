@@ -1689,3 +1689,26 @@ Required proof:
 
 ### NEXT ACTION
 Complete only this compatibility verification. Do not execute the live trading pipeline, submit an order, enable execution, modify production DB state, or reopen closed checkpoints. After compatibility is proven, stop at the separate runtime-authorization gate.
+
+
+## CP49 — ACTUAL RUNTIME PRODUCER COMPATIBILITY — 2026-09-26
+
+### STATUS
+**BLOCKED / NOT VERIFIED / NOT CLOSED / EXECUTION OFF**
+
+### PROOF RESULT
+The required compatibility proof cannot currently be satisfied:
+
+1. The real production dynamic-signal producer does not emit a canonical decision_id.
+2. The downstream real Decision producer now requires that identity and correctly fails closed when it is missing.
+3. No authoritative existing upstream producer for the canonical identity was found in the inspected path.
+4. Synthetic identity generation/derivation is prohibited.
+5. decision_engine.build_decision_snapshot(...) also remains incompatible with the required decision_id argument.
+
+### MANAGEMENT DETERMINATION
+Do not wire around the missing identity and do not weaken the canonical identity contract.
+
+CP49 remains **BLOCKED / NOT VERIFIED / NOT CLOSED** at the actual runtime producer compatibility gate.
+
+### NEXT ACTION
+Identify the authoritative Decision Birth producer/source for decision_id. After that source is established, verify unchanged propagation through the real chain and re-run the compatibility verification. Until then: no live runtime, no execution, no order, no exchange/API write, no production DB change.
