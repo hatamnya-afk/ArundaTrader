@@ -49,6 +49,7 @@ class BalanceObservation:
 class AccountBalanceObservation:
     account: AccountObservation
     balances: Tuple[BalanceObservation, ...]
+    balance_observation_complete: bool
 
 
 def _utc_now() -> str:
@@ -179,7 +180,12 @@ def build_account_balance_observation(
             )
         )
 
+    balance_observation_complete = (
+        balance_data.get("balance_observation_complete") is True
+    )
+
     return AccountBalanceObservation(
         account=account,
         balances=tuple(observations),
+        balance_observation_complete=balance_observation_complete,
     )
