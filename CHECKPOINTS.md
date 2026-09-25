@@ -1466,3 +1466,28 @@ Run local compile + focused integration tests, then static/diff verification. If
 CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL.
 
 # END CP49 INTEGRATION FRONTIER BUILD
+
+
+## CP49 — INTEGRATION VERIFICATION — 2026-09-26
+
+### STATUS
+**CP49 INTEGRATION = VERIFIED / PASS / NOT CLOSED / EXECUTION OFF**
+
+### EVIDENCE
+- Local focused CP49 suite completed: **35/35 PASS** in **1.26s**.
+- The previously failing canonical-decision propagation tests are now green.
+- Static inspection confirms the CP49 contract surfaces preserve canonical identity, fail-closed provider preflight, one-attempt lifecycle, immutable observation, and no execution/network/DB I/O.
+- No trading runtime was executed.
+- No order, exchange/API write, or production DB write occurred.
+
+### GOVERNANCE DETERMINATION
+CP49 Integration verification is **VERIFIED / PASS** at the contract/integration-test boundary, but is **NOT CLOSED** because actual production runtime producer compatibility remains a distinct gate.
+
+### CURRENT FRONTIER
+**ACTUAL RUNTIME PRODUCER COMPATIBILITY VERIFICATION**
+
+### NEXT ACTION
+Verify the real production decision producer against the CP49 required input contract, with particular attention to canonical `decision_id` birth/propagation, required risk/allocation/position-size/quantity provenance, and the absence of forbidden side effects before the separately authorized execution boundary.
+
+### SAFETY
+Execution remains OFF. No live runtime is authorized by this checkpoint verification.
