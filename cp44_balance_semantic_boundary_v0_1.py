@@ -129,9 +129,9 @@ def build_cp44_balance_semantics(
             provenance=provenance,
         )
 
-    if portfolio_capital <= 0:
+    if portfolio_capital < 0:
         return _blocked(
-            "PORTFOLIO_CAPITAL_NON_POSITIVE",
+            "PORTFOLIO_CAPITAL_NEGATIVE",
             source=source,
             observed_at=observed_at,
             provenance=provenance,
@@ -154,5 +154,9 @@ def build_cp44_balance_semantics(
         source=source,
         observed_at=observed_at,
         provenance=provenance,
-        reason="REAL_USDT_BALANCE_SEMANTICALLY_MAPPED",
+        reason=(
+            "REAL_ZERO_USDT_BALANCE_SEMANTICALLY_MAPPED"
+            if portfolio_capital == 0
+            else "REAL_USDT_BALANCE_SEMANTICALLY_MAPPED"
+        ),
     )
