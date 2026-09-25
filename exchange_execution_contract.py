@@ -34,6 +34,11 @@ ORDER_TYPE_MARKET = "MARKET"
 VALID_DIRECTIONS = frozenset({"LONG", "SHORT"})
 QUANTITY_UNIT_BASE_ASSET = "BASE_ASSET"
 QUANTITY_SOURCE_RISK_POSITION = "RISK.position_quantity"
+QUANTITY_SOURCE_RESEARCH_PREDEFINED = "RESEARCH_PREDEFINED"
+VALID_QUANTITY_SOURCES = frozenset({
+    QUANTITY_SOURCE_RISK_POSITION,
+    QUANTITY_SOURCE_RESEARCH_PREDEFINED,
+})
 
 
 @dataclass(frozen=True)
@@ -96,13 +101,21 @@ def build_order_request(
     if quantity is None:
         raise ValueError("QUANTITY_UNAVAILABLE")
 
+    quantity_source = risk.get(
+        "quantity_source",
+        QUANTITY_SOURCE_RISK_POSITION,
+    )
+
+    if quantity_source not in VALID_QUANTITY_SOURCES:
+        raise ValueError("QUANTITY_PROVENANCE_INVALID")
+
     return CanonicalOrderRequest(
         asset=str(asset).strip().upper(),
         direction=str(direction).strip().upper(),
         order_type=str(order_type).strip().upper(),
         quantity=quantity,
         quantity_unit=QUANTITY_UNIT_BASE_ASSET,
-        quantity_source=QUANTITY_SOURCE_RISK_POSITION,
+        quantity_source=quantity_source,
         entry_price=entry_price,
         reference_price=reference_price,
         intent_id=str(intent_id).strip(),
@@ -134,7 +147,7 @@ def validate_order_request(
     if request.quantity_unit != QUANTITY_UNIT_BASE_ASSET:
         return False, "QUANTITY_UNIT_INVALID"
 
-    if request.quantity_source != QUANTITY_SOURCE_RISK_POSITION:
+    if request.quantity_source not in VALID_QUANTITY_SOURCES:
         return False, "QUANTITY_PROVENANCE_INVALID"
 
     if not request.intent_id:
