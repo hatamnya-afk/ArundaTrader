@@ -50,7 +50,11 @@ class ObservationEnvelope:
             return AttemptState.BLOCKED
         if self.latency_ms < 0:
             return AttemptState.BLOCKED
-        if any(not k.strip() or not v.strip() for k, v in self.non_secret_metadata):
+        secret_like_keys = ("api_key", "apikey", "api_secret", "secret", "password", "token", "authorization", "auth")
+        if any(
+            not k.strip() or not v.strip() or any(secret_key in k.strip().lower() for secret_key in secret_like_keys)
+            for k, v in self.non_secret_metadata
+        ):
             return AttemptState.BLOCKED
         return self.outcome
 
