@@ -1540,3 +1540,28 @@ Establish the canonical decision_id at the real Decision Birth producer from an 
 
 ### SAFETY
 Execution remains OFF.
+
+
+## CP49 — CANONICAL DECISION BIRTH SOURCE — 2026-09-26
+
+### STATUS
+**CONTRACT BUILT / AUTHORITATIVE RUNTIME SOURCE NOT YET PRESENT / EXECUTION OFF**
+
+### ACTION COMPLETED
+Added:
+- cp49_canonical_decision_birth_source_v0_1.py
+- test_cp49_canonical_decision_birth_source_v0_1.py
+
+The new boundary accepts only an externally supplied authoritative Decision Birth event containing:
+decision_id, asset, decision_timestamp_ms, snapshot_id, and source.
+
+It preserves the supplied decision_id unchanged and fails closed when identity or required birth metadata is absent.
+
+### HARD RULE
+This boundary never generates or derives decision_id. No UUID, hash, timestamp, snapshot-derived, asset-derived, intent-derived, or manual identity is permitted.
+
+### CURRENT BLOCKER
+The inspected real production chain still has no authoritative upstream producer that supplies decision_id into dynamic_signals before the CP49 boundary.
+
+### NEXT ACTION
+Locate/establish the real authoritative Decision Birth producer, then bind its existing decision_id through this boundary and verify unchanged propagation. Do not fabricate an identity or run the live pipeline.
