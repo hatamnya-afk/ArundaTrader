@@ -640,7 +640,12 @@ def build_decision(
 def build_decision_snapshot(
     validated_signals: ValidatedSignalSnapshot,
     scores: ScoreSnapshot,
+    *,
+    decision_ids: Mapping[str, str],
 ) -> dict:
+
+    if not isinstance(decision_ids, Mapping):
+        raise RuntimeError("Canonical decision_ids are required at decision birth")
 
     validate_asset_keys(
         validated_signals,
@@ -656,10 +661,17 @@ def build_decision_snapshot(
 
     for asset in EXPECTED_ASSETS:
 
+        decision_id = decision_ids.get(asset)
+        if not isinstance(decision_id, str) or not decision_id.strip():
+            raise RuntimeError(
+                f"Canonical decision_id is required at decision birth: {asset}"
+            )
+
         decisions[asset] = build_decision(
             asset,
             validated_signals[asset],
             scores[asset],
+            decision_id=decision_id.strip(),
         )
 
     return decisions
