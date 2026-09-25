@@ -5441,10 +5441,17 @@ def main() -> int:
             validation = validation_results[asset]
             validated_signal["valid"] = validation["valid"]
             validated_signal["validation"] = validation["validation"]
+            canonical_decision_id = validated_signal.get("decision_id")
+            if not isinstance(canonical_decision_id, str) or not canonical_decision_id.strip():
+                fail(
+                    f"CANONICAL_DECISION_ID_MISSING_AT_REAL_PRODUCER: {asset}"
+                )
+
             decision_snapshot[asset] = build_dynamic_decision(
                 f"{asset}/USDT",
                 validated_signal,
                 score_snapshot[asset],
+                decision_id=canonical_decision_id.strip(),
             )
         # ------------------------------------------------------------------
         # 10. CP44 REAL PORTFOLIO COMPOSITION
