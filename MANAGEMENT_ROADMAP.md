@@ -1712,3 +1712,25 @@ CP49 remains **BLOCKED / NOT VERIFIED / NOT CLOSED** at the actual runtime produ
 
 ### NEXT ACTION
 Identify the authoritative Decision Birth producer/source for decision_id. After that source is established, verify unchanged propagation through the real chain and re-run the compatibility verification. Until then: no live runtime, no execution, no order, no exchange/API write, no production DB change.
+
+
+## CP49 — CANONICAL DECISION BIRTH SOURCE — 2026-09-26
+
+### STATUS
+**CONTRACT BUILT / AUTHORITATIVE RUNTIME SOURCE BLOCKED / NOT VERIFIED / NOT CLOSED**
+
+### DECISION
+The canonical Decision Birth Source is now explicitly defined as an external authoritative Decision Birth event. The boundary validates and preserves its existing decision_id; it does not create one.
+
+### REQUIRED BIRTH DATA
+- decision_id
+- asset
+- decision_timestamp_ms
+- snapshot_id
+- source
+
+### BLOCKER
+The real production path still lacks an authoritative producer feeding decision_id into dynamic_signals before the CP49 Decision boundary.
+
+### NEXT ACTION
+Identify/establish that authoritative Decision Birth producer, bind its existing identity, and verify unchanged downstream propagation. Until then: no synthetic identity, no runtime, no execution, no DB/exchange write.
