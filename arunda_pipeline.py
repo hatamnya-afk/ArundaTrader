@@ -4124,7 +4124,14 @@ def build_canonical_order_requests(
                 "position_quantity"
             )
 
-            if quantity != getattr(
+            if (
+                getattr(intent, "trade_type", None) == RESEARCH_TRADE
+            ):
+                if float(quantity) != 0.0:
+                    fail(
+                        f"RESEARCH_TRADE requires zero Risk.position_quantity: {asset}"
+                    )
+            elif quantity != getattr(
                 intent,
                 "quantity",
                 None,
@@ -4151,12 +4158,24 @@ def build_canonical_order_requests(
                     f"{asset}"
                 )
 
+            request_risk = dict(risk_row)
+
+            if getattr(
+                intent,
+                "trade_type",
+                None,
+            ) == RESEARCH_TRADE:
+                request_risk["position_quantity"] = intent.quantity
+                request_risk["quantity_source"] = (
+                    "RESEARCH_PREDEFINED"
+                )
+
             request = (
                 exchange_execution_contract.build_order_request(
                     asset=asset,
                     direction=intent["direction"],
                     order_type="MARKET",
-                    risk=risk_row,
+                    risk=request_risk,
                     entry_price=intent["entry_price"],
                     reference_price=None,
                     intent_id=intent["intent_id"],
@@ -4178,9 +4197,15 @@ def build_canonical_order_requests(
                 request
             )
 
-            if request.quantity != quantity:
+            expected_request_quantity = (
+                intent.quantity
+                if getattr(intent, "trade_type", None) == RESEARCH_TRADE
+                else quantity
+            )
+
+            if request.quantity != expected_request_quantity:
                 fail(
-                    f"Canonical quantity != Risk quantity: {asset}"
+                    f"Canonical quantity mismatch: {asset}"
                 )
 
             if request.quantity_unit != CANONICAL_QUANTITY_UNIT:
@@ -4188,7 +4213,13 @@ def build_canonical_order_requests(
                     f"Canonical quantity unit invalid: {asset}"
                 )
 
-            if request.quantity_source != CANONICAL_QUANTITY_SOURCE:
+            expected_quantity_source = (
+                "RESEARCH_PREDEFINED"
+                if getattr(intent, "trade_type", None) == RESEARCH_TRADE
+                else CANONICAL_QUANTITY_SOURCE
+            )
+
+            if request.quantity_source != expected_quantity_source:
                 fail(
                     f"Canonical quantity source invalid: {asset}"
                 )
