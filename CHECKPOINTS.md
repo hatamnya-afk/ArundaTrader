@@ -1428,3 +1428,41 @@ Focused CP49 compile/test verification remains **PENDING LOCAL EXECUTION**. No P
 CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL and are not reopened or re-audited.
 
 # END CP49 IMPLEMENTATION BUILD
+
+
+## CP49 — INTEGRATION FRONTIER BUILD — 2026-09-26
+
+### STATUS
+**CP49 INTEGRATION = BUILT / LOCAL VERIFICATION PENDING / EXECUTION OFF**
+
+### BUILT
+- `cp49_autonomous_decision_boundary_v0_1.py` — canonical-decision to CP49 Order Intent boundary.
+- `cp49_provider_preflight_v0_1.py` — fail-closed provider preflight contract, no provider I/O.
+- `cp49_execution_lifecycle_v0_1.py` — one-attempt prepare/finalize lifecycle plus Observation Envelope linkage, no exchange/network/DB I/O.
+- `test_cp49_integration_v0_1.py` — focused integration-contract tests.
+
+### BOUNDARY
+- Single intelligence/capital pipeline preserved.
+- Upstream Decision, Risk, Allocation, Position Size, and Quantity provenance are required.
+- No management/runtime-selected symbol, direction, thesis, or quantity is introduced by this boundary.
+- Provider preflight fails closed on authentication, freshness, symbol, constraints, balance, position, timestamp, and safety state.
+- First-attempt lifecycle is one-way and requires the separate authorization gate.
+- Decision-time knowledge cutoff remains separated from execution-attempt time.
+- No automatic retry, duplicate/recovery submission, network call, exchange write, order submission, or DB write.
+
+### IMPORTANT BOUNDARY
+`arunda_pipeline.py` was not modified. These are contract-level adapters only; actual runtime wiring remains a separate compatibility-verification gate.
+
+### VERIFICATION
+Local compile and focused integration tests are **PENDING LOCAL EXECUTION**. No PASS or CLOSED claim is made for this frontier.
+
+### SAFETY
+Execution remains OFF; no runtime, order, exchange/API write, or production DB write occurred.
+
+### NEXT ACTION
+Run local compile + focused integration tests, then static/diff verification. If green, inspect actual runtime producer compatibility before any pipeline wiring.
+
+### GOVERNANCE
+CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL.
+
+# END CP49 INTEGRATION FRONTIER BUILD
