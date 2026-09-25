@@ -565,7 +565,14 @@ def build_decision(
     asset: str,
     signal_record: Mapping[str, Any],
     score_record: Mapping[str, Any],
+    *,
+    decision_id: str,
 ) -> dict:
+
+    if not isinstance(decision_id, str) or not decision_id.strip():
+        raise RuntimeError(
+            f"Canonical decision_id is required at decision birth: {asset}"
+        )
 
     signal = validate_signal_record(
         asset,
@@ -589,6 +596,7 @@ def build_decision(
     )
 
     decision = {
+        "decision_id": decision_id.strip(),
         "asset": asset,
         "state": result["state"],
         "direction": result["direction"],
