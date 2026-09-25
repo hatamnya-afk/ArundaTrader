@@ -1162,8 +1162,19 @@ class ToobitTradingAdapter:
             ),
             data={
                 "balance_rows": len(balances),
+                "balances": [
+                    {
+                        "asset": row.get("coin"),
+                        "free": row.get("free"),
+                        "locked": row.get("locked"),
+                        "total": row.get("total"),
+                    }
+                    for row in balances
+                    if isinstance(row, dict)
+                ],
                 "nonzero_balances": nonzero,
                 "nonzero_count": len(nonzero),
+                "balance_observation_complete": True,
             },
         )
 
