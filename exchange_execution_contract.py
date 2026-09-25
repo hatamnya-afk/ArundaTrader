@@ -10,12 +10,13 @@ NO DATABASE WRITE.
 NO EXECUTION.
 
 Authoritative quantity provenance:
-    Risk Contract -> position_quantity
+    Normal Trade -> Risk.position_quantity
+    Research Trade -> RESEARCH_PREDEFINED
 
 Canonical quantity semantics:
-    quantity is the base-asset quantity supplied by Risk.
-    Execution Boundary MUST NOT calculate, round, clamp, normalize,
-    or otherwise modify it.
+    quantity is the base-asset quantity supplied by an already-authoritative
+    upstream contract. The Execution Boundary MUST NOT calculate, round,
+    clamp, normalize, or otherwise modify it.
 """
 
 from dataclasses import dataclass
