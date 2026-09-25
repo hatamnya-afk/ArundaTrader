@@ -1381,3 +1381,23 @@ The CP49 contract layer is green. The next question is not whether the contracts
 
 ### SAFETY
 Execution remains OFF. No real order or exchange write is authorized by this verification.
+
+
+## CP49 — ACTUAL RUNTIME PRODUCER COMPATIBILITY — 2026-09-26
+
+### STATUS
+**BLOCKED / NOT VERIFIED / NOT CLOSED / EXECUTION OFF**
+
+### FINDING
+The real production chain reaches arunda_pipeline.py → dynamic_signals without a canonical decision_id. The next boundary deliberately requires that field and fails closed when absent.
+
+No authoritative upstream canonical identity producer was found in the inspected production path.
+
+### GOVERNANCE RULE
+Do not generate or derive a decision_id from UUID, hash, timestamp, snapshot identity, asset identity, intent identity, or any other synthetic mechanism.
+
+### SECONDARY GAP
+decision_engine.build_decision_snapshot(...) is not aligned with the new required decision_id parameter. This is a compatibility gap, not patched by synthetic identity.
+
+### NEXT ACTION
+Find/establish the authoritative real Decision Birth source for decision_id, then verify unchanged propagation. No runtime, live pipeline, execution, DB write, or unrelated patching.
