@@ -63,7 +63,7 @@ def test_observation_rejects_future_knowledge_cutoff():
     assert env.validate() is AttemptState.BLOCKED
 
 
-def test_observation_rejects_secret-like metadata():
+def test_observation_rejects_secret_like_metadata():
     env = ObservationEnvelope(
         "D1", "S1", "A1", 1000, 900, 1100, "BTC/USDT", "TOOBIT",
         "I1", "REQ1", "REJECTED", AttemptState.REJECTED, 35,
