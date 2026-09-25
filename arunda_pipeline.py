@@ -5386,6 +5386,19 @@ def main() -> int:
 
         cp44_balance_semantics = build_cp44_balance_semantics(
             usdt_balance,
+            balance_observation_complete=(
+                cp44_account_balance_observation.balance_observation_complete
+            ),
+            source=cp44_account_balance_observation.account.source_id,
+            observed_at=(
+                cp44_account_balance_observation.account.source_timestamp
+            ),
+            provenance={
+                "source_type": (
+                    cp44_account_balance_observation.account.source_type
+                ),
+                "account_observation": "REAL_ACCOUNT_BALANCE",
+            },
         )
 
         if cp44_balance_semantics.validation != "VALID":
