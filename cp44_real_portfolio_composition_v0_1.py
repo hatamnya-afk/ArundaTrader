@@ -83,7 +83,7 @@ def _number(value: Any) -> float | None:
 
 def _positive_number(value: Any) -> float | None:
     result = _number(value)
-    if result is None or result <= 0:
+    if result is None or result < 0:
         return None
     return result
 
