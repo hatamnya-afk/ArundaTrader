@@ -110,7 +110,12 @@ def build_dynamic_decision(
     asset: str,
     signal_record: Mapping[str, Any],
     score_record: Mapping[str, Any],
+    *,
+    decision_id: str | None = None,
 ) -> dict[str, Any]:
+
+    if not isinstance(decision_id, str) or not decision_id.strip():
+        raise ValueError("canonical decision_id is required")
 
     dynamic_asset = normalize_symbol(asset)
     base_asset = dynamic_asset.split("/", 1)[0]
@@ -214,6 +219,7 @@ def build_dynamic_decision(
 
     return {
         "status": "READY",
+        "decision_id": decision_id.strip(),
         "asset": dynamic_asset,
         "state": decision["state"],
         "direction": decision["direction"],
