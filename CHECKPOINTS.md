@@ -1491,3 +1491,24 @@ Verify the real production decision producer against the CP49 required input con
 
 ### SAFETY
 Execution remains OFF. No live runtime is authorized by this checkpoint verification.
+
+
+## CP49 — ACTUAL RUNTIME PRODUCER COMPATIBILITY — 2026-09-26
+
+### STATUS
+**BLOCKED / NOT VERIFIED / NOT CLOSED / EXECUTION OFF**
+
+### EVIDENCE
+Static inspection of the real producer chain found that dynamic_signals[asset] does not contain decision_id, while the hardened downstream Decision Birth boundary requires it and fails closed.
+
+The inspected repository path contains no authoritative upstream producer supplying a canonical decision identity into that record.
+
+A separate compatibility gap also remains in decision_engine.build_decision_snapshot(...), which calls the now-required build_decision(...) without decision_id.
+
+### GOVERNANCE DETERMINATION
+CP49 contract/integration tests remain **VERIFIED / PASS**, but actual runtime producer compatibility is **BLOCKED**.
+
+No synthetic identity may be introduced. No runtime or execution action occurred.
+
+### NEXT ACTION
+Establish the canonical decision identity at real Decision Birth from an authoritative existing source, propagate unchanged, then re-verify the complete producer chain.
