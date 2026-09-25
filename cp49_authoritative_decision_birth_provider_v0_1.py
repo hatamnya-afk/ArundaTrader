@@ -1,14 +1,19 @@
-"""CP49 authoritative Decision Birth source interface.
+"""CP49 authoritative Decision Birth provider boundary.
 
-This module defines the only acceptable runtime entry for canonical decision
-identity. A concrete provider must supply an already-existing authoritative
-decision_id. This interface never generates, derives, hashes, timestamps,
-or persists identity.
+A concrete provider must return an already-existing authoritative Decision
+Birth event. This boundary validates that event through the canonical birth
+source contract and exposes its identity unchanged.
+
+It never generates, derives, hashes, timestamps, persists, or mutates identity.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any, Protocol
+
+from cp49_canonical_decision_birth_source_v0_1 import (
+    require_canonical_decision_birth,
+)
 
 
 class CanonicalDecisionBirthProvider(Protocol):
@@ -49,14 +54,25 @@ def read_authoritative_birth(
             "CANONICAL_DECISION_BIRTH_PROVIDER_INVALID"
         )
 
-    decision_id = event.get("decision_id")
-
-    if not isinstance(decision_id, str) or not decision_id.strip():
+    try:
+        return require_canonical_decision_birth(event)
+    except ValueError as exc:
         raise RuntimeError(
-            "CANONICAL_DECISION_ID_MISSING_FROM_AUTHORITATIVE_SOURCE"
-        )
+            f"CANONICAL_DECISION_BIRTH_EVENT_INVALID:{exc}"
+        ) from exc
 
-    bound = dict(event)
-    bound["decision_id"] = decision_id.strip()
 
-    return bound
+def require_authoritative_decision_id(
+    provider: CanonicalDecisionBirthProvider,
+    *,
+    asset: str,
+    snapshot_id: str,
+    decision_timestamp_ms: int,
+) -> str:
+    event = read_authoritative_birth(
+        provider,
+        asset=asset,
+        snapshot_id=snapshot_id,
+        decision_timestamp_ms=decision_timestamp_ms,
+    )
+    return event["decision_id"]
