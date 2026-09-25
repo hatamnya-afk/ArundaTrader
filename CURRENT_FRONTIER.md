@@ -1354,3 +1354,30 @@ Run local compile + focused integration tests, then static/diff verification. If
 CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL.
 
 # END CP49 INTEGRATION FRONTIER BUILD
+
+
+## CP49 — INTEGRATION VERIFICATION — 2026-09-26
+
+### STATUS
+**CP49 INTEGRATION = VERIFIED / PASS / NOT CLOSED / EXECUTION OFF**
+
+### VERIFIED EVIDENCE
+- Focused CP49 integration/contract suite: **35/35 PASS**, **1.26s**.
+- Canonical decision identity is externally supplied and preserved; no identity derivation/generation was introduced.
+- Dynamic Decision now forwards the canonical `decision_id` into Decision Birth.
+- Static GitHub inspection confirms fail-closed Provider Preflight, one-attempt lifecycle, immutable Observation Envelope, and provider-neutral boundaries.
+- No runtime, order, exchange/API write, or production DB write occurred.
+
+### CURRENT FRONTIER
+**ACTUAL RUNTIME PRODUCER COMPATIBILITY VERIFICATION**
+
+The CP49 contract layer is green. The next question is not whether the contracts work in isolation; it is whether the real production producer chain supplies every required CP49 field, especially the canonical `decision_id`, and can reach CP49 without synthetic identity or manual intervention.
+
+### NEXT ACTION
+1. Verify the actual runtime producer fields and call chain against CP49 requirements.
+2. Confirm canonical `decision_id` exists at real decision birth and is propagated unchanged through the downstream chain.
+3. Confirm no OrderIntent/execution side effect occurs before the separately authorized execution boundary.
+4. Stop and report any compatibility gap; do not patch unrelated surfaces or run the live pipeline.
+
+### SAFETY
+Execution remains OFF. No real order or exchange write is authorized by this verification.
