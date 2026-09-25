@@ -747,6 +747,7 @@ def validate_internal_snapshot(
             )
 
         required = (
+            "decision_id",
             "asset",
             "state",
             "direction",
@@ -762,6 +763,14 @@ def validate_internal_snapshot(
                     f"Decision {asset} missing field: "
                     f"{field}"
                 )
+
+        if not isinstance(
+            decision["decision_id"],
+            str,
+        ) or not decision["decision_id"].strip():
+            raise RuntimeError(
+                f"Decision {asset} missing canonical decision_id"
+            )
 
         if decision["asset"] != asset:
 
@@ -1143,6 +1152,8 @@ def print_contract(
 def main(
     validated_signals: ValidatedSignalSnapshot,
     scores: ScoreSnapshot,
+    *,
+    decision_ids: Mapping[str, str],
 ) -> dict:
 
     print_header()
@@ -1165,6 +1176,11 @@ def main(
                 "scores is required"
             )
 
+        if not isinstance(decision_ids, Mapping):
+            raise RuntimeError(
+                "canonical decision_ids are required"
+            )
+
         # ---------------------------------------------------------------------
         # 2. Build decision snapshot
         # ---------------------------------------------------------------------
@@ -1173,6 +1189,7 @@ def main(
             build_decision_snapshot(
                 validated_signals,
                 scores,
+                decision_ids=decision_ids,
             )
         )
 
@@ -1246,11 +1263,14 @@ def main(
 def run(
     validated_signals: ValidatedSignalSnapshot,
     scores: ScoreSnapshot,
+    *,
+    decision_ids: Mapping[str, str],
 ) -> dict:
 
     return main(
         validated_signals,
         scores,
+        decision_ids=decision_ids,
     )
 
 
