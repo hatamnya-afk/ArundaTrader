@@ -5427,6 +5427,30 @@ def main() -> int:
         if set(score_snapshot) != set(market_signal_map):
             fail("Dynamic Score cardinality mismatch")
 
+        from cp49_production_decision_birth_producer_v0_1 import (
+            require_production_decision_birth,
+        )
+
+        canonical_birth_events = {
+            asset: {
+                key: value
+                for key, value in signal_record.items()
+                if key in (
+                    "decision_id",
+                    "asset",
+                    "decision_timestamp_ms",
+                    "snapshot_id",
+                    "source",
+                )
+            }
+            for asset, signal_record in market_signal_map.items()
+        }
+
+        canonical_decision_ids = require_production_decision_birth(
+            canonical_birth_events,
+            expected_assets=set(market_signal_map),
+        )
+
         # ------------------------------------------------------------------
         # 9. DYNAMIC DECISION
         # ------------------------------------------------------------------
@@ -5441,7 +5465,7 @@ def main() -> int:
             validation = validation_results[asset]
             validated_signal["valid"] = validation["valid"]
             validated_signal["validation"] = validation["validation"]
-            canonical_decision_id = validated_signal.get("decision_id")
+            canonical_decision_id = canonical_decision_ids.get(asset)
             if not isinstance(canonical_decision_id, str) or not canonical_decision_id.strip():
                 fail(
                     f"CANONICAL_DECISION_ID_MISSING_AT_REAL_PRODUCER: {asset}"
