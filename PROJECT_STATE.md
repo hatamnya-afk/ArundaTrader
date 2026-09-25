@@ -1477,3 +1477,35 @@ Run local compile + focused integration tests, then static/diff verification. If
 CP46-A1..H, CP47, and CP48 remain CLOSED / VERIFIED / CANONICAL.
 
 # END CP49 INTEGRATION FRONTIER BUILD
+
+
+## CP49 — INTEGRATION VERIFICATION — 2026-09-26
+
+### STATUS
+**CP49 INTEGRATION = VERIFIED / PASS / EXECUTION OFF / NOT CLOSED**
+
+### VERIFIED EVIDENCE
+- Local focused CP49 suite: **35/35 PASS** in **1.26s**.
+- Canonical decision-birth identity tests pass, including preservation of the externally supplied `decision_id`.
+- Dynamic decision boundary now propagates the canonical `decision_id` unchanged into decision birth.
+- GitHub static inspection confirms the CP49 integration surfaces remain provider-neutral, fail-closed, one-attempt, and free of exchange/network/DB I/O.
+- No runtime was executed as part of this verification.
+- No order was submitted.
+- No exchange/API write occurred.
+- No production DB write occurred.
+- Execution remains OFF.
+
+### CURRENT BOUNDARY
+CP49 contract/integration verification is complete. The remaining gate is **actual runtime producer compatibility**: prove that the real production decision producer supplies the canonical `decision_id` and that the complete downstream producer chain can feed CP49 without synthetic identity, manual selection, or forbidden I/O.
+
+### SAFETY
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+- no real-order runtime;
+- no capital deployment;
+- no automatic retry.
+
+### NEXT ACTION
+Inspect and verify the actual production producer compatibility boundary. Do not execute the trading pipeline or enable execution until that gate is separately satisfied and explicitly authorized.
