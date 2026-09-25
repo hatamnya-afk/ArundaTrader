@@ -74,8 +74,56 @@ def build_cp44_balance_semantics(
     balance: Any,
     *,
     denomination: str = PORTFOLIO_DENOMINATION,
+    balance_observation_complete: bool = False,
+    source: Optional[str] = None,
+    observed_at: Optional[str] = None,
+    provenance: Optional[Mapping[str, Any]] = None,
 ) -> BalanceSemanticObservation:
     if balance is None:
+        # A complete real account snapshot with no USDT row means the
+        # observed USDT balance is zero. This is a semantic consequence of
+        # the complete observation, not synthetic capital and not a special
+        # zero-capital execution path.
+        if balance_observation_complete:
+            resolved_source = source
+            resolved_observed_at = observed_at
+            resolved_provenance = dict(provenance or {})
+            resolved_provenance.update(
+                {
+                    "semantic_contract": SEMANTIC_CONTRACT_VERSION,
+                    "denomination": PORTFOLIO_DENOMINATION,
+                    "balance_observation_complete": "true",
+                }
+            )
+
+            if not resolved_source:
+                return _blocked(
+                    "BALANCE_SOURCE_UNAVAILABLE",
+                    source=resolved_source,
+                    observed_at=resolved_observed_at,
+                    provenance=resolved_provenance,
+                )
+
+            if not resolved_observed_at:
+                return _blocked(
+                    "BALANCE_SOURCE_TIMESTAMP_UNAVAILABLE",
+                    source=resolved_source,
+                    observed_at=resolved_observed_at,
+                    provenance=resolved_provenance,
+                )
+
+            return BalanceSemanticObservation(
+                capital_state="REAL_CAPITAL",
+                portfolio_capital=0.0,
+                usable_capital=0.0,
+                denomination=PORTFOLIO_DENOMINATION,
+                validation="VALID",
+                source=resolved_source,
+                observed_at=resolved_observed_at,
+                provenance=resolved_provenance,
+                reason="REAL_ZERO_USDT_BALANCE_FROM_COMPLETE_ACCOUNT_SNAPSHOT",
+            )
+
         return _blocked("BALANCE_UNAVAILABLE")
 
     if str(denomination).upper() != PORTFOLIO_DENOMINATION:
