@@ -1401,3 +1401,18 @@ decision_engine.build_decision_snapshot(...) is not aligned with the new require
 
 ### NEXT ACTION
 Find/establish the authoritative real Decision Birth source for decision_id, then verify unchanged propagation. No runtime, live pipeline, execution, DB write, or unrelated patching.
+
+
+## CP49 — CANONICAL DECISION BIRTH SOURCE — 2026-09-26
+
+### STATUS
+**CONTRACT BUILT / RUNTIME SOURCE BLOCKED / NOT VERIFIED / NOT CLOSED**
+
+### COMPLETED
+Canonical Decision Birth Source boundary and focused tests were added. The boundary validates an externally supplied authoritative birth event and propagates its existing decision_id unchanged.
+
+### BLOCKER
+No authoritative decision_id producer is currently present in the inspected real production path. dynamic_signals reaches the downstream boundary without decision_id.
+
+### NEXT ACTION
+Establish the real Decision Birth producer/source and connect its pre-existing identity without derivation or generation. Then verify propagation and compatibility. No runtime or execution.
