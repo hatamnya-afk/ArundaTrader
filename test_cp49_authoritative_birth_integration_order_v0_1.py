@@ -35,9 +35,20 @@ def main() -> None:
                 "issue_canonical_decision_id",
                 "build_birth_identity_record",
                 "require_production_decision_birth",
-                "persist_authoritative_birth",
             }:
                 calls.append(name)
+
+    producer_path = Path(__file__).resolve().parent / (
+        "cp49_production_decision_birth_producer_v0_1.py"
+    )
+    producer_tree = ast.parse(
+        producer_path.read_text(encoding="utf-8-sig")
+    )
+    producer_calls = [
+        _call_name(node)
+        for node in ast.walk(producer_tree)
+        if isinstance(node, ast.Call)
+    ]
 
     assert "determine_decision" in calls
     assert "issue_canonical_decision_id" in calls
@@ -50,15 +61,13 @@ def main() -> None:
     assert calls.index("build_birth_identity_record") < calls.index(
         "require_production_decision_birth"
     )
-    assert "persist_authoritative_birth" in calls
-    assert calls.index("persist_authoritative_birth") < calls.index(
-        "require_production_decision_birth"
-    )
+    assert "persist_authoritative_birth" in producer_calls
+    assert "persist_authoritative_birth" not in calls
 
     print("CP49_BIRTH_INTEGRATION_ORDER=PASS")
     print("SEMANTIC_DECISION_BEFORE_ID_ISSUANCE=PASS")
     print("ID_ISSUANCE_BEFORE_BIRTH_BINDING=PASS")
-    print("BIRTH_BINDING_BEFORE_DOWNSTREAM_PROPAGATION=PASS")
+    print("BIRTH_PERSISTENCE_BEFORE_DOWNSTREAM_PROPAGATION=PASS")
     print("RUNTIME_EXECUTED=FALSE")
     print("PRODUCTION_DB_TOUCHED=FALSE")
 
