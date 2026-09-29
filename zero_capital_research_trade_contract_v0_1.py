@@ -51,8 +51,9 @@ def resolve_trade_quantity(
     Capital is a runtime observation, never a configured contract value.
 
     For real capital > 0, quantity MUST come from dynamic Risk/Position
-    Sizing. For real capital == 0, the only permitted quantity is the
-    explicitly supplied predefined research quantity.
+    Sizing. For real capital == 0, preserve the authoritative Risk quantity
+    exactly, including zero, so the downstream environment can determine
+    whether the attempted order is accepted or rejected.
 
     No synthetic capital, fallback capital, scaling, rounding, or blending
     is performed.
