@@ -45,6 +45,8 @@ def build_observation(
     news_items: Any = (),
     social_items: Any = (),
     launch_timestamp: str | None = None,
+    db_writes: int = 0,
+    db_write_boundary: str | None = None,
 ) -> dict[str, Any]:
     if not isinstance(emitted_at, str) or not emitted_at.strip():
         raise ValueError("emitted_at must be a non-empty string")
@@ -53,6 +55,13 @@ def build_observation(
         not isinstance(knowledge_cutoff, str) or not knowledge_cutoff.strip()
     ):
         raise ValueError("knowledge_cutoff must be a non-empty string when supplied")
+
+    if not isinstance(db_writes, int) or isinstance(db_writes, bool) or db_writes < 0:
+        raise ValueError("db_writes must be a non-negative integer")
+    if db_writes > 0 and db_write_boundary != "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE":
+        raise ValueError("non-zero DB writes require the authorized CP49 Birth boundary")
+    if db_writes == 0 and db_write_boundary is not None:
+        raise ValueError("db_write_boundary requires non-zero DB writes")
 
     state = {
         "universe_assets": universe_assets,
@@ -107,13 +116,14 @@ def build_observation(
             "source": "arunda_pipeline",
             "runtime_snapshot_id": runtime_snapshot_id,
             "launch_boundary": launch_timestamp,
+            "db_write_boundary": db_write_boundary,
         },
         "state": state,
         "execution_state": {
             "EXECUTION": "OFF",
             "REAL_ORDER": False,
             "REAL_TRADE": False,
-            "DB_WRITES": 0,
+            "DB_WRITES": db_writes,
         },
     }
 
@@ -238,13 +248,18 @@ def _validate_observation(observation: dict[str, Any]) -> None:
     if observation["adapter_id"] != CP69_ADAPTER_ID:
         raise ValueError("invalid CP69 adapter identity")
     execution = observation["execution_state"]
-    if execution != {
-        "EXECUTION": "OFF",
-        "REAL_ORDER": False,
-        "REAL_TRADE": False,
-        "DB_WRITES": 0,
-    }:
+    if not isinstance(execution, dict):
+        raise ValueError("execution state must be a dict")
+    if execution.get("EXECUTION") != "OFF" or execution.get("REAL_ORDER") is not False or execution.get("REAL_TRADE") is not False:
         raise ValueError("unsafe execution state")
+    db_writes = execution.get("DB_WRITES")
+    if not isinstance(db_writes, int) or isinstance(db_writes, bool) or db_writes < 0:
+        raise ValueError("invalid DB_WRITES")
+    boundary = observation["provenance"].get("db_write_boundary")
+    if db_writes > 0 and boundary != "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE":
+        raise ValueError("unauthorized DB write boundary")
+    if db_writes == 0 and boundary is not None:
+        raise ValueError("DB write boundary present with zero writes")
 
 
 def _assert_json_safe(value: Any, name: str) -> None:
