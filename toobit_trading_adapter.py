@@ -178,6 +178,7 @@ class ToobitTradingAdapter:
 
         self.live_order_transport = live_order_transport
         self.live_order_transport_enabled = False
+        self._first_execution_activated = False
 
         self.session = requests.Session()
 
@@ -192,17 +193,23 @@ class ToobitTradingAdapter:
         if safety_gate.validate() is not AttemptState.READY:
             return False
 
+        if self._first_execution_activated:
+            return False
+
+        transport = self.live_order_transport
+        if transport is None:
+            return False
+
         self.execution_enabled = True
         self.order_submission_enabled = True
         self.exchange_write_enabled = True
         self.live_order_transport_enabled = True
 
-        transport = self.live_order_transport
-        if transport is not None:
-            transport.transport_enabled = True
-            transport.execution_enabled = True
-            transport.order_submission_enabled = True
-            transport.exchange_write_enabled = True
+        transport.transport_enabled = True
+        transport.execution_enabled = True
+        transport.order_submission_enabled = True
+        transport.exchange_write_enabled = True
+        self._first_execution_activated = True
 
         return True
 
