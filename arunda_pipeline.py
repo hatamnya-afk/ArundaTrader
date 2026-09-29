@@ -5910,11 +5910,19 @@ def main() -> int:
             if len(order_intents) != len(trade_ready_assets):
                 fail("ORDER_INTENT count != TRADE_READY count")
 
-            canonical_order_requests = build_canonical_order_requests(
-                order_intents,
-                risk_snapshot,
-                snapshot_id,
-            )
+            canonical_order_requests = {}
+            for asset in trade_ready_assets:
+                asset_intents = [
+                    intent
+                    for intent in order_intents
+                    if normalize_asset(intent.get("asset")) == asset
+                ]
+                asset_requests = build_canonical_order_requests(
+                    asset_intents,
+                    {asset: risk_snapshot[asset]},
+                    birth_by_asset[asset].get("snapshot_id"),
+                )
+                canonical_order_requests.update(asset_requests)
 
             bind_order_intent_quantity_observability(
                 order_intents,
