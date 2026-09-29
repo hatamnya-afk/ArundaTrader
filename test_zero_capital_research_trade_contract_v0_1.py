@@ -20,21 +20,22 @@ def main() -> int:
     assert normal["quantity"] == 0.5
     assert normal["quantity_source"] == RISK_QUANTITY_SOURCE
 
-    research = resolve_trade_quantity(
+    zero = resolve_trade_quantity(
         observed_real_capital=0.0,
         risk_position_quantity=0.0,
-        research_quantity=0.01,
     )
-    assert research["trade_type"] == RESEARCH_TRADE
-    assert research["quantity"] == 0.01
-    assert research["quantity_source"] == RESEARCH_QUANTITY_SOURCE
+    assert zero["trade_type"] == NORMAL_TRADE
+    assert zero["quantity"] == 0.0
+    assert zero["quantity_source"] == RISK_QUANTITY_SOURCE
 
-    validate_research_trade_contract(
-        trade_type=RESEARCH_TRADE,
+    zero_with_positive_risk = resolve_trade_quantity(
         observed_real_capital=0.0,
-        quantity=0.01,
-        quantity_source=RESEARCH_QUANTITY_SOURCE,
+        risk_position_quantity=0.01,
+        research_quantity=999.0,
     )
+    assert zero_with_positive_risk["trade_type"] == NORMAL_TRADE
+    assert zero_with_positive_risk["quantity"] == 0.01
+    assert zero_with_positive_risk["quantity_source"] == RISK_QUANTITY_SOURCE
 
     try:
         validate_research_trade_contract(
