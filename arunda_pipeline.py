@@ -5629,15 +5629,17 @@ def main() -> int:
             },
         )
 
-        if cp44_balance_semantics.validation != "VALID":
-            fail(
-                "CP44 BALANCE SEMANTIC CONTRACT BLOCKED: "
-                + cp44_balance_semantics.reason
-            )
-
         cp44_real_balance_mapping = (
             cp44_balance_semantics.as_mapping()
         )
+
+        # CP44 balance is an observation, not a global pipeline gate.
+        # A valid zero balance remains REAL_CAPITAL and continues through
+        # Smart Risk / Trade Gate. If the real balance observation itself is
+        # unavailable or semantically blocked, preserve that BLOCKED state
+        # per asset instead of aborting the entire current run. This keeps
+        # N -> N cardinality and allows CP69 to observe the laboratory
+        # failure without inventing capital or bypassing the contract.
 
         cp44_account_balance_mapping.update(
             {
@@ -5681,15 +5683,43 @@ def main() -> int:
             cp44_real_risk_allocation_observation,
         )
 
-        if cp44_real_portfolio_composition.state != "AVAILABLE":
-            fail(
-                "CP44 REAL PORTFOLIO COMPOSITION BLOCKED: "
-                + ",".join(cp44_real_portfolio_composition.gaps)
+        if cp44_real_portfolio_composition.state == "AVAILABLE":
+            cp44_real_capital_observation = (
+                cp44_real_portfolio_composition.as_mapping()
             )
-
-        cp44_real_capital_observation = (
-            cp44_real_portfolio_composition.as_mapping()
-        )
+        else:
+            # Preserve the real CP44 BLOCKED observation as downstream
+            # Smart-Risk input. Do not synthesize capital or terminate the
+            # whole runtime; Smart Risk will emit per-asset BLOCKED results,
+            # Trade Gate will evaluate them, and CP69 will record the outcome.
+            cp44_real_capital_observation = dict(
+                cp44_real_balance_mapping
+            )
+            cp44_real_capital_observation.update(
+                {
+                    "allocated_risk": None,
+                    "concurrent_positions": cp44_portfolio_mapping.get(
+                        "concurrent_positions"
+                    ),
+                    "state": cp44_real_portfolio_composition.state,
+                    "gaps": list(
+                        cp44_real_portfolio_composition.gaps
+                    ),
+                    "composition_version": (
+                        cp44_real_portfolio_composition.as_mapping().get(
+                            "composition_version"
+                        )
+                    ),
+                    "synthetic": False,
+                    "interpolation": False,
+                    "fill": False,
+                    "backfill": False,
+                    "padding": False,
+                    "blending": False,
+                    "db_writes": 0,
+                    "execution": False,
+                }
+            )
 
         # ------------------------------------------------------------------
         # 11. CP44 DYNAMIC SMART RISK
