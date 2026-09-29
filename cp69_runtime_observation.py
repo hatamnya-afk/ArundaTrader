@@ -280,6 +280,17 @@ def _to_json_safe(value: Any) -> Any:
         }
     if isinstance(value, (list, tuple)):
         return [_to_json_safe(item) for item in value]
+    if isinstance(value, (set, frozenset)):
+        return sorted(
+            (_to_json_safe(item) for item in value),
+            key=lambda item: json.dumps(
+                item,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+                allow_nan=False,
+            ),
+        )
     return value
 
 
