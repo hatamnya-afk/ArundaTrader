@@ -5022,6 +5022,20 @@ def main() -> int:
         # 3. REAL PRODUCTION SIGNAL INPUT + DYNAMIC SIGNAL
         # ------------------------------------------------------------------
         import importlib.util
+        def load_module(module_path: Path, module_name: str):
+            """Load a production module by path without changing pipeline ownership."""
+            spec = importlib.util.spec_from_file_location(
+                module_name,
+                module_path,
+            )
+            if spec is None or spec.loader is None:
+                fail(f"Unable to load module: {module_path}")
+
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[spec.name] = module
+            spec.loader.exec_module(module)
+            return module
+
 
         signal_input_path = (
             PROJECT_DIR / "production_signal_input_boundary_v0_1.py"
@@ -5946,7 +5960,6 @@ if __name__ == "__main__":
         print("=" * 90)
 
         raise
-
 
 
 
