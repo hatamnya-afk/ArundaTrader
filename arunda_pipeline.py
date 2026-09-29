@@ -5985,7 +5985,7 @@ def main() -> int:
         print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
         print("REAL_ORDER=FALSE")
         print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")
-        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")\n        print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")\n        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
+        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
         print(f"DB_WRITES={len(committed_decision_ids)}")
