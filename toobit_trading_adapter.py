@@ -46,6 +46,11 @@ from urllib.parse import quote
 
 import requests
 
+from cp49_first_execution_contract_v0_1 import (
+    AttemptState,
+    ExecutionSafetyGate,
+)
+
 
 # ============================================================
 # CONTRACT CONSTANTS
@@ -175,6 +180,31 @@ class ToobitTradingAdapter:
         self.live_order_transport_enabled = False
 
         self.session = requests.Session()
+
+    def authorize_first_execution(
+        self,
+        safety_gate: ExecutionSafetyGate,
+    ) -> bool:
+        """Apply the already-approved CP49 first-execution gate once."""
+        if not isinstance(safety_gate, ExecutionSafetyGate):
+            return False
+
+        if safety_gate.validate() is not AttemptState.READY:
+            return False
+
+        self.execution_enabled = True
+        self.order_submission_enabled = True
+        self.exchange_write_enabled = True
+        self.live_order_transport_enabled = True
+
+        transport = self.live_order_transport
+        if transport is not None:
+            transport.transport_enabled = True
+            transport.execution_enabled = True
+            transport.order_submission_enabled = True
+            transport.exchange_write_enabled = True
+
+        return True
 
     # ========================================================
     # CONTRACT STATUS
