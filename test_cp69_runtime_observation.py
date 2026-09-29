@@ -109,6 +109,29 @@ def test_execution_off() -> None:
     }
 
 
+def test_authorized_cp49_birth_write_provenance() -> None:
+    item = build_observation(
+        observation_id="obs:cp49-write",
+        emitted_at="2026-09-24T00:00:00+00:00",
+        runtime_snapshot_id="RS-cp49-write",
+        universe_assets=["BTC"],
+        market_data_results={},
+        opportunity_by_asset={},
+        dynamic_signals={},
+        validation_results={},
+        fusion_snapshot={},
+        score_snapshot={},
+        decision_snapshot={},
+        risk_snapshot={},
+        trade_gate_snapshot={},
+        trade_ready_assets=[],
+        db_writes=1,
+        db_write_boundary="CP49_AUTHORITATIVE_BIRTH_PERSISTENCE",
+    )
+    assert item["execution_state"]["DB_WRITES"] == 1
+    assert item["provenance"]["db_write_boundary"] == "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
+
+
 def test_provenance() -> None:
     item = make()
     assert item["provenance"]["runtime_snapshot_id"] == "RS-test"
