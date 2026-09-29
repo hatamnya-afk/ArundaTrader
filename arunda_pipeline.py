@@ -5964,21 +5964,11 @@ def main() -> int:
         print(f"CP69_OBSERVATION_WRITTEN=1")
         print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
 
-        # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
+        # 14. EXECUTION SAFETY
         # ------------------------------------------------------------------
+        # Canonical requests are verified against the existing fail-closed
+        # execution boundary. No execution is enabled by this bridge.
         assert_execution_disabled()
-
-        if trade_ready_assets:
-            print(
-                "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
-            )
-
-        # No OrderIntent creation.
-        # No canonical order request creation.
-        # No exchange submission.
-        # No execution.
-        # No DB writes.
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
@@ -5993,7 +5983,9 @@ def main() -> int:
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
         print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
-        print("REAL_ORDER=FALSE")\n        print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")\n        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
+        print("REAL_ORDER=FALSE")
+        print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")\n        print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")\n        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
         print(f"DB_WRITES={len(committed_decision_ids)}")
