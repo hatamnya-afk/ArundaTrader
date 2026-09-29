@@ -1398,6 +1398,93 @@ def _resolve_market_data_provenance(
 
     # ============================================================================
 
+def build_runtime_entry_invalidation(
+    asset: str,
+    direction: str,
+    market_data_result,
+) -> dict:
+    """Build explicit real-market Entry/Invalidation geometry for Smart Risk.
+
+    Entry is taken from the latest real closed candle. Invalidation uses the
+    existing production ATR14 stop-distance contract. This function does not
+    touch Trade Gate, Order Intent, quantity, execution, or persistence.
+    """
+    if direction not in ("LONG", "SHORT"):
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION direction invalid: {asset}: {direction}"
+        )
+
+    if market_data_result is None:
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION MARKET DATA MISSING: {asset}"
+        )
+
+    candles = getattr(market_data_result, "candles", None)
+    if not candles:
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION REAL CANDLES MISSING: {asset}"
+        )
+
+    last_candle = candles[-1]
+    if isinstance(last_candle, dict):
+        entry_price = last_candle.get("close")
+    else:
+        entry_price = getattr(last_candle, "close", None)
+
+    if not is_finite_number(entry_price) or float(entry_price) <= 0:
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION ENTRY PRICE INVALID: {asset}"
+        )
+
+    atr14 = market_data_engine.calculate_real_atr14(candles)
+    if atr14 is None:
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION ATR14 UNAVAILABLE: {asset}"
+        )
+
+    stop_distance = (
+        market_data_engine.calculate_runtime_stop_distance(atr14)
+    )
+    if stop_distance is None or not is_finite_number(stop_distance):
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION STOP_DISTANCE UNAVAILABLE: {asset}"
+        )
+
+    entry_price = float(entry_price)
+    stop_distance = float(stop_distance)
+
+    if direction == "LONG":
+        invalidation_price = entry_price - stop_distance
+    else:
+        invalidation_price = entry_price + stop_distance
+
+    if (
+        not is_finite_number(invalidation_price)
+        or float(invalidation_price) <= 0
+    ):
+        raise RuntimeError(
+            f"ENTRY/INVALIDATION PRICE INVALID: {asset}"
+        )
+
+    return {
+        "asset": asset,
+        "direction": direction,
+        "entry_price": entry_price,
+        "invalidation_price": float(invalidation_price),
+        "stop_distance": stop_distance,
+        "atr14": float(atr14),
+        "source": getattr(market_data_result, "source", None),
+        "synthetic": False,
+        "interpolation": False,
+        "fill": False,
+        "backfill": False,
+        "padding": False,
+        "blending": False,
+        "db_writes": 0,
+        "execution": False,
+    }
+
+
 def build_runtime_quantity_bridge(
     snapshot_id: str,
     opportunity_rows: list[dict],
@@ -5771,6 +5858,36 @@ def main() -> int:
                             "observed_at",
                             "provenance",
                         )
+                    }
+                )
+
+            # Explicit production Entry/Invalidation producer:
+            # Decision -> Entry/Invalidation -> Smart Risk.
+            # Uses only the current real closed-candle market data and the
+            # existing production ATR14 stop-distance contract.
+            decision_direction = decision_snapshot[asset].get(
+                "direction"
+            )
+            if decision_direction in ("LONG", "SHORT"):
+                entry_invalidation = build_runtime_entry_invalidation(
+                    asset,
+                    decision_direction,
+                    market_data_by_symbol.get(
+                        f"{asset}/USDT"
+                    ),
+                )
+                smart_risk_observation.update(
+                    {
+                        "entry_price": entry_invalidation["entry_price"],
+                        "invalidation_price": (
+                            entry_invalidation["invalidation_price"]
+                        ),
+                        "stop_distance": (
+                            entry_invalidation["stop_distance"]
+                        ),
+                        "entry_invalidation_source": (
+                            entry_invalidation["source"]
+                        ),
                     }
                 )
 
