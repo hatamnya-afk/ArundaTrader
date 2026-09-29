@@ -196,3 +196,29 @@ def test_database_write_is_never_enabled():
     from toobit_spot_order_live_transport_v0_1 import DATABASE_WRITE_ENABLED
 
     assert DATABASE_WRITE_ENABLED is False
+
+def test_live_transport_preserves_exchange_order_id_on_acceptance():
+    session = FakeSession(
+        FakeResponse(
+            200,
+            {
+                "orderId": "TOOBIT-ORDER-1",
+                "status": "FILLED",
+            },
+        )
+    )
+    transport = ToobitSpotOrderLiveTransport(
+        api_key="TEST_KEY",
+        api_secret="TEST_SECRET",
+        session=session,
+        transport_enabled=True,
+        execution_enabled=True,
+        order_submission_enabled=True,
+        exchange_write_enabled=True,
+    )
+
+    result = transport.submit(make_limit_sell_request())
+
+    assert result.status == "PASS"
+    assert result.accepted is True
+    assert result.exchange_order_id == "TOOBIT-ORDER-1"
