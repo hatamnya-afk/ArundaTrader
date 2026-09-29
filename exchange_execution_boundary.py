@@ -13,6 +13,10 @@ from exchange_execution_contract import (
     EXECUTION_ENABLED,
     ORDER_SUBMISSION_ENABLED,
 )
+from cp49_first_execution_contract_v0_1 import (
+    AttemptState,
+    ExecutionSafetyGate,
+)
 
 CAPABILITY_ORDER_SUBMISSION = "ORDER_SUBMISSION"
 
@@ -22,6 +26,7 @@ def execute_order(
     adapter: Any = None,
     *,
     eligibility: Optional[ExecutionEligibilityResult] = None,
+    safety_gate: Optional[ExecutionSafetyGate] = None,
 ) -> CanonicalExecutionResult:
 
     # ============================================================
@@ -97,24 +102,26 @@ def execute_order(
         )
 
     # ============================================================
-    # 4. GLOBAL EXECUTION SAFETY LOCK
+    # 4. CP49 FIRST-EXECUTION AUTHORIZATION GATE
     #
-    # Must happen BEFORE any adapter interaction.
+    # Module-level execution flags remain fail-closed defaults.
+    # Only a READY CP49 gate may authorize the existing
+    # adapter/transport for this execution path.
     # ============================================================
-    if EXECUTION_ENABLED is not True:
+    if not isinstance(safety_gate, ExecutionSafetyGate):
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
-            error_code="EXECUTION_DISABLED",
-            error_message="Execution is disabled.",
+            error_code="CP49_SAFETY_GATE_REQUIRED",
+            error_message="CP49 first-execution safety gate is required.",
         )
 
-    if ORDER_SUBMISSION_ENABLED is not True:
+    if safety_gate.validate() is not AttemptState.READY:
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
-            error_code="ORDER_SUBMISSION_DISABLED",
-            error_message="Order submission is disabled.",
+            error_code="CP49_SAFETY_GATE_BLOCKED",
+            error_message="CP49 first-execution safety gate is not READY.",
         )
 
     # ============================================================
@@ -129,7 +136,19 @@ def execute_order(
         )
 
     # ============================================================
-    # 6. CAPABILITY GATE
+    # 6. AUTHORIZE EXISTING ADAPTER / TRANSPORT
+    # ============================================================
+    authorize = getattr(adapter, "authorize_first_execution", None)
+    if not callable(authorize) or authorize(safety_gate) is not True:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code="CP49_EXECUTION_ACTIVATION_FAILED",
+            error_message="Existing adapter/transport could not be authorized by CP49 gate.",
+        )
+
+    # ============================================================
+    # 7. CAPABILITY GATE
     # ============================================================
     try:
         capabilities = adapter.capabilities()
