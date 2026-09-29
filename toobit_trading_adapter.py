@@ -2,10 +2,10 @@
 """
 ARUNDA TRADER — TOOBIT TRADING ADAPTER v0.2
 ============================================================
-MODE        : READ-ONLY CONTRACT INTEGRATION
+MODE        : READ-ONLY + CONTROLLED LIVE ORDER TRANSPORT
 EXCHANGE    : Toobit
-EXECUTION   : DISABLED
-ORDER WRITE : FORBIDDEN
+EXECUTION   : FAIL-CLOSED BY DEFAULT
+ORDER WRITE : CONTROLLED / DISABLED BY DEFAULT
 WITHDRAW    : FORBIDDEN
 DATABASE    : NO WRITE
 
@@ -21,10 +21,10 @@ v0.2 repair:
     - recvWindow included in signed USER_DATA requests
     - No requests parameter re-encoding of signed query
     - Diagnostic HTTP/API error payload preserved
-    - No execution surface added
+    - Live spot order transport is an explicit, fail-closed execution surface
 
 Hard rules:
-    - No order submission
+    - No order submission unless explicit live transport flags are enabled
     - No order cancellation
     - No withdrawal
     - No exchange write
@@ -117,7 +117,7 @@ class AdapterResult:
 
 class ToobitTradingAdapter:
     """
-    Read-only Toobit exchange boundary.
+    Toobit exchange boundary, fail-closed by default.
 
     Allowed:
         - public server time
@@ -127,8 +127,8 @@ class ToobitTradingAdapter:
         - authenticated account read
         - authenticated API-key metadata read
 
-    Forbidden:
-        - order submission
+    Forbidden by default:
+        - order submission until explicit live transport enablement
         - order cancellation
         - withdrawal
         - any exchange write
@@ -1438,7 +1438,11 @@ class ToobitTradingAdapter:
                 time_in_force="GTC" if request.order_type == "LIMIT" else None,
                 quantity=request.quantity,
                 quantity_unit=request.quantity_unit,
-                price=request.entry_price,
+                price=(
+                    request.entry_price
+                    if request.order_type != "MARKET"
+                    else None
+                ),
                 timestamp=int(request.timestamp),
                 new_client_order_id=request.intent_id,
             )
@@ -1449,7 +1453,7 @@ class ToobitTradingAdapter:
 
             return CanonicalExecutionResult(
                 accepted=transport_result.accepted,
-                exchange_order_id=None,
+                exchange_order_id=transport_result.exchange_order_id,
                 status=transport_result.status,
                 asset=request.asset,
                 direction=request.direction,
