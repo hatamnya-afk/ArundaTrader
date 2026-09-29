@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from dataclasses import fields, is_dataclass
 from pathlib import Path
 from typing import Any
 
@@ -271,6 +272,17 @@ def _assert_json_safe(value: Any, name: str) -> None:
 
 def _find_json_violation(value: Any, path: str) -> None:
     if value is None or isinstance(value, (str, bool, int)):
+        return
+
+    # Production market data uses the immutable MarketDataResult dataclass.
+    # CP69 owns the observation serialization boundary, so convert dataclass
+    # instances to their field mapping without changing their semantics.
+    if is_dataclass(value) and not isinstance(value, type):
+        for field in fields(value):
+            _find_json_violation(
+                getattr(value, field.name),
+                f"{path}.{field.name}",
+            )
         return
 
     if isinstance(value, float):
