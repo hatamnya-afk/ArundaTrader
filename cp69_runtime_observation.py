@@ -64,23 +64,25 @@ def build_observation(
     if db_writes == 0 and db_write_boundary is not None:
         raise ValueError("db_write_boundary requires non-zero DB writes")
 
-    state = {
-        "universe_assets": universe_assets,
-        "market_data_results": market_data_results,
-        "opportunity_by_asset": opportunity_by_asset,
-        "dynamic_signals": dynamic_signals,
-        "validation_results": validation_results,
-        "fusion_snapshot": fusion_snapshot,
-        "score_snapshot": score_snapshot,
-        "decision_snapshot": decision_snapshot,
-        "risk_snapshot": risk_snapshot,
-        "trade_gate_snapshot": trade_gate_snapshot,
-        "failure_attribution": build_failure_attribution(trade_gate_snapshot),
-        "trade_ready_assets": trade_ready_assets,
-        "news_items": news_items,
-        "social_items": social_items,
-        "launch_timestamp": launch_timestamp,
-    }
+    state = _to_json_safe(
+        {
+            "universe_assets": universe_assets,
+            "market_data_results": market_data_results,
+            "opportunity_by_asset": opportunity_by_asset,
+            "dynamic_signals": dynamic_signals,
+            "validation_results": validation_results,
+            "fusion_snapshot": fusion_snapshot,
+            "score_snapshot": score_snapshot,
+            "decision_snapshot": decision_snapshot,
+            "risk_snapshot": risk_snapshot,
+            "trade_gate_snapshot": trade_gate_snapshot,
+            "failure_attribution": build_failure_attribution(trade_gate_snapshot),
+            "trade_ready_assets": trade_ready_assets,
+            "news_items": news_items,
+            "social_items": social_items,
+            "launch_timestamp": launch_timestamp,
+        }
+    )
     _assert_json_safe(state, "state")
 
     canonical_state = json.dumps(
@@ -261,6 +263,24 @@ def _validate_observation(observation: dict[str, Any]) -> None:
         raise ValueError("unauthorized DB write boundary")
     if db_writes == 0 and boundary is not None:
         raise ValueError("DB write boundary present with zero writes")
+
+
+def _to_json_safe(value: Any) -> Any:
+    if value is None or isinstance(value, (str, bool, int, float)):
+        return value
+    if is_dataclass(value) and not isinstance(value, type):
+        return {
+            field.name: _to_json_safe(getattr(value, field.name))
+            for field in fields(value)
+        }
+    if isinstance(value, dict):
+        return {
+            key: _to_json_safe(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_to_json_safe(item) for item in value]
+    return value
 
 
 def _assert_json_safe(value: Any, name: str) -> None:
