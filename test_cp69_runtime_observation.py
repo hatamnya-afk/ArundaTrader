@@ -4,7 +4,19 @@ from __future__ import annotations
 
 import json
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
+
+
+
+@dataclass(frozen=True)
+class SampleMarketDataResult:
+    symbol: str
+    status: str
+    candles: tuple[dict, ...]
+    source: str
+    error: str | None
+    real_data: bool
 
 from cp69_runtime_observation import (
     CP69_ADAPTER_ID,
