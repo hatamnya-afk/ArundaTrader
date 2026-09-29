@@ -3507,7 +3507,6 @@ def build_current_order_intents(
         regime_snapshot: dict,
         risk_snapshot: dict,
         observed_real_capital: float | int | None = None,
-        research_quantity: float | int | None = None,
     ) -> list[dict]:
         gate_rows = exact_asset_rows(
             gate_results,
@@ -3717,7 +3716,6 @@ def build_current_order_intents(
             resolved_quantity = resolve_trade_quantity(
                 observed_real_capital=observed_real_capital,
                 risk_position_quantity=quantity,
-                research_quantity=research_quantity,
             )
 
             intent = RuntimeOrderIntent(
@@ -5903,7 +5901,6 @@ def main() -> int:
                     regime_snapshot,
                     asset_risk,
                     observed_real_capital=cp44_real_capital_observation.get("portfolio_capital"),
-                    research_quantity=cp44_real_capital_observation.get("research_quantity"),
                 )
                 order_intents.extend(asset_intents)
 
