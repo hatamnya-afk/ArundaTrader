@@ -1565,3 +1565,98 @@ The inspected real production chain still has no authoritative upstream producer
 
 ### NEXT ACTION
 Locate/establish the real authoritative Decision Birth producer, then bind its existing decision_id through this boundary and verify unchanged propagation. Do not fabricate an identity or run the live pipeline.
+
+
+## MASTER ROADMAP RECONCILIATION — 2026-09-29
+
+## PURPOSE
+This section is the current continuity/state authority for Builder/Manager context loss. It reconciles the historical roadmap with the later CP64–CP71 governance path and the current CP69 operationalization work. It does not reopen or re-audit CLOSED/VERIFIED checkpoints.
+
+## SOURCE DISCIPLINE
+The Local Original Project at `C:\Users\ASUS\ArundaTrader` remains the primary historical/reference object. GitHub is a controlled project reference. When sources disagree, the disagreement is recorded rather than silently resolved. Unknown history is never reconstructed by guesswork.
+
+## HISTORICAL CHECKPOINT PATH
+The verified management path recovered from project history is:
+
+`CP41 → CP43 → CP44 → CP45 → CP46-A..H → CP47 → CP48 → CP49 → CP64 → CP65 → CP66 → CP67 → CP68 → CP69 → CP70 → CP71`
+
+Important historical notes:
+- CP44's early `INSUFFICIENT_CONTIGUOUS_CONTEXT:MHA/USDT:7` blocker is historical. Later real-data accumulation resolved that blocker; it must not be treated as the current blocker.
+- CP44 historical BUY-rule recovery completed with no authoritative independent market BUY trigger recovered. No trigger was invented.
+- CP46-A..H, CP47 and CP48 are CLOSED/VERIFIED/CANONICAL and are not reopened without direct regression evidence.
+- CP49 contract/integration verification reached 35/35 PASS, while its historical runtime-producer compatibility blocker led to the authoritative Decision Birth boundary. The canonical identity must be born from an authoritative source; synthetic identity is forbidden.
+
+## CP64–CP71 CANONICAL ROADMAP
+These checkpoints are historical/canonical and remain closed:
+- CP64 — Environment Intelligence Bridge: closed; no uncontrolled trading, DB mutation, or Core contamination.
+- CP65 — Trader Classroom / Control Center: closed; Trader UI and Aroonda Chat preserved.
+- CP66 — Command / Dialogue Environment: closed; command/dialogue is not execution.
+- CP67 — Trader Improvement Loop: closed; Proposal is not Production Change.
+- CP68 — Experience / Cross-Environment Transfer: closed; no automatic transfer.
+- CP69 — Canonical Runtime Observation Bridge: closed/canonical as a contract/architecture; its operational wiring is a downstream implementation/verification activity, not a reopening of the checkpoint.
+- CP70 — Output Supervision: closed/canonical.
+- CP71 — Capability Gap → Sandbox → Build / Controlled Self-Improvement boundary: closed/canonical.
+
+## POST-CP71 OPERATING ROUTE
+The post-CP71 route is:
+
+`Trader Integration Priority → CP69 operational wiring → read-only E2E observation → Aroonda analysis/explanation/gap detection → CP72 Controlled Self-Improvement → CP73 Multi-Environment Generalization → CP74 Controlled Autonomy Expansion → CP75 Self-Directed Growth Gate`
+
+Trader remains the execution authority. Aroonda observes, analyzes, explains, detects gaps and proposes/learns within its governed boundary; it does not silently mutate ArundaTrader history/contracts or take over exchange execution.
+
+## CP69 OPERATIONAL CONTRACT
+Canonical CP69 runtime observation:
+- schema: `arunda.runtime_observation`
+- version: `1.0`
+- stream: `runtime_observations/arundatrader_runtime_observations.jsonl`
+- producer: `cp69_runtime_observation.py`
+- producer boundary: `build_observation(...)` / `append_observation(...)`
+- source provenance: `arunda_pipeline`
+- execution: `EXECUTION=OFF`, `REAL_ORDER=False`, `REAL_TRADE=False`
+- DB writes, if present, must use `CP49_AUTHORITATIVE_BIRTH_PERSISTENCE`
+- append-only observation; no recomputation of upstream intelligence; no retry/loop.
+
+The canonical flow is:
+
+`REAL MARKET → ArundaTrader Runtime → CP69 Observation → canonical stream → ArundaTrader UI + Aroonda consumer`
+
+The CP69 observation is the single canonical runtime evidence source. Aroonda is not a second market-data or decision source.
+
+## CURRENT REAL FRONTIER
+The current work is NOT a new architecture and NOT a reopening of CP64–CP71.
+
+Current frontier:
+**E2E Runtime proof of the already-built production pipeline through Decision Birth → Risk → Trade Gate → CP69 observation, followed by verification that the canonical observation is consumed by the Trader UI and then available to Aroonda.**
+
+The latest authorized runtime reached:
+`Universe 840 → Opportunity 421 → Signal 421 → Validation 421 → Fusion 421`
+and then failed before Decision Birth because `load_module` was undefined.
+
+The minimal loader boundary was subsequently added, compiled successfully, synchronized to GitHub in commit `5b23d2c9c121583e539c6ccbb3bb51c7de1cb307`, and one new runtime was authorized/executed. Its final result is not yet recorded in this roadmap and must not be assumed.
+
+## CURRENT GATE
+The current gate is therefore:
+
+`Fusion → Authoritative Decision Birth → Risk → Trade Gate → Trade Ready → CP69 Observation → UI/consumer evidence`
+
+Only the actual runtime evidence can move this gate to PASS.
+
+## HARD PROHIBITIONS
+- No reopening closed checkpoints because context was lost.
+- No redesign of Opportunity/Signal/Score/Fusion/Decision to compensate for missing context.
+- No synthetic/fill/backfill/interpolation/padding/blending.
+- No synthetic or manually invented decision identity.
+- No DB repair or schema redesign.
+- No execution enablement, order submission, exchange/API write, or capital deployment without a separate explicit Management authorization.
+- No automatic retry after a failed authorized runtime.
+- No broad re-audit when a narrow downstream verification is sufficient.
+
+## UNKNOWN / CONFLICTING RECORD
+Any historical checkpoint detail not supported by current repository evidence or recovered project history is recorded as UNKNOWN/UNRESOLVED rather than invented. The older sections of these governance files remain preserved as historical evidence; this reconciliation section is the current forward-management anchor.
+
+## MANAGEMENT RULE
+`BUILD → VERIFY → CLOSE → ADVANCE`
+
+Closed means closed. Context loss is never permission to restart. When uncertain: preserve, record the uncertainty, and escalate rather than improvise.
+
+# END MASTER ROADMAP RECONCILIATION
