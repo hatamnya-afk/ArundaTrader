@@ -2,13 +2,19 @@
 
 This is the production integration point for canonical Decision Birth.
 It accepts only an already-existing authoritative birth event per asset.
-It never generates, derives, hashes, timestamps, persists, or mutates identity.
+Identity is never generated, derived, hashed, timestamped, or mutated here.
+Persistence is performed only through the explicitly supplied SQLite
+connection at the authoritative Birth boundary.
 """
 from __future__ import annotations
 
+import sqlite3
 from collections.abc import Mapping
 from typing import Any
 
+from cp49_authoritative_decision_birth_store_v0_1 import (
+    persist_authoritative_birth,
+)
 from cp49_canonical_decision_birth_source_v0_1 import (
     require_canonical_decision_birth,
 )
@@ -16,9 +22,13 @@ from cp49_canonical_decision_birth_source_v0_1 import (
 
 def produce_canonical_decision_ids(
     birth_events: Mapping[str, Mapping[str, Any]],
+    *,
+    conn: sqlite3.Connection,
 ) -> dict[str, str]:
     if not isinstance(birth_events, Mapping):
         raise RuntimeError("CANONICAL_DECISION_BIRTH_EVENTS_INVALID")
+    if not isinstance(conn, sqlite3.Connection):
+        raise RuntimeError("CANONICAL_DECISION_BIRTH_DB_CONNECTION_INVALID")
 
     result: dict[str, str] = {}
 
@@ -39,7 +49,19 @@ def produce_canonical_decision_ids(
                 f"CANONICAL_DECISION_BIRTH_ASSET_MISMATCH:{asset}"
             )
 
-        result[asset.strip().upper()] = bound["decision_id"]
+        try:
+            persisted = persist_authoritative_birth(conn, bound)
+        except (RuntimeError, ValueError) as exc:
+            raise RuntimeError(
+                f"CANONICAL_DECISION_BIRTH_PERSISTENCE_BLOCKED:{asset}:{exc}"
+            ) from exc
+
+        if persisted.get("decision_id") != bound["decision_id"]:
+            raise RuntimeError(
+                f"CANONICAL_DECISION_BIRTH_PERSISTED_ID_MISMATCH:{asset}"
+            )
+
+        result[asset.strip().upper()] = persisted["decision_id"]
 
     if set(result) != {str(key).strip().upper() for key in birth_events}:
         raise RuntimeError("CANONICAL_DECISION_BIRTH_CARDINALITY_MISMATCH")
@@ -51,8 +73,12 @@ def require_production_decision_birth(
     birth_events: Mapping[str, Mapping[str, Any]],
     *,
     expected_assets: set[str],
+    conn: sqlite3.Connection,
 ) -> dict[str, str]:
-    decision_ids = produce_canonical_decision_ids(birth_events)
+    decision_ids = produce_canonical_decision_ids(
+        birth_events,
+        conn=conn,
+    )
 
     if decision_ids.keys() != {asset.upper() for asset in expected_assets}:
         raise RuntimeError(
