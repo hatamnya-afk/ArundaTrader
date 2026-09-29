@@ -35,6 +35,7 @@ def main() -> None:
                 "issue_canonical_decision_id",
                 "build_birth_identity_record",
                 "require_production_decision_birth",
+                "persist_authoritative_birth",
             }:
                 calls.append(name)
 
@@ -47,6 +48,10 @@ def main() -> None:
         "build_birth_identity_record"
     )
     assert calls.index("build_birth_identity_record") < calls.index(
+        "require_production_decision_birth"
+    )
+    assert "persist_authoritative_birth" in calls
+    assert calls.index("persist_authoritative_birth") < calls.index(
         "require_production_decision_birth"
     )
 
