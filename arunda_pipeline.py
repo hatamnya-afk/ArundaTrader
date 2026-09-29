@@ -43,7 +43,7 @@ HARD SAFETY RULES:
 - EXECUTION ENABLED = False
 - No exchange writes
 - No order submission
-- No database writes
+- No database writes outside the CP49 authoritative Birth persistence boundary
 - No synthetic data
 - No interpolation
 - No fill
@@ -59,6 +59,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import sqlite3
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -5527,11 +5528,20 @@ def main() -> int:
             canonical_birth_events[asset] = birth_event
             canonical_decision_ids[asset] = decision_id
 
-        # Existing CP49 binding validates/propagates the Birth identity.
-        require_production_decision_birth(
-            canonical_birth_events,
-            expected_assets=set(market_signal_map),
-        )
+        # CP49 authoritative Birth boundary validates, persists, and
+        # returns the committed identity. No downstream layer may substitute it.
+        with sqlite3.connect(DB_PATH) as cp49_birth_conn:
+            committed_decision_ids = require_production_decision_birth(
+                canonical_birth_events,
+                expected_assets=set(market_signal_map),
+                conn=cp49_birth_conn,
+            )
+
+        if committed_decision_ids != {
+            asset.upper(): canonical_decision_ids[asset]
+            for asset in canonical_decision_ids
+        }:
+            fail("CP49 COMMITTED_DECISION_ID_MISMATCH")
 
         # ------------------------------------------------------------------
         # 9. DYNAMIC DECISION
@@ -5862,6 +5872,7 @@ def main() -> int:
         print(f"FUSION_READY={len(fusion_snapshot)}")
         print(f"SCORE_READY={len(score_snapshot)}")
         print(f"DECISION_READY={len(decision_snapshot)}")
+        print(f"CP49_BIRTH_PERSISTED={len(committed_decision_ids)}")
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
@@ -5869,7 +5880,7 @@ def main() -> int:
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
-        print("DB_WRITES=0")
+        print(f"DB_WRITES={len(committed_decision_ids)}")
         print("FAIL_CLOSED=TRUE")
         print("=" * 90)
 
