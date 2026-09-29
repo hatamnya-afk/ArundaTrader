@@ -3736,11 +3736,9 @@ def build_current_order_intents(
             intent.observed_real_capital = (
                 resolved_quantity["observed_real_capital"]
             )
-            intent.research_quantity = (
-                research_quantity
-                if resolved_quantity["trade_type"] == RESEARCH_TRADE
-                else None
-            )
+            # Zero-capital production path never substitutes a predefined
+            # research quantity. Preserve the field as empty for compatibility.
+            intent.research_quantity = None
 
             if set(intent.keys()) != set(
                 CURRENT_ORDER_INTENT_REQUIRED_FIELDS
