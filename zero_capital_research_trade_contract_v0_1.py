@@ -2,7 +2,7 @@
 
 One-pipeline quantity resolution:
     observed real capital > 0 -> normal dynamic risk quantity.
-    observed real capital == 0 -> predefined research quantity.
+    observed real capital == 0 -> preserve the authoritative Risk quantity exactly.
 
 This contract never invents capital and never submits an order.
 """
@@ -44,7 +44,7 @@ def resolve_trade_quantity(
     *,
     observed_real_capital: Any,
     risk_position_quantity: Any,
-    research_quantity: Any,
+    research_quantity: Any = None,
 ) -> dict[str, Any]:
     """Resolve Trade Intent quantity from observed capital.
 
@@ -54,6 +54,10 @@ def resolve_trade_quantity(
     Sizing. For real capital == 0, preserve the authoritative Risk quantity
     exactly, including zero, so the downstream environment can determine
     whether the attempted order is accepted or rejected.
+
+    research_quantity is retained as a compatibility-only argument and is
+    intentionally ignored. Zero capital never substitutes a predefined
+    quantity.
 
     No synthetic capital, fallback capital, scaling, rounding, or blending
     is performed.
