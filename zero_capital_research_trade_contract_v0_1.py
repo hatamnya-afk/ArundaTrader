@@ -75,15 +75,18 @@ def resolve_trade_quantity(
             "observed_real_capital": capital,
         }
 
-    quantity = _positive(
-        research_quantity,
-        "RESEARCH_QUANTITY_INVALID",
+    # Zero real capital does not stop the order path. Preserve the
+    # authoritative Risk position quantity exactly as produced (including
+    # zero) and let the execution environment decide the outcome.
+    quantity = _non_negative(
+        risk_position_quantity,
+        "RISK_POSITION_QUANTITY_INVALID",
     )
     return {
-        "trade_type": RESEARCH_TRADE,
+        "trade_type": NORMAL_TRADE,
         "quantity": quantity,
         "quantity_unit": QUANTITY_UNIT_BASE_ASSET,
-        "quantity_source": RESEARCH_QUANTITY_SOURCE,
+        "quantity_source": RISK_QUANTITY_SOURCE,
         "observed_real_capital": 0.0,
     }
 
