@@ -148,6 +148,7 @@ class CP49ActivationWiringTests(unittest.TestCase):
         self.assertTrue(transport.execution_enabled)
         self.assertTrue(transport.order_submission_enabled)
         self.assertTrue(transport.exchange_write_enabled)
+        self.assertFalse(adapter.authorize_first_execution(ready_gate()))
 
     def test_boundary_requires_cp49_gate(self):
         req = request()
