@@ -69,6 +69,7 @@ class SpotLiveOrderResult:
     error_code: Optional[str]
     error_message: Optional[str]
     submitted_to_matching_engine: bool
+    exchange_order_id: Optional[str] = None
 
 
 def _scalar(value: Any) -> str:
@@ -363,6 +364,13 @@ class ToobitSpotOrderLiveTransport:
                 response_body = getattr(response, "text", None)
 
             accepted = response.status_code == 200
+            exchange_order_id = (
+                str(response_body.get("orderId"))
+                if accepted
+                and isinstance(response_body, dict)
+                and response_body.get("orderId") is not None
+                else None
+            )
 
             return SpotLiveOrderResult(
                 accepted=accepted,
@@ -372,6 +380,7 @@ class ToobitSpotOrderLiveTransport:
                 error_code=None if accepted else "HTTP_ERROR",
                 error_message=None if accepted else str(response.status_code),
                 submitted_to_matching_engine=True,
+                exchange_order_id=exchange_order_id,
             )
 
         except SpotLiveOrderContractError as exc:
