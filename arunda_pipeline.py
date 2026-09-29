@@ -5869,7 +5869,65 @@ def main() -> int:
         print(f"TRADE_READY={len(trade_ready_assets)}")
 
         # ------------------------------------------------------------------
-        # 12. CP69 CANONICAL RUNTIME OBSERVATION
+        # 12. CURRENT ORDER-INTENT -> CANONICAL REQUEST BRIDGE
+        # ------------------------------------------------------------------
+        # Reuse the already-defined production contracts. This stage only
+        # connects Trade Gate output to OrderIntent/CanonicalRequest; the
+        # execution safety boundary remains unchanged.
+        order_intents = []
+        canonical_order_requests = {}
+        quantity_records = {}
+        validated_order_intents = 0
+        execution_boundary_status = "DEFERRED_NO_CANONICAL_REQUESTS"
+
+        if trade_ready_assets:
+            # CP49 gives each asset its authoritative runtime snapshot id.
+            # Build the existing OrderIntent contract asset-by-asset so that
+            # no asset inherits another asset's snapshot identity.
+            birth_by_asset = {
+                asset: canonical_birth_events[asset]
+                for asset in trade_ready_assets
+            }
+            for asset in trade_ready_assets:
+                asset_gate = [trade_gate_snapshot[asset]]
+                asset_opportunity = [opportunity_by_asset[asset]]
+                asset_risk = {asset: risk_snapshot[asset]}
+                asset_snapshot_id = birth_by_asset[asset].get("snapshot_id")
+                if not isinstance(asset_snapshot_id, str) or not asset_snapshot_id:
+                    fail(f"ORDER_INTENT snapshot identity missing: {asset}")
+
+                asset_intents = build_current_order_intents(
+                    asset_gate,
+                    asset_opportunity,
+                    asset_snapshot_id,
+                    regime_snapshot,
+                    asset_risk,
+                    observed_real_capital=cp44_real_capital_observation.get("portfolio_capital"),
+                    research_quantity=cp44_real_capital_observation.get("research_quantity"),
+                )
+                order_intents.extend(asset_intents)
+
+            if len(order_intents) != len(trade_ready_assets):
+                fail("ORDER_INTENT count != TRADE_READY count")
+
+            canonical_order_requests = build_canonical_order_requests(
+                order_intents,
+                risk_snapshot,
+                snapshot_id,
+            )
+
+            bind_order_intent_quantity_observability(
+                order_intents,
+                quantity_records,
+                canonical_order_requests,
+            )
+            validated_order_intents = len(order_intents)
+            execution_boundary_status = verify_execution_boundary_integration(
+                canonical_order_requests,
+            )
+
+        # ------------------------------------------------------------------
+        # 13. CP69 CANONICAL RUNTIME OBSERVATION
         # ------------------------------------------------------------------
         cp69_observation = build_observation(
             emitted_at=utc_now_iso(),
@@ -5926,8 +5984,8 @@ def main() -> int:
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
-        print("ORDER_INTENTS_CREATED=0")
-        print("REAL_ORDER=FALSE")
+        print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
+        print("REAL_ORDER=FALSE")\n        print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")\n        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
         print(f"DB_WRITES={len(committed_decision_ids)}")
