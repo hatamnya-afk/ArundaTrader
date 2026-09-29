@@ -5843,6 +5843,12 @@ def main() -> int:
             news_items=news_items,
             social_items=social_items,
             launch_timestamp=LAUNCH_TIMESTAMP,
+            db_writes=len(committed_decision_ids),
+            db_write_boundary=(
+                "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
+                if committed_decision_ids
+                else None
+            ),
         )
         cp69_stream_path = append_observation(cp69_observation)
         print(f"CP69_OBSERVATION_WRITTEN=1")
