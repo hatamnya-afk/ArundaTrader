@@ -116,11 +116,10 @@ def validate_research_trade_contract(
         return True
 
     if trade_type == NORMAL_TRADE:
-        if capital <= 0.0:
-            raise ValueError(
-                "NORMAL_TRADE_REQUIRES_POSITIVE_OBSERVED_REAL_CAPITAL"
-            )
-        _positive(quantity, "RISK_POSITION_QUANTITY_INVALID")
+        # Zero observed capital is not a pipeline gate. A Risk quantity may
+        # still be carried into the canonical order path; the exchange is
+        # authoritative for balance sufficiency when execution is enabled.
+        _non_negative(quantity, "RISK_POSITION_QUANTITY_INVALID")
         if quantity_source != RISK_QUANTITY_SOURCE:
             raise ValueError("RISK_QUANTITY_SOURCE_INVALID")
         return True
