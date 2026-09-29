@@ -431,9 +431,9 @@ class ToobitTradingAdapter:
         # Do not use local machine time here.
         # ----------------------------------------------------
 
-        payload["timestamp"] = (
-            self._get_server_timestamp_ms()
-        )
+        signed_timestamp_ms = self._get_server_timestamp_ms()
+        self._last_signed_timestamp_ms = signed_timestamp_ms
+        payload["timestamp"] = signed_timestamp_ms
 
         # ----------------------------------------------------
         # Signed recvWindow.
@@ -1050,6 +1050,12 @@ class ToobitTradingAdapter:
                     ),
                 )
 
+            source_timestamp = getattr(
+                self,
+                "_last_signed_timestamp_ms",
+                None,
+            )
+
             return AdapterResult(
                 status="PASS",
                 allowed=True,
@@ -1066,6 +1072,13 @@ class ToobitTradingAdapter:
                             balances,
                             list,
                         )
+                        else None
+                    ),
+                    "source_id": f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
+                    "source_type": "EXCHANGE_PRIVATE_API",
+                    "source_timestamp": (
+                        str(source_timestamp)
+                        if source_timestamp is not None
                         else None
                     ),
                 },
