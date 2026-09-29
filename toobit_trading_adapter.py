@@ -140,6 +140,7 @@ class ToobitTradingAdapter:
         api_key: Optional[str] = None,
         api_secret: Optional[str] = None,
         timeout: int = HTTP_TIMEOUT,
+        live_order_transport: Any = None,
     ) -> None:
 
         self.adapter_version = ADAPTER_VERSION
@@ -170,6 +171,9 @@ class ToobitTradingAdapter:
         self.database_write_enabled = DATABASE_WRITE_ENABLED
         self.exchange_write_enabled = EXCHANGE_WRITE_ENABLED
 
+        self.live_order_transport = live_order_transport
+        self.live_order_transport_enabled = False
+
         self.session = requests.Session()
 
     # ========================================================
@@ -180,6 +184,13 @@ class ToobitTradingAdapter:
         return {
             "ACCOUNT_READ": True,
             "BALANCE_READ": True,
+            "ORDER_SUBMISSION": (
+                self.live_order_transport_enabled is True
+                and self.live_order_transport is not None
+                and self.execution_enabled is True
+                and self.order_submission_enabled is True
+                and self.exchange_write_enabled is True
+            ),
         }
 
     def get_account(self) -> AdapterResult:
@@ -1346,6 +1357,7 @@ class ToobitTradingAdapter:
         """
 
         from exchange_execution_contract import (
+            CanonicalExecutionResult,
             CanonicalOrderRequest,
             blocked_execution_result,
         )
@@ -1387,16 +1399,76 @@ class ToobitTradingAdapter:
                 error_message="Toobit exchange write is disabled.",
             )
 
-        return blocked_execution_result(
-            asset=request.asset,
-            direction=request.direction,
-            adapter=EXCHANGE_NAME,
-            error_code="SUBMISSION_TRANSPORT_UNAVAILABLE",
-            error_message=(
-                "Canonical Toobit submission transport "
-                "is not implemented in CP46-A1."
-            ),
-        )
+        if self.live_order_transport_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SUBMISSION_TRANSPORT_DISABLED",
+                error_message="Toobit live order transport is disabled.",
+            )
+
+        if self.live_order_transport is None:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SUBMISSION_TRANSPORT_UNAVAILABLE",
+                error_message="Toobit live order transport is unavailable.",
+            )
+
+        if request.direction != "LONG":
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SPOT_DIRECTION_UNSUPPORTED",
+                error_message="Toobit spot transport currently supports canonical LONG -> BUY only.",
+            )
+
+        try:
+            from toobit_spot_order_live_transport_v0_1 import (
+                SpotLiveOrderRequest,
+            )
+
+            provider_request = SpotLiveOrderRequest(
+                symbol=request.asset,
+                side="BUY",
+                order_type=request.order_type,
+                time_in_force="GTC" if request.order_type == "LIMIT" else None,
+                quantity=request.quantity,
+                quantity_unit=request.quantity_unit,
+                price=request.entry_price,
+                timestamp=int(request.timestamp),
+                new_client_order_id=request.intent_id,
+            )
+
+            transport_result = self.live_order_transport.submit(
+                provider_request
+            )
+
+            return CanonicalExecutionResult(
+                accepted=transport_result.accepted,
+                exchange_order_id=None,
+                status=transport_result.status,
+                asset=request.asset,
+                direction=request.direction,
+                executed_quantity=None,
+                executed_price=None,
+                timestamp=request.timestamp,
+                adapter=EXCHANGE_NAME,
+                error_code=transport_result.error_code,
+                error_message=transport_result.error_message,
+            )
+
+        except Exception as exc:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="ADAPTER_SUBMISSION_ERROR",
+                error_message=str(exc),
+            )
 
     def cancel_order(
         self,
