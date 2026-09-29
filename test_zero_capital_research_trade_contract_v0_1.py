@@ -51,16 +51,12 @@ def main() -> int:
     else:
         raise AssertionError("research trade accepted with positive capital")
 
-    try:
-        resolve_trade_quantity(
-            observed_real_capital=0.0,
-            risk_position_quantity=0.0,
-            research_quantity=None,
-        )
-    except ValueError as exc:
-        assert str(exc) == "RESEARCH_QUANTITY_INVALID"
-    else:
-        raise AssertionError("missing research quantity accepted")
+    # The compatibility-only research_quantity argument is optional and ignored.
+    zero_without_compatibility_argument = resolve_trade_quantity(
+        observed_real_capital=0.0,
+        risk_position_quantity=0.0,
+    )
+    assert zero_without_compatibility_argument["quantity"] == 0.0
 
     print("ZERO_CAPITAL_RESEARCH_CONTRACT_TEST=PASS")
     return 0
