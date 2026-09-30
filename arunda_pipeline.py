@@ -4330,6 +4330,116 @@ def build_canonical_order_requests(
 
 
     # ============================================================================
+    # TRADE-READY QUANTITY OBSERVABILITY SOURCE
+    # ============================================================================
+
+def build_trade_ready_quantity_records(
+        trade_ready_assets: set[str],
+        risk_snapshot: dict,
+        market_data_by_symbol: dict,
+        snapshot_id: str,
+    ) -> dict:
+        """Bind quantity observability to the authoritative Smart Risk output.
+
+        Smart Risk already owns risk_budget and position_size. This bridge only
+        observes and carries those exact values into the existing quantity
+        contract; it never recalculates or rescales quantity.
+        """
+        risk_rows = extract_rows(
+            risk_snapshot,
+            (
+                "risk",
+                "risk_decisions",
+                "decisions",
+                "rows",
+                "assets",
+                "results",
+            ),
+        )
+        risk_rows = exact_asset_rows(risk_rows, "RISK")
+        r_map = risk_map(risk_rows)
+        records = {}
+
+        for asset in sorted(trade_ready_assets):
+            risk_row = r_map.get(asset)
+            if not isinstance(risk_row, dict):
+                fail(f"Trade Ready Risk row missing: {asset}")
+
+            risk_status = normalize_status(
+                get_row_value(
+                    risk_row,
+                    "risk_status",
+                    "status",
+                    "decision",
+                    "risk_state",
+                )
+            )
+            if risk_status not in APPROVED_RISK_STATUSES:
+                fail(f"Trade Ready Risk not approved: {asset}")
+
+            risk_budget = risk_row.get("risk_budget")
+            position_size = risk_row.get("position_size")
+            entry_price = risk_row.get("entry_price")
+            stop_distance = risk_row.get("stop_distance")
+
+            for name, value in (
+                ("risk_budget", risk_budget),
+                ("position_size", position_size),
+                ("entry_price", entry_price),
+                ("stop_distance", stop_distance),
+            ):
+                if not is_finite_number(value) or float(value) <= 0:
+                    fail(f"Trade Ready Risk {name} invalid: {asset}")
+
+            market_result = market_data_by_symbol.get(f"{asset}/USDT")
+            if market_result is None:
+                fail(f"Trade Ready market data missing: {asset}")
+
+            candles = tuple(getattr(market_result, "candles", ()) or ())
+            if not candles:
+                fail(f"Trade Ready real candles missing: {asset}")
+
+            latest = candles[-1]
+            latest_timestamp = (
+                latest.get("timestamp")
+                if isinstance(latest, dict)
+                else getattr(latest, "timestamp", None)
+            )
+            if latest_timestamp is None:
+                fail(f"Trade Ready latest OHLCV timestamp missing: {asset}")
+
+            atr14 = market_data_engine.calculate_real_atr14(candles)
+            if atr14 is None:
+                fail(f"Trade Ready ATR14 unavailable: {asset}")
+
+            records[asset] = {
+                "snapshot_id": snapshot_id,
+                "asset": asset,
+                "timeframe": "1h",
+                "source": getattr(market_result, "source", None),
+                "latest_ohlcv_timestamp": latest_timestamp,
+                "real_candle_count": len(candles),
+                "atr14": atr14,
+                "stop_distance": float(stop_distance),
+                "risk_budget": float(risk_budget),
+                "entry_price": float(entry_price),
+                "position_size": float(position_size),
+                "risk_position_quantity": float(position_size),
+                "order_intent_quantity": None,
+                "canonical_order_request_quantity": None,
+                "quantity_unit": POSITION_QUANTITY_UNIT,
+                "quantity_source": POSITION_QUANTITY_SOURCE,
+                "quantity_changed": False,
+                "quantity_recomputed": False,
+                "quantity_rescaled": False,
+                "quantity_rounded": False,
+                "quantity_clipped": False,
+            }
+
+        return records
+
+
+    # ============================================================================
     # QUANTITY OBSERVABILITY
     # ============================================================================
 
@@ -6020,6 +6130,15 @@ def main() -> int:
         execution_boundary_status = "DEFERRED_NO_CANONICAL_REQUESTS"
 
         if trade_ready_assets:
+            quantity_records = build_trade_ready_quantity_records(
+                trade_ready_assets,
+                risk_snapshot,
+                market_data_by_symbol,
+                next(iter(canonical_birth_events.values())).get("snapshot_id")
+                if canonical_birth_events
+                else "",
+            )
+
             # CP49 gives each asset its authoritative runtime snapshot id.
             # Build the existing OrderIntent contract asset-by-asset so that
             # no asset inherits another asset's snapshot identity.
@@ -6066,6 +6185,12 @@ def main() -> int:
                 order_intents,
                 quantity_records,
                 canonical_order_requests,
+            )
+            validate_runtime_quantity_records(
+                quantity_records,
+                next(iter(birth_by_asset.values())).get("snapshot_id")
+                if birth_by_asset
+                else "",
             )
             validated_order_intents = len(order_intents)
             execution_boundary_status = verify_execution_boundary_integration(
