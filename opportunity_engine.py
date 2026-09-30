@@ -1166,8 +1166,13 @@ def calculate_confidence(
     rsi: float,
 ) -> float:
 
+    # Score is a 0..100 opportunity-strength scale, while
+    # MIN_OPPORTUNITY_SCORE is the production eligibility floor.
+    # Confidence must therefore normalize score against the same
+    # production floor; using /100 made the 0.55 confidence gate
+    # mathematically disconnected from the 10.0 opportunity floor.
     score_component = min(
-        score / 100.0,
+        score / MIN_OPPORTUNITY_SCORE,
         1.0,
     )
 
