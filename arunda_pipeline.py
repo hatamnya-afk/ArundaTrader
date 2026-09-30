@@ -3596,10 +3596,23 @@ def build_current_order_intents(
         risk_snapshot: dict,
         observed_real_capital: float | int | None = None,
     ) -> list[dict]:
-        gate_rows = exact_asset_rows(
-            gate_results,
-            "TRADE GATE",
-        )
+        if not isinstance(gate_results, list):
+            fail("TRADE GATE rows must be list")
+
+        gate_rows = []
+        seen_gate_assets = set()
+        for gate_row in gate_results:
+            if not isinstance(gate_row, dict):
+                fail("TRADE GATE row must be dict")
+            gate_asset = normalize_asset(
+                gate_row.get("asset", gate_row.get("symbol"))
+            )
+            if gate_asset is None:
+                fail("TRADE GATE row missing asset")
+            if gate_asset in seen_gate_assets:
+                fail(f"TRADE GATE duplicate asset: {gate_asset}")
+            seen_gate_assets.add(gate_asset)
+            gate_rows.append(gate_row)
 
         opportunities = opportunity_map(
             {
@@ -4629,9 +4642,9 @@ def verify_execution_boundary_integration(
             return "DEFERRED_NO_CANONICAL_REQUESTS"
 
         for asset, record in canonical_order_requests.items():
-            if asset not in EXPECTED_ASSET_SET:
+            if normalize_asset(asset) is None:
                 fail(
-                    f"Execution Boundary unexpected asset: {asset}"
+                    f"Execution Boundary asset missing: {asset}"
                 )
 
             if not isinstance(
@@ -4640,6 +4653,11 @@ def verify_execution_boundary_integration(
             ):
                 fail(
                     f"Execution Boundary record invalid: {asset}"
+                )
+
+            if normalize_asset(asset) != normalize_asset(record.get("request").asset if isinstance(record.get("request"), exchange_execution_contract.CanonicalOrderRequest) else None):
+                fail(
+                    f"Execution Boundary asset identity mismatch: {asset}"
                 )
 
             request = record.get("request")
