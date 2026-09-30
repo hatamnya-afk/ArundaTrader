@@ -4352,14 +4352,14 @@ def build_trade_ready_quantity_records(
         if not isinstance(risk_snapshot, dict):
             fail("Trade Ready Risk snapshot must be dict")
 
-        risk_rows = []
+        r_map = {}
         for asset_key, risk_row in risk_snapshot.items():
             asset = normalize_asset(asset_key)
             if asset is None or not isinstance(risk_row, dict):
                 fail("Trade Ready Risk snapshot contains invalid asset row")
-            risk_rows.append(risk_row)
-
-        r_map = risk_map(risk_rows)
+            if asset in r_map:
+                fail(f"Duplicate Trade Ready Risk asset: {asset}")
+            r_map[asset] = risk_row
 
         if not trade_ready_assets.issubset(set(r_map)):
             missing = sorted(trade_ready_assets - set(r_map))
