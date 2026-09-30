@@ -94,7 +94,7 @@ def build_dynamic_smart_risk(
 
     if result.asset != dynamic_asset:
         raise RuntimeError("Smart Risk asset identity mismatch")
-    if result.direction != direction:
+    if result.risk_state == "APPROVED" and result.direction != direction:
         raise RuntimeError("Smart Risk direction mismatch")
     if result.risk_state not in ("APPROVED", "BLOCKED"):
         raise RuntimeError("invalid Smart Risk state")
