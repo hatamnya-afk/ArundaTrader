@@ -1835,10 +1835,10 @@ def validate_runtime_quantity_records(
             asset
         )
 
-        if asset not in EXPECTED_ASSET_SET:
+        if asset is None:
 
             fail(
-                f"Unexpected quantity asset: {asset}"
+                "Quantity asset missing"
             )
 
         if not isinstance(
@@ -3607,26 +3607,17 @@ def build_current_order_intents(
             }
         )
 
-        risk_rows = extract_rows(
-            risk_snapshot,
-            (
-                "risk",
-                "risk_decisions",
-                "decisions",
-                "rows",
-                "assets",
-                "results",
-            ),
-        )
+        if not isinstance(risk_snapshot, dict):
+            fail("Risk snapshot must be dict")
 
-        risk_rows = exact_asset_rows(
-            risk_rows,
-            "RISK",
-        )
-
-        r_map = risk_map(
-            risk_rows
-        )
+        r_map = {}
+        for asset_key, risk_row in risk_snapshot.items():
+            asset_key = normalize_asset(asset_key)
+            if asset_key is None or not isinstance(risk_row, dict):
+                fail("Risk snapshot contains invalid asset row")
+            if asset_key in r_map:
+                fail(f"Duplicate Risk asset: {asset_key}")
+            r_map[asset_key] = risk_row
 
         if observed_real_capital is None:
             fail(
@@ -4144,26 +4135,17 @@ def build_canonical_order_requests(
         risk_snapshot: dict,
         snapshot_id: str,
     ) -> dict[str, dict]:
-        risk_rows = extract_rows(
-            risk_snapshot,
-            (
-                "risk",
-                "risk_decisions",
-                "decisions",
-                "rows",
-                "assets",
-                "results",
-            ),
-        )
+        if not isinstance(risk_snapshot, dict):
+            fail("Risk snapshot must be dict")
 
-        risk_rows = exact_asset_rows(
-            risk_rows,
-            "RISK",
-        )
-
-        r_map = risk_map(
-            risk_rows
-        )
+        r_map = {}
+        for asset_key, risk_row in risk_snapshot.items():
+            asset_key = normalize_asset(asset_key)
+            if asset_key is None or not isinstance(risk_row, dict):
+                fail("Risk snapshot contains invalid asset row")
+            if asset_key in r_map:
+                fail(f"Duplicate Risk asset: {asset_key}")
+            r_map[asset_key] = risk_row
 
         result = {}
 
