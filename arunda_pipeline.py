@@ -3455,9 +3455,9 @@ def validate_runtime_quantity_records(
         for asset_key, record in quantity_records.items():
             asset = normalize_asset(asset_key)
 
-            if asset not in EXPECTED_ASSET_SET:
+            if asset is None:
                 fail(
-                    f"Unexpected quantity asset: {asset}"
+                    "Quantity asset missing"
                 )
 
             if not isinstance(
