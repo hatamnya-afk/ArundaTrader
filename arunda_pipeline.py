@@ -4345,19 +4345,25 @@ def build_trade_ready_quantity_records(
         observes and carries those exact values into the existing quantity
         contract; it never recalculates or rescales quantity.
         """
-        risk_rows = extract_rows(
-            risk_snapshot,
-            (
-                "risk",
-                "risk_decisions",
-                "decisions",
-                "rows",
-                "assets",
-                "results",
-            ),
-        )
-        risk_rows = exact_asset_rows(risk_rows, "RISK")
+        # Dynamic Runtime Risk is authoritative as an asset-keyed mapping.
+        # Do not route it through the legacy EXPECTED_ASSETS/15-row extractor;
+        # the current production universe is dynamic and was already cardinality-
+        # checked against decision_snapshot at the Risk boundary above.
+        if not isinstance(risk_snapshot, dict):
+            fail("Trade Ready Risk snapshot must be dict")
+
+        risk_rows = []
+        for asset_key, risk_row in risk_snapshot.items():
+            asset = normalize_asset(asset_key)
+            if asset is None or not isinstance(risk_row, dict):
+                fail("Trade Ready Risk snapshot contains invalid asset row")
+            risk_rows.append(risk_row)
+
         r_map = risk_map(risk_rows)
+
+        if not trade_ready_assets.issubset(set(r_map)):
+            missing = sorted(trade_ready_assets - set(r_map))
+            fail(f"Trade Ready Risk rows missing: {missing}")
         records = {}
 
         for asset in sorted(trade_ready_assets):
