@@ -16,8 +16,9 @@ def test_portfolio_cap():
 def test_requires_real_capital():
     x=obs(); x["capital_state"]="UNAVAILABLE_CAPITAL"; r=build_smart_risk(x,policy()); assert r.risk_state=="BLOCKED"; assert r.reason=="REAL_CAPITAL_NOT_AVAILABLE"
 
-def test_zero_risk_budget_blocks():
-    x=obs(); x["portfolio_capital"]=0.0; x["usable_capital"]=0.0; r=build_smart_risk(x,policy()); assert r.risk_state=="BLOCKED"; assert r.reason=="RISK_BUDGET_ZERO"; assert r.risk_budget is None; assert r.position_size is None
+def test_zero_capital_is_research_ready():
+    x=obs(); x["portfolio_capital"]=0.0; x["usable_capital"]=0.0; r=build_smart_risk(x,policy()); assert r.risk_state=="APPROVED"; assert r.reason=="ZERO_REAL_CAPITAL_RESEARCH_READY"; assert r.risk_budget==0.0; assert r.position_size==0.0; assert r.exposure==0.0; assert r.remaining_portfolio_risk==0.0
+
 
 def test_requires_valid_policy():
     p=policy(); p["policy_validation"]="UNVALIDATED"; r=build_smart_risk(obs(),p); assert r.reason=="RISK_POLICY_UNVALIDATED"
