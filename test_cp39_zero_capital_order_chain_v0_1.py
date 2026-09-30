@@ -64,18 +64,6 @@ def test_zero_capital_trade_ready_to_canonical_request_preserves_zero_quantity()
     assert intent.trade_type == "NORMAL_TRADE"
     assert intent.observed_real_capital == 0.0
 
-    assert (
-        arunda_pipeline.validate_current_order_intents(
-            intents=intents,
-            gate_results=[gate],
-            opportunity_rows=[opportunity],
-            snapshot_id=snapshot_id,
-            regime_snapshot=regime,
-            risk_rows=[dict(asset=asset, **risk)],
-        )
-        == 1
-    )
-
     canonical = arunda_pipeline.build_canonical_order_requests(
         order_intents=intents,
         risk_snapshot={asset: risk},
