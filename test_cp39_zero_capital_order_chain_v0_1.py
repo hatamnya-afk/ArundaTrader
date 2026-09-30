@@ -31,7 +31,7 @@ def _zero_capital_fixture():
         "position_size": 0.0,
         "position_quantity": 0.0,
         "quantity_unit": "BASE_ASSET",
-        "quantity_source": "POSITION_SIZING.position_size",
+        "quantity_source": "RISK.position_quantity",
         "entry_price": 100000.0,
         "stop_distance": 100.0,
         "quantity_changed": False,
