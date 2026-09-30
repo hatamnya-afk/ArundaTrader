@@ -6152,6 +6152,14 @@ def main() -> int:
         print(f"TRADE_READY={len(trade_ready_assets)}")
 
         # ------------------------------------------------------------------
+        # CURRENT MARKET REGIME — AUTHORITATIVE READ-ONLY INPUT
+        # ------------------------------------------------------------------
+        # Order Intent requires the current market regime as an explicit
+        # production input. Load it once at the orchestration boundary so
+        # every Trade Ready asset receives the same authoritative snapshot.
+        regime_snapshot = load_current_market_regime()
+
+        # ------------------------------------------------------------------
         # 12. CURRENT ORDER-INTENT -> CANONICAL REQUEST BRIDGE
         # ------------------------------------------------------------------
         # Reuse the already-defined production contracts. This stage only
