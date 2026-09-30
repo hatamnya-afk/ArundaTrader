@@ -331,10 +331,10 @@ def build_smart_risk(
             policy_version,
         )
 
-    if risk_budget <= EPSILON and portfolio_capital > EPSILON:
+    if risk_budget <= EPSILON:
         return _blocked(
             asset,
-            "RISK_BUDGET_INVALID",
+            "RISK_BUDGET_ZERO",
             policy_version,
         )
 
