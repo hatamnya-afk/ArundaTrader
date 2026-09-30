@@ -4418,6 +4418,10 @@ def build_trade_ready_quantity_records(
             if atr14 is None:
                 fail(f"Trade Ready ATR14 unavailable: {asset}")
 
+            snapshot_id = birth_by_asset[asset].get("snapshot_id")
+            if not isinstance(snapshot_id, str) or not snapshot_id:
+                fail(f"Trade Ready Quantity snapshot identity missing: {asset}")
+
             records[asset] = {
                 "snapshot_id": snapshot_id,
                 "asset": asset,
