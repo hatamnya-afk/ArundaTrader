@@ -296,14 +296,39 @@ def build_smart_risk(
             policy_version,
         )
 
-    # With zero observed real capital, the frozen sizing formula naturally
-    # produces zero remaining capacity. This is not a balance gate and does
-    # not change the pipeline route; it is the mathematical output of the
-    # same sizing function at Capital = 0.
-    if (
-        remaining_portfolio_risk <= EPSILON
-        and portfolio_capital > EPSILON
-    ):
+    # A real zero-capital account is a valid research state in the same
+    # production intelligence pipeline. Capital scales position sizing; it
+    # must not erase an otherwise valid market Decision. Preserve the exact
+    # mathematical zero Risk quantity so downstream Trade Gate / OrderIntent
+    # can observe the candidate without inventing capital or quantity.
+    if portfolio_capital <= EPSILON:
+        if allocated_risk > EPSILON:
+            return _blocked(
+                asset,
+                "PORTFOLIO_RISK_CAPACITY_INVALID",
+                policy_version,
+            )
+
+        result = SmartRiskDecision(
+            asset=asset,
+            direction=direction,
+            entry_price=entry,
+            stop_distance=stop_distance,
+            risk_budget=0.0,
+            position_size=0.0,
+            exposure=0.0,
+            remaining_portfolio_risk=0.0,
+            concurrent_positions=concurrent,
+            max_concurrent_positions=max_concurrent,
+            risk_state="APPROVED",
+            reason="ZERO_REAL_CAPITAL_RESEARCH_READY",
+            policy_version=policy_version,
+            invalidation_price=invalidation,
+        )
+        result.validate()
+        return result
+
+    if remaining_portfolio_risk <= EPSILON:
         return _blocked(
             asset,
             "PORTFOLIO_RISK_CAPACITY_EXHAUSTED",
