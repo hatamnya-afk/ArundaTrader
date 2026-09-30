@@ -179,6 +179,7 @@ import risk_engine
 import risk_budget_engine
 import position_sizing_engine
 import trade_gate_engine
+from dynamic_risk_intelligence_v0_1 import build_dynamic_risk_policy
 from cp44_real_portfolio_composition_v0_1 import (
     compose_real_portfolio_capital,
 )
@@ -5905,17 +5906,42 @@ def main() -> int:
                 }
             )
 
-            policy = {
-                key: smart_risk_observation[key]
-                for key in (
-                    "policy_version",
-                    "policy_validation",
-                    "risk_per_trade",
-                    "max_portfolio_risk",
-                    "max_concurrent_positions",
+            # CP39 authoritative Dynamic Risk Intelligence producer.
+            # Per-candidate risk is derived from current real decision,
+            # confidence, stop distance, liquidity and cross-asset correlation.
+            # No fixed per-trade percentage is injected into Smart Risk.
+            policy = {}
+            if decision_direction in ("LONG", "SHORT"):
+                try:
+                    policy = build_dynamic_risk_policy(
+                        asset=asset,
+                        decision=decision_snapshot[asset],
+                        opportunity=opportunity or {},
+                        entry_price=entry_invalidation["entry_price"],
+                        stop_distance=entry_invalidation["stop_distance"],
+                        market_data_by_symbol=market_data_by_symbol,
+                    )
+                except (TypeError, ValueError, KeyError):
+                    # Dynamic Risk context is incomplete: preserve fail-closed
+                    # behavior rather than inventing a policy or fallback.
+                    policy = {}
+
+            if policy:
+                smart_risk_observation.update(
+                    {
+                        key: policy[key]
+                        for key in (
+                            "policy_version",
+                            "policy_validation",
+                            "risk_per_trade",
+                            "max_portfolio_risk",
+                            "max_concurrent_positions",
+                        )
+                    }
                 )
-                if key in smart_risk_observation
-            }
+                smart_risk_observation["risk_factors"] = policy.get(
+                    "risk_factors"
+                )
 
             risk_snapshot[asset] = build_cp44_smart_risk(
                 f"{asset}/USDT",
