@@ -61,7 +61,7 @@ def test_zero_capital_trade_ready_to_canonical_request_preserves_zero_quantity()
     assert intent["quantity"] == 0.0
     assert intent["quantity_unit"] == "BASE_ASSET"
     assert intent["quantity_source"] == "RISK.position_quantity"
-    assert intent.trade_type == arunda_pipeline.RESEARCH_TRADE
+    assert intent.trade_type == "NORMAL_TRADE"
     assert intent.observed_real_capital == 0.0
 
     assert (
