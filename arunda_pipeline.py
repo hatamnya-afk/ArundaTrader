@@ -3398,7 +3398,7 @@ def build_runtime_quantity_bridge(
             risk_row["quantity_clipped"] = False
 
             records[asset] = {
-                "snapshot_id": snapshot_id,
+                "snapshot_id": birth_by_asset[asset].get("snapshot_id"),
                 "asset": asset,
                 "timeframe": "1h",
                 "source": runtime["source"],
@@ -4337,7 +4337,7 @@ def build_trade_ready_quantity_records(
         trade_ready_assets: set[str],
         risk_snapshot: dict,
         market_data_by_symbol: dict,
-        snapshot_id: str,
+        birth_by_asset: dict[str, dict],
     ) -> dict:
         """Bind quantity observability to the authoritative Smart Risk output.
 
@@ -6130,15 +6130,6 @@ def main() -> int:
         execution_boundary_status = "DEFERRED_NO_CANONICAL_REQUESTS"
 
         if trade_ready_assets:
-            quantity_records = build_trade_ready_quantity_records(
-                trade_ready_assets,
-                risk_snapshot,
-                market_data_by_symbol,
-                next(iter(canonical_birth_events.values())).get("snapshot_id")
-                if canonical_birth_events
-                else "",
-            )
-
             # CP49 gives each asset its authoritative runtime snapshot id.
             # Build the existing OrderIntent contract asset-by-asset so that
             # no asset inherits another asset's snapshot identity.
@@ -6146,6 +6137,13 @@ def main() -> int:
                 asset: canonical_birth_events[asset]
                 for asset in trade_ready_assets
             }
+
+            quantity_records = build_trade_ready_quantity_records(
+                trade_ready_assets,
+                risk_snapshot,
+                market_data_by_symbol,
+                birth_by_asset,
+            )
             for asset in trade_ready_assets:
                 asset_gate = [trade_gate_snapshot[asset]]
                 asset_opportunity = [opportunity_by_asset[asset]]
@@ -6186,12 +6184,11 @@ def main() -> int:
                 quantity_records,
                 canonical_order_requests,
             )
-            validate_runtime_quantity_records(
-                quantity_records,
-                next(iter(birth_by_asset.values())).get("snapshot_id")
-                if birth_by_asset
-                else "",
-            )
+            for asset, birth in birth_by_asset.items():
+                validate_runtime_quantity_records(
+                    {asset: quantity_records[asset]},
+                    birth.get("snapshot_id"),
+                )
             validated_order_intents = len(order_intents)
             execution_boundary_status = verify_execution_boundary_integration(
                 canonical_order_requests,
