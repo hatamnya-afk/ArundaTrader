@@ -4389,7 +4389,16 @@ def build_trade_ready_quantity_records(
                 ("entry_price", entry_price),
                 ("stop_distance", stop_distance),
             ):
-                if not is_finite_number(value) or float(value) <= 0:
+                if not is_finite_number(value):
+                    fail(f"Trade Ready Risk {name} invalid: {asset}")
+
+                # Zero real capital is a valid research/readiness state.
+                # Preserve authoritative zero risk/position values exactly.
+                # Entry and stop geometry remain strictly positive below.
+                if name in {"risk_budget", "position_size"}:
+                    if float(value) < 0:
+                        fail(f"Trade Ready Risk {name} invalid: {asset}")
+                elif float(value) <= 0:
                     fail(f"Trade Ready Risk {name} invalid: {asset}")
 
             market_result = market_data_by_symbol.get(f"{asset}/USDT")
