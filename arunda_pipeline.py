@@ -5154,6 +5154,15 @@ def main() -> int:
                 "MarketDataResult cardinality/identity mismatch"
             )
 
+        # Dynamic Risk consumes the real 1h candle rows, while the rest of the
+        # pipeline consumes MarketDataResult objects. Keep this as an explicit
+        # read-only adapter so Dynamic Risk receives its declared input shape
+        # without inference, synthetic values, or changes to market provenance.
+        dynamic_risk_market_data_by_symbol = {
+            symbol: list(getattr(result, "candles", ()) or ())
+            for symbol, result in market_data_by_symbol.items()
+        }
+
         opportunity_results = build_dynamic_opportunities(
             market_data_results
         )
@@ -6029,7 +6038,7 @@ def main() -> int:
                         opportunity=opportunity or {},
                         entry_price=entry_invalidation["entry_price"],
                         stop_distance=entry_invalidation["stop_distance"],
-                        market_data_by_symbol=market_data_by_symbol,
+                        market_data_by_symbol=dynamic_risk_market_data_by_symbol,
                     )
                 except (TypeError, ValueError, KeyError):
                     # Dynamic Risk context is incomplete: preserve fail-closed
