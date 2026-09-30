@@ -125,6 +125,19 @@ def build_cp44_smart_risk(
     output["risk_decision"] = output.get("risk_state")
     output["decision"] = output.get("risk_state")
     output["entry_invalidation_state"] = entry_boundary.state
+
+    # Downstream Quantity/Order Intent contracts consume the canonical
+    # position quantity name. Preserve Smart Risk position_size exactly;
+    # this is a field-alias only, with no recalculation or rescaling.
+    output["position_quantity"] = output.get("position_size")
+    output["quantity_unit"] = "BASE_ASSET"
+    output["quantity_source"] = "POSITION_SIZING.position_size"
+    output["quantity_changed"] = False
+    output["quantity_recomputed"] = False
+    output["quantity_rescaled"] = False
+    output["quantity_rounded"] = False
+    output["quantity_clipped"] = False
+
     output["fixed_15_used"] = False
     output["synthetic"] = False
     output["interpolation"] = False
