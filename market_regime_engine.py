@@ -122,6 +122,19 @@ def _normalize_text(value):
     return value
 
 
+def _normalize_asset(value):
+
+    value = _normalize_text(value)
+
+    if value is None:
+        return None
+
+    if "/" in value:
+        value = value.split("/", 1)[0].strip()
+
+    return value or None
+
+
 def _safe_float(value):
 
     if value is None:
@@ -350,7 +363,7 @@ def _build_market_bar(
 # =============================================================================
 
 
-def load_market_data_by_symbol():
+def load_market_data_by_symbol(assets=None):
 
     conn = sqlite3.connect(
         DB_PATH
@@ -472,14 +485,29 @@ def load_market_data_by_symbol():
             query
         ).fetchall()
 
+        requested_assets = (
+            EXPECTED_ASSETS
+            if assets is None
+            else sorted(
+                {
+                    normalized
+                    for normalized in (
+                        _normalize_asset(asset)
+                        for asset in assets
+                    )
+                    if normalized is not None
+                }
+            )
+        )
+
         result = {
             asset: []
-            for asset in EXPECTED_ASSETS
+            for asset in requested_assets
         }
 
         for row in rows:
 
-            symbol = _normalize_text(
+            symbol = _normalize_asset(
                 row["symbol"]
             )
 
@@ -921,15 +949,32 @@ def calculate_structure(
 # =============================================================================
 
 
-def build_structural_state():
+def build_structural_state(assets=None):
+
+    requested_assets = (
+        EXPECTED_ASSETS
+        if assets is None
+        else sorted(
+            {
+                normalized
+                for normalized in (
+                    _normalize_asset(asset)
+                    for asset in assets
+                )
+                if normalized is not None
+            }
+        )
+    )
 
     history = (
-        load_market_data_by_symbol()
+        load_market_data_by_symbol(
+            requested_assets
+        )
     )
 
     result = {}
 
-    for asset in EXPECTED_ASSETS:
+    for asset in requested_assets:
 
         bars = history.get(
             asset,
@@ -1039,16 +1084,33 @@ def classify_regime(
 # =============================================================================
 
 
-def build_market_regime():
+def build_market_regime(assets=None):
+
+    requested_assets = (
+        EXPECTED_ASSETS
+        if assets is None
+        else sorted(
+            {
+                normalized
+                for normalized in (
+                    _normalize_asset(asset)
+                    for asset in assets
+                )
+                if normalized is not None
+            }
+        )
+    )
 
     structural_state = (
-        build_structural_state()
+        build_structural_state(
+            requested_assets
+        )
     )
 
     if len(
         structural_state
     ) != len(
-        EXPECTED_ASSETS
+        requested_assets
     ):
 
         raise RuntimeError(
@@ -1062,7 +1124,7 @@ def build_market_regime():
 
     market_regime = {}
 
-    for asset in EXPECTED_ASSETS:
+    for asset in requested_assets:
 
         if asset not in structural_state:
 
@@ -1142,14 +1204,18 @@ def build_market_regime():
 # =============================================================================
 
 
-def load_market_regime():
+def load_market_regime(assets=None):
 
-    return build_market_regime()
+    return build_market_regime(
+        assets
+    )
 
 
-def load_structural_state():
+def load_structural_state(assets=None):
 
-    return build_structural_state()
+    return build_structural_state(
+        assets
+    )
 
 
 # =============================================================================
