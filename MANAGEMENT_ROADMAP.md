@@ -1867,3 +1867,20 @@ CP49 birth persistence is an intentional authoritative persistence event and is 
 4. Synchronize all four governance documents at the next checkpoint before advancing again.
 
 No closed checkpoint is reopened or re-audited without a direct, provable regression.
+
+
+## 2026-10-01 — CONTROLLED FIRST-EXECUTION READINESS BOUNDARY
+
+### BUILT
+A dedicated provider-neutral first-execution readiness contract was added without modifying the established Core decision/risk/order architecture:
+- `cp49_first_execution_readiness_v0_1.py`
+- `test_cp49_first_execution_readiness_v0_1.py`
+
+### GOVERNANCE
+Readiness is now explicitly separated from activation. The readiness contract is pure and fail-closed: it cannot turn on execution, order submission, exchange writes, database writes, or retry behavior.
+
+### CURRENT BLOCKER
+The existing Toobit/account signature issue remains downstream and unresolved; real-capital authorization is also not established. Therefore no claim of first-execution readiness is made.
+
+### NEXT ACTION
+Complete evidence for account/signature, capital authorization, provider constraints, and CP46-E eligibility through existing boundaries. Keep Execution OFF. Only a subsequent, separately authorized activation step may move beyond readiness.
