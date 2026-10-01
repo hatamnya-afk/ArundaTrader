@@ -146,6 +146,13 @@ def build_cp44_smart_risk(
     output["quantity_rounded"] = False
     output["quantity_clipped"] = False
 
+    # Intelligence-side capital allocation observability. These values are
+    # outputs of the validated Dynamic Risk policy, not account balance.
+    output["recommended_capital"] = validated_policy.get("recommended_capital")
+    output["strategy_capital_envelope"] = validated_policy.get("strategy_capital_envelope")
+    output["capital_allocation_factor"] = validated_policy.get("capital_allocation_factor")
+    output["capital_source"] = validated_policy.get("capital_source")
+
     output["fixed_15_used"] = False
     output["synthetic"] = False
     output["interpolation"] = False
