@@ -214,9 +214,33 @@ def test_validate_market_regime_rejects_missing_dynamic_row():
 
 def test_load_market_data_discovers_dynamic_assets_without_fixed_ceiling(monkeypatch):
     rows = [
-        {"symbol": "IMX/USDT"},
-        {"symbol": "APR"},
-        {"symbol": "BTC/USDT"},
+        {
+            "symbol": "IMX/USDT",
+            "timestamp": 1,
+            "open": 1.0,
+            "high": 1.0,
+            "low": 1.0,
+            "close": 1.0,
+            "volume": 1.0,
+        },
+        {
+            "symbol": "APR",
+            "timestamp": 2,
+            "open": 1.0,
+            "high": 1.0,
+            "low": 1.0,
+            "close": 1.0,
+            "volume": 1.0,
+        },
+        {
+            "symbol": "BTC/USDT",
+            "timestamp": 3,
+            "open": 1.0,
+            "high": 1.0,
+            "low": 1.0,
+            "close": 1.0,
+            "volume": 1.0,
+        },
     ]
 
     monkeypatch.setattr(
