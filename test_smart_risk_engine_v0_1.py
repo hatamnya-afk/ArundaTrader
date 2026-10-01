@@ -5,7 +5,7 @@ def obs():
     return {"asset":"BTC/USDT","direction":"LONG","entry_price":100.0,"stop_distance":2.0,"capital_state":"REAL_CAPITAL","portfolio_capital":10000.0,"usable_capital":10000.0,"allocated_risk":0.0,"concurrent_positions":0}
 
 def policy():
-    return {"policy_validation":"VALID","policy_version":"CP38-POLICY-0.1","risk_per_trade":0.005,"max_portfolio_risk":0.01,"max_concurrent_positions":2}
+    return {"policy_validation":"VALID","policy_version":"CP38-POLICY-0.1","risk_per_trade":0.005,"max_portfolio_risk":0.01,"max_concurrent_positions":2,"recommended_capital":10000.0,"strategy_capital_envelope":10000.0,"capital_allocation_factor":1.0,"capital_source":"TEST_STRATEGY_ENVELOPE"}
 
 def test_calculation():
     r=build_smart_risk(obs(),policy()); assert r.risk_state=="APPROVED"; assert r.risk_budget==50.0; assert r.position_size==25.0; assert r.exposure==2500.0; assert r.remaining_portfolio_risk==100.0
@@ -17,7 +17,7 @@ def test_requires_real_capital():
     x=obs(); x["capital_state"]="UNAVAILABLE_CAPITAL"; r=build_smart_risk(x,policy()); assert r.risk_state=="BLOCKED"; assert r.reason=="REAL_CAPITAL_NOT_AVAILABLE"
 
 def test_zero_capital_is_research_ready():
-    x=obs(); x["portfolio_capital"]=0.0; x["usable_capital"]=0.0; r=build_smart_risk(x,policy()); assert r.risk_state=="APPROVED"; assert r.reason=="ZERO_REAL_CAPITAL_RESEARCH_READY"; assert r.risk_budget==0.0; assert r.position_size==0.0; assert r.exposure==0.0; assert r.remaining_portfolio_risk==0.0
+    x=obs(); x["portfolio_capital"]=0.0; x["usable_capital"]=0.0; r=build_smart_risk(x,policy()); assert r.risk_state=="APPROVED"; assert r.reason=="RISK_BUDGET_VALIDATED_FROM_INTELLIGENCE_CAPITAL"; assert r.risk_budget==50.0; assert r.position_size==25.0; assert r.exposure==2500.0; assert r.remaining_portfolio_risk==100.0
 
 
 def test_requires_valid_policy():
