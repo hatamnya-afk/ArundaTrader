@@ -14,26 +14,6 @@ MIN_MARKET_DATA_POINTS = 4
 
 EXECUTION_ENABLED = False
 
-EXPECTED_ASSETS = [
-    "BTC",
-    "ETH",
-    "SOL",
-    "XRP",
-    "ADA",
-    "DOGE",
-    "SHIB",
-    "LINK",
-    "AVAX",
-    "DOT",
-    "LTC",
-    "UNI",
-    "AAVE",
-    "SUI",
-    "NEAR",
-]
-
-EXPECTED_ASSET_COUNT = 15
-
 APPROVED_RISK_STATES = {
     "APPROVED",
     "ACCEPTED",
@@ -903,9 +883,6 @@ def _rows_from_asset_mapping(mapping):
     for key, row in mapping.items():
         asset = normalize_asset(key)
 
-        if asset not in EXPECTED_ASSETS:
-            continue
-
         if not isinstance(
             row,
             dict,
@@ -929,11 +906,7 @@ def _coverage_score(mapping):
     ):
         return 0
 
-    return sum(
-        1
-        for asset in EXPECTED_ASSETS
-        if asset in mapping
-    )
+    return len(mapping) if isinstance(mapping, dict) else 0
 
 
 def _select_best_rows(rows):
@@ -1035,45 +1008,44 @@ def run_runtime(
         decision_snapshot
     )
 
-    if _coverage_score(
-        decision_rows
-    ) != EXPECTED_ASSET_COUNT:
-        raise RuntimeError(
-            "Decision snapshot coverage failure: "
-            f"{_coverage_score(decision_rows)}/"
-            f"{EXPECTED_ASSET_COUNT}"
-        )
+    if not decision_rows:
+        raise RuntimeError("Decision snapshot must contain at least one asset")
 
     risk_rows = extract_snapshot_rows(
         risk_snapshot
     )
 
-    if _coverage_score(
-        risk_rows
-    ) != EXPECTED_ASSET_COUNT:
+    if not risk_rows:
+        raise RuntimeError("Risk snapshot must contain at least one asset")
+
+    opportunity_rows = _select_best_rows(
+        opportunities
+    )
+
+    if set(decision_rows) != set(risk_rows):
         raise RuntimeError(
-            "Risk snapshot coverage failure: "
-            f"{_coverage_score(risk_rows)}/"
-            f"{EXPECTED_ASSET_COUNT}"
+            "Decision/Risk asset coverage mismatch: "
+            f"decision={sorted(decision_rows)} "
+            f"risk={sorted(risk_rows)}"
         )
 
     opportunity_rows = _select_best_rows(
         opportunities
     )
 
-    if len(decision_rows) != EXPECTED_ASSET_COUNT:
-        raise RuntimeError(
-            "Decision asset count mismatch"
-        )
+    if not opportunity_rows:
+        raise RuntimeError("Opportunity snapshot must contain at least one asset")
 
-    if len(risk_rows) != EXPECTED_ASSET_COUNT:
+    if set(opportunity_rows) != set(decision_rows):
         raise RuntimeError(
-            "Risk asset count mismatch"
+            "Opportunity/Decision asset coverage mismatch: "
+            f"opportunity={sorted(opportunity_rows)} "
+            f"decision={sorted(decision_rows)}"
         )
 
     results = []
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(decision_rows):
         decision = decision_rows.get(
             asset
         )
@@ -1230,40 +1202,22 @@ def run_runtime(
         for row in results
     ]
 
-    if len(results) != EXPECTED_ASSET_COUNT:
+    if len(results) != len(decision_rows):
         raise RuntimeError(
             "Trade Gate result count mismatch: "
-            f"{len(results)}/"
-            f"{EXPECTED_ASSET_COUNT}"
+            f"{len(results)}/{len(decision_rows)}"
         )
 
-    if len(
-        set(result_assets)
-    ) != EXPECTED_ASSET_COUNT:
+    if len(set(result_assets)) != len(results):
         raise RuntimeError(
             "Trade Gate result contains duplicate assets"
         )
 
-    missing_assets = (
-        set(EXPECTED_ASSETS)
-        - set(result_assets)
-    )
-
-    extra_assets = (
-        set(result_assets)
-        - set(EXPECTED_ASSETS)
-    )
-
-    if missing_assets:
+    if set(result_assets) != set(decision_rows):
         raise RuntimeError(
-            "Trade Gate result missing assets: "
-            f"{sorted(missing_assets)}"
-        )
-
-    if extra_assets:
-        raise RuntimeError(
-            "Trade Gate result contains unexpected assets: "
-            f"{sorted(extra_assets)}"
+            "Trade Gate result asset coverage mismatch: "
+            f"expected={sorted(decision_rows)} "
+            f"actual={sorted(set(result_assets))}"
         )
 
     uni_result = next(
