@@ -42,6 +42,26 @@ def merge_validated_risk_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
     if max_portfolio_risk is None or max_portfolio_risk > 1:
         raise ValueError("MAX_PORTFOLIO_RISK_INVALID")
 
+    recommended_capital = _positive(policy.get("recommended_capital"))
+    if recommended_capital is None:
+        raise ValueError("RECOMMENDED_CAPITAL_INVALID")
+
+    strategy_capital_envelope = _positive(
+        policy.get("strategy_capital_envelope")
+    )
+    if strategy_capital_envelope is None:
+        raise ValueError("STRATEGY_CAPITAL_ENVELOPE_INVALID")
+
+    capital_allocation_factor = _positive(
+        policy.get("capital_allocation_factor")
+    )
+    if capital_allocation_factor is None or capital_allocation_factor > 1:
+        raise ValueError("CAPITAL_ALLOCATION_FACTOR_INVALID")
+
+    capital_source = policy.get("capital_source")
+    if not isinstance(capital_source, str) or not capital_source.strip():
+        raise ValueError("CAPITAL_SOURCE_MISSING")
+
     max_concurrent = policy.get("max_concurrent_positions")
     if (
         not isinstance(max_concurrent, int)
@@ -56,6 +76,10 @@ def merge_validated_risk_policy(policy: Mapping[str, Any]) -> dict[str, Any]:
         "risk_per_trade": risk_per_trade,
         "max_portfolio_risk": max_portfolio_risk,
         "max_concurrent_positions": max_concurrent,
+        "recommended_capital": recommended_capital,
+        "strategy_capital_envelope": strategy_capital_envelope,
+        "capital_allocation_factor": capital_allocation_factor,
+        "capital_source": capital_source,
     }
 
 
