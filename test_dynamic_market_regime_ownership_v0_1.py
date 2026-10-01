@@ -147,3 +147,102 @@ def test_pipeline_market_regime_loader_forwards_assets():
         )
 
     assert any(forwards_assets(call) for call in calls)
+
+
+def test_validate_market_regime_accepts_dynamic_assets():
+    snapshot = {
+        asset: {
+            "asset": asset,
+            "status": "AVAILABLE",
+            "points": 21,
+            "context_status": "LIMITED",
+            "context_target": market_regime_engine.FULL_CONTEXT_TARGET,
+            "context_minimum": market_regime_engine.MIN_CONTEXT,
+            "regime": "UNDEFINED",
+            "structure": {
+                "trend": None,
+                "volatility": None,
+                "momentum": None,
+                "position": None,
+                "acceleration": 0.0,
+            },
+        }
+        for asset in ("IMX", "APR", "BTC")
+    }
+
+    assert market_regime_engine.validate_market_regime(snapshot) is True
+
+
+def test_validate_market_regime_rejects_missing_dynamic_row():
+    snapshot = {
+        "IMX": {
+            "asset": "IMX",
+            "status": "AVAILABLE",
+            "points": 21,
+            "context_status": "LIMITED",
+            "context_target": market_regime_engine.FULL_CONTEXT_TARGET,
+            "context_minimum": market_regime_engine.MIN_CONTEXT,
+            "regime": "UNDEFINED",
+            "structure": {
+                "trend": None,
+                "volatility": None,
+                "momentum": None,
+                "position": None,
+                "acceleration": 0.0,
+            },
+        },
+        "APR": {
+            "asset": "APR",
+            "status": "AVAILABLE",
+            "points": 20,
+            "context_status": "INSUFFICIENT",
+            "context_target": market_regime_engine.FULL_CONTEXT_TARGET,
+            "context_minimum": market_regime_engine.MIN_CONTEXT,
+            "regime": "UNDEFINED",
+            "structure": {
+                "trend": None,
+                "volatility": None,
+                "momentum": None,
+                "position": None,
+                "acceleration": None,
+            },
+        },
+    }
+
+    assert market_regime_engine.validate_market_regime(snapshot) is True
+
+
+def test_load_market_data_discovers_dynamic_assets_without_fixed_ceiling(monkeypatch):
+    rows = [
+        {"symbol": "IMX/USDT"},
+        {"symbol": "APR"},
+        {"symbol": "BTC/USDT"},
+    ]
+
+    monkeypatch.setattr(
+        market_regime_engine,
+        "_get_columns",
+        lambda conn, table_name: [
+            "symbol", "timestamp", "open", "high", "low", "close", "volume"
+        ],
+    )
+
+    class FakeConn:
+        def execute(self, query):
+            class Result:
+                def fetchall(self):
+                    return rows
+            return Result()
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(
+        market_regime_engine.sqlite3,
+        "connect",
+        lambda path: FakeConn(),
+    )
+
+    result = market_regime_engine.load_market_data_by_symbol()
+
+    assert set(result) == {"IMX", "APR", "BTC"}
