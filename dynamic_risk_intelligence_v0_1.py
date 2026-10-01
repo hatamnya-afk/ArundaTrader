@@ -6,6 +6,13 @@ a per-candidate risk policy inside one portfolio-risk safety envelope.
 
 No DB/API/execution side effects.
 No synthetic or padded market data.
+
+Capital semantics:
+    capital_config.capital is a strategy capital envelope, not account
+    available balance. Dynamic Risk Intelligence derives the candidate
+    recommended capital from real market factors inside that envelope.
+    Account balance is observed separately and remains an environment
+    constraint at the exchange boundary.
 """
 
 from __future__ import annotations
@@ -15,6 +22,7 @@ from statistics import median
 from typing import Any, Mapping
 
 from smart_risk_policy_bridge_v0_1 import merge_validated_risk_policy
+import capital_config
 
 POLICY_VERSION = "DYNAMIC_RISK_POLICY_v0.1"
 POLICY_SOURCE = "ARUNDA_DYNAMIC_RISK_INTELLIGENCE"
@@ -22,6 +30,7 @@ POLICY_PROVENANCE = "REAL_MARKET_DECISION_RISK_INTELLIGENCE_V0_1"
 
 # Safety envelope only. This is NOT the per-trade allocation.
 MAX_PORTFOLIO_RISK_CEILING = 0.01
+STRATEGY_CAPITAL_SOURCE = "CAPITAL_CONFIG.strategy_capital_envelope"
 
 
 def _finite(value: Any) -> float | None:
@@ -188,7 +197,22 @@ def build_dynamic_risk_policy(
         * correlation
         * execution
     )
-    risk_per_trade = MAX_PORTFOLIO_RISK_CEILING * _clamp(composite, 0.0, 1.0)
+    allocation_factor = _clamp(composite, 0.0, 1.0)
+
+    # This is the authoritative intelligence-side capital envelope. It is
+    # deliberately separate from the real account balance observed upstream.
+    # The account may therefore be zero while Intelligence still produces a
+    # positive recommended capital for a valid actionable candidate.
+    config = capital_config.get_config()
+    strategy_capital = _finite(config.get("capital"))
+    if strategy_capital is None or strategy_capital <= 0:
+        raise ValueError("STRATEGY_CAPITAL_ENVELOPE_INVALID")
+
+    recommended_capital = strategy_capital * allocation_factor
+    if not isfinite(recommended_capital) or recommended_capital <= 0:
+        raise ValueError("RECOMMENDED_CAPITAL_ZERO")
+
+    risk_per_trade = MAX_PORTFOLIO_RISK_CEILING * allocation_factor
 
     if risk_per_trade <= 0:
         raise ValueError("DYNAMIC_RISK_BUDGET_ZERO")
@@ -203,6 +227,10 @@ def build_dynamic_risk_policy(
         "policy_validation": "VALID",
         "risk_per_trade": risk_per_trade,
         "max_portfolio_risk": MAX_PORTFOLIO_RISK_CEILING,
+        "strategy_capital_envelope": strategy_capital,
+        "recommended_capital": recommended_capital,
+        "capital_allocation_factor": allocation_factor,
+        "capital_source": STRATEGY_CAPITAL_SOURCE,
         "max_concurrent_positions": max_concurrent,
         "policy_source": POLICY_SOURCE,
         "policy_provenance": POLICY_PROVENANCE,
@@ -220,6 +248,10 @@ def build_dynamic_risk_policy(
         "policy_source": POLICY_SOURCE,
         "policy_provenance": POLICY_PROVENANCE,
         "risk_factors": policy["risk_factors"],
+        "strategy_capital_envelope": strategy_capital,
+        "recommended_capital": recommended_capital,
+        "capital_allocation_factor": allocation_factor,
+        "capital_source": STRATEGY_CAPITAL_SOURCE,
     })
     return validated
 
