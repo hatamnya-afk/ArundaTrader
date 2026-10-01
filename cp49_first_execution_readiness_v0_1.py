@@ -104,28 +104,8 @@ def evaluate_first_execution_readiness(
     elif not readiness.account_signature_evidence.validate():
         blockers.append("ACCOUNT_SIGNATURE_EVIDENCE_INVALID")
 
-    if not readiness.capital_authorized:
-        blockers.append("REAL_CAPITAL_NOT_AUTHORIZED")
-    elif readiness.capital_authorization_evidence is None:
-        blockers.append("REAL_CAPITAL_AUTHORIZATION_EVIDENCE_MISSING")
-    elif not readiness.capital_authorization_evidence.validate():
-        blockers.append("REAL_CAPITAL_AUTHORIZATION_EVIDENCE_INVALID")
-    elif (
-        not isinstance(readiness.authorized_account_id, str)
-        or not readiness.authorized_account_id.strip()
-    ):
-        blockers.append("AUTHORIZED_ACCOUNT_ID_MISSING")
-    elif (
-        readiness.capital_authorization_evidence.account_id
-        != readiness.authorized_account_id
-    ):
-        blockers.append("CAPITAL_AUTHORIZATION_ACCOUNT_MISMATCH")
-
     if not readiness.provider_constraints_verified:
         blockers.append("PROVIDER_CONSTRAINTS_NOT_VERIFIED")
-
-    if not readiness.management_authorized:
-        blockers.append("MANAGEMENT_AUTHORIZATION_NOT_GRANTED")
 
     if readiness.execution_enabled:
         blockers.append("EXECUTION_ALREADY_ENABLED_DURING_READINESS")

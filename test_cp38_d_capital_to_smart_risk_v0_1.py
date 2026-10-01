@@ -37,10 +37,21 @@ def _market():
 def test_validated_capital_is_explicitly_mapped_to_smart_risk_inputs():
     capital = _capital()
     mapped = merge_real_capital_observation(_market(), capital)
-    result = build_smart_risk(mapped, _policy())
+
+    policy = _policy()
+    policy.update(
+        {
+            "strategy_capital_envelope": 10_000.0,
+            "recommended_capital": 10_000.0,
+            "capital_allocation_factor": 1.0,
+            "capital_source": "CAPITAL_CONFIG.strategy_capital_envelope",
+        }
+    )
+
+    result = build_smart_risk(mapped, policy)
+
     assert result.risk_state == "APPROVED"
     assert result.risk_budget == pytest.approx(100.0)
-
 
 def test_bridge_requires_valid_real_capital():
     capital = _capital()

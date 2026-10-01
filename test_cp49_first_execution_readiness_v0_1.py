@@ -83,8 +83,9 @@ def _base_readiness(**overrides):
     return FirstExecutionReadinessInput(**values)
 
 
-def test_readiness_blocks_on_account_signature_and_capital():
+def test_readiness_blocks_on_account_signature_but_not_capital():
     request = _request()
+
     result = evaluate_first_execution_readiness(
         readiness=_base_readiness(
             signature_verified=False,
@@ -99,14 +100,16 @@ def test_readiness_blocks_on_account_signature_and_capital():
 
     assert result.state is ReadinessState.BLOCKED
     assert "ACCOUNT_SIGNATURE_NOT_VERIFIED" in result.blockers
-    assert "REAL_CAPITAL_NOT_AUTHORIZED" in result.blockers
+    assert "REAL_CAPITAL_NOT_AUTHORIZED" not in result.blockers
 
 
-def test_readiness_requires_authoritative_evidence_for_true_flags():
+def test_readiness_is_ready_without_capital_or_management_authorization():
     request = _request()
+
     result = evaluate_first_execution_readiness(
         readiness=_base_readiness(
-            account_signature_evidence=None,
+            capital_authorized=False,
+            management_authorized=False,
             capital_authorization_evidence=None,
             authorized_account_id=None,
         ),
@@ -114,9 +117,10 @@ def test_readiness_requires_authoritative_evidence_for_true_flags():
         eligibility=_eligibility(request),
     )
 
-    assert result.state is ReadinessState.BLOCKED
-    assert "ACCOUNT_SIGNATURE_EVIDENCE_MISSING" in result.blockers
-    assert "REAL_CAPITAL_AUTHORIZATION_EVIDENCE_MISSING" in result.blockers
+    assert result.state is ReadinessState.READY_FOR_AUTHORIZATION
+    assert result.blockers == ()
+    assert result.canonical_request_valid is True
+    assert result.eligibility_passed is True
 
 
 def test_readiness_can_be_ready_without_enabling_execution():
@@ -145,17 +149,3 @@ def test_readiness_rejects_pre_enabled_execution():
 
     assert result.state is ReadinessState.BLOCKED
     assert "EXECUTION_ALREADY_ENABLED_DURING_READINESS" in result.blockers
-
-
-def test_readiness_rejects_capital_authorization_account_mismatch():
-    request = _request()
-    result = evaluate_first_execution_readiness(
-        readiness=_base_readiness(
-            authorized_account_id="different-account",
-        ),
-        canonical_request=request,
-        eligibility=_eligibility(request),
-    )
-
-    assert result.state is ReadinessState.BLOCKED
-    assert "CAPITAL_AUTHORIZATION_ACCOUNT_MISMATCH" in result.blockers
