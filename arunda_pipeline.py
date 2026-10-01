@@ -186,55 +186,55 @@ from exchange_execution_boundary import execute_order
 
     # ============================================================================
 
-    class RuntimeOrderIntent(dict):
-        """
-        Visible ORDER_INTENT contract contains exactly eleven fields.
+class RuntimeOrderIntent(dict):
+    """
+    Visible ORDER_INTENT contract contains exactly eleven fields.
 
-        Quantity observability is also retained as runtime metadata for
-        downstream invariants and transformation guards.
-        """
+    Quantity observability is also retained as runtime metadata for
+    downstream invariants and transformation guards.
+    """
 
-        def __init__(
-            self,
-            *,
-            quantity,
-            quantity_unit,
-            quantity_source,
-            asset,
-            direction,
-            entry_price,
-            confidence,
-            regime,
-            timestamp,
-            snapshot_id,
-            intent_id,
-        ):
-            super().__init__(
-                asset=asset,
-                direction=direction,
-                entry_price=entry_price,
-                quantity=quantity,
-                quantity_unit=quantity_unit,
-                quantity_source=quantity_source,
-                confidence=confidence,
-                regime=regime,
-                timestamp=timestamp,
-                snapshot_id=snapshot_id,
-                intent_id=intent_id,
-            )
+    def __init__(
+        self,
+        *,
+        quantity,
+        quantity_unit,
+        quantity_source,
+        asset,
+        direction,
+        entry_price,
+        confidence,
+        regime,
+        timestamp,
+        snapshot_id,
+        intent_id,
+    ):
+        super().__init__(
+            asset=asset,
+            direction=direction,
+            entry_price=entry_price,
+            quantity=quantity,
+            quantity_unit=quantity_unit,
+            quantity_source=quantity_source,
+            confidence=confidence,
+            regime=regime,
+            timestamp=timestamp,
+            snapshot_id=snapshot_id,
+            intent_id=intent_id,
+        )
 
-            self.quantity = quantity
-            self.quantity_unit = quantity_unit
-            self.quantity_source = quantity_source
+        self.quantity = quantity
+        self.quantity_unit = quantity_unit
+        self.quantity_source = quantity_source
 
-            self.quantity_changed = False
-            self.quantity_recomputed = False
-            self.quantity_rescaled = False
-            self.quantity_rounded = False
-            self.quantity_clipped = False
+        self.quantity_changed = False
+        self.quantity_recomputed = False
+        self.quantity_rescaled = False
+        self.quantity_rounded = False
+        self.quantity_clipped = False
 
 
-    # ============================================================================
+# ============================================================================
 
 # GENERIC HELPERS
 
