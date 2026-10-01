@@ -476,6 +476,13 @@ def build_opportunity_from_market_data(
 
     result["market_data_points"] = history_points
 
+    # Canonical downstream Opportunity contract expects `price`.
+    # Opportunity Engine owns the real latest market close as
+    # `latest_close`; propagate that existing value without fabrication.
+    latest_close = result.get("latest_close")
+    if latest_close is not None:
+        result["price"] = latest_close
+
     # -------------------------------------------------------------
     # REAL MARKET-DATA PROVENANCE PROPAGATION
     #
