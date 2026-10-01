@@ -132,6 +132,10 @@ APPROVED_RISK_STATUSES = {
 "PASS",
 }
 
+POSITION_SIZE_SOURCE = (
+"POSITION_SIZING.position_size"
+)
+
 POSITION_QUANTITY_SOURCE = (
 "RISK.position_quantity"
 )
@@ -2345,6 +2349,9 @@ def build_trade_ready_quantity_records(
 
             risk_budget = risk_row.get("risk_budget")
             position_size = risk_row.get("position_size")
+            position_size_source = risk_row.get("position_size_source")
+            if position_size_source != POSITION_SIZE_SOURCE:
+                fail(f"Risk Position Sizing provenance invalid: {asset}")
             entry_price = risk_row.get("entry_price")
             stop_distance = risk_row.get("stop_distance")
 
