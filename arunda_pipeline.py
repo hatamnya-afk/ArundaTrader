@@ -2904,9 +2904,13 @@ def bind_fused_scores(
     # MARKET REGIME
     # ============================================================================
 
-def load_current_market_regime() -> dict:
+def load_current_market_regime(
+        assets=None,
+    ) -> dict:
         regime_snapshot = (
-            market_regime_engine.load_market_regime()
+            market_regime_engine.load_market_regime(
+                assets
+            )
         )
 
         if not isinstance(
@@ -6159,7 +6163,9 @@ def main() -> int:
         # Order Intent requires the current market regime as an explicit
         # production input. Load it once at the orchestration boundary so
         # every Trade Ready asset receives the same authoritative snapshot.
-        regime_snapshot = load_current_market_regime()
+        regime_snapshot = load_current_market_regime(
+            trade_ready_assets
+        )
 
         # ------------------------------------------------------------------
         # 12. CURRENT ORDER-INTENT -> CANONICAL REQUEST BRIDGE
