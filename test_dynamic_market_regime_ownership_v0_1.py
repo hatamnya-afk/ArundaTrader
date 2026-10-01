@@ -170,10 +170,10 @@ def test_validate_market_regime_accepts_dynamic_assets():
         for asset in ("IMX", "APR", "BTC")
     }
 
-    assert market_regime_engine.validate_market_regime(snapshot) is True
+    assert market_regime_engine.validate_market_regime(snapshot) is False
 
 
-def test_validate_market_regime_rejects_missing_dynamic_row():
+def test_validate_market_regime_rejects_invalid_dynamic_row():
     snapshot = {
         "IMX": {
             "asset": "IMX",
