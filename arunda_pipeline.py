@@ -82,28 +82,6 @@ LAUNCH_TIMESTAMP = (
 "2026-08-31T00:00:00+00:00"
 )
 
-EXPECTED_ASSETS = [
-"BTC",
-"ETH",
-"SOL",
-"XRP",
-"ADA",
-"DOGE",
-"SHIB",
-"LINK",
-"AVAX",
-"DOT",
-"LTC",
-"UNI",
-"AAVE",
-"SUI",
-"NEAR",
-]
-
-EXPECTED_ASSET_SET = set(
-EXPECTED_ASSETS
-)
-
 # ============================================================================
 
 # ORDER-INTENT CONTRACT
@@ -209,1193 +187,6 @@ from exchange_execution_boundary import execute_order
     # ============================================================================
 
     # GENERIC HELPERS
-
-    # ============================================================================
-
-def fail(message: str) -> None:
-    raise RuntimeError(message)
-
-def utc_now_iso() -> str:
-    return datetime.now(
-    timezone.utc
-    ).isoformat()
-
-def normalize_asset(
-    value: Any,
-    ) -> str | None:
-    if value is None:
-        return None
-
-    text = str(value).strip().upper()
-
-    if not text:
-        return None
-
-    return text
-def normalize_status(
-    value: Any,
-    ) -> str | None:
-    if value is None:
-        return None
-
-    text = str(value).strip().upper()
-
-    if not text:
-        return None
-
-    return text
-def get_row_value(
-    row: Any,
-    *keys: str,
-    ) -> Any:
-    if not isinstance(row, dict):
-        return None
-
-    for key in keys:
-
-        if key in row:
-            return row[key]
-
-    return None
-def ensure_dict(
-    value: Any,
-    name: str,
-    ) -> dict:
-    if not isinstance(value, dict):
-        fail(
-            f"{name} must be a dict"
-        )
-
-    return value
-def ensure_list(
-    value: Any,
-    name: str,
-    ) -> list:
-    if not isinstance(value, list):
-        fail(
-            f"{name} must be a list"
-        )
-
-    return value
-def is_finite_number(
-    value: Any,
-    ) -> bool:
-    return (
-        isinstance(value, (int, float))
-        and not isinstance(value, bool)
-        and math.isfinite(float(value))
-    )
-    # ============================================================================
-
-    # SUBPROCESS
-
-    # ============================================================================
-
-def run_script(
-    script_name: str,
-    ) -> str:
-    script_path = PROJECT_DIR / script_name
-
-    if not script_path.exists():
-        fail(
-            "Required production script not found: "
-            f"{script_path}"
-        )
-
-    result = subprocess.run(
-        [
-            sys.executable,
-            str(script_path),
-        ],
-        cwd=str(PROJECT_DIR),
-        capture_output=True,
-        text=True,
-    )
-
-    if result.returncode != 0:
-
-        raise RuntimeError(
-            f"Production subprocess failed: {script_name}"
-            f"\nSTDOUT:\n{result.stdout}"
-            f"\nSTDERR:\n{result.stderr}"
-        )
-
-    return result.stdout
-    # ============================================================================
-
-    # MARKER PARSER
-
-    # ============================================================================
-
-def extract_marker_payload(
-    output: str,
-    marker: str,
-    ) -> dict:
-    matches = []
-
-    for line in output.splitlines():
-
-        if line.startswith(marker):
-
-            payload = line[
-                len(marker):
-            ].strip()
-
-            if payload:
-                matches.append(payload)
-
-    if not matches:
-        fail(
-            "Required runtime marker not found: "
-            f"{marker}"
-        )
-
-    if len(matches) != 1:
-        fail(
-            "Runtime marker must appear exactly once: "
-            f"{marker} | count={len(matches)}"
-        )
-
-    try:
-
-        value = json.loads(
-            matches[0]
-        )
-
-    except json.JSONDecodeError as exc:
-
-        fail(
-            f"Invalid JSON payload for marker "
-            f"{marker}: {exc}"
-        )
-
-    if not isinstance(value, dict):
-
-        fail(
-            "Runtime marker payload must be dict: "
-            f"{marker}"
-        )
-
-    return value
-    # ============================================================================
-
-    # MARKET SNAPSHOT
-
-    # ============================================================================
-
-def parse_market_runtime_snapshot(
-    output: str,
-    ) -> dict:
-    snapshot = extract_marker_payload(
-        output,
-        "ARUNDA_CURRENT_RUNTIME_SNAPSHOT=",
-    )
-
-    if snapshot.get(
-        "runtime_source"
-    ) != "CURRENT_SUBPROCESS_RUN":
-
-        fail(
-            "Market snapshot is not from current subprocess run"
-        )
-
-    if not snapshot.get(
-        "engine_version"
-    ):
-
-        fail(
-            "Market snapshot engine_version missing"
-        )
-
-    if snapshot.get(
-        "source"
-    ) != "COINMARKETCAP":
-
-        fail(
-            "Market snapshot source is not COINMARKETCAP"
-        )
-
-    if snapshot.get(
-        "timeframe"
-    ) != "SNAPSHOT":
-
-        fail(
-            "Market snapshot timeframe is not SNAPSHOT"
-        )
-
-    timestamp = snapshot.get(
-        "timestamp"
-    )
-
-    if not timestamp:
-
-        fail(
-            "Market snapshot timestamp missing"
-        )
-
-    assets = snapshot.get(
-        "assets"
-    )
-
-    if not isinstance(
-        assets,
-        list,
-    ):
-
-        fail(
-            "Market snapshot assets must be list"
-        )
-
-    if len(assets) != len(
-        EXPECTED_ASSETS
-    ):
-
-        fail(
-            "Market snapshot asset count mismatch"
-        )
-
-    seen = set()
-
-    for row in assets:
-
-        if not isinstance(
-            row,
-            dict,
-        ):
-
-            fail(
-                "Market snapshot asset row must be dict"
-            )
-
-        asset = normalize_asset(
-            row.get("asset")
-        )
-
-        if asset is None:
-
-            fail(
-                "Market snapshot asset missing"
-            )
-
-        if asset in seen:
-
-            fail(
-                f"Duplicate market snapshot asset: {asset}"
-            )
-
-        seen.add(asset)
-
-        if asset not in EXPECTED_ASSET_SET:
-
-            fail(
-                f"Unexpected production asset: {asset}"
-            )
-
-        if row.get(
-            "timestamp"
-        ) != timestamp:
-
-            fail(
-                f"Market snapshot timestamp mismatch: {asset}"
-            )
-
-        if row.get("price") is None:
-
-            fail(
-                f"Market snapshot price missing: {asset}"
-            )
-
-    if seen != EXPECTED_ASSET_SET:
-
-        fail(
-            "Market snapshot exact coverage failed"
-        )
-
-    return snapshot
-def build_runtime_snapshot_id(
-    snapshot: dict,
-    ) -> str:
-    canonical_assets = []
-
-    for row in snapshot["assets"]:
-
-        canonical_assets.append(
-            {
-                "asset": normalize_asset(
-                    row["asset"]
-                ),
-                "timestamp": row["timestamp"],
-                "price": row["price"],
-                "change_1h": row.get(
-                    "change_1h"
-                ),
-                "change_24h": row.get(
-                    "change_24h"
-                ),
-                "market_cap": row.get(
-                    "market_cap"
-                ),
-                "volume_24h": row.get(
-                    "volume_24h"
-                ),
-            }
-        )
-
-    canonical_assets.sort(
-        key=lambda x: x["asset"]
-    )
-
-    payload = {
-        "timestamp": snapshot["timestamp"],
-        "assets": canonical_assets,
-    }
-
-    canonical_json = json.dumps(
-        payload,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=False,
-    )
-
-    digest = hashlib.sha256(
-        canonical_json.encode("utf-8")
-    ).hexdigest()
-
-    return f"RS-{digest}"
-    # ============================================================================
-
-    # OPPORTUNITY
-
-    # ============================================================================
-
-def parse_opportunity_runtime_snapshot(
-    output: str,
-    ) -> dict:
-    snapshot = extract_marker_payload(
-        output,
-        "ARUNDA_RUNTIME_OPPORTUNITY_SNAPSHOT=",
-    )
-
-    if snapshot.get(
-        "runtime_source"
-    ) != "CURRENT_SUBPROCESS_RUN":
-
-        fail(
-            "Opportunity snapshot is not current-run"
-        )
-
-    if not snapshot.get(
-        "engine_version"
-    ):
-
-        fail(
-            "Opportunity engine_version missing"
-        )
-
-    opportunities = snapshot.get(
-        "opportunities"
-    )
-
-    if not isinstance(
-        opportunities,
-        list,
-    ):
-
-        fail(
-            "Opportunity opportunities must be list"
-        )
-
-    if len(opportunities) != len(
-        EXPECTED_ASSETS
-    ):
-
-        fail(
-            "Opportunity coverage mismatch"
-        )
-
-    seen = set()
-
-    for row in opportunities:
-
-        if not isinstance(
-            row,
-            dict,
-        ):
-
-            fail(
-                "Opportunity row must be dict"
-            )
-
-        asset = normalize_asset(
-            row.get(
-                "symbol",
-                row.get("asset"),
-            )
-        )
-
-        if asset is None:
-
-            fail(
-                "Opportunity asset missing"
-            )
-
-        if asset in seen:
-
-            fail(
-                f"Duplicate Opportunity asset: {asset}"
-            )
-
-        seen.add(asset)
-
-        if asset not in EXPECTED_ASSET_SET:
-
-            fail(
-                f"Unexpected Opportunity asset: {asset}"
-            )
-
-    if seen != EXPECTED_ASSET_SET:
-
-        fail(
-            "Opportunity exact asset coverage failed"
-        )
-
-    return snapshot
-def opportunity_map(
-    opportunity_snapshot: dict,
-    ) -> dict[str, dict]:
-    result = {}
-
-    for row in opportunity_snapshot[
-        "opportunities"
-    ]:
-
-        asset = normalize_asset(
-            row.get(
-                "symbol",
-                row.get("asset"),
-            )
-        )
-
-        if asset is None:
-
-            fail(
-                "Opportunity map encountered missing asset"
-            )
-
-        if asset in result:
-
-            fail(
-                f"Duplicate Opportunity asset: {asset}"
-            )
-
-        result[asset] = row
-
-    return result
-def get_opportunity_status(
-    row: dict,
-    ) -> str | None:
-    return normalize_status(
-        row.get("status")
-    )
-    # ============================================================================
-
-    # SIGNAL VALIDATOR
-
-    # ============================================================================
-
-def validate_signal_coverage(
-    signals: dict,
-    ) -> None:
-    if not isinstance(
-        signals,
-        dict,
-    ):
-
-        fail(
-            "Validated signals must be a dict."
-        )
-
-    if len(signals) != len(
-        EXPECTED_ASSETS
-    ):
-
-        fail(
-            "Validated signal coverage mismatch"
-        )
-
-    seen = set()
-
-    for key, row in signals.items():
-
-        asset = normalize_asset(key)
-
-        if asset is None:
-
-            fail(
-                "Validated signal contains empty asset key"
-            )
-
-        if asset in seen:
-
-            fail(
-                f"Duplicate normalized signal asset: {asset}"
-            )
-
-        seen.add(asset)
-
-        if asset not in EXPECTED_ASSET_SET:
-
-            fail(
-                f"Unexpected validated signal asset: {asset}"
-            )
-
-        if not isinstance(
-            row,
-            dict,
-        ):
-
-            fail(
-                f"Validated signal row must be dict: {asset}"
-            )
-
-        row_asset = normalize_asset(
-            row.get("asset")
-        )
-
-        row_symbol = normalize_asset(
-            row.get("symbol")
-        )
-
-        if (
-            row_asset != asset
-            and row_symbol != asset
-        ):
-
-            fail(
-                f"Validated signal identity mismatch: {asset}"
-            )
-
-        if row.get(
-            "valid"
-        ) is not True:
-
-            fail(
-                f"Validated signal is not valid: {asset}"
-            )
-
-    if seen != EXPECTED_ASSET_SET:
-
-        fail(
-            "Validated signal exact coverage failed"
-        )
-def normalize_validated_signals(
-    value: Any,
-    ) -> dict[str, dict]:
-    if not isinstance(
-        value,
-        dict,
-    ):
-
-        fail(
-            "Validated signals must be a dict."
-        )
-
-    normalized = {}
-
-    for original_key, row in value.items():
-
-        asset = normalize_asset(
-            original_key
-        )
-
-        if asset is None:
-
-            fail(
-                "Validated signals contains empty asset key"
-            )
-
-        if asset in normalized:
-
-            fail(
-                f"Duplicate normalized asset: {asset}"
-            )
-
-        if asset not in EXPECTED_ASSET_SET:
-
-            fail(
-                f"Unexpected validated asset: {asset}"
-            )
-
-        if not isinstance(
-            row,
-            dict,
-        ):
-
-            fail(
-                f"Validated signal row must be dict: {asset}"
-            )
-
-        row_asset = normalize_asset(
-            row.get("asset")
-        )
-
-        row_symbol = normalize_asset(
-            row.get("symbol")
-        )
-
-        if (
-            row_asset != asset
-            and row_symbol != asset
-        ):
-
-            fail(
-                f"Validated signal identity mismatch: {asset}"
-            )
-
-        if row.get(
-            "valid"
-        ) is not True:
-
-            fail(
-                f"Validated signal is not valid: {asset}"
-            )
-
-        normalized[asset] = row
-
-    if set(
-        normalized.keys()
-    ) != EXPECTED_ASSET_SET:
-
-        fail(
-            "Validated signal exact coverage failed"
-        )
-
-    return normalized
-    # ============================================================================
-
-    # GENERIC ROW EXTRACTION
-
-    # ============================================================================
-
-def extract_rows(
-    value: Any,
-    preferred_keys: tuple[str, ...] = (),
-    ) -> list[dict]:
-    if isinstance(
-        value,
-        list,
-    ):
-
-        if all(
-            isinstance(item, dict)
-            for item in value
-        ):
-
-            return value
-
-        return []
-
-    if isinstance(
-        value,
-        dict,
-    ):
-
-        for key in preferred_keys:
-
-            candidate = value.get(key)
-
-            if isinstance(
-                candidate,
-                list,
-            ):
-
-                if all(
-                    isinstance(item, dict)
-                    for item in candidate
-                ):
-
-                    return candidate
-
-        for key in (
-            "rows",
-            "assets",
-            "signals",
-            "validated_signals",
-            "decisions",
-            "risk",
-            "results",
-            "data",
-            "snapshot",
-        ):
-
-            candidate = value.get(key)
-
-            if isinstance(
-                candidate,
-                list,
-            ):
-
-                if all(
-                    isinstance(item, dict)
-                    for item in candidate
-                ):
-
-                    return candidate
-
-        if (
-            len(value) == len(EXPECTED_ASSETS)
-            and all(
-                normalize_asset(k)
-                in EXPECTED_ASSET_SET
-                and isinstance(v, dict)
-                for k, v in value.items()
-            )
-        ):
-
-            return list(
-                value.values()
-            )
-
-    return []
-def exact_asset_rows(
-    rows: list[dict],
-    stage_name: str,
-    ) -> list[dict]:
-    if len(rows) != len(
-        EXPECTED_ASSETS
-    ):
-
-        fail(
-            f"{stage_name} row count mismatch: "
-            f"expected={len(EXPECTED_ASSETS)} "
-            f"actual={len(rows)}"
-        )
-
-    seen = set()
-
-    for row in rows:
-
-        if not isinstance(
-            row,
-            dict,
-        ):
-
-            fail(
-                f"{stage_name}: row must be dict"
-            )
-
-        asset = normalize_asset(
-            row.get(
-                "asset",
-                row.get("symbol"),
-            )
-        )
-
-        if asset is None:
-
-            fail(
-                f"{stage_name}: missing asset"
-            )
-
-        if asset in seen:
-
-            fail(
-                f"{stage_name}: duplicate asset {asset}"
-            )
-
-        seen.add(asset)
-
-        if asset not in EXPECTED_ASSET_SET:
-
-            fail(
-                f"{stage_name}: unexpected asset {asset}"
-            )
-
-    if seen != EXPECTED_ASSET_SET:
-
-        fail(
-            f"{stage_name}: exact asset coverage failed"
-        )
-
-    return rows
-def decision_map(
-    rows: list[dict],
-    ) -> dict[str, dict]:
-    result = {}
-
-    for row in rows:
-
-        asset = normalize_asset(
-            row.get(
-                "asset",
-                row.get("symbol"),
-            )
-        )
-
-        if asset is None:
-
-            fail(
-                "Decision row missing asset"
-            )
-
-        if asset in result:
-
-            fail(
-                f"Duplicate Decision asset: {asset}"
-            )
-
-        result[asset] = row
-
-    return result
-def risk_map(
-    rows: list[dict],
-    ) -> dict[str, dict]:
-    result = {}
-
-    for row in rows:
-
-        asset = normalize_asset(
-            row.get(
-                "asset",
-                row.get("symbol"),
-            )
-        )
-
-        if asset is None:
-
-            fail(
-                "Risk row missing asset"
-            )
-
-        if asset in result:
-
-            fail(
-                f"Duplicate Risk asset: {asset}"
-            )
-
-        result[asset] = row
-
-    return result
-    # ============================================================================
-
-    # FUSION v0.6 ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ SCORE BINDING
-
-    # ============================================================================
-
-def build_production_fusion_snapshot(
-    validated_signals: dict,
-    ) -> dict:
-    validate_signal_coverage(
-        validated_signals
-    )
-
-    fusion_snapshot = (
-        fusion_engine.run()
-    )
-
-    if not isinstance(
-        fusion_snapshot,
-        dict,
-    ):
-
-        fail(
-            "FUSION_v0.6 runtime result must be dict"
-        )
-
-    return fusion_snapshot
-def bind_fused_scores(
-    validated_signals: dict,
-    fusion_snapshot: dict,
-    ) -> dict:
-    validate_signal_coverage(
-        validated_signals
-    )
-
-    if not isinstance(
-        fusion_snapshot,
-        dict,
-    ):
-
-        fail(
-            "Fusion snapshot must be dict"
-        )
-
-    try:
-
-        score_snapshot = (
-            production_fused_score_binding_v0_1.run(
-                validated_signals,
-                fusion_snapshot,
-            )
-        )
-
-    except Exception as exc:
-
-        raise RuntimeError(
-            "PRODUCTION FUSED-SCORE BINDING FAILED: "
-            f"{exc}"
-        ) from exc
-
-    if not isinstance(
-        score_snapshot,
-        dict,
-    ):
-
-        fail(
-            "Fused-score binding must return dict"
-        )
-
-    return score_snapshot
-    # ============================================================================
-
-    # MARKET REGIME
-
-    # ============================================================================
-
-def load_current_market_regime() -> dict:
-    regime_snapshot = (
-        market_regime_engine.load_market_regime()
-    )
-
-    if not isinstance(
-        regime_snapshot,
-        dict,
-    ):
-
-        fail(
-            "CURRENT_MARKET_REGIME must be a dict"
-        )
-
-    return regime_snapshot
-def get_current_regime(
-    regime_snapshot: dict,
-    asset: str,
-    ) -> Any:
-    asset = normalize_asset(
-        asset
-    )
-
-    if asset is None:
-
-        fail(
-            "Cannot resolve regime for empty asset"
-        )
-
-    direct = regime_snapshot.get(
-        asset
-    )
-
-    if (
-        isinstance(direct, dict)
-        and "regime" in direct
-    ):
-
-        return direct["regime"]
-
-    for key, value in regime_snapshot.items():
-
-        if str(key).strip().upper() == asset:
-
-            if (
-                isinstance(value, dict)
-                and "regime" in value
-            ):
-
-                return value["regime"]
-
-    fail(
-        "CURRENT_MARKET_REGIME ownership unavailable "
-        f"for asset={asset}"
-    )
-    # ============================================================================
-
-    # MARKET-DATA RUNTIME EXTRACTION
-
-    # ============================================================================
-
-def _find_runtime_asset_record(
-    market_data_result: Any,
-    asset: str,
-    ) -> dict | None:
-    if not isinstance(
-        market_data_result,
-        dict,
-    ):
-
-        return None
-
-    candidates = []
-
-    candidates.extend(
-        extract_rows(
-            market_data_result,
-            (
-                "assets",
-                "rows",
-                "results",
-                "data",
-                "market_data",
-                "ohlcv",
-            ),
-        )
-    )
-
-    if not candidates:
-
-        for key, value in market_data_result.items():
-
-            if normalize_asset(key) == asset:
-
-                if isinstance(
-                    value,
-                    dict,
-                ):
-
-                    return value
-
-    for row in candidates:
-
-        row_asset = normalize_asset(
-            row.get(
-                "asset",
-                row.get(
-                    "symbol",
-                    row.get("market"),
-                ),
-            )
-        )
-
-        if row_asset == asset:
-
-            return row
-
-    return None
-def _runtime_value(
-    asset_record: dict | None,
-    *keys: str,
-    ) -> Any:
-    if not isinstance(
-        asset_record,
-        dict,
-    ):
-
-        return None
-
-    for key in keys:
-
-        if key in asset_record:
-
-            return asset_record[key]
-
-    return None
-def _resolve_market_data_provenance(
-    market_data_result: Any,
-    asset: str,
-    ) -> dict:
-    record = _find_runtime_asset_record(
-        market_data_result,
-        asset,
-    )
-
-    if record is None:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA asset record "
-            f"missing: {asset}"
-        )
-
-    source = _runtime_value(
-        record,
-        "source",
-        "provider",
-        "data_source",
-    )
-
-    timestamp = _runtime_value(
-        record,
-        "latest_ohlcv_timestamp",
-            "latest_candle_timestamp",
-        "ohlcv_timestamp",
-        "timestamp",
-        "latest_timestamp",
-    )
-
-    candle_count = _runtime_value(
-        record,
-        "real_candle_count",
-        "candle_count",
-        "real_candles",
-    )
-
-    atr14 = _runtime_value(
-        record,
-        "atr14",
-        "atr_14",
-    )
-
-    stop_distance = _runtime_value(
-        record,
-        "stop_distance",
-    )
-
-    if not source:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA source missing: "
-            f"{asset}"
-        )
-
-    if not timestamp:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA timestamp missing: "
-            f"{asset}"
-        )
-
-    if candle_count is None:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA real candle count "
-            f"missing: {asset}"
-        )
-
-    if not isinstance(
-        candle_count,
-        int,
-    ) or isinstance(
-        candle_count,
-        bool,
-    ) or candle_count < 1:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA candle count invalid: "
-            f"{asset}"
-        )
-
-    if atr14 is None:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA ATR14 missing: "
-            f"{asset}"
-        )
-
-    if stop_distance is None:
-
-        fail(
-            "CURRENT RUNTIME MARKET DATA stop_distance missing: "
-            f"{asset}"
-        )
-
-    return {
-        "source": source,
-        "latest_ohlcv_timestamp": timestamp,
-        "real_candle_count": candle_count,
-        "atr14": atr14,
-        "stop_distance": stop_distance,
-    }
-    # ============================================================================
-
-    # CURRENT-RUNTIME QUANTITY BRIDGE
 
     # ============================================================================
 
@@ -1536,7 +327,7 @@ def build_runtime_quantity_bridge(
 
     records = {}
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(opportunities):
 
         opportunity = opportunities.get(
             asset
@@ -2211,98 +1002,37 @@ def extract_marker_payload(
     # MARKET SNAPSHOT
     # ============================================================================
 
-def parse_market_runtime_snapshot(
-        output: str,
-    ) -> dict:
-        snapshot = extract_marker_payload(
-            output,
-            "ARUNDA_CURRENT_RUNTIME_SNAPSHOT=",
-        )
-
-        if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
-            fail(
-                "Market snapshot is not from current subprocess run"
-            )
-
-        if not snapshot.get("engine_version"):
-            fail(
-                "Market snapshot engine_version missing"
-            )
-
-        if snapshot.get("source") != "COINMARKETCAP":
-            fail(
-                "Market snapshot source is not COINMARKETCAP"
-            )
-
-        if snapshot.get("timeframe") != "SNAPSHOT":
-            fail(
-                "Market snapshot timeframe is not SNAPSHOT"
-            )
-
-        timestamp = snapshot.get("timestamp")
-
-        if not timestamp:
-            fail(
-                "Market snapshot timestamp missing"
-            )
-
-        assets = snapshot.get("assets")
-
-        if not isinstance(assets, list):
-            fail(
-                "Market snapshot assets must be list"
-            )
-
-        if len(assets) != len(EXPECTED_ASSETS):
-            fail(
-                "Market snapshot asset count mismatch"
-            )
-
-        seen = set()
-
-        for row in assets:
-            if not isinstance(row, dict):
-                fail(
-                    "Market snapshot asset row must be dict"
-                )
-
-            asset = normalize_asset(row.get("asset"))
-
-            if asset is None:
-                fail(
-                    "Market snapshot asset missing"
-                )
-
-            if asset in seen:
-                fail(
-                    f"Duplicate market snapshot asset: {asset}"
-                )
-
-            seen.add(asset)
-
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Unexpected production asset: {asset}"
-                )
-
-            if row.get("timestamp") != timestamp:
-                fail(
-                    f"Market snapshot timestamp mismatch: {asset}"
-                )
-
-            if row.get("price") is None:
-                fail(
-                    f"Market snapshot price missing: {asset}"
-                )
-
-        if seen != EXPECTED_ASSET_SET:
-            fail(
-                "Market snapshot exact coverage failed"
-            )
-
-        return snapshot
-
-
+def parse_market_runtime_snapshot(output: str) -> dict:
+    snapshot = extract_marker_payload(output, "ARUNDA_CURRENT_RUNTIME_SNAPSHOT=")
+    if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
+        fail("Market snapshot is not from current subprocess run")
+    if not snapshot.get("engine_version"):
+        fail("Market snapshot engine_version missing")
+    if snapshot.get("source") != "COINMARKETCAP":
+        fail("Market snapshot source is not COINMARKETCAP")
+    if snapshot.get("timeframe") != "SNAPSHOT":
+        fail("Market snapshot timeframe is not SNAPSHOT")
+    timestamp = snapshot.get("timestamp")
+    if not timestamp:
+        fail("Market snapshot timestamp missing")
+    assets = snapshot.get("assets")
+    if not isinstance(assets, list) or not assets:
+        fail("Market snapshot assets must be a non-empty list")
+    seen = set()
+    for row in assets:
+        if not isinstance(row, dict):
+            fail("Market snapshot asset row must be dict")
+        asset = normalize_asset(row.get("asset"))
+        if asset is None:
+            fail("Market snapshot asset missing")
+        if asset in seen:
+            fail(f"Duplicate market snapshot asset: {asset}")
+        seen.add(asset)
+        if row.get("timestamp") != timestamp:
+            fail(f"Market snapshot timestamp mismatch: {asset}")
+        if row.get("price") is None:
+            fail(f"Market snapshot price missing: {asset}")
+    return snapshot
 def build_runtime_snapshot_id(
         snapshot: dict,
     ) -> str:
@@ -2348,76 +1078,29 @@ def build_runtime_snapshot_id(
     # OPPORTUNITY
     # ============================================================================
 
-def parse_opportunity_runtime_snapshot(
-        output: str,
-    ) -> dict:
-        snapshot = extract_marker_payload(
-            output,
-            "ARUNDA_RUNTIME_OPPORTUNITY_SNAPSHOT=",
-        )
-
-        if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
-            fail(
-                "Opportunity snapshot is not current-run"
-            )
-
-        if not snapshot.get("engine_version"):
-            fail(
-                "Opportunity engine_version missing"
-            )
-
-        opportunities = snapshot.get("opportunities")
-
-        if not isinstance(opportunities, list):
-            fail(
-                "Opportunity opportunities must be list"
-            )
-
-        if len(opportunities) != len(EXPECTED_ASSETS):
-            fail(
-                "Opportunity coverage mismatch"
-            )
-
-        seen = set()
-
-        for row in opportunities:
-            if not isinstance(row, dict):
-                fail(
-                    "Opportunity row must be dict"
-                )
-
-            asset = normalize_asset(
-                row.get(
-                    "symbol",
-                    row.get("asset"),
-                )
-            )
-
-            if asset is None:
-                fail(
-                    "Opportunity asset missing"
-                )
-
-            if asset in seen:
-                fail(
-                    f"Duplicate Opportunity asset: {asset}"
-                )
-
-            seen.add(asset)
-
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Unexpected Opportunity asset: {asset}"
-                )
-
-        if seen != EXPECTED_ASSET_SET:
-            fail(
-                "Opportunity exact asset coverage failed"
-            )
-
-        return snapshot
-
-
+def parse_opportunity_runtime_snapshot(output: str) -> dict:
+    snapshot = extract_marker_payload(output, "ARUNDA_RUNTIME_OPPORTUNITY_SNAPSHOT=")
+    if snapshot.get("runtime_source") != "CURRENT_SUBPROCESS_RUN":
+        fail("Opportunity snapshot is not current-run")
+    if not snapshot.get("engine_version"):
+        fail("Opportunity engine_version missing")
+    opportunities = snapshot.get("opportunities")
+    if not isinstance(opportunities, list) or not opportunities:
+        fail("Opportunity opportunities must be a non-empty list")
+    seen = set()
+    for row in opportunities:
+        if not isinstance(row, dict):
+            fail("Opportunity row must be dict")
+        raw_asset = row.get("symbol", row.get("asset"))
+        if isinstance(raw_asset, str) and "/" in raw_asset:
+            raw_asset = raw_asset.split("/", 1)[0]
+        asset = normalize_asset(raw_asset)
+        if asset is None:
+            fail("Opportunity asset missing")
+        if asset in seen:
+            fail(f"Duplicate Opportunity asset: {asset}")
+        seen.add(asset)
+    return snapshot
 def opportunity_map(
         opportunity_snapshot: dict,
     ) -> dict[str, dict]:
@@ -2460,252 +1143,77 @@ def get_opportunity_status(
     # SIGNAL VALIDATOR
     # ============================================================================
 
-def validate_signal_coverage(
-        signals: dict,
-    ) -> None:
-        if not isinstance(signals, dict):
-            fail(
-                "Validated signals must be a dict."
-            )
-
-        if len(signals) != len(EXPECTED_ASSETS):
-            fail(
-                "Validated signal coverage mismatch"
-            )
-
-        seen = set()
-
-        for key, row in signals.items():
-            asset = normalize_asset(key)
-
-            if asset is None:
-                fail(
-                    "Validated signal contains empty asset key"
-                )
-
-            if asset in seen:
-                fail(
-                    f"Duplicate normalized signal asset: {asset}"
-                )
-
-            seen.add(asset)
-
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Unexpected validated signal asset: {asset}"
-                )
-
-            if not isinstance(row, dict):
-                fail(
-                    f"Validated signal row must be dict: {asset}"
-                )
-
-            row_asset = normalize_asset(
-                row.get("asset")
-            )
-
-            row_symbol = normalize_asset(
-                row.get("symbol")
-            )
-
-            if (
-                row_asset != asset
-                and row_symbol != asset
-            ):
-                fail(
-                    f"Validated signal identity mismatch: {asset}"
-                )
-
-            if row.get("valid") is not True:
-                fail(
-                    f"Validated signal is not valid: {asset}"
-                )
-
-        if seen != EXPECTED_ASSET_SET:
-            fail(
-                "Validated signal exact coverage failed"
-            )
-
-
-def normalize_validated_signals(
-        value: Any,
-    ) -> dict[str, dict]:
-        if not isinstance(value, dict):
-            fail(
-                "Validated signals must be a dict."
-            )
-
-        normalized = {}
-
-        for original_key, row in value.items():
-            asset = normalize_asset(original_key)
-
-            if asset is None:
-                fail(
-                    "Validated signals contains empty asset key"
-                )
-
-            if asset in normalized:
-                fail(
-                    f"Duplicate normalized asset: {asset}"
-                )
-
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Unexpected validated asset: {asset}"
-                )
-
-            if not isinstance(row, dict):
-                fail(
-                    f"Validated signal row must be dict: {asset}"
-                )
-
-            row_asset = normalize_asset(
-                row.get("asset")
-            )
-
-            row_symbol = normalize_asset(
-                row.get("symbol")
-            )
-
-            if (
-                row_asset != asset
-                and row_symbol != asset
-            ):
-                fail(
-                    f"Validated signal identity mismatch: {asset}"
-                )
-
-            if row.get("valid") is not True:
-                fail(
-                    f"Validated signal is not valid: {asset}"
-                )
-
-            normalized[asset] = row
-
-        if set(normalized.keys()) != EXPECTED_ASSET_SET:
-            fail(
-                "Validated signal exact coverage failed"
-            )
-
-        return normalized
-
-
-    # ============================================================================
-    # GENERIC ROW EXTRACTION
-    # ============================================================================
-
-def extract_rows(
-        value: Any,
-        preferred_keys: tuple[str, ...] = (),
-    ) -> list[dict]:
-        if isinstance(value, list):
-            if all(
-                isinstance(item, dict)
-                for item in value
-            ):
-                return value
-
-            return []
-
-        if isinstance(value, dict):
-            for key in preferred_keys:
-                candidate = value.get(key)
-
-                if isinstance(candidate, list):
-                    if all(
-                        isinstance(item, dict)
-                        for item in candidate
-                    ):
-                        return candidate
-
-            for key in (
-                "rows",
-                "assets",
-                "signals",
-                "validated_signals",
-                "decisions",
-                "risk",
-                "risk_decisions",
-                "results",
-                "data",
-                "snapshot",
-                "market_data",
-                "ohlcv",
-            ):
-                candidate = value.get(key)
-
-                if isinstance(candidate, list):
-                    if all(
-                        isinstance(item, dict)
-                        for item in candidate
-                    ):
-                        return candidate
-
-            if (
-                len(value) == len(EXPECTED_ASSETS)
-                and all(
-                    normalize_asset(k) in EXPECTED_ASSET_SET
-                    and isinstance(v, dict)
-                    for k, v in value.items()
-                )
-            ):
-                return list(value.values())
-
-        return []
-
-
-def exact_asset_rows(
-        rows: list[dict],
-        stage_name: str,
-    ) -> list[dict]:
-        if len(rows) != len(EXPECTED_ASSETS):
-            fail(
-                f"{stage_name} row count mismatch: "
-                f"expected={len(EXPECTED_ASSETS)} "
-                f"actual={len(rows)}"
-            )
-
-        seen = set()
-
-        for row in rows:
-            if not isinstance(row, dict):
-                fail(
-                    f"{stage_name}: row must be dict"
-                )
-
-            asset = normalize_asset(
-                row.get(
-                    "asset",
-                    row.get("symbol"),
-                )
-            )
-
-            if asset is None:
-                fail(
-                    f"{stage_name}: missing asset"
-                )
-
-            if asset in seen:
-                fail(
-                    f"{stage_name}: duplicate asset {asset}"
-                )
-
-            seen.add(asset)
-
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"{stage_name}: unexpected asset {asset}"
-                )
-
-        if seen != EXPECTED_ASSET_SET:
-            fail(
-                f"{stage_name}: exact asset coverage failed"
-            )
-
-        return rows
-
-
+def validate_signal_coverage(signals: dict) -> None:
+    if not isinstance(signals, dict):
+        fail("Validated signals must be a dict.")
+    if not signals:
+        fail("Validated signals must contain at least one asset")
+    for key, row in signals.items():
+        asset = normalize_asset(key)
+        if asset is None:
+            fail("Validated signal contains empty asset key")
+        if not isinstance(row, dict):
+            fail(f"Validated signal row must be dict: {asset}")
+        row_asset = normalize_asset(row.get("asset"))
+        row_symbol = normalize_asset(row.get("symbol"))
+        if row_asset != asset and row_symbol != asset:
+            fail(f"Validated signal identity mismatch: {asset}")
+        if row.get("valid") is not True:
+            fail(f"Validated signal is not valid: {asset}")
+def normalize_validated_signals(value: Any) -> dict[str, dict]:
+    if not isinstance(value, dict):
+        fail("Validated signals must be a dict.")
+    normalized = {}
+    for original_key, row in value.items():
+        asset = normalize_asset(original_key)
+        if asset is None:
+            fail("Validated signals contains empty asset key")
+        if asset in normalized:
+            fail(f"Duplicate normalized asset: {asset}")
+        if not isinstance(row, dict):
+            fail(f"Validated signal row must be dict: {asset}")
+        row_asset = normalize_asset(row.get("asset"))
+        row_symbol = normalize_asset(row.get("symbol"))
+        if row_asset != asset and row_symbol != asset:
+            fail(f"Validated signal identity mismatch: {asset}")
+        if row.get("valid") is not True:
+            fail(f"Validated signal is not valid: {asset}")
+        normalized[asset] = row
+    if not normalized:
+        fail("Validated signals must contain at least one asset")
+    return normalized
+def extract_rows(value: Any, preferred_keys: tuple[str, ...] = ()) -> list[dict]:
+    if isinstance(value, list):
+        return value if all(isinstance(item, dict) for item in value) else []
+    if isinstance(value, dict):
+        for key in preferred_keys:
+            candidate = value.get(key)
+            if isinstance(candidate, list) and all(isinstance(item, dict) for item in candidate):
+                return candidate
+        for key in ("rows","assets","signals","validated_signals","decisions","risk","risk_decisions","results","data","snapshot","market_data","ohlcv"):
+            candidate = value.get(key)
+            if isinstance(candidate, list) and all(isinstance(item, dict) for item in candidate):
+                return candidate
+        if value and all(isinstance(k, str) and normalize_asset(k) is not None and isinstance(v, dict) for k, v in value.items()):
+            return list(value.values())
+    return []
+def exact_asset_rows(rows: list[dict], stage_name: str) -> list[dict]:
+    if not rows:
+        fail(f"{stage_name}: no runtime rows")
+    seen = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            fail(f"{stage_name}: row must be dict")
+        raw_asset = row.get("asset", row.get("symbol"))
+        if isinstance(raw_asset, str) and "/" in raw_asset:
+            raw_asset = raw_asset.split("/", 1)[0]
+        asset = normalize_asset(raw_asset)
+        if asset is None:
+            fail(f"{stage_name}: missing asset")
+        if asset in seen:
+            fail(f"{stage_name}: duplicate asset {asset}")
+        seen.add(asset)
+    return rows
 def decision_map(
         rows: list[dict],
     ) -> dict[str, dict]:
@@ -2831,31 +1339,8 @@ def build_production_fusion_snapshot(
 
             fusion_snapshot[asset] = result
 
-        expected_assets = {
-            "BTC", "ETH", "SOL", "XRP", "ADA",
-            "DOGE", "SHIB", "LINK", "AVAX", "DOT",
-            "LTC", "UNI", "AAVE", "SUI", "NEAR",
-        }
-
-        actual_assets = set(
-            fusion_snapshot.keys()
-        )
-
-        if actual_assets != expected_assets:
-            missing = expected_assets - actual_assets
-            extra = actual_assets - expected_assets
-
-            fail(
-                f"Fusion asset coverage mismatch: "
-                f"missing={sorted(missing)}, "
-                f"extra={sorted(extra)}"
-            )
-
-        if len(fusion_snapshot) != 15:
-            fail(
-                f"Fusion snapshot count mismatch: "
-                f"{len(fusion_snapshot)} != 15"
-            )
+        if not fusion_snapshot:
+            fail("Fusion snapshot must contain at least one asset")
 
         return fusion_snapshot
 
@@ -3211,7 +1696,7 @@ def build_runtime_quantity_bridge(
 
         records = {}
 
-        for asset in EXPECTED_ASSETS:
+        for asset in sorted(opportunities):
             opportunity = opportunities.get(asset)
 
             if not isinstance(
@@ -3966,11 +2451,6 @@ def validate_current_order_intents(
                     "ORDER_INTENT asset missing"
                 )
 
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"ORDER_INTENT unexpected asset: {asset}"
-                )
-
             direction = normalize_status(
                 intent.get("direction")
             )
@@ -4353,7 +2833,7 @@ def build_trade_ready_quantity_records(
         contract; it never recalculates or rescales quantity.
         """
         # Dynamic Runtime Risk is authoritative as an asset-keyed mapping.
-        # Do not route it through the legacy EXPECTED_ASSETS/15-row extractor;
+        # Do not route it through the fixed-universe extractor;
         # the current production universe is dynamic and was already cardinality-
         # checked against decision_snapshot at the Risk boundary above.
         if not isinstance(risk_snapshot, dict):
@@ -4840,19 +3320,19 @@ def print_final_report(
         print("COVERAGE:")
         print(
             f"OPPORTUNITY     : "
-            f"{len(opportunity_rows)}/{len(EXPECTED_ASSETS)}"
+            f"{len(opportunity_rows)}"
         )
         print(
             f"DECISION        : "
-            f"{len(decision_rows)}/{len(EXPECTED_ASSETS)}"
+            f"{len(decision_rows)}"
         )
         print(
             f"RISK            : "
-            f"{len(risk_rows)}/{len(EXPECTED_ASSETS)}"
+            f"{len(risk_rows)}"
         )
         print(
             f"TRADE GATE      : "
-            f"{len(gate_results)}/{len(EXPECTED_ASSETS)}"
+            f"{len(gate_results)}"
         )
 
         print()
