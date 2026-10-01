@@ -2424,12 +2424,14 @@ def opportunity_map(
         result = {}
 
         for row in opportunity_snapshot["opportunities"]:
-            asset = normalize_asset(
-                row.get(
-                    "symbol",
-                    row.get("asset"),
-                )
+            raw_asset = row.get(
+                "symbol",
+                row.get("asset"),
             )
+            if isinstance(raw_asset, str) and "/" in raw_asset:
+                raw_asset = raw_asset.split("/", 1)[0]
+
+            asset = normalize_asset(raw_asset)
 
             if asset is None:
                 fail(
