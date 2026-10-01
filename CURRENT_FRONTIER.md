@@ -1511,3 +1511,40 @@ Any historical checkpoint detail not supported by current repository evidence or
 Closed means closed. Context loss is never permission to restart. When uncertain: preserve, record the uncertainty, and escalate rather than improvise.
 
 # END MASTER ROADMAP RECONCILIATION
+
+## 2026-10-01 — FRONTIER RECONCILIATION
+
+**CURRENT FRONTIER:** AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION PATH + OBSERVATION REQUIREMENTS
+
+**CP44:** VERIFIED / PASS / CLOSED. The latest authorized real-market runtime proved the dynamic downstream chain through the exchange-agnostic execution boundary.
+
+### VERIFIED EVIDENCE
+- UNIVERSE_SIZE=841
+- SIGNAL_READY=422
+- VALIDATED=422
+- FUSION_READY=422
+- SCORE_READY=422
+- DECISION_READY=422
+- CP49_BIRTH_PERSISTED=422
+- RISK_READY=422
+- TRADE_GATE_READY=422
+- TRADE_READY=96
+- ORDER_INTENTS_CREATED=96
+- CANONICAL_ORDER_REQUESTS_CREATED=96
+- EXECUTION_BOUNDARY_STATUS=VERIFIED_BLOCKED
+- CP69_OBSERVATION_WRITTEN=1
+- CP49_BIRTH_DB_WRITES=422
+- OPERATIONAL_DB_WRITES=0
+- EXECUTION_DB_WRITES=0
+- REAL_ORDER=FALSE
+- REAL_TRADE=FALSE
+- EXECUTION=OFF
+- FAIL_CLOSED=TRUE
+
+The older CP44 MHA contiguous-context blocker and second-runtime prohibition are historical records superseded by this verified runtime. Do not reopen CP44 absent a direct, provable regression.
+
+### NEXT ACTION
+1. Treat the exchange-agnostic pre-execution boundary as the active architectural frontier.
+2. Define/verify the controlled first-execution preparation requirements without enabling execution.
+3. Keep Toobit/account signature issues downstream and isolated from Core architecture.
+4. Synchronize all four governance documents at the next checkpoint.
