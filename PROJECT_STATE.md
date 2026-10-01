@@ -1711,3 +1711,32 @@ The contract separates **pre-activation readiness** from the existing CP49 execu
 Required readiness evidence is explicit: implementation verification, no prior attempt, no automatic retry, account read verification, signature verification, real-capital authorization, provider constraints verification, Management authorization, valid Canonical Order Request, and passed CP46-E eligibility. Execution/order-submission/exchange-write flags must remain OFF during readiness evaluation.
 
 **CURRENT READINESS:** BLOCKED. Existing independent Toobit account-signature blocker remains unresolved, and real-capital authorization has not been granted. Execution remains OFF.
+
+
+## 2026-10-01 — FIRST-EXECUTION EVIDENCE BOUNDARY RECONCILIATION
+
+### STATUS
+**BUILT / STATIC-VERIFIED / READINESS STILL BLOCKED / EXECUTION OFF**
+
+### BUILT
+- toobit_trading_adapter.py now exposes the provider-normalized account_type from the authenticated account read at the adapter boundary.
+- cp49_first_execution_evidence_contract_v0_1.py now requires authenticated account-read evidence with correlated account type and immutable source provenance; it does not invent an account identifier.
+- cp49_first_execution_readiness_v0_1.py now requires authoritative evidence objects whenever signature_verified or capital_authorized is asserted true.
+- Focused readiness tests were updated to verify missing-evidence blocking and capital-authorization account binding.
+
+### STATIC FINDINGS
+- Existing Toobit api_key_check() proves authenticated API-key read success and exposes account_type.
+- Existing account_check() is an authenticated account read; the adapter now normalizes its account type for the provider-neutral observation boundary.
+- No existing authoritative capital_authorization / MANAGEMENT_AUTHORIZATION producer was found.
+- Therefore real-capital authorization cannot be inferred from balance, capital observation, configuration, credentials, or account-read success.
+
+### GOVERNANCE RESULT
+The structural evidence gap is closed at the contract boundary, but the real-capital authorization evidence itself is NOT PRESENT. Readiness therefore remains BLOCKED until Management supplies an independently authoritative authorization evidence object bound to the intended account.
+
+No runtime, exchange/API write, order submission, execution enablement, database write, retry, synthetic proof, or fabricated authorization occurred.
+
+### NEXT ACTION
+1. Preserve the new evidence-bound readiness gate.
+2. Obtain/verify the actual Management Authorization evidence through its authoritative source.
+3. Correlate it to the actual authorized account without inventing identity.
+4. Only then reassess readiness. A separate explicit activation authorization remains required afterward.
