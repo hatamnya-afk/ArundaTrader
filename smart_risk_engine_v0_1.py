@@ -107,7 +107,11 @@ def build_smart_risk(
         when invalidation_price is supplied, its directional geometry and
         consistency with stop_distance are validated.
 
-    No allocation_fraction or allocated_capital semantics are used.
+    Capital semantics:
+        recommended_capital comes from Dynamic Risk Intelligence and is
+        the intelligence-side allocation output. portfolio_capital and
+        usable_capital are real account observations only; they do not
+        determine the candidate risk budget or position size.
     """
 
     if not isinstance(observation, Mapping) or not isinstance(policy, Mapping):
@@ -170,12 +174,16 @@ def build_smart_risk(
 
     risk_per_trade = _positive(policy.get("risk_per_trade"))
     max_portfolio_risk = _positive(policy.get("max_portfolio_risk"))
+    recommended_capital = _positive(policy.get("recommended_capital"))
 
     if risk_per_trade is None:
         return _blocked(asset, "RISK_PER_TRADE_INVALID", policy_version)
 
     if max_portfolio_risk is None:
         return _blocked(asset, "MAX_PORTFOLIO_RISK_INVALID", policy_version)
+
+    if recommended_capital is None:
+        return _blocked(asset, "RECOMMENDED_CAPITAL_INVALID", policy_version)
 
     if risk_per_trade > max_portfolio_risk + EPSILON:
         return _blocked(
@@ -282,8 +290,11 @@ def build_smart_risk(
             policy_version,
         )
 
+    # Intelligence-side capital allocation is authoritative for sizing.
+    # Real account balance remains an observed environment constraint and is
+    # intentionally NOT used to scale the candidate down to zero.
     max_portfolio_risk_amount = (
-        portfolio_capital * max_portfolio_risk
+        recommended_capital * max_portfolio_risk
     )
     remaining_portfolio_risk = (
         max_portfolio_risk_amount - allocated_risk
@@ -296,38 +307,6 @@ def build_smart_risk(
             policy_version,
         )
 
-    # A real zero-capital account is a valid research state in the same
-    # production intelligence pipeline. Capital scales position sizing; it
-    # must not erase an otherwise valid market Decision. Preserve the exact
-    # mathematical zero Risk quantity so downstream Trade Gate / OrderIntent
-    # can observe the candidate without inventing capital or quantity.
-    if portfolio_capital <= EPSILON:
-        if allocated_risk > EPSILON:
-            return _blocked(
-                asset,
-                "PORTFOLIO_RISK_CAPACITY_INVALID",
-                policy_version,
-            )
-
-        result = SmartRiskDecision(
-            asset=asset,
-            direction=direction,
-            entry_price=entry,
-            stop_distance=stop_distance,
-            risk_budget=0.0,
-            position_size=0.0,
-            exposure=0.0,
-            remaining_portfolio_risk=0.0,
-            concurrent_positions=concurrent,
-            max_concurrent_positions=max_concurrent,
-            risk_state="APPROVED",
-            reason="ZERO_REAL_CAPITAL_RESEARCH_READY",
-            policy_version=policy_version,
-            invalidation_price=invalidation,
-        )
-        result.validate()
-        return result
-
     if remaining_portfolio_risk <= EPSILON:
         return _blocked(
             asset,
@@ -335,7 +314,7 @@ def build_smart_risk(
             policy_version,
         )
 
-    base_risk = portfolio_capital * risk_per_trade
+    base_risk = recommended_capital * risk_per_trade
 
     adjusted_risk = (
         base_risk
@@ -360,13 +339,6 @@ def build_smart_risk(
         return _blocked(
             asset,
             "RISK_BUDGET_ZERO",
-            policy_version,
-        )
-
-    if risk_budget > usable_capital + EPSILON:
-        return _blocked(
-            asset,
-            "USABLE_CAPITAL_EXCEEDED",
             policy_version,
         )
 
@@ -396,9 +368,7 @@ def build_smart_risk(
         max_concurrent_positions=max_concurrent,
         risk_state="APPROVED",
         reason=(
-            "RISK_SIZING_ZERO_FROM_REAL_CAPITAL"
-            if portfolio_capital <= EPSILON
-            else "RISK_BUDGET_VALIDATED"
+            "RISK_BUDGET_VALIDATED_FROM_INTELLIGENCE_CAPITAL"
         ),
         policy_version=policy_version,
         invalidation_price=invalidation,
