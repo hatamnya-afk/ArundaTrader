@@ -11,8 +11,8 @@ This module MUST NOT:
 - mutate a canonical order request
 - authorize a first execution attempt
 
-It only determines whether the independently required prerequisites are
-satisfied before Management may consider activation.
+It only determines whether independently required prerequisites are satisfied
+before Management may consider activation.
 """
 
 from __future__ import annotations
@@ -28,6 +28,10 @@ from exchange_execution_contract import (
 from cp46_e_execution_eligibility_v0_1 import (
     EligibilityStatus,
     ExecutionEligibilityResult,
+)
+from cp49_first_execution_evidence_contract_v0_1 import (
+    AccountSignatureEvidence,
+    RealCapitalAuthorizationEvidence,
 )
 
 
@@ -52,6 +56,15 @@ class FirstExecutionReadinessInput:
     order_submission_enabled: bool
     exchange_write_enabled: bool
     database_write_enabled: bool
+
+    # These are authoritative evidence objects, not flags that grant access.
+    # Readiness requires them whenever the corresponding verification flag is
+    # asserted true.
+    account_signature_evidence: Optional[AccountSignatureEvidence] = None
+    capital_authorization_evidence: Optional[
+        RealCapitalAuthorizationEvidence
+    ] = None
+    authorized_account_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -86,9 +99,27 @@ def evaluate_first_execution_readiness(
 
     if not readiness.signature_verified:
         blockers.append("ACCOUNT_SIGNATURE_NOT_VERIFIED")
+    elif readiness.account_signature_evidence is None:
+        blockers.append("ACCOUNT_SIGNATURE_EVIDENCE_MISSING")
+    elif not readiness.account_signature_evidence.validate():
+        blockers.append("ACCOUNT_SIGNATURE_EVIDENCE_INVALID")
 
     if not readiness.capital_authorized:
         blockers.append("REAL_CAPITAL_NOT_AUTHORIZED")
+    elif readiness.capital_authorization_evidence is None:
+        blockers.append("REAL_CAPITAL_AUTHORIZATION_EVIDENCE_MISSING")
+    elif not readiness.capital_authorization_evidence.validate():
+        blockers.append("REAL_CAPITAL_AUTHORIZATION_EVIDENCE_INVALID")
+    elif (
+        not isinstance(readiness.authorized_account_id, str)
+        or not readiness.authorized_account_id.strip()
+    ):
+        blockers.append("AUTHORIZED_ACCOUNT_ID_MISSING")
+    elif (
+        readiness.capital_authorization_evidence.account_id
+        != readiness.authorized_account_id
+    ):
+        blockers.append("CAPITAL_AUTHORIZATION_ACCOUNT_MISMATCH")
 
     if not readiness.provider_constraints_verified:
         blockers.append("PROVIDER_CONSTRAINTS_NOT_VERIFIED")
