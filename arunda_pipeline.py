@@ -2210,9 +2210,9 @@ def build_canonical_order_requests(
                 )
             else:
                 # Canonical exchange contract uses the canonical RISK provenance.
-                # Upstream Trade-Ready validation intentionally preserves the
-                # authoritative POSITION_SIZING provenance; this boundary only
-                # translates the provenance label and never changes quantity.
+                # Upstream Trade-Ready validation preserves the
+                # authoritative RISK.position_quantity provenance; this boundary
+                # carries the provenance label and never changes quantity.
                 request_risk["quantity_source"] = CANONICAL_QUANTITY_SOURCE
 
             request = (
@@ -2830,7 +2830,7 @@ def print_final_report(
         )
         print(
             "SOURCE          : "
-            "POSITION_SIZING.position_size"
+            "RISK.position_quantity"
         )
         print(
             "RISK QUANTITY   : "
