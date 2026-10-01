@@ -2905,7 +2905,7 @@ def main() -> int:
         -> DYNAMIC RISK
         -> DYNAMIC TRADE GATE
 
-    This boundary intentionally bypasses all legacy fixed-15 snapshot
+    This boundary intentionally bypasses all legacy fixed-universe snapshot
     orchestration helpers. Those helpers remain available only for
     historical/test compatibility and are not part of this Production path.
 
