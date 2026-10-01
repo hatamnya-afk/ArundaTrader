@@ -165,31 +165,12 @@ def build_dynamic_decision(
     legacy_signal["asset"] = base_asset
     legacy_score["asset"] = base_asset
 
-    import decision_contract
-
-    previous_assets = decision_contract.EXPECTED_ASSETS
-    previous_count = decision_contract.EXPECTED_ASSET_COUNT
-
-    try:
-        if base_asset not in previous_assets:
-            decision_contract.EXPECTED_ASSETS = (
-                *previous_assets,
-                base_asset,
-            )
-            decision_contract.EXPECTED_ASSET_COUNT = len(
-                decision_contract.EXPECTED_ASSETS
-            )
-
-        decision = build_decision(
-            base_asset,
-            legacy_signal,
-            legacy_score,
-            decision_id=decision_id.strip(),
-        )
-
-    finally:
-        decision_contract.EXPECTED_ASSETS = previous_assets
-        decision_contract.EXPECTED_ASSET_COUNT = previous_count
+    decision = build_decision(
+        base_asset,
+        legacy_signal,
+        legacy_score,
+        decision_id=decision_id.strip(),
+    )
 
     if not isinstance(decision, dict):
         raise ValueError("invalid decision result")
