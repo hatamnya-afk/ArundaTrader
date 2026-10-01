@@ -129,9 +129,20 @@ def test_pipeline_market_regime_loader_forwards_assets():
     ]
 
     assert calls
-    assert any(
-        len(call.args) == 1
-        and isinstance(call.args[0], ast.Name)
-        and call.args[0].id == "assets"
-        for call in calls
-    )
+    def forwards_assets(call):
+        if len(call.args) == 1:
+            argument = call.args[0]
+            if (
+                isinstance(argument, ast.Name)
+                and argument.id == "assets"
+            ):
+                return True
+
+        return any(
+            keyword.arg == "assets"
+            and isinstance(keyword.value, ast.Name)
+            and keyword.value.id == "assets"
+            for keyword in call.keywords
+        )
+
+    assert any(forwards_assets(call) for call in calls)
