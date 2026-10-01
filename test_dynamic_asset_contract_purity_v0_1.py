@@ -6,6 +6,7 @@ from pathlib import Path
 import decision_contract
 import decision_engine
 import trade_gate_engine
+from toobit_trading_adapter import ToobitTradingAdapter
 from dynamic_decision_contract_boundary_v0_1 import build_dynamic_decision
 
 
@@ -142,3 +143,25 @@ def test_production_contracts_have_no_fixed_asset_constants():
         if isinstance(node, ast.FunctionDef)
     ]
     assert len(defs) == len(set(defs))
+
+
+def test_toobit_symbol_contract_discovers_dynamic_requested_assets():
+    adapter = ToobitTradingAdapter(api_key="", api_secret="")
+    adapter._load_symbol_map = lambda: {
+        "IMXUSDT": {
+            "baseAsset": "IMX",
+            "quoteAsset": "USDT",
+            "status": "TRADING",
+            "filters": [],
+        },
+        "APRUSDT": {
+            "baseAsset": "APR",
+            "quoteAsset": "USDT",
+            "status": "TRADING",
+            "filters": [],
+        },
+    }
+    result = adapter.validate_expected_symbols(["IMX", "APR"])
+    assert result.allowed is True
+    assert result.data["validated_count"] == 2
+    assert {row["asset"] for row in result.data["symbols"]} == {"IMX", "APR"}
