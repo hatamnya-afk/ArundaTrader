@@ -1707,3 +1707,13 @@ No runtime, exchange/API write, order submission, execution enablement, database
 2. Obtain/verify the actual Management Authorization evidence through its authoritative source.
 3. Correlate it to the actual authorized account without inventing identity.
 4. Only then reassess readiness. A separate explicit activation authorization remains required afterward.
+
+
+## CP39 CAPITAL-INDEPENDENCE RECONCILIATION — 2026-10-02
+
+- **STATUS:** IMPLEMENTED / VERIFIED-BY-CONTRACT-TESTS / RUNTIME NOT AUTHORIZED
+- Dynamic Risk Intelligence now produces an explicit recommended_capital from real market risk factors inside the strategy capital envelope.
+- Real account portfolio_capital / usable_capital remain environment/account observations and no longer scale Smart Risk position sizing to zero.
+- Zero real account balance is therefore a valid intelligence state: Decision → Risk → Position Size → Trade Gate → Order Intent can remain non-zero; the real exchange remains responsible for accepting/rejecting the order against actual account constraints.
+- allocated_risk and concurrent-position state remain portfolio constraints; no synthetic balance or capital is created.
+- Execution remains OFF; no runtime or exchange write is authorized by this checkpoint.
