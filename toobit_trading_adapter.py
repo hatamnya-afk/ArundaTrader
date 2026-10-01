@@ -1117,6 +1117,9 @@ class ToobitTradingAdapter:
                     "read succeeded."
                 ),
                 data={
+                    # Provider-normalized account identity metadata for the
+                    # provider-neutral observation/evidence boundary.
+                    "account_type": payload.get("accountType"),
                     "account_response": payload,
                     "balance_rows": (
                         len(balances)
