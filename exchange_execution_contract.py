@@ -55,6 +55,8 @@ class CanonicalOrderRequest:
     intent_id: str
     snapshot_id: str
     timestamp: str
+    # Authoritative Decision-Birth identity. Never generated downstream.
+    decision_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -83,6 +85,7 @@ def build_order_request(
     intent_id: str,
     snapshot_id: str,
     timestamp: str,
+    decision_id: Optional[str] = None,
 ) -> CanonicalOrderRequest:
     """
     Build only from already-authoritative upstream values.
@@ -122,6 +125,11 @@ def build_order_request(
         intent_id=str(intent_id).strip(),
         snapshot_id=str(snapshot_id).strip(),
         timestamp=str(timestamp).strip(),
+        decision_id=(
+            str(decision_id).strip()
+            if decision_id is not None
+            else None
+        ),
     )
 
 
@@ -159,6 +167,9 @@ def validate_order_request(
 
     if not request.timestamp:
         return False, "TIMESTAMP_INVALID"
+
+    if request.decision_id is not None and not request.decision_id.strip():
+        return False, "DECISION_ID_INVALID"
 
     return True, "VALID"
 
