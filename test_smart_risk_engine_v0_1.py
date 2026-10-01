@@ -35,8 +35,8 @@ def test_adjustments_only_reduce_risk():
 def test_position_limit():
     x=obs(); x["concurrent_positions"]=2; r=build_smart_risk(x,policy()); assert r.reason=="MAX_CONCURRENT_POSITIONS_REACHED"
 
-def test_usable_capital_limit():
-    x=obs(); x["usable_capital"]=10.0; r=build_smart_risk(x,policy()); assert r.reason=="USABLE_CAPITAL_EXCEEDED"
+def test_usable_capital_is_not_a_sizing_gate():
+    x=obs(); x["usable_capital"]=10.0; r=build_smart_risk(x,policy()); assert r.risk_state=="APPROVED"; assert r.risk_budget==50.0
 
 def test_no_execution_fields():
     r=build_smart_risk(obs(),policy()); assert not ({"order_intent","execution","exchange","order_id"} & set(vars(r)))
