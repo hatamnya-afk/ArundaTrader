@@ -2,6 +2,10 @@ from cp46_e_execution_eligibility_v0_1 import (
     EligibilityStatus,
     ExecutionEligibilityResult,
 )
+from cp49_first_execution_evidence_contract_v0_1 import (
+    AccountSignatureEvidence,
+    RealCapitalAuthorizationEvidence,
+)
 from cp49_first_execution_readiness_v0_1 import (
     FirstExecutionReadinessInput,
     ReadinessState,
@@ -35,22 +39,59 @@ def _eligibility(request):
     )
 
 
+def _account_evidence():
+    return AccountSignatureEvidence(
+        evidence_id="acct-evidence-1",
+        account_type="SPOT",
+        authentication_status="AUTHENTICATED",
+        source="AUTHENTICATED_ACCOUNT_READ",
+        source_id="TOOBIT:/api/v1/account",
+        observed_at="2026-10-01T00:00:00+00:00",
+    )
+
+
+def _capital_evidence():
+    return RealCapitalAuthorizationEvidence(
+        authorization_id="auth-1",
+        account_id="management-bound-account",
+        capital_scope="REAL_CAPITAL:SPOT",
+        authorized_by="MANAGEMENT",
+        authorized_at="2026-10-01T00:00:00+00:00",
+        source="MANAGEMENT_AUTHORIZATION",
+    )
+
+
+def _base_readiness(**overrides):
+    values = dict(
+        implementation_verified=True,
+        prior_attempt_exists=False,
+        automatic_retry_enabled=False,
+        account_read_verified=True,
+        signature_verified=True,
+        capital_authorized=True,
+        provider_constraints_verified=True,
+        management_authorized=True,
+        execution_enabled=False,
+        order_submission_enabled=False,
+        exchange_write_enabled=False,
+        database_write_enabled=False,
+        account_signature_evidence=_account_evidence(),
+        capital_authorization_evidence=_capital_evidence(),
+        authorized_account_id="management-bound-account",
+    )
+    values.update(overrides)
+    return FirstExecutionReadinessInput(**values)
+
+
 def test_readiness_blocks_on_account_signature_and_capital():
     request = _request()
     result = evaluate_first_execution_readiness(
-        readiness=FirstExecutionReadinessInput(
-            implementation_verified=True,
-            prior_attempt_exists=False,
-            automatic_retry_enabled=False,
-            account_read_verified=True,
+        readiness=_base_readiness(
             signature_verified=False,
             capital_authorized=False,
-            provider_constraints_verified=True,
-            management_authorized=True,
-            execution_enabled=False,
-            order_submission_enabled=False,
-            exchange_write_enabled=False,
-            database_write_enabled=False,
+            account_signature_evidence=None,
+            capital_authorization_evidence=None,
+            authorized_account_id=None,
         ),
         canonical_request=request,
         eligibility=_eligibility(request),
@@ -61,23 +102,27 @@ def test_readiness_blocks_on_account_signature_and_capital():
     assert "REAL_CAPITAL_NOT_AUTHORIZED" in result.blockers
 
 
+def test_readiness_requires_authoritative_evidence_for_true_flags():
+    request = _request()
+    result = evaluate_first_execution_readiness(
+        readiness=_base_readiness(
+            account_signature_evidence=None,
+            capital_authorization_evidence=None,
+            authorized_account_id=None,
+        ),
+        canonical_request=request,
+        eligibility=_eligibility(request),
+    )
+
+    assert result.state is ReadinessState.BLOCKED
+    assert "ACCOUNT_SIGNATURE_EVIDENCE_MISSING" in result.blockers
+    assert "REAL_CAPITAL_AUTHORIZATION_EVIDENCE_MISSING" in result.blockers
+
+
 def test_readiness_can_be_ready_without_enabling_execution():
     request = _request()
     result = evaluate_first_execution_readiness(
-        readiness=FirstExecutionReadinessInput(
-            implementation_verified=True,
-            prior_attempt_exists=False,
-            automatic_retry_enabled=False,
-            account_read_verified=True,
-            signature_verified=True,
-            capital_authorized=True,
-            provider_constraints_verified=True,
-            management_authorized=True,
-            execution_enabled=False,
-            order_submission_enabled=False,
-            exchange_write_enabled=False,
-            database_write_enabled=False,
-        ),
+        readiness=_base_readiness(),
         canonical_request=request,
         eligibility=_eligibility(request),
     )
@@ -91,19 +136,8 @@ def test_readiness_can_be_ready_without_enabling_execution():
 def test_readiness_rejects_pre_enabled_execution():
     request = _request()
     result = evaluate_first_execution_readiness(
-        readiness=FirstExecutionReadinessInput(
-            implementation_verified=True,
-            prior_attempt_exists=False,
-            automatic_retry_enabled=False,
-            account_read_verified=True,
-            signature_verified=True,
-            capital_authorized=True,
-            provider_constraints_verified=True,
-            management_authorized=True,
+        readiness=_base_readiness(
             execution_enabled=True,
-            order_submission_enabled=False,
-            exchange_write_enabled=False,
-            database_write_enabled=False,
         ),
         canonical_request=request,
         eligibility=_eligibility(request),
@@ -111,3 +145,17 @@ def test_readiness_rejects_pre_enabled_execution():
 
     assert result.state is ReadinessState.BLOCKED
     assert "EXECUTION_ALREADY_ENABLED_DURING_READINESS" in result.blockers
+
+
+def test_readiness_rejects_capital_authorization_account_mismatch():
+    request = _request()
+    result = evaluate_first_execution_readiness(
+        readiness=_base_readiness(
+            authorized_account_id="different-account",
+        ),
+        canonical_request=request,
+        eligibility=_eligibility(request),
+    )
+
+    assert result.state is ReadinessState.BLOCKED
+    assert "CAPITAL_AUTHORIZATION_ACCOUNT_MISMATCH" in result.blockers
