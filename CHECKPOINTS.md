@@ -1665,3 +1665,16 @@ AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION PATH + OBSERVATION 
 
 ### NEXT ACTION
 Advance from the verified exchange-agnostic pre-execution boundary without enabling execution or introducing exchange-specific Core dependencies.
+
+
+## 2026-10-01 — CONTROLLED FIRST-EXECUTION READINESS CONTRACT
+
+**STATUS: BUILT / STATIC-REVIEWED / NOT ACTIVATED**
+
+Added a pure provider-neutral readiness contract and focused tests:
+- `cp49_first_execution_readiness_v0_1.py`
+- `test_cp49_first_execution_readiness_v0_1.py`
+
+The contract explicitly prevents readiness from being conflated with execution authorization. It requires verified implementation, no prior attempt/retry, verified account/signature, authorized real capital, verified provider constraints, Management authorization, valid canonical request, and CP46-E PASS, while requiring execution/order-submission/exchange-write/database-write flags to remain OFF during readiness evaluation.
+
+Current result is intentionally **BLOCKED** because account signature verification and real-capital authorization are not established. No order or exchange write was attempted.
