@@ -1695,3 +1695,19 @@ This runtime supersedes stale earlier CP44 blocker/current-action text in this d
 **CURRENT FRONTIER:** AUTONOMOUS REAL-MARKET DECISION + CONTROLLED FIRST EXECUTION PATH + OBSERVATION REQUIREMENTS
 
 **NEXT ACTION:** Advance only from the verified exchange-agnostic pre-execution boundary toward controlled first execution preparation. Keep execution, exchange writes, signatures, withdrawals, and unauthorized DB writes forbidden until explicitly authorized.
+
+
+## 2026-10-01 — CONTROLLED FIRST-EXECUTION READINESS CONTRACT
+
+**STATUS:** BUILT / STATIC-REVIEWED / NOT ACTIVATED
+
+A provider-neutral pure readiness contract was added:
+- `cp49_first_execution_readiness_v0_1.py`
+- verification contract: `test_cp49_first_execution_readiness_v0_1.py`
+- commits: `35e633b9e6556ebc61fea321e0de4f0d1add15e4`, `f148c25ef9b3acf483f205bb8184b7fe09366744`
+
+The contract separates **pre-activation readiness** from the existing CP49 execution authorization gate. It performs no network I/O, exchange write, database write, execution enablement, order submission, quantity mutation, or authorization.
+
+Required readiness evidence is explicit: implementation verification, no prior attempt, no automatic retry, account read verification, signature verification, real-capital authorization, provider constraints verification, Management authorization, valid Canonical Order Request, and passed CP46-E eligibility. Execution/order-submission/exchange-write flags must remain OFF during readiness evaluation.
+
+**CURRENT READINESS:** BLOCKED. Existing independent Toobit account-signature blocker remains unresolved, and real-capital authorization has not been granted. Execution remains OFF.
