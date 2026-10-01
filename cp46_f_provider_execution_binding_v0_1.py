@@ -117,6 +117,13 @@ def build_provider_execution_binding(
             "Provider and canonical timestamp identity do not match.",
         )
 
+    if canonical.decision_id is not None:
+        if provider.decision_id != canonical.decision_id:
+            return _block(
+                "DECISION_ID_MISMATCH",
+                "Provider and canonical Decision-Birth identity do not match.",
+            )
+
     if canonical.direction not in {"LONG", "SHORT"}:
         return _block(
             "CANONICAL_DIRECTION_INVALID",
