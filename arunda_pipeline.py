@@ -237,6 +237,10 @@ class RuntimeOrderIntent(dict):
         self.quantity_rounded = False
         self.quantity_clipped = False
 
+        # CP49 authoritative Decision-Birth identity.
+        # Carried as provenance metadata; never generated downstream.
+        self.decision_id = None
+
 
 # ============================================================================
 
@@ -1649,6 +1653,13 @@ def build_current_order_intents(
                     f"{asset}"
                 )
 
+            decision_id = gate_row.get("decision_id")
+
+            if not isinstance(decision_id, str) or not decision_id.strip():
+                fail(
+                    f"ORDER-INTENT authoritative decision_id missing: {asset}"
+                )
+
             direction = normalize_status(
                 gate_row.get("direction")
             )
@@ -1791,6 +1802,8 @@ def build_current_order_intents(
                 snapshot_id=snapshot_id,
                 intent_id=intent_id,
             )
+
+            intent.decision_id = decision_id.strip()
 
             intent.trade_type = resolved_quantity["trade_type"]
             intent.observed_real_capital = (
@@ -2230,6 +2243,7 @@ def build_canonical_order_requests(
                     intent_id=intent["intent_id"],
                     snapshot_id=snapshot_id,
                     timestamp=intent["timestamp"],
+                    decision_id=getattr(intent, "decision_id", None),
                 )
             )
 
@@ -2281,6 +2295,17 @@ def build_canonical_order_requests(
             if request.intent_id != intent["intent_id"]:
                 fail(
                     f"Canonical intent_id mismatch: {asset}"
+                )
+
+            decision_id = getattr(intent, "decision_id", None)
+            if not isinstance(decision_id, str) or not decision_id.strip():
+                fail(
+                    f"Canonical decision_id missing: {asset}"
+                )
+
+            if request.decision_id != decision_id:
+                fail(
+                    f"Canonical decision_id mismatch: {asset}"
                 )
 
             result[asset] = {
@@ -4086,6 +4111,7 @@ def main() -> int:
             trade_gate_snapshot[asset] = {
                 "asset": asset,
                 "symbol": f"{asset}/USDT",
+                "decision_id": decision.get("decision_id"),
                 "direction": trade_gate_engine.get_direction(decision),
                 "trade_gate_status": trade_gate_status,
                 "reasons": list(gate_reasons),
@@ -4187,6 +4213,16 @@ def main() -> int:
                     {asset: risk_snapshot[asset]},
                     birth_by_asset[asset].get("snapshot_id"),
                 )
+
+                expected_decision_id = canonical_birth_events[asset].get(
+                    "decision_id"
+                )
+                request = asset_requests[asset]["request"]
+                if request.decision_id != expected_decision_id:
+                    fail(
+                        f"CP49 Decision ID lineage mismatch at Canonical Request: {asset}"
+                    )
+
                 canonical_order_requests.update(asset_requests)
 
             bind_order_intent_quantity_observability(
