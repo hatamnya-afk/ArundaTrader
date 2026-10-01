@@ -3,8 +3,8 @@
 Provider-neutral, fail-closed evidence boundaries.
 No network, exchange, DB, execution, or authorization side effects.
 
-This module does not grant permission. It validates evidence that must already
-exist from an authoritative source before readiness can become eligible.
+This module validates evidence that must already exist from an authoritative
+source. It never creates identity, capital permission, or management approval.
 """
 
 from __future__ import annotations
@@ -16,24 +16,29 @@ from typing import Any, Mapping, Optional
 @dataclass(frozen=True)
 class AccountSignatureEvidence:
     evidence_id: str
-    account_id: str
     account_type: str
     authentication_status: str
     source: str
+    source_id: str
     observed_at: str
 
     def validate(self) -> bool:
         required = (
             self.evidence_id,
-            self.account_id,
             self.account_type,
             self.authentication_status,
             self.source,
+            self.source_id,
             self.observed_at,
         )
-        if any(not isinstance(value, str) or not value.strip() for value in required):
+        if any(
+            not isinstance(value, str) or not value.strip()
+            for value in required
+        ):
             return False
         if self.authentication_status != "AUTHENTICATED":
+            return False
+        if self.source != "AUTHENTICATED_ACCOUNT_READ":
             return False
         return True
 
@@ -56,7 +61,10 @@ class RealCapitalAuthorizationEvidence:
             self.authorized_at,
             self.source,
         )
-        if any(not isinstance(value, str) or not value.strip() for value in required):
+        if any(
+            not isinstance(value, str) or not value.strip()
+            for value in required
+        ):
             return False
         if self.authorized_by != "MANAGEMENT":
             return False
@@ -74,10 +82,14 @@ def build_account_signature_evidence(
 ) -> Optional[AccountSignatureEvidence]:
     """Correlate existing authenticated account-read evidence.
 
-    This never performs the API call and never treats HMAC generation alone as
-    account identity evidence.
+    The account identity requirement here is deliberately limited to the
+    provider-authenticated account type and immutable source provenance.
+    No account identifier is invented when the provider does not expose one
+    through the existing read contract.
     """
-    if api_key_result is None or getattr(api_key_result, "allowed", False) is not True:
+    if api_key_result is None:
+        return None
+    if getattr(api_key_result, "allowed", False) is not True:
         return None
     if getattr(api_key_result, "status", None) != "PASS":
         return None
@@ -88,27 +100,31 @@ def build_account_signature_evidence(
     if not isinstance(api_data, Mapping):
         return None
 
-    account_data = getattr(account_observation, "account", None)
-    if account_data is None:
+    account = getattr(account_observation, "account", None)
+    if account is None:
+        return None
+    if getattr(account, "status", None) != "PASS":
         return None
 
-    account_id = getattr(account_data, "account_id", None)
-    account_type = getattr(account_data, "account_type", None)
+    account_type = getattr(account, "account_type", None)
     api_account_type = api_data.get("account_type")
+    source_id = getattr(account, "source_id", None)
 
-    if not all(isinstance(v, str) and v.strip() for v in (account_id, account_type)):
+    if not isinstance(account_type, str) or not account_type.strip():
         return None
     if not isinstance(api_account_type, str) or not api_account_type.strip():
         return None
     if account_type != api_account_type:
         return None
+    if not isinstance(source_id, str) or not source_id.strip():
+        return None
 
     evidence = AccountSignatureEvidence(
         evidence_id=evidence_id,
-        account_id=account_id,
         account_type=account_type,
         authentication_status="AUTHENTICATED",
         source="AUTHENTICATED_ACCOUNT_READ",
+        source_id=source_id,
         observed_at=observed_at,
     )
     return evidence if evidence.validate() else None
