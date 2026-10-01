@@ -85,25 +85,6 @@ MIN_CONTEXT = (
 WINDOW_SIZE = FULL_CONTEXT_TARGET
 
 
-EXPECTED_ASSETS = [
-    "BTC",
-    "ETH",
-    "SOL",
-    "XRP",
-    "ADA",
-    "DOGE",
-    "SHIB",
-    "LINK",
-    "AVAX",
-    "DOT",
-    "LTC",
-    "UNI",
-    "AAVE",
-    "SUI",
-    "NEAR",
-]
-
-
 # =============================================================================
 # NORMALIZATION
 # =============================================================================
@@ -485,19 +466,21 @@ def load_market_data_by_symbol(assets=None):
             query
         ).fetchall()
 
-        requested_assets = (
-            EXPECTED_ASSETS
-            if assets is None
-            else sorted(
-                {
-                    normalized
-                    for normalized in (
-                        _normalize_asset(asset)
-                        for asset in assets
-                    )
-                    if normalized is not None
-                }
-            )
+        requested_assets = sorted(
+            {
+                _normalize_asset(row["symbol"])
+                for row in rows
+                if _normalize_asset(row["symbol"]) is not None
+            }
+        ) if assets is None else sorted(
+            {
+                normalized
+                for normalized in (
+                    _normalize_asset(asset)
+                    for asset in assets
+                )
+                if normalized is not None
+            }
         )
 
         result = {
@@ -951,19 +934,15 @@ def calculate_structure(
 
 def build_structural_state(assets=None):
 
-    requested_assets = (
-        EXPECTED_ASSETS
-        if assets is None
-        else sorted(
-            {
-                normalized
-                for normalized in (
-                    _normalize_asset(asset)
-                    for asset in assets
-                )
-                if normalized is not None
-            }
-        )
+    requested_assets = None if assets is None else sorted(
+        {
+            normalized
+            for normalized in (
+                _normalize_asset(asset)
+                for asset in assets
+            )
+            if normalized is not None
+        }
     )
 
     history = (
@@ -971,6 +950,9 @@ def build_structural_state(assets=None):
             requested_assets
         )
     )
+
+    if requested_assets is None:
+        requested_assets = sorted(history)
 
     result = {}
 
@@ -1234,12 +1216,15 @@ def validate_market_regime(
 
         return False
 
-    if len(
-        market_regime
-    ) != len(
-        EXPECTED_ASSETS
-    ):
+    expected_assets = sorted(
+        {
+            _normalize_asset(asset)
+            for asset in market_regime.keys()
+            if _normalize_asset(asset) is not None
+        }
+    )
 
+    if len(expected_assets) != len(market_regime):
         return False
 
     allowed_status = {
@@ -1262,7 +1247,7 @@ def validate_market_regime(
         "UNDEFINED",
     }
 
-    for asset in EXPECTED_ASSETS:
+    for asset in expected_assets:
 
         if asset not in market_regime:
             return False
@@ -1363,10 +1348,6 @@ def validate_market_regime(
                 )
             ):
                 return False
-
-        # ---------------------------------------------------------------------
-        # CONTEXT CONSISTENCY
-        # ---------------------------------------------------------------------
 
         if points < MIN_CONTEXT:
 
@@ -1508,7 +1489,7 @@ def print_regime(
 
     print("-" * 100)
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(market_regime):
 
         data = market_regime[
             asset
@@ -1560,7 +1541,7 @@ def print_structure_details(
 
     print("-" * 145)
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(market_regime):
 
         data = market_regime[
             asset
@@ -1652,7 +1633,7 @@ def print_contract(
     insufficient_assets = 0
     acceleration_assets = 0
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(market_regime):
 
         data = market_regime[
             asset
@@ -1695,8 +1676,8 @@ def print_contract(
     print("=" * 86)
 
     print(
-        "Expected Assets       :",
-        len(EXPECTED_ASSETS)
+        "Observed Assets       :",
+        len(market_regime)
     )
 
     print(
