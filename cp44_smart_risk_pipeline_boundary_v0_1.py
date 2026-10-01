@@ -16,6 +16,10 @@ from entry_invalidation_boundary_v0_1 import normalize_entry_invalidation
 from smart_risk_policy_bridge_v0_1 import merge_validated_risk_policy
 
 
+POSITION_SIZE_SOURCE = "POSITION_SIZING.position_size"
+RISK_QUANTITY_SOURCE = "RISK.position_quantity"
+
+
 def _blocked_asset(asset: str, reason: str) -> dict[str, Any]:
     return {
         "asset": asset,
@@ -126,12 +130,16 @@ def build_cp44_smart_risk(
     output["decision"] = output.get("risk_state")
     output["entry_invalidation_state"] = entry_boundary.state
 
-    # Downstream Quantity/Order Intent contracts consume the canonical
-    # position quantity name. Preserve Smart Risk position_size exactly;
-    # this is a field-alias only, with no recalculation or rescaling.
+    # Smart Risk exposes two provenance layers deliberately:
+    # - position_size_source identifies the upstream Position Sizing producer.
+    # - quantity_source identifies the canonical Risk-owned quantity exposed
+    #   to Order Intent and the canonical order-request boundary.
+    # The numeric value is an exact field alias; no recalculation, scaling,
+    # rounding, clipping, or other transformation occurs here.
     output["position_quantity"] = output.get("position_size")
+    output["position_size_source"] = POSITION_SIZE_SOURCE
     output["quantity_unit"] = "BASE_ASSET"
-    output["quantity_source"] = "POSITION_SIZING.position_size"
+    output["quantity_source"] = RISK_QUANTITY_SOURCE
     output["quantity_changed"] = False
     output["quantity_recomputed"] = False
     output["quantity_rescaled"] = False
