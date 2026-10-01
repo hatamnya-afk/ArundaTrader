@@ -76,24 +76,6 @@ EXCHANGE_WRITE_ENABLED = False
 RECV_WINDOW = 5000
 HTTP_TIMEOUT = 15
 
-EXPECTED_ASSETS = (
-    "BTC",
-    "ETH",
-    "SOL",
-    "XRP",
-    "ADA",
-    "DOGE",
-    "SHIB",
-    "LINK",
-    "AVAX",
-    "DOT",
-    "LTC",
-    "UNI",
-    "AAVE",
-    "SUI",
-    "NEAR",
-)
-
 # Public
 TIME_ENDPOINT = "/api/v1/time"
 EXCHANGE_INFO_ENDPOINT = "/api/v1/exchangeInfo"
@@ -823,22 +805,52 @@ class ToobitTradingAdapter:
             )
 
     # ========================================================
-    # SYMBOL CONTRACT — 15 PRODUCTION ASSETS
+    # SYMBOL CONTRACT — DYNAMIC EXCHANGE DISCOVERY
     # ========================================================
 
-    def validate_expected_symbols(self) -> AdapterResult:
+    def validate_expected_symbols(
+        self,
+        assets: Optional[List[str]] = None,
+    ) -> AdapterResult:
 
         try:
-
             symbol_map = self._load_symbol_map()
+
+            requested = None
+            if assets is not None:
+                requested = []
+                seen = set()
+                for value in assets:
+                    if not isinstance(value, str):
+                        raise ValueError("asset must be a string")
+                    asset = value.strip().upper()
+                    if "/" in asset:
+                        asset = asset.split("/", 1)[0]
+                    if not asset:
+                        raise ValueError("asset must be non-empty")
+                    if asset in seen:
+                        raise ValueError(f"duplicate requested asset: {asset}")
+                    seen.add(asset)
+                    requested.append(asset)
+
+            if requested is None:
+                requested = sorted(
+                    {
+                        str(row.get("baseAsset", "")).strip().upper()
+                        for symbol, row in symbol_map.items()
+                        if isinstance(row, dict)
+                        and str(symbol).upper().endswith("USDT")
+                        and str(row.get("status", "")).upper() == "TRADING"
+                        and row.get("baseAsset")
+                    }
+                )
 
             rows: List[Dict[str, Any]] = []
             missing: List[str] = []
             not_trading: List[str] = []
             invalid: List[str] = []
 
-            for asset in EXPECTED_ASSETS:
-
+            for asset in requested:
                 symbol = f"{asset}USDT"
                 row = symbol_map.get(symbol)
 
@@ -846,16 +858,12 @@ class ToobitTradingAdapter:
                     missing.append(asset)
                     continue
 
-                status = str(
-                    row.get("status", "")
-                ).upper()
-
+                status = str(row.get("status", "")).upper()
                 if status != "TRADING":
                     not_trading.append(asset)
                     continue
 
                 filters = row.get("filters")
-
                 if not isinstance(filters, list):
                     invalid.append(asset)
                     continue
@@ -869,8 +877,8 @@ class ToobitTradingAdapter:
                     }
                 )
 
-            passed = (
-                len(rows) == len(EXPECTED_ASSETS)
+            passed = bool(requested) and (
+                len(rows) == len(requested)
                 and not missing
                 and not not_trading
                 and not invalid
@@ -879,36 +887,32 @@ class ToobitTradingAdapter:
             return AdapterResult(
                 status="PASS" if passed else "FAIL",
                 allowed=passed,
-                operation="validate_expected_symbols",
+                operation="validate_runtime_symbols",
                 reason=(
-                    "All expected production assets have "
-                    "verified active Toobit spot contracts."
+                    "Requested/discovered Toobit spot contracts "
+                    "verified against current exchange information."
                     if passed
                     else
-                    "One or more expected production asset "
-                    "contracts failed validation."
+                    "One or more requested/discovered Toobit "
+                    "spot contracts failed validation."
                 ),
                 data={
-                    "expected_count":
-                        len(EXPECTED_ASSETS),
-                    "validated_count":
-                        len(rows),
+                    "requested_count": len(requested),
+                    "validated_count": len(rows),
                     "missing": missing,
                     "not_trading": not_trading,
                     "invalid": invalid,
                     "symbols": rows,
+                    "dynamic_universe": True,
                 },
             )
 
         except Exception as exc:
-
             return AdapterResult(
                 status="ERROR",
                 allowed=False,
-                operation="validate_expected_symbols",
-                reason=(
-                    f"Expected-symbol validation failed: {exc}"
-                ),
+                operation="validate_runtime_symbols",
+                reason=f"Runtime-symbol validation failed: {exc}",
             )
 
     # ========================================================
@@ -1599,7 +1603,7 @@ class ToobitTradingAdapter:
             "exchange_info":
                 self.get_exchange_info().__dict__,
 
-            "expected_symbols":
+            "runtime_symbols":
                 self.validate_expected_symbols().__dict__,
 
             "account":
