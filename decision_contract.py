@@ -16,26 +16,6 @@ Rules:
     - NO INTERPRETATION
 """
 
-EXPECTED_ASSETS = [
-    "BTC",
-    "ETH",
-    "SOL",
-    "XRP",
-    "ADA",
-    "DOGE",
-    "SHIB",
-    "LINK",
-    "AVAX",
-    "DOT",
-    "LTC",
-    "UNI",
-    "AAVE",
-    "SUI",
-    "NEAR",
-]
-
-EXPECTED_ASSET_COUNT = 15
-
 DECISION_STATES = (
     "ACTIONABLE",
     "HOLD",
@@ -65,8 +45,9 @@ def build_empty_decision(asset):
     It only defines the contract shape.
     """
 
-    if asset not in EXPECTED_ASSETS:
-        raise ValueError(f"Unknown asset: {asset}")
+    if not isinstance(asset, str) or not asset.strip():
+        raise ValueError("Asset must be a non-empty string")
+    asset = asset.strip().upper()
 
     return {
         "asset": asset,
@@ -100,10 +81,9 @@ def validate_decision(decision):
 
     asset = decision["asset"]
 
-    if asset not in EXPECTED_ASSETS:
-        raise RuntimeError(
-            f"Invalid asset: {asset}"
-        )
+    if not isinstance(asset, str) or not asset.strip():
+        raise RuntimeError("Invalid asset")
+    asset = asset.strip().upper()
 
     state = decision["state"]
 
@@ -144,44 +124,35 @@ def validate_decision(decision):
 
 def validate_decision_snapshot(snapshot):
     """
-    Validate a complete Decision snapshot.
+    Validate a complete dynamic Decision snapshot.
 
-    Expected structure:
-
-        {
-            "BTC": {...},
-            "ETH": {...},
-            ...
-        }
+    The contract validates the assets actually present in the snapshot;
+    it does not impose a fixed universe or cardinality.
     """
-
     if not isinstance(snapshot, dict):
-        raise RuntimeError(
-            "Decision snapshot must be a dictionary"
-        )
+        raise RuntimeError("Decision snapshot must be a dictionary")
 
-    expected = set(EXPECTED_ASSETS)
-    actual = set(snapshot.keys())
+    actual = set()
+    for key, decision in snapshot.items():
+        if not isinstance(key, str) or not key.strip():
+            raise RuntimeError("Decision snapshot contains invalid asset key")
+        asset = key.strip().upper()
+        if asset in actual:
+            raise RuntimeError(f"Duplicate normalized asset: {asset}")
+        actual.add(asset)
+        if not isinstance(decision, dict):
+            raise RuntimeError(f"Invalid decision object: {asset}")
+        row_asset = decision.get("asset")
+        if not isinstance(row_asset, str) or row_asset.strip().upper() != asset:
+            raise RuntimeError(f"Decision asset mismatch: {asset}")
+        validate_decision(decision)
 
-    missing = expected - actual
-    extra = actual - expected
-
-    if missing:
-        raise RuntimeError(
-            f"Missing assets: {sorted(missing)}"
-        )
-
-    if extra:
-        raise RuntimeError(
-            f"Unexpected assets: {sorted(extra)}"
-        )
-
-    for asset in EXPECTED_ASSETS:
-        validate_decision(snapshot[asset])
+    if not actual:
+        raise RuntimeError("Decision snapshot must contain at least one asset")
 
     return {
-        "expected_assets": EXPECTED_ASSET_COUNT,
-        "validated_assets": len(snapshot),
+        "observed_assets": sorted(actual),
+        "observed_asset_count": len(actual),
         "decision_states": len(DECISION_STATES),
         "directions": len(DIRECTIONS),
         "contract_status": "VALID",
@@ -209,7 +180,7 @@ def print_contract():
     print("DECISION CONTRACT")
     print("=" * 77)
     print(
-        f"Expected Assets : {EXPECTED_ASSET_COUNT}"
+        "Asset Universe   : DYNAMIC (observed input)"
     )
     print(
         f"Decision Fields : {len(DECISION_FIELDS)}"
@@ -245,9 +216,9 @@ def main():
         # Contract-only validation.
         # No real decision is generated here.
 
-        for asset in EXPECTED_ASSETS:
-            decision = build_empty_decision(asset)
-            validate_decision(decision)
+        sample_asset = "BTC"
+        decision = build_empty_decision(sample_asset)
+        validate_decision(decision)
 
         print_contract()
 
