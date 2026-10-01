@@ -111,14 +111,15 @@ def test_pipeline_market_regime_loader_forwards_assets():
     source = PIPELINE_FILE.read_text(encoding="utf-8-sig")
     tree = ast.parse(source, filename=str(PIPELINE_FILE))
 
-    loader = None
+    loaders = [
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef)
+        and node.name == "load_current_market_regime"
+    ]
 
-    for node in tree.body:
-        if isinstance(node, ast.FunctionDef) and node.name == "load_current_market_regime":
-            loader = node
-            break
-
-    assert loader is not None
+    assert loaders
+    loader = loaders[-1]
 
     calls = [
         node
