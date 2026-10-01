@@ -377,6 +377,7 @@ def translate_order_request(
         intent_id=canonical.intent_id,
         snapshot_id=canonical.snapshot_id,
         timestamp=canonical.timestamp,
+        decision_id=canonical.decision_id,
     )
 
     return ProviderTranslationResult(
