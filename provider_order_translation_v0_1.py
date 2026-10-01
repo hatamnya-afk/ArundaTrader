@@ -94,6 +94,7 @@ class ProviderOrderRequest:
     intent_id: str
     snapshot_id: str
     timestamp: str
+    decision_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -268,6 +269,7 @@ def translate_order_request(
                 intent_id=canonical.intent_id,
                 snapshot_id=canonical.snapshot_id,
                 timestamp=canonical.timestamp,
+                decision_id=canonical.decision_id,
             )
 
             return ProviderTranslationResult(
