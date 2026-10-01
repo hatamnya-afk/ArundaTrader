@@ -1275,10 +1275,10 @@ def validate_opportunity_engine(
     opportunity_engine: Any,
 ) -> None:
 
+    # Dynamic runtime contract: only the callable opportunity builder is
+    # required. Legacy fixed-universe attributes are intentionally forbidden.
     required = (
         "build_opportunity",
-        "EXPECTED_ASSETS",
-        "EXPECTED_ASSET_COUNT",
         "MAX_CANDIDATES",
     )
 
