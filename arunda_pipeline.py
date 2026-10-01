@@ -1446,7 +1446,7 @@ def validate_runtime_quantity_records(
                     f"Quantity asset mismatch: {asset}"
                 )
 
-            if record.get("timeframe") != TIMEFRAME:
+            if record.get("timeframe") != "1h":
                 fail(
                     f"Quantity timeframe invalid: {asset}"
                 )
@@ -4258,7 +4258,9 @@ def main() -> int:
         print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
-        print(f"DB_WRITES={len(committed_decision_ids)}")
+        print(f"CP49_BIRTH_DB_WRITES={len(committed_decision_ids)}")
+        print("OPERATIONAL_DB_WRITES=0")
+        print("EXECUTION_DB_WRITES=0")
         print("FAIL_CLOSED=TRUE")
         print("=" * 90)
 
