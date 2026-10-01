@@ -83,6 +83,8 @@ EXCHANGE_INFO_ENDPOINT = "/api/v1/exchangeInfo"
 # Signed USER_DATA
 ACCOUNT_ENDPOINT = "/api/v1/account"
 API_KEY_CHECK_ENDPOINT = "/api/v1/account/checkApiKey"
+OPEN_ORDERS_ENDPOINT = "/api/v1/spot/openOrders"
+ALL_ORDERS_ENDPOINT = "/api/v1/spot/tradeOrders"
 
 
 # ============================================================
@@ -1328,31 +1330,125 @@ class ToobitTradingAdapter:
             )
 
     # ========================================================
-    # DUPLICATE CHECK — FAIL CLOSED
+    # AUTHORITATIVE SPOT ORDER STATE — READ ONLY
     # ========================================================
 
-    def duplicate_check(
-        self,
-        asset: str,
-        direction: str,
-    ) -> AdapterResult:
+    def open_orders(self, asset: Optional[str] = None) -> AdapterResult:
+        """Read current open Spot orders from Toobit's USER_DATA API."""
+        if not self.api_key or not self.api_secret:
+            return AdapterResult(
+                status="MISSING_CREDENTIALS",
+                allowed=False,
+                operation="open_orders",
+                reason="Toobit API credentials are not available.",
+            )
+        try:
+            params = {}
+            if asset:
+                symbol_result = self.symbol_check(asset)
+                if not symbol_result.allowed or not symbol_result.data:
+                    return AdapterResult(
+                        status="UNAVAILABLE", allowed=False,
+                        operation="open_orders", reason=symbol_result.reason,
+                        data=symbol_result.data,
+                    )
+                params["symbol"] = symbol_result.data["symbol"]
+            response = self._signed_get(OPEN_ORDERS_ENDPOINT, params=params)
+            if response.status_code != 200:
+                return AdapterResult(
+                    status="HTTP_ERROR", allowed=False,
+                    operation="open_orders",
+                    reason=f"Toobit openOrders returned HTTP {response.status_code}.",
+                    data=self._response_data(response),
+                )
+            payload = response.json()
+            if not isinstance(payload, list) or any(not isinstance(row, dict) for row in payload):
+                return AdapterResult(
+                    status="INVALID_RESPONSE", allowed=False,
+                    operation="open_orders", reason="Toobit openOrders response is not a list of objects.",
+                )
+            return AdapterResult(
+                status="PASS", allowed=True, operation="open_orders",
+                reason="Authoritative Toobit current open-order state read succeeded.",
+                data={"orders": payload, "state_known": True, "source_id": "TOOBIT", "source_type": "CEX_PRIVATE_API"},
+            )
+        except Exception as exc:
+            return AdapterResult(status="ERROR", allowed=False, operation="open_orders", reason=f"Open-order read failed: {exc}")
 
+    def recent_orders(self, asset: Optional[str] = None) -> AdapterResult:
+        """Read recent Spot account orders from Toobit's USER_DATA API."""
+        if not self.api_key or not self.api_secret:
+            return AdapterResult(
+                status="MISSING_CREDENTIALS", allowed=False,
+                operation="recent_orders", reason="Toobit API credentials are not available.",
+            )
+        try:
+            params = {}
+            if asset:
+                symbol_result = self.symbol_check(asset)
+                if not symbol_result.allowed or not symbol_result.data:
+                    return AdapterResult(
+                        status="UNAVAILABLE", allowed=False,
+                        operation="recent_orders", reason=symbol_result.reason,
+                        data=symbol_result.data,
+                    )
+                params["symbol"] = symbol_result.data["symbol"]
+            response = self._signed_get(ALL_ORDERS_ENDPOINT, params=params)
+            if response.status_code != 200:
+                return AdapterResult(
+                    status="HTTP_ERROR", allowed=False,
+                    operation="recent_orders",
+                    reason=f"Toobit tradeOrders returned HTTP {response.status_code}.",
+                    data=self._response_data(response),
+                )
+            payload = response.json()
+            if not isinstance(payload, list) or any(not isinstance(row, dict) for row in payload):
+                return AdapterResult(
+                    status="INVALID_RESPONSE", allowed=False,
+                    operation="recent_orders", reason="Toobit tradeOrders response is not a list of objects.",
+                )
+            return AdapterResult(
+                status="PASS", allowed=True, operation="recent_orders",
+                reason="Authoritative Toobit recent-order state read succeeded.",
+                data={"orders": payload, "state_known": True, "source_id": "TOOBIT", "source_type": "CEX_PRIVATE_API"},
+            )
+        except Exception as exc:
+            return AdapterResult(status="ERROR", allowed=False, operation="recent_orders", reason=f"Recent-order read failed: {exc}")
+
+    # ========================================================
+    # DUPLICATE CHECK — AUTHORITATIVE READ ONLY
+    # ========================================================
+
+    def duplicate_check(self, asset: str, direction: str) -> AdapterResult:
+        """Expose authoritative current/recent Spot order state for preflight."""
+        open_result = self.open_orders(asset)
+        recent_result = self.recent_orders(asset)
+        if not open_result.allowed or not recent_result.allowed:
+            return AdapterResult(
+                status="UNAVAILABLE", allowed=False, operation="duplicate_check",
+                reason=f"Provider order state unavailable: {open_result.reason}; {recent_result.reason}",
+            )
+        open_rows = open_result.data.get("orders", [])
+        recent_rows = recent_result.data.get("orders", [])
+        open_ids = frozenset(
+            str(row.get("clientOrderId")).strip()
+            for row in open_rows if row.get("clientOrderId") not in (None, "")
+        )
+        recent_ids = frozenset(
+            str(row.get("clientOrderId")).strip()
+            for row in recent_rows if row.get("clientOrderId") not in (None, "")
+        )
         return AdapterResult(
-            status="UNAVAILABLE",
-            allowed=False,
-            operation="duplicate_check",
-            reason=(
-                "Open-order/private order-state integration "
-                "is not part of TOOBIT_ADAPTER_v0.2. "
-                "Duplicate protection therefore fails closed."
-            ),
+            status="PASS", allowed=True, operation="duplicate_check",
+            reason="Authoritative provider order state is available.",
             data={
-                "asset": (
-                    asset.upper()
-                    if isinstance(asset, str)
-                    else asset
-                ),
+                "asset": asset.upper() if isinstance(asset, str) else asset,
                 "direction": direction,
+                "state_known": True,
+                "open_order_client_ids": open_ids,
+                "recent_order_client_ids": recent_ids,
+                "source_id": "TOOBIT",
+                "source_type": "CEX_PRIVATE_API",
             },
         )
 
