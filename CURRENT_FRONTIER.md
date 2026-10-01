@@ -1548,3 +1548,18 @@ The older CP44 MHA contiguous-context blocker and second-runtime prohibition are
 2. Define/verify the controlled first-execution preparation requirements without enabling execution.
 3. Keep Toobit/account signature issues downstream and isolated from Core architecture.
 4. Synchronize all four governance documents at the next checkpoint.
+
+
+## 2026-10-01 — CONTROLLED FIRST-EXECUTION READINESS CONTRACT
+
+**STATUS:** BUILT / STATIC-REVIEWED / NOT ACTIVATED
+
+The active frontier now has a dedicated provider-neutral readiness boundary:
+`cp49_first_execution_readiness_v0_1.py`.
+
+This boundary is intentionally distinct from CP49 execution authorization. It can report `BLOCKED` or `READY_FOR_AUTHORIZATION` but cannot enable execution, order submission, exchange writes, or database writes.
+
+Current blockers are explicit: Toobit/account signature verification is not established, real-capital authorization is not established, and therefore first-execution readiness is not claimable. No exchange-specific workaround or Core redesign is authorized.
+
+### NEXT ACTION
+Verify the remaining account/signature, capital, provider-constraint, and CP46-E evidence through their existing boundaries without enabling execution. Only after all readiness predicates pass may Management consider a separate activation authorization.
