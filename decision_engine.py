@@ -98,26 +98,6 @@ import decision_contract
 # CONSTANTS
 # =============================================================================
 
-EXPECTED_ASSETS = [
-    "BTC",
-    "ETH",
-    "SOL",
-    "XRP",
-    "ADA",
-    "DOGE",
-    "SHIB",
-    "LINK",
-    "AVAX",
-    "DOT",
-    "LTC",
-    "UNI",
-    "AAVE",
-    "SUI",
-    "NEAR",
-]
-
-EXPECTED_ASSET_COUNT = 15
-
 
 SIGNAL_STATES = (
     "ACTIVE",
@@ -170,37 +150,22 @@ def validate_asset_keys(
             f"{source_name} must be a mapping"
         )
 
-    expected = set(
-        EXPECTED_ASSETS
-    )
+    actual = set()
+    for key in snapshot.keys():
+        if not isinstance(key, str) or not key.strip():
+            raise RuntimeError(
+                f"{source_name} contains invalid asset key"
+            )
+        asset = key.strip().upper()
+        if asset in actual:
+            raise RuntimeError(
+                f"{source_name} contains duplicate asset: {asset}"
+            )
+        actual.add(asset)
 
-    actual = set(
-        snapshot.keys()
-    )
-
-    missing = expected - actual
-    extra = actual - expected
-
-    if missing:
-
+    if not actual:
         raise RuntimeError(
-            f"{source_name} missing assets: "
-            f"{sorted(missing)}"
-        )
-
-    if extra:
-
-        raise RuntimeError(
-            f"{source_name} contains unexpected assets: "
-            f"{sorted(extra)}"
-        )
-
-    if len(actual) != EXPECTED_ASSET_COUNT:
-
-        raise RuntimeError(
-            f"{source_name} asset count mismatch: "
-            f"{len(actual)} != "
-            f"{EXPECTED_ASSET_COUNT}"
+            f"{source_name} must contain at least one asset"
         )
 
 
@@ -659,8 +624,13 @@ def build_decision_snapshot(
 
     decisions = {}
 
-    for asset in EXPECTED_ASSETS:
+    assets = sorted(validated_signals.keys())
+    if set(scores.keys()) != set(assets):
+        raise RuntimeError("validated signals and scores asset sets differ")
+    if set(decision_ids.keys()) != set(assets):
+        raise RuntimeError("decision_ids and decision inputs asset sets differ")
 
+    for asset in assets:
         decision_id = decision_ids.get(asset)
         if not isinstance(decision_id, str) or not decision_id.strip():
             raise RuntimeError(
@@ -733,7 +703,7 @@ def validate_internal_snapshot(
         "decision snapshot",
     )
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(snapshot):
 
         decision = snapshot[asset]
 
@@ -883,7 +853,7 @@ def calculate_statistics(
     short_count = 0
     none_count = 0
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(snapshot):
 
         item = snapshot[asset]
 
@@ -1014,7 +984,7 @@ def print_decisions(
 
     print("-" * 100)
 
-    for asset in EXPECTED_ASSETS:
+    for asset in sorted(snapshot):
 
         decision = snapshot[asset]
 
@@ -1048,7 +1018,7 @@ def print_contract(
     print("=" * 82)
 
     print(
-        f"Expected Assets : {EXPECTED_ASSET_COUNT}"
+        "Asset Universe  : DYNAMIC (observed input)"
     )
 
     print(
