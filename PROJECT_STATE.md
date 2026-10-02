@@ -1804,3 +1804,16 @@ No synthetic capital, fabricated balance, synthetic quantity, API write, exchang
 If future context is lost, **do not introduce a capital gate into Trader logic merely because real capital is zero or because capital authorization is absent.** Capital authorization belongs to the separate execution/management authority boundary. Capital state may constrain what an external exchange accepts, but it does not determine whether ArundaTrader thinks, analyzes, decides, or produces its established pre-execution artifacts.
 
 **CAPITAL INDEPENDENCE = CLOSED / LOCKED.** Any future contradiction requires a direct regression finding and a separately approved patch; do not redesign or reopen this checkpoint from context loss.
+
+
+## 2026-10-02 — MANAGEMENT DIRECTIVE: TRADER COMPLETION BEFORE CAPITAL DEPLOYMENT
+
+**LATEST FORWARD OVERRIDE**
+
+ArundaTrader must be completed and proven as an independent real-market intelligence system before any capital deployment decision. Capital is an external Management decision made after Trader outputs are observed and jointly analyzed.
+
+REAL_CAPITAL=0 is valid. Zero balance does not stop Trader analysis, Decision, Risk, Position Sizing, Trade Gate, Trade Ready, Order Intent, Canonical Order Request, or observation. Capital injection changes the observed account environment; it does not change Trader logic.
+
+ACTIVE ROUTE: Trader completion → real-market E2E output proof → governed observation/UI/Aroonda continuity → output analysis → Management capital decision → account capital observation → same Trader logic.
+
+Do not reopen CP39 or Zero-Capital. Do not add a capital gate to Trader intelligence. Do not interpret missing capital evidence as an incomplete Trader. Execution activation remains a separate control boundary.
