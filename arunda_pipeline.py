@@ -4172,6 +4172,9 @@ def main() -> int:
         validated_order_intents = 0
         execution_boundary_status = "DEFERRED_NO_CANONICAL_REQUESTS"
         provider_preflight_results = {}
+        execution_results = {}
+        attempted_count = 0
+        accepted_count = 0
 
         if trade_ready_assets:
             # CP49 gives each asset its authoritative runtime snapshot id.
@@ -4285,7 +4288,6 @@ def main() -> int:
                     )
                 )
 
-            execution_results = {}
             management_authorized = management_execution_authorized()
 
             for asset, canonical_record in canonical_order_requests.items():
