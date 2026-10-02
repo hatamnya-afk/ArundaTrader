@@ -1988,3 +1988,105 @@ No new capital engine; no new risk engine; no authorization redesign; no CP39 re
 
 ### BUILDER CONTINUITY RULE
 If a future Builder is uncertain because context is missing, read this section before changing anything related to capital. **Do not convert absence of capital into absence of Trader intelligence. Do not convert capital authorization into a prerequisite for Decision/Risk/analysis. Escalate any genuine regression instead of redesigning the architecture.**
+
+
+## 2026-10-02 — MANAGEMENT DIRECTIVE: COMPLETE THE TRADER BEFORE CAPITAL DEPLOYMENT
+
+### STATUS
+**LATEST FORWARD-MANAGEMENT OVERRIDE — TRADER COMPLETION IS THE ACTIVE PRIORITY**
+
+Management has clarified the intended operating model:
+
+> **ArundaTrader must complete and prove its own intelligence/decision lifecycle independently of capital deployment. Capital injection is a separate Management decision made after Trader outputs are observed and analyzed.**
+
+This section supersedes any older forward wording that makes capital authorization, account balance, or capital deployment a prerequisite for completing Trader intelligence. Historical readiness/evidence sections remain preserved as evidence and are not deleted.
+
+### NON-NEGOTIABLE SEPARATION
+
+The Trader owns:
+
+`REAL MARKET → OPPORTUNITY → SIGNAL → VALIDATION → FUSION → SCORE → DECISION → RISK → POSITION SIZING → TRADE GATE → TRADE READY → ORDER INTENT → CANONICAL ORDER REQUEST → OBSERVATION`
+
+Management owns the separate capital decision:
+
+`TRADER OUTPUT → JOINT ANALYSIS (MANAGEMENT + ASSISTANT) → CAPITAL DECISION → CAPITAL INJECTION INTO TOOBIT`
+
+Capital injection must never become a prerequisite for the Trader to:
+- observe real market data;
+- analyze opportunities;
+- generate Decision;
+- calculate Risk;
+- calculate intelligent sizing;
+- pass/fail Trade Gate;
+- generate Trade Ready;
+- generate Order Intent / Canonical Order Request;
+- produce canonical runtime observations.
+
+### ZERO-CAPITAL OPERATING MODE
+
+`REAL_CAPITAL = 0` is a valid operating state.
+
+The Trader must continue its established intelligence path and produce its established outputs. Zero balance is an environment/account observation, not a shutdown condition and not a strategy switch.
+
+### CAPITALIZED OPERATING MODE
+
+After Management and the assistant jointly determine that capital should be injected, capital is placed into the Toobit account through the appropriate external Management/account path.
+
+The Trader does **not** receive a new strategy or a new capital-dependent brain.
+
+It observes the changed account/environment state and continues doing the same Trader job under the already-established contracts.
+
+Conceptually:
+
+`Toobit Account State → Environment Observation → Existing Trader Logic`
+
+not:
+
+`Capital Injection → Trader Logic Redesign`
+
+### DEVELOPMENT ROUTE
+
+The active development sequence is now:
+
+1. **Complete the remaining Trader production/runtime wiring.**
+2. **Prove the complete real-market Trader output path end-to-end**, including canonical Decision Birth, Risk, Trade Gate, Trade Ready, Order Intent, Canonical Order Request, and CP69 observation continuity.
+3. **Verify that the resulting observations are consumed correctly by the Trader UI / Aroonda observation path where already governed.**
+4. **Collect and analyze Trader outputs before capital deployment.**
+5. **Management + assistant jointly review quality, behavior, opportunity capture, risk behavior, sizing, gates, and output integrity.**
+6. **Only after that analysis, Management decides whether/how much capital to inject into Toobit.**
+7. **After capital exists, verify the environment/account observation is recognized without changing Trader intelligence.**
+8. **Execution activation remains a distinct technical/control boundary and must not be silently inferred from capital presence.**
+
+### WHAT IS NOT THE FRONTIER
+
+The following are **not** current development frontiers:
+- building a capital engine;
+- making capital authorization a prerequisite for Trader intelligence;
+- redesigning Smart Risk because capital is zero;
+- reopening CP39;
+- reopening the Zero-Capital Contract;
+- inventing a synthetic capital state;
+- changing strategy because capital was injected;
+- making Toobit-specific behavior part of the provider-neutral Core.
+
+### CURRENT FRONTIER
+
+**TRADER COMPLETION → REAL-MARKET E2E OUTPUT PROOF → OUTPUT ANALYSIS → MANAGEMENT CAPITAL DECISION**
+
+The immediate Builder target is Trader completion and evidence, not capital deployment.
+
+### GOVERNANCE RULE
+
+`CAPITAL DECISION IS DOWNSTREAM OF TRADER EVIDENCE`
+
+`TRADER LOGIC IS INDEPENDENT OF CAPITAL DEPLOYMENT`
+
+`CAPITAL INJECTION DOES NOT MODIFY TRADER LOGIC`
+
+`ACCOUNT STATE IS OBSERVED BY THE TRADER; IT DOES NOT DEFINE THE TRADER`
+
+Future Builders must read this section before interpreting first-execution or capital-readiness records. A missing capital record must never be interpreted as "Trader incomplete." It means only that the separate Management capital decision/evidence has not yet been exercised.
+
+### SAFETY
+
+No capital was injected by this governance update. No exchange write, order, execution activation, DB change, runtime, retry, or strategy modification was performed.
