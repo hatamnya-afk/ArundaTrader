@@ -2,7 +2,10 @@
 Provider-neutral, read-only capital observation boundary.
 
 This contract carries validated production capital observations into core
-risk logic. It contains no provider/API, database, order, or execution logic.
+risk logic. Zero is a valid observed real-capital state; it does not disable
+market intelligence or Smart Risk generation. Real execution remains a
+separate execution-authority boundary. The contract contains no provider/API,
+database, order, or execution logic.
 """
 from dataclasses import dataclass
 from typing import Mapping
@@ -28,10 +31,10 @@ class RealCapitalObservation:
             raise ValueError("capital_state must be REAL_CAPITAL")
         if self.validation != "VALID":
             raise ValueError("capital observation must be VALID")
-        if isinstance(self.portfolio_capital, bool) or not isinstance(self.portfolio_capital, (int, float)) or self.portfolio_capital <= 0:
-            raise ValueError("portfolio_capital must be positive")
-        if isinstance(self.usable_capital, bool) or not isinstance(self.usable_capital, (int, float)) or self.usable_capital <= 0:
-            raise ValueError("usable_capital must be positive")
+        if isinstance(self.portfolio_capital, bool) or not isinstance(self.portfolio_capital, (int, float)) or self.portfolio_capital < 0:
+            raise ValueError("portfolio_capital must be non-negative")
+        if isinstance(self.usable_capital, bool) or not isinstance(self.usable_capital, (int, float)) or self.usable_capital < 0:
+            raise ValueError("usable_capital must be non-negative")
         if self.usable_capital > self.portfolio_capital:
             raise ValueError("usable_capital cannot exceed portfolio_capital")
         if isinstance(self.allocated_risk, bool) or not isinstance(self.allocated_risk, (int, float)) or self.allocated_risk < 0:
