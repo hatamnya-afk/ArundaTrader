@@ -40,7 +40,7 @@ QUANTITY OBSERVABILITY
 EXECUTION BOUNDARY
 
 HARD SAFETY RULES:
-- EXECUTION ENABLED = False
+- EXECUTION ENABLED module default = False; live execution requires explicit management authorization through the CP49 bridge
 - No exchange writes
 - No order submission
 - No database writes outside the CP49 authoritative Birth persistence boundary
@@ -2637,6 +2637,20 @@ def assert_execution_disabled() -> None:
                 )
 
 
+def assert_execution_control(
+        management_authorized: bool,
+    ) -> None:
+        """Allow live execution only under explicit management authorization.
+
+        The contract-level execution flags remain fail-closed defaults.
+        The CP49 bridge owns the actual per-request activation gate.
+        """
+        if management_authorized:
+            return
+
+        assert_execution_disabled()
+
+
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
     ) -> str:
@@ -2998,10 +3012,13 @@ def main() -> int:
     orchestration helpers. Those helpers remain available only for
     historical/test compatibility and are not part of this Production path.
 
-    Execution, real orders, real trades and DB writes remain forbidden.
+    Execution is fail-closed by default. Live provider submission is
+    permitted only when explicit management authorization is present and
+    the CP49 bridge authorizes each canonical request.
     """
 
-    assert_execution_disabled()
+    management_authorized = management_execution_authorized()
+    assert_execution_control(management_authorized)
 
     try:
         # --------------------------------------------------------------
@@ -4300,8 +4317,6 @@ def main() -> int:
                     )
                 )
 
-            management_authorized = management_execution_authorized()
-
             for asset, canonical_record in canonical_order_requests.items():
                 request = canonical_record["request"]
                 result = execute_canonical_request(
@@ -4382,7 +4397,7 @@ def main() -> int:
         # ------------------------------------------------------------------
         # Module-level safety defaults remain fail-closed. Live submission,
         # when explicitly authorized, occurs only through the CP49 bridge.
-        assert_execution_disabled()
+        assert_execution_control(management_authorized)
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
