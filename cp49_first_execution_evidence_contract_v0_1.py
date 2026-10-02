@@ -84,10 +84,11 @@ def build_account_signature_evidence(
 ) -> Optional[AccountSignatureEvidence]:
     """Correlate existing authenticated account-read evidence.
 
-    The account identity requirement here is deliberately limited to the
-    provider-authenticated account type and immutable source provenance.
-    No account identifier is invented when the provider does not expose one
-    through the existing read contract.
+    The provider account endpoint is authoritative for the concrete account
+    identity (userId/account_id), while the authenticated API-key endpoint is
+    authoritative for the key account type. These are preserved as separate
+    authoritative facts; the account endpoint need not redundantly expose
+    accountType. No account identifier or account type is invented or inferred.
     """
     if api_key_result is None:
         return None
