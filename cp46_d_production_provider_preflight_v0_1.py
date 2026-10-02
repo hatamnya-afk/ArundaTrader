@@ -74,6 +74,7 @@ def build_toobit_translation_evidence(
     *,
     adapter: Any,
     canonical_request: Any,
+    quote_quantity: Any = None,
 ) -> ProviderTranslationEvidence:
     if adapter is None:
         raise RuntimeError("Toobit adapter is required")
@@ -86,12 +87,12 @@ def build_toobit_translation_evidence(
     # reconstructed from a hardcoded suffix or inferred mapping.
     symbol = _provider_symbol(adapter, asset)
 
-    # Spot MARKET BUY requires an already-authoritative quote quantity.
-    # No producer currently exists for this value; therefore None is
-    # intentional and CP46-C fails closed rather than estimating it.
+    # For Spot MARKET BUY, quote_quantity is supplied by the already-
+    # authoritative Risk.position exposure output. The provider boundary
+    # transports that value; it never derives it from price.
     return ProviderTranslationEvidence(
         provider_symbol=symbol,
-        quote_quantity=None,
+        quote_quantity=quote_quantity,
     )
 
 
@@ -99,6 +100,7 @@ def translate_and_preflight_toobit(
     *,
     canonical_request: Any,
     adapter: Any,
+    quote_quantity: Any = None,
 ) -> ProductionProviderPreflightResult:
     if adapter is None:
         return _block(
@@ -110,6 +112,7 @@ def translate_and_preflight_toobit(
         evidence = build_toobit_translation_evidence(
         adapter=adapter,
         canonical_request=canonical_request,
+        quote_quantity=quote_quantity,
     )
 
         translation = translate_order_request(
