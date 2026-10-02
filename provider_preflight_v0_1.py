@@ -187,7 +187,11 @@ class ProviderPreflightEvidence:
     account: ProviderAccountState
     orders: ProviderOrderState
     timestamp: ProviderTimestampState
-    portfolio: ProviderPortfolioState
+
+    # Provider portfolio-exposure evidence is venue/provider specific.
+    # Spot providers that expose no authoritative exposure permission
+    # must not be forced to synthesize one. In that case this is None.
+    portfolio: Optional[ProviderPortfolioState]
 
 
 @dataclass(frozen=True)
@@ -578,27 +582,56 @@ def run_provider_preflight(
     # Portfolio exposure.
     #
     # No exposure calculation here.
+    #
+    # Portfolio-exposure evidence is provider/venue specific.
+    # Spot providers that expose no authoritative exposure
+    # permission must not synthesize one merely to satisfy
+    # this generic contract. Account/order conflict protection
+    # is already validated above from authoritative state.
+    #
+    # Futures (and any future venue explicitly requiring this
+    # state) remains fail-closed when evidence is absent,
+    # unknown, or not allowed.
     # ---------------------------------------------------------
 
     portfolio = evidence.portfolio
 
+    if request.venue == "SPOT":
+        if portfolio is not None:
+            if portfolio.state_known is not True:
+                return _block(
+                    PreflightReason.BLOCK_PORTFOLIO_EXPOSURE,
+                    "Supplied Spot portfolio exposure state is unknown.",
+                )
+
+            if portfolio.exposure_allowed is not True:
+                return _block(
+                    PreflightReason.BLOCK_PORTFOLIO_EXPOSURE,
+                    "Supplied Spot portfolio exposure is not authorized.",
+                )
+
+        return _pass()
+
+    if portfolio is None:
+        return _block(
+            PreflightReason.BLOCK_PORTFOLIO_EXPOSURE,
+            "Required provider portfolio exposure state is unavailable.",
+        )
+
     if portfolio.state_known is not True:
         return _block(
             PreflightReason.BLOCK_PORTFOLIO_EXPOSURE,
-            "Portfolio exposure state is unknown.",
+            "Provider portfolio exposure state is unknown.",
         )
 
     if portfolio.exposure_allowed is not True:
         return _block(
             PreflightReason.BLOCK_PORTFOLIO_EXPOSURE,
-            "Portfolio exposure is not authorized.",
+            "Provider portfolio exposure is not authorized.",
         )
 
     return _pass()
-
-
-__all__ = [
-    "PreflightStatus",
+Status",
     "PreflightReason",
     "ProviderOrderPreflightRequest",
     "ProviderContractState",
