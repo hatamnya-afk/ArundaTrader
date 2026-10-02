@@ -131,6 +131,12 @@ def build_account_balance_observation(
     balance_data = _result_data(balance_result)
 
     account_source_id, account_source_type, account_source_timestamp = _provenance(account_data)
+    # A complete balance snapshot may legitimately contain no USDT row. In
+    # that case the semantic boundary still needs authoritative provenance;
+    # preserve the authenticated account endpoint as the observation source
+    # even when account identity resolution did not yield an identity source.
+    if account_source_id is None:
+        account_source_id = _text(account_data.get("account_source_id"))
 
     account = AccountObservation(
         account_id=_text(account_data.get("account_id")),
