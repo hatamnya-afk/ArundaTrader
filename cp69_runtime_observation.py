@@ -48,6 +48,7 @@ def build_observation(
     launch_timestamp: str | None = None,
     db_writes: int = 0,
     db_write_boundary: str | None = None,
+    execution_results: Any = None,
 ) -> dict[str, Any]:
     if not isinstance(emitted_at, str) or not emitted_at.strip():
         raise ValueError("emitted_at must be a non-empty string")
@@ -81,6 +82,7 @@ def build_observation(
             "news_items": news_items,
             "social_items": social_items,
             "launch_timestamp": launch_timestamp,
+            "execution_results": execution_results,
         }
     )
     _assert_json_safe(state, "state")
@@ -106,6 +108,20 @@ def build_observation(
         else f"obs:{runtime_snapshot_id}"
     )
 
+    execution_rows = (
+        execution_results
+        if isinstance(execution_results, dict)
+        else {}
+    )
+    execution_attempted = any(
+        isinstance(row, dict) and row.get("submitted_to_matching_engine") is True
+        for row in execution_rows.values()
+    )
+    real_trade = any(
+        isinstance(row, dict) and row.get("accepted") is True
+        for row in execution_rows.values()
+    )
+
     return {
         "schema": CP69_SCHEMA,
         "schema_version": CP69_SCHEMA_VERSION,
@@ -123,9 +139,9 @@ def build_observation(
         },
         "state": state,
         "execution_state": {
-            "EXECUTION": "OFF",
-            "REAL_ORDER": False,
-            "REAL_TRADE": False,
+            "EXECUTION": "ON" if execution_attempted else "OFF",
+            "REAL_ORDER": execution_attempted,
+            "REAL_TRADE": real_trade,
             "DB_WRITES": db_writes,
         },
     }
