@@ -1775,9 +1775,10 @@ Capital injection is not a strategy change. Account state is an environment obse
 
 - Repository: `hatamnya-afk/ArundaTrader`
 - Active controlled branch: `sync/local-project-20260917`
-- Latest verified project HEAD: `40819760b517614e628b46cdfd1440ca80fd78d6`
-- Latest commit: `CP49: isolate account observation failures per execution request`
-- The branch is synchronized with its remote at the latest verified state.
+- Latest verified **implementation** HEAD before this documentation sync: `40819760b517614e628b46cdfd1440ca80fd78d6`
+- Implementation commit: `CP49: isolate account observation failures per execution request`
+- This handoff/documentation sync then advanced the same controlled branch with documentation-only commits; the latest documentation-sync commit is recorded by Git history.
+- No code/runtime/DB/execution claim is changed by the documentation sync.
 - Local untracked/backup/DB artifacts are **not** project truth and must not be modified, deleted, cleaned, or promoted without explicit authorization.
 
 ## 2. WHAT IS CLOSED — DO NOT REOPEN
