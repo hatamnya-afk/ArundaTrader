@@ -4147,7 +4147,19 @@ def main() -> int:
         if not trade_ready_assets.issubset(set(trade_gate_snapshot)):
             fail("Trade Ready asset identity mismatch")
 
-        print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
+        trade_gate_status_counts = {}
+        for gate_row in trade_gate_snapshot.values():
+            status = gate_row.get("trade_gate_status")
+            trade_gate_status_counts[status] = (
+                trade_gate_status_counts.get(status, 0) + 1
+            )
+
+        print(f"TRADE_GATE_EVALUATED={len(trade_gate_snapshot)}")
+        print(
+            "TRADE_GATE_STATUS_COUNTS="
+            f"{trade_gate_status_counts}"
+        )
+        print(f"TRADE_GATE_READY={len(trade_ready_assets)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
 
         # ------------------------------------------------------------------
