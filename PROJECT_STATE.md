@@ -1750,3 +1750,57 @@ No runtime, exchange/API write, order submission, execution enablement, database
 - Zero real account balance is therefore a valid intelligence state: Decision → Risk → Position Size → Trade Gate → Order Intent can remain non-zero; the real exchange remains responsible for accepting/rejecting the order against actual account constraints.
 - allocated_risk and concurrent-position state remain portfolio constraints; no synthetic balance or capital is created.
 - Execution remains OFF; no runtime or exchange write is authorized by this checkpoint.
+
+
+## 2026-10-02 — CAPITAL-INDEPENDENCE GOVERNANCE LOCK
+
+### STATUS
+**VERIFIED / CLOSED / LOCKED — GOVERNANCE CORRECTION ONLY**
+
+Static forensic verification confirms that ArundaTrader is capital-independent at the Trader-logic boundary. This section is the latest forward-management clarification and does not reopen CP39, CP44, CP46-A..H, CP47, CP48, or redesign CP49.
+
+### NON-NEGOTIABLE ARCHITECTURE
+
+`TRADER BEHAVIOR ≠ ACCOUNT CAPITAL STATE`
+
+`CAPITAL INJECTION ≠ TRADER LOGIC CHANGE`
+
+`CAPITAL INCREASE ≠ PERMISSION TO THINK / DECIDE / ANALYZE`
+
+The following are environmental/management quantities, not conditions for Trader existence or intelligence execution:
+- REAL_CAPITAL
+- ACCOUNT_BALANCE
+- AVAILABLE_BALANCE
+- RECOMMENDED_CAPITAL
+- CAPITAL_INJECTION_AMOUNT
+- CAPITAL_ALLOCATION_AMOUNT
+
+### VERIFIED ZERO-CAPITAL BEHAVIOR
+
+Both observed states are valid:
+- REAL CAPITAL = 0
+- REAL CAPITAL > 0
+
+Zero real capital must not suppress Decision, Risk, Position Sizing, Trade Gate, Trade Ready, Trade Intent, or Canonical Order Request generation where the established contracts otherwise permit them. The existing Zero-Capital Contract is VERIFIED/CLOSED and is not reopened.
+
+Static inspection of the current Decision/Risk/Trade Gate path found no blocking dependency from Decision or Trade Gate on account capital/balance. Smart Risk explicitly treats real account portfolio_capital/usable_capital as environment observations and uses Dynamic Risk Intelligence recommended_capital for intelligence-side sizing. No capital-independence redesign was introduced.
+
+### MANAGEMENT CAPITAL CONTROL
+
+Management independently controls:
+- when to inject capital;
+- how much capital to inject;
+- whether to increase capital;
+- whether to withdraw capital.
+
+Management capital decisions do not mutate Trader strategy or intelligence logic. Capital authorization, account balance, recommended capital, and Trader logic are distinct concepts and must not be inferred from one another.
+
+### GOVERNANCE SAFETY
+
+No synthetic capital, fabricated balance, synthetic quantity, API write, exchange write, order, execution activation, DB change, runtime, retry, or automatic capital injection was performed by this correction.
+
+### FORWARD RULE FOR BUILDER / MANAGER
+
+If future context is lost, **do not introduce a capital gate into Trader logic merely because real capital is zero or because capital authorization is absent.** Capital authorization belongs to the separate execution/management authority boundary. Capital state may constrain what an external exchange accepts, but it does not determine whether ArundaTrader thinks, analyzes, decides, or produces its established pre-execution artifacts.
+
+**CAPITAL INDEPENDENCE = CLOSED / LOCKED.** Any future contradiction requires a direct regression finding and a separately approved patch; do not redesign or reopen this checkpoint from context loss.
