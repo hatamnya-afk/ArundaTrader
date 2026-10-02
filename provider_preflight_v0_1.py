@@ -501,17 +501,18 @@ def run_provider_preflight(
     # by the real exchange at order acceptance/rejection time.
     # No account balance is converted into a synthetic Boolean here.
     #
-    if account.margin_state_known is not True:
-        return _block(
-            PreflightReason.BLOCK_MARGIN_STATE_UNKNOWN,
-            "Margin state is not confirmed.",
-        )
+    if request.venue != "SPOT":
+        if account.margin_state_known is not True:
+            return _block(
+                PreflightReason.BLOCK_MARGIN_STATE_UNKNOWN,
+                "Margin state is not confirmed.",
+            )
 
-    if account.leverage_state_known is not True:
-        return _block(
-            PreflightReason.BLOCK_LEVERAGE_STATE_UNKNOWN,
-            "Leverage state is not confirmed.",
-        )
+        if account.leverage_state_known is not True:
+            return _block(
+                PreflightReason.BLOCK_LEVERAGE_STATE_UNKNOWN,
+                "Leverage state is not confirmed.",
+            )
 
     # ---------------------------------------------------------
     # Duplicate / open-order protection.
