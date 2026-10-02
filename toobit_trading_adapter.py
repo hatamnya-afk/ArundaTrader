@@ -82,6 +82,7 @@ EXCHANGE_INFO_ENDPOINT = "/api/v1/exchangeInfo"
 
 # Signed USER_DATA
 ACCOUNT_ENDPOINT = "/api/v1/account"
+ACCOUNT_BALANCE_FLOW_ENDPOINT = "/api/v1/account/balanceFlow"
 API_KEY_CHECK_ENDPOINT = "/api/v1/account/checkApiKey"
 OPEN_ORDERS_ENDPOINT = "/api/v1/spot/openOrders"
 ALL_ORDERS_ENDPOINT = "/api/v1/spot/tradeOrders"
@@ -1104,10 +1105,8 @@ class ToobitTradingAdapter:
                     ),
                 )
 
-            source_timestamp = getattr(
-                self,
-                "_last_signed_timestamp_ms",
-                None,
+            account_id, identity_source_id, source_timestamp = (
+                self._resolve_account_identity(payload)
             )
 
             return AdapterResult(
@@ -1121,6 +1120,7 @@ class ToobitTradingAdapter:
                 data={
                     # Provider-normalized account identity metadata for the
                     # provider-neutral observation/evidence boundary.
+                    "account_id": account_id,
                     "account_type": payload.get("accountType"),
                     "account_response": payload,
                     "balance_rows": (
@@ -1131,8 +1131,9 @@ class ToobitTradingAdapter:
                         )
                         else None
                     ),
-                    "source_id": f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
+                    "source_id": identity_source_id,
                     "source_type": "EXCHANGE_PRIVATE_API",
+                    "account_source_id": f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
                     "source_timestamp": (
                         str(source_timestamp)
                         if source_timestamp is not None
@@ -1152,6 +1153,47 @@ class ToobitTradingAdapter:
                 ),
             )
 
+    def _resolve_account_identity(
+        self,
+        payload: Dict[str, Any],
+    ) -> tuple[Optional[str], Optional[str], Optional[int]]:
+        """Resolve the authoritative Toobit account id without invention.
+
+        The current Toobit spot account response is documented with balances
+        but without accountId. When the live response does expose accountId,
+        that value is preferred. Otherwise, one authenticated read of the
+        balanceFlow endpoint is used because Toobit documents accountId on
+        each flow row.
+
+        Empty/invalid identity remains unavailable; no local or synthetic
+        identifier is ever generated.
+        """
+        account_id = payload.get("accountId")
+        if isinstance(account_id, (str, int)) and str(account_id).strip():
+            timestamp = getattr(self, "_last_signed_timestamp_ms", None)
+            return str(account_id).strip(), f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}", timestamp
+
+        response = self._signed_get(ACCOUNT_BALANCE_FLOW_ENDPOINT, {"limit": 1})
+        if response.status_code != 200:
+            return None, None, getattr(self, "_last_signed_timestamp_ms", None)
+
+        flow_payload = response.json()
+        if not isinstance(flow_payload, list):
+            return None, None, getattr(self, "_last_signed_timestamp_ms", None)
+
+        for row in flow_payload:
+            if not isinstance(row, dict):
+                continue
+            candidate = row.get("accountId")
+            if isinstance(candidate, (str, int)) and str(candidate).strip():
+                timestamp = getattr(self, "_last_signed_timestamp_ms", None)
+                return (
+                    str(candidate).strip(),
+                    f"{EXCHANGE_NAME}:{ACCOUNT_BALANCE_FLOW_ENDPOINT}",
+                    timestamp,
+                )
+
+        return None, None, getattr(self, "_last_signed_timestamp_ms", None)
     # ========================================================
     # BALANCE CHECK
     # ========================================================
