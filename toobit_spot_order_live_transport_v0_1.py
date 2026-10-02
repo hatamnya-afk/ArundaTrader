@@ -372,13 +372,27 @@ class ToobitSpotOrderLiveTransport:
                 else None
             )
 
+            provider_error_code = None
+            provider_error_message = None
+            if not accepted and isinstance(response_body, dict):
+                raw_code = response_body.get("code")
+                raw_message = response_body.get("msg")
+                if raw_code is not None:
+                    provider_error_code = str(raw_code)
+                if raw_message is not None:
+                    provider_error_message = str(raw_message)
+
             return SpotLiveOrderResult(
                 accepted=accepted,
-                status="PASS" if accepted else "HTTP_ERROR",
+                status="PASS" if accepted else "REJECTED",
                 http_status=response.status_code,
                 response_body=response_body,
-                error_code=None if accepted else "HTTP_ERROR",
-                error_message=None if accepted else str(response.status_code),
+                error_code=None if accepted else (
+                    provider_error_code or "HTTP_ERROR"
+                ),
+                error_message=None if accepted else (
+                    provider_error_message or str(response.status_code)
+                ),
                 submitted_to_matching_engine=True,
                 exchange_order_id=exchange_order_id,
             )
