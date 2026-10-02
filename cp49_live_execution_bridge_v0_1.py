@@ -91,8 +91,22 @@ def execute_canonical_request(
 
     attach_live_transport(adapter)
 
-    account_observation = build_account_balance_observation(adapter)
-    api_key_result = adapter.api_key_check()
+    # Per-order execution isolation: an account/provenance/read error must
+    # block this execution attempt without terminating the continuous
+    # production pipeline or allowing an unsafe write.
+    try:
+        account_observation = build_account_balance_observation(adapter)
+        api_key_result = adapter.api_key_check()
+    except Exception as exc:
+        from exchange_execution_contract import blocked_execution_result
+
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code="CP49_ACCOUNT_OBSERVATION_FAILED",
+            error_message=str(exc),
+            adapter="TOOBIT",
+        )
 
     account_signature_evidence = build_account_signature_evidence(
         api_key_result=api_key_result,
