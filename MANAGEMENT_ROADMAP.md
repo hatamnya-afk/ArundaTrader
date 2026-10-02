@@ -2170,7 +2170,7 @@ The bridge is **fail-closed by default**. Live provider submission requires the 
 
 This control is an execution authorization switch only. It is **not capital authorization** and must never be interpreted as a requirement for Trader intelligence or order generation.
 
-The Toobit transport now preserves provider error codes/messages from real responses. Toobit's official API documentation identifies `-1131 INSUFFICIENT_BALANCE` as an insufficient-balance error for Spot, so an actual zero-capital rejection can be preserved as provider evidence rather than synthesized locally. citeturn2search3
+The Toobit transport now preserves provider error codes/messages from real responses. Toobit's official API documentation identifies `-1131 INSUFFICIENT_BALANCE` as an insufficient-balance error for Spot, so an actual zero-capital rejection can be preserved as provider evidence rather than synthesized locally.
 
 No local/runtime execution was performed by this repository change. Therefore no real Toobit order, rejection, or trade is claimed yet.
 
