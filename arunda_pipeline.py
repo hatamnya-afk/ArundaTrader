@@ -181,6 +181,10 @@ from cp69_runtime_observation import (
 )
 
 from exchange_execution_boundary import execute_order
+from cp46_d_production_provider_preflight_v0_1 import (
+    translate_and_preflight_toobit,
+)
+from toobit_trading_adapter import ToobitTradingAdapter
 
 # ============================================================================
 
@@ -4164,6 +4168,7 @@ def main() -> int:
         quantity_records = {}
         validated_order_intents = 0
         execution_boundary_status = "DEFERRED_NO_CANONICAL_REQUESTS"
+        provider_preflight_results = {}
 
         if trade_ready_assets:
             # CP49 gives each asset its authoritative runtime snapshot id.
@@ -4236,6 +4241,20 @@ def main() -> int:
                     birth.get("snapshot_id"),
                 )
             validated_order_intents = len(order_intents)
+
+            # CP46-D production invocation is downstream of CanonicalOrderRequest
+            # and upstream of the existing execution boundary. It performs only
+            # provider read/preflight work and never enables execution or submits.
+            toobit_adapter = ToobitTradingAdapter()
+            for asset, canonical_record in canonical_order_requests.items():
+                request = canonical_record["request"]
+                provider_preflight_results[asset] = (
+                    translate_and_preflight_toobit(
+                        canonical_request=request,
+                        adapter=toobit_adapter,
+                    )
+                )
+
             execution_boundary_status = verify_execution_boundary_integration(
                 canonical_order_requests,
             )
