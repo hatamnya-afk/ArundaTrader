@@ -1131,13 +1131,18 @@ class ToobitTradingAdapter:
                         )
                         else None
                     ),
-                    "source_id": identity_source_id,
                     "source_type": "EXCHANGE_PRIVATE_API",
                     "account_source_id": f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
-                    "source_timestamp": (
-                        str(source_timestamp)
+                    **(
+                        {"source_id": identity_source_id}
+                        if isinstance(identity_source_id, str)
+                        and identity_source_id.strip()
+                        else {}
+                    ),
+                    **(
+                        {"source_timestamp": str(source_timestamp)}
                         if source_timestamp is not None
-                        else None
+                        else {}
                     ),
                 },
             )
