@@ -71,6 +71,21 @@ def test_authoritative_provider_symbol_is_not_reconstructed():
     assert evidence.quote_quantity is None
 
 
+def test_market_buy_passes_with_authoritative_risk_exposure_quote_quantity():
+    result = translate_and_preflight_toobit(
+        canonical_request=_canonical(),
+        adapter=_Adapter(),
+        quote_quantity=1000,
+    )
+    assert result.status == "PASS"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.translation.request.quantity == 1000
+    assert result.translation.request.quantity_unit == "QUOTE_ASSET"
+    assert result.handoff is not None
+    assert result.handoff.preflight is not None
+
+
 def test_market_buy_blocks_without_authoritative_quote_quantity():
     result = translate_and_preflight_toobit(
         canonical_request=_canonical(),
@@ -80,6 +95,15 @@ def test_market_buy_blocks_without_authoritative_quote_quantity():
     assert result.reason == "CP46_C_TRANSLATION_BLOCKED"
     assert result.translation is not None
     assert result.translation.request is None
+
+
+def test_translation_evidence_preserves_authoritative_quote_quantity():
+    evidence = build_toobit_translation_evidence(
+        adapter=_Adapter(),
+        canonical_request=_canonical(),
+        quote_quantity=1000,
+    )
+    assert evidence.quote_quantity == 1000
 
 
 def test_unavailable_authoritative_state_fails_closed():
