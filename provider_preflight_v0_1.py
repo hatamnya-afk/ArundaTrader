@@ -71,7 +71,6 @@ class PreflightReason(str, Enum):
     BLOCK_NOTIONAL_INVALID = "BLOCK_NOTIONAL_INVALID"
 
     BLOCK_ACCOUNT_STATE_UNKNOWN = "BLOCK_ACCOUNT_STATE_UNKNOWN"
-    BLOCK_BALANCE_INSUFFICIENT = "BLOCK_BALANCE_INSUFFICIENT"
     BLOCK_MARGIN_STATE_UNKNOWN = "BLOCK_MARGIN_STATE_UNKNOWN"
     BLOCK_LEVERAGE_STATE_UNKNOWN = "BLOCK_LEVERAGE_STATE_UNKNOWN"
 
@@ -130,8 +129,6 @@ class ProviderAccountState:
     """
 
     state_known: bool
-
-    balance_sufficient: Optional[bool]
 
     margin_state_known: Optional[bool]
     leverage_state_known: Optional[bool]
@@ -496,15 +493,14 @@ def run_provider_preflight(
         )
 
     # ---------------------------------------------------------
-    # Balance / margin / leverage state.
+    # Margin / leverage state.
     # ---------------------------------------------------------
-
-    if account.balance_sufficient is not True:
-        return _block(
-            PreflightReason.BLOCK_BALANCE_INSUFFICIENT,
-            "Sufficient account balance is not confirmed.",
-        )
-
+    #
+    # Account balance is intentionally NOT a preflight permission.
+    # Whether the account can fund this specific order is resolved
+    # by the real exchange at order acceptance/rejection time.
+    # No account balance is converted into a synthetic Boolean here.
+    #
     if account.margin_state_known is not True:
         return _block(
             PreflightReason.BLOCK_MARGIN_STATE_UNKNOWN,
