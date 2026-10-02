@@ -4309,15 +4309,10 @@ def main() -> int:
                     "error_code": result.error_code,
                     "error_message": result.error_message,
                     "submitted_to_matching_engine": (
-                        result.error_code not in {
-                            "CP49_READINESS_BLOCKED",
-                            "CP49_SAFETY_GATE_REQUIRED",
-                            "CP49_SAFETY_GATE_BLOCKED",
-                            "CP49_EXECUTION_ACTIVATION_FAILED",
-                            "CP46_E_REQUIRED",
-                            "CP46_E_BLOCKED",
-                            "MISSING_ADAPTER",
-                            "ORDER_SUBMISSION_DISABLED",
+                        result.status in {
+                            "PASS",
+                            "REJECTED",
+                            "INCONCLUSIVE",
                         }
                     ),
                 }
