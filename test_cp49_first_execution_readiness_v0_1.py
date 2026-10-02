@@ -42,6 +42,7 @@ def _eligibility(request):
 def _account_evidence():
     return AccountSignatureEvidence(
         evidence_id="acct-evidence-1",
+        account_id="management-bound-account",
         account_type="SPOT",
         authentication_status="AUTHENTICATED",
         source="AUTHENTICATED_ACCOUNT_READ",
@@ -83,7 +84,7 @@ def _base_readiness(**overrides):
     return FirstExecutionReadinessInput(**values)
 
 
-def test_readiness_blocks_on_account_signature_but_not_capital():
+def test_readiness_blocks_on_account_signature_and_capital_authorization():
     request = _request()
 
     result = evaluate_first_execution_readiness(
@@ -100,10 +101,10 @@ def test_readiness_blocks_on_account_signature_but_not_capital():
 
     assert result.state is ReadinessState.BLOCKED
     assert "ACCOUNT_SIGNATURE_NOT_VERIFIED" in result.blockers
-    assert "REAL_CAPITAL_NOT_AUTHORIZED" not in result.blockers
+    assert "REAL_CAPITAL_NOT_AUTHORIZED" in result.blockers
 
 
-def test_readiness_is_ready_without_capital_or_management_authorization():
+def test_readiness_blocks_without_capital_or_management_authorization():
     request = _request()
 
     result = evaluate_first_execution_readiness(
@@ -117,8 +118,9 @@ def test_readiness_is_ready_without_capital_or_management_authorization():
         eligibility=_eligibility(request),
     )
 
-    assert result.state is ReadinessState.READY_FOR_AUTHORIZATION
-    assert result.blockers == ()
+    assert result.state is ReadinessState.BLOCKED
+    assert "REAL_CAPITAL_NOT_AUTHORIZED" in result.blockers
+    assert "MANAGEMENT_AUTHORIZATION_NOT_VERIFIED" in result.blockers
     assert result.canonical_request_valid is True
     assert result.eligibility_passed is True
 
