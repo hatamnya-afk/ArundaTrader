@@ -269,8 +269,27 @@ def _validate_observation(observation: dict[str, Any]) -> None:
     execution = observation["execution_state"]
     if not isinstance(execution, dict):
         raise ValueError("execution state must be a dict")
-    if execution.get("EXECUTION") != "OFF" or execution.get("REAL_ORDER") is not False or execution.get("REAL_TRADE") is not False:
-        raise ValueError("unsafe execution state")
+    execution_mode = execution.get("EXECUTION")
+    real_order = execution.get("REAL_ORDER")
+    real_trade = execution.get("REAL_TRADE")
+
+    if execution_mode not in {"OFF", "ON"}:
+        raise ValueError("invalid EXECUTION state")
+
+    if not isinstance(real_order, bool):
+        raise ValueError("invalid REAL_ORDER state")
+
+    if not isinstance(real_trade, bool):
+        raise ValueError("invalid REAL_TRADE state")
+
+    if execution_mode == "OFF" and (real_order or real_trade):
+        raise ValueError("OFF execution cannot contain real order/trade")
+
+    if real_order is False and real_trade is True:
+        raise ValueError("REAL_TRADE requires REAL_ORDER")
+
+    if real_order and execution_mode != "ON":
+        raise ValueError("REAL_ORDER requires EXECUTION=ON")
     db_writes = execution.get("DB_WRITES")
     if not isinstance(db_writes, int) or isinstance(db_writes, bool) or db_writes < 0:
         raise ValueError("invalid DB_WRITES")

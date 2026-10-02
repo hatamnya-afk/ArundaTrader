@@ -203,15 +203,76 @@ def test_non_json_runtime_state_rejected() -> None:
     raise AssertionError("non-JSON state accepted")
 
 
-def test_unsafe_execution_state_rejected() -> None:
-    item = make()
-    item["execution_state"]["EXECUTION"] = "ON"
-    try:
-        append_observation(item, Path(tempfile.gettempdir()) / "cp69-invalid.jsonl")
-    except ValueError:
-        return
-    raise AssertionError("unsafe execution state accepted")
+def test_execution_state_contract() -> None:
+    valid_states = [
+        {
+            "EXECUTION": "OFF",
+            "REAL_ORDER": False,
+            "REAL_TRADE": False,
+            "DB_WRITES": 0,
+        },
+        {
+            "EXECUTION": "ON",
+            "REAL_ORDER": True,
+            "REAL_TRADE": False,
+            "DB_WRITES": 0,
+        },
+        {
+            "EXECUTION": "ON",
+            "REAL_ORDER": True,
+            "REAL_TRADE": True,
+            "DB_WRITES": 0,
+        },
+    ]
 
+    for state in valid_states:
+        item = make()
+        item["execution_state"] = state
+        with tempfile.TemporaryDirectory() as directory:
+            append_observation(
+                item,
+                Path(directory) / "valid.jsonl",
+            )
+
+    invalid_states = [
+        {
+            "EXECUTION": "OFF",
+            "REAL_ORDER": True,
+            "REAL_TRADE": False,
+            "DB_WRITES": 0,
+        },
+        {
+            "EXECUTION": "OFF",
+            "REAL_ORDER": False,
+            "REAL_TRADE": True,
+            "DB_WRITES": 0,
+        },
+        {
+            "EXECUTION": "ON",
+            "REAL_ORDER": False,
+            "REAL_TRADE": True,
+            "DB_WRITES": 0,
+        },
+        {
+            "EXECUTION": "INVALID",
+            "REAL_ORDER": False,
+            "REAL_TRADE": False,
+            "DB_WRITES": 0,
+        },
+    ]
+
+    for state in invalid_states:
+        item = make()
+        item["execution_state"] = state
+        try:
+            with tempfile.TemporaryDirectory() as directory:
+                append_observation(
+                    item,
+                    Path(directory) / "invalid.jsonl",
+                )
+        except ValueError:
+            continue
+        raise AssertionError(f"invalid execution state accepted: {state}")
 
 def test_no_execution_methods() -> None:
     assert not hasattr(build_observation, "execute")
