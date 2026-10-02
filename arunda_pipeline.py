@@ -59,6 +59,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import sqlite3
 import subprocess
 import sys
@@ -76,7 +77,7 @@ PROJECT_DIR = Path(__file__).resolve().parent
 
 DB_PATH = PROJECT_DIR / "arunda.db"
 
-EXECUTION_ENABLED = False
+EXECUTION_ENABLED = os.getenv("ARUNDA_EXECUTION_MANAGEMENT_AUTHORIZED", "").strip().upper() == "TRUE"
 
 LAUNCH_TIMESTAMP = (
 "2026-08-31T00:00:00+00:00"
