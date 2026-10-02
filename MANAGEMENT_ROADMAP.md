@@ -1923,3 +1923,68 @@ No runtime, exchange/API write, order submission, execution enablement, database
 - Zero real account balance is therefore a valid intelligence state: Decision → Risk → Position Size → Trade Gate → Order Intent can remain non-zero; the real exchange remains responsible for accepting/rejecting the order against actual account constraints.
 - allocated_risk and concurrent-position state remain portfolio constraints; no synthetic balance or capital is created.
 - Execution remains OFF; no runtime or exchange write is authorized by this checkpoint.
+
+
+## 2026-10-02 — CAPITAL-INDEPENDENCE GOVERNANCE LOCK / BUILDER CONTINUITY
+
+### PURPOSE
+This is the latest forward-management clarification for Capital Independence. It exists specifically so a future Builder/Manager cannot misread capital authorization, account balance, or recommended capital as a prerequisite for Trader intelligence.
+
+### NON-NEGOTIABLE ARCHITECTURE
+**ARUNDA TRADER MUST BE CAPITAL-INDEPENDENT.**
+
+`TRADER BEHAVIOR ≠ ACCOUNT CAPITAL STATE`
+
+`CAPITAL INJECTION ≠ TRADER LOGIC CHANGE`
+
+`CAPITAL INCREASE ≠ TRADER PERMISSION TO THINK / DECIDE / ANALYZE`
+
+The following must remain separate from core Trader behavior:
+`REAL_CAPITAL`, `ACCOUNT_BALANCE`, `AVAILABLE_BALANCE`, `RECOMMENDED_CAPITAL`, `CAPITAL_INJECTION_AMOUNT`, `CAPITAL_ALLOCATION_AMOUNT`.
+
+### VALID PATH IN BOTH CAPITAL STATES
+
+For both `REAL CAPITAL = 0` and `REAL CAPITAL > 0`, the established valid path remains:
+
+`REAL MARKET → UNIVERSE → OPPORTUNITY → SIGNAL → VALIDATION → FUSION → SCORE → DECISION → RISK → POSITION SIZING → TRADE GATE → TRADE READY → ORDER INTENT → CANONICAL ORDER REQUEST → OBSERVATION`
+
+Zero capital does **not** mean stop Trader, suppress Decision, suppress Risk, suppress Position Sizing, suppress Trade Intent, or alter strategy logic.
+
+### MANAGEMENT CAPITAL AUTHORITY
+
+Management independently decides:
+- WHEN TO INJECT CAPITAL
+- HOW MUCH CAPITAL TO INJECT
+- WHETHER TO INCREASE CAPITAL
+- WHETHER TO WITHDRAW CAPITAL
+
+These are management/environment decisions. They are not inputs required for Trader intelligence to remain alive or perform its established analysis/decision path.
+
+Capital Authorization, Account Balance, Recommended Capital, and Trader Logic must never be implicitly generated from or substituted for one another.
+
+### VERIFIED FORENSIC RESULT — 2026-10-02
+
+Static inspection of the current repository confirmed:
+- Decision has no capital/balance blocking dependency.
+- Trade Gate has no capital/balance blocking dependency found.
+- Smart Risk explicitly distinguishes real account observations from Dynamic Risk Intelligence recommended_capital.
+- Zero real capital remains a valid observed state under the already VERIFIED Zero-Capital Contract.
+- No evidence was found that capital increase/injection changes Trader strategy logic.
+
+### CHECKPOINT STATUS
+- **CP39 = CLOSED / VERIFIED**
+- **ZERO-CAPITAL CONTRACT = VERIFIED / CLOSED**
+- **CAPITAL-INDEPENDENCE GOVERNANCE = VERIFIED / CLOSED / LOCKED**
+
+These are not to be reopened or redesigned due to context loss.
+
+### CURRENT FRONTIER AFTER THIS CORRECTION
+The Capital-Independence question is **CLOSED / LOCKED** and is not a current development frontier.
+
+The forward frontier remains the established production path toward controlled first-execution preparation and canonical observation, with execution still separately governed and OFF. The next Builder must continue from the latest verified CP49/first-execution state rather than treating capital state as a Trader-logic blocker.
+
+### HARD PROHIBITIONS
+No new capital engine; no new risk engine; no authorization redesign; no CP39 reopen; no CP44 reopen; no CP46/47/48 reopen; no CP49 redesign; no DB change; no synthetic capital; no synthetic quantity; no balance fabrication; no API write; no order; no exchange write; no automatic capital injection; no runtime unless explicitly authorized; no retry.
+
+### BUILDER CONTINUITY RULE
+If a future Builder is uncertain because context is missing, read this section before changing anything related to capital. **Do not convert absence of capital into absence of Trader intelligence. Do not convert capital authorization into a prerequisite for Decision/Risk/analysis. Escalate any genuine regression instead of redesigning the architecture.**
