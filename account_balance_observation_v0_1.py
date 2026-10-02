@@ -82,14 +82,14 @@ def _provenance(data: Mapping[str, Any]) -> tuple[Optional[str], Optional[str], 
 
 
 def _valid_nonnegative_number(value: Any) -> bool:
+    """Validate provider numeric fields without changing their value."""
     if isinstance(value, bool) or value is None:
         return False
     try:
-        if isinstance(value, float) and not isfinite(value):
-            return False
-        return value >= 0
+        number = float(value)
     except (TypeError, ValueError):
         return False
+    return isfinite(number) and number >= 0
 
 
 def _require_read_capabilities(adapter: Any) -> None:
