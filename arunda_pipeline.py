@@ -3017,7 +3017,10 @@ def main() -> int:
     the CP49 bridge authorizes each canonical request.
     """
 
+    global EXECUTION_ENABLED
+
     management_authorized = management_execution_authorized()
+    EXECUTION_ENABLED = management_authorized
     assert_execution_control(management_authorized)
 
     try:
