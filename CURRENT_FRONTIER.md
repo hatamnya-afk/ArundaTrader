@@ -1602,3 +1602,53 @@ No runtime, exchange/API write, order submission, execution enablement, database
 - Zero real account balance is therefore a valid intelligence state: Decision → Risk → Position Size → Trade Gate → Order Intent can remain non-zero; the real exchange remains responsible for accepting/rejecting the order against actual account constraints.
 - allocated_risk and concurrent-position state remain portfolio constraints; no synthetic balance or capital is created.
 - Execution remains OFF; no runtime or exchange write is authorized by this checkpoint.
+
+
+## 2026-10-02 — CURRENT FRONTIER OVERRIDE / CAPITAL-INDEPENDENCE LOCK
+
+> **LATEST GOVERNANCE OVERRIDE:** This section supersedes older stale CP45/current-frontier text above for forward management. Historical sections are preserved as evidence and are not silently rewritten.
+
+### CAPITAL-INDEPENDENCE STATUS
+**CLOSED / VERIFIED / LOCKED — NOT A CURRENT FRONTIER**
+
+Static forensic verification confirmed that the established Trader path is not blocked by real account capital state.
+
+`TRADER BEHAVIOR ≠ ACCOUNT CAPITAL STATE`
+
+`CAPITAL INJECTION ≠ TRADER LOGIC CHANGE`
+
+`CAPITAL INCREASE ≠ PERMISSION TO THINK / DECIDE / ANALYZE`
+
+Both `REAL CAPITAL = 0` and `REAL CAPITAL > 0` are valid Trader operating states for the established intelligence path.
+
+### VERIFIED DETERMINATION
+- REAL_CAPITAL blocks Trader = **NO**
+- ACCOUNT_BALANCE blocks Trader = **NO**
+- RECOMMENDED_CAPITAL blocks Trader = **NO**
+- Decision capital dependency = **NONE**
+- Risk capital dependency = **environment observation only; zero is valid**
+- Position sizing = **Dynamic Risk Intelligence sizing; not an account-balance gate**
+- Trade Gate capital dependency = **NONE FOUND**
+- Order Intent capital dependency = **NONE FOUND**
+- Trader Logic depends on Capital = **NO**
+
+### FORWARD MANAGEMENT RULE
+Do not reopen CP39 or the Zero-Capital Contract. Do not redesign Smart Risk, Decision, Trade Gate, or Order Intent to solve a capital problem that static verification has not found.
+
+Capital authorization remains a separate management/execution boundary. It must not be used as a proxy for account balance, recommended capital, or permission for Trader intelligence to operate.
+
+### ACTUAL CURRENT FRONTIER
+**Controlled first-execution preparation / readiness evidence and canonical runtime observation continuity — execution remains OFF.**
+
+The capital-independence issue is closed and removed from the development frontier. Future Builder work must continue from the latest verified CP49 state and must not reinterpret zero capital as a reason to stop the Trader.
+
+### SAFETY
+No code change, DB write, runtime, retry, API write, exchange write, order, execution activation, synthetic capital, or fabricated quantity occurred during this governance correction.
+
+### BUILDER HANDOFF
+When context is truncated or a new Builder takes over:
+1. Read this section first.
+2. Treat Capital Independence as **CLOSED / LOCKED**.
+3. Do not reopen CP39 / Zero-Capital Contract.
+4. Do not introduce a capital gate into Decision/Risk/Trade Gate/Order Intent.
+5. Continue from the actual latest CP49/first-execution frontier.
