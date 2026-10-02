@@ -486,10 +486,16 @@ def run_provider_preflight(
             "Provider account state is unknown.",
         )
 
-    if account.position_conflict is not False:
+    if account.position_conflict is True:
         return _block(
             PreflightReason.BLOCK_POSITION_CONFLICT,
-            "Position state is conflicting or unknown.",
+            "Provider position state reports a conflict.",
+        )
+
+    if request.venue != "SPOT" and account.position_conflict is not False:
+        return _block(
+            PreflightReason.BLOCK_POSITION_CONFLICT,
+            "Provider position state is unknown.",
         )
 
     # ---------------------------------------------------------
