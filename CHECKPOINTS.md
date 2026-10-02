@@ -1750,3 +1750,16 @@ This is a governance/source-of-truth correction only. No code, DB, runtime, exec
 **CP39 = CLOSED / VERIFIED. ZERO-CAPITAL CONTRACT = VERIFIED / CLOSED. CAPITAL-INDEPENDENCE GOVERNANCE = CLOSED / LOCKED.**
 
 Do not reopen or redesign these checkpoints because of future context loss. A future Builder must treat capital state as environmental/management state separate from Trader intelligence unless direct regression evidence proves otherwise.
+
+
+## 2026-10-02 — MANAGEMENT DIRECTIVE: TRADER COMPLETION INDEPENDENT OF CAPITAL
+
+**LATEST FORWARD OVERRIDE**
+
+The Trader must complete its real-market intelligence and output lifecycle independently of capital deployment. Capital is a separate Management decision taken after observing and analyzing Trader outputs.
+
+Zero capital is a valid environment state and must not block Decision, Risk, Position Sizing, Trade Gate, Trade Ready, Order Intent, Canonical Order Request, or canonical observation where established contracts permit them.
+
+The forward sequence is: TRADER COMPLETION → REAL-MARKET E2E OUTPUT PROOF → OBSERVATION CONSUMPTION → OUTPUT ANALYSIS → MANAGEMENT CAPITAL DECISION → ACCOUNT CAPITAL OBSERVATION → CONTINUED OPERATION OF THE SAME TRADER LOGIC.
+
+Capital injection is not a strategy change. Account state is an environment observation, not the definition of Trader intelligence. CP39 and the Zero-Capital Contract remain CLOSED/LOCKED and must not be reopened from context loss.
