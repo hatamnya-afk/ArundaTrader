@@ -2149,6 +2149,31 @@ OBSERVE + RECORD + ANALYZE OUTCOME
 
 The immediate technical objective is therefore to remove the current artificial fail-closed stop that prevents the already-built Trader from reaching the real Toobit submission path, under the separately governed execution-safety controls.
 
+### IMPLEMENTATION STATE — 2026-10-02
+
+The real execution bridge has now been connected in code:
+
+```text
+Canonical Order Request
+    → CP46-D provider preflight
+    → CP46-E execution eligibility
+    → CP49 readiness
+    → CP49 ExecutionSafetyGate
+    → Toobit live spot transport
+    → real provider response
+    → CP69 execution evidence
+```
+
+The bridge is **fail-closed by default**. Live provider submission requires the explicit management execution control:
+
+`ARUNDA_EXECUTION_MANAGEMENT_AUTHORIZED=TRUE`
+
+This control is an execution authorization switch only. It is **not capital authorization** and must never be interpreted as a requirement for Trader intelligence or order generation.
+
+The Toobit transport now preserves provider error codes/messages from real responses. Toobit's official API documentation identifies `-1131 INSUFFICIENT_BALANCE` as an insufficient-balance error for Spot, so an actual zero-capital rejection can be preserved as provider evidence rather than synthesized locally. citeturn2search3
+
+No local/runtime execution was performed by this repository change. Therefore no real Toobit order, rejection, or trade is claimed yet.
+
 ### CAPITAL DEPLOYMENT SEQUENCE
 
 ```text
