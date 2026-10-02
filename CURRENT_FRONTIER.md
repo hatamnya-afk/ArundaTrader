@@ -1652,3 +1652,35 @@ When context is truncated or a new Builder takes over:
 3. Do not reopen CP39 / Zero-Capital Contract.
 4. Do not introduce a capital gate into Decision/Risk/Trade Gate/Order Intent.
 5. Continue from the actual latest CP49/first-execution frontier.
+
+
+## 2026-10-02 — MANAGEMENT DIRECTIVE: TRADER COMPLETION IS INDEPENDENT OF CAPITAL
+
+**LATEST FORWARD OVERRIDE**
+
+ArundaTrader must complete and prove its intelligence lifecycle independently of capital deployment. Capital is an external Management decision made after Trader outputs are observed and analyzed.
+
+Trader lifecycle: REAL MARKET → OPPORTUNITY → SIGNAL → VALIDATION → FUSION → SCORE → DECISION → RISK → POSITION SIZING → TRADE GATE → TRADE READY → ORDER INTENT → CANONICAL ORDER REQUEST → OBSERVATION.
+
+Capital lifecycle: TRADER OUTPUT → JOINT MANAGEMENT/ASSISTANT ANALYSIS → CAPITAL DECISION → ACCOUNT CAPITAL STATE.
+
+REAL_CAPITAL=0 is a valid operating state. Zero balance must not stop Trader analysis, Decision, Risk, sizing, Trade Gate, Trade Ready, Order Intent, Canonical Order Request, or observation. Capital injection does not modify Trader logic. The Trader observes account state as an environment input.
+
+### ACTIVE ROUTE
+1. Complete remaining Trader production/runtime wiring.
+2. Prove the real-market Trader output path end-to-end through Decision Birth → Risk → Trade Gate → Trade Ready → Order Intent → Canonical Order Request → CP69 observation.
+3. Verify governed UI/Aroonda observation consumption.
+4. Collect and analyze Trader outputs before capital deployment.
+5. Management and assistant jointly review quality, opportunity capture, risk, sizing, gates, and output integrity.
+6. Only after that analysis does Management decide whether/how much capital to place in the account.
+7. After capital exists, verify that the Trader recognizes the changed environment state without changing its intelligence.
+8. Execution activation remains a separate technical/control boundary and is not inferred merely from capital presence.
+
+### NOT THE FRONTIER
+Do not make capital authorization or account balance a Trader-intelligence gate. Do not reopen CP39 or the Zero-Capital Contract. Do not build a capital engine, invent synthetic capital, redesign Smart Risk because capital is zero, or make exchange-specific behavior part of the provider-neutral Core.
+
+**CURRENT FRONTIER = TRADER COMPLETION → REAL-MARKET E2E OUTPUT PROOF → OUTPUT ANALYSIS → MANAGEMENT CAPITAL DECISION.**
+
+Future Builders must not interpret a missing capital record as “Trader incomplete.” Capital deployment is downstream of Trader evidence.
+
+Safety unchanged: no capital deployment, exchange write, order, execution activation, DB change, retry, or strategy modification is performed by this governance update.
