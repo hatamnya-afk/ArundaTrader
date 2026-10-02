@@ -631,7 +631,10 @@ def run_provider_preflight(
         )
 
     return _pass()
-Status",
+
+
+__all__ = [
+    "PreflightStatus",
     "PreflightReason",
     "ProviderOrderPreflightRequest",
     "ProviderContractState",
