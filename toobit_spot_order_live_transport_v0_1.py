@@ -384,7 +384,15 @@ class ToobitSpotOrderLiveTransport:
 
             return SpotLiveOrderResult(
                 accepted=accepted,
-                status="PASS" if accepted else "REJECTED",
+                status=(
+                    "PASS"
+                    if accepted
+                    else (
+                        "INCONCLUSIVE"
+                        if response.status_code >= 500
+                        else "REJECTED"
+                    )
+                ),
                 http_status=response.status_code,
                 response_body=response_body,
                 error_code=None if accepted else (
