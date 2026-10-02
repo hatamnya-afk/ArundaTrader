@@ -2443,4 +2443,23 @@ Then:
 
 The repository must remain self-explanatory enough that a Builder can continue safely after context truncation without reconstructing project truth from conversational memory.
 
+
+
+## 14. 2026-10-02 — ZERO-TRADE-READY RUNTIME FIX
+
+A controlled runtime exposed a producer-scope defect:
+`TRADE_READY=0` caused `execution_results` to remain uninitialized before CP69 observation.
+
+Fix committed:
+- Commit: `9d18eece1f3990e8837fbdcac6bf9cd3944cda42`
+- Message: `fix: initialize execution observation state for zero trade-ready runs`
+- Scope: `arunda_pipeline.py` only.
+- `execution_results`, `attempted_count`, and `accepted_count` are now initialized before the `if trade_ready_assets` branch.
+- No execution, provider, Risk, Data Fabric, Decision Birth, capital, DB, or order-contract redesign.
+- The inner duplicate `execution_results = {}` initialization was removed.
+- The observed runtime itself remained fail-closed: no real order, no exchange write, DB_WRITES=0.
+- **Do not infer the next runtime result.** The fix must be statically verified before any new runtime is considered.
+
+This fix establishes that `TRADE_READY=0` is a valid runtime state and must still reach CP69 observation rather than crashing on local execution-state initialization.
+
 # END 2026-10-02 MASTER BUILDER HANDOFF
