@@ -1717,3 +1717,36 @@ No runtime, exchange/API write, order submission, execution enablement, database
 - Zero real account balance is therefore a valid intelligence state: Decision → Risk → Position Size → Trade Gate → Order Intent can remain non-zero; the real exchange remains responsible for accepting/rejecting the order against actual account constraints.
 - allocated_risk and concurrent-position state remain portfolio constraints; no synthetic balance or capital is created.
 - Execution remains OFF; no runtime or exchange write is authorized by this checkpoint.
+
+
+## 2026-10-02 — CAPITAL-INDEPENDENCE GOVERNANCE LOCK
+
+**STATUS: VERIFIED / CLOSED / LOCKED**
+
+Static forensic verification was performed specifically against the path:
+`Decision → Risk → Position Sizing → Trade Gate → Trade Ready → Order Intent`.
+
+### DETERMINATION
+- `REAL_CAPITAL` does not block Trader existence or Decision generation.
+- `ACCOUNT_BALANCE` does not block Trader existence or Decision generation.
+- `RECOMMENDED_CAPITAL` is an intelligence-side sizing input, not an account-balance gate.
+- No blocking capital dependency was found at Decision or Trade Gate.
+- Smart Risk preserves the established distinction between Dynamic Risk Intelligence recommended_capital and observed real-account capital.
+- Zero real capital is a valid observed state under the already VERIFIED Zero-Capital Contract.
+
+### ARCHITECTURAL INVARIANTS
+`TRADER BEHAVIOR ≠ ACCOUNT CAPITAL STATE`
+
+`CAPITAL INJECTION ≠ TRADER LOGIC CHANGE`
+
+`CAPITAL INCREASE ≠ PERMISSION TO THINK / DECIDE / ANALYZE`
+
+Management may independently inject, increase, reduce, or withdraw capital without changing Trader logic.
+
+### SCOPE
+This is a governance/source-of-truth correction only. No code, DB, runtime, execution, order, exchange/API write, retry, or synthetic capital/quantity was introduced.
+
+### LOCK
+**CP39 = CLOSED / VERIFIED. ZERO-CAPITAL CONTRACT = VERIFIED / CLOSED. CAPITAL-INDEPENDENCE GOVERNANCE = CLOSED / LOCKED.**
+
+Do not reopen or redesign these checkpoints because of future context loss. A future Builder must treat capital state as environmental/management state separate from Trader intelligence unless direct regression evidence proves otherwise.
