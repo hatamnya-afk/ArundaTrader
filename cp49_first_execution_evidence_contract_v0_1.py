@@ -16,6 +16,7 @@ from typing import Any, Mapping, Optional
 @dataclass(frozen=True)
 class AccountSignatureEvidence:
     evidence_id: str
+    account_id: str
     account_type: str
     authentication_status: str
     source: str
@@ -25,6 +26,7 @@ class AccountSignatureEvidence:
     def validate(self) -> bool:
         required = (
             self.evidence_id,
+            self.account_id,
             self.account_type,
             self.authentication_status,
             self.source,
@@ -106,22 +108,21 @@ def build_account_signature_evidence(
     if getattr(account, "status", None) != "PASS":
         return None
 
-    account_type = getattr(account, "account_type", None)
+    account_id = getattr(account, "account_id", None)
     api_account_type = api_data.get("account_type")
     source_id = getattr(account, "source_id", None)
 
-    if not isinstance(account_type, str) or not account_type.strip():
+    if not isinstance(account_id, str) or not account_id.strip():
         return None
     if not isinstance(api_account_type, str) or not api_account_type.strip():
-        return None
-    if account_type != api_account_type:
         return None
     if not isinstance(source_id, str) or not source_id.strip():
         return None
 
     evidence = AccountSignatureEvidence(
         evidence_id=evidence_id,
-        account_type=account_type,
+        account_id=account_id,
+        account_type=api_account_type,
         authentication_status="AUTHENTICATED",
         source="AUTHENTICATED_ACCOUNT_READ",
         source_id=source_id,
