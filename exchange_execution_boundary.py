@@ -139,13 +139,20 @@ def execute_order(
     # 6. AUTHORIZE EXISTING ADAPTER / TRANSPORT
     # ============================================================
     authorize = getattr(adapter, "authorize_first_execution", None)
-    if not callable(authorize) or authorize(safety_gate) is not True:
-        return blocked_execution_result(
-            asset=request.asset,
-            direction=request.direction,
-            error_code="CP49_EXECUTION_ACTIVATION_FAILED",
-            error_message="Existing adapter/transport could not be authorized by CP49 gate.",
-        )
+    already_active = (
+        getattr(adapter, "live_order_transport_enabled", False) is True
+        and getattr(adapter, "execution_enabled", False) is True
+        and getattr(adapter, "order_submission_enabled", False) is True
+        and getattr(adapter, "exchange_write_enabled", False) is True
+    )
+    if not already_active:
+        if not callable(authorize) or authorize(safety_gate) is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                error_code="CP49_EXECUTION_ACTIVATION_FAILED",
+                error_message="Existing adapter/transport could not be authorized by CP49 gate.",
+            )
 
     # ============================================================
     # 7. CAPABILITY GATE
