@@ -106,16 +106,22 @@ def translate_and_preflight_toobit(
             "Toobit adapter is required.",
         )
 
-    evidence = build_toobit_translation_evidence(
+    try:
+        evidence = build_toobit_translation_evidence(
         adapter=adapter,
         canonical_request=canonical_request,
     )
 
-    translation = translate_order_request(
-        canonical_request,
-        evidence,
-        venue="SPOT",
-    )
+        translation = translate_order_request(
+            canonical_request,
+            evidence,
+            venue="SPOT",
+        )
+    except Exception as exc:
+        return _block(
+            "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE",
+            str(exc),
+        )
 
     if translation.status != TranslationStatus.PASS:
         return _block(
@@ -125,17 +131,24 @@ def translate_and_preflight_toobit(
         )
 
     # CP46-D remains the sole owner of ProviderOrderRequest -> A6 adaptation.
-    provider_evidence: ProviderPreflightEvidence = (
+    try:
+        provider_evidence: ProviderPreflightEvidence = (
         build_toobit_provider_preflight_evidence(
             adapter=adapter,
             asset=canonical_request.asset,
         )
     )
 
-    handoff = handoff_to_provider_preflight(
-        translation,
-        provider_evidence,
-    )
+        handoff = handoff_to_provider_preflight(
+            translation,
+            provider_evidence,
+        )
+    except Exception as exc:
+        return _block(
+            "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE",
+            str(exc),
+            translation=translation,
+        )
 
     if handoff.status != "PASS":
         return _block(
