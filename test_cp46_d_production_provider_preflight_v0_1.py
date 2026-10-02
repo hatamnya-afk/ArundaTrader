@@ -96,3 +96,31 @@ def test_unavailable_authoritative_state_fails_closed():
     )
     assert result.status == "BLOCK"
     assert result.reason == "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE"
+
+
+def test_cp46_d_reaches_authoritative_toobit_evidence_for_spot_limit():
+    request = _canonical()
+    request = CanonicalOrderRequest(
+        asset=request.asset,
+        direction=request.direction,
+        order_type="LIMIT",
+        quantity=1,
+        quantity_unit=request.quantity_unit,
+        quantity_source=request.quantity_source,
+        entry_price=100,
+        reference_price=None,
+        intent_id=request.intent_id,
+        snapshot_id=request.snapshot_id,
+        timestamp=request.timestamp,
+    )
+
+    result = translate_and_preflight_toobit(
+        canonical_request=request,
+        adapter=_Adapter(),
+    )
+
+    assert result.status == "PASS"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.handoff is not None
+    assert result.handoff.preflight is not None
