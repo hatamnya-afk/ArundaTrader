@@ -2090,3 +2090,98 @@ Future Builders must read this section before interpreting first-execution or ca
 ### SAFETY
 
 No capital was injected by this governance update. No exchange write, order, execution activation, DB change, runtime, retry, or strategy modification was performed.
+
+
+## 2026-10-02 — ZERO-CAPITAL REAL ORDER / TOOBIT REJECTION OPERATING MODEL
+
+### MANAGEMENT DIRECTIVE — PERMANENT CONTINUITY RULE
+
+This section records the exact intended operating model so it is not reinterpreted in future Builder/Manager sessions.
+
+**The Trader must actually operate on the real market and issue its real order requests even when real account capital is zero.**
+
+Zero capital is **not** a Trader gate, not a research/laboratory mode, not a strategy switch, and not a reason to suppress an otherwise valid order request.
+
+### AUTHORITATIVE OPERATING PATH
+
+```text
+REAL MARKET
+    ↓
+TRADER INTELLIGENCE
+    ↓
+DECISION
+    ↓
+RISK / POSITION SIZING
+    ↓
+TRADE GATE
+    ↓
+TRADE READY
+    ↓
+ORDER INTENT
+    ↓
+CANONICAL ORDER REQUEST
+    ↓
+REAL TOOBIT ORDER REQUEST
+    ↓
+TOOBIT PROVIDER RESPONSE
+    ├── CAPITAL = 0  →  PROVIDER REJECTION (e.g. INSUFFICIENT_BALANCE)
+    └── CAPITAL AVAILABLE → PROVIDER MAY ACCEPT / EXECUTE
+    ↓
+OBSERVE + RECORD + ANALYZE OUTCOME
+```
+
+### NON-NEGOTIABLE RULES
+
+- The Trader itself determines symbol/asset, direction, quantity, and timing through its established intelligence/contracts. Management does not manually specify the first trade.
+- The absence of capital must not cause the Trader to suppress Decision, Risk, Position Sizing, Trade Gate, Trade Ready, Order Intent, or Canonical Order Request.
+- Once the real execution path is technically opened and authorized, the actual request must reach Toobit. The Trader must not manufacture an internal `INSUFFICIENT_BALANCE` result.
+- With zero account capital, the expected insufficient-funds outcome must originate from the real Toobit/provider boundary, be preserved as provider execution evidence, and be recorded for subsequent performance analysis.
+- Provider rejection is an **execution outcome**, not a Trader-intelligence failure.
+- The resulting rejected-order observations are valid evidence for evaluating the Trader's behavior and realized/expected performance characteristics before capital deployment.
+- When Management + assistant determine from accumulated evidence that performance is satisfactory, capital may be injected into the Toobit account **incrementally / stepwise**.
+- Capital injection does not modify Trader logic, strategy, decision rules, sizing architecture, or intelligence. The same Trader continues operating; only the external Toobit account/environment state has changed.
+- After capital is available, the same real order path continues. Toobit is no longer expected to reject those otherwise valid requests solely for insufficient balance, and accepted requests may become real trades subject to the provider's actual constraints.
+- No separate "laboratory", "research trade", or capital-gated Trader architecture is to be introduced for this purpose.
+
+### CURRENT FRONTIER
+
+**Complete the real execution bridge from Canonical Order Request → Execution Boundary → Toobit Adapter → real provider response → canonical observation/evidence, while preserving capital-independence.**
+
+The immediate technical objective is therefore to remove the current artificial fail-closed stop that prevents the already-built Trader from reaching the real Toobit submission path, under the separately governed execution-safety controls.
+
+### CAPITAL DEPLOYMENT SEQUENCE
+
+```text
+TRADER OPERATES
+    ↓
+REAL ORDER REQUESTS
+    ↓
+TOOBIT REJECTS FOR ZERO BALANCE
+    ↓
+RECORD + ANALYZE TRADER PERFORMANCE
+    ↓
+MANAGEMENT + ASSISTANT CAPITAL DECISION
+    ↓
+INCREMENTAL CAPITAL INTO TOOBIT
+    ↓
+SAME TRADER / SAME LOGIC / SAME ORDER FLOW
+    ↓
+TOOBIT CAN ACCEPT / EXECUTE
+```
+
+### HARD PROHIBITIONS
+
+- Do not make capital authorization a prerequisite for Trader intelligence.
+- Do not manually invent the first order's symbol, direction, quantity, or decision.
+- Do not convert provider rejection into a local synthetic rejection.
+- Do not create a second Trader mode for zero capital.
+- Do not change Trader logic when capital is injected.
+- Do not reopen CP39 or the verified Zero-Capital Contract.
+- Do not redesign Risk, Data Fabric, Decision Birth, or closed CP46/47/48/49 contracts to implement this model.
+- Do not perform DB repair/change.
+- Do not enable execution implicitly merely because this roadmap entry exists; the real execution boundary remains a distinct technical/control authorization step.
+- Do not claim a real Toobit rejection or real order outcome until an actual authorized runtime provides that evidence.
+
+### BUILDER CONTINUITY RULE
+
+If future context is missing, read this section before interpreting zero capital, capital authorization, or first-execution behavior. **Never translate zero capital into "Trader must wait." The intended system is: Trader operates, Toobit receives the real request, Toobit determines the provider outcome, and those outcomes are recorded and analyzed before incremental capital deployment.**
