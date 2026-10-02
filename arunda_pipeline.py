@@ -180,7 +180,10 @@ from cp69_runtime_observation import (
     build_observation,
 )
 
-from exchange_execution_boundary import execute_order
+from cp49_live_execution_bridge_v0_1 import (
+    execute_canonical_request,
+    management_execution_authorized,
+)
 from cp46_d_production_provider_preflight_v0_1 import (
     translate_and_preflight_toobit,
 )
@@ -4282,8 +4285,57 @@ def main() -> int:
                     )
                 )
 
-            execution_boundary_status = verify_execution_boundary_integration(
-                canonical_order_requests,
+            execution_results = {}
+            management_authorized = management_execution_authorized()
+
+            for asset, canonical_record in canonical_order_requests.items():
+                request = canonical_record["request"]
+                result = execute_canonical_request(
+                    adapter=toobit_adapter,
+                    request=request,
+                    provider_preflight_result=provider_preflight_results.get(asset),
+                    management_authorized=management_authorized,
+                )
+                execution_results[asset] = {
+                    "accepted": result.accepted,
+                    "exchange_order_id": result.exchange_order_id,
+                    "status": result.status,
+                    "asset": result.asset,
+                    "direction": result.direction,
+                    "executed_quantity": result.executed_quantity,
+                    "executed_price": result.executed_price,
+                    "timestamp": result.timestamp,
+                    "adapter": result.adapter,
+                    "error_code": result.error_code,
+                    "error_message": result.error_message,
+                    "submitted_to_matching_engine": (
+                        result.error_code not in {
+                            "CP49_READINESS_BLOCKED",
+                            "CP49_SAFETY_GATE_REQUIRED",
+                            "CP49_SAFETY_GATE_BLOCKED",
+                            "CP49_EXECUTION_ACTIVATION_FAILED",
+                            "CP46_E_REQUIRED",
+                            "CP46_E_BLOCKED",
+                            "MISSING_ADAPTER",
+                            "ORDER_SUBMISSION_DISABLED",
+                        }
+                    ),
+                }
+
+            attempted_count = sum(
+                1
+                for row in execution_results.values()
+                if row.get("submitted_to_matching_engine") is True
+            )
+            accepted_count = sum(
+                1
+                for row in execution_results.values()
+                if row.get("accepted") is True
+            )
+            execution_boundary_status = (
+                "LIVE_PROVIDER_ATTEMPTED"
+                if attempted_count
+                else "VERIFIED_BLOCKED"
             )
 
         # ------------------------------------------------------------------
@@ -4311,15 +4363,16 @@ def main() -> int:
                 if committed_decision_ids
                 else None
             ),
+            execution_results=execution_results,
         )
         cp69_stream_path = append_observation(cp69_observation)
         print(f"CP69_OBSERVATION_WRITTEN=1")
         print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
 
-        # 14. EXECUTION SAFETY
+        # 14. EXECUTION SAFETY / REAL PROVIDER OUTCOME
         # ------------------------------------------------------------------
-        # Canonical requests are verified against the existing fail-closed
-        # execution boundary. No execution is enabled by this bridge.
+        # Module-level safety defaults remain fail-closed. Live submission,
+        # when explicitly authorized, occurs only through the CP49 bridge.
         assert_execution_disabled()
 
         print("=" * 90)
@@ -4335,11 +4388,11 @@ def main() -> int:
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
         print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
-        print("REAL_ORDER=FALSE")
+        print(f"REAL_ORDER={attempted_count > 0}")
         print(f"CANONICAL_ORDER_REQUESTS_CREATED={len(canonical_order_requests)}")
         print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
-        print("REAL_TRADE=FALSE")
-        print("EXECUTION=OFF")
+        print(f"REAL_TRADE={accepted_count > 0}")
+        print(f"EXECUTION={'ON' if attempted_count > 0 else 'OFF'}")
         print(f"CP49_BIRTH_DB_WRITES={len(committed_decision_ids)}")
         print("OPERATIONAL_DB_WRITES=0")
         print("EXECUTION_DB_WRITES=0")
