@@ -4248,10 +4248,37 @@ def main() -> int:
             toobit_adapter = ToobitTradingAdapter()
             for asset, canonical_record in canonical_order_requests.items():
                 request = canonical_record["request"]
+
+                # Smart Risk already owns candidate exposure. For Toobit Spot
+                # MARKET BUY, that authoritative exposure is the provider's
+                # required quote-asset order amount. This boundary transports
+                # the exact upstream value; it never derives quote quantity
+                # from price and never mutates canonical BASE_ASSET quantity.
+                risk_row = risk_snapshot.get(asset)
+                if not isinstance(risk_row, dict):
+                    fail(
+                        f"CP46-D authoritative Risk row missing: {asset}"
+                    )
+
+                quote_quantity = risk_row.get("exposure")
+                if quote_quantity is None:
+                    fail(
+                        f"CP46-D authoritative Risk exposure missing: {asset}"
+                    )
+                if not is_finite_number(quote_quantity):
+                    fail(
+                        f"CP46-D authoritative Risk exposure invalid: {asset}"
+                    )
+                if float(quote_quantity) <= 0:
+                    fail(
+                        f"CP46-D authoritative Risk exposure must be > 0: {asset}"
+                    )
+
                 provider_preflight_results[asset] = (
                     translate_and_preflight_toobit(
                         canonical_request=request,
                         adapter=toobit_adapter,
+                        quote_quantity=quote_quantity,
                     )
                 )
 
