@@ -82,7 +82,6 @@ def build_pass_evidence() -> ProviderPreflightEvidence:
         ),
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=True,
             leverage_state_known=True,
             position_conflict=False,
@@ -255,16 +254,13 @@ def test_preflight_block_is_propagated():
 
     blocked_evidence = ProviderPreflightEvidence(
         contract=evidence.contract,
-        account=ProviderAccountState(
-            state_known=True,
-            balance_sufficient=False,
-            margin_state_known=True,
-            leverage_state_known=True,
-            position_conflict=False,
-        ),
+        account=evidence.account,
         orders=evidence.orders,
         timestamp=evidence.timestamp,
-        portfolio=evidence.portfolio,
+        portfolio=ProviderPortfolioState(
+            state_known=True,
+            exposure_allowed=False,
+        ),
     )
 
     result = handoff_to_provider_preflight(
@@ -277,7 +273,7 @@ def test_preflight_block_is_propagated():
     assert result.preflight is not None
     assert (
         result.preflight.reason
-        == PreflightReason.BLOCK_BALANCE_INSUFFICIENT
+        == PreflightReason.BLOCK_PORTFOLIO_EXPOSURE
     )
 
 
