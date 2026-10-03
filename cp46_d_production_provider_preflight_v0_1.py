@@ -16,6 +16,13 @@ from cp46_d_provider_execution_handoff_v0_1 import (
     ProviderExecutionHandoffResult,
     handoff_to_provider_preflight,
 )
+
+from execution_venue_routing_policy_v0_1 import (
+    RoutingReason,
+    Venue,
+    VenueRoutingRequest,
+    route_venue,
+)
 from provider_order_translation_v0_1 import (
     ProviderOrderRequest,
     ProviderTranslationEvidence,
@@ -108,12 +115,46 @@ def translate_and_preflight_toobit(
             "Toobit adapter is required.",
         )
 
+    # CP46-A3 is the authoritative venue-routing boundary.
+    # SHORT is Futures-only; never reinterpret it as Spot SELL.
+    # The current Toobit production adapter exposes Spot preflight only,
+    # therefore unavailable Futures capability remains an explicit route
+    # block rather than a false Spot translation.
+    direction = str(
+        getattr(canonical_request, "direction", "")
+    ).strip().upper()
+    futures_capable = (
+        callable(getattr(adapter, "futures_trading_constraints", None))
+        and callable(getattr(adapter, "futures_account_state", None))
+    )
+    routing = route_venue(
+        VenueRoutingRequest(
+            direction=direction,
+            spot_ready=True,
+            futures_ready=futures_capable,
+        )
+    )
+
+    if routing.venue is not Venue.SPOT:
+        return _block(
+            (
+                "FUTURES_ROUTE_REQUIRED"
+                if routing.reason is RoutingReason.SHORT_FUTURES
+                else routing.reason.value
+            ),
+            (
+                "Canonical SHORT is routed to Futures by CP46-A3; "
+                "Spot translation is forbidden. "
+                f"routing_reason={routing.reason.value}"
+            ),
+        )
+
     try:
         evidence = build_toobit_translation_evidence(
-        adapter=adapter,
-        canonical_request=canonical_request,
-        quote_quantity=quote_quantity,
-    )
+            adapter=adapter,
+            canonical_request=canonical_request,
+            quote_quantity=quote_quantity,
+        )
 
         translation = translate_order_request(
             canonical_request,
