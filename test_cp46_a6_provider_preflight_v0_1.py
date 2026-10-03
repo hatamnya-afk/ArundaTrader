@@ -233,7 +233,10 @@ def test_unknown_margin_state_blocks():
     )
 
     result = run_provider_preflight(
-        valid_request(),
+        valid_request(
+            venue="FUTURES",
+            quantity_unit="CONTRACTS",
+        ),
         evidence,
     )
 
@@ -257,7 +260,10 @@ def test_unknown_leverage_state_blocks():
     )
 
     result = run_provider_preflight(
-        valid_request(),
+        valid_request(
+            venue="FUTURES",
+            quantity_unit="CONTRACTS",
+        ),
         evidence,
     )
 
