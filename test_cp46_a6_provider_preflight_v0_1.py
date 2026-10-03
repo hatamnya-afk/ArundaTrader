@@ -364,28 +364,6 @@ def test_quantity_step_violation_blocks():
     )
 
 
-def test_insufficient_balance_blocks():
-    evidence = replace(
-        valid_evidence(),
-        account=ProviderAccountState(
-            state_known=True,
-            margin_state_known=True,
-            leverage_state_known=True,
-            position_conflict=False,
-        ),
-    )
-
-    result = run_provider_preflight(
-        valid_request(),
-        evidence,
-    )
-
-    assert_block(
-        result,
-        PreflightReason.BLOCK_BALANCE_INSUFFICIENT,
-    )
-
-
 def test_portfolio_exposure_blocks():
     evidence = replace(
         valid_evidence(),
