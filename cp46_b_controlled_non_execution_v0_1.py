@@ -52,7 +52,6 @@ def build_pass_evidence() -> ProviderPreflightEvidence:
         ),
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=True,
             leverage_state_known=True,
             position_conflict=False,
