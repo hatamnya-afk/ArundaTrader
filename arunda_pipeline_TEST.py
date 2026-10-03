@@ -2713,9 +2713,9 @@ def print_final_report(
         if get_opportunity_status(row) == ELIGIBLE_STATUS
     )
 
-    print()
-    print("=" * 90)
-    print(
+        print()
+        print("=" * 90)
+        print(
         "ARUNDA TRADER Ã¢â‚¬â€ "
         "PRODUCTION PIPELINE v1.0"
     )
@@ -3422,12 +3422,12 @@ def main() -> int:
 # ============================================================================
 
 if __name__ == "__main__":
-try:
+    try:
     raise SystemExit(
         main()
     )
 
-except Exception as exc:
+    except Exception as exc:
     print()
     print("=" * 90)
     print(
