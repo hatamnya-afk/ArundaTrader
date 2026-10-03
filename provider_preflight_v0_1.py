@@ -116,8 +116,15 @@ class ProviderContractState:
 
     quantity_step: Optional[Any]
 
-    min_notional: Optional[Any]
-    max_notional: Optional[Any]
+    # Spot MARKET BUY quantity is denominated in quote asset.
+    # Toobit exposes its authoritative min/max through TRADE_AMOUNT,
+    # not LOT_SIZE. These fields are intentionally separate from the
+    # base-asset LOT_SIZE contract.
+    quote_min_amount: Optional[Any] = None
+    quote_max_amount: Optional[Any] = None
+
+    min_notional: Optional[Any] = None
+    max_notional: Optional[Any] = None
 
 
 @dataclass(frozen=True)
@@ -408,49 +415,92 @@ def run_provider_preflight(
 
     # ---------------------------------------------------------
     # Quantity constraints.
+    #
+    # Provider quantity semantics are explicit:
+    #   BASE_ASSET  -> LOT_SIZE / MARKET_LOT_SIZE
+    #   QUOTE_ASSET -> TRADE_AMOUNT
+    #
+    # Toobit Spot MARKET BUY sends quantity in the quote asset.
+    # Applying the base-asset LOT_SIZE step/max to that quote amount
+    # is a unit mismatch and can falsely block valid orders.
+    # No normalization, rounding, or conversion occurs here.
     # ---------------------------------------------------------
 
-    minimum = _positive_decimal(contract.min_quantity)
-
-    if minimum is None:
-        return _block(
-            PreflightReason.BLOCK_MIN_QUANTITY,
-            "Provider minimum quantity is unknown or invalid.",
+    if request.quantity_unit == "QUOTE_ASSET":
+        quote_minimum = _positive_decimal(
+            contract.quote_min_amount
         )
 
-    if quantity < minimum:
-        return _block(
-            PreflightReason.BLOCK_MIN_QUANTITY,
-            "Quantity is below provider minimum.",
+        if quote_minimum is None:
+            return _block(
+                PreflightReason.BLOCK_MIN_QUANTITY,
+                "Provider quote-asset minimum amount is unknown or invalid.",
+            )
+
+        if quantity < quote_minimum:
+            return _block(
+                PreflightReason.BLOCK_MIN_QUANTITY,
+                "Quote-asset quantity is below provider minimum amount.",
+            )
+
+        quote_maximum = _positive_decimal(
+            contract.quote_max_amount
         )
 
-    maximum = _positive_decimal(contract.max_quantity)
+        if quote_maximum is None:
+            return _block(
+                PreflightReason.BLOCK_MAX_QUANTITY,
+                "Provider quote-asset maximum amount is unknown or invalid.",
+            )
 
-    if maximum is None:
-        return _block(
-            PreflightReason.BLOCK_MAX_QUANTITY,
-            "Provider maximum quantity is unknown or invalid.",
-        )
+        if quantity > quote_maximum:
+            return _block(
+                PreflightReason.BLOCK_MAX_QUANTITY,
+                "Quote-asset quantity exceeds provider maximum amount.",
+            )
 
-    if quantity > maximum:
-        return _block(
-            PreflightReason.BLOCK_MAX_QUANTITY,
-            "Quantity exceeds provider maximum.",
-        )
+    else:
+        minimum = _positive_decimal(contract.min_quantity)
 
-    step = _positive_decimal(contract.quantity_step)
+        if minimum is None:
+            return _block(
+                PreflightReason.BLOCK_MIN_QUANTITY,
+                "Provider minimum quantity is unknown or invalid.",
+            )
 
-    if step is None:
-        return _block(
-            PreflightReason.BLOCK_PRECISION_INVALID,
-            "Provider quantity step is unknown or invalid.",
-        )
+        if quantity < minimum:
+            return _block(
+                PreflightReason.BLOCK_MIN_QUANTITY,
+                "Quantity is below provider minimum.",
+            )
 
-    if not _quantity_step_valid(quantity, step):
-        return _block(
-            PreflightReason.BLOCK_PRECISION_INVALID,
-            "Quantity does not satisfy provider quantity step.",
-        )
+        maximum = _positive_decimal(contract.max_quantity)
+
+        if maximum is None:
+            return _block(
+                PreflightReason.BLOCK_MAX_QUANTITY,
+                "Provider maximum quantity is unknown or invalid.",
+            )
+
+        if quantity > maximum:
+            return _block(
+                PreflightReason.BLOCK_MAX_QUANTITY,
+                "Quantity exceeds provider maximum.",
+            )
+
+        step = _positive_decimal(contract.quantity_step)
+
+        if step is None:
+            return _block(
+                PreflightReason.BLOCK_PRECISION_INVALID,
+                "Provider quantity step is unknown or invalid.",
+            )
+
+        if not _quantity_step_valid(quantity, step):
+            return _block(
+                PreflightReason.BLOCK_PRECISION_INVALID,
+                "Quantity does not satisfy provider quantity step.",
+            )
 
     # ---------------------------------------------------------
     # Notional.
