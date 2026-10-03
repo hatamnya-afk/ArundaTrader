@@ -735,62 +735,100 @@ class ToobitTradingAdapter:
             )
 
         asset = asset.upper().strip()
-        symbol = f"{asset}USDT"
 
         try:
 
             symbol_map = self._load_symbol_map()
 
-            row = symbol_map.get(symbol)
+            # Provider symbol identity is authoritative exchange metadata.
+            # Do not reconstruct <asset>USDT and treat that guess as the
+            # provider symbol. Resolve the active Spot row by provider-owned
+            # baseAsset/quoteAsset fields instead.
+            matching_rows = [
+                (symbol, row)
+                for symbol, row in symbol_map.items()
+                if isinstance(row, dict)
+                and str(row.get("baseAsset", "")).strip().upper() == asset
+                and str(row.get("quoteAsset", "")).strip().upper() == "USDT"
+            ]
 
-            if row is None:
+            if not matching_rows:
 
                 return AdapterResult(
                     status="NOT_FOUND",
                     allowed=False,
                     operation="symbol_check",
                     reason=(
-                        f"Toobit spot symbol {symbol} "
-                        "was not found in exchangeInfo."
+                        f"Toobit spot symbol for base asset {asset} "
+                        "with USDT quote was not found in exchangeInfo."
                     ),
                     data={
                         "asset": asset,
-                        "symbol": symbol,
+                        "quote_asset": "USDT",
+                        "provider_symbol_resolution": "EXCHANGE_INFO_METADATA",
                     },
                 )
 
-            status = str(
-                row.get("status", "")
-            ).upper()
+            trading_rows = [
+                (symbol, row)
+                for symbol, row in matching_rows
+                if str(row.get("status", "")).upper() == "TRADING"
+            ]
 
-            if status != "TRADING":
+            if not trading_rows:
+
+                symbol, row = matching_rows[0]
+                status = str(row.get("status", "")).upper()
 
                 return AdapterResult(
                     status="NOT_TRADING",
                     allowed=False,
                     operation="symbol_check",
                     reason=(
-                        f"Toobit symbol {symbol} exists "
+                        f"Toobit Spot symbol {symbol} exists "
                         "but is not TRADING."
                     ),
                     data={
                         "asset": asset,
                         "symbol": symbol,
                         "status": status,
+                        "base_asset": row.get("baseAsset"),
+                        "quote_asset": row.get("quoteAsset"),
                     },
                 )
+
+            # Multiple active USDT Spot rows for one base asset are
+            # ambiguous provider state. Do not choose one silently.
+            if len(trading_rows) != 1:
+                return AdapterResult(
+                    status="AMBIGUOUS",
+                    allowed=False,
+                    operation="symbol_check",
+                    reason=(
+                        f"Multiple active Toobit Spot symbols for "
+                        f"{asset}/USDT were returned by exchangeInfo."
+                    ),
+                    data={
+                        "asset": asset,
+                        "quote_asset": "USDT",
+                        "symbols": [symbol for symbol, _ in trading_rows],
+                    },
+                )
+
+            symbol, row = trading_rows[0]
 
             return AdapterResult(
                 status="PASS",
                 allowed=True,
                 operation="symbol_check",
                 reason=(
-                    "Verified active Toobit spot symbol."
+                    "Verified active Toobit Spot symbol from "
+                    "authoritative exchangeInfo metadata."
                 ),
                 data={
                     "asset": asset,
                     "symbol": symbol,
-                    "status": status,
+                    "status": str(row.get("status", "")).upper(),
                     "base_asset": row.get("baseAsset"),
                     "quote_asset": row.get("quoteAsset"),
                 },
