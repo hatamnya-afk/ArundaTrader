@@ -80,6 +80,13 @@ class ProviderTranslationEvidence:
     # quote quantity from an estimated/reference market price.
     quote_quantity: Optional[Any] = None
 
+    # Authoritative provider-time captured at the provider boundary.
+    #
+    # Canonical timestamp is Decision-Birth time. Provider timestamp is
+    # transport/preflight time and must not reuse an older decision
+    # timestamp when the provider enforces a narrow drift policy.
+    provider_request_timestamp: Optional[Any] = None
+
 
 @dataclass(frozen=True)
 class ProviderOrderRequest:
@@ -257,6 +264,10 @@ def translate_order_request(
                     ),
                 )
 
+            provider_timestamp = evidence.provider_request_timestamp
+            if provider_timestamp is None:
+                provider_timestamp = canonical.timestamp
+
             request = ProviderOrderRequest(
                 venue="SPOT",
                 symbol=provider_symbol,
@@ -268,7 +279,7 @@ def translate_order_request(
                 entry_price=None,
                 intent_id=canonical.intent_id,
                 snapshot_id=canonical.snapshot_id,
-                timestamp=canonical.timestamp,
+                timestamp=str(provider_timestamp).strip(),
                 decision_id=canonical.decision_id,
             )
 
@@ -291,6 +302,10 @@ def translate_order_request(
                 "Spot LIMIT requires canonical entry price.",
             )
 
+        provider_timestamp = evidence.provider_request_timestamp
+        if provider_timestamp is None:
+            provider_timestamp = canonical.timestamp
+
         request = ProviderOrderRequest(
             venue="SPOT",
             symbol=provider_symbol,
@@ -302,7 +317,7 @@ def translate_order_request(
             entry_price=canonical.entry_price,
             intent_id=canonical.intent_id,
             snapshot_id=canonical.snapshot_id,
-            timestamp=canonical.timestamp,
+            timestamp=str(provider_timestamp).strip(),
         )
 
         return ProviderTranslationResult(
