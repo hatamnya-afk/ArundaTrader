@@ -4323,12 +4323,33 @@ def main() -> int:
 
             for asset, canonical_record in canonical_order_requests.items():
                 request = canonical_record["request"]
-                result = execute_canonical_request(
-                    adapter=toobit_adapter,
-                    request=request,
-                    provider_preflight_result=provider_preflight_results.get(asset),
-                    management_authorized=management_authorized,
-                )
+                provider_preflight_result = provider_preflight_results.get(asset)
+
+                # Provider eligibility is an explicit per-order boundary.
+                # A CP46-D BLOCK must remain evidence for this order, but it
+                # must never trigger account/authentication work or prevent
+                # another eligible order from reaching CP49.
+                if getattr(provider_preflight_result, "status", None) != "PASS":
+                    from exchange_execution_contract import blocked_execution_result
+
+                    result = blocked_execution_result(
+                        asset=request.asset,
+                        direction=request.direction,
+                        error_code="CP46_D_PROVIDER_BLOCKED",
+                        error_message=(
+                            f"reason={getattr(provider_preflight_result, 'reason', None)};"
+                            f"message={getattr(provider_preflight_result, 'message', None)}"
+                        ),
+                        adapter="TOOBIT",
+                    )
+                else:
+                    result = execute_canonical_request(
+                        adapter=toobit_adapter,
+                        request=request,
+                        provider_preflight_result=provider_preflight_result,
+                        management_authorized=management_authorized,
+                    )
+
                 execution_results[asset] = {
                     "accepted": result.accepted,
                     "exchange_order_id": result.exchange_order_id,
