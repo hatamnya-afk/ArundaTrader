@@ -163,11 +163,39 @@ def execute_canonical_request(
     if readiness.state.value != "READY_FOR_AUTHORIZATION":
         from exchange_execution_contract import blocked_execution_result
 
+        readiness_message = ";".join(readiness.blockers)
+        provider_preflight_status = getattr(
+            provider_preflight_result, "status", None
+        )
+        provider_preflight_reason = getattr(
+            provider_preflight_result, "reason", None
+        )
+        provider_preflight_message = getattr(
+            provider_preflight_result, "message", None
+        )
+        provider_handoff = getattr(provider_preflight_result, "handoff", None)
+        provider_preflight = getattr(provider_handoff, "preflight", None)
+        provider_reason = getattr(provider_preflight, "reason", None)
+        provider_message = getattr(provider_preflight, "message", None)
+
+        # Preserve the authoritative CP46-D provider constraint cause at the
+        # execution/observation boundary.  CP49 readiness deliberately keeps
+        # its aggregate blocker semantics; this is additive evidence only.
+        if provider_preflight_status != "PASS":
+            provider_evidence = (
+                f"CP46_D_STATUS={provider_preflight_status};"
+                f"CP46_D_REASON={provider_preflight_reason};"
+                f"CP46_D_MESSAGE={provider_preflight_message};"
+                f"CP46_D_HANDOFF_REASON={provider_reason};"
+                f"CP46_D_HANDOFF_MESSAGE={provider_message}"
+            )
+            readiness_message = f"{readiness_message};{provider_evidence}"
+
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
             error_code="CP49_READINESS_BLOCKED",
-            error_message=";".join(readiness.blockers),
+            error_message=readiness_message,
             adapter="TOOBIT",
         )
 
