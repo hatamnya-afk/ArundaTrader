@@ -75,3 +75,32 @@ def propagate_canonical_decision_id(
 ) -> str:
     bound = require_canonical_decision_birth(birth_event)
     return bound["decision_id"]
+
+
+
+def read_authoritative_birth(
+    provider: Any,
+    *,
+    asset: str,
+    snapshot_id: str,
+    decision_timestamp_ms: int,
+) -> dict[str, Any]:
+    """Read and validate an authoritative Decision Birth from a provider."""
+    if provider is None:
+        raise RuntimeError("CANONICAL_DECISION_BIRTH_PROVIDER_MISSING")
+    getter = getattr(provider, "get_decision_birth", None)
+    if not callable(getter):
+        raise RuntimeError("CANONICAL_DECISION_BIRTH_PROVIDER_MISSING")
+    event = getter(
+        asset=asset,
+        snapshot_id=snapshot_id,
+        decision_timestamp_ms=decision_timestamp_ms,
+    )
+    if not isinstance(event, Mapping) or not event.get("decision_id"):
+        raise RuntimeError(
+            "CANONICAL_DECISION_ID_MISSING_FROM_AUTHORITATIVE_SOURCE"
+        )
+    try:
+        return require_canonical_decision_birth(event)
+    except ValueError as exc:
+        raise RuntimeError(str(exc)) from exc
