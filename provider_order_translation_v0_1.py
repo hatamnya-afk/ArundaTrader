@@ -380,6 +380,10 @@ def translate_order_request(
         side = "SELL"
         position_side = "SHORT"
 
+    provider_timestamp = evidence.provider_request_timestamp
+    if provider_timestamp is None:
+        provider_timestamp = canonical.timestamp
+
     request = ProviderOrderRequest(
         venue="FUTURES",
         symbol=provider_symbol,
@@ -391,7 +395,7 @@ def translate_order_request(
         entry_price=canonical.entry_price,
         intent_id=canonical.intent_id,
         snapshot_id=canonical.snapshot_id,
-        timestamp=canonical.timestamp,
+        timestamp=str(provider_timestamp).strip(),
         decision_id=canonical.decision_id,
     )
 
