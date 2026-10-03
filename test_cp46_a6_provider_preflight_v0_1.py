@@ -55,7 +55,6 @@ def valid_evidence():
         ),
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=True,
             leverage_state_known=True,
             position_conflict=False,
@@ -203,7 +202,6 @@ def test_position_conflict_blocks():
         evidence,
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=True,
             leverage_state_known=True,
             position_conflict=True,
@@ -228,7 +226,6 @@ def test_unknown_margin_state_blocks():
         evidence,
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=False,
             leverage_state_known=True,
             position_conflict=False,
@@ -253,7 +250,6 @@ def test_unknown_leverage_state_blocks():
         evidence,
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=True,
             margin_state_known=True,
             leverage_state_known=False,
             position_conflict=False,
@@ -373,7 +369,6 @@ def test_insufficient_balance_blocks():
         valid_evidence(),
         account=ProviderAccountState(
             state_known=True,
-            balance_sufficient=False,
             margin_state_known=True,
             leverage_state_known=True,
             position_conflict=False,
