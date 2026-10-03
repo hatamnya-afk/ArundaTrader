@@ -3422,12 +3422,12 @@ def main() -> int:
 # ============================================================================
 
 if __name__ == "__main__":
-        try:
+    try:
         raise SystemExit(
             main()
         )
 
-        except Exception as exc:
+    except Exception as exc:
         print()
         print("=" * 90)
         print(
