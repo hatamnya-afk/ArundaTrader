@@ -3422,44 +3422,44 @@ def main() -> int:
 # ============================================================================
 
 if __name__ == "__main__":
-    try:
-    raise SystemExit(
-        main()
-    )
+        try:
+        raise SystemExit(
+            main()
+        )
 
-    except Exception as exc:
-    print()
-    print("=" * 90)
-    print(
-        "ARUNDA TRADER Ã¢â‚¬â€ "
-        "PRODUCTION PIPELINE FAILURE"
-    )
-    print("=" * 90)
+        except Exception as exc:
+        print()
+        print("=" * 90)
+        print(
+            "ARUNDA TRADER Ã¢â‚¬â€ "
+            "PRODUCTION PIPELINE FAILURE"
+        )
+        print("=" * 90)
 
-    print(
-        f"ERROR : {exc}"
-    )
+        print(
+            f"ERROR : {exc}"
+        )
 
-    print()
-    print(
-        "EXECUTION          : DISABLED"
-    )
-    print(
-        "ORDER SUBMISSION   : NONE"
-    )
-    print(
-        "EXCHANGE WRITE     : NONE"
-    )
-    print(
-        "DB_WRITES          : 0"
-    )
-    print(
-        "FAIL-CLOSED        : YES"
-    )
-    print(
-        "EXECUTION BOUNDARY : FAIL-CLOSED"
-    )
+        print()
+        print(
+            "EXECUTION          : DISABLED"
+        )
+        print(
+            "ORDER SUBMISSION   : NONE"
+        )
+        print(
+            "EXCHANGE WRITE     : NONE"
+        )
+        print(
+            "DB_WRITES          : 0"
+        )
+        print(
+            "FAIL-CLOSED        : YES"
+        )
+        print(
+            "EXECUTION BOUNDARY : FAIL-CLOSED"
+        )
 
-    print("=" * 90)
+        print("=" * 90)
 
-    raise
+        raise
