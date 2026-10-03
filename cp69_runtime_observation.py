@@ -65,7 +65,12 @@ def build_observation(
     if db_writes == 0 and db_write_boundary is not None:
         raise ValueError("db_write_boundary requires non-zero DB writes")
 
-    state = _to_json_safe(
+    # CP69 records the runtime witness, not the full in-memory production
+    # payload. Keep the canonical snapshot identity derived from the complete
+    # runtime state, then compact only the persisted observation copy. This
+    # prevents large market-history/candle payloads from being duplicated into
+    # the append-only JSONL stream while preserving runtime identity.
+    full_state = _to_json_safe(
         {
             "universe_assets": universe_assets,
             "market_data_results": market_data_results,
@@ -85,10 +90,10 @@ def build_observation(
             "execution_results": execution_results,
         }
     )
-    _assert_json_safe(state, "state")
+    _assert_json_safe(full_state, "state")
 
     canonical_state = json.dumps(
-        state,
+        full_state,
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
@@ -101,6 +106,9 @@ def build_observation(
                 canonical_state.encode("utf-8")
             ).hexdigest()
         )
+
+    state = _compact_observation_state(full_state)
+    _assert_json_safe(state, "compact_state")
 
     observation_id = (
         observation_id
@@ -145,6 +153,110 @@ def build_observation(
             "DB_WRITES": db_writes,
         },
     }
+
+
+def _compact_observation_state(state: dict[str, Any]) -> dict[str, Any]:
+    """Persist a bounded witness instead of raw production payloads.
+
+    The complete state is still used for runtime_snapshot_id hashing. CP69
+    persistence keeps scalar metadata, compact collection samples, and the
+    execution result map needed for provider-blocker attribution.
+    """
+    compact: dict[str, Any] = {}
+
+    for key, value in state.items():
+        if key == "execution_results":
+            compact[key] = _compact_observation_value(
+                value,
+                max_dict_items=128,
+                max_list_items=8,
+            )
+        elif key == "failure_attribution":
+            compact[key] = value
+        elif key == "trade_ready_assets":
+            compact[key] = {
+                "count": len(value)
+                if isinstance(value, (list, tuple, set, frozenset))
+                else None,
+                "assets": sorted(str(item) for item in value)
+                if isinstance(value, (list, tuple, set, frozenset))
+                else _compact_observation_value(value),
+            }
+        else:
+            compact[key] = _compact_observation_value(value)
+
+    return compact
+
+
+def _compact_observation_value(
+    value: Any,
+    *,
+    max_dict_items: int = 32,
+    max_list_items: int = 4,
+    depth: int = 0,
+) -> Any:
+    if value is None or isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return value
+    if isinstance(value, str):
+        return value if len(value) <= 512 else value[:509] + "..."
+
+    if depth >= 4:
+        if isinstance(value, dict):
+            return {"__type__": "dict", "count": len(value)}
+        if isinstance(value, (list, tuple, set, frozenset)):
+            return {"__type__": "collection", "count": len(value)}
+        return str(type(value).__name__)
+
+    if isinstance(value, dict):
+        keys = list(value.keys())
+        if len(keys) <= max_dict_items:
+            return {
+                str(key): _compact_observation_value(
+                    item,
+                    max_dict_items=max_dict_items,
+                    max_list_items=max_list_items,
+                    depth=depth + 1,
+                )
+                for key, item in value.items()
+            }
+
+        sample_keys = keys[:max_dict_items]
+        return {
+            "__type__": "dict",
+            "count": len(value),
+            "keys_sample": [str(key) for key in sample_keys],
+            "sample": {
+                str(key): _compact_observation_value(
+                    value[key],
+                    max_dict_items=8,
+                    max_list_items=max_list_items,
+                    depth=depth + 1,
+                )
+                for key in sample_keys[:8]
+            },
+        }
+
+    if isinstance(value, (list, tuple, set, frozenset)):
+        items = list(value)
+        return {
+            "__type__": "collection",
+            "count": len(items),
+            "sample": [
+                _compact_observation_value(
+                    item,
+                    max_dict_items=max_dict_items,
+                    max_list_items=max_list_items,
+                    depth=depth + 1,
+                )
+                for item in items[:max_list_items]
+            ],
+        }
+
+    return str(type(value).__name__)
 
 
 def build_failure_attribution(trade_gate_snapshot: Any) -> dict[str, Any]:
