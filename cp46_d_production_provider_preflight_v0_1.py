@@ -77,6 +77,40 @@ def _provider_symbol(adapter: Any, asset: str) -> str:
     return symbol.strip().upper()
 
 
+def _authoritative_provider_request_timestamp(adapter: Any) -> str:
+    """Capture provider time immediately before provider translation."""
+    result = adapter.get_server_time()
+    if getattr(result, "allowed", False) is not True:
+        raise RuntimeError(
+            "AUTHORITATIVE_PROVIDER_REQUEST_TIME_UNAVAILABLE:"
+            f"{getattr(result, 'reason', 'unknown')}"
+        )
+
+    data = getattr(result, "data", None)
+    if not isinstance(data, dict):
+        raise RuntimeError(
+            "AUTHORITATIVE_PROVIDER_REQUEST_TIME_INVALID"
+        )
+
+    raw = data.get("serverTime")
+    if raw is None:
+        raw = data.get("timestamp")
+
+    try:
+        timestamp_ms = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(
+            "AUTHORITATIVE_PROVIDER_REQUEST_TIME_INVALID"
+        ) from exc
+
+    if timestamp_ms <= 0:
+        raise RuntimeError(
+            "AUTHORITATIVE_PROVIDER_REQUEST_TIME_INVALID"
+        )
+
+    return str(timestamp_ms)
+
+
 def build_toobit_translation_evidence(
     *,
     adapter: Any,
@@ -97,9 +131,18 @@ def build_toobit_translation_evidence(
     # For Spot MARKET BUY, quote_quantity is supplied by the already-
     # authoritative Risk.position exposure output. The provider boundary
     # transports that value; it never derives it from price.
+    #
+    # Decision-Birth timestamp is preserved upstream as identity/history.
+    # Provider preflight instead receives a fresh authoritative provider
+    # timestamp so a long-running pipeline cannot fail the 5s drift guard
+    # merely because Decision Birth occurred several seconds earlier.
+    provider_request_timestamp = _authoritative_provider_request_timestamp(
+        adapter
+    )
     return ProviderTranslationEvidence(
         provider_symbol=symbol,
         quote_quantity=quote_quantity,
+        provider_request_timestamp=provider_request_timestamp,
     )
 
 
