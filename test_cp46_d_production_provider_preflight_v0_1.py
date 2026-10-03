@@ -117,6 +117,7 @@ def test_unavailable_authoritative_state_fails_closed():
     result = translate_and_preflight_toobit(
         canonical_request=_canonical(),
         adapter=BrokenAdapter(),
+        quote_quantity=1000,
     )
     assert result.status == "BLOCK"
     assert result.reason == "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE"
