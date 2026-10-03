@@ -5,7 +5,7 @@ No live exchange, DB, or production runtime is used. These tests prove that:
 2) the Toobit transport preserves a real provider rejection as execution evidence.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import cp49_live_execution_bridge_v0_1 as bridge
 from exchange_execution_contract import CanonicalOrderRequest
@@ -42,7 +42,7 @@ class _Account:
 
 @dataclass
 class _Observation:
-    account: _Account = _Account()
+    account: _Account = field(default_factory=_Account)
 
 
 @dataclass
@@ -70,7 +70,7 @@ class _ReadinessState:
 
 @dataclass
 class _Readiness:
-    state: _ReadinessState = _ReadinessState()
+    state: _ReadinessState = field(default_factory=_ReadinessState)
 
 
 @dataclass
@@ -81,7 +81,7 @@ class _Handoff:
 @dataclass
 class _Preflight:
     status: str = "PASS"
-    handoff: _Handoff = _Handoff()
+    handoff: _Handoff = field(default_factory=_Handoff)
 
 
 class _Adapter:
@@ -177,7 +177,7 @@ def test_toobit_rejection_is_preserved_as_real_provider_evidence():
         order_type="MARKET",
         time_in_force=None,
         quantity="0.001",
-        quantity_unit="BASE_ASSET",
+        quantity_unit="QUOTE_ASSET",
         price=None,
         timestamp=1769990400000,
         new_client_order_id="ARUNDA-CP49-1",
