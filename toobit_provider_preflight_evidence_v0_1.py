@@ -71,19 +71,30 @@ def build_toobit_provider_contract_state(
     status = str(data.get("status", "")).upper()
     filters = _filter_map(data.get("filters"))
     lot = _first_filter(filters, "LOT_SIZE", "MARKET_LOT_SIZE")
-    notional = _first_filter(filters, "NOTIONAL", "MIN_NOTIONAL")
+
+    # Toobit Spot exchangeInfo publishes the minimum order notional in
+    # MIN_NOTIONAL and the executable min/max trade amount in TRADE_AMOUNT.
+    # The previous implementation incorrectly required maxNotional from
+    # MIN_NOTIONAL, a field Toobit does not publish for Spot. Use the
+    # provider-owned TRADE_AMOUNT bounds instead; no value is inferred.
+    notional = _first_filter(filters, "TRADE_AMOUNT")
+    min_notional_filter = _first_filter(filters, "NOTIONAL", "MIN_NOTIONAL")
 
     if lot is None:
         raise RuntimeError("Authoritative Toobit LOT_SIZE state is unavailable")
     if notional is None:
-        raise RuntimeError("Authoritative Toobit notional state is unavailable")
+        raise RuntimeError("Authoritative Toobit TRADE_AMOUNT state is unavailable")
 
     required = ("minQty", "maxQty", "stepSize")
     if any(lot.get(key) is None for key in required):
         raise RuntimeError("Toobit quantity constraint state is incomplete")
 
-    min_notional = notional.get("minNotional")
-    max_notional = notional.get("maxNotional")
+    min_notional = notional.get("minAmount")
+    max_notional = notional.get("maxAmount")
+
+    if min_notional is None and min_notional_filter is not None:
+        min_notional = min_notional_filter.get("minNotional")
+
     if min_notional is None or max_notional is None:
         raise RuntimeError("Toobit notional bounds are incomplete")
 
