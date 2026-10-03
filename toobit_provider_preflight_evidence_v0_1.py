@@ -104,6 +104,8 @@ def build_toobit_provider_contract_state(
         min_quantity=lot["minQty"],
         max_quantity=lot["maxQty"],
         quantity_step=lot["stepSize"],
+        quote_min_amount=notional["minAmount"],
+        quote_max_amount=notional["maxAmount"],
         min_notional=min_notional,
         max_notional=max_notional,
     )
