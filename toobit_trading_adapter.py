@@ -1200,43 +1200,83 @@ class ToobitTradingAdapter:
         self,
         payload: Dict[str, Any],
     ) -> tuple[Optional[str], Optional[str], Optional[int]]:
-        """Resolve the authoritative Toobit account id without invention.
+        """Resolve the authoritative Toobit account identity without invention.
 
-        The current Toobit spot account response is documented with balances
-        but without accountId. When the live response does expose accountId,
-        that value is preferred. Otherwise, one authenticated read of the
-        balanceFlow endpoint is used because Toobit documents accountId on
-        each flow row.
+        Toobit's authenticated /api/v1/account response may expose the authenticated
+        account identity as either accountId or userId. Prefer either value
+        directly from that authoritative authenticated response.
 
-        Empty/invalid identity remains unavailable; no local or synthetic
-        identifier is ever generated.
+        Only when neither identity field is present, use the authenticated
+        balanceFlow fallback exposing accountId.
+
+        No local, synthetic, hashed, or inferred identifier is created.
         """
         account_id = payload.get("accountId")
+
         if isinstance(account_id, (str, int)) and str(account_id).strip():
             timestamp = getattr(self, "_last_signed_timestamp_ms", None)
-            return str(account_id).strip(), f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}", timestamp
+            return (
+                str(account_id).strip(),
+                f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
+                timestamp,
+            )
 
-        response = self._signed_get(ACCOUNT_BALANCE_FLOW_ENDPOINT, {"limit": 1})
+        user_id = payload.get("userId")
+
+        if isinstance(user_id, (str, int)) and str(user_id).strip():
+            timestamp = getattr(self, "_last_signed_timestamp_ms", None)
+            return (
+                str(user_id).strip(),
+                f"{EXCHANGE_NAME}:{ACCOUNT_ENDPOINT}",
+                timestamp,
+            )
+
+        response = self._signed_get(
+            ACCOUNT_BALANCE_FLOW_ENDPOINT,
+            {"limit": 1},
+        )
+
         if response.status_code != 200:
-            return None, None, getattr(self, "_last_signed_timestamp_ms", None)
+            return (
+                None,
+                None,
+                getattr(self, "_last_signed_timestamp_ms", None),
+            )
 
         flow_payload = response.json()
+
         if not isinstance(flow_payload, list):
-            return None, None, getattr(self, "_last_signed_timestamp_ms", None)
+            return (
+                None,
+                None,
+                getattr(self, "_last_signed_timestamp_ms", None),
+            )
 
         for row in flow_payload:
             if not isinstance(row, dict):
                 continue
+
             candidate = row.get("accountId")
+
             if isinstance(candidate, (str, int)) and str(candidate).strip():
-                timestamp = getattr(self, "_last_signed_timestamp_ms", None)
+                timestamp = getattr(
+                    self,
+                    "_last_signed_timestamp_ms",
+                    None,
+                )
+
                 return (
                     str(candidate).strip(),
                     f"{EXCHANGE_NAME}:{ACCOUNT_BALANCE_FLOW_ENDPOINT}",
                     timestamp,
                 )
 
-        return None, None, getattr(self, "_last_signed_timestamp_ms", None)
+        return (
+            None,
+            None,
+            getattr(self, "_last_signed_timestamp_ms", None),
+        )
+
     # ========================================================
     # BALANCE CHECK
     # ========================================================
