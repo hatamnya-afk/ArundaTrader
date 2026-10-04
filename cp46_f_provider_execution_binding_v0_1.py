@@ -111,10 +111,10 @@ def build_provider_execution_binding(
             "Provider and canonical snapshot identity do not match.",
         )
 
-    if provider.timestamp != canonical.timestamp:
+    if provider.decision_id != getattr(canonical, "decision_id", None):
         return _block(
-            "TIMESTAMP_MISMATCH",
-            "Provider and canonical timestamp identity do not match.",
+            "DECISION_ID_MISMATCH",
+            "Provider and canonical decision identity do not match.",
         )
 
     if canonical.direction not in {"LONG", "SHORT"}:
