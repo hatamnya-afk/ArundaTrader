@@ -31,6 +31,7 @@ def _canonical():
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
+        decision_id="D-1",
     )
 
 
@@ -47,6 +48,7 @@ def _provider():
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
+        decision_id="D-1",
     )
 
 
@@ -128,17 +130,36 @@ def test_identity_mismatch_blocks():
     assert result.reason == "INTENT_ID_MISMATCH"
 
 
-def test_timestamp_mismatch_blocks():
+def test_provider_timestamp_may_differ_from_canonical_timestamp():
     canonical = _canonical()
     provider = _provider()
     provider = ProviderOrderRequest(
-        **{**provider.__dict__, "timestamp": "2026-09-23T00:01:00+00:00"}
+        **{
+            **provider.__dict__,
+            "timestamp": "2026-09-23T00:01:00+00:00",
+        }
     )
     result = build_provider_execution_binding(
         _eligibility(canonical),
         _handoff(provider),
     )
-    assert result.reason == "TIMESTAMP_MISMATCH"
+    assert result.status == BindingStatus.PASS
+
+
+def test_decision_id_mismatch_blocks():
+    canonical = _canonical()
+    provider = _provider()
+    provider = ProviderOrderRequest(
+        **{
+            **provider.__dict__,
+            "decision_id": "D-OTHER",
+        }
+    )
+    result = build_provider_execution_binding(
+        _eligibility(canonical),
+        _handoff(provider),
+    )
+    assert result.reason == "DECISION_ID_MISMATCH"
 
 
 def test_spot_long_passes_and_preserves_objects():
@@ -228,7 +249,8 @@ def run():
         test_requires_handoff_pass,
         test_requires_preflight_pass,
         test_identity_mismatch_blocks,
-        test_timestamp_mismatch_blocks,
+        test_provider_timestamp_may_differ_from_canonical_timestamp,
+        test_decision_id_mismatch_blocks,
         test_spot_long_passes_and_preserves_objects,
         test_spot_short_blocks,
         test_futures_short_passes,
@@ -236,7 +258,7 @@ def run():
     ]
     for test in tests:
         test()
-    print("CP46-F TESTS PASS: 10/10")
+    print("CP46-F TESTS PASS: 11/11")
 
 
 if __name__ == "__main__":
