@@ -410,3 +410,7 @@ Then:
 The repository must remain self-explanatory enough that a Builder can continue safely after context truncation without reconstructing project truth from conversational memory.
 
 # END 2026-10-02 MASTER BUILDER HANDOFF
+
+
+## MANDATORY CONTEXT-LOSS HANDOFF
+Read `BUILDER_CONTINUATION.md` before taking any new implementation action. It is the forward continuation contract for context loss and must prevent redundant historical re-audits.
