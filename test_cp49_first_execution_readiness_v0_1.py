@@ -42,6 +42,7 @@ def _eligibility(request):
 def _account_evidence():
     return AccountSignatureEvidence(
         evidence_id="acct-evidence-1",
+        account_id="management-bound-account",
         account_type="SPOT",
         authentication_status="AUTHENTICATED",
         source="AUTHENTICATED_ACCOUNT_READ",
