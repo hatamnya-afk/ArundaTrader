@@ -352,3 +352,126 @@ At the time this continuation contract was created:
 - Do not restart historical architecture investigation.
 
 **THIS IS A FORWARD HANDOFF, NOT A HISTORICAL RE-AUDIT.**
+
+
+---
+
+# 2026-10-05 — LATEST FORWARD OVERRIDE / CONTINUATION LOCK
+
+> This section supersedes earlier forward sections of this file when they conflict. Historical sections remain provenance. The next Builder MUST use repository state documents and actual Git state before acting.
+
+## CURRENT GOVERNANCE TRUTH
+
+- The project is **not** in a laboratory mode. It is a real-market trading decision/execution system.
+- Closed checkpoints remain closed unless direct regression evidence exists.
+- CP49 remains the active execution-boundary frontier.
+- The master route is:
+  **TRADER COMPLETION → REAL-MARKET E2E OUTPUT PROOF → OUTPUT OBSERVATION/CONSUMPTION → OUTPUT ANALYSIS → MANAGEMENT CAPITAL DECISION**
+- Immediate technical boundary:
+  **Canonical Order Request → real execution boundary → real Toobit response → CP69 evidence**
+- Aroonda is a read-only observation/analysis consumer. It does not replace ArundaTrader execution authority.
+
+## DECISION-BIRTH STATUS
+
+The historical CP49 runtime-producer blocker around authoritative decision identity has been addressed through the authoritative Decision Birth / persistence path. Do not recreate or synthesize decision identity in Pipeline, Snapshot, Order Intent, or Execution.
+
+The canonical lifecycle remains:
+
+REAL MARKET
+→ Opportunity
+→ ProductionSignalInput
+→ Dynamic Signal
+→ Validation
+→ Fusion
+→ Score
+→ Decision Birth
+→ Risk
+→ Trade Gate
+→ Trade Ready
+→ Order Intent
+→ Canonical Order Request
+→ Provider Preflight / Execution Boundary
+→ Provider Response
+→ CP69 Observation
+
+## CURRENT GIT / WORKTREE HANDOFF
+
+The controlled synchronization branch is:
+`sync/local-project-20260917`
+
+The next Builder MUST inspect:
+`git branch --show-current`
+`git log --oneline --decorate -15`
+`git status --short`
+`git stash list -n 2`
+
+Do not assume the remote branch SHA equals the local HEAD. The local branch may legitimately contain preserved local CP49 commits plus cherry-picked remote changes.
+
+A protected pre-sync tracked-worktree stash exists in the local environment when present:
+`CP49 pre-sync tracked worktree 20261005`
+
+Do not drop it until the restored tracked changes have been deliberately reconciled and promoted.
+
+Untracked DB, backup, forensic, probe, patch, and runtime-observation artifacts are local operational/recovery material unless explicitly promoted by Management. Never clean/delete them automatically.
+
+## CURRENT LOCAL WORKTREE REALITY
+
+At the latest handoff, the local tracked CP49 execution surfaces had been restored from the protected stash with **no merge conflict**. These local modifications are not automatically canonical merely because they exist.
+
+The affected surfaces include:
+- `arunda_pipeline.py`
+- `cp46_g_binding_execution_consumer_handoff_v0_1.py`
+- `cp49_live_execution_bridge_v0_1.py`
+- `test_cp46_g_binding_execution_consumer_handoff_v0_1.py`
+- `test_cp49_execution_boundary_v0_1.py`
+- `test_cp49_first_execution_readiness_v0_1.py`
+- `test_cp49_toobit_provider_preflight_evidence_v0_1.py`
+- `test_toobit_adapter_live_submission_binding_v0_1.py`
+- `toobit_provider_preflight_evidence_v0_1.py`
+- `toobit_spot_order_live_transport_v0_1.py`
+- `toobit_trading_adapter.py`
+
+First action is therefore **reconcile and verify these actual local changes against the active CP49 frontier**, not redesign the architecture.
+
+## EXECUTION / RUNTIME RULE
+
+Do not infer a real provider outcome from code, mocks, probes, or stale chat memory.
+
+Before claiming:
+- REAL_ORDER=True
+- REAL_TRADE=True
+- provider rejection
+- provider failure
+- successful execution
+
+the Builder MUST locate the exact authoritative runtime/evidence record in the repository or obtain the actual Management-supplied runtime output.
+
+Never automatically retry a real execution merely because the previous result is unclear.
+
+Execution authorization is a separate Management control. Do not convert documentation, capital state, account balance, or API capability into execution authorization.
+
+## NEXT ACTION AFTER CONTEXT LOSS
+
+1. Read:
+   `PROJECT_STATE.md`
+   `ARCHITECTURE.md`
+   `CHECKPOINTS.md`
+   `CURRENT_FRONTIER.md`
+   `BUILDER_PROTOCOL.md`
+   `MANAGEMENT_ROADMAP.md`
+   `BUILDER_CONTINUATION.md`
+2. Inspect actual branch/HEAD/worktree/stashes.
+3. Reconcile the restored tracked CP49 changes against the current canonical frontier.
+4. Do not rerun closed checkpoints.
+5. Do not run a new real runtime unless Management explicitly authorizes that exact runtime.
+6. Once the execution-boundary evidence is authoritative and recorded, advance to CP69 observation/consumption and output analysis.
+7. Keep repository state synchronized whenever the frontier changes.
+
+## HANDOFF PRINCIPLE
+
+The next Builder does **not** need to reconstruct the architecture from chat history.
+
+The Builder only needs to:
+**READ STATE → INSPECT ACTUAL GIT → IDENTIFY THE ACTIVE CP49 BOUNDARY → VERIFY THE SMALLEST REMAINING EVIDENCE → RECORD → ADVANCE.**
+
+No reset, rebase, force-push, clean, DB repair, synthetic data, fabricated provider outcome, automatic retry, or closed-checkpoint reopening.
