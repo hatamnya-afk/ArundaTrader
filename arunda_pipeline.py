@@ -63,6 +63,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -4494,6 +4495,24 @@ if __name__ == "__main__":
         print(
             f"ERROR : {exc}"
         )
+        print(
+            f"ERROR_TYPE : {type(exc).__module__}.{type(exc).__name__}"
+        )
+        print(
+            f"ERROR_REPR : {exc!r}"
+        )
+        print(
+            f"ERROR_ARGS : {getattr(exc, 'args', None)!r}"
+        )
+        print(
+            f"ERROR_CAUSE : {getattr(exc, '__cause__', None)!r}"
+        )
+        print(
+            f"ERROR_CONTEXT : {getattr(exc, '__context__', None)!r}"
+        )
+        print("TRACEBACK_START")
+        print(traceback.format_exc())
+        print("TRACEBACK_END")
 
         print()
         print(
