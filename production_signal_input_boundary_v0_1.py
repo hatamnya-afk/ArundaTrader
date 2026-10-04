@@ -462,57 +462,115 @@ def kucoin_source_id(
 # DYNAMIC UNIVERSE
 # ============================================================================
 
-def discover_production_universe(
-    universe_binding,
+def _build_provider_market_map(
+    rows,
+    *,
+    exchange,
+    source,
 ):
+    markets = {}
 
-    try:
-        import ccxt
-    except Exception as exc:
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+
+        symbol = str(row.get("symbol") or "").strip().upper()
+        base = str(row.get("baseCoin") or "").strip().upper()
+        quote = str(row.get("quoteCoin") or "").strip().upper()
+        status = str(row.get("status") or "").strip().lower()
+
+        if not symbol or not base or quote != "USDT":
+            continue
+
+        if status not in {"online", "trading"}:
+            continue
+
+        markets[symbol] = {
+            "id": symbol,
+            "symbol": f"{base}/USDT",
+            "base": base,
+            "quote": "USDT",
+            "type": "spot",
+            "spot": True,
+            "active": True,
+            "status": status,
+            "timestamp": row.get("requestTime"),
+        }
+
+    if not markets:
         raise RuntimeError(
-            "CCXT_IMPORT_FAILED"
-        ) from exc
-
-    exchange = ccxt.kucoin()
-
-    markets = exchange.load_markets()
-
-    if not isinstance(
-        markets,
-        dict,
-    ):
-        raise RuntimeError(
-            "KUCOIN_MARKET_MAP_INVALID"
+            f"{exchange}_MARKET_MAP_EMPTY"
         )
 
-    records = (
-        universe_binding.build_production_universe(
-            markets=markets,
-            exchange="KUCOIN",
-            source="KUCOIN_CCXT_MARKET_DISCOVERY",
-        )
+    return markets
+
+
+def _discover_bitget_markets():
+    url = (
+        "https://api.bitget.com/api/v2/spot/public/symbols"
     )
 
-    eligible = (
-        universe_binding.eligible_production_universe(
-            markets=markets,
-            exchange="KUCOIN",
-            source="KUCOIN_CCXT_MARKET_DISCOVERY",
+    response = requests.get(
+        url,
+        headers={
+            "Accept": "application/json",
+            "User-Agent": "ArundaTrader-DynamicUniverse/0.1",
+        },
+        timeout=TIMEOUT,
+    )
+    response.raise_for_status()
+
+    payload = response.json()
+
+    if not isinstance(payload, dict):
+        raise RuntimeError(
+            "BITGET_MARKET_RESPONSE_INVALID"
         )
+
+    if payload.get("code") != "00000":
+        raise RuntimeError(
+            f"BITGET_MARKET_API_ERROR:{payload.get('msg')}"
+        )
+
+    rows = payload.get("data")
+
+    if not isinstance(rows, list):
+        raise RuntimeError(
+            "BITGET_MARKET_DATA_INVALID"
+        )
+
+    return _build_provider_market_map(
+        rows,
+        exchange="BITGET",
+        source="BITGET_SPOT_PUBLIC_MARKET_DISCOVERY",
     )
 
-    if not isinstance(
-        records,
-        list,
-    ):
+
+def _bind_discovered_markets(
+    universe_binding,
+    markets,
+    *,
+    exchange,
+    source,
+):
+    records = universe_binding.build_production_universe(
+        markets=markets,
+        exchange=exchange,
+        source=source,
+    )
+
+    eligible = universe_binding.eligible_production_universe(
+        markets=markets,
+        exchange=exchange,
+        source=source,
+    )
+
+    if not isinstance(records, list):
         raise RuntimeError(
             "PRODUCTION_UNIVERSE_OUTPUT_INVALID"
         )
 
-    if not isinstance(
-        eligible,
-        list,
-    ):
+    if not isinstance(eligible, list):
         raise RuntimeError(
             "ELIGIBLE_UNIVERSE_OUTPUT_INVALID"
         )
@@ -528,6 +586,53 @@ def discover_production_universe(
         )
 
     return records, eligible
+
+
+def discover_production_universe(
+    universe_binding,
+):
+    # PRIMARY DISCOVERY: KUCOIN
+    try:
+        import ccxt
+        exchange = ccxt.kucoin()
+        markets = exchange.load_markets()
+
+        if not isinstance(markets, dict):
+            raise RuntimeError(
+                "KUCOIN_MARKET_MAP_INVALID"
+            )
+
+        return _bind_discovered_markets(
+            universe_binding,
+            markets,
+            exchange="KUCOIN",
+            source="KUCOIN_CCXT_MARKET_DISCOVERY",
+        )
+
+    except Exception as kucoin_exc:
+        kucoin_error = (
+            f"{type(kucoin_exc).__name__}:{kucoin_exc}"
+        )
+
+    # FAILOVER DISCOVERY: BITGET
+    try:
+        return _bind_discovered_markets(
+            universe_binding,
+            _discover_bitget_markets(),
+            exchange="BITGET",
+            source="BITGET_SPOT_PUBLIC_MARKET_DISCOVERY",
+        )
+
+    except Exception as bitget_exc:
+        bitget_error = (
+            f"{type(bitget_exc).__name__}:{bitget_exc}"
+        )
+
+    raise RuntimeError(
+        "MARKET_UNIVERSE_DISCOVERY_FAILED:"
+        f"KUCOIN={kucoin_error};"
+        f"BITGET={bitget_error}"
+    )
 
 
 # ============================================================================
