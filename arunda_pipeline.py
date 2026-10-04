@@ -3300,11 +3300,6 @@ def main() -> int:
         sys.modules[spec.name] = signal_input_module
         spec.loader.exec_module(signal_input_module)
 
-        import ccxt
-
-        kucoin = ccxt.kucoin()
-        kucoin.load_markets()
-
         import indicator_engine
         import market_structure_engine
         import feature_engine
