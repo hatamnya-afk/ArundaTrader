@@ -189,9 +189,10 @@ def test_spot_short_blocks():
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
+        decision_id="D-1",
     )
     result = build_provider_execution_binding(
-        _eligibility(canonical),
+        _eligibility(canonical), 
         _handoff(_provider()),
     )
     assert result.reason == "SPOT_DIRECTION_MISMATCH"
@@ -210,6 +211,7 @@ def test_futures_short_passes():
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
+        decision_id="D-1",
     )
     provider = ProviderOrderRequest(
         venue="FUTURES",
@@ -223,9 +225,10 @@ def test_futures_short_passes():
         intent_id="I-1",
         snapshot_id="S-1",
         timestamp="2026-09-23T00:00:00+00:00",
+        decision_id="D-1",
     )
     result = build_provider_execution_binding(
-        _eligibility(canonical),
+        _eligibility(canonical), 
         _handoff(provider),
     )
     assert result.status == BindingStatus.PASS
