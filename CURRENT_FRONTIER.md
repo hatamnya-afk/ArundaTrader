@@ -1918,3 +1918,37 @@ Then:
 The repository must remain self-explanatory enough that a Builder can continue safely after context truncation without reconstructing project truth from conversational memory.
 
 # END 2026-10-02 MASTER BUILDER HANDOFF
+
+
+
+## 2026-10-05 — CURRENT FRONTIER OVERRIDE: MCP-01
+
+### CURRENT FRONTIER
+**MCP-01 — COMPACT EVENT EVIDENCE & 24H INTELLIGENCE REPORTING**
+
+Immediate step: **MCP-01.1 — Evidence Contract**.
+
+Goal: make real-market Trader operation compact, traceable, analyzable, and 24/7-ready without changing Trader intelligence.
+
+### ORDER OF WORK
+1. MCP-01.1 Evidence Contract
+2. MCP-01.2 Runtime Projection / compact console
+3. MCP-01.3 Case Projection
+4. MCP-01.4 Trade Projection
+5. MCP-01.5 Outcome Reconciliation
+6. MCP-01.6 24H Aggregator
+7. MCP-01.7 One Email / 24H
+8. MCP-01.8 24/7 readiness verification
+
+### OUTPUT MODEL
+- Console = compact management view.
+- Evidence = canonical structured event record.
+- Case = repeated analytical thread, not a cycle.
+- Trade event = actual order attempt.
+- 24H report = aggregation, not raw transcript.
+
+### HARD RULES
+No artificial max-50/max-40 cap, no first-order cap, no report-based suppression, no synthetic outcome, no synthetic decision identity, no closed-CP reopening, no strategy redesign, no DB repair/change without explicit scope.
+
+### BUILDER HANDOFF
+If context is lost, do not restart Trader audits. Read the four governance documents and continue from the first unfinished MCP-01 sub-step. Repository governance wins over remembered chat state.
