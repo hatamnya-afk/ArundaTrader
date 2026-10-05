@@ -1952,3 +1952,16 @@ No artificial max-50/max-40 cap, no first-order cap, no report-based suppression
 
 ### BUILDER HANDOFF
 If context is lost, do not restart Trader audits. Read the four governance documents and continue from the first unfinished MCP-01 sub-step. Repository governance wins over remembered chat state.
+
+
+
+## 2026-10-05 — 24/7 ACTIVATION BOUNDARY
+
+**24/7 OPERATION = NOT ACTIVE.**
+
+MCP-01 builds the evidence/reporting foundation and verifies future technical readiness; it does not activate continuous operation.
+
+Current mission remains:
+`TRADER COMPLETION → REAL-MARKET OBSERVATION → COMPACT EVENT EVIDENCE → OUTPUT ANALYSIS`
+
+A separate explicit Management authorization is required before any transition to continuous 24/7 operation. Do not infer activation from MCP-01 completion, 24H report design, or technical readiness.
