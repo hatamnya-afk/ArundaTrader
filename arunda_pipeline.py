@@ -177,6 +177,9 @@ from zero_capital_research_trade_contract_v0_1 import (
 )
 import fusion_engine
 import production_fused_score_binding_v0_1
+from cp49_authoritative_decision_birth_store_v0_1 import (
+    ensure_birth_schema,
+)
 from cp69_runtime_observation import (
     append_observation,
     build_observation,
@@ -3788,12 +3791,13 @@ def main() -> int:
         # CP49 authoritative Birth boundary validates, persists, and
         # returns the committed identity. No downstream layer may substitute it.
         with sqlite3.connect(DB_PATH) as cp49_birth_conn:
+            ensure_birth_schema(cp49_birth_conn)
+
             committed_decision_ids = require_production_decision_birth(
                 canonical_birth_events,
                 expected_assets=set(market_signal_map),
                 conn=cp49_birth_conn,
             )
-
         if committed_decision_ids != {
             asset.upper(): canonical_decision_ids[asset]
             for asset in canonical_decision_ids
