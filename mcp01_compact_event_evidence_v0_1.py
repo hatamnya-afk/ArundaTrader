@@ -1,0 +1,109 @@
+"""MCP-01.1 compact event evidence contract.
+
+The evidence layer references authoritative Trader identities; it never creates
+decision, case, or trade identities.
+"""
+from __future__ import annotations
+import hashlib
+import json
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any
+
+MCP01_SCHEMA = "arunda.compact_event_evidence"
+MCP01_SCHEMA_VERSION = "1.0"
+EVENT_NEW = "NEW"
+EVENT_SELECTED = "SELECTED"
+EVENT_TRADE_READY = "TRADE_READY"
+EVENT_ORDER_ATTEMPTED = "ORDER_ATTEMPTED"
+EVENT_PROVIDER_RESULT = "PROVIDER_RESULT"
+EVENT_MARKET_OUTCOME = "MARKET_OUTCOME"
+EVENT_CLOSED = "CLOSED"
+EVENT_DATA_QUALITY = "DATA_QUALITY_EVENT"
+EVENT_TYPES = frozenset({EVENT_NEW, EVENT_SELECTED, EVENT_TRADE_READY, EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT, EVENT_MARKET_OUTCOME, EVENT_CLOSED, EVENT_DATA_QUALITY})
+STAGES = frozenset({"OPPORTUNITY", "DECISION", "RISK", "TRADE_GATE", "ORDER", "EXECUTION", "MARKET_OUTCOME", "DATA_QUALITY", "MANAGEMENT"})
+DIRECTIONS = frozenset({"LONG", "SHORT", "NONE"})
+DEFAULT_STREAM_PATH = Path(__file__).resolve().parent / "runtime_observations" / "arundatrader_compact_events.jsonl"
+
+@dataclass(frozen=True)
+class CompactEvent:
+    event_id: str
+    event_type: str
+    event_timestamp: str
+    cycle_id: str
+    decision_id: str | None = None
+    case_id: str | None = None
+    asset: str | None = None
+    direction: str | None = None
+    stage: str = "MANAGEMENT"
+    status: str | None = None
+    reason_code: str | None = None
+    provider: str | None = None
+    trade_event_id: str | None = None
+    correlation_id: str | None = None
+    source_system: str = "ArundaTrader"
+    environment_id: str = "arundatrader"
+    schema: str = MCP01_SCHEMA
+    schema_version: str = MCP01_SCHEMA_VERSION
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+    def validate(self) -> bool:
+        _validate_event(self.to_dict())
+        return True
+
+def build_event(**kwargs: Any) -> CompactEvent:
+    event = CompactEvent(**kwargs)
+    event.validate()
+    return event
+
+def deterministic_event_id(**kwargs: Any) -> str:
+    encoded = json.dumps(kwargs, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return "EV-" + hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+def append_event(event: CompactEvent, stream_path: Path = DEFAULT_STREAM_PATH) -> Path:
+    event.validate()
+    path = Path(stream_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(event.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n")
+    return path
+
+def _require_text(value: Any, name: str) -> None:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{name} must be a non-empty string")
+
+def _validate_event(event: dict[str, Any]) -> None:
+    for name in ("event_id", "event_type", "event_timestamp", "cycle_id"):
+        _require_text(event.get(name), name)
+    if event["event_type"] not in EVENT_TYPES:
+        raise ValueError(f"unsupported event_type: {event['event_type']}")
+    if event["stage"] not in STAGES:
+        raise ValueError(f"unsupported stage: {event['stage']}")
+    if event["schema"] != MCP01_SCHEMA or event["schema_version"] != MCP01_SCHEMA_VERSION:
+        raise ValueError("invalid MCP-01 schema")
+    if event["source_system"] != "ArundaTrader" or event["environment_id"] != "arundatrader":
+        raise ValueError("invalid evidence source identity")
+    for name in ("decision_id", "case_id", "asset", "status", "reason_code", "provider", "trade_event_id", "correlation_id"):
+        if event.get(name) is not None:
+            _require_text(event[name], name)
+    if event.get("direction") is not None and event["direction"] not in DIRECTIONS:
+        raise ValueError(f"unsupported direction: {event['direction']}")
+    if event["event_type"] in {EVENT_SELECTED, EVENT_TRADE_READY}:
+        _require_text(event.get("decision_id"), "decision_id")
+    if event["event_type"] == EVENT_ORDER_ATTEMPTED:
+        _require_text(event.get("decision_id"), "decision_id")
+        _require_text(event.get("trade_event_id"), "trade_event_id")
+    if event["event_type"] == EVENT_PROVIDER_RESULT:
+        _require_text(event.get("trade_event_id"), "trade_event_id")
+        _require_text(event.get("provider"), "provider")
+    if event["event_type"] == EVENT_MARKET_OUTCOME:
+        _require_text(event.get("trade_event_id"), "trade_event_id")
+        _require_text(event.get("case_id"), "case_id")
+    if event["event_type"] == EVENT_CLOSED:
+        _require_text(event.get("case_id"), "case_id")
+    if event["event_type"] == EVENT_DATA_QUALITY:
+        if event["stage"] != "DATA_QUALITY":
+            raise ValueError("DATA_QUALITY_EVENT requires DATA_QUALITY stage")
+        _require_text(event.get("reason_code"), "reason_code")
