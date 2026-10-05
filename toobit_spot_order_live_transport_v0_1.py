@@ -348,9 +348,19 @@ class ToobitSpotOrderLiveTransport:
                     "ORDER_TEST_ENDPOINT_FORBIDDEN"
                 )
 
+            post_url = (
+                f"{BASE_URL}{LIVE_ORDER_ENDPOINT}"
+            )
+
+            post_body = (
+                f"{prepared['query_string']}"
+                f"&signature={prepared['signature']}"
+            )
+
             response = self.session.post(
-                prepared["url"],
+                post_url,
                 headers=prepared["headers"],
+                data=post_body,
             )
 
             if request.quantity != original_quantity:

@@ -223,4 +223,7 @@ def test_pass_does_not_claim_execution_success():
 
     assert result.status == g.ConsumerHandoffStatus.PASS
     assert result.execution_result is not None
-    assert getattr(result.execution_result, "error_code", None) == "EXECUTION_DISABLED"
+    assert (
+        getattr(result.execution_result, "error_code", None)
+        == "CP49_SAFETY_GATE_REQUIRED"
+    )

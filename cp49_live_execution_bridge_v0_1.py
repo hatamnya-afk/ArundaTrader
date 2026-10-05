@@ -28,7 +28,15 @@ from cp49_first_execution_readiness_v0_1 import (
 from cp49_readiness_to_execution_gate_binding_v0_1 import (
     build_execution_safety_gate,
 )
-from exchange_execution_boundary import execute_order
+from cp46_f_provider_execution_binding_v0_1 import (
+    BindingStatus,
+    build_provider_execution_binding,
+)
+from cp46_g_binding_execution_consumer_handoff_v0_1 import (
+    ConsumerHandoffStatus,
+    handoff_binding_to_execution_consumer,
+)
+from exchange_execution_contract import blocked_execution_result
 from exchange_execution_contract import (
     CanonicalExecutionResult,
     CanonicalOrderRequest,
@@ -98,7 +106,6 @@ def execute_canonical_request(
         account_observation = build_account_balance_observation(adapter)
         api_key_result = adapter.api_key_check()
     except Exception as exc:
-        from exchange_execution_contract import blocked_execution_result
 
         return blocked_execution_result(
             asset=request.asset,
@@ -161,7 +168,6 @@ def execute_canonical_request(
     )
 
     if readiness.state.value != "READY_FOR_AUTHORIZATION":
-        from exchange_execution_contract import blocked_execution_result
 
         readiness_message = ";".join(readiness.blockers)
         provider_preflight_status = getattr(
@@ -199,6 +205,44 @@ def execute_canonical_request(
             adapter="TOOBIT",
         )
 
+    # CP46-F: bind the exact provider request produced by CP46-C/D
+    # to the already-verified CP46-E eligibility. No reconstruction,
+    # conversion, rounding, estimation, or mutation is permitted.
+    handoff_binding = build_provider_execution_binding(
+        eligibility,
+        handoff,
+    )
+
+    if handoff_binding.status != BindingStatus.PASS:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter="TOOBIT",
+            error_code="CP46G_PROVIDER_BINDING_BLOCKED",
+            error_message=(
+                f"reason={handoff_binding.reason};"
+                f"message={handoff_binding.message}"
+            ),
+        )
+
+    if handoff_binding.provider_request is None:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter="TOOBIT",
+            error_code="CP46G_PROVIDER_REQUEST_MISSING",
+            error_message="CP46-F binding contains no provider request.",
+        )
+
+    # The canonical execution boundary remains unchanged. The exact
+    # provider request is carried separately through the existing adapter
+    # instance and consumed only by its provider submission path.
+    setattr(
+        adapter,
+        "_cp46g_provider_request",
+        handoff_binding.provider_request,
+    )
+
     gate = build_execution_safety_gate(
         readiness=readiness,
         management_authorized=management_authorized,
@@ -209,12 +253,35 @@ def execute_canonical_request(
         exchange_write_enabled=True,
     )
 
-    return execute_order(
-        request=request,
+    consumer_handoff = handoff_binding_to_execution_consumer(
+        handoff_binding,
+        eligibility,
         adapter=adapter,
-        eligibility=eligibility,
         safety_gate=gate,
     )
+
+    if consumer_handoff.status != ConsumerHandoffStatus.PASS:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter="TOOBIT",
+            error_code="CP46G_CONSUMER_HANDOFF_BLOCKED",
+            error_message=(
+                f"reason={consumer_handoff.reason};"
+                f"message={consumer_handoff.message}"
+            ),
+        )
+
+    if consumer_handoff.execution_result is None:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter="TOOBIT",
+            error_code="CP46G_EXECUTION_RESULT_MISSING",
+            error_message="CP46-G consumer handoff returned no execution result.",
+        )
+
+    return consumer_handoff.execution_result
 
 
 __all__ = [

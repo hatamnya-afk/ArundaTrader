@@ -3,7 +3,7 @@ from toobit_trading_adapter import ToobitTradingAdapter
 from toobit_spot_order_live_transport_v0_1 import (
     SpotLiveOrderResult,
 )
-
+from provider_order_translation_v0_1 import ProviderOrderRequest
 
 class FakeLiveTransport:
     def submit(self, request):
@@ -51,7 +51,7 @@ def test_toobit_adapter_exposes_order_submission_capability_only_when_explicitly
     assert adapter.capabilities().get("ORDER_SUBMISSION") is True
 
 
-def test_toobit_adapter_submit_order_preserves_canonical_quantity_and_returns_exchange_rejection():
+def test_toobit_adapter_submit_order_projects_provider_quantity_and_returns_exchange_rejection():
     adapter = ToobitTradingAdapter(
         api_key="TEST_KEY",
         api_secret="TEST_SECRET",
@@ -66,9 +66,28 @@ def test_toobit_adapter_submit_order_preserves_canonical_quantity_and_returns_ex
     request = make_request()
     original_quantity = request.quantity
 
+    provider_request = ProviderOrderRequest(
+        venue="TOOBIT",
+        symbol="BTCUSDT",
+        side="BUY",
+        position_side=None,
+        order_type="LIMIT",
+        quantity="123.456789",
+        quantity_unit="BASE_ASSET",
+        entry_price="40000",
+        intent_id=request.intent_id,
+        snapshot_id=request.snapshot_id,
+        timestamp=request.timestamp,
+        decision_id="DEC-1",
+    )
+
+    adapter._cp46g_provider_request = provider_request
+    adapter._get_server_timestamp_ms = lambda: 1791120705000
+
     result = adapter.submit_order(request)
 
     assert result.accepted is False
     assert result.error_code == "HTTP_ERROR"
     assert result.exchange_order_id is None
     assert request.quantity == original_quantity
+    assert provider_request.quantity == "123.456789"

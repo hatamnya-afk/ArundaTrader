@@ -65,6 +65,7 @@ def handoff_binding_to_execution_consumer(
     eligibility: ExecutionEligibilityResult,
     *,
     adapter: Any = None,
+    safety_gate: Any = None,
 ) -> ProviderExecutionConsumerHandoffResult:
     """Hand an exact CP46-F PASS to the existing execution consumer.
 
@@ -73,9 +74,11 @@ def handoff_binding_to_execution_consumer(
     the exact canonical request carried by CP46-F.
 
     A BLOCK never calls the execution boundary.
-    A PASS delegates only the canonical request and original eligibility to
-    the existing execute_order() consumer. ProviderOrderRequest is preserved
-    as provenance but is not reinterpreted by this handoff.
+    A PASS delegates the canonical request and original eligibility to
+    the existing execute_order() consumer. When supplied by CP49, the
+    already-constructed Safety Gate is passed through unchanged.
+    ProviderOrderRequest is preserved as provenance and is not reconstructed
+    from CanonicalOrderRequest.
     """
 
     if not isinstance(binding, ProviderExecutionBindingResult):
@@ -139,11 +142,19 @@ def handoff_binding_to_execution_consumer(
     # here. CP46-F already proved its binding. CP46-G only carries it as
     # immutable provenance while the canonical consumer receives the exact
     # request and original CP46-E eligibility object.
-    execution_result = execute_order(
-        request=canonical,
-        adapter=adapter,
-        eligibility=eligibility,
-    )
+    if safety_gate is None:
+        execution_result = execute_order(
+            request=canonical,
+            adapter=adapter,
+            eligibility=eligibility,
+        )
+    else:
+        execution_result = execute_order(
+            request=canonical,
+            adapter=adapter,
+            eligibility=eligibility,
+            safety_gate=safety_gate,
+        )
 
     return ProviderExecutionConsumerHandoffResult(
         status=ConsumerHandoffStatus.PASS,

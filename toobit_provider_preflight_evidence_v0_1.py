@@ -1,4 +1,4 @@
-"""ARUNDA TRADER â€” TOOBIT PREFLIGHT EVIDENCE PRODUCER v0.1
+"""ARUNDA TRADER — TOOBIT PREFLIGHT EVIDENCE PRODUCER v0.1
 
 Provider-specific read-only owner for CP46-A6 evidence assembly.
 
@@ -22,6 +22,9 @@ from provider_preflight_v0_1 import (
     ProviderContractState,
     ProviderPreflightEvidence,
     ProviderTimestampState,
+    ProviderOrderPreflightRequest,
+    ProviderPreflightResult,
+    run_provider_preflight,
 )
 from toobit_provider_order_state_v0_1 import (
     build_toobit_provider_order_state,
@@ -124,8 +127,12 @@ def build_toobit_provider_account_state(
 
     return ProviderAccountState(
         state_known=True,
+        # Toobit Spot account read does not authoritatively expose
+        # margin/leverage state; None is preserved rather than inferred.
         margin_state_known=None,
         leverage_state_known=None,
+        # Spot account read does not expose a provider-native position
+        # conflict field; order conflict is owned by ProviderOrderState.
         position_conflict=None,
     )
 
@@ -188,9 +195,28 @@ def build_toobit_provider_preflight_evidence(
     )
 
 
+def run_toobit_provider_preflight(
+    *,
+    adapter,
+    request: ProviderOrderPreflightRequest,
+) -> ProviderPreflightResult:
+    """Production provider boundary: authoritative reads -> pure CP46-A6 preflight."""
+    if adapter is None:
+        raise RuntimeError("Toobit adapter is required")
+    if not isinstance(request, ProviderOrderPreflightRequest):
+        raise TypeError("request must be ProviderOrderPreflightRequest")
+
+    evidence = build_toobit_provider_preflight_evidence(
+        adapter=adapter,
+        asset=request.symbol.replace("USDT", "").strip().upper(),
+    )
+    return run_provider_preflight(request, evidence)
+
+
 __all__ = [
     "build_toobit_provider_contract_state",
     "build_toobit_provider_account_state",
     "build_toobit_provider_timestamp_state",
     "build_toobit_provider_preflight_evidence",
+    "run_toobit_provider_preflight",
 ]

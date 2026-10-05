@@ -1606,6 +1606,14 @@ class ToobitTradingAdapter:
     # CP46-A1
     # ========================================================
 
+        # ========================================================
+    # CANONICAL ORDER SUBMISSION — CP46-G / CP49
+    # ========================================================
+
+        # ========================================================
+    # CANONICAL ORDER SUBMISSION — CP46-G / CP49
+    # ========================================================
+
     def submit_order(
         self,
         request,
@@ -1613,12 +1621,25 @@ class ToobitTradingAdapter:
         """
         Canonical exchange-agnostic submission boundary.
 
-        CP46-A1:
-            - accepts only the canonical order request
-            - performs no exchange HTTP request
-            - performs no database write
-            - remains fail-closed while execution is disabled
-            - does not mutate request quantity
+        CP46-G / CP49:
+
+            CanonicalOrderRequest
+                +
+            exact ProviderOrderRequest produced upstream
+                |
+                v
+            Toobit provider transport
+
+        Rules:
+            - Canonical request remains the execution-boundary input.
+            - Exact ProviderOrderRequest is consumed from CP46-G.
+            - Provider request is never reconstructed from canonical data.
+            - Provider quantity is authoritative.
+            - Provider identity is preserved.
+            - Fresh Toobit server timestamp is used at provider boundary.
+            - Decision-Birth timestamp remains unchanged.
+            - No database write.
+            - Fail closed on missing or invalid provenance.
         """
 
         from exchange_execution_contract import (
@@ -1626,6 +1647,14 @@ class ToobitTradingAdapter:
             CanonicalOrderRequest,
             blocked_execution_result,
         )
+
+        from cp46_d_production_provider_preflight_v0_1 import (
+            ProviderOrderRequest,
+        )
+
+        # ----------------------------------------------------
+        # Canonical request validation
+        # ----------------------------------------------------
 
         if not isinstance(
             request,
@@ -1637,13 +1666,19 @@ class ToobitTradingAdapter:
                 adapter=EXCHANGE_NAME,
             )
 
+        # ----------------------------------------------------
+        # Execution capability gates
+        # ----------------------------------------------------
+
         if self.execution_enabled is not True:
             return blocked_execution_result(
                 asset=request.asset,
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="EXECUTION_DISABLED",
-                error_message="Toobit canonical order submission is disabled.",
+                error_message=(
+                    "Toobit canonical order submission is disabled."
+                ),
             )
 
         if self.order_submission_enabled is not True:
@@ -1652,7 +1687,9 @@ class ToobitTradingAdapter:
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="ORDER_SUBMISSION_DISABLED",
-                error_message="Toobit order submission is disabled.",
+                error_message=(
+                    "Toobit order submission is disabled."
+                ),
             )
 
         if self.exchange_write_enabled is not True:
@@ -1661,7 +1698,9 @@ class ToobitTradingAdapter:
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="EXCHANGE_WRITE_DISABLED",
-                error_message="Toobit exchange write is disabled.",
+                error_message=(
+                    "Toobit exchange write is disabled."
+                ),
             )
 
         if self.live_order_transport_enabled is not True:
@@ -1670,7 +1709,9 @@ class ToobitTradingAdapter:
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="SUBMISSION_TRANSPORT_DISABLED",
-                error_message="Toobit live order transport is disabled.",
+                error_message=(
+                    "Toobit live order transport is disabled."
+                ),
             )
 
         if self.live_order_transport is None:
@@ -1679,8 +1720,14 @@ class ToobitTradingAdapter:
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="SUBMISSION_TRANSPORT_UNAVAILABLE",
-                error_message="Toobit live order transport is unavailable.",
+                error_message=(
+                    "Toobit live order transport is unavailable."
+                ),
             )
+
+        # ----------------------------------------------------
+        # Current Spot scope
+        # ----------------------------------------------------
 
         if request.direction != "LONG":
             return blocked_execution_result(
@@ -1688,43 +1735,200 @@ class ToobitTradingAdapter:
                 direction=request.direction,
                 adapter=EXCHANGE_NAME,
                 error_code="SPOT_DIRECTION_UNSUPPORTED",
-                error_message="Toobit spot transport currently supports canonical LONG -> BUY only.",
+                error_message=(
+                    "Toobit spot transport currently supports "
+                    "canonical LONG -> BUY only."
+                ),
             )
 
         try:
+            # ------------------------------------------------
+            # CP46-G provider provenance
+            # ------------------------------------------------
+
+            provider_request = getattr(
+                self,
+                "_cp46g_provider_request",
+                None,
+            )
+
+            # Missing provenance is different from invalid type.
+            if provider_request is None:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_REQUEST_MISSING",
+                    error_message=(
+                        "Exact ProviderOrderRequest from "
+                        "CP46-G handoff is unavailable."
+                    ),
+                )
+
+            if not isinstance(
+                provider_request,
+                ProviderOrderRequest,
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_REQUEST_TYPE_INVALID",
+                    error_message=(
+                        "CP46-G provider request must be the approved "
+                        "ProviderOrderRequest instance."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Intent identity binding
+            # ------------------------------------------------
+
+            if provider_request.intent_id != request.intent_id:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_INTENT_ID_MISMATCH",
+                    error_message=(
+                        "Provider and canonical intent identity "
+                        "do not match."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Provider-owned symbol
+            # ------------------------------------------------
+
+            if (
+                not isinstance(
+                    provider_request.symbol,
+                    str,
+                )
+                or not provider_request.symbol.strip()
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_SYMBOL_MISSING",
+                    error_message=(
+                        "ProviderOrderRequest contains no "
+                        "authoritative provider symbol."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Provider order type
+            # ------------------------------------------------
+
+            if (
+                not isinstance(
+                    provider_request.order_type,
+                    str,
+                )
+                or not provider_request.order_type.strip()
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_ORDER_TYPE_MISSING",
+                    error_message=(
+                        "ProviderOrderRequest contains no "
+                        "provider order type."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # IMPORTANT:
+            #
+            # ProviderOrderRequest.quantity is authoritative.
+            #
+            # DO NOT compare it with request.quantity.
+            # DO NOT reconstruct it from CanonicalOrderRequest.
+            #
+            # CP46-G explicitly requires the exact provider
+            # projection to reach the transport unchanged.
+            # ------------------------------------------------
+
             from toobit_spot_order_live_transport_v0_1 import (
                 SpotLiveOrderRequest,
             )
 
-            provider_request = SpotLiveOrderRequest(
-                symbol=request.asset,
-                side="BUY",
-                order_type=request.order_type,
-                time_in_force="GTC" if request.order_type == "LIMIT" else None,
-                quantity=request.quantity,
-                quantity_unit=request.quantity_unit,
-                price=(
-                    request.entry_price
-                    if request.order_type != "MARKET"
+            transport_request = SpotLiveOrderRequest(
+                symbol=provider_request.symbol,
+                side=provider_request.side,
+                order_type=provider_request.order_type,
+                time_in_force=(
+                    "GTC"
+                    if provider_request.order_type == "LIMIT"
                     else None
                 ),
-                timestamp=int(request.timestamp),
-                new_client_order_id=request.intent_id,
+                quantity=provider_request.quantity,
+                quantity_unit=provider_request.quantity_unit,
+                price=(
+                    provider_request.entry_price
+                    if provider_request.order_type != "MARKET"
+                    else None
+                ),
+
+                # Fresh Toobit server timestamp.
+                #
+                # This timestamp belongs exclusively to the
+                # actual signed provider HTTP request.
+                #
+                # It does NOT replace the canonical Decision-Birth
+                # timestamp or ProviderOrderRequest.timestamp.
+                timestamp=self._get_server_timestamp_ms(),
+
+                new_client_order_id=provider_request.intent_id,
             )
 
+            # ------------------------------------------------
+            # Quantity integrity:
+            #
+            # Transport must consume the exact provider quantity.
+            # ------------------------------------------------
+
+            if transport_request.quantity != provider_request.quantity:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_QUANTITY_PROJECTION_MUTATION",
+                    error_message=(
+                        "Provider transport projection changed "
+                        "the authoritative provider quantity."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Actual provider transport boundary
+            # ------------------------------------------------
+
             transport_result = self.live_order_transport.submit(
-                provider_request
+                transport_request
             )
+
+            # ------------------------------------------------
+            # Canonical result
+            # ------------------------------------------------
 
             return CanonicalExecutionResult(
                 accepted=transport_result.accepted,
-                exchange_order_id=transport_result.exchange_order_id,
+                exchange_order_id=(
+                    transport_result.exchange_order_id
+                ),
                 status=transport_result.status,
                 asset=request.asset,
                 direction=request.direction,
                 executed_quantity=None,
                 executed_price=None,
+
+                # Preserve canonical Decision-Birth timestamp.
                 timestamp=request.timestamp,
+
                 adapter=EXCHANGE_NAME,
                 error_code=transport_result.error_code,
                 error_message=transport_result.error_message,
@@ -1738,7 +1942,6 @@ class ToobitTradingAdapter:
                 error_code="ADAPTER_SUBMISSION_ERROR",
                 error_message=str(exc),
             )
-
     def cancel_order(
         self,
         order_id: str,
