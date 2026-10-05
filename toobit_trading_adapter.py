@@ -1882,7 +1882,10 @@ class ToobitTradingAdapter:
                 # timestamp or ProviderOrderRequest.timestamp.
                 timestamp=self._get_server_timestamp_ms(),
 
-                new_client_order_id=provider_request.intent_id,
+                new_client_order_id=(
+                    provider_request.client_order_id
+                    or provider_request.intent_id
+                ),
             )
 
             # ------------------------------------------------
