@@ -31,6 +31,7 @@ def build_observation(
     emitted_at: str,
     observation_id: str | None = None,
     runtime_snapshot_id: str | None = None,
+    cycle_id: str | None = None,
     universe_assets: Any,
     market_data_results: Any,
     opportunity_by_asset: Any,
@@ -52,6 +53,11 @@ def build_observation(
 ) -> dict[str, Any]:
     if not isinstance(emitted_at, str) or not emitted_at.strip():
         raise ValueError("emitted_at must be a non-empty string")
+
+    if cycle_id is not None and (
+        not isinstance(cycle_id, str) or not cycle_id.strip()
+    ):
+        raise ValueError("cycle_id must be a non-empty string when supplied")
 
     if knowledge_cutoff is not None and (
         not isinstance(knowledge_cutoff, str) or not knowledge_cutoff.strip()
@@ -142,6 +148,7 @@ def build_observation(
         "provenance": {
             "source": "arunda_pipeline",
             "runtime_snapshot_id": runtime_snapshot_id,
+            "cycle_id": cycle_id,
             "launch_boundary": launch_timestamp,
             "db_write_boundary": db_write_boundary,
         },
