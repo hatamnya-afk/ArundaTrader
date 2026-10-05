@@ -28,6 +28,7 @@ Rules:
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from enum import Enum
@@ -102,6 +103,11 @@ class ProviderOrderRequest:
     snapshot_id: str
     timestamp: str
     decision_id: Optional[str] = None
+    # Provider-specific client order identifier. This is a deterministic
+    # projection of the authoritative intent identity, not a new trade
+    # identity. It exists because Toobit clientOrderId accepts a restricted
+    # character set.
+    client_order_id: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -157,6 +163,15 @@ def _block(
         message=message,
         request=None,
     )
+
+
+def _provider_client_order_id(intent_id: str) -> str:
+    # Deterministic provider-field projection only; never a new Arunda identity.
+    raw = str(intent_id).strip()
+    if not raw:
+        raise ValueError("PROVIDER_CLIENT_ORDER_ID_SOURCE_MISSING")
+    digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+    return f"AT-{digest}"
 
 
 def translate_order_request(
@@ -281,6 +296,7 @@ def translate_order_request(
                 snapshot_id=canonical.snapshot_id,
                 timestamp=str(provider_timestamp).strip(),
                 decision_id=canonical.decision_id,
+                client_order_id=_provider_client_order_id(canonical.intent_id),
             )
 
             return ProviderTranslationResult(
