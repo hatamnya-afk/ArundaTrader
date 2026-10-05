@@ -43,6 +43,53 @@ def _positive(value: Any) -> Optional[Decimal]:
     value = _decimal(value)
     return value if value is not None and value > 0 else None
 
+def collect_toobit_execution_quality(adapter: Any, *, asset: str, provider_symbol: str,
+                                    max_age_ms: int = 3000) -> ExecutionQualityResult:
+    """Read and normalize three real Toobit public market-data surfaces."""
+    book_ticker = adapter.get_book_ticker(provider_symbol)
+    depth = adapter.get_depth(provider_symbol, limit=20)
+    trades = adapter.get_recent_trades(provider_symbol, limit=60)
+    for name, result in (("BOOK_TICKER", book_ticker), ("DEPTH", depth), ("TRADES", trades)):
+        if not result.allowed or not isinstance(result.data, dict):
+            return ExecutionQualityResult("BLOCK", False, f"{name}_UNAVAILABLE")
+    ticker = book_ticker.data.get("payload")
+    depth_payload = depth.data.get("payload")
+    trades_payload = trades.data.get("payload")
+    if not isinstance(ticker, list):
+        ticker = [ticker] if isinstance(ticker, dict) else None
+    if not isinstance(ticker, list) or len(ticker) != 1 or not isinstance(ticker[0], dict):
+        return ExecutionQualityResult("BLOCK", False, "BOOK_TICKER_INVALID")
+    if not isinstance(depth_payload, dict) or not isinstance(trades_payload, list):
+        return ExecutionQualityResult("BLOCK", False, "MICROSTRUCTURE_PAYLOAD_INVALID")
+    t = ticker[0]
+    if str(t.get("s", "")).upper() != provider_symbol.strip().upper():
+        return ExecutionQualityResult("BLOCK", False, "BOOK_TICKER_SYMBOL_MISMATCH")
+    bids, asks = depth_payload.get("b"), depth_payload.get("a")
+    if not isinstance(bids, list) or not isinstance(asks, list) or not bids or not asks:
+        return ExecutionQualityResult("BLOCK", False, "DEPTH_SIDES_MISSING")
+    timestamps = []
+    for value in (t.get("t"), depth_payload.get("t")):
+        if isinstance(value, int) and value > 0:
+            timestamps.append(value)
+    for row in trades_payload:
+        if not isinstance(row, dict) or _positive(row.get("p")) is None or _positive(row.get("q")) is None:
+            return ExecutionQualityResult("BLOCK", False, "RECENT_TRADE_INVALID")
+        if isinstance(row.get("t"), int) and row.get("t") > 0:
+            timestamps.append(row["t"])
+        else:
+            return ExecutionQualityResult("BLOCK", False, "RECENT_TRADE_TIMESTAMP_INVALID")
+    if not timestamps:
+        return ExecutionQualityResult("BLOCK", False, "MICROSTRUCTURE_TIMESTAMP_MISSING")
+    book = {
+        "best_bid": t.get("b"), "best_ask": t.get("a"),
+        "bid_qty": t.get("bq"), "ask_qty": t.get("aq"),
+        "depth_levels": min(len(bids), len(asks)),
+    }
+    return evaluate_execution_quality(asset=asset, provider_symbol=provider_symbol,
+        book=book, recent_trades=trades_payload,
+        captured_at_ms=min(timestamps), max_age_ms=max_age_ms)
+
+
 def evaluate_execution_quality(*, asset: str, provider_symbol: str,
                                book: dict, recent_trades: list,
                                captured_at_ms: int, now_ms: Optional[int] = None,
