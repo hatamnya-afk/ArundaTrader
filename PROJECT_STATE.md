@@ -2051,3 +2051,26 @@ Then:
 The repository must remain self-explanatory enough that a Builder can continue safely after context truncation without reconstructing project truth from conversational memory.
 
 # END 2026-10-02 MASTER BUILDER HANDOFF
+
+
+
+## 2026-10-05 — MCP-01 MANAGEMENT CHECKPOINT
+
+**STATUS: AUTHORIZED / CURRENT FRONTIER**
+
+Management has approved the operational evidence layer **COMPACT EVENT EVIDENCE & 24H INTELLIGENCE REPORTING**. This does not modify Trader intelligence or reopen any closed checkpoint.
+
+Authoritative lifecycle:
+`REAL MARKET → TRADER → DECISION/RISK/GATE → ORDER → PROVIDER → MARKET OUTCOME → COMPACT EVENT EVIDENCE → PROJECTIONS → 24H AGGREGATOR → ONE EMAIL / 24H`
+
+Required identities:
+- `decision_id`: Trader decision instance.
+- `case_id`: analytical case across repeated cycles.
+- `trade_event_id`: actual order attempt.
+
+The console is a management view only. Canonical evidence is the source for 24H reporting. No artificial trade/order cap is permitted. Repeated asset appearance is not automatically a new case or trade. Future/invalid timestamps and other data-quality anomalies must be represented as structured evidence events.
+
+### MCP-01 NEXT ACTION
+Start at **MCP-01.1 Evidence Contract**, then advance sequentially through Runtime Projection → Case Projection → Trade Projection → Outcome Reconciliation → 24H Aggregator → 24H Email → 24/7 Readiness.
+
+Do not alter Trader selection logic merely to reduce output volume. Do not reopen closed CPs. Do not claim implementation/runtime evidence until verified.
