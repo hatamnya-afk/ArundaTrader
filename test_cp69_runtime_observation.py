@@ -34,6 +34,7 @@ def make() -> dict:
         observation_id="obs:test-001",
         emitted_at="2026-09-24T00:00:00+00:00",
         runtime_snapshot_id="RS-test",
+        cycle_id="RC-test",
         universe_assets=["BTC"],
         market_data_results={"BTC": {"status": "READY"}},
         opportunity_by_asset={"BTC": {"asset": "BTC"}},
@@ -147,6 +148,31 @@ def test_authorized_cp49_birth_write_provenance() -> None:
 def test_provenance() -> None:
     item = make()
     assert item["provenance"]["runtime_snapshot_id"] == "RS-test"
+    assert item["provenance"]["cycle_id"] == "RC-test"
+
+
+def test_cycle_id_validation() -> None:
+    try:
+        build_observation(
+            observation_id="obs:cycle-invalid",
+            emitted_at="2026-09-24T00:00:00+00:00",
+            cycle_id="   ",
+            universe_assets=[],
+            market_data_results={},
+            opportunity_by_asset={},
+            dynamic_signals={},
+            validation_results={},
+            fusion_snapshot={},
+            score_snapshot={},
+            decision_snapshot={},
+            risk_snapshot={},
+            trade_gate_snapshot={},
+            trade_ready_assets=[],
+        )
+    except ValueError as exc:
+        assert str(exc) == "cycle_id must be a non-empty string when supplied"
+        return
+    raise AssertionError("invalid cycle_id accepted")
 
 
 def test_timestamp_preserved() -> None:
