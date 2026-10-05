@@ -561,6 +561,175 @@ def load_market_data_by_symbol(assets=None):
 
 
 # =============================================================================
+# IN-MEMORY MARKET DATA BOUNDARY
+# =============================================================================
+
+
+def load_market_data_from_results(
+    assets,
+    market_data_by_symbol,
+):
+
+    if not isinstance(
+        market_data_by_symbol,
+        dict,
+    ):
+        raise RuntimeError(
+            "REAL_MARKET_DATA_MAPPING_INVALID"
+        )
+
+    requested_assets = sorted(
+        {
+            normalized
+            for normalized in (
+                _normalize_asset(asset)
+                for asset in assets
+            )
+            if normalized is not None
+        }
+    )
+
+    result = {
+        asset: []
+        for asset in requested_assets
+    }
+
+    for asset in requested_assets:
+
+        market_result = (
+            market_data_by_symbol.get(
+                f"{asset}/USDT"
+            )
+        )
+
+        if market_result is None:
+            market_result = (
+                market_data_by_symbol.get(
+                    asset
+                )
+            )
+
+        if market_result is None:
+            raise RuntimeError(
+                "REAL_MARKET_DATA_MISSING:"
+                + asset
+            )
+
+        if getattr(
+            market_result,
+            "status",
+            None,
+        ) != "READY":
+
+            raise RuntimeError(
+                "REAL_MARKET_DATA_NOT_READY:"
+                + asset
+            )
+
+        if getattr(
+            market_result,
+            "real_data",
+            False,
+        ) is not True:
+
+            raise RuntimeError(
+                "REAL_MARKET_DATA_NOT_REAL:"
+                + asset
+            )
+
+        candles = getattr(
+            market_result,
+            "candles",
+            (),
+        )
+
+        if not isinstance(
+            candles,
+            (tuple, list),
+        ):
+
+            raise RuntimeError(
+                "REAL_MARKET_CANDLES_INVALID:"
+                + asset
+            )
+
+        bars = []
+
+        for candle in candles:
+
+            if not isinstance(
+                candle,
+                dict,
+            ):
+
+                raise RuntimeError(
+                    "REAL_MARKET_CANDLE_INVALID:"
+                    + asset
+                )
+
+            open_price = _safe_float(
+                candle.get("open")
+            )
+
+            high = _safe_float(
+                candle.get("high")
+            )
+
+            low = _safe_float(
+                candle.get("low")
+            )
+
+            close = _safe_float(
+                candle.get("close")
+            )
+
+            volume = _safe_float(
+                candle.get("volume")
+            )
+
+            if (
+                open_price is None
+                or high is None
+                or low is None
+                or close is None
+            ):
+
+                raise RuntimeError(
+                    "REAL_MARKET_CANDLE_OHLC_INVALID:"
+                    + asset
+                )
+
+            if high < low:
+
+                raise RuntimeError(
+                    "REAL_MARKET_CANDLE_RANGE_INVALID:"
+                    + asset
+                )
+
+            bars.append(
+                _build_market_bar(
+                    symbol=f"{asset}/USDT",
+                    timestamp=candle.get(
+                        "timestamp"
+                    ),
+                    open_price=open_price,
+                    high=high,
+                    low=low,
+                    close=close,
+                    volume=(
+                        volume
+                        if volume is not None
+                        else 0.0
+                    ),
+                )
+            )
+
+        result[asset] = bars
+
+    return result
+
+
+# =============================================================================
 # UNAVAILABLE STRUCTURAL STATE
 # =============================================================================
 
@@ -1066,7 +1235,10 @@ def classify_regime(
 # =============================================================================
 
 
-def build_market_regime(assets=None):
+def build_market_regime(
+    assets=None,
+    market_data_by_symbol=None,
+):
 
     requested_assets = (
         EXPECTED_ASSETS
@@ -1083,11 +1255,33 @@ def build_market_regime(assets=None):
         )
     )
 
-    structural_state = (
-        build_structural_state(
-            requested_assets
+    if market_data_by_symbol is None:
+
+        structural_state = (
+            build_structural_state(
+                requested_assets
+            )
         )
-    )
+
+    else:
+
+        history = (
+            load_market_data_from_results(
+                requested_assets,
+                market_data_by_symbol,
+            )
+        )
+
+        structural_state = {
+            asset: calculate_structure(
+                asset,
+                history.get(
+                    asset,
+                    [],
+                ),
+            )
+            for asset in requested_assets
+        }
 
     if len(
         structural_state
@@ -1186,10 +1380,14 @@ def build_market_regime(assets=None):
 # =============================================================================
 
 
-def load_market_regime(assets=None):
+def load_market_regime(
+    assets=None,
+    market_data_by_symbol=None,
+):
 
     return build_market_regime(
-        assets
+        assets,
+        market_data_by_symbol=market_data_by_symbol,
     )
 
 
