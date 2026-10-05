@@ -2463,3 +2463,133 @@ Fix committed:
 This fix establishes that `TRADE_READY=0` is a valid runtime state and must still reach CP69 observation rather than crashing on local execution-state initialization.
 
 # END 2026-10-02 MASTER BUILDER HANDOFF
+
+
+
+## 2026-10-05 — MCP-01: COMPACT EVENT EVIDENCE & 24H INTELLIGENCE REPORTING
+
+### MANAGEMENT CHECKPOINT
+**MCP-01 = AUTHORIZED / ROADMAP-LOCKED / NEXT IMPLEMENTATION FRONTIER**
+
+Purpose: make Trader operation manageable now and 24/7-ready later without changing Trader intelligence, reducing real selections artificially, reopening closed checkpoints, or turning the console into the source of truth.
+
+### AUTHORITATIVE DESIGN
+
+```
+REAL MARKET
+    ↓
+ARUNDA PIPELINE
+    ↓
+DECISION / RISK / GATE
+    ↓
+ORDER INTENT
+    ↓
+CANONICAL ORDER
+    ↓
+EXECUTION
+    ↓
+PROVIDER RESPONSE
+    ↓
+MARKET OUTCOME
+    ↓
+COMPACT EVENT EVIDENCE
+    ├── Runtime Projection
+    ├── Case Projection
+    ├── Trade Projection
+    └── 24H Aggregator
+              ↓
+       24H Intelligence Report
+              ↓
+          ONE EMAIL / 24H
+```
+
+### CORE IDENTITIES
+- `decision_id` = authoritative Trader decision instance.
+- `case_id` = analytical case identity across repeated cycles; repeated appearance of an asset is not automatically a new case.
+- `trade_event_id` = actual order-attempt identity.
+- Optional correlation identity must connect related evidence without replacing authoritative decision identity.
+
+### EVENT LIFECYCLE
+`NEW → SELECTED → TRADE_READY → ORDER_ATTEMPTED → PROVIDER_RESULT → MARKET_OUTCOME → CLOSED`
+
+The lifecycle is evidence-oriented. It does not impose a trade cap and does not suppress a valid Trade Ready candidate.
+
+### NON-NEGOTIABLE RULES
+1. Console output is a compact management view, not canonical truth.
+2. Canonical evidence is structured, compact, append-oriented, and sufficient to reconstruct what happened without dumping the entire runtime state.
+3. A cycle selection, a unique analytical case, and an executable trade event are separate concepts.
+4. No artificial max-40/max-50 order cap, first-order cap, or report-based suppression.
+5. Selection count may naturally fall as Trader quality improves; reporting must never manipulate selection count.
+6. Full forensic material remains available when needed, but routine console output must remain small.
+7. Data-quality anomalies (for example future-dated input relative to runtime) are recorded as structured `DATA_QUALITY_EVENT`; they are not hidden and do not become console spam.
+8. Outcome reconciliation must connect `DECISION → ORDER → PROVIDER RESPONSE → MARKET OUTCOME → CASE OUTCOME`.
+9. 24H reporting aggregates evidence; it must not print every cycle as a giant transcript.
+10. Existing roadmap requirement for one 24H email is preserved: `EVENT EVIDENCE → 24H AGGREGATOR → MANAGEMENT REPORT → ONE EMAIL / 24H`.
+
+### COMPACT EVIDENCE MINIMUM
+Each material event should be representable with, as applicable:
+`event_id, event_type, event_timestamp, cycle_id, decision_id, case_id, asset, direction, stage, status, reason_code, provider, trade_event_id, correlation_id`.
+
+Do not duplicate full pipeline snapshots into every event merely for convenience.
+
+### 24H REPORT MINIMUM
+The aggregator must be able to produce:
+- cycle count;
+- unique case count;
+- selected / Trade Ready counts;
+- order-attempt count;
+- provider accepted / rejected / inconclusive counts;
+- top rejection/block reasons;
+- decision/risk/gate quality indicators;
+- market-outcome coverage and case outcomes when available;
+- data-quality anomalies;
+- recurring cases/reasons;
+- concise Management Summary.
+
+### CHECKPOINT EXIT CRITERIA
+MCP-01 is complete only when all are true:
+1. Compact runtime console output is defined and implemented without changing Trader selection/decision logic.
+2. Canonical compact event evidence is emitted for the governed lifecycle stages.
+3. `decision_id`, `case_id`, and `trade_event_id` remain semantically distinct and traceable.
+4. Repeated asset appearances can be correlated without falsely multiplying cases/trades.
+5. Provider responses and real-world outcomes are captured without synthetic outcomes.
+6. 24H aggregation can summarize the evidence without replaying every raw cycle.
+7. Existing one-email-per-24H requirement is wired to the aggregated report, not raw console output.
+8. Data-quality anomalies are represented as evidence events.
+9. A Builder can continue from repository documents alone after context loss.
+10. No closed CP is reopened and no Trader intelligence contract is redesigned.
+
+### IMPLEMENTATION ORDER
+**MCP-01.1 — Evidence contract:** define canonical compact event fields/types and lifecycle mapping.
+
+**MCP-01.2 — Runtime projection:** derive a compact per-cycle management view from canonical evidence; keep console output small.
+
+**MCP-01.3 — Case projection:** correlate repeated asset/decision activity into `case_id` without inventing decision identity.
+
+**MCP-01.4 — Trade projection:** correlate actual order attempts/provider responses using `trade_event_id`; preserve accepted/rejected/inconclusive outcomes exactly as observed.
+
+**MCP-01.5 — Outcome reconciliation:** connect provider result to later market outcome and case closure where evidence exists.
+
+**MCP-01.6 — 24H aggregator:** produce the compact management intelligence report from projections/evidence.
+
+**MCP-01.7 — 24H email:** deliver exactly one aggregated report per 24H window; no raw-cycle flood.
+
+**MCP-01.8 — 24/7 readiness verification:** prove continuity, idempotent event handling, bounded console output, and recovery behavior without changing Trader intelligence.
+
+### SCOPE / SAFETY
+- No strategy redesign.
+- No selection suppression.
+- No arbitrary trade/order cap.
+- No synthetic/fill/backfill/interpolation/forward-fill/padding/blending.
+- No synthetic decision identity.
+- No DB repair/change unless a later checkpoint explicitly authorizes a specific evidence-storage change.
+- No reopening CP39, CP44, CP46-A..H, CP47, CP48, CP64..CP71 or CP69 contract.
+- No automatic retry after ambiguous provider execution.
+- Real provider outcomes remain authoritative.
+- This is an operational/management evidence layer, not a replacement for Trader intelligence.
+
+### CURRENT FRONTIER AFTER MCP-01
+`TRADER COMPLETION → REAL-MARKET OBSERVATION → MCP-01 COMPACT EVENT EVIDENCE → CASE/TRADE RECONCILIATION → 24H INTELLIGENCE → 24H EMAIL → OUTPUT ANALYSIS → CAPITAL DECISION`
+
+### BUILDER CONTINUITY RULE
+If chat context is lost, a Builder must start at **MCP-01.1** and must not redesign the above architecture. Read the four governance documents first, then inspect only the files required by the current MCP sub-step. Closed CPs remain closed unless direct regression evidence exists.
