@@ -884,10 +884,20 @@ def bind_fused_scores(
 
 def load_current_market_regime(
         assets=None,
+        market_data_by_symbol=None,
     ) -> dict:
+        if not isinstance(
+            market_data_by_symbol,
+            dict,
+        ):
+            fail(
+                "CURRENT_MARKET_REGIME real market data mapping missing"
+            )
+
         regime_snapshot = (
-            market_regime_engine.load_market_regime(
-                assets
+            market_regime_engine.build_market_regime(
+                assets,
+                market_data_by_symbol=market_data_by_symbol,
             )
         )
 
@@ -4190,7 +4200,8 @@ def main() -> int:
         # production input. Load it once at the orchestration boundary so
         # every Trade Ready asset receives the same authoritative snapshot.
         regime_snapshot = load_current_market_regime(
-            trade_ready_assets
+            trade_ready_assets,
+            market_data_by_symbol=market_data_by_symbol,
         )
 
         # ------------------------------------------------------------------
