@@ -184,6 +184,10 @@ from cp69_runtime_observation import (
     append_observation,
     build_observation,
 )
+from runtime_cycle_identity_v0_1 import (
+    build_runtime_cycle_id,
+    utc_cycle_start,
+)
 
 from cp49_live_execution_bridge_v0_1 import (
     execute_canonical_request,
@@ -3038,6 +3042,13 @@ def main() -> int:
     EXECUTION_ENABLED = management_authorized
     assert_execution_control(management_authorized)
 
+    cycle_started_at = utc_cycle_start()
+    runtime_cycle_id = build_runtime_cycle_id(
+        started_at=cycle_started_at,
+    )
+    print(f"RUNTIME_CYCLE_ID={runtime_cycle_id}")
+    print(f"RUNTIME_CYCLE_STARTED_AT={cycle_started_at}")
+
     try:
         # --------------------------------------------------------------
         # CP44 REAL READ-ONLY PORTFOLIO PRODUCER
@@ -4422,6 +4433,7 @@ def main() -> int:
         # ------------------------------------------------------------------
         cp69_observation = build_observation(
             emitted_at=utc_now_iso(),
+            cycle_id=runtime_cycle_id,
             universe_assets=universe_assets,
             market_data_results=market_data_results,
             opportunity_by_asset=opportunity_by_asset,
