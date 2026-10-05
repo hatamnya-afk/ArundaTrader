@@ -1997,3 +1997,46 @@ Then:
 The repository must remain self-explanatory enough that a Builder can continue safely after context truncation without reconstructing project truth from conversational memory.
 
 # END 2026-10-02 MASTER BUILDER HANDOFF
+
+
+
+## 2026-10-05 — MCP-01: COMPACT EVENT EVIDENCE & 24H INTELLIGENCE REPORTING
+
+### CHECKPOINT STATUS
+**MCP-01 = AUTHORIZED / CURRENT / NOT YET VERIFIED**
+
+This is a management/operational checkpoint, not a reopening of CP72 or any closed historical CP.
+
+### OBJECTIVE
+Create a compact evidence-and-reporting layer around the already-established real-market Trader lifecycle so the system can operate now with small understandable runtime output and later sustain 24/7 operation without generating an unmanageable transcript.
+
+### ACCEPTED ARCHITECTURE
+`Trader → Compact Event Evidence → Runtime/Case/Trade Projections → 24H Aggregator → One 24H Email`
+
+### CHECKPOINT SUB-STAGES
+- **MCP-01.1 — Evidence Contract:** canonical event types/fields and lifecycle mapping.
+- **MCP-01.2 — Runtime Projection:** compact per-cycle management output.
+- **MCP-01.3 — Case Projection:** stable analytical `case_id` across repeated cycles.
+- **MCP-01.4 — Trade Projection:** actual order-attempt `trade_event_id` and provider result correlation.
+- **MCP-01.5 — Outcome Reconciliation:** provider result → market outcome → case outcome.
+- **MCP-01.6 — 24H Aggregator:** aggregated intelligence from evidence, not raw console.
+- **MCP-01.7 — 24H Email:** one report/email per 24H window.
+- **MCP-01.8 — 24/7 Readiness:** continuity, idempotency, bounded output, recovery behavior.
+
+### EXIT CRITERIA
+1. Compact console exists without altering Trader decisions/selections.
+2. Canonical evidence captures material lifecycle events.
+3. `decision_id`, `case_id`, and `trade_event_id` remain distinct.
+4. Repeated asset appearances do not create false trade/case inflation.
+5. Real provider responses/outcomes are preserved; no synthetic outcome.
+6. 24H report aggregates rather than replaying every cycle.
+7. One-email-per-24H requirement is connected to the aggregator.
+8. Data-quality anomalies are structured evidence events.
+9. A new Builder can continue safely after context loss.
+10. No closed checkpoint is reopened.
+
+### NEXT ACTION
+**MCP-01.1 — Evidence Contract.** Inspect only the minimum current runtime/observation surfaces required to implement and verify the event contract. Do not change Trader intelligence while performing this checkpoint.
+
+### SAFETY
+No runtime, execution activation, DB repair, capital deployment, synthetic data, or provider outcome is implied by this checkpoint.
