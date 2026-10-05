@@ -79,6 +79,9 @@ HTTP_TIMEOUT = 15
 # Public
 TIME_ENDPOINT = "/api/v1/time"
 EXCHANGE_INFO_ENDPOINT = "/api/v1/exchangeInfo"
+DEPTH_ENDPOINT = "/quote/v1/depth"
+BOOK_TICKER_ENDPOINT = "/quote/v1/ticker/bookTicker"
+RECENT_TRADES_ENDPOINT = "/quote/v1/trades"
 
 # Signed USER_DATA
 ACCOUNT_ENDPOINT = "/api/v1/account"
@@ -676,6 +679,38 @@ class ToobitTradingAdapter:
                     f"Exchange info request failed: {exc}"
                 ),
             )
+
+    # ========================================================
+    # PUBLIC MARKET MICROSTRUCTURE — READ ONLY
+    # ========================================================
+
+    def _public_market_data(self, endpoint: str, symbol: str, limit: Optional[int] = None) -> AdapterResult:
+        if not isinstance(symbol, str) or not symbol.strip():
+            return AdapterResult("INVALID", False, "public_market_data", "Provider symbol is missing.")
+        params = {"symbol": symbol.strip().upper()}
+        if limit is not None:
+            params["limit"] = limit
+        try:
+            response = self._public_get(endpoint, params=params)
+            if response.status_code != 200:
+                return AdapterResult("HTTP_ERROR", False, "public_market_data", f"Toobit market-data endpoint returned HTTP {response.status_code}.", self._response_data(response))
+            payload = response.json()
+            return AdapterResult("PASS", True, "public_market_data", "Toobit public market-data read succeeded.", {"payload": payload, "captured_at_ms": int(time.time() * 1000)})
+        except Exception as exc:
+            return AdapterResult("ERROR", False, "public_market_data", f"Market-data request failed: {exc}")
+
+    def get_book_ticker(self, symbol: str) -> AdapterResult:
+        return self._public_market_data(BOOK_TICKER_ENDPOINT, symbol)
+
+    def get_depth(self, symbol: str, limit: int = 20) -> AdapterResult:
+        if not isinstance(limit, int) or limit <= 0 or limit > 100:
+            return AdapterResult("INVALID", False, "get_depth", "Depth limit must be an integer in 1..100.")
+        return self._public_market_data(DEPTH_ENDPOINT, symbol, limit)
+
+    def get_recent_trades(self, symbol: str, limit: int = 60) -> AdapterResult:
+        if not isinstance(limit, int) or limit <= 0 or limit > 60:
+            return AdapterResult("INVALID", False, "get_recent_trades", "Recent-trades limit must be an integer in 1..60.")
+        return self._public_market_data(RECENT_TRADES_ENDPOINT, symbol, limit)
 
     # ========================================================
     # SYMBOL MAP
