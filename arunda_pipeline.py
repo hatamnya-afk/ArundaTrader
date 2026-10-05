@@ -197,6 +197,7 @@ from cp46_d_production_provider_preflight_v0_1 import (
     translate_and_preflight_toobit,
 )
 from toobit_trading_adapter import ToobitTradingAdapter
+from execution_quality_v0_1 import collect_toobit_execution_quality
 
 # ============================================================================
 
@@ -4216,6 +4217,57 @@ def main() -> int:
         )
 
         # ------------------------------------------------------------------
+        # 12. EXECUTION QUALITY / MARKET MICROSTRUCTURE EVIDENCE
+        # ------------------------------------------------------------------
+        # Downstream of Trade Gate, upstream of Order Intent. No mutation of
+        # Score, Decision, Risk, or Trade Gate semantics.
+        execution_quality_snapshot = {}
+        execution_quality_ready_assets = set()
+        if trade_ready_assets:
+            execution_quality_adapter = ToobitTradingAdapter()
+            for asset in sorted(trade_ready_assets):
+                symbol_result = execution_quality_adapter.symbol_check(asset)
+                if not symbol_result.allowed or not symbol_result.data:
+                    execution_quality_snapshot[asset] = {
+                        "status": "BLOCK", "allowed": False,
+                        "reason": "PROVIDER_SYMBOL_UNAVAILABLE",
+                    }
+                    continue
+                provider_symbol = symbol_result.data["symbol"]
+                quality_result = collect_toobit_execution_quality(
+                    execution_quality_adapter,
+                    asset=asset,
+                    provider_symbol=provider_symbol,
+                )
+                row = {
+                    "status": quality_result.status,
+                    "allowed": quality_result.allowed,
+                    "reason": quality_result.reason,
+                    "provider_symbol": provider_symbol,
+                }
+                if quality_result.evidence is not None:
+                    evidence = quality_result.evidence
+                    row.update({
+                        "captured_at_ms": evidence.captured_at_ms,
+                        "best_bid": str(evidence.best_bid),
+                        "best_ask": str(evidence.best_ask),
+                        "spread_abs": str(evidence.spread_abs),
+                        "spread_bps": str(evidence.spread_bps),
+                        "bid_qty": str(evidence.bid_qty),
+                        "ask_qty": str(evidence.ask_qty),
+                        "top_book_imbalance": str(evidence.top_book_imbalance),
+                        "depth_levels": evidence.depth_levels,
+                        "recent_trade_count": evidence.recent_trade_count,
+                        "source": evidence.source,
+                    })
+                execution_quality_snapshot[asset] = row
+                if quality_result.allowed:
+                    execution_quality_ready_assets.add(asset)
+        print(f"EXECUTION_QUALITY_EVALUATED={len(execution_quality_snapshot)}")
+        print(f"EXECUTION_QUALITY_READY={len(execution_quality_ready_assets)}")
+        print(f"EXECUTION_QUALITY_BLOCKED={len(trade_ready_assets - execution_quality_ready_assets)}")
+
+        # ------------------------------------------------------------------
         # 12. CURRENT ORDER-INTENT -> CANONICAL REQUEST BRIDGE
         # ------------------------------------------------------------------
         # Reuse the already-defined production contracts. This stage only
@@ -4231,7 +4283,7 @@ def main() -> int:
         attempted_count = 0
         accepted_count = 0
 
-        if trade_ready_assets:
+        if execution_quality_ready_assets:
             # CP49 gives each asset its authoritative runtime snapshot id.
             # Build the existing OrderIntent contract asset-by-asset so that
             # no asset inherits another asset's snapshot identity.
@@ -4246,7 +4298,7 @@ def main() -> int:
                 market_data_by_symbol,
                 birth_by_asset,
             )
-            for asset in trade_ready_assets:
+            for asset in execution_quality_ready_assets:
                 asset_gate = [trade_gate_snapshot[asset]]
                 asset_opportunity = [opportunity_by_asset[asset]]
                 asset_risk = {asset: risk_snapshot[asset]}
@@ -4264,11 +4316,11 @@ def main() -> int:
                 )
                 order_intents.extend(asset_intents)
 
-            if len(order_intents) != len(trade_ready_assets):
+            if len(order_intents) != len(execution_quality_ready_assets):
                 fail("ORDER_INTENT count != TRADE_READY count")
 
             canonical_order_requests = {}
-            for asset in trade_ready_assets:
+            for asset in execution_quality_ready_assets:
                 asset_intents = [
                     intent
                     for intent in order_intents
