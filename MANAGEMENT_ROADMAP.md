@@ -2593,3 +2593,33 @@ MCP-01 is complete only when all are true:
 
 ### BUILDER CONTINUITY RULE
 If chat context is lost, a Builder must start at **MCP-01.1** and must not redesign the above architecture. Read the four governance documents first, then inspect only the files required by the current MCP sub-step. Closed CPs remain closed unless direct regression evidence exists.
+
+
+
+## 2026-10-05 — MANAGEMENT CLARIFICATION: 24/7 IS NOT ACTIVE YET
+
+### GOVERNANCE LOCK
+**24/7 OPERATION = NOT STARTED.**
+
+MCP-01 is an implementation/readiness layer for the future 24/7 operating model. It must **not** be interpreted as authorization to start continuous operation now.
+
+### CURRENT OPERATING PHASE
+The project remains in:
+
+`TRADER COMPLETION → REAL-MARKET OBSERVATION → COMPACT EVENT EVIDENCE → OUTPUT ANALYSIS`
+
+The immediate objective is to observe real Trader behavior, selected assets, Trade Ready outputs, real order attempts/provider responses, and resulting evidence sufficiently to judge Trader output quality.
+
+### FUTURE 24/7 ACTIVATION GATE
+24/7 operation may begin only after Management explicitly authorizes activation and the preceding Trader observation/quality stage has been completed.
+
+The MCP-01.8 readiness checkpoint proves **technical readiness only**. It does not activate 24/7 and does not authorize continuous execution.
+
+### STRICT SEPARATION
+- **MCP-01** = evidence/reporting infrastructure and future 24/7 readiness.
+- **Current real-market runs** = controlled observation of Trader quality.
+- **24/7 activation** = separate future Management decision.
+- **24H report/email** = future operating capability; it must be designed now but must not be represented as evidence of current 24/7 operation.
+
+### BUILDER RULE
+If context is lost, never infer that MCP-01 completion means 24/7 has started. The Builder must look for an explicit Management 24/7 activation checkpoint before enabling continuous operation.
