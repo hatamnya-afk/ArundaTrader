@@ -545,11 +545,7 @@ def load_market_data_by_symbol(assets=None):
                     high=high,
                     low=low,
                     close=close,
-                    volume=(
-                        volume
-                        if volume is not None
-                        else 0.0
-                    ),
+                    volume=volume,
                 )
             )
 
@@ -692,10 +688,11 @@ def load_market_data_from_results(
                 or high is None
                 or low is None
                 or close is None
+                or volume is None
             ):
 
                 raise RuntimeError(
-                    "REAL_MARKET_CANDLE_OHLC_INVALID:"
+                    "REAL_MARKET_CANDLE_OHLCV_INVALID:"
                     + asset
                 )
 
