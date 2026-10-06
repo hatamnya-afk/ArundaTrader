@@ -256,4 +256,6 @@ def execute_order(
     # ============================================================
     # 12. RETURN CANONICAL EXECUTION RESULT
     # ============================================================
-    return result
+    # The execution boundary owns trade-event identity. Any provider-side
+    # exchange_order_id remains a separate provider identity.
+    return replace(result, trade_event_id=trade_event_id)
