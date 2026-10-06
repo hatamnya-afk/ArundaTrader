@@ -43,6 +43,30 @@ def test_invalid_order_rejected():
         return
     raise AssertionError("invalid order evidence accepted")
 
+
+def test_idempotent_append_does_not_duplicate_identical_event():
+    e=build_event(event_id="EV-IDEMP-1",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    with tempfile.TemporaryDirectory() as d:
+        p=Path(d)/"events.jsonl"
+        append_event_idempotent(e,p)
+        append_event_idempotent(e,p)
+        assert len(p.read_text(encoding="utf-8").splitlines()) == 1
+
+
+def test_idempotent_append_rejects_conflicting_event_id():
+    e=build_event(event_id="EV-IDEMP-2",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    conflict=build_event(event_id="EV-IDEMP-2",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d2",stage="DECISION")
+    with tempfile.TemporaryDirectory() as d:
+        p=Path(d)/"events.jsonl"
+        append_event_idempotent(e,p)
+        try:
+            append_event_idempotent(conflict,p)
+        except ValueError as exc:
+            assert "event_id conflict" in str(exc)
+        else:
+            raise AssertionError("conflicting event_id was accepted")
+
+
 if __name__=="__main__":
     tests=[v for n,v in sorted(globals().items()) if n.startswith("test_") and callable(v)]
     for test in tests: test()
