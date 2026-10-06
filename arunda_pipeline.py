@@ -198,6 +198,11 @@ from cp46_d_production_provider_preflight_v0_1 import (
 )
 from toobit_trading_adapter import ToobitTradingAdapter
 from execution_quality_v0_1 import collect_toobit_execution_quality
+from mcp01_compact_event_evidence_v0_1 import append_event, build_event
+from mcp01_trader_evidence_bridge_v0_1 import (
+    build_runtime_evidence_events,
+    deduplicate_events,
+)
 
 # ============================================================================
 
@@ -4426,6 +4431,7 @@ def main() -> int:
 
                 execution_results[asset] = {
                     "accepted": result.accepted,
+                    "trade_event_id": result.trade_event_id,
                     "exchange_order_id": result.exchange_order_id,
                     "status": result.status,
                     "asset": result.asset,
@@ -4455,6 +4461,23 @@ def main() -> int:
                 for row in execution_results.values()
                 if row.get("accepted") is True
             )
+
+            # MCP-01 compact evidence: consume only authoritative Trader
+            # identities already present in the runtime results. The bridge never
+            # invents trade_event_id and never substitutes exchange_order_id.
+            mcp01_events = deduplicate_events(
+                build_runtime_evidence_events(
+                    cycle_id=runtime_cycle_id,
+                    emitted_at=utc_now_iso(),
+                    decision_snapshot=decision_snapshot,
+                    trade_gate_snapshot=trade_gate_snapshot,
+                    trade_ready_assets=trade_ready_assets,
+                    execution_results=execution_results,
+                )
+            )
+            for event in mcp01_events:
+                append_event(build_event(**event))
+            print(f"MCP01_COMPACT_EVENTS_APPENDED={len(mcp01_events)}")
 
             # CP49/CP46-D compact diagnostic witness: expose the authoritative
             # provider preflight cause without requiring retrieval of the
