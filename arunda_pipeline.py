@@ -198,7 +198,10 @@ from cp46_d_production_provider_preflight_v0_1 import (
 )
 from toobit_trading_adapter import ToobitTradingAdapter
 from execution_quality_v0_1 import collect_toobit_execution_quality
-from mcp01_compact_event_evidence_v0_1 import (\n    build_event,\n    persist_events_isolated,\n)
+from mcp01_compact_event_evidence_v0_1 import (
+    build_event,
+    persist_events_isolated,
+)
 from mcp01_trader_evidence_bridge_v0_1 import (
     build_runtime_evidence_events,
     deduplicate_events,
