@@ -198,7 +198,7 @@ from cp46_d_production_provider_preflight_v0_1 import (
 )
 from toobit_trading_adapter import ToobitTradingAdapter
 from execution_quality_v0_1 import collect_toobit_execution_quality
-from mcp01_compact_event_evidence_v0_1 import append_event, build_event
+from mcp01_compact_event_evidence_v0_1 import append_event_idempotent, build_event
 from mcp01_trader_evidence_bridge_v0_1 import (
     build_runtime_evidence_events,
     deduplicate_events,
@@ -4502,7 +4502,7 @@ def main() -> int:
             )
         )
         for event in mcp01_events:
-            append_event(build_event(**event))
+            append_event_idempotent(build_event(**event))
         print(f"MCP01_COMPACT_EVENTS_APPENDED={len(mcp01_events)}")
 
 
