@@ -1,30 +1,29 @@
-# ARUNDA TRADER — BUILDER CONTINUATION BRIEF
-## PURPOSE
+# ARUNDA TRADER — BUILDER CONTINUATION / MCP-01 HANDOFF
 
-This file is the **context-loss continuation contract** for the next Builder/Manager.
+## AUTHORITY
+This file is the compact forward continuation contract for context loss.
 
-If the current Builder/Chat becomes unavailable, the next Builder MUST continue the project from this document and the canonical governance documents. Do not spend days re-searching the history or rebuilding the architecture from scratch.
-
-Primary governance order:
+Repository governance wins over chat memory.
+Read these first:
 1. PROJECT_STATE.md
 2. ARCHITECTURE.md
 3. CHECKPOINTS.md
 4. CURRENT_FRONTIER.md
 5. BUILDER_PROTOCOL.md
 6. MANAGEMENT_ROADMAP.md
-7. THIS FILE
+7. BUILDER_CONTINUATION.md
 
-Repository governance wins over conversational memory.
+Do not reconstruct closed history from chat.
 
 ---
 
-## 1. PROJECT GOAL
+# 2026-10-06 — CURRENT FORWARD OVERRIDE
 
-ArundaTrader is being completed as a **real-market trading decision and execution system**.
+## PROJECT MISSION
 
-There is NO separate "laboratory mode".
+ArundaTrader is a real-market, exchange-agnostic trading decision/execution system.
 
-The intended operating model is:
+Canonical lifecycle:
 
 REAL MARKET
 → DYNAMIC UNIVERSE
@@ -44,20 +43,19 @@ REAL MARKET
 → PROVIDER
 → REAL PROVIDER RESPONSE
 → OBSERVATION
+→ EVIDENCE
 → ANALYSIS
 → MANAGEMENT CAPITAL DECISION
 
-Zero account capital does NOT mean the Trader stops thinking, deciding, sizing, gating, or building a real order request.
+There is NO separate laboratory mode.
 
-A real provider rejection caused by the actual account state is valid evidence.
-
-Capital deployment is a MANAGEMENT decision after Trader output quality is observed and analyzed.
+Capital is downstream Management state. Zero real capital does not stop Trader intelligence.
 
 ---
 
-## 2. CLOSED AREAS — DO NOT REOPEN
+# CLOSED — DO NOT REOPEN
 
-Unless direct regression evidence exists, do NOT reopen or redesign:
+The following are closed/verified unless direct regression evidence proves otherwise:
 
 - CP39 / Capital Independence
 - Zero-Capital Contract
@@ -67,411 +65,355 @@ Unless direct regression evidence exists, do NOT reopen or redesign:
 - CP48
 - CP64..CP71
 - CP69 observation contract
+- MCP-01.1
+- MCP-01.2
+- MCP-01.3
+- MCP-01.4
+- MCP-01.5
+- MCP-01.6
+- MCP-01.7
+- MCP-01.8
 
-Do NOT:
-- redesign Risk/Data Fabric;
+Do not re-audit closed checkpoints because context was lost.
+
+Do not:
+- redesign Risk or Data Fabric;
 - reconstruct historical BUY rules;
-- invent score/confidence thresholds;
-- invent capital or quantity;
-- synthesize data;
-- repair/change the production DB;
-- move exchange-specific logic into Core;
-- redesign the architecture because Toobit rejects a request;
-- run repetitive audits of already-verified checkpoints.
+- invent thresholds/formulas;
+- introduce synthetic/fill/backfill/interpolation/forward-fill/padding/blending;
+- synthesize decision_id, case_id, or trade_event_id;
+- synthesize capital, quantity, or provider outcomes;
+- repair/change production DB;
+- move exchange-specific behavior into Core;
+- reset/rebase/clean/delete/force-push.
 
 ---
 
-## 3. CURRENT MASTER ROUTE
+# MCP-01 — FINAL STATUS
 
-CURRENT FRONTIER:
+MCP-01 was built as the evidence/reporting foundation without changing Trader intelligence.
 
-**TRADER COMPLETION
-→ REAL-MARKET E2E OUTPUT PROOF
-→ OUTPUT OBSERVATION / CONSUMPTION
-→ OUTPUT ANALYSIS
-→ MANAGEMENT CAPITAL DECISION**
+Verified sequence:
 
-Immediate technical boundary:
+MCP-01.1 Compact Event Evidence
+→ 15/15 PASS
 
-**Canonical Order Request
-→ real execution boundary
-→ real Toobit response
-→ CP69 evidence**
+MCP-01.2 Runtime Projection
+→ 6/6 PASS
 
-After that:
+MCP-01.3 Case Projection
+→ 6/6 PASS
 
-**CP69 canonical observation
-→ Trader UI / observation surface
+MCP-01.4 Trade Projection
+→ 6/6 PASS
+
+MCP-01.5 Outcome Reconciliation
+→ 6/6 PASS
+
+MCP-01.6 24H Aggregator
+→ 6/6 PASS
+
+MCP-01.7 One Email / 24H
+→ 6/6 PASS
+
+MCP-01.8 24/7 Readiness
+→ 6/6 PASS
+
+For MCP-01.2 through .8, the focused tests, py_compile checks, and git diff --check were verified clean in the controlled MCP worktree.
+
+MCP-01 = BUILT / VERIFIED / CLOSED.
+
+Important:
+24/7 readiness is NOT 24/7 operation.
+
+24/7 OPERATION = NOT STARTED
+EMAIL DELIVERY = DISABLED
+CAPITAL DEPLOYMENT = NOT AUTHORIZED
+EXECUTION = SEPARATE MANAGEMENT CONTROL
+
+No runtime was executed by the MCP-01 verification sequence.
+
+---
+
+# MCP-01 ARCHITECTURE
+
+Canonical evidence flow:
+
+REAL MARKET
+→ ARUNDA PIPELINE
+→ DECISION / RISK / GATE
+→ ORDER INTENT
+→ CANONICAL ORDER
+→ EXECUTION
+→ PROVIDER RESPONSE
+→ MARKET OUTCOME
+→ COMPACT EVENT EVIDENCE
+   ├─ Runtime Projection
+   ├─ Case Projection
+   ├─ Trade Projection
+   └─ 24H Aggregator
+→ 24H Intelligence
+→ One Email / 24H
+
+Core identities:
+- decision_id = authoritative Decision Birth identity
+- case_id = analytical case identity
+- trade_event_id = authoritative order-attempt identity
+- runtime_cycle_id = runtime-cycle identity
+- provider exchange_order_id = provider identity
+
+Never substitute one identity for another.
+
+---
+
+# EXISTING MCP-01 → TRADER BRIDGE
+
+Already built:
+
+mcp01_trader_evidence_bridge_v0_1.py
+
+It maps existing Trader runtime state into compact evidence.
+
+It:
+- preserves canonical decision_id;
+- validates redundant Trade Gate decision_id lineage;
+- emits SELECTED from decision evidence;
+- emits TRADE_READY only when the established Trade Gate state says TRADE_READY;
+- emits ORDER_ATTEMPTED / PROVIDER_RESULT only when an authoritative trade_event_id exists;
+- emits DATA_QUALITY_EVENT when an execution result lacks trade_event_id;
+- never derives trade_event_id from exchange_order_id;
+- never changes Trader strategy or execution authority.
+
+The execution boundary now issues trade_event_id at the actual order-attempt boundary.
+
+Existing identity implementation:
+mcp01_trade_event_identity_v0_1.py
+
+Existing execution contract:
+exchange_execution_contract.py
+
+Existing execution boundary:
+exchange_execution_boundary.py
+
+Existing static bridge verification:
+mcp01_execution_boundary_trade_event_test_v0_1.py
+→ 2/2 PASS
+
+---
+
+# PIPELINE EVIDENCE WIRING
+
+arunda_pipeline.py has an authorized MCP-01 evidence block.
+
+It:
+- receives runtime_cycle_id;
+- maps decision/trade-gate/runtime state through the evidence bridge;
+- preserves trade_event_id and exchange_order_id as separate fields;
+- deduplicates compact events;
+- persists through persist_events_isolated(...);
+- reports bounded persistence diagnostics;
+- does NOT call append_event_idempotent directly from the evidence region;
+- is positioned outside the Execution Quality block so SELECTED / TRADE_READY evidence is not silently suppressed by Execution Quality.
+
+Static wiring verification:
+mcp01_pipeline_evidence_wiring_test_v0_1.py
+→ 4/4 PASS
+
+The bridge/persistence wiring is therefore implemented, but routine production evidence must not be claimed until an actual authorized Trader runtime produces it.
+
+---
+
+# IMPORTANT DISTINCTION
+
+MCP-01 module tests prove contracts.
+
+They do NOT prove that a new production runtime has occurred.
+
+Do not claim:
+- real runtime success;
+- real provider acceptance;
+- real provider rejection;
+- real trade;
+- market outcome;
+unless an authoritative runtime/evidence record exists.
+
+Do not convert a mock or unit-test response into real provider evidence.
+
+---
+
+# CURRENT FRONTIER AFTER MCP-01
+
+The next objective is NOT another MCP module.
+
+The next objective is:
+
+## CONNECT / VERIFY THE EXISTING MCP-01 TO THE REAL TRADER EVIDENCE FLOW
+
+Minimal scope.
+Maximum traceability.
+Zero strategy drift.
+
+Target:
+
+REAL TRADER RUNTIME
+→ existing compact evidence bridge
+→ canonical evidence persistence
+→ existing Runtime / Case / Trade projections
+→ existing Outcome Reconciliation
+→ existing 24H Aggregator
+→ existing 24H Email formatter
+→ governed observation / analysis
+
+Do not rebuild any of these modules.
+
+First inspect the actual current wiring and prove what is already connected versus what remains disconnected.
+
+---
+
+# AROONDA NEXT
+
+After clean canonical Trader evidence exists:
+
+CP69 canonical observation
+→ governed UI / observation surface
 → Aroonda read-only consumer
-→ analysis / explanation / gap detection**
+→ analysis / explanation / gap detection
 
-Aroonda does NOT replace ArundaTrader execution authority.
+Aroonda is NOT the execution authority.
+
+Aroonda may observe, analyze, explain, detect capability gaps, and propose improvements within governance.
+
+Aroonda must not silently mutate:
+- Trader history;
+- Trader contracts;
+- Decision identity;
+- Risk;
+- Trade Gate;
+- Order Intent;
+- execution behavior;
+- capital state.
 
 ---
 
-## 4. CURRENT EXECUTION ARCHITECTURE
+# REAL EXECUTION BOUNDARY
 
-The verified production path is:
+The established path is:
 
-CanonicalOrderRequest
-→ CP46-D provider preflight
-→ CP46-E execution eligibility
-→ CP49 readiness / safety gate
-→ CP46-F exact ProviderOrderRequest binding
+Canonical Order Request
+→ CP46-D Provider Preflight
+→ CP46-E Execution Eligibility
+→ CP49 Readiness / Safety Gate
+→ CP46-F ProviderOrderRequest binding
 → CP46-G execution consumer handoff
 → adapter.submit_order()
 → Toobit live transport
 → real provider response
 → CP69 observation
 
-Important implementation surfaces:
+Do not bypass this chain.
 
-- cp49_live_execution_bridge_v0_1.py
-- cp46_g_binding_execution_consumer_handoff_v0_1.py
-- toobit_trading_adapter.py
-- toobit_spot_order_live_transport_v0_1.py
-- cp49_first_execution_readiness_v0_1.py
-- cp49_first_execution_evidence_contract_v0_1.py
-- cp69_runtime_observation.py
-- arunda_pipeline.py
+Real Toobit order endpoint:
+POST /api/v1/spot/order
 
-Do not bypass CP46-G or call execute_order directly from a new bridge.
+orderTest is forbidden.
 
----
+Execution authorization is separate from capital authorization.
 
-## 5. EXECUTION CONTROL
-
-Explicit Management execution control:
-
-ARUNDA_EXECUTION_MANAGEMENT_AUTHORIZED=TRUE
-
-This means execution authorization only.
-
-It does NOT mean:
-- capital authorization;
-- strategy authorization;
-- permission to redesign contracts;
-- permission to repeat runtimes indefinitely.
-
-The current governance requires fail-closed behavior and no automatic retry.
-
----
-
-## 6. IMPORTANT REAL-WORLD FINDINGS ALREADY ESTABLISHED
-
-### Toobit authenticated read-only path
-
-Authenticated:
-
-GET /api/v1/account
-
-returned HTTP 200 and a valid account identity, with an empty balances array.
-
-This established that:
-- API authentication works;
-- API key/secret are valid;
-- server timestamp handling is accepted on the signed account endpoint;
-- HMAC/query construction works on the signed account endpoint;
-- the account can legitimately expose zero balances.
-
-Therefore, do NOT restart generic API-key/signature/time investigations merely because an order endpoint returned -1021.
-
-### Order transport investigation
-
-The observed -1021 diagnostics were not sufficient proof of a real provider rejection when produced through fake/mock response paths.
-
-Do NOT label a mocked -1021 as real Toobit evidence.
-
-The remaining question is the **real order endpoint request/response behavior**.
-
----
-
-## 7. CURRENT CONTROLLED PROBE
-
-The project is currently at the boundary where Management authorized a **single real provider submission probe**.
-
-There is no existing production selector for "one order only".
-
-Do NOT modify production pipeline merely to add a probe selector.
-
-The approved approach is a temporary external probe that:
-- imports arunda_pipeline;
-- wraps execute_canonical_request;
-- permits exactly ONE real execution-boundary call;
-- blocks before a second call;
-- prints the first real execution result;
-- is not a production architecture change.
-
-Temporary file intended:
-
-cp49_single_order_real_probe_v0_1.py
-
-Expected invocation:
-
-python .\cp49_single_order_real_probe_v0_1.py
-
-IMPORTANT:
-The probe must never accidentally submit a second provider order.
-
-If the first invocation fails before reaching the provider, do not infer that a real order was attempted. Inspect the returned status/error and adjust the probe boundary carefully. Do not blindly run another real submission.
-
-If a real provider response is obtained, record it as evidence once.
-
----
-
-## 8. RESULT INTERPRETATION
-
-Only evidence may establish these states:
-
-EXECUTION=ON
-means the real execution path was enabled/entered.
-
-REAL_ORDER=True
-means a real provider order request was actually submitted.
-
-REAL_TRADE=True
-means the provider accepted/executed the order.
-
-Valid real rejection:
+If a real runtime is explicitly authorized, evidence must distinguish:
 
 EXECUTION=ON
 REAL_ORDER=True
-REAL_TRADE=False
-PROVIDER_STATUS=REJECTED
+REAL_TRADE=True/False
 
-Do NOT convert:
-- local validation failure into provider rejection;
-- mock response into provider evidence;
-- empty balance observation into a fabricated insufficient-balance response;
-- missing output into success/failure.
+A valid provider rejection is real evidence only when a real provider request was actually submitted.
+
+Never invent the provider result.
 
 ---
 
-## 9. WHAT THE NEXT BUILDER SHOULD DO
+# RUNTIME RULE
 
-### FIRST
-Read the seven governance documents listed at the top.
+No production runtime merely because this document says it is next.
 
-### SECOND
-Establish actual repository branch and HEAD.
+Before any real runtime:
+- Management must explicitly authorize that exact runtime;
+- confirm the intended execution boundary;
+- preserve the one-run/no-automatic-retry rule where applicable.
 
-### THIRD
-Inspect only the immediate CP49 execution-boundary surfaces.
-
-### FOURTH
-Continue the single-order controlled probe already authorized by Management.
-
-### FIFTH
-If a real provider response is obtained:
-1. preserve the exact result;
-2. record CP69 evidence;
-3. update the governance state;
-4. move forward.
-
-### SIXTH
-Do NOT spend days searching for an already-solved architecture problem.
-
-The architecture is already established.
-
-The Builder's job is now to **prove the remaining real boundary, observe the output, analyze it, and advance**.
+If runtime output is missing:
+- do not guess;
+- do not retry automatically;
+- obtain the actual output/evidence first.
 
 ---
 
-## 10. IF THE CHAT CONTEXT IS LOST
+# BUILDER OPERATING PROTOCOL
 
-Do NOT ask:
+For the next Builder:
 
-"What was the architecture?"
-"What were CP44/46/47/48 doing?"
-"Should we redesign Risk?"
-"Should we rebuild the data fabric?"
-"Should we invent a laboratory mode?"
-"Should we create fake capital?"
-"Should we rerun every old test?"
+1. Read the seven governance documents.
+2. Establish actual branch, HEAD, status, and recent commits.
+3. Treat this 2026-10-06 MCP-01 override as the current forward handoff.
+4. Do not reopen MCP-01.1-.8.
+5. Inspect only the existing MCP-01 ↔ Trader wiring needed for the active frontier.
+6. Determine exactly which projections/aggregation/email components are already connected to production evidence and which are not.
+7. Propose the smallest exact wiring change before modifying code.
+8. Preserve:
+   - Trader intelligence;
+   - canonical identities;
+   - dynamic cardinality;
+   - full selection set;
+   - fail-closed behavior;
+   - bounded management output;
+   - no artificial selection/report caps.
+9. Run focused static/tests after any approved change.
+10. Run no production runtime without separate explicit authorization.
+11. Synchronize governance documents when the frontier materially advances.
 
-The answer is already documented.
+Management rule:
 
-Ask only:
-
-1. What is the current HEAD?
-2. What is the current frontier?
-3. Has the single authorized real provider probe produced actual evidence?
-4. If yes, what exactly did the provider return?
-5. If not, what exact boundary blocked it?
-6. What is the smallest next action that proves that boundary?
-
-Then continue.
-
----
-
-## 11. HARD SAFETY / GOVERNANCE RULES
-
-Never:
-- reset;
-- rebase;
-- force-push;
-- clean/delete unknown local artifacts;
-- modify the production DB;
-- fabricate data;
-- backfill/interpolate/fill/pad/blend;
-- synthesize decision identity;
-- synthesize capital;
-- invent provider outcomes;
-- automatically retry a failed real runtime;
-- reopen closed checkpoints without regression evidence;
-- redesign Core because of provider-specific behavior.
-
-When repository state and chat memory disagree, repository evidence wins until Management resolves the discrepancy.
+BUILD → VERIFY → RECORD → ADVANCE
 
 ---
 
-## 12. MANAGEMENT PRINCIPLE
+# HARD PROHIBITIONS
 
-**BUILD → VERIFY → RECORD → ADVANCE**
-
-The repository must be self-explanatory enough that a new Builder can continue the project immediately after context loss.
-
-The Builder is NOT expected to rediscover the project.
-
-The Builder is expected to **continue it**.
-
----
-
-## 13. CURRENT HANDOFF SNAPSHOT
-
-At the time this continuation contract was created:
-
-- CP49 is the active execution-boundary work.
-- The full production architecture is already established.
-- Authenticated Toobit account read works.
-- Empty account balances are compatible with the zero-capital operating model.
-- Mock -1021 diagnostics are not real provider evidence.
-- Management has authorized one controlled real provider submission.
-- The next meaningful action is to execute/finish that single controlled probe and capture the actual provider response.
-- After that, move to CP69 observation/consumption and output analysis.
-- Do not restart historical architecture investigation.
-
-**THIS IS A FORWARD HANDOFF, NOT A HISTORICAL RE-AUDIT.**
-
+No:
+- synthetic data;
+- fake outcomes;
+- fake capital;
+- fake quantity;
+- fake decision identity;
+- fake trade_event_id;
+- selection suppression;
+- first-order cap;
+- max-40/max-50 report cap;
+- report-based trade suppression;
+- DB repair/change;
+- strategy redesign;
+- exchange-specific Core logic;
+- automatic real-runtime retry;
+- closed-checkpoint reopening;
+- reset/rebase/clean/delete/force operation.
 
 ---
 
-# 2026-10-05 — LATEST FORWARD OVERRIDE / CONTINUATION LOCK
+# MANAGEMENT VERDICT
 
-> This section supersedes earlier forward sections of this file when they conflict. Historical sections remain provenance. The next Builder MUST use repository state documents and actual Git state before acting.
+MCP-01 is complete.
 
-## CURRENT GOVERNANCE TRUTH
+The project has moved from:
+"build the evidence/reporting machinery"
 
-- The project is **not** in a laboratory mode. It is a real-market trading decision/execution system.
-- Closed checkpoints remain closed unless direct regression evidence exists.
-- CP49 remains the active execution-boundary frontier.
-- The master route is:
-  **TRADER COMPLETION → REAL-MARKET E2E OUTPUT PROOF → OUTPUT OBSERVATION/CONSUMPTION → OUTPUT ANALYSIS → MANAGEMENT CAPITAL DECISION**
-- Immediate technical boundary:
-  **Canonical Order Request → real execution boundary → real Toobit response → CP69 evidence**
-- Aroonda is a read-only observation/analysis consumer. It does not replace ArundaTrader execution authority.
+to:
 
-## DECISION-BIRTH STATUS
+"prove the existing evidence machinery is actually connected to the real Trader flow, then consume the resulting canonical evidence for analysis."
 
-The historical CP49 runtime-producer blocker around authoritative decision identity has been addressed through the authoritative Decision Birth / persistence path. Do not recreate or synthesize decision identity in Pipeline, Snapshot, Order Intent, or Execution.
+The next Builder must continue from that frontier directly.
 
-The canonical lifecycle remains:
+No restart.
+No redesign.
+No historical re-audit.
+No new MCP architecture.
 
-REAL MARKET
-→ Opportunity
-→ ProductionSignalInput
-→ Dynamic Signal
-→ Validation
-→ Fusion
-→ Score
-→ Decision Birth
-→ Risk
-→ Trade Gate
-→ Trade Ready
-→ Order Intent
-→ Canonical Order Request
-→ Provider Preflight / Execution Boundary
-→ Provider Response
-→ CP69 Observation
-
-## CURRENT GIT / WORKTREE HANDOFF
-
-The controlled synchronization branch is:
-`sync/local-project-20260917`
-
-The next Builder MUST inspect:
-`git branch --show-current`
-`git log --oneline --decorate -15`
-`git status --short`
-`git stash list -n 2`
-
-Do not assume the remote branch SHA equals the local HEAD. The local branch may legitimately contain preserved local CP49 commits plus cherry-picked remote changes.
-
-A protected pre-sync tracked-worktree stash exists in the local environment when present:
-`CP49 pre-sync tracked worktree 20261005`
-
-Do not drop it until the restored tracked changes have been deliberately reconciled and promoted.
-
-Untracked DB, backup, forensic, probe, patch, and runtime-observation artifacts are local operational/recovery material unless explicitly promoted by Management. Never clean/delete them automatically.
-
-## CURRENT LOCAL WORKTREE REALITY
-
-At the latest handoff, the local tracked CP49 execution surfaces had been restored from the protected stash with **no merge conflict**. These local modifications are not automatically canonical merely because they exist.
-
-The affected surfaces include:
-- `arunda_pipeline.py`
-- `cp46_g_binding_execution_consumer_handoff_v0_1.py`
-- `cp49_live_execution_bridge_v0_1.py`
-- `test_cp46_g_binding_execution_consumer_handoff_v0_1.py`
-- `test_cp49_execution_boundary_v0_1.py`
-- `test_cp49_first_execution_readiness_v0_1.py`
-- `test_cp49_toobit_provider_preflight_evidence_v0_1.py`
-- `test_toobit_adapter_live_submission_binding_v0_1.py`
-- `toobit_provider_preflight_evidence_v0_1.py`
-- `toobit_spot_order_live_transport_v0_1.py`
-- `toobit_trading_adapter.py`
-
-First action is therefore **reconcile and verify these actual local changes against the active CP49 frontier**, not redesign the architecture.
-
-## EXECUTION / RUNTIME RULE
-
-Do not infer a real provider outcome from code, mocks, probes, or stale chat memory.
-
-Before claiming:
-- REAL_ORDER=True
-- REAL_TRADE=True
-- provider rejection
-- provider failure
-- successful execution
-
-the Builder MUST locate the exact authoritative runtime/evidence record in the repository or obtain the actual Management-supplied runtime output.
-
-Never automatically retry a real execution merely because the previous result is unclear.
-
-Execution authorization is a separate Management control. Do not convert documentation, capital state, account balance, or API capability into execution authorization.
-
-## NEXT ACTION AFTER CONTEXT LOSS
-
-1. Read:
-   `PROJECT_STATE.md`
-   `ARCHITECTURE.md`
-   `CHECKPOINTS.md`
-   `CURRENT_FRONTIER.md`
-   `BUILDER_PROTOCOL.md`
-   `MANAGEMENT_ROADMAP.md`
-   `BUILDER_CONTINUATION.md`
-2. Inspect actual branch/HEAD/worktree/stashes.
-3. Reconcile the restored tracked CP49 changes against the current canonical frontier.
-4. Do not rerun closed checkpoints.
-5. Do not run a new real runtime unless Management explicitly authorizes that exact runtime.
-6. Once the execution-boundary evidence is authoritative and recorded, advance to CP69 observation/consumption and output analysis.
-7. Keep repository state synchronized whenever the frontier changes.
-
-## HANDOFF PRINCIPLE
-
-The next Builder does **not** need to reconstruct the architecture from chat history.
-
-The Builder only needs to:
-**READ STATE → INSPECT ACTUAL GIT → IDENTIFY THE ACTIVE CP49 BOUNDARY → VERIFY THE SMALLEST REMAINING EVIDENCE → RECORD → ADVANCE.**
-
-No reset, rebase, force-push, clean, DB repair, synthetic data, fabricated provider outcome, automatic retry, or closed-checkpoint reopening.
+**NEXT FRONTIER = EXISTING MCP-01 → REAL TRADER EVIDENCE FLOW → VERIFIED OUTPUT CONSUMPTION → AROONDA READ-ONLY ANALYSIS.**
