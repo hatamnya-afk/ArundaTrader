@@ -4462,46 +4462,31 @@ def main() -> int:
                 if row.get("accepted") is True
             )
 
-            # MCP-01 compact evidence: consume only authoritative Trader
-            # identities already present in the runtime results. The bridge never
-            # invents trade_event_id and never substitutes exchange_order_id.
-            mcp01_events = deduplicate_events(
-                build_runtime_evidence_events(
-                    cycle_id=runtime_cycle_id,
-                    emitted_at=utc_now_iso(),
-                    decision_snapshot=decision_snapshot,
-                    trade_gate_snapshot=trade_gate_snapshot,
-                    trade_ready_assets=trade_ready_assets,
-                    execution_results=execution_results,
-                )
-            )
-            for event in mcp01_events:
-                append_event(build_event(**event))
-            print(f"MCP01_COMPACT_EVENTS_APPENDED={len(mcp01_events)}")
-
-            # CP49/CP46-D compact diagnostic witness: expose the authoritative
-            # provider preflight cause without requiring retrieval of the
-            # potentially very large CP69 JSONL observation line.
-            cp46d_diagnostics = sorted(
-                {
-                    (
-                        str(row.get("error_code")),
-                        str(row.get("error_message")),
-                    )
-                    for row in execution_results.values()
-                    if isinstance(row, dict)
-                    and row.get("error_code") == "CP49_READINESS_BLOCKED"
-                }
-            )
-            for diagnostic_code, diagnostic_message in cp46d_diagnostics:
-                print(f"CP49_DIAGNOSTIC_ERROR_CODE={diagnostic_code}")
-                print(f"CP49_DIAGNOSTIC_ERROR_MESSAGE={diagnostic_message}")
-
             execution_boundary_status = (
                 "LIVE_PROVIDER_ATTEMPTED"
                 if attempted_count
                 else "VERIFIED_BLOCKED"
             )
+        # MCP-01 compact evidence: consume only authoritative Trader
+        # identities already present in the runtime results. The bridge never
+        # invents trade_event_id and never substitutes exchange_order_id.
+        # This boundary is intentionally OUTSIDE the execution-quality/order
+        # block so SELECTED and TRADE_READY evidence is emitted even when
+        # execution quality blocks every order or no order is attempted.
+        mcp01_events = deduplicate_events(
+            build_runtime_evidence_events(
+                cycle_id=runtime_cycle_id,
+                emitted_at=utc_now_iso(),
+                decision_snapshot=decision_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+                trade_ready_assets=trade_ready_assets,
+                execution_results=execution_results,
+            )
+        )
+        for event in mcp01_events:
+            append_event(build_event(**event))
+        print(f"MCP01_COMPACT_EVENTS_APPENDED={len(mcp01_events)}")
+
 
         # ------------------------------------------------------------------
         # 13. CP69 CANONICAL RUNTIME OBSERVATION
