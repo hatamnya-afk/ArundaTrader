@@ -4462,6 +4462,24 @@ def main() -> int:
                 if row.get("accepted") is True
             )
 
+            # CP49/CP46-D compact diagnostic witness: expose the authoritative
+            # provider preflight cause without requiring retrieval of the
+            # potentially very large CP69 JSONL observation line.
+            cp46d_diagnostics = sorted(
+                {
+                    (
+                        str(row.get("error_code")),
+                        str(row.get("error_message")),
+                    )
+                    for row in execution_results.values()
+                    if isinstance(row, dict)
+                    and row.get("error_code") == "CP49_READINESS_BLOCKED"
+                }
+            )
+            for diagnostic_code, diagnostic_message in cp46d_diagnostics:
+                print(f"CP49_DIAGNOSTIC_ERROR_CODE={diagnostic_code}")
+                print(f"CP49_DIAGNOSTIC_ERROR_MESSAGE={diagnostic_message}")
+
             execution_boundary_status = (
                 "LIVE_PROVIDER_ATTEMPTED"
                 if attempted_count
