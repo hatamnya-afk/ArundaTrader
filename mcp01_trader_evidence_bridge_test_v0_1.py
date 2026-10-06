@@ -118,14 +118,18 @@ def test_identity_conflict_is_rejected():
         **gates["BTC"],
         "decision_id": "WRONG-ID",
     }
-    events = build_runtime_evidence_events(
-        cycle_id="RC-5",
-        emitted_at="2026-10-06T00:04:00+00:00",
-        decision_snapshot=decisions,
-        trade_gate_snapshot=bad_gates,
-        trade_ready_assets={"BTC"},
-    )
-    assert events[0]["decision_id"] == "DEC-BTC-1"
+    try:
+        build_runtime_evidence_events(
+            cycle_id="RC-5",
+            emitted_at="2026-10-06T00:04:00+00:00",
+            decision_snapshot=decisions,
+            trade_gate_snapshot=bad_gates,
+            trade_ready_assets={"BTC"},
+        )
+    except ValueError as exc:
+        assert "decision_id lineage mismatch" in str(exc)
+    else:
+        raise AssertionError("decision lineage conflict was not rejected")
 
 
 def test_deduplication_is_identity_based_and_stable():
@@ -153,14 +157,7 @@ def main():
         test_deduplication_is_identity_based_and_stable,
     )
     for test in tests:
-        try:
-            test()
-        except AssertionError:
-            # The conflict test intentionally verifies that the bridge does not
-            # trust a redundant Trade Gate decision_id over the canonical snapshot.
-            if test is test_identity_conflict_is_rejected:
-                continue
-            raise
+        test()
     print("MCP01_TRADER_EVIDENCE_BRIDGE_TESTS=6/6 PASS")
 
 
