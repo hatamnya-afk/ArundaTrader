@@ -57,15 +57,28 @@ def test_evidence_call_uses_authoritative_runtime_inputs():
     assert "exchange_order_id" not in block
 
 
+def test_evidence_persistence_is_isolated_from_pipeline_control_flow():
+    source = PIPELINE.read_text(encoding="utf-8-sig")
+
+    evidence_pos = source.index("mcp01_events = deduplicate_events(")
+    persistence_pos = source.index("persist_events_isolated(", evidence_pos)
+    cp69_pos = source.index("# 13. CP69 CANONICAL RUNTIME OBSERVATION")
+
+    assert evidence_pos < persistence_pos < cp69_pos
+    assert "append_event_idempotent(" not in source[evidence_pos:cp69_pos]
+    assert "MCP01_EVIDENCE_PERSISTENCE_FAILURES=" in source[persistence_pos:cp69_pos]
+
+
 def main():
     tests = (
         test_evidence_boundary_is_after_execution_results_and_outside_execution_quality_block,
         test_pipeline_preserves_authoritative_trade_event_id_in_execution_result_mapping,
         test_evidence_call_uses_authoritative_runtime_inputs,
+        test_evidence_persistence_is_isolated_from_pipeline_control_flow,
     )
     for test in tests:
         test()
-    print("MCP01_PIPELINE_EVIDENCE_WIRING_TESTS=3/3 PASS")
+    print("MCP01_PIPELINE_EVIDENCE_WIRING_TESTS=4/4 PASS")
 
 
 if __name__ == "__main__":
