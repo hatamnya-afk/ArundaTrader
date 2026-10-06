@@ -72,6 +72,9 @@ class CanonicalExecutionResult:
     adapter: Optional[str]
     error_code: Optional[str]
     error_message: Optional[str]
+    # Issued by the execution boundary for an actual order-attempt call.
+    # Never sourced from exchange_order_id or provider response.
+    trade_event_id: Optional[str] = None
 
 
 def build_order_request(
@@ -181,6 +184,7 @@ def blocked_execution_result(
     adapter: Optional[str] = None,
     error_code: str = "EXECUTION_DISABLED",
     error_message: str = "Execution is disabled by contract.",
+    trade_event_id: Optional[str] = None,
 ) -> CanonicalExecutionResult:
     """
     Contract-level fail-closed result.
@@ -199,6 +203,7 @@ def blocked_execution_result(
         adapter=adapter,
         error_code=error_code,
         error_message=error_message,
+        trade_event_id=trade_event_id,
     )
 
 
