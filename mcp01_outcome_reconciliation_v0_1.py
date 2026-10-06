@@ -85,8 +85,42 @@ def _event_state(event_type: str) -> str | None:
     return _EVENT_STAGE.get(event_type)
 
 
+def _merge_identity(state: dict, event: Mapping[str, object]) -> None:
+    for field in ("decision_id", "trade_event_id", "asset", "direction", "case_id"):
+        value = event.get(field)
+        if value is None:
+            continue
+        value = _require_text(value, field)
+        if state[field] is not None and state[field] != value:
+            raise ValueError(f"reconciliation identity conflict: {field}={value}")
+        state[field] = value
+
+
+def _new_state(case_id: str | None, decision_id: str | None, trade_event_id: str | None) -> dict:
+    return {
+        "case_id": case_id,
+        "decision_id": decision_id,
+        "trade_event_id": trade_event_id,
+        "asset": None,
+        "direction": None,
+        "states": set(),
+        "evidence_count": 0,
+        "provider": None,
+        "provider_status": None,
+        "provider_reason_code": None,
+        "market_outcome": None,
+        "case_outcome": None,
+        "events": [],
+    }
+
+
 def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
-    groups: dict[tuple[str | None, str | None], dict] = {}
+    # First retain the decision anchor independently. Trade evidence is keyed by
+    # its authoritative trade_event_id. This allows one decision to have multiple
+    # order attempts while still attaching the decision state to every trade chain.
+    decision_anchors: dict[tuple[str | None, str], dict] = {}
+    trades: dict[tuple[str | None, str], dict] = {}
+    case_closures: dict[str, list[Mapping[str, object]]] = {}
 
     for event in events:
         event_type = _require_text(event.get("event_type"), "event_type")
@@ -100,39 +134,26 @@ def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
 
         if state_name in {"ORDER", "PROVIDER_RESULT", "MARKET_OUTCOME"} and trade_event_id is None:
             raise ValueError(f"{event_type} requires trade_event_id")
+        if state_name == "DECISION" and decision_id is None:
+            raise ValueError("TRADE_READY requires decision_id")
 
-        key = (case_id, trade_event_id or decision_id)
-        state = groups.setdefault(
-            key,
-            {
-                "case_id": case_id,
-                "decision_id": decision_id,
-                "trade_event_id": trade_event_id,
-                "asset": None,
-                "direction": None,
-                "states": set(),
-                "evidence_count": 0,
-                "provider": None,
-                "provider_status": None,
-                "provider_reason_code": None,
-                "market_outcome": None,
-                "case_outcome": None,
-            },
-        )
+        if state_name == "CASE_OUTCOME":
+            if case_id is None:
+                raise ValueError("CLOSED requires case_id")
+            case_closures.setdefault(case_id, []).append(event)
+            continue
 
+        if state_name == "DECISION":
+            key = (case_id, decision_id)
+            state = decision_anchors.setdefault(key, _new_state(case_id, decision_id, None))
+        else:
+            key = (case_id, trade_event_id)
+            state = trades.setdefault(key, _new_state(case_id, decision_id, trade_event_id))
+
+        _merge_identity(state, event)
         state["evidence_count"] += 1
         state["states"].add(state_name)
-
-        for field in ("decision_id", "trade_event_id", "asset", "direction", "case_id"):
-            value = event.get(field)
-            if value is None:
-                continue
-            value = _require_text(value, field)
-            if state[field] is not None and state[field] != value:
-                raise ValueError(
-                    f"reconciliation identity conflict: {field}={value}"
-                )
-            state[field] = value
+        state["events"].append(event)
 
         provider = event.get("provider")
         if provider is not None:
@@ -142,48 +163,62 @@ def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
             state["provider"] = provider
 
         if state_name == "PROVIDER_RESULT":
-            state["provider_status"] = _optional_text(
-                event.get("status"), "status"
-            )
-            state["provider_reason_code"] = _optional_text(
-                event.get("reason_code"), "reason_code"
-            )
+            state["provider_status"] = _optional_text(event.get("status"), "status")
+            state["provider_reason_code"] = _optional_text(event.get("reason_code"), "reason_code")
         elif state_name == "MARKET_OUTCOME":
-            state["market_outcome"] = _optional_text(
-                event.get("status"), "status"
-            )
-        elif state_name == "CASE_OUTCOME":
-            state["case_outcome"] = _optional_text(
-                event.get("status"), "status"
-            )
+            state["market_outcome"] = _optional_text(event.get("status"), "status")
 
-    result = []
-    for key in sorted(groups, key=lambda item: (item[0] or "", item[1] or "")):
-        state = groups[key]
-        states_seen = tuple(
-            name for name in RECONCILIATION_STATES if name in state["states"]
-        )
+    # Attach each decision anchor to every trade event carrying that decision.
+    # A decision with no order attempt remains a decision-only reconciliation.
+    results = []
+    attached_decisions: set[tuple[str | None, str]] = set()
+    for key, state in trades.items():
+        anchor_key = (state["case_id"], state["decision_id"]) if state["decision_id"] else None
+        if anchor_key is not None and anchor_key in decision_anchors:
+            anchor = decision_anchors[anchor_key]
+            for field in ("case_id", "decision_id", "asset", "direction"):
+                if anchor[field] is not None and state[field] is not None and anchor[field] != state[field]:
+                    raise ValueError(f"reconciliation identity conflict: {field}={state[field]}")
+                if state[field] is None:
+                    state[field] = anchor[field]
+            state["states"].add("DECISION")
+            state["evidence_count"] += anchor["evidence_count"]
+            attached_decisions.add(anchor_key)
+
+    # A case closure belongs to the case, not to a newly-created trade identity.
+    # When a case has multiple trades, its closure is reflected on each trade chain.
+    for state in trades.values():
+        case_id = state["case_id"]
+        if case_id in case_closures:
+            closure = case_closures[case_id][-1]
+            state["states"].add("CASE_OUTCOME")
+            state["evidence_count"] += 1
+            state["case_outcome"] = _optional_text(closure.get("status"), "status")
+
+    for key, state in decision_anchors.items():
+        if key in attached_decisions:
+            continue
+        states_seen = tuple(name for name in RECONCILIATION_STATES if name in state["states"])
+        results.append(OutcomeReconciliation(
+            case_id=state["case_id"], decision_id=state["decision_id"], trade_event_id=None,
+            asset=state["asset"], direction=state["direction"],
+            state=states_seen[-1] if states_seen else "DECISION", states_seen=states_seen,
+            evidence_count=state["evidence_count"], provider=None, provider_status=None,
+            provider_reason_code=None, market_outcome=None, case_outcome=None,
+            complete=False,
+        ).to_dict())
+
+    for key in sorted(trades, key=lambda item: (item[0] or "", item[1] or "")):
+        state = trades[key]
+        states_seen = tuple(name for name in RECONCILIATION_STATES if name in state["states"])
         state_name = states_seen[-1] if states_seen else "DECISION"
-        complete = all(
-            name in state["states"]
-            for name in ("DECISION", "ORDER", "PROVIDER_RESULT")
-        )
-        result.append(
-            OutcomeReconciliation(
-                case_id=state["case_id"],
-                decision_id=state["decision_id"],
-                trade_event_id=state["trade_event_id"],
-                asset=state["asset"],
-                direction=state["direction"],
-                state=state_name,
-                states_seen=states_seen,
-                evidence_count=state["evidence_count"],
-                provider=state["provider"],
-                provider_status=state["provider_status"],
-                provider_reason_code=state["provider_reason_code"],
-                market_outcome=state["market_outcome"],
-                case_outcome=state["case_outcome"],
-                complete=complete,
-            ).to_dict()
-        )
-    return result
+        complete = all(name in state["states"] for name in ("DECISION", "ORDER", "PROVIDER_RESULT"))
+        results.append(OutcomeReconciliation(
+            case_id=state["case_id"], decision_id=state["decision_id"], trade_event_id=state["trade_event_id"],
+            asset=state["asset"], direction=state["direction"], state=state_name,
+            states_seen=states_seen, evidence_count=state["evidence_count"], provider=state["provider"],
+            provider_status=state["provider_status"], provider_reason_code=state["provider_reason_code"],
+            market_outcome=state["market_outcome"], case_outcome=state["case_outcome"], complete=complete,
+        ).to_dict())
+
+    return results
