@@ -82,6 +82,10 @@ class ProviderTranslationEvidence:
     # quote quantity from an estimated/reference market price.
     quote_quantity: Optional[Any] = None
 
+    # Required only for Futures BASE_ASSET -> CONTRACTS translation.
+    contract_multiplier: Optional[Any] = None
+    contract_quantity_step: Optional[Any] = None
+
     # Authoritative provider-time captured at the provider boundary.
     #
     # Canonical timestamp is Decision-Birth time. Provider timestamp is
