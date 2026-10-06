@@ -121,7 +121,7 @@ def main() -> int:
         assert result["email_24h"]["delivery"]["enabled"] is False
         assert "email_enabled=False" in render_management_summary(result)
 
-    print("MCP01 MANAGEMENT INTELLIGENCE FLOW TESTS=6/6 PASS")
+    print("MCP01 MANAGEMENT INTELLIGENCE FLOW TESTS=7/7 PASS")
     return 0
 
 
