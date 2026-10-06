@@ -674,10 +674,6 @@ class ToobitTradingAdapter:
                 data={
                     "symbol_count": len(symbols),
                     "symbols": symbols,
-                    # Toobit /api/v1/exchangeInfo also publishes the
-                    # authoritative Futures contract rows under
-                    # `contracts`. Preserve them at the adapter boundary;
-                    # do not reinterpret them as Spot symbols.
                     "contract_count": (
                         len(payload.get("contracts", []))
                         if isinstance(payload.get("contracts"), list)
@@ -1132,89 +1128,35 @@ class ToobitTradingAdapter:
     def futures_trading_constraints(self, asset: str) -> AdapterResult:
         """Read authoritative Toobit Futures contract metadata."""
         if not isinstance(asset, str) or not asset.strip():
-            return AdapterResult(
-                status="INVALID",
-                allowed=False,
-                operation="futures_trading_constraints",
-                reason="Asset symbol is missing or invalid.",
-            )
-
+            return AdapterResult("INVALID", False, "futures_trading_constraints", "Asset symbol is missing or invalid.")
         asset = asset.strip().upper()
         try:
             result = self.get_exchange_info()
             if not result.allowed or not result.data:
-                return AdapterResult(
-                    status="UNAVAILABLE",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=result.reason,
-                )
-
+                return AdapterResult("UNAVAILABLE", False, "futures_trading_constraints", result.reason)
             contracts = result.data.get("contracts")
             if not isinstance(contracts, list):
-                return AdapterResult(
-                    status="INVALID_RESPONSE",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=(
-                        "Toobit exchangeInfo.contracts is unavailable; "
-                        "Futures readiness cannot be established."
-                    ),
-                )
-
-            matches = []
-            for row in contracts:
-                if not isinstance(row, dict):
-                    continue
-                underlying = str(row.get("underlying", "")).strip().upper()
-                quote_asset = str(row.get("quoteAsset", "")).strip().upper()
-                if underlying == asset and quote_asset == "USDT":
-                    matches.append(row)
-
-            trading = [
-                row for row in matches
-                if str(row.get("status", "")).strip().upper() == "TRADING"
+                return AdapterResult("INVALID_RESPONSE", False, "futures_trading_constraints", "Toobit exchangeInfo.contracts is unavailable; Futures readiness cannot be established.")
+            matches = [
+                row for row in contracts
+                if isinstance(row, dict)
+                and str(row.get("underlying", "")).strip().upper() == asset
+                and str(row.get("quoteAsset", "")).strip().upper() == "USDT"
             ]
-
+            trading = [row for row in matches if str(row.get("status", "")).strip().upper() == "TRADING"]
             if not matches:
-                return AdapterResult(
-                    status="NOT_FOUND",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=(
-                        f"Authoritative Toobit Futures contract for "
-                        f"{asset}/USDT was not found."
-                    ),
-                )
-
+                return AdapterResult("NOT_FOUND", False, "futures_trading_constraints", f"Authoritative Toobit Futures contract for {asset}/USDT was not found.")
             if len(trading) != 1:
                 return AdapterResult(
-                    status="AMBIGUOUS" if trading else "NOT_TRADING",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=(
-                        f"Authoritative Toobit Futures contract state "
-                        f"for {asset}/USDT is ambiguous or not TRADING."
-                    ),
-                    data={
-                        "asset": asset,
-                        "symbols": [row.get("symbol") for row in matches],
-                    },
+                    "AMBIGUOUS" if trading else "NOT_TRADING", False,
+                    "futures_trading_constraints",
+                    f"Authoritative Toobit Futures contract state for {asset}/USDT is ambiguous or not TRADING.",
+                    {"asset": asset, "symbols": [row.get("symbol") for row in matches]},
                 )
-
             row = trading[0]
             filters = row.get("filters")
             if not isinstance(filters, list) or not filters:
-                return AdapterResult(
-                    status="INVALID",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=(
-                        f"Authoritative Futures filters are unavailable "
-                        f"for {row.get('symbol')}."
-                    ),
-                )
-
+                return AdapterResult("INVALID", False, "futures_trading_constraints", f"Authoritative Futures filters are unavailable for {row.get('symbol')}.")
             normalized_filters = {}
             for item in filters:
                 if not isinstance(item, dict):
@@ -1222,46 +1164,18 @@ class ToobitTradingAdapter:
                 filter_type = item.get("filterType")
                 if isinstance(filter_type, str) and filter_type.strip():
                     normalized_filters[filter_type.strip()] = dict(item)
-
             multiplier = row.get("contractMultiplier")
             if multiplier is None or str(multiplier).strip() == "":
-                return AdapterResult(
-                    status="INVALID",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason=(
-                        "Authoritative Futures contractMultiplier is "
-                        "unavailable."
-                    ),
-                )
-
+                return AdapterResult("INVALID", False, "futures_trading_constraints", "Authoritative Futures contractMultiplier is unavailable.")
             lot = normalized_filters.get("LOT_SIZE") or normalized_filters.get("MARKET_LOT_SIZE")
             if not isinstance(lot, dict):
-                return AdapterResult(
-                    status="INVALID",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason="Authoritative Futures quantity filter is unavailable.",
-                )
-
-            required = ("minQty", "maxQty", "stepSize")
-            if any(lot.get(key) is None for key in required):
-                return AdapterResult(
-                    status="INVALID",
-                    allowed=False,
-                    operation="futures_trading_constraints",
-                    reason="Authoritative Futures quantity constraints are incomplete.",
-                )
-
+                return AdapterResult("INVALID", False, "futures_trading_constraints", "Authoritative Futures quantity filter is unavailable.")
+            if any(lot.get(key) is None for key in ("minQty", "maxQty", "stepSize")):
+                return AdapterResult("INVALID", False, "futures_trading_constraints", "Authoritative Futures quantity constraints are incomplete.")
             return AdapterResult(
-                status="PASS",
-                allowed=True,
-                operation="futures_trading_constraints",
-                reason=(
-                    f"Authoritative Toobit Futures contract constraints "
-                    f"verified for {row.get('symbol')}."
-                ),
-                data={
+                "PASS", True, "futures_trading_constraints",
+                f"Authoritative Toobit Futures contract constraints verified for {row.get('symbol')}.",
+                {
                     "asset": asset,
                     "symbol": str(row.get("symbol", "")).strip().upper(),
                     "status": str(row.get("status", "")).strip().upper(),
@@ -1275,148 +1189,58 @@ class ToobitTradingAdapter:
                 },
             )
         except Exception as exc:
-            return AdapterResult(
-                status="ERROR",
-                allowed=False,
-                operation="futures_trading_constraints",
-                reason=f"Futures contract read failed: {exc}",
-            )
+            return AdapterResult("ERROR", False, "futures_trading_constraints", f"Futures contract read failed: {exc}")
 
     def futures_account_state(self, asset: str) -> AdapterResult:
         """Read authoritative Futures balance, leverage and position state."""
         if not isinstance(asset, str) or not asset.strip():
-            return AdapterResult(
-                status="INVALID",
-                allowed=False,
-                operation="futures_account_state",
-                reason="Asset symbol is missing or invalid.",
-            )
+            return AdapterResult("INVALID", False, "futures_account_state", "Asset symbol is missing or invalid.")
         if not self.api_key or not self.api_secret:
-            return AdapterResult(
-                status="MISSING_CREDENTIALS",
-                allowed=False,
-                operation="futures_account_state",
-                reason="Toobit API credentials are not available.",
-            )
-
+            return AdapterResult("MISSING_CREDENTIALS", False, "futures_account_state", "Toobit API credentials are not available.")
         asset = asset.strip().upper()
         try:
             constraints = self.futures_trading_constraints(asset)
             if not constraints.allowed or not constraints.data:
-                return AdapterResult(
-                    status="UNAVAILABLE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason=constraints.reason,
-                )
+                return AdapterResult("UNAVAILABLE", False, "futures_account_state", constraints.reason)
             symbol = constraints.data["symbol"]
-
-            balance_response = self._signed_get(
-                FUTURES_BALANCE_ENDPOINT,
-                params={"category": "USDT"},
-            )
+            balance_response = self._signed_get(FUTURES_BALANCE_ENDPOINT, params={"category": "USDT"})
             if balance_response.status_code != 200:
-                return AdapterResult(
-                    status="HTTP_ERROR",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason=(
-                        f"Toobit Futures balance returned HTTP "
-                        f"{balance_response.status_code}."
-                    ),
-                    data=self._response_data(balance_response),
-                )
+                return AdapterResult("HTTP_ERROR", False, "futures_account_state", f"Toobit Futures balance returned HTTP {balance_response.status_code}.", self._response_data(balance_response))
             balance_payload = balance_response.json()
-            if not isinstance(balance_payload, list) or any(
-                not isinstance(row, dict) for row in balance_payload
-            ):
-                return AdapterResult(
-                    status="INVALID_RESPONSE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason="Toobit Futures balance response is invalid.",
-                )
-
-            leverage_response = self._signed_get(
-                FUTURES_ACCOUNT_LEVERAGE_ENDPOINT,
-                params={"symbol": symbol, "category": "USDT"},
-            )
+            if not isinstance(balance_payload, list) or any(not isinstance(row, dict) for row in balance_payload):
+                return AdapterResult("INVALID_RESPONSE", False, "futures_account_state", "Toobit Futures balance response is invalid.")
+            leverage_response = self._signed_get(FUTURES_ACCOUNT_LEVERAGE_ENDPOINT, params={"symbol": symbol, "category": "USDT"})
             if leverage_response.status_code != 200:
-                return AdapterResult(
-                    status="HTTP_ERROR",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason=(
-                        f"Toobit Futures accountLeverage returned HTTP "
-                        f"{leverage_response.status_code}."
-                    ),
-                    data=self._response_data(leverage_response),
-                )
+                return AdapterResult("HTTP_ERROR", False, "futures_account_state", f"Toobit Futures accountLeverage returned HTTP {leverage_response.status_code}.", self._response_data(leverage_response))
             leverage_payload = leverage_response.json()
             if not isinstance(leverage_payload, list):
-                return AdapterResult(
-                    status="INVALID_RESPONSE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason="Toobit Futures accountLeverage response is invalid.",
-                )
+                return AdapterResult("INVALID_RESPONSE", False, "futures_account_state", "Toobit Futures accountLeverage response is invalid.")
             leverage_rows = [
                 row for row in leverage_payload
                 if isinstance(row, dict)
                 and str(row.get("symbolId", "")).strip().upper() == symbol
             ]
             if len(leverage_rows) != 1:
-                return AdapterResult(
-                    status="INVALID_STATE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason=(
-                        "Authoritative Futures leverage/margin state is "
-                        "missing or ambiguous."
-                    ),
-                )
+                return AdapterResult("INVALID_STATE", False, "futures_account_state", "Authoritative Futures leverage/margin state is missing or ambiguous.")
             leverage_row = leverage_rows[0]
             leverage = leverage_row.get("leverage")
             margin_type = str(leverage_row.get("marginType", "")).strip().upper()
             if leverage is None or str(leverage).strip() == "" or margin_type not in {"CROSS", "ISOLATED"}:
-                return AdapterResult(
-                    status="INVALID_STATE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason="Authoritative Futures leverage/margin state is incomplete.",
-                )
-
+                return AdapterResult("INVALID_STATE", False, "futures_account_state", "Authoritative Futures leverage/margin state is incomplete.")
             from toobit_position_reader_v0_1 import build_toobit_position_reader
             position_result = build_toobit_position_reader(self)()
             if not position_result.allowed or not isinstance(position_result.data, dict):
-                return AdapterResult(
-                    status="UNAVAILABLE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason="Authoritative Futures position state is unavailable.",
-                )
+                return AdapterResult("UNAVAILABLE", False, "futures_account_state", "Authoritative Futures position state is unavailable.")
             positions = position_result.data.get("positions")
             if not isinstance(positions, list):
-                return AdapterResult(
-                    status="INVALID_RESPONSE",
-                    allowed=False,
-                    operation="futures_account_state",
-                    reason="Authoritative Futures position state is invalid.",
-                )
-            symbol_positions = [
-                row for row in positions
-                if isinstance(row, dict)
-                and str(row.get("symbol", "")).strip().upper() == symbol
-            ]
+                return AdapterResult("INVALID_RESPONSE", False, "futures_account_state", "Authoritative Futures position state is invalid.")
+            symbol_positions = [row for row in positions if isinstance(row, dict) and str(row.get("symbol", "")).strip().upper() == symbol]
             sides = [str(row.get("side", "")).strip().upper() for row in symbol_positions]
             position_conflict = len(sides) != len(set(sides))
-
             return AdapterResult(
-                status="PASS",
-                allowed=True,
-                operation="futures_account_state",
-                reason="Authoritative Toobit Futures account state is available.",
-                data={
+                "PASS", True, "futures_account_state",
+                "Authoritative Toobit Futures account state is available.",
+                {
                     "state_known": True,
                     "symbol": symbol,
                     "category": "USDT",
@@ -1431,12 +1255,7 @@ class ToobitTradingAdapter:
                 },
             )
         except Exception as exc:
-            return AdapterResult(
-                status="ERROR",
-                allowed=False,
-                operation="futures_account_state",
-                reason=f"Futures account read failed: {exc}",
-            )
+            return AdapterResult("ERROR", False, "futures_account_state", f"Futures account read failed: {exc}")
 
     # ========================================================
     # ACCOUNT READ
@@ -1914,31 +1733,16 @@ class ToobitTradingAdapter:
         """Read authoritative Futures open/history order client IDs."""
         constraints = self.futures_trading_constraints(asset)
         if not constraints.allowed or not constraints.data:
-            return AdapterResult(
-                status="UNAVAILABLE", allowed=False, operation="futures_duplicate_check",
-                reason=constraints.reason,
-            )
+            return AdapterResult("UNAVAILABLE", False, "futures_duplicate_check", constraints.reason)
         symbol = constraints.data["symbol"]
         try:
-            open_response = self._signed_get(
-                FUTURES_OPEN_ORDERS_ENDPOINT,
-                params={"symbol": symbol, "category": "USDT"},
-            )
-            history_response = self._signed_get(
-                FUTURES_HISTORY_ORDERS_ENDPOINT,
-                params={"symbol": symbol, "category": "USDT", "limit": 100},
-            )
+            open_response = self._signed_get(FUTURES_OPEN_ORDERS_ENDPOINT, params={"symbol": symbol, "category": "USDT"})
+            history_response = self._signed_get(FUTURES_HISTORY_ORDERS_ENDPOINT, params={"symbol": symbol, "category": "USDT", "limit": 100})
             if open_response.status_code != 200 or history_response.status_code != 200:
                 return AdapterResult(
-                    status="HTTP_ERROR", allowed=False, operation="futures_duplicate_check",
-                    reason=(
-                        f"Futures order-state read failed: open_http={open_response.status_code}; "
-                        f"history_http={history_response.status_code}."
-                    ),
-                    data={
-                        "open": self._response_data(open_response),
-                        "history": self._response_data(history_response),
-                    },
+                    "HTTP_ERROR", False, "futures_duplicate_check",
+                    f"Futures order-state read failed: open_http={open_response.status_code}; history_http={history_response.status_code}.",
+                    {"open": self._response_data(open_response), "history": self._response_data(history_response)},
                 )
             open_payload = open_response.json()
             history_payload = history_response.json()
@@ -1947,31 +1751,17 @@ class ToobitTradingAdapter:
             if not isinstance(history_payload, list) or any(not isinstance(row, dict) for row in history_payload):
                 raise RuntimeError("Futures history-order response is invalid")
             return AdapterResult(
-                status="PASS", allowed=True, operation="futures_duplicate_check",
-                reason="Authoritative Toobit Futures order state is available.",
-                data={
-                    "asset": asset.upper(),
-                    "symbol": symbol,
-                    "state_known": True,
-                    "open_order_client_ids": frozenset(
-                        str(row.get("clientOrderId")).strip()
-                        for row in open_payload
-                        if row.get("clientOrderId") not in (None, "")
-                    ),
-                    "recent_order_client_ids": frozenset(
-                        str(row.get("clientOrderId")).strip()
-                        for row in history_payload
-                        if row.get("clientOrderId") not in (None, "")
-                    ),
-                    "source_id": "TOOBIT",
-                    "source_type": "CEX_PRIVATE_API",
+                "PASS", True, "futures_duplicate_check",
+                "Authoritative Toobit Futures order state is available.",
+                {
+                    "asset": asset.upper(), "symbol": symbol, "state_known": True,
+                    "open_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in open_payload if row.get("clientOrderId") not in (None, "")),
+                    "recent_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in history_payload if row.get("clientOrderId") not in (None, "")),
+                    "source_id": "TOOBIT", "source_type": "CEX_PRIVATE_API",
                 },
             )
         except Exception as exc:
-            return AdapterResult(
-                status="ERROR", allowed=False, operation="futures_duplicate_check",
-                reason=f"Futures order-state read failed: {exc}",
-            )
+            return AdapterResult("ERROR", False, "futures_duplicate_check", f"Futures order-state read failed: {exc}")
 
     # ========================================================
     # DUPLICATE CHECK — AUTHORITATIVE READ ONLY
@@ -2096,3 +1886,610 @@ class ToobitTradingAdapter:
             return blocked_execution_result(
                 error_code="INVALID_REQUEST",
                 error_message="CanonicalOrderRequest is required.",
+                adapter=EXCHANGE_NAME,
+            )
+
+        # ----------------------------------------------------
+        # Execution capability gates
+        # ----------------------------------------------------
+
+        if self.execution_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="EXECUTION_DISABLED",
+                error_message=(
+                    "Toobit canonical order submission is disabled."
+                ),
+            )
+
+        if self.order_submission_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="ORDER_SUBMISSION_DISABLED",
+                error_message=(
+                    "Toobit order submission is disabled."
+                ),
+            )
+
+        if self.exchange_write_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="EXCHANGE_WRITE_DISABLED",
+                error_message=(
+                    "Toobit exchange write is disabled."
+                ),
+            )
+
+        if self.live_order_transport_enabled is not True:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SUBMISSION_TRANSPORT_DISABLED",
+                error_message=(
+                    "Toobit live order transport is disabled."
+                ),
+            )
+
+        if self.live_order_transport is None:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SUBMISSION_TRANSPORT_UNAVAILABLE",
+                error_message=(
+                    "Toobit live order transport is unavailable."
+                ),
+            )
+
+        # ----------------------------------------------------
+        # Current Spot scope
+        # ----------------------------------------------------
+
+        if request.direction != "LONG":
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="SPOT_DIRECTION_UNSUPPORTED",
+                error_message=(
+                    "Toobit spot transport currently supports "
+                    "canonical LONG -> BUY only."
+                ),
+            )
+
+        try:
+            # ------------------------------------------------
+            # CP46-G provider provenance
+            # ------------------------------------------------
+
+            provider_request = getattr(
+                self,
+                "_cp46g_provider_request",
+                None,
+            )
+
+            # Missing provenance is different from invalid type.
+            if provider_request is None:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_REQUEST_MISSING",
+                    error_message=(
+                        "Exact ProviderOrderRequest from "
+                        "CP46-G handoff is unavailable."
+                    ),
+                )
+
+            if not isinstance(
+                provider_request,
+                ProviderOrderRequest,
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_REQUEST_TYPE_INVALID",
+                    error_message=(
+                        "CP46-G provider request must be the approved "
+                        "ProviderOrderRequest instance."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Intent identity binding
+            # ------------------------------------------------
+
+            if provider_request.intent_id != request.intent_id:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_INTENT_ID_MISMATCH",
+                    error_message=(
+                        "Provider and canonical intent identity "
+                        "do not match."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Provider-owned symbol
+            # ------------------------------------------------
+
+            if (
+                not isinstance(
+                    provider_request.symbol,
+                    str,
+                )
+                or not provider_request.symbol.strip()
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_SYMBOL_MISSING",
+                    error_message=(
+                        "ProviderOrderRequest contains no "
+                        "authoritative provider symbol."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Provider order type
+            # ------------------------------------------------
+
+            if (
+                not isinstance(
+                    provider_request.order_type,
+                    str,
+                )
+                or not provider_request.order_type.strip()
+            ):
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_PROVIDER_ORDER_TYPE_MISSING",
+                    error_message=(
+                        "ProviderOrderRequest contains no "
+                        "provider order type."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # IMPORTANT:
+            #
+            # ProviderOrderRequest.quantity is authoritative.
+            #
+            # DO NOT compare it with request.quantity.
+            # DO NOT reconstruct it from CanonicalOrderRequest.
+            #
+            # CP46-G explicitly requires the exact provider
+            # projection to reach the transport unchanged.
+            # ------------------------------------------------
+
+            from toobit_spot_order_live_transport_v0_1 import (
+                SpotLiveOrderRequest,
+            )
+
+            transport_request = SpotLiveOrderRequest(
+                symbol=provider_request.symbol,
+                side=provider_request.side,
+                order_type=provider_request.order_type,
+                time_in_force=(
+                    "GTC"
+                    if provider_request.order_type == "LIMIT"
+                    else None
+                ),
+                quantity=provider_request.quantity,
+                quantity_unit=provider_request.quantity_unit,
+                price=(
+                    provider_request.entry_price
+                    if provider_request.order_type != "MARKET"
+                    else None
+                ),
+
+                # Fresh Toobit server timestamp.
+                #
+                # This timestamp belongs exclusively to the
+                # actual signed provider HTTP request.
+                #
+                # It does NOT replace the canonical Decision-Birth
+                # timestamp or ProviderOrderRequest.timestamp.
+                timestamp=self._get_server_timestamp_ms(),
+
+                new_client_order_id=provider_request.client_order_id,
+            )
+
+            # ------------------------------------------------
+            # Quantity integrity:
+            #
+            # Transport must consume the exact provider quantity.
+            # ------------------------------------------------
+
+            if transport_request.quantity != provider_request.quantity:
+                return blocked_execution_result(
+                    asset=request.asset,
+                    direction=request.direction,
+                    adapter=EXCHANGE_NAME,
+                    error_code="CP46G_QUANTITY_PROJECTION_MUTATION",
+                    error_message=(
+                        "Provider transport projection changed "
+                        "the authoritative provider quantity."
+                    ),
+                )
+
+            # ------------------------------------------------
+            # Actual provider transport boundary
+            # ------------------------------------------------
+
+            transport_result = self.live_order_transport.submit(
+                transport_request
+            )
+
+            # ------------------------------------------------
+            # Canonical result
+            # ------------------------------------------------
+
+            return CanonicalExecutionResult(
+                accepted=transport_result.accepted,
+                exchange_order_id=(
+                    transport_result.exchange_order_id
+                ),
+                status=transport_result.status,
+                asset=request.asset,
+                direction=request.direction,
+                executed_quantity=None,
+                executed_price=None,
+
+                # Preserve canonical Decision-Birth timestamp.
+                timestamp=request.timestamp,
+
+                adapter=EXCHANGE_NAME,
+                error_code=transport_result.error_code,
+                error_message=transport_result.error_message,
+            )
+
+        except Exception as exc:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=EXCHANGE_NAME,
+                error_code="ADAPTER_SUBMISSION_ERROR",
+                error_message=str(exc),
+            )
+    def cancel_order(
+        self,
+        order_id: str,
+    ) -> AdapterResult:
+
+        return AdapterResult(
+            status="BLOCKED",
+            allowed=False,
+            operation="cancel_order",
+            reason=(
+                "ORDER CANCELLATION IS DISABLED IN "
+                "TOOBIT_ADAPTER_v0.2. "
+                "No exchange request is generated."
+            ),
+        )
+
+    # ========================================================
+    # WITHDRAWAL — HARD BLOCK
+    # ========================================================
+
+    def withdraw(
+        self,
+        request: Dict[str, Any],
+    ) -> AdapterResult:
+
+        return AdapterResult(
+            status="BLOCKED",
+            allowed=False,
+            operation="withdraw",
+            reason=(
+                "WITHDRAWAL IS DISABLED IN "
+                "TOOBIT_ADAPTER_v0.2. "
+                "No exchange request is generated."
+            ),
+        )
+
+    # ========================================================
+    # READ-ONLY PREFLIGHT
+    # ========================================================
+
+    def read_only_preflight(
+        self,
+        asset: Optional[str] = None,
+    ) -> Dict[str, Any]:
+
+        result: Dict[str, Any] = {
+            "adapter_version":
+                self.adapter_version,
+
+            "exchange":
+                self.exchange,
+
+            "execution_enabled":
+                self.execution_enabled,
+
+            "order_submission_enabled":
+                self.order_submission_enabled,
+
+            "order_cancellation_enabled":
+                self.order_cancellation_enabled,
+
+            "withdraw_enabled":
+                self.withdraw_enabled,
+
+            "private_api_enabled":
+                self.private_api_enabled,
+
+            "account_api_enabled":
+                self.account_api_enabled,
+
+            "database_write_enabled":
+                self.database_write_enabled,
+
+            "exchange_write_enabled":
+                self.exchange_write_enabled,
+
+            "contract":
+                self.contract_status().__dict__,
+
+            "credentials":
+                self.credential_presence().__dict__,
+
+            "server_time":
+                self.get_server_time().__dict__,
+
+            "exchange_info":
+                self.get_exchange_info().__dict__,
+
+            "runtime_symbols":
+                self.validate_expected_symbols().__dict__,
+
+            "account":
+                self.account_check().__dict__,
+
+            "balance":
+                self.balance_check().__dict__,
+
+            "api_key":
+                self.api_key_check().__dict__,
+        }
+
+        if asset:
+
+            result["symbol"] = (
+                self.symbol_check(asset).__dict__
+            )
+
+            result["constraints"] = (
+                self.trading_constraints(asset).__dict__
+            )
+
+        return result
+
+
+# ============================================================
+# SELF TEST
+# ============================================================
+
+def self_test() -> int:
+
+    adapter = ToobitTradingAdapter()
+
+    contract = adapter.contract_status()
+
+    assert contract.allowed is True
+
+    assert adapter.execution_enabled is False
+    assert adapter.order_submission_enabled is False
+    assert adapter.order_cancellation_enabled is False
+    assert adapter.withdraw_enabled is False
+
+    assert adapter.private_api_enabled is True
+    assert adapter.account_api_enabled is True
+
+    assert adapter.database_write_enabled is False
+    assert adapter.exchange_write_enabled is False
+
+    # --------------------------------------------------------
+    # Hard safety tests
+    # --------------------------------------------------------
+
+    order_test = adapter.place_order(
+        {
+            "asset": "UNI",
+            "direction": "LONG",
+            "entry_price": 1.0,
+        }
+    )
+
+    assert order_test.allowed is False
+    assert order_test.status == "BLOCKED"
+
+    cancel_test = adapter.cancel_order(
+        "TEST"
+    )
+
+    assert cancel_test.allowed is False
+    assert cancel_test.status == "BLOCKED"
+
+    withdraw_test = adapter.withdraw(
+        {
+            "coin": "USDT",
+            "amount": 1,
+        }
+    )
+
+    assert withdraw_test.allowed is False
+    assert withdraw_test.status == "BLOCKED"
+
+    # --------------------------------------------------------
+    # Local signature construction test
+    # --------------------------------------------------------
+
+    test_query = (
+        "timestamp=1700000000000"
+        "&recvWindow=5000"
+    )
+
+    test_signature = (
+        adapter._generate_signature(
+            test_query
+        )
+        if adapter.api_secret
+        else None
+    )
+
+    if adapter.api_secret:
+
+        assert isinstance(
+            test_signature,
+            str,
+        )
+
+        assert len(test_signature) == 64
+
+        assert test_signature.lower() == (
+            test_signature
+        )
+
+    # --------------------------------------------------------
+    # Output
+    # --------------------------------------------------------
+
+    print("=" * 80)
+    print(
+        "ARUNDA TRADER — TOOBIT TRADING ADAPTER v0.2"
+    )
+    print("=" * 80)
+
+    print(
+        "STATUS                 : READY_READ_ONLY"
+    )
+
+    print(
+        "EXCHANGE               :",
+        adapter.exchange,
+    )
+
+    print(
+        "EXECUTION_ENABLED      :",
+        adapter.execution_enabled,
+    )
+
+    print(
+        "ORDER_SUBMISSION       :",
+        adapter.order_submission_enabled,
+    )
+
+    print(
+        "ORDER_CANCELLATION     :",
+        adapter.order_cancellation_enabled,
+    )
+
+    print(
+        "WITHDRAW_ENABLED       :",
+        adapter.withdraw_enabled,
+    )
+
+    print(
+        "PRIVATE_API_ENABLED    :",
+        adapter.private_api_enabled,
+    )
+
+    print(
+        "ACCOUNT_API_ENABLED    :",
+        adapter.account_api_enabled,
+    )
+
+    print(
+        "DATABASE_WRITE         :",
+        adapter.database_write_enabled,
+    )
+
+    print(
+        "EXCHANGE_WRITE         :",
+        adapter.exchange_write_enabled,
+    )
+
+    print(
+        "SIGNED_QUERY_MODEL     : "
+        "EXACT_MANUAL_QUERY"
+    )
+
+    print(
+        "TIMESTAMP_SOURCE       : "
+        "TOOBIT_SERVER_TIME"
+    )
+
+    print(
+        "RECV_WINDOW_SIGNING    : "
+        "INCLUDED_SIGNED_QUERY"
+    )
+
+    print(
+        "PLACE_ORDER            : BLOCKED"
+    )
+
+    print(
+        "CANCEL_ORDER           : BLOCKED"
+    )
+
+    print(
+        "WITHDRAW               : BLOCKED"
+    )
+
+    print(
+        "SELF TEST              : PASS"
+    )
+
+    print("=" * 80)
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(
+        self_test()
+    )
+
+
+def build_toobit_portfolio_observation(
+    adapter: ToobitTradingAdapter,
+    account_balance,
+    *,
+    portfolio_id=None,
+):
+    """Provider-local Toobit wiring.
+
+    REAL ToobitTradingAdapter
+        -> Toobit Position Reader
+        -> provider-neutral Portfolio Observation
+    """
+
+    from portfolio_observation_v0_1 import build_portfolio_observation
+    from toobit_position_reader_v0_1 import build_toobit_position_reader
+
+    if not isinstance(adapter, ToobitTradingAdapter):
+        raise TypeError(
+            "adapter must be ToobitTradingAdapter"
+        )
+
+    position_reader = build_toobit_position_reader(adapter)
+
+    return build_portfolio_observation(
+        account_balance,
+        position_reader=position_reader,
+        portfolio_id=portfolio_id,
+    )
