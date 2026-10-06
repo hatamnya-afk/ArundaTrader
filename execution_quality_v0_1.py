@@ -67,19 +67,33 @@ def collect_toobit_execution_quality(adapter: Any, *, asset: str, provider_symbo
     bids, asks = depth_payload.get("b"), depth_payload.get("a")
     if not isinstance(bids, list) or not isinstance(asks, list) or not bids or not asks:
         return ExecutionQualityResult("BLOCK", False, "DEPTH_SIDES_MISSING")
-    timestamps = []
-    for value in (t.get("t"), depth_payload.get("t")):
-        if isinstance(value, int) and value > 0:
-            timestamps.append(value)
+    capture_times = []
+
+    for name, result in (
+        ("BOOK_TICKER", book_ticker),
+        ("DEPTH", depth),
+        ("TRADES", trades),
+    ):
+        captured_at_ms = result.data.get("captured_at_ms")
+        if not isinstance(captured_at_ms, int) or captured_at_ms <= 0:
+            return ExecutionQualityResult(
+                "BLOCK",
+                False,
+                f"{name}_CAPTURE_TIMESTAMP_INVALID",
+            )
+        capture_times.append(captured_at_ms)
+
     for row in trades_payload:
         if not isinstance(row, dict) or _positive(row.get("p")) is None or _positive(row.get("q")) is None:
             return ExecutionQualityResult("BLOCK", False, "RECENT_TRADE_INVALID")
-        if isinstance(row.get("t"), int) and row.get("t") > 0:
-            timestamps.append(row["t"])
-        else:
-            return ExecutionQualityResult("BLOCK", False, "RECENT_TRADE_TIMESTAMP_INVALID")
-    if not timestamps:
-        return ExecutionQualityResult("BLOCK", False, "MICROSTRUCTURE_TIMESTAMP_MISSING")
+        if not isinstance(row.get("t"), int) or row["t"] <= 0:
+            return ExecutionQualityResult(
+                "BLOCK",
+                False,
+                "RECENT_TRADE_TIMESTAMP_INVALID",
+            )
+
+    captured_at_ms = min(capture_times)
     book = {
         "best_bid": t.get("b"), "best_ask": t.get("a"),
         "bid_qty": t.get("bq"), "ask_qty": t.get("aq"),
@@ -87,7 +101,7 @@ def collect_toobit_execution_quality(adapter: Any, *, asset: str, provider_symbo
     }
     return evaluate_execution_quality(asset=asset, provider_symbol=provider_symbol,
         book=book, recent_trades=trades_payload,
-        captured_at_ms=min(timestamps), max_age_ms=max_age_ms)
+        captured_at_ms=captured_at_ms, max_age_ms=max_age_ms)
 
 
 def evaluate_execution_quality(*, asset: str, provider_symbol: str,
