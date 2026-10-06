@@ -198,7 +198,7 @@ from cp46_d_production_provider_preflight_v0_1 import (
 )
 from toobit_trading_adapter import ToobitTradingAdapter
 from execution_quality_v0_1 import collect_toobit_execution_quality
-from mcp01_compact_event_evidence_v0_1 import append_event_idempotent, build_event
+from mcp01_compact_event_evidence_v0_1 import (\n    build_event,\n    persist_events_isolated,\n)
 from mcp01_trader_evidence_bridge_v0_1 import (
     build_runtime_evidence_events,
     deduplicate_events,
@@ -4501,9 +4501,18 @@ def main() -> int:
                 execution_results=execution_results,
             )
         )
-        for event in mcp01_events:
-            append_event_idempotent(build_event(**event))
-        print(f"MCP01_COMPACT_EVENTS_APPENDED={len(mcp01_events)}")
+        compact_event_objects = [build_event(**event) for event in mcp01_events]
+        persisted_event_count, persistence_failures = persist_events_isolated(
+            compact_event_objects
+        )
+        print(f"MCP01_COMPACT_EVENTS_APPENDED={persisted_event_count}")
+        print(f"MCP01_EVIDENCE_PERSISTENCE_FAILURES={len(persistence_failures)}")
+        for failure in persistence_failures:
+            print(
+                "MCP01_EVIDENCE_PERSISTENCE_FAILURE="
+                f"event_id={failure['event_id']};"
+                f"error_type={failure['error_type']}"
+            )
 
 
         # ------------------------------------------------------------------
