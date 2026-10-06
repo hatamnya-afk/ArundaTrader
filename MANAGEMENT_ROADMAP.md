@@ -2623,3 +2623,252 @@ The MCP-01.8 readiness checkpoint proves **technical readiness only**. It does n
 
 ### BUILDER RULE
 If context is lost, never infer that MCP-01 completion means 24/7 has started. The Builder must look for an explicit Management 24/7 activation checkpoint before enabling continuous operation.
+
+# 2026-10-06 — FINAL MASTER BUILDER ROUTE / MANAGEMENT LOCK
+
+## FINAL FORWARD OVERRIDE
+
+This section is the operative route for the next Builder. Historical roadmap sections remain provenance. If an earlier section conflicts with this section, this section governs the forward path.
+
+## 1. FINAL PROJECT ARCHITECTURE
+
+ArundaTrader = ACTOR. It observes real markets, makes decisions, controls risk, creates order intent, executes through the authorized boundary, and observes real provider/market outcomes.
+
+MCP-01 = EVIDENCE / MEMORY / MANAGEMENT INTELLIGENCE. It converts Trader behavior into compact, traceable, append-oriented evidence and aggregates it into case, trade, outcome, and 24H intelligence.
+
+Aroonda AI = OBSERVER / ANALYST / LEARNER. Initially it is read-only and non-authoritative. It consumes clean Trader evidence, analyzes patterns/failures/gaps, learns, and proposes hypotheses/improvements. It must not silently alter Trader contracts, history, Trade Gate, execution, or capital decisions.
+
+Management = GOVERNANCE GATE. Proposed changes become implementation only through explicit Management approval, Builder execution, verification, and synchronized governance records.
+
+Canonical loop:
+REAL MARKET → OBSERVE → DECIDE → RISK → GATE → ACT → REAL OUTCOME → EVIDENCE → ANALYZE → LEARN → VERIFY → IMPROVE
+
+## 2. NON-NEGOTIABLE SEPARATION
+
+- decision_id = authoritative Trader decision instance.
+- case_id = analytical case identity across repeated appearances.
+- trade_event_id = actual order-attempt identity.
+- Runtime cycle identity = cycle provenance.
+- Provider identity = exchange/account/provider provenance.
+- Aroonda analysis = non-authoritative intelligence.
+- Management authorization = governance, not intelligence.
+
+Never generate a downstream replacement for an authoritative identity.
+
+## 3. IMMEDIATE CURRENT FRONTIER
+
+The current implementation frontier is:
+
+MCP-01.1 → MCP-01.2 → MCP-01.3 → MCP-01.4 → MCP-01.5 → MCP-01.6 → MCP-01.7 → MCP-01.8
+
+The repository already contains structural modules for MCP-01.1 through MCP-01.8. The remaining task is operational integration and verification, not redesign.
+
+Repository inspection on 2026-10-06 confirmed these modules exist:
+- mcp01_compact_event_evidence_v0_1.py
+- mcp01_runtime_projection_v0_1.py
+- mcp01_case_projection_v0_1.py
+- mcp01_trade_projection_v0_1.py
+- mcp01_outcome_reconciliation_v0_1.py
+- mcp01_24h_aggregator_v0_1.py
+- mcp01_24h_email_v0_1.py
+- mcp01_24h_readiness_v0_1.py
+
+The current arunda_pipeline.py imports/uses CP69 and execution surfaces but does not directly import the MCP-01 projection/aggregation/email modules above. Therefore the next Builder must connect the existing MCP-01 contracts to the real Trader evidence flow with the smallest safe scope.
+
+## 4. REQUIRED IMPLEMENTATION ORDER
+
+### MCP-01.1 — Canonical compact evidence
+Use the existing evidence contract. Do not replace it.
+- append-oriented;
+- compact;
+- structured;
+- traceable;
+- no full runtime snapshot duplication;
+- no synthetic identity;
+- data-quality anomalies are DATA_QUALITY_EVENT.
+
+### MCP-01.2 — Runtime projection
+Wire the existing runtime projection into the management-visible runtime path.
+- one bounded runtime summary;
+- no artificial selection/order cap;
+- no change to Trader intelligence;
+- console is a view, not canonical truth.
+
+### MCP-01.3 — Case projection
+Wire repeated evidence into analytical case_id projections.
+- repeated asset appearance is not automatically a new case;
+- identity conflicts fail closed;
+- no decision identity creation here.
+
+### MCP-01.4 — Trade projection
+Wire actual order attempts and provider responses to trade_event_id.
+- preserve accepted/rejected/inconclusive exactly;
+- never synthesize provider outcomes;
+- never retry ambiguous execution automatically;
+- no trade cap.
+
+### MCP-01.5 — Outcome reconciliation
+Connect:
+DECISION → ORDER → PROVIDER RESULT → MARKET OUTCOME → CASE OUTCOME
+
+Only observed evidence may advance a chain.
+
+### MCP-01.6 — 24H aggregator
+Build one compact aggregate from MCP evidence/projections.
+Minimum intelligence:
+- cycles;
+- unique cases;
+- selected / Trade Ready;
+- order attempts;
+- provider accepted/rejected/inconclusive;
+- top rejection/block reasons;
+- decision/risk/gate quality;
+- market-outcome coverage;
+- case outcomes;
+- data-quality anomalies;
+- recurring cases/reasons;
+- concise Management Summary.
+
+### MCP-01.7 — One daily email
+The existing email formatter is a formatting boundary, not yet a delivery mechanism.
+Required final behavior:
+- exactly ONE aggregated management email per 24H period;
+- based on the 24H aggregate;
+- never based on raw console flooding;
+- no per-cycle/per-trade email flood;
+- delivery remains explicitly gated.
+
+### MCP-01.8 — 24/7 readiness
+Verify:
+- continuity;
+- bounded output;
+- idempotent evidence handling;
+- recovery after isolated request failure;
+- no change to Trader intelligence.
+
+This checkpoint proves readiness only. It does NOT activate 24/7.
+
+## 5. CURRENT OPERATING MODE
+
+24/7 OPERATION = NOT STARTED.
+
+Current phase:
+TRADER COMPLETION → REAL-MARKET OBSERVATION → COMPACT EVIDENCE → OUTPUT ANALYSIS
+
+Controlled real-market observation continues only under explicit Management authorization.
+
+Do not infer 24/7 activation from MCP-01 completion.
+
+## 6. AROONDA INTEGRATION — AFTER CLEAN EVIDENCE
+
+Only after the Trader evidence path is clean and compact:
+Trader → MCP-01 evidence → 24H/case/trade/outcome projections → Aroonda read-only consumer
+
+Aroonda initial responsibilities:
+1. consume;
+2. classify;
+3. compare;
+4. detect recurring patterns;
+5. detect failures/gaps;
+6. build hypotheses;
+7. produce explainable improvement proposals.
+
+Aroonda must not:
+- create Trader decisions;
+- modify Trade Gate;
+- modify execution;
+- alter capital;
+- mutate canonical evidence;
+- fabricate outcomes;
+- silently deploy recommendations.
+
+Improvement loop:
+Aroonda hypothesis → evidence/eval → Management approval → Builder implementation → verification → controlled release
+
+## 7. CAPITAL GATE
+
+Capital is independent of Trader intelligence.
+
+Before capital:
+- Trader continues functioning at zero capital;
+- real-market decisions and execution attempts are observable;
+- real provider responses are captured;
+- market outcomes accumulate;
+- selection quality is measurable;
+- economic edge is evaluated;
+- stability and drawdown are evaluated;
+- execution quality and realistic costs are evaluated;
+- regime robustness is evaluated.
+
+Only then:
+Evidence → Economic Edge → Stability → Risk/Drawdown → Management Capital Gate → gradual capital introduction
+
+No capital decision may be inferred from one runtime or one provider response.
+
+## 8. ABSOLUTE PROHIBITIONS
+
+The next Builder must NOT:
+- redesign Trader strategy;
+- invent BUY/SELL thresholds;
+- suppress selections to make reporting easier;
+- introduce max-40/max-50 or first-order caps;
+- create synthetic/fill/backfill/interpolated/forward-filled/padded/blended data;
+- create synthetic decision/case/trade identities;
+- fabricate outcomes;
+- repair/change production DB;
+- reopen CLOSED/VERIFIED checkpoints without direct regression evidence;
+- activate 24/7;
+- activate execution without explicit Management authorization;
+- automatically retry ambiguous provider execution;
+- use Aroonda as execution authority;
+- perform reset/rebase/clean/delete/force operations;
+- promote temporary/generated/backup artifacts into canonical truth.
+
+## 9. BUILDER OPERATING PROTOCOL
+
+Every new Builder MUST:
+
+1. Read PROJECT_STATE.md, ARCHITECTURE.md, CHECKPOINTS.md, CURRENT_FRONTIER.md, BUILDER_PROTOCOL.md, and MANAGEMENT_ROADMAP.md.
+2. Establish actual branch, HEAD, working-tree state, and latest relevant commits.
+3. Treat this section as the operative forward route.
+4. Inspect only files required for the active MCP sub-step.
+5. Do not re-audit closed checkpoints.
+6. Before modifying code, state exact intended files, preserved invariants, and explicit out-of-scope items.
+7. After modification, run focused static/tests, git diff --check, and inspect the exact diff.
+8. Do not run production runtime unless explicitly authorized.
+9. At checkpoint completion synchronize PROJECT_STATE.md, CURRENT_FRONTIER.md, CHECKPOINTS.md, and MANAGEMENT_ROADMAP.md.
+10. Record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT FRONTIER, and NEXT ACTION.
+
+## 10. DEFINITION OF DONE FOR THE CURRENT ROAD
+
+The road is not complete merely because MCP modules compile, an email formatter exists, a runtime succeeds, a provider accepts an order, or Aroonda produces an analysis.
+
+The required causal chain is:
+REAL MARKET
+→ DECISION
+→ RISK/GATE
+→ ORDER INTENT
+→ REAL ORDER ATTEMPT
+→ REAL PROVIDER RESULT
+→ MARKET OUTCOME
+→ CASE OUTCOME
+→ COMPACT EVIDENCE
+→ 24H INTELLIGENCE
+→ AROONDA ANALYSIS
+
+Management must be able to evaluate that evidence without reading giant raw console transcripts.
+
+## 11. MANAGEMENT VERDICT
+
+FINAL ARCHITECTURE = LOCKED.
+
+Do not build another Trader.
+Do not build a theatrical multi-agent voting system.
+Do not put Aroonda in the execution path.
+Complete the Trader, connect the evidence loop, observe real outcomes, learn from them, and only then evaluate economic edge and capital.
+
+Governing principle:
+REPORTING MUST SHRINK THE OUTPUT, NOT SHRINK THE INTELLIGENCE.
+
+NEXT BUILDER OBJECTIVE:
+CONNECT EXISTING MCP-01 TO THE REAL TRADER EVIDENCE FLOW — MINIMAL SCOPE, MAXIMUM TRACEABILITY, ZERO STRATEGY DRIFT.
