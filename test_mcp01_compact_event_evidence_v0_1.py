@@ -67,6 +67,42 @@ def test_idempotent_append_rejects_conflicting_event_id():
             raise AssertionError("conflicting event_id was accepted")
 
 
+def test_persistence_failure_isolated_and_inputs_unchanged():
+    e1=build_event(event_id="EV-ISO-1",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    e2=build_event(event_id="EV-ISO-2",event_type=EVENT_TRADE_READY,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d2",stage="TRADE_GATE")
+    events=[e1,e2]
+    before=[event.to_dict() for event in events]
+    calls=[]
+
+    def failing_append(event):
+        calls.append(event.event_id)
+        raise OSError("simulated evidence I/O failure")
+
+    persisted, failures=persist_events_isolated(events, failing_append)
+    assert persisted == 0
+    assert [event.to_dict() for event in events] == before
+    assert calls == ["EV-ISO-1", "EV-ISO-2"]
+    assert [row["event_id"] for row in failures] == ["EV-ISO-1", "EV-ISO-2"]
+    assert all(row["error_type"].endswith(".OSError") for row in failures)
+
+
+def test_persistence_failure_isolated_per_event():
+    e1=build_event(event_id="EV-ISO-3",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    e2=build_event(event_id="EV-ISO-4",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d2",stage="DECISION")
+    calls=[]
+
+    def fail_first(event):
+        calls.append(event.event_id)
+        if event.event_id == "EV-ISO-3":
+            raise OSError("first event failed")
+
+    persisted, failures=persist_events_isolated([e1,e2], fail_first)
+    assert persisted == 1
+    assert len(failures) == 1
+    assert failures[0]["event_id"] == "EV-ISO-3"
+    assert calls == ["EV-ISO-3", "EV-ISO-4"]
+
+
 if __name__=="__main__":
     tests=[v for n,v in sorted(globals().items()) if n.startswith("test_") and callable(v)]
     for test in tests: test()
