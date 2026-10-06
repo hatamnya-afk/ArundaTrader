@@ -61,7 +61,7 @@ def test_execution_off_cannot_claim_real_activity():
 
 def test_real_trade_requires_real_order():
     try:
-        _projection(real_trade=True, real_order=False)
+        _projection(execution="ON", real_trade=True, real_order=False)
     except ValueError as exc:
         assert "real_order" in str(exc)
     else:
