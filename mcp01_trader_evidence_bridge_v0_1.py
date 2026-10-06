@@ -11,6 +11,8 @@ from typing import Any, Iterable, Mapping
 
 from mcp01_compact_event_evidence_v0_1 import (
     EVENT_DATA_QUALITY,
+    EVENT_ORDER_ATTEMPTED,
+    EVENT_PROVIDER_RESULT,
     EVENT_SELECTED,
     EVENT_TRADE_READY,
     build_event,
@@ -59,6 +61,12 @@ def build_runtime_evidence_events(
         if not isinstance(gate, Mapping):
             raise ValueError(f"trade_gate_snapshot missing asset: {asset}")
 
+        gate_decision_id = gate.get("decision_id")
+        if gate_decision_id is not None and _text(
+            gate_decision_id, f"{asset}.trade_gate.decision_id"
+        ) != decision_id:
+            raise ValueError(f"decision_id lineage mismatch: {asset}")
+
         common = {
             "cycle_id": cycle_id,
             "event_timestamp": emitted_at,
@@ -69,11 +77,11 @@ def build_runtime_evidence_events(
         }
 
         if gate.get("trade_gate_status") == "TRADE_READY":
-            payload = {
-                **common,
-                "event_type": EVENT_TRADE_READY,
-                "status": "TRADE_READY",
-            }
+            if asset not in ready_assets:
+                raise ValueError(
+                    f"Trade Gate is TRADE_READY but asset is absent from trade_ready_assets: {asset}"
+                )
+            payload = {**common, "event_type": EVENT_TRADE_READY, "status": "TRADE_READY"}
             payload["event_id"] = deterministic_event_id(**payload)
             events.append(build_event(**payload).to_dict())
         elif asset in ready_assets:
@@ -82,10 +90,7 @@ def build_runtime_evidence_events(
         payload = {
             **common,
             "event_type": EVENT_SELECTED,
-            "status": _optional_text(
-                decision.get("decision"),
-                f"{asset}.decision",
-            ),
+            "status": _optional_text(decision.get("decision"), f"{asset}.decision"),
         }
         payload["event_id"] = deterministic_event_id(**payload)
         events.append(build_event(**payload).to_dict())
@@ -93,6 +98,10 @@ def build_runtime_evidence_events(
     for asset, result in sorted(results.items()):
         if not isinstance(result, Mapping):
             raise ValueError(f"execution_results[{asset}] must be a mapping")
+        if asset not in decision_snapshot:
+            raise ValueError(
+                f"execution_results asset missing from decision_snapshot: {asset}"
+            )
 
         trade_event_id = result.get("trade_event_id")
         if trade_event_id is None:
@@ -110,14 +119,11 @@ def build_runtime_evidence_events(
             continue
 
         trade_event_id = _text(trade_event_id, f"{asset}.trade_event_id")
-        decision_id = _text(
-            decision_snapshot[asset].get("decision_id"),
-            f"{asset}.decision_id",
-        )
+        decision_id = _text(decision_snapshot[asset].get("decision_id"), f"{asset}.decision_id")
         direction = _optional_text(result.get("direction"), f"{asset}.direction")
 
         order_payload = {
-            "event_type": "ORDER_ATTEMPTED",
+            "event_type": EVENT_ORDER_ATTEMPTED,
             "event_timestamp": emitted_at,
             "cycle_id": cycle_id,
             "decision_id": decision_id,
@@ -133,12 +139,9 @@ def build_runtime_evidence_events(
 
         provider_payload = {
             **order_payload,
-            "event_type": "PROVIDER_RESULT",
+            "event_type": EVENT_PROVIDER_RESULT,
             "stage": "EXECUTION",
-            "reason_code": _optional_text(
-                result.get("error_code"),
-                f"{asset}.error_code",
-            ),
+            "reason_code": _optional_text(result.get("error_code"), f"{asset}.error_code"),
         }
         provider_payload["event_id"] = deterministic_event_id(**provider_payload)
         events.append(build_event(**provider_payload).to_dict())
@@ -147,7 +150,7 @@ def build_runtime_evidence_events(
 
 
 def deduplicate_events(events: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    """Return one event per authoritative event_id, preserving first occurrence."""
+    """Return one event per event_id, preserving first occurrence."""
     result: list[dict[str, Any]] = []
     seen: set[str] = set()
     for event in events:
