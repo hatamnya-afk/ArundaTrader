@@ -104,6 +104,33 @@ def append_event_idempotent(event: CompactEvent, stream_path: Path = DEFAULT_STR
         handle.write(encoded + "\n")
     return path
 
+def persist_events_isolated(
+    events: list[CompactEvent],
+    append_fn=append_event_idempotent,
+) -> tuple[int, list[dict[str, str]]]:
+    """Persist evidence without allowing persistence failure to abort Trader flow.
+
+    Each event is attempted independently. Persistence failures are returned as
+    bounded management diagnostics; they never alter the supplied event list or
+    raise into the Trader pipeline. This boundary does not create replacement
+    evidence when persistence itself is unavailable.
+    """
+    persisted = 0
+    failures: list[dict[str, str]] = []
+    for event in events:
+        try:
+            append_fn(event)
+            persisted += 1
+        except Exception as exc:
+            failures.append(
+                {
+                    "event_id": event.event_id,
+                    "error_type": f"{type(exc).__module__}.{type(exc).__name__}",
+                }
+            )
+    return persisted, failures
+
+
 def _require_text(value: Any, name: str) -> None:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{name} must be a non-empty string")
