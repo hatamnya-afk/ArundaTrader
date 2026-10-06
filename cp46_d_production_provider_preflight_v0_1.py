@@ -61,8 +61,16 @@ def _block(
     )
 
 
-def _provider_symbol(adapter: Any, asset: str) -> str:
-    result = adapter.trading_constraints(asset)
+def _provider_symbol(
+    adapter: Any,
+    asset: str,
+    *,
+    venue: str = "SPOT",
+) -> str:
+    if venue == "FUTURES":
+        result = adapter.futures_trading_constraints(asset)
+    else:
+        result = adapter.trading_constraints(asset)
     if getattr(result, "allowed", False) is not True:
         raise RuntimeError(
             "AUTHORITATIVE_PROVIDER_SYMBOL_UNAVAILABLE:"
@@ -116,6 +124,7 @@ def build_toobit_translation_evidence(
     adapter: Any,
     canonical_request: Any,
     quote_quantity: Any = None,
+    venue: str = "SPOT",
 ) -> ProviderTranslationEvidence:
     if adapter is None:
         raise RuntimeError("Toobit adapter is required")
@@ -126,7 +135,39 @@ def build_toobit_translation_evidence(
 
     # Provider symbol is authoritative exchange metadata. It is never
     # reconstructed from a hardcoded suffix or inferred mapping.
-    symbol = _provider_symbol(adapter, asset)
+    symbol = _provider_symbol(adapter, asset, venue=venue)
+
+    contract_multiplier = None
+    contract_quantity_step = None
+    if venue == "FUTURES":
+        constraints = adapter.futures_trading_constraints(asset)
+        if getattr(constraints, "allowed", False) is not True:
+            raise RuntimeError(
+                "AUTHORITATIVE_FUTURES_CONTRACT_STATE_UNAVAILABLE:"
+                f"{getattr(constraints, 'reason', 'unknown')}"
+            )
+        data = getattr(constraints, "data", None)
+        if not isinstance(data, dict):
+            raise RuntimeError("AUTHORITATIVE_FUTURES_CONTRACT_STATE_INVALID")
+        contract_multiplier = data.get("contract_multiplier")
+        filters = data.get("filters")
+        if not isinstance(filters, dict):
+            raise RuntimeError("AUTHORITATIVE_FUTURES_CONTRACT_FILTERS_INVALID")
+        lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
+        if not isinstance(lot, dict):
+            raise RuntimeError("AUTHORITATIVE_FUTURES_QUANTITY_FILTER_UNAVAILABLE")
+        raw_step = lot.get("stepSize")
+        if raw_step is None:
+            raise RuntimeError("AUTHORITATIVE_FUTURES_QUANTITY_STEP_UNAVAILABLE")
+        from decimal import Decimal, InvalidOperation
+        try:
+            multiplier = Decimal(str(contract_multiplier))
+            step = Decimal(str(raw_step))
+        except (InvalidOperation, ValueError) as exc:
+            raise RuntimeError("AUTHORITATIVE_FUTURES_QUANTITY_STATE_INVALID") from exc
+        if multiplier <= 0 or step <= 0:
+            raise RuntimeError("AUTHORITATIVE_FUTURES_QUANTITY_STATE_INVALID")
+        contract_quantity_step = str(step / multiplier)
 
     # For Spot MARKET BUY, quote_quantity is supplied by the already-
     # authoritative Risk.position exposure output. The provider boundary
@@ -142,6 +183,8 @@ def build_toobit_translation_evidence(
     return ProviderTranslationEvidence(
         provider_symbol=symbol,
         quote_quantity=quote_quantity,
+        contract_multiplier=contract_multiplier,
+        contract_quantity_step=contract_quantity_step,
         provider_request_timestamp=provider_request_timestamp,
     )
 
@@ -160,9 +203,8 @@ def translate_and_preflight_toobit(
 
     # CP46-A3 is the authoritative venue-routing boundary.
     # SHORT is Futures-only; never reinterpret it as Spot SELL.
-    # The current Toobit production adapter exposes Spot preflight only,
-    # therefore unavailable Futures capability remains an explicit route
-    # block rather than a false Spot translation.
+    # Futures readiness is established only when the adapter exposes both
+    # authoritative Futures contract and account read boundaries.
     direction = str(
         getattr(canonical_request, "direction", "")
     ).strip().upper()
@@ -193,16 +235,18 @@ def translate_and_preflight_toobit(
         )
 
     try:
+        venue = routing.venue.value
         evidence = build_toobit_translation_evidence(
             adapter=adapter,
             canonical_request=canonical_request,
             quote_quantity=quote_quantity,
+            venue=venue,
         )
 
         translation = translate_order_request(
             canonical_request,
             evidence,
-            venue="SPOT",
+            venue=venue,
         )
     except Exception as exc:
         return _block(
@@ -220,11 +264,12 @@ def translate_and_preflight_toobit(
     # CP46-D remains the sole owner of ProviderOrderRequest -> A6 adaptation.
     try:
         provider_evidence: ProviderPreflightEvidence = (
-        build_toobit_provider_preflight_evidence(
-            adapter=adapter,
-            asset=canonical_request.asset,
+            build_toobit_provider_preflight_evidence(
+                adapter=adapter,
+                asset=canonical_request.asset,
+                venue=venue,
+            )
         )
-    )
 
         handoff = handoff_to_provider_preflight(
             translation,
