@@ -131,6 +131,44 @@ def persist_events_isolated(
     return persisted, failures
 
 
+def recover_failed_events(
+    events: list[CompactEvent],
+    failed_event_ids: list[str],
+    append_fn=append_event_idempotent,
+) -> tuple[int, list[dict[str, str]]]:
+    """Retry only previously failed evidence using the original event identities.
+
+    Recovery never creates replacement events and never retries events outside the
+    supplied failure set. Idempotent persistence makes a successful prior write a
+    harmless recovery result.
+    """
+    by_id = {event.event_id: event for event in events}
+    if len(by_id) != len(events):
+        raise ValueError("recovery input contains duplicate event_id values")
+    if len(set(failed_event_ids)) != len(failed_event_ids):
+        raise ValueError("recovery failure set contains duplicate event_id values")
+
+    missing = [event_id for event_id in failed_event_ids if event_id not in by_id]
+    if missing:
+        raise ValueError(f"recovery event_id not present in supplied events: {missing[0]}")
+
+    recovered = 0
+    failures: list[dict[str, str]] = []
+    for event_id in failed_event_ids:
+        event = by_id[event_id]
+        try:
+            append_fn(event)
+            recovered += 1
+        except Exception as exc:
+            failures.append(
+                {
+                    "event_id": event_id,
+                    "error_type": f"{type(exc).__module__}.{type(exc).__name__}",
+                }
+            )
+    return recovered, failures
+
+
 def _require_text(value: Any, name: str) -> None:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{name} must be a non-empty string")
