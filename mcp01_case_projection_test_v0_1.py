@@ -62,6 +62,18 @@ def main() -> int:
     assert explicit_assigned[0]["case_id"] == "CASE-EXPLICIT"
     assert explicit_assigned[1]["case_id"] == "CASE-EXPLICIT"
 
+    deterministic = [
+        event("d1", "SELECTED", "2026-10-06T04:00:00Z", "d1", asset="XRP/USDT", decision_id="DX"),
+    ]
+    first_id = assign_case_ids(deterministic)[0]["case_id"]
+    second_id = assign_case_ids(deterministic)[0]["case_id"]
+    assert first_id == second_id
+    with_trade = [
+        event("t1", "ORDER_ATTEMPTED", "2026-10-06T04:00:00Z", "d1", asset="XRP/USDT", decision_id="DX", trade_event_id="TE-1"),
+    ]
+    trade_case = aggregate_cases(with_trade)[0]
+    assert trade_case["trade_event_ids"] == ["TE-1"]
+
     conflict = [
         event("z1", "SELECTED", "2026-10-06T03:00:00Z", "z1", asset="BTC/USDT", case_id="CASE-X"),
         event("z2", "SELECTED", "2026-10-06T03:00:01Z", "z2", asset="ETH/USDT", case_id="CASE-X"),
