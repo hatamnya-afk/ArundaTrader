@@ -11,12 +11,20 @@ from __future__ import annotations
 from provider_preflight_v0_1 import ProviderOrderState
 
 
-def build_toobit_provider_order_state(adapter, asset: str) -> ProviderOrderState:
+def build_toobit_provider_order_state(
+    adapter,
+    asset: str,
+    *,
+    venue: str = "SPOT",
+) -> ProviderOrderState:
     """Build ProviderOrderState from Toobit's authenticated USER_DATA reads."""
     if adapter is None or not isinstance(asset, str) or not asset.strip():
         raise RuntimeError("Provider order-state input is invalid")
 
-    result = adapter.duplicate_check(asset.strip().upper(), "LONG")
+    if venue == "FUTURES":
+        result = adapter.futures_duplicate_check(asset.strip().upper())
+    else:
+        result = adapter.duplicate_check(asset.strip().upper(), "LONG")
     if getattr(result, "allowed", False) is not True:
         raise RuntimeError(
             "Authoritative Toobit order state unavailable: "
