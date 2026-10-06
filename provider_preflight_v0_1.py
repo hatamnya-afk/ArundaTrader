@@ -126,6 +126,12 @@ class ProviderContractState:
     min_notional: Optional[Any] = None
     max_notional: Optional[Any] = None
 
+    # Some provider venues expose quantity/risk-limit constraints without
+    # an authoritative notional upper bound. The provider evidence owner
+    # must explicitly declare whether notional-bound validation applies;
+    # no missing bound may be synthesized.
+    notional_validation_required: bool = True
+
 
 @dataclass(frozen=True)
 class ProviderAccountState:
@@ -510,19 +516,20 @@ def run_provider_preflight(
     # provider contract when one exists.
     # ---------------------------------------------------------
 
-    minimum_notional = _positive_decimal(
-        contract.min_notional
-    )
-
-    maximum_notional = _positive_decimal(
-        contract.max_notional
-    )
-
-    if minimum_notional is None or maximum_notional is None:
-        return _block(
-            PreflightReason.BLOCK_NOTIONAL_INVALID,
-            "Provider notional bounds are unknown or invalid.",
+    if contract.notional_validation_required:
+        minimum_notional = _positive_decimal(
+            contract.min_notional
         )
+
+        maximum_notional = _positive_decimal(
+            contract.max_notional
+        )
+
+        if minimum_notional is None or maximum_notional is None:
+            return _block(
+                PreflightReason.BLOCK_NOTIONAL_INVALID,
+                "Provider notional bounds are unknown or invalid.",
+            )
 
     # ---------------------------------------------------------
     # Position state.
@@ -698,4 +705,3 @@ __all__ = [
     "ProviderPreflightEvidence",
     "ProviderPreflightResult",
     "run_provider_preflight",
-]
