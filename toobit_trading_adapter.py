@@ -93,8 +93,8 @@ ALL_ORDERS_ENDPOINT = "/api/v1/spot/tradeOrders"
 # Futures USER_DATA / read-only
 FUTURES_BALANCE_ENDPOINT = "/api/v1/futures/balance"
 FUTURES_ACCOUNT_LEVERAGE_ENDPOINT = "/api/v1/futures/accountLeverage"
-FUTURES_OPEN_ORDERS_ENDPOINT = "/api/v1/futures/openOrders"
-FUTURES_HISTORY_ORDERS_ENDPOINT = "/api/v1/futures/historyOrders"
+FUTURES_OPEN_ORDERS_ENDPOINT = "/api/v2/futures/open-orders"
+FUTURES_HISTORY_ORDERS_ENDPOINT = "/api/v2/futures/history-orders"
 
 
 # ============================================================
@@ -1746,17 +1746,21 @@ class ToobitTradingAdapter:
                 )
             open_payload = open_response.json()
             history_payload = history_response.json()
-            if not isinstance(open_payload, list) or any(not isinstance(row, dict) for row in open_payload):
-                raise RuntimeError("Futures open-order response is invalid")
-            if not isinstance(history_payload, list) or any(not isinstance(row, dict) for row in history_payload):
-                raise RuntimeError("Futures history-order response is invalid")
+            if not isinstance(open_payload, dict) or not isinstance(history_payload, dict):
+                raise RuntimeError("Futures v2 order-state response is invalid")
+            open_rows = open_payload.get("data")
+            history_rows = history_payload.get("data")
+            if not isinstance(open_rows, list) or any(not isinstance(row, dict) for row in open_rows):
+                raise RuntimeError("Futures v2 open-order data is invalid")
+            if not isinstance(history_rows, list) or any(not isinstance(row, dict) for row in history_rows):
+                raise RuntimeError("Futures v2 history-order data is invalid")
             return AdapterResult(
                 "PASS", True, "futures_duplicate_check",
                 "Authoritative Toobit Futures order state is available.",
                 {
                     "asset": asset.upper(), "symbol": symbol, "state_known": True,
-                    "open_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in open_payload if row.get("clientOrderId") not in (None, "")),
-                    "recent_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in history_payload if row.get("clientOrderId") not in (None, "")),
+                    "open_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in open_rows if row.get("clientOrderId") not in (None, "")),
+                    "recent_order_client_ids": frozenset(str(row.get("clientOrderId")).strip() for row in history_rows if row.get("clientOrderId") not in (None, "")),
                     "source_id": "TOOBIT", "source_type": "CEX_PRIVATE_API",
                 },
             )
