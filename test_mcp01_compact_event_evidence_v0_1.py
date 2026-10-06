@@ -103,6 +103,46 @@ def test_persistence_failure_isolated_per_event():
     assert calls == ["EV-ISO-3", "EV-ISO-4"]
 
 
+def test_recovery_retries_only_failed_identity_and_preserves_payload():
+    e1=build_event(event_id="EV-REC-1",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    e2=build_event(event_id="EV-REC-2",event_type=EVENT_TRADE_READY,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d2",stage="TRADE_GATE")
+    calls=[]
+    def retry_append(event):
+        calls.append(event.event_id)
+    recovered, failures=recover_failed_events([e1,e2],["EV-REC-2"],retry_append)
+    assert recovered == 1
+    assert failures == []
+    assert calls == ["EV-REC-2"]
+
+
+def test_recovery_failure_can_be_retried_again_without_new_identity():
+    e=build_event(event_id="EV-REC-3",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    calls=[]
+    attempts={"count":0}
+    def flaky_append(event):
+        calls.append(event.event_id)
+        attempts["count"] += 1
+        if attempts["count"] == 1:
+            raise OSError("temporary failure")
+    recovered1, failures1=recover_failed_events([e],["EV-REC-3"],flaky_append)
+    recovered2, failures2=recover_failed_events([e],[failures1[0]["event_id"]],flaky_append)
+    assert recovered1 == 0
+    assert failures1[0]["event_id"] == "EV-REC-3"
+    assert recovered2 == 1
+    assert failures2 == []
+    assert calls == ["EV-REC-3","EV-REC-3"]
+
+
+def test_recovery_rejects_unknown_event_identity():
+    e=build_event(event_id="EV-REC-4",event_type=EVENT_SELECTED,event_timestamp="2026-10-05T00:00:00+00:00",cycle_id="c1",decision_id="d1",stage="DECISION")
+    try:
+        recover_failed_events([e],["EV-NOT-PRESENT"],lambda event: None)
+    except ValueError as exc:
+        assert "not present" in str(exc)
+    else:
+        raise AssertionError("unknown recovery event_id accepted")
+
+
 if __name__=="__main__":
     tests=[v for n,v in sorted(globals().items()) if n.startswith("test_") and callable(v)]
     for test in tests: test()
