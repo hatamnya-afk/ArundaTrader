@@ -206,6 +206,10 @@ from mcp01_trader_evidence_bridge_v0_1 import (
     build_runtime_evidence_events,
     deduplicate_events,
 )
+from mcp01_management_intelligence_flow_v0_1 import (
+    build_management_intelligence,
+    render_management_summary,
+)
 
 # ============================================================================
 
@@ -4516,6 +4520,34 @@ def main() -> int:
                 f"event_id={failure['event_id']};"
                 f"error_type={failure['error_type']}"
             )
+
+        # MCP-01 management intelligence: compose the already-verified
+        # projections over canonical compact evidence. This is a read-only
+        # management adapter; it never creates identities, sends email,
+        # starts a scheduler, or changes Trader authority.
+        mcp01_management_result = build_management_intelligence(
+            cycle_id=runtime_cycle_id,
+            emitted_at=utc_now_iso(),
+            universe_size=len(universe_assets),
+            opportunity_ready=len(ready_opportunity_results),
+            signal_ready=len(dynamic_signals),
+            validation_ready=len(validated_signals),
+            fusion_ready=len(fusion_snapshot),
+            decision_ready=len(decision_snapshot),
+            risk_ready=len(risk_snapshot),
+            trade_gate_ready=len(trade_gate_snapshot),
+            trade_ready=len(trade_ready_assets),
+            order_intents_created=len(order_intents),
+            canonical_order_requests_created=len(canonical_order_requests),
+            execution="ON" if attempted_count > 0 else "OFF",
+            real_order=attempted_count > 0,
+            real_trade=accepted_count > 0,
+            selected_assets=list(decision_snapshot),
+            current_events=mcp01_events,
+        )
+        print(render_management_summary(mcp01_management_result))
+        print("MCP01_24H_EMAIL_READY=1")
+        print("MCP01_24H_EMAIL_DELIVERY_ENABLED=0")
 
 
         # ------------------------------------------------------------------
