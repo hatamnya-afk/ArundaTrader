@@ -17,6 +17,8 @@ from cp49_first_execution_contract_v0_1 import (
     AttemptState,
     ExecutionSafetyGate,
 )
+from mcp01_trade_event_identity_v0_1 import issue_trade_event_id
+from dataclasses import replace
 
 CAPABILITY_ORDER_SUBMISSION = "ORDER_SUBMISSION"
 
@@ -212,6 +214,10 @@ def execute_order(
     # ============================================================
     # 9. CANONICAL ADAPTER SUBMISSION
     # ============================================================
+    # Authoritative trade-event birth occurs at the exact execution-boundary
+    # attempt point. It is not derived from provider response/order IDs.
+    trade_event_id = issue_trade_event_id()
+
     try:
         result = submit(request)
     except Exception as exc:
@@ -220,6 +226,7 @@ def execute_order(
             direction=request.direction,
             error_code="ADAPTER_SUBMISSION_ERROR",
             error_message=str(exc),
+            trade_event_id=trade_event_id,
         )
 
     # ============================================================
@@ -231,6 +238,7 @@ def execute_order(
             direction=request.direction,
             error_code="NON_CANONICAL_RESULT",
             error_message="Adapter returned a non-canonical execution result.",
+            trade_event_id=trade_event_id,
         )
 
     # ============================================================
@@ -242,6 +250,7 @@ def execute_order(
             direction=request.direction,
             error_code="QUANTITY_MUTATION",
             error_message="Order quantity changed during submission.",
+            trade_event_id=trade_event_id,
         )
 
     # ============================================================
