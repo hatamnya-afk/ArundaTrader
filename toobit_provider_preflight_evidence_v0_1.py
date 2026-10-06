@@ -30,7 +30,7 @@ from provider_preflight_v0_1 import (
 from toobit_provider_order_state_v0_1 import (
     build_toobit_provider_order_state,
 )
-
+from provider_preflight_v0_1 import ProviderPortfolioState
 
 def _filter_map(filters: Any) -> Dict[str, Dict[str, Any]]:
     if not isinstance(filters, dict):
@@ -284,14 +284,51 @@ def build_toobit_provider_preflight_evidence(
     )
     timestamp = build_toobit_provider_timestamp_state(adapter)
 
+    portfolio = None
+
+    if venue == "FUTURES":
+        futures_account = adapter.futures_account_state(asset)
+
+        if not getattr(futures_account, "allowed", False):
+            raise RuntimeError(
+                getattr(
+                    futures_account,
+                    "reason",
+                    "FUTURES_ACCOUNT_UNAVAILABLE",
+                )
+            )
+
+        state = getattr(futures_account, "data", None)
+
+        if not isinstance(state, dict):
+            raise RuntimeError(
+                "Futures account state payload is invalid"
+            )
+
+        portfolio = ProviderPortfolioState(
+            state_known=state.get("state_known") is True,
+            exposure_allowed=(
+                False
+                if state.get("position_conflict") is True
+                else (
+                    True
+                    if (
+                        state.get("state_known") is True
+                        and state.get("margin_state_known") is True
+                        and state.get("leverage_state_known") is True
+                    )
+                    else None
+                )
+            ),
+        )
+
     return build_provider_preflight_evidence(
         contract=contract,
         account=account,
         orders=orders,
         timestamp=timestamp,
-        portfolio=None,
+        portfolio=portfolio,
     )
-
 
 def run_toobit_provider_preflight(
     *,

@@ -208,32 +208,57 @@ def translate_and_preflight_toobit(
     direction = str(
         getattr(canonical_request, "direction", "")
     ).strip().upper()
-    futures_capable = (
+    futures_ready = False
+
+    if (
         callable(getattr(adapter, "futures_trading_constraints", None))
         and callable(getattr(adapter, "futures_account_state", None))
-    )
+    ):
+        try:
+            futures_constraints = adapter.futures_trading_constraints(
+                canonical_request.asset
+            )
+
+            if getattr(futures_constraints, "allowed", False) is True:
+                futures_account = adapter.futures_account_state(
+                    canonical_request.asset
+                )
+
+                if getattr(futures_account, "allowed", False) is not True:
+                    return _block(
+                        "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE",
+                        str(
+                            getattr(
+                                futures_account,
+                                "reason",
+                                "FUTURES_ACCOUNT_UNAVAILABLE",
+                            )
+                        ),
+                    )
+
+                futures_ready = True
+
+        except Exception as exc:
+            return _block(
+                "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE",
+                str(exc),
+            )
+
     routing = route_venue(
         VenueRoutingRequest(
             direction=direction,
             spot_ready=True,
-            futures_ready=futures_capable,
+            futures_ready=futures_ready,
         )
     )
-
-    if routing.venue is not Venue.SPOT:
+    if routing.venue is Venue.NONE:
         return _block(
+            routing.reason.value,
             (
-                "FUTURES_ROUTE_REQUIRED"
-                if routing.reason is RoutingReason.SHORT_FUTURES
-                else routing.reason.value
-            ),
-            (
-                "Canonical SHORT is routed to Futures by CP46-A3; "
-                "Spot translation is forbidden. "
+                "CP46-A3 venue routing blocked the canonical request. "
                 f"routing_reason={routing.reason.value}"
             ),
         )
-
     try:
         venue = routing.venue.value
         evidence = build_toobit_translation_evidence(

@@ -244,7 +244,7 @@ def test_futures_capability_gap_fails_closed():
         adapter=NoFuturesAdapter(),
     )
     assert result.status == "BLOCK"
-    assert result.reason == "FUTURES_ROUTE_REQUIRED"
+    assert result.reason == "SHORT_FUTURES_UNAVAILABLE"
 
 
 def test_futures_missing_account_state_fails_closed():
