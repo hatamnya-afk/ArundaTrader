@@ -70,6 +70,40 @@ def append_event(event: CompactEvent, stream_path: Path = DEFAULT_STREAM_PATH) -
         handle.write(json.dumps(event.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n")
     return path
 
+def append_event_idempotent(event: CompactEvent, stream_path: Path = DEFAULT_STREAM_PATH) -> Path:
+    """Append evidence once; reject conflicting reuse of an existing event_id.
+
+    This is a single-process append-only persistence boundary. Existing identical
+    evidence is treated as already persisted; the same event_id with different
+    content fails closed.
+    """
+    event.validate()
+    path = Path(stream_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = event.to_dict()
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    if path.exists():
+        with path.open("r", encoding="utf-8") as handle:
+            for line_number, line in enumerate(handle, 1):
+                if not line.strip():
+                    continue
+                try:
+                    existing = json.loads(line)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(
+                        f"invalid evidence stream JSON at line {line_number}"
+                    ) from exc
+                if existing.get("event_id") != event.event_id:
+                    continue
+                if existing != payload:
+                    raise ValueError(
+                        f"event_id conflict at line {line_number}: {event.event_id}"
+                    )
+                return path
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(encoded + "\n")
+    return path
+
 def _require_text(value: Any, name: str) -> None:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{name} must be a non-empty string")
