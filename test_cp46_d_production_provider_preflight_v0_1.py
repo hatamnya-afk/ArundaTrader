@@ -193,7 +193,7 @@ class _FuturesAdapter(_Adapter):
             "risk_limits": [],
         })
 
-    def futures_account_state(self, asset):
+    def futures_account_state(self, asset, *, execution_instrument=None):
         return _Result(data={
             "state_known": True,
             "margin_state_known": True,
@@ -201,7 +201,7 @@ class _FuturesAdapter(_Adapter):
             "position_conflict": False,
         })
 
-    def futures_duplicate_check(self, asset):
+    def futures_duplicate_check(self, asset, *, execution_instrument=None):
         return _Result(data={
             "state_known": True,
             "open_order_client_ids": frozenset(),
@@ -284,7 +284,7 @@ def test_futures_capability_gap_fails_closed():
 
 def test_futures_missing_account_state_fails_closed():
     class BrokenFuturesAdapter(_FuturesAdapter):
-        def futures_account_state(self, asset):
+        def futures_account_state(self, asset, *, execution_instrument=None):
             return _Result(allowed=False, reason="FUTURES_ACCOUNT_UNAVAILABLE")
 
     result = translate_and_preflight_toobit(

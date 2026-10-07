@@ -263,10 +263,22 @@ def translate_and_preflight_toobit(
 
                 futures_constraints = resolver(execution_instrument)
 
-                if getattr(futures_constraints, "allowed", False) is True:
-                    futures_account = adapter.futures_account_state(
-                        canonical_request.asset
+                if getattr(futures_constraints, "allowed", False) is not True:
+                    return _block(
+                        "AUTHORITATIVE_PROVIDER_INSTRUMENT_UNAVAILABLE",
+                        str(
+                            getattr(
+                                futures_constraints,
+                                "reason",
+                                "FUTURES_INSTRUMENT_UNAVAILABLE",
+                            )
+                        ),
                     )
+
+                futures_account = adapter.futures_account_state(
+                    canonical_request.asset,
+                    execution_instrument=execution_instrument,
+                )
 
                 if getattr(futures_account, "allowed", False) is not True:
                     return _block(
@@ -303,6 +315,7 @@ def translate_and_preflight_toobit(
                 f"routing_reason={routing.reason.value}"
             ),
         )
+
     try:
         venue = routing.venue.value
 
@@ -345,6 +358,7 @@ def translate_and_preflight_toobit(
                 adapter=adapter,
                 asset=canonical_request.asset,
                 venue=venue,
+                execution_instrument=execution_instrument,
             )
         )
 

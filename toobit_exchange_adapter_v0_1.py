@@ -295,22 +295,57 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def futures_account_state(self, asset: str) -> ToobitAdapterResult:
+    def futures_account_state(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
-            constraints = self.futures_trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-
-            symbol = str(constraints.data["symbol"]).strip().upper()
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
+                )
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+            else:
+                constraints = self.futures_trading_constraints(asset)
+                if (
+                    not constraints.allowed
+                    or not isinstance(constraints.data, dict)
+                ):
+                    raise RuntimeError(constraints.reason)
+                symbol = str(
+                    constraints.data["symbol"]
+                ).strip().upper()
 
             balance = self._unwrap(
-                self._call("GET", "/api/v1/futures/balance", signed=True)
+                self._call(
+                    "GET",
+                    "/api/v1/futures/balance",
+                    signed=True,
+                )
             )
             leverage = self._unwrap(
                 self._call(
                     "GET",
                     "/api/v1/futures/accountLeverage",
-                    params={"symbol": symbol, "category": "USDT"},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                    },
                     signed=True,
                 )
             )
@@ -318,33 +353,65 @@ class ToobitExchangeAdapter:
                 self._call(
                     "GET",
                     "/api/v1/futures/positions",
-                    params={"symbol": symbol, "category": "USDT"},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                    },
                     signed=True,
                 )
             )
 
             if not isinstance(balance, list):
-                raise RuntimeError("TOOBIT_FUTURES_BALANCE_INVALID")
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_BALANCE_INVALID"
+                )
             if not isinstance(leverage, list):
-                raise RuntimeError("TOOBIT_FUTURES_LEVERAGE_STATE_INVALID")
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_LEVERAGE_STATE_INVALID"
+                )
             if not isinstance(positions, list):
-                raise RuntimeError("TOOBIT_FUTURES_POSITION_STATE_INVALID")
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_POSITION_STATE_INVALID"
+                )
 
             leverage_rows = [
-                row for row in leverage
-                if isinstance(row, dict)
-                and str(row.get("symbolId", "")).strip().upper() == symbol
+                row
+                for row in leverage
+                if (
+                    isinstance(row, dict)
+                    and str(
+                        row.get("symbolId", "")
+                    ).strip().upper()
+                    == symbol
+                )
             ]
+
             if len(leverage_rows) != 1:
-                raise RuntimeError("TOOBIT_FUTURES_LEVERAGE_STATE_UNAVAILABLE")
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_LEVERAGE_STATE_UNAVAILABLE"
+                )
 
             for row in positions:
                 if not isinstance(row, dict):
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_STATE_INVALID")
-                if str(row.get("symbol", "")).strip().upper() != symbol:
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_SYMBOL_INVALID")
-                if str(row.get("side", "")).upper() not in {"LONG", "SHORT"}:
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_SIDE_INVALID")
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_STATE_INVALID"
+                    )
+                if (
+                    str(row.get("symbol", ""))
+                    .strip()
+                    .upper()
+                    != symbol
+                ):
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_SYMBOL_INVALID"
+                    )
+                if (
+                    str(row.get("side", "")).upper()
+                    not in {"LONG", "SHORT"}
+                ):
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_SIDE_INVALID"
+                    )
 
             return ToobitAdapterResult(
                 True,
@@ -360,63 +427,51 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def duplicate_check(self, asset: str, side: str) -> ToobitAdapterResult:
-        del side
+    def futures_duplicate_check(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
-            constraints = self.trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-            symbol = str(constraints.data["symbol"]).strip().upper()
-
-            open_orders = self._unwrap(
-                self._call(
-                    "GET",
-                    "/api/v1/spot/openOrders",
-                    params={"symbol": symbol, "limit": 1000},
-                    signed=True,
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
                 )
-            )
-            recent_orders = self._unwrap(
-                self._call(
-                    "GET",
-                    "/api/v1/spot/tradeOrders",
-                    params={"symbol": symbol, "limit": 1000},
-                    signed=True,
-                )
-            )
-
-            return ToobitAdapterResult(
-                True,
-                "OK",
-                {
-                    "state_known": True,
-                    "open_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in open_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
-                    ),
-                    "recent_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in recent_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
-                    ),
-                },
-            )
-        except Exception as exc:
-            return ToobitAdapterResult(False, str(exc))
-
-    def futures_duplicate_check(self, asset: str) -> ToobitAdapterResult:
-        try:
-            constraints = self.futures_trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-            symbol = str(constraints.data["symbol"]).strip().upper()
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+            else:
+                constraints = self.futures_trading_constraints(asset)
+                if (
+                    not constraints.allowed
+                    or not isinstance(constraints.data, dict)
+                ):
+                    raise RuntimeError(constraints.reason)
+                symbol = str(
+                    constraints.data["symbol"]
+                ).strip().upper()
 
             open_orders = self._unwrap(
                 self._call(
                     "GET",
                     "/api/v2/futures/open-orders",
-                    params={"symbol": symbol, "category": "USDT", "limit": 1000},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                        "limit": 1000,
+                    },
                     signed=True,
                 )
             )
@@ -424,7 +479,11 @@ class ToobitExchangeAdapter:
                 self._call(
                     "GET",
                     "/api/v1/futures/historyOrders",
-                    params={"symbol": symbol, "category": "USDT", "limit": 1000},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                        "limit": 1000,
+                    },
                     signed=True,
                 )
             )
@@ -437,17 +496,24 @@ class ToobitExchangeAdapter:
                     "open_order_client_ids": frozenset(
                         str(row["clientOrderId"])
                         for row in open_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
+                        if (
+                            isinstance(row, dict)
+                            and row.get("clientOrderId") is not None
+                        )
                     ),
                     "recent_order_client_ids": frozenset(
                         str(row["clientOrderId"])
                         for row in recent_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
+                        if (
+                            isinstance(row, dict)
+                            and row.get("clientOrderId") is not None
+                        )
                     ),
                 },
             )
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
+
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs

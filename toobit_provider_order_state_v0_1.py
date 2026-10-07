@@ -16,13 +16,17 @@ def build_toobit_provider_order_state(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderOrderState:
     """Build ProviderOrderState from Toobit's authenticated USER_DATA reads."""
     if adapter is None or not isinstance(asset, str) or not asset.strip():
         raise RuntimeError("Provider order-state input is invalid")
 
     if venue == "FUTURES":
-        result = adapter.futures_duplicate_check(asset.strip().upper())
+        result = adapter.futures_duplicate_check(
+            asset.strip().upper(),
+            execution_instrument=execution_instrument,
+        )
     else:
         result = adapter.duplicate_check(asset.strip().upper(), "LONG")
     if getattr(result, "allowed", False) is not True:

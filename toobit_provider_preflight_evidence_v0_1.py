@@ -183,9 +183,13 @@ def build_toobit_provider_account_state(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderAccountState:
     if venue == "FUTURES":
-        result = adapter.futures_account_state(asset)
+        result = adapter.futures_account_state(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(result, "allowed", False) is not True:
             raise RuntimeError(
                 "Authoritative Toobit Futures account state unavailable: "
@@ -266,6 +270,7 @@ def build_toobit_provider_preflight_evidence(
     adapter,
     asset: str,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderPreflightEvidence:
     """Read and compose authoritative Toobit CP46-A6 evidence."""
     if adapter is None:
@@ -277,17 +282,26 @@ def build_toobit_provider_preflight_evidence(
         adapter, asset, venue=venue,
     )
     account = build_toobit_provider_account_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     orders = build_toobit_provider_order_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     timestamp = build_toobit_provider_timestamp_state(adapter)
 
     portfolio = None
 
     if venue == "FUTURES":
-        futures_account = adapter.futures_account_state(asset)
+        futures_account = adapter.futures_account_state(
+            asset,
+            execution_instrument=execution_instrument,
+        )
 
         if not getattr(futures_account, "allowed", False):
             raise RuntimeError(
