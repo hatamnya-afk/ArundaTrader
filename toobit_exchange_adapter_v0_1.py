@@ -25,6 +25,12 @@ from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Optional
 from urllib.parse import urlencode
 
+from execution_instrument_contract_v0_1 import (
+    ExecutionInstrumentSpecification,
+    InstrumentResolutionStatus,
+    resolve_provider_instrument,
+)
+
 BASE_URL = "https://api.toobit.com"
 DEFAULT_RECV_WINDOW = 5000
 
@@ -188,6 +194,95 @@ class ToobitExchangeAdapter:
                 futures=True,
             )
             return ToobitAdapterResult(True, "OK", row)
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
+    def resolve_futures_instrument(
+        self,
+        specification: ExecutionInstrumentSpecification,
+    ) -> ToobitAdapterResult:
+        """Resolve a provider-neutral Futures instrument specification.
+
+        Provider-specific metadata interpretation remains inside this adapter.
+        The Core never sees or reconstructs the provider symbol.
+        """
+        try:
+            if not isinstance(
+                specification,
+                ExecutionInstrumentSpecification,
+            ):
+                raise RuntimeError("EXECUTION_INSTRUMENT_SPEC_INVALID")
+
+            if specification.venue.strip().upper() != "FUTURES":
+                raise RuntimeError("EXECUTION_INSTRUMENT_VENUE_INVALID")
+
+            contracts = self._exchange_info().get("contracts")
+            if not isinstance(contracts, list):
+                raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+            candidates: list[dict[str, Any]] = []
+            for row in contracts:
+                if not isinstance(row, dict):
+                    continue
+
+                symbol = row.get("symbol")
+                underlying = row.get("underlying")
+                status = row.get("status")
+
+                if not all(
+                    isinstance(value, str) and value.strip()
+                    for value in (symbol, underlying, status)
+                ):
+                    continue
+
+                # Toobit exposes settlement/margin identity as provider
+                # metadata. Never derive it from the provider symbol.
+                settlement_asset = row.get("marginToken")
+                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                    settlement_asset = row.get("quoteAsset")
+
+                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                    continue
+
+                # Toobit uses SWAP contracts for perpetual futures.
+                # This provider-specific interpretation stays in the adapter.
+                instrument_type = (
+                    "PERPETUAL"
+                    if "-SWAP" in symbol.upper()
+                    else None
+                )
+
+                candidates.append(
+                    {
+                        "asset": underlying.strip().upper(),
+                        "venue": "FUTURES",
+                        "settlement_asset": settlement_asset.strip().upper(),
+                        "instrument_type": instrument_type,
+                        "provider_symbol": symbol.strip().upper(),
+                        "status": status.strip().upper(),
+                    }
+                )
+
+            resolved = resolve_provider_instrument(
+                specification,
+                candidates,
+            )
+
+            if resolved.status != InstrumentResolutionStatus.RESOLVED:
+                return ToobitAdapterResult(
+                    False,
+                    resolved.reason,
+                    {"candidate_count": len(candidates)},
+                )
+
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {
+                    "symbol": resolved.provider_symbol,
+                    "instrument": dict(resolved.observation or {}),
+                },
+            )
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
