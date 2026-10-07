@@ -1,10 +1,10 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-CURRENT FRONTIER — PROVIDER READINESS → MAIN / SELECTIVE INTEGRATION
+CURRENT FRONTIER — PROVIDER READINESS → MAIN / SELECTIVE INTEGRATION — MAP VERIFIED
 
 ## CURRENT STATE
-MCP-01 handoff is complete and frozen. Main is canonical. The next step is a **static forensic map** of the closed provider-readiness contracts. Runtime remains NOT EXECUTED.
+MCP-01 handoff is complete and frozen. Main is canonical. The provider-readiness forensic map is now verified from the current MAIN tree. The authoritative CP46-D/F provider modules are present on MAIN as selective evidence-backed contracts. Runtime remains NOT EXECUTED.
 
 ## AUTHORITATIVE HANDOFFS
 - `MCP01_HANDOFF_TO_MAIN.md`
@@ -27,7 +27,18 @@ MCP-01 handoff is complete and frozen. Main is canonical. The next step is a **s
 - Closed/verified stages remain historical truth unless direct regression is proven.
 
 ## CURRENT FORENSIC FINDING
-MAIN currently exposes the legacy Toobit provider-preflight evidence files, but the authoritative CP46-D/F provider modules are not present by their known source names on MAIN. This must be mapped before any implementation decision.
+The previous finding was stale and is corrected here. MAIN contains the selective CP46-D/F/provider-readiness contracts:
+- `cp46_d_production_provider_preflight_v0_1.py`
+- `cp46_d_provider_execution_handoff_v0_1.py`
+- `execution_venue_routing_policy_v0_1.py`
+- `provider_order_translation_v0_1.py`
+- `provider_preflight_v0_1.py`
+- `exchange_execution_contract.py`
+- `provider_preflight_evidence_assembler_v0_1.py`
+- `toobit_provider_order_state_v0_1.py`
+- `toobit_provider_preflight_evidence_v0_1.py`
+
+The modules are evidence/contract boundaries, not a license to bind Toobit into the Core now. `arunda_pipeline.py` remains exchange-agnostic and does not call the Toobit preflight chain. This is architecturally correct while the Project Completion Gate remains open and Toobit Binding is not yet authorized.
 
 ## REQUIRED MAP
 For each carry-forward contract report PRESENT / PARTIAL / MISSING / BLOCKED with exact MAIN file:function:
@@ -43,7 +54,7 @@ For each carry-forward contract report PRESENT / PARTIAL / MISSING / BLOCKED wit
 10. Execution-quality dependency only if proven necessary.
 
 ## NEXT ACTION
-Builder runs the exact commands in `BUILDER_HANDOFF_PROVIDER_READINESS.md` and returns **only the forensic map**. Management approval is required before any provider-readiness code is changed.
+No provider-readiness code patch is required at this frontier. Preserve the existing MAIN contracts as selective evidence-backed boundaries. The next advancement is the Project Completion Gate; only after that gate is CLOSED may Toobit Binding connect these contracts to the exchange adapter. Do not wire Toobit into `arunda_pipeline.py` before that gate.
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
