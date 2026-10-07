@@ -4680,6 +4680,10 @@ def main() -> int:
 
     assert_execution_disabled()
 
+    cp49_birth_persisted = 0
+    mcp01_evidence_persisted = 0
+    mcp01_evidence_failures = []
+
     try:
         print("=" * 90)
         print("ARUNDA TRADER ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â FULL REAL DYNAMIC UNIVERSE PIPELINE")
@@ -5324,7 +5328,7 @@ def main() -> int:
         # No canonical order request creation.
         # No exchange submission.
         # No execution.
-        # No DB writes.
+        # No DB writes outside the explicit CP49 authoritative Birth boundary.
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
@@ -5356,7 +5360,8 @@ def main() -> int:
         print("EXECUTION          : DISABLED")
         print("ORDER SUBMISSION   : NONE")
         print("EXCHANGE WRITE     : NONE")
-        print("DB_WRITES           : 0")
+        print(f"CP49_BIRTH_DB_WRITES : {cp49_birth_persisted}")
+        print("DB_WRITES_OUTSIDE_CP49: 0")
         print("FAIL-CLOSED         : YES")
         print("=" * 90)
         return 1
