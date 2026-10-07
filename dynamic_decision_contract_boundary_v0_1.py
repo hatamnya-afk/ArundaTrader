@@ -5,14 +5,6 @@ from typing import Any, Mapping
 import importlib.util
 import sys
 import math
-import hashlib
-import json
-from datetime import datetime, timezone
-
-from cp49_authoritative_decision_birth_issuer_v0_1 import (
-    issue_canonical_decision_id,
-    build_birth_identity_record,
-)
 
 
 ROOT = Path(__file__).resolve().parent
@@ -122,6 +114,9 @@ def build_dynamic_decision(
     decision_id: str | None = None,
 ) -> dict[str, Any]:
 
+    if not isinstance(decision_id, str) or not decision_id.strip():
+        raise ValueError("canonical decision_id is required")
+
     dynamic_asset = normalize_symbol(asset)
     base_asset = dynamic_asset.split("/", 1)[0]
 
@@ -170,66 +165,11 @@ def build_dynamic_decision(
     legacy_signal["asset"] = base_asset
     legacy_score["asset"] = base_asset
 
-    # ------------------------------------------------------------------
-    # AUTHORITATIVE DECISION BIRTH
-    #
-    # The semantic decision is evaluated first. Only then is the opaque
-    # UUIDv4 issued and bound to that Birth context. No downstream layer
-    # creates or replaces the identity.
-    # ------------------------------------------------------------------
-    semantic = decision_engine.determine_decision(
-        legacy_signal,
-        legacy_score,
-    )
-
-    if not isinstance(semantic, dict):
-        raise ValueError("invalid semantic decision at birth")
-
-    birth_timestamp_ms = int(
-        datetime.now(timezone.utc).timestamp() * 1000
-    )
-
-    birth_fingerprint = hashlib.sha256(
-        json.dumps(
-            {
-                "asset": dynamic_asset,
-                "signal": legacy_signal,
-                "score": legacy_score,
-                "decision": semantic,
-            },
-            sort_keys=True,
-            separators=(",", ":"),
-            default=str,
-        ).encode("utf-8")
-    ).hexdigest()
-
-    birth_context = {
-        "asset": dynamic_asset,
-        "decision_timestamp_ms": birth_timestamp_ms,
-        "snapshot_id": f"DYN-{birth_timestamp_ms}-{birth_fingerprint[:32]}",
-        "source": "DYNAMIC_DECISION_BIRTH",
-        "decision": semantic,
-    }
-
-    if decision_id is None:
-        issued_decision_id = issue_canonical_decision_id(
-            birth_context
-        )
-    elif isinstance(decision_id, str) and decision_id.strip():
-        issued_decision_id = decision_id.strip()
-    else:
-        raise ValueError("canonical decision_id is invalid")
-
-    birth_identity = build_birth_identity_record(
-        birth_context,
-        decision_id=issued_decision_id,
-    )
-
     decision = build_decision(
         base_asset,
         legacy_signal,
         legacy_score,
-        decision_id=issued_decision_id,
+        decision_id=decision_id.strip(),
     )
 
     if not isinstance(decision, dict):
@@ -261,12 +201,8 @@ def build_dynamic_decision(
 
     return {
         "status": "READY",
-        "decision_id": issued_decision_id,
+        "decision_id": decision_id.strip(),
         "asset": dynamic_asset,
-        "decision_timestamp_ms": birth_identity["decision_timestamp_ms"],
-        "snapshot_id": birth_identity["snapshot_id"],
-        "decision_birth_source": birth_identity["source"],
-        "decision_birth_issuer_contract": birth_identity["issuer_contract"],
         "state": decision["state"],
         "direction": decision["direction"],
         "score": score,
