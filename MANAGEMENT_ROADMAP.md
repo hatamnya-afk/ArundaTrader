@@ -150,13 +150,16 @@ ORDER SUBMISSION/CANCELLATION = FORBIDDEN
 WITHDRAWAL = FORBIDDEN
 DATABASE WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
-## 5. FORWARD ROADMAP — AFTER MCP-01 MAIN INTEGRATION
+## 5. FORWARD ROADMAP — AFTER PROJECT COMPLETION
 
-After selective integration is verified, resume:
-`PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+Project Completion is CLOSED / VERIFIED.
 
-All later stages retain their existing gates and explicit Management authorization.
+Current route:
+`PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
+Toobit Binding is the only active next gate. It may open only through the existing replaceable exchange-adapter boundary and only under explicit Management authorization.
+
+Do not wire Toobit into arunda_pipeline.py. Do not call provider APIs, submit orders, mutate the DB, or enable execution at this frontier.
 
 ## 6. MANAGEMENT GATES
 
