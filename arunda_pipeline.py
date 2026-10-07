@@ -5220,6 +5220,23 @@ def main() -> int:
                 validated_signal,
                 score_snapshot[asset],
             )
+        from mcp01_main_integration_boundary_v0_1 import (
+            bind_authoritative_decision_birth,
+        )
+
+        (
+            decision_snapshot,
+            cp49_birth_persisted,
+        ) = bind_authoritative_decision_birth(
+            db_path=str(DB_PATH),
+            decision_snapshot=decision_snapshot,
+            market_data_by_symbol=market_data_by_symbol,
+        )
+
+        mcp01_cycle_id = (
+            f"MCP01-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}"
+        )
+
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
         from dynamic_risk_contract_boundary_v0_1 import (
@@ -5274,30 +5291,21 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
-        from datetime import datetime, timezone
-
-        # MCP-01 / CP49 SELECTIVE MAIN INTEGRATION
+        # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
-        # This is downstream evidence integration only. It does not alter
-        # Strategy, Decision semantics, Risk, Trade Gate, or Execution.
         from mcp01_main_integration_boundary_v0_1 import (
-            integrate_authoritative_birth_and_evidence,
+            emit_mcp01_evidence,
         )
 
         (
-            decision_snapshot,
             mcp01_evidence_persisted,
             mcp01_evidence_failures,
-        ) = integrate_authoritative_birth_and_evidence(
-            db_path=str(DB_PATH),
-            cycle_id=f"MCP01-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}",
+        ) = emit_mcp01_evidence(
+            cycle_id=mcp01_cycle_id,
             decision_snapshot=decision_snapshot,
             trade_gate_snapshot=trade_gate_snapshot,
             trade_ready_assets=trade_ready_assets,
-            market_data_by_symbol=market_data_by_symbol,
         )
-
-        cp49_birth_persisted = len(decision_snapshot)
 
         # ------------------------------------------------------------------
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
