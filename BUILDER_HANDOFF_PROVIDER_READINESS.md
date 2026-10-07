@@ -12,7 +12,7 @@ This is the next Builder checkpoint after MCP-01 → MAIN selective integration.
 - Do NOT create a new branch.
 
 ## Exact objective
-Map the already-closed provider-readiness contracts onto MAIN and identify the **minimum** missing boundary. Do not implement anything yet.
+Map the already-closed provider-readiness contracts onto MAIN and identify the **minimum** missing boundary. The map is now complete; do not add a provider-readiness patch at this frontier.
 
 Required contracts:
 1. CP46-A3: SHORT => Futures; Spot SELL is never SHORT.
@@ -26,21 +26,19 @@ Required contracts:
 9. Quantity provenance remains mandatory.
 10. Execution stays OFF.
 
-## Important current finding
-A Main-tree search currently finds the legacy files:
-- `toobit_provider_preflight_evidence_v0_1.py`
-- `test_cp49_toobit_provider_preflight_evidence_v0_1.py`
-
-The following authoritative CP46-D/F/provider modules were **not found on MAIN by exact-name/code search** and must therefore be mapped before any copy/implementation decision:
+## Verified current finding
+The previous handoff finding was stale. MAIN contains the selective provider-readiness contracts:
 - `cp46_d_production_provider_preflight_v0_1.py`
 - `cp46_d_provider_execution_handoff_v0_1.py`
 - `execution_venue_routing_policy_v0_1.py`
 - `provider_order_translation_v0_1.py`
 - `provider_preflight_v0_1.py`
-- `execution_quality_v0_1.py`
 - `exchange_execution_contract.py`
+- `provider_preflight_evidence_assembler_v0_1.py`
+- `toobit_provider_order_state_v0_1.py`
+- `toobit_provider_preflight_evidence_v0_1.py`
 
-This is a **finding, not permission to copy them**.
+These are evidence/contract boundaries. They must not be wholesale-copied from CP46-F and must not be wired into the exchange-agnostic Core before Project Completion and the explicit Toobit Binding gate.
 
 ## Required PowerShell commands
 Run from the local MAIN workspace:
@@ -96,4 +94,4 @@ Then list:
 - Do not fix missing contracts by inventing evidence or generic calculations.
 
 ## Stop condition
-Stop immediately after the forensic map. Management must approve the minimum patch before Builder changes any provider-readiness code.
+Forensic map is verified. There is no provider-readiness code patch at this frontier. Preserve execution OFF and advance to Project Completion. Toobit Binding is the later gate at which the existing contracts may be connected selectively through the exchange adapter.
