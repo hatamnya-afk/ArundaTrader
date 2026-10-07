@@ -223,6 +223,14 @@ Record BUILT, VERIFIED, CLOSED/BLOCKED/NOT VERIFIED, evidence, blocker, CURRENT 
 No next checkpoint starts before synchronization is complete.
 
 ## CURRENT NEXT ACTION
-Execute the single controlled CP44 runtime from the established downstream ELIGIBLE boundary under the no-write/no-order safety boundary.
 
+Static/selective integration on `main` only:
+1. map the carry-forward provider-readiness contracts from `MCP01_HANDOFF_TO_MAIN.md`;
+2. identify the exact Main implementation for each contract;
+3. identify only genuinely missing pieces;
+4. define the minimum authorized integration scope.
+
+No Runtime. No order. No real trade. No DB mutation. No new branch. No wholesale branch merge.
+
+# END CHECKPOINTS
 # END CHECKPOINTS
