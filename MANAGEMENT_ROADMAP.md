@@ -152,16 +152,35 @@ ORDER SUBMISSION/CANCELLATION = FORBIDDEN
 WITHDRAWAL = FORBIDDEN
 DATABASE WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
-## 5. FORWARD ROADMAP — AFTER PROJECT COMPLETION
+## 5. FORWARD ROADMAP — FINAL CONTROLLED TEST
 
 Project Completion is CLOSED / VERIFIED.
+Toobit Binding is CLOSED / VERIFIED.
 
 Current route:
 `PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-Toobit Binding is the only active next gate. It may open only through the existing replaceable exchange-adapter boundary and only under explicit Management authorization.
+### Verified read-only evidence
+- Full Read-Only Provider Preflight = PASS against live Toobit.
+- Authoritative Futures instrument = BTC-SWAP-USDT.
+- Live ExchangeInfo, Futures balance, leverage, positions, open orders, history orders, and server time returned HTTP 200.
+- Provider preflight evidence constructed successfully.
+- Account/order/contract/timestamp evidence was known and valid.
+- GET-only transport; no write endpoint invoked.
+- CP46-D focused tests = 12/12 PASS.
+- git diff --check = PASS.
+- targeted py_compile = PASS.
+- evidence-alignment commit = f80fa83.
 
-Do not wire Toobit into arunda_pipeline.py. Do not call provider APIs, submit orders, mutate the DB, or enable execution at this frontier.
+### Active controlled-test boundary
+The evidence above proves read-only provider readiness. It does not authorize execution.
+
+Do not wire Toobit into arunda_pipeline.py.
+Do not submit/cancel orders.
+Do not withdraw.
+Do not mutate the DB.
+Do not enable execution.
+Do not invoke additional provider APIs unless separately authorized as part of the controlled-test evidence scope.
 
 ## 6. MANAGEMENT GATES
 
