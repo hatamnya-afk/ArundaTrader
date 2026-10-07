@@ -121,125 +121,59 @@ The following historical stages are completed and must not be reopened or re-aud
   - Execution authorization remained false.
   - No order, execution, API write, or production DB mutation occurred.
 
-## 4. CURRENT FRONTIER — CP44
+## 4. CURRENT FRONTIER — MCP-01 → MAIN / SELECTIVE INTEGRATION
 
-### CP44 — REAL-MARKET CONTROLLED TEST
+### MCP-01 MAIN HANDOFF
 Status:
-`MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED`
+`HANDOFF_READY / MANAGEMENT-AUTHORIZED / STATIC INTEGRATION BOUNDARY / NOT EXECUTED`
 
-Objective:
-`REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT`
+Authoritative handoff:
+`MCP01_HANDOFF_TO_MAIN.md`
 
-Current downstream focus:
-`ELIGIBLE[N] → REAL/VALIDATED ENTRY → REAL/VALIDATED INVALIDATION → SMART RISK → RISK[N] → TRADE_GATE[N] → TRADE_READY[N] → ORDER INTENT → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY`
+MCP-01 verification is complete for the current provider-readiness boundary. The divergent source branch is evidence only and MUST NOT be merged wholesale.
 
-CP44 must prove, with real and attributable observations:
-- REAL_MARKET_DATA
-- VALIDATED_OBSERVATIONS
-- REAL_CAPITAL_BOUNDARY
-- VALID_ENTRY
-- VALID_STOP / INVALIDATION
-- VALID_QUANTITY
-- VALID_EXPOSURE
-- DECISION_CONSISTENCY
-- TRADE_INTENT_CONSISTENCY
-- CONSTRAINT_READINESS
-- PROVENANCE
-- FAIL_CLOSED
-- DYNAMIC_ASSET
-- NO_TEST_DATA
-- NO_FIXED_15
-- NO_ORDER
-- NO_AUTHORIZATION
-- NO_EXECUTION
-- NO_API_WRITE
-- NO_DB_WRITE
+Canonical route:
+`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-CP44 does NOT authorize order submission, execution, signature bypass, exchange writes, test capital, or modification of protected pipeline code.
+Carry-forward contracts:
+- `decision_id` remains authoritative.
+- `case_id`, `trade_event_id`, `runtime_cycle_id`, and `exchange_order_id` remain distinct.
+- Missing outcome evidence becomes `DATA_QUALITY_EVENT`; no fabricated outcome.
+- Quantity provenance remains mandatory.
+- CP46-A3 routing remains authoritative: SHORT requires Futures; Spot SELL is never interpreted as SHORT.
+- Futures readiness uses authoritative provider contract/account state.
+- Futures portfolio exposure is provider-derived; no generic exposure calculation.
+- Provider preflight remains fail-closed.
+- Execution remains OFF until separately authorized.
 
-### CP44 operating rule
-Use the established downstream `ELIGIBLE[N]` boundary. Do not rebuild Opportunity, Signal, Fusion, Score, or Decision merely to reach CP44.
+Explicitly excluded from automatic carry-forward:
+- divergent branch wholesale merge/rebase
+- MCP runtime wrappers and forensic scripts
+- runtime artifacts (`arunda.db`, `__pycache__/`, `runtime_observations/`)
+- unrelated historical artifacts
+- reopening closed/verified checkpoints
+- strategy redesign or DB repair/change
 
-A single controlled CP44 runtime is permitted under the existing no-write/no-order boundary. No retry or second runtime is implied.
+### CURRENT SCOPE
+Static/selective integration only:
+1. map each carry-forward contract to its canonical Main implementation;
+2. identify only genuinely missing pieces;
+3. define the minimum evidence-backed integration patch;
+4. keep MCP downstream of Trader evidence;
+5. preserve execution OFF and all fail-closed boundaries.
 
-## 5. FORWARD ROADMAP — FROM CP44 TO FIRST REAL TRADING
+No Runtime. No order. No real trade. No DB mutation. No strategy/Decision/Risk/Gate/Order/Execution redesign. No new branch.
 
-### CP45 — EXECUTION AUTHORIZATION BOUNDARY
-Purpose:
-Create and verify the explicit gate between technical `PRE-EXECUTION READY` and any permission to send a real order.
+### EXIT CONDITION
+The selective integration boundary is mapped and verified on `main`, with exact files and minimal authorized scope identified.
 
-Required properties:
-- explicit Management authorization object/boundary
-- authorization is distinct from technical readiness
-- fail closed by default
-- no inferred authorization
-- no order submission during CP45
-- execution remains disabled until the gate is explicitly opened
+## 5. FORWARD ROADMAP — AFTER MCP-01 MAIN INTEGRATION
 
-Exit condition:
-`PRE-EXECUTION READY → EXPLICIT EXECUTION AUTHORIZATION BOUNDARY` is verified and governance documents are synchronized.
+After selective integration is verified, resume:
+`PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-### PROJECT COMPLETION GATE
-Before exchange binding, Management must explicitly close the exchange-agnostic project/core.
+All later stages retain their existing gates and explicit Management authorization.
 
-Acceptance must cover the completed Core chain and its contracts, boundaries, real-market readiness, risk/decision/trade-intent path, and execution separation.
-
-Exit condition:
-Project completion is explicitly recorded as CLOSED in all four governance documents.
-
-### PHASE B — EXCHANGE BINDING
-Only after Project Completion Gate is closed.
-
-Purpose:
-- authorize the execution environment
-- bind Toobit through the existing replaceable exchange adapter boundary
-- preserve provider-neutral Core architecture
-- keep Market Information Arm providers separate from execution
-
-No exchange-specific logic may be moved into Core.
-
-### PHASE C — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
-After exchange binding is explicitly authorized:
-- verify the Toobit adapter/environment against real authorized paths
-- verify real account/capital/position/constraint observations as available
-- verify final constraint readiness
-- run the final controlled real-market integration test
-- preserve provenance and fail-closed behavior
-
-The known Toobit private-account blocker `HTTP 400 / -1022 INVALID_SIGNATURE` remains an independent blocker until resolved through an explicitly authorized path. It must not be bypassed or repeatedly diagnosed without authorization.
-
-No real order is implied by Phase C.
-
-### CP46 — FIRST REAL ORDER
-Only after:
-1. Project Completion Gate is CLOSED.
-2. Toobit binding is CLOSED / VERIFIED.
-3. Final real-market controlled integration is CLOSED / VERIFIED.
-4. CP45 execution authorization boundary is CLOSED / VERIFIED.
-5. Real capital, entry, invalidation, quantity, exposure, and exchange constraints are all valid for the specific opportunity.
-6. Management explicitly authorizes the first real order.
-
-CP46 must be a single controlled first-order event with complete provenance and fail-closed behavior.
-
-### FIRST REAL FILL
-After the first real order is explicitly authorized and accepted by the exchange, verify the actual fill rather than assuming it.
-
-Required evidence includes actual exchange response/fill state, executed quantity/price where available, timestamps, fees where available, and provenance.
-
-### REAL OUTCOME
-Capture the actual position outcome:
-- fill/open state
-- exit/invalidation/closure evidence
-- realized result
-- exposure lifecycle
-- fees/slippage where available
-- no fabricated or inferred fill/outcome data
-
-### OBSERVATION
-Convert the completed real trade into a structured observation while preserving raw provenance and separating observation from calibration.
-
-### CALIBRATION
-Use accumulated real observations to evaluate and, only through an explicitly governed future checkpoint, adjust policies/parameters. Calibration must be empirical; it must not silently alter contracts or reopen closed stages.
 
 ## 6. MANAGEMENT GATES
 
@@ -279,18 +213,16 @@ If repository documents conflict, stop and escalate rather than inventing a para
 
 Do not restart.
 Do not redesign the project.
-Do not reopen closed checkpoints.
-Do not re-audit approved information arms without regression evidence.
-Do not replace KuCoin/Bybit/Gate market-information providers with the execution exchange.
-Do not confuse runtime cardinality with a fixed universe.
-Do not use Fixed-15 or Fixed-6 as production contracts.
-Do not use test capital as production capital.
-Do not guess Entry, Stop/Invalidation, Quantity, Exposure, or authorization.
-Do not execute orders during unauthorized stages.
+Do not reopen closed checkpoints without direct, provable regression.
+Do not wholesale-merge the divergent MCP source branch.
 Do not create extra branches/files.
+Do not mutate the production DB.
+Do not execute orders or real trades without explicit authorization.
+Do not fabricate outcome evidence.
+Preserve provenance and fail-closed behavior.
 
 **Current path:**
-`CP44 → CP45 → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → CP46 FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
 Every completed checkpoint MUST update the four governance documents before the next frontier begins.
 
