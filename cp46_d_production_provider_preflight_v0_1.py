@@ -31,6 +31,7 @@ from provider_order_translation_v0_1 import (
     translate_order_request,
 )
 from provider_preflight_v0_1 import ProviderPreflightEvidence
+from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
 from toobit_provider_preflight_evidence_v0_1 import (
     build_toobit_provider_preflight_evidence,
 )
@@ -66,8 +67,16 @@ def _provider_symbol(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> str:
-    if venue == "FUTURES":
+    if venue == "FUTURES" and execution_instrument is not None:
+        resolver = getattr(adapter, "resolve_futures_instrument", None)
+        if not callable(resolver):
+            raise RuntimeError(
+                "AUTHORITATIVE_PROVIDER_INSTRUMENT_RESOLVER_UNAVAILABLE"
+            )
+        result = resolver(execution_instrument)
+    elif venue == "FUTURES":
         result = adapter.futures_trading_constraints(asset)
     else:
         result = adapter.trading_constraints(asset)
@@ -125,6 +134,7 @@ def build_toobit_translation_evidence(
     canonical_request: Any,
     quote_quantity: Any = None,
     venue: str = "SPOT",
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> ProviderTranslationEvidence:
     if adapter is None:
         raise RuntimeError("Toobit adapter is required")
@@ -135,7 +145,12 @@ def build_toobit_translation_evidence(
 
     # Provider symbol is authoritative exchange metadata. It is never
     # reconstructed from a hardcoded suffix or inferred mapping.
-    symbol = _provider_symbol(adapter, asset, venue=venue)
+    symbol = _provider_symbol(
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
+    )
 
     contract_multiplier = None
     contract_quantity_step = None
@@ -194,6 +209,7 @@ def translate_and_preflight_toobit(
     canonical_request: Any,
     adapter: Any,
     quote_quantity: Any = None,
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> ProductionProviderPreflightResult:
     if adapter is None:
         return _block(
@@ -266,6 +282,7 @@ def translate_and_preflight_toobit(
             canonical_request=canonical_request,
             quote_quantity=quote_quantity,
             venue=venue,
+            execution_instrument=execution_instrument,
         )
 
         translation = translate_order_request(
