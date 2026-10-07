@@ -303,3 +303,12 @@ def test_futures_can_use_authoritative_neutral_instrument_specification():
     assert result.translation is not None
     assert result.translation.request is not None
     assert result.translation.request.symbol == "BTC-SWAP-USDT"
+
+
+def test_futures_blocks_without_authoritative_execution_instrument_specification():
+    result = translate_and_preflight_toobit(
+        canonical_request=_futures_short(),
+        adapter=_FuturesAdapter(),
+    )
+    assert result.status == "BLOCK"
+    assert result.reason == "CP46_C_TRANSLATION_BLOCKED"
