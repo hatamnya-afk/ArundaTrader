@@ -258,3 +258,48 @@ def test_futures_missing_account_state_fails_closed():
     )
     assert result.status == "BLOCK"
     assert result.reason == "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE"
+
+
+def test_futures_can_use_authoritative_neutral_instrument_specification():
+    from execution_instrument_contract_v0_1 import (
+        ExecutionInstrumentSpecification,
+    )
+
+    class InstrumentAwareFuturesAdapter(_FuturesAdapter):
+        def resolve_futures_instrument(self, specification):
+            assert specification.asset == "BTC"
+            assert specification.venue == "FUTURES"
+            assert specification.settlement_asset == "USDT"
+            return _Result(
+                data={
+                    "symbol": "BTC-SWAP-USDT",
+                    "instrument": {
+                        "asset": "BTC",
+                        "venue": "FUTURES",
+                        "settlement_asset": "USDT",
+                        "instrument_type": "PERPETUAL",
+                        "provider_symbol": "BTC-SWAP-USDT",
+                        "status": "TRADING",
+                    },
+                }
+            )
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
+    result = translate_and_preflight_toobit(
+        canonical_request=_futures_short(),
+        adapter=InstrumentAwareFuturesAdapter(),
+        execution_instrument=specification,
+    )
+
+    assert result.status == "PASS"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.translation.request.symbol == "BTC-SWAP-USDT"
