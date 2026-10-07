@@ -26,16 +26,32 @@ CORE → EXCHANGE-AGNOSTIC EXECUTION BOUNDARY → REPLACEABLE EXCHANGE ADAPTER �
 
 Toobit is not a Core dependency. It is not wired into arunda_pipeline.py at Project Completion.
 
-## CURRENT FRONTIER — PHASE B
+## CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 Status:
-CURRENT FRONTIER / NOT STARTED
+CURRENT FRONTIER / OPEN / NOT EXECUTED
 
-Minimum next scope:
-1. use the existing exchange-agnostic adapter boundary;
-2. bind Toobit only through that boundary;
-3. preserve provider-neutral Core contracts;
-4. keep execution authorization FALSE;
-5. do not submit orders or call provider APIs until the later authorized controlled-test gate.
+Verified read-only evidence:
+- Full Read-Only Provider Preflight = PASS on live Toobit.
+- Authoritative Futures instrument = BTC-SWAP-USDT (TRADING, USDT, PERPETUAL).
+- ExchangeInfo, Futures balance, leverage, positions, open orders, history orders, and server time returned HTTP 200.
+- Provider preflight evidence constructed successfully.
+- Account/order/contract/timestamp evidence was known and valid; no open/recent order IDs were present.
+- GET-only transport; no write endpoint invoked.
+- CP46-D focused tests = 12/12 PASS.
+- git diff --check = PASS.
+- targeted py_compile = PASS.
+- evidence-alignment commit = f80fa83.
+
+Controlled-test readiness boundary:
+1. preserve Core → exchange-agnostic boundary → Toobit adapter architecture;
+2. verify the controlled-test contract before any execution permission;
+3. use real market/provider evidence only;
+4. keep EXECUTION AUTHORIZATION = FALSE;
+5. no order/cancel/withdraw, DB mutation, or arunda_pipeline.py wiring;
+6. no additional provider API calls unless separately authorized for the controlled-test evidence set.
+
+NEXT ACTION:
+Perform controlled-test contract/readiness inspection only.
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
