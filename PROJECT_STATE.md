@@ -101,13 +101,13 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
-### MCP-01 → MAIN / SELECTIVE INTEGRATION
+### MCP-01 → MAIN / SELECTIVE INTEGRATION — PROVIDER READINESS MAP VERIFIED
 Status = `HANDOFF_READY / MANAGEMENT-AUTHORIZED / STATIC INTEGRATION BOUNDARY / NOT EXECUTED`
 
 Authoritative handoff:
 `MCP01_HANDOFF_TO_MAIN.md`
 
-MCP-01 verification is complete for the current provider-readiness boundary. Its divergent source branch is evidence only and must not become project truth through wholesale merge.
+MCP-01 verification is complete for the current provider-readiness boundary. Its divergent source branch is evidence only and must not become project truth through wholesale merge. The prior MAIN finding that the CP46-D/F provider modules were absent is corrected: the selective contracts are present on MAIN.
 
 Current path:
 `MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
