@@ -116,10 +116,19 @@ Toobit remains outside Core and is not bound at this gate.
 Only after Project Completion Gate is CLOSED.
 
 Status:
-CURRENT FRONTIER / NOT STARTED
+CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
+
+Evidence:
+- `toobit_exchange_adapter_v0_1.py` and `test_toobit_exchange_adapter_v0_1.py` are present at the existing replaceable exchange-adapter boundary.
+- 6/6 focused adapter tests passed.
+- Static compilation passed.
+- `git diff --check` passed.
+- Futures position state is provider-authoritative; no fabricated conflict state remains.
+- Fix commits `2f3a79a212da209f99a2e6788255f308fc00d4c9` and `30485cb88d10e0ce90d481bfdb54f8eb829451ad` preserve and verify this contract.
+- No provider connectivity, runtime, order/cancel, DB mutation, or execution authorization occurred.
 
 Next action:
-Open the existing replaceable exchange-adapter boundary for Toobit only under an explicitly authorized Toobit Binding checkpoint. Do not wire Toobit into arunda_pipeline.py or Core.
+Advance only to the final real-market exchange integration / controlled-test gate under explicit Management authorization. Do not execute provider APIs, orders, or DB writes.
 ## CARDINALITY CONTRACT
 Production remains dynamic:
 `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`
@@ -149,18 +158,25 @@ No next checkpoint starts before synchronization is complete.
 
 ## CURRENT NEXT ACTION
 
-Project Completion is CLOSED / VERIFIED at the exchange-agnostic contract boundary.
+Project Completion is CLOSED / VERIFIED, and Phase B — Toobit Exchange Binding is CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS.
 
-The active frontier is now Phase B — Toobit Exchange Binding, but only at the replaceable adapter boundary and only under an explicitly authorized checkpoint.
+The active frontier is now FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST. It may open only under explicit Management authorization.
 
-No Core/arunda_pipeline.py wiring to Toobit. No provider API call. No order. No real trade. No DB mutation. No execution authorization.
+No Core/arunda_pipeline.py rewiring. No provider API call. No order. No real trade. No DB mutation. No execution authorization.
 
 ## PHASE B — TOOBIT EXCHANGE BINDING CHECKPOINT
-Status: BUILT / NOT VERIFIED / IN PROGRESS
+Status: CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Built scope:
-- toobit_exchange_adapter_v0_1.py
-- test_toobit_exchange_adapter_v0_1.py
+Verified scope:
+- `toobit_exchange_adapter_v0_1.py`
+- `test_toobit_exchange_adapter_v0_1.py`
+
+Evidence:
+- 6/6 focused adapter tests passed.
+- Static compilation passed.
+- `git diff --check` passed.
+- Provider-authoritative Futures position state preserved and verified.
+- Fix commits `2f3a79a212da209f99a2e6788255f308fc00d4c9` and `30485cb88d10e0ce90d481bfdb54f8eb829451ad` recorded.
 
 Safety preserved:
 - Execution authorization FALSE.
@@ -169,8 +185,8 @@ Safety preserved:
 - No DB mutation.
 - No arunda_pipeline.py or Core wiring.
 
-Verification: NOT YET EXECUTED. Checkpoint remains open.
+Checkpoint closed. No re-audit unless direct, provable regression.
 
-NEXT ACTION: Run focused adapter tests only; close only after verified PASS and synchronize all four governance documents again.
+NEXT ACTION: Open the FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST gate only under explicit Management authorization.
 
 # END CHECKPOINTS
