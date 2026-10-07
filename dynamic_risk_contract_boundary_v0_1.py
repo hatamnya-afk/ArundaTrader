@@ -3,7 +3,7 @@ import importlib.util
 import sys
 import math
 
-ROOT = Path(r"C:\Users\ASUS\ArundaTrader")
+ROOT = Path(__file__).resolve().parent
 RISK_ENGINE_FILE = ROOT / "risk_engine.py"
 
 def load_module(name, path):
