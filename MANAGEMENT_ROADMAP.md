@@ -155,17 +155,16 @@ Explicitly excluded from automatic carry-forward:
 - strategy redesign or DB repair/change
 
 ### CURRENT SCOPE
-Static/selective integration only:
-1. map each carry-forward contract to its canonical Main implementation;
-2. identify only genuinely missing pieces;
-3. define the minimum evidence-backed integration patch;
-4. keep MCP downstream of Trader evidence;
-5. preserve execution OFF and all fail-closed boundaries.
+The selective provider-readiness boundary has now been mapped and verified on `main`.
 
-No Runtime. No order. No real trade. No DB mutation. No strategy/Decision/Risk/Gate/Order/Execution redesign. No new branch.
+Verified contracts are present on MAIN for routing, provider translation, authoritative contract/filter state, account state, open/recent orders, server timestamp, Futures evidence, fail-closed preflight, quantity provenance, and execution-off safety.
+
+No code patch is required at this frontier. The minimum correct action is to preserve these contracts without wiring Toobit into the exchange-agnostic Core before the Project Completion Gate. The prior handoff statement claiming the CP46-D/F modules were absent from MAIN was stale and is superseded by the verified MAIN tree.
+
+No Runtime. No provider API call. No order. No real trade. No DB mutation. No strategy/Decision/Risk/Gate/Order/Execution redesign. No new branch.
 
 ### EXIT CONDITION
-The selective integration boundary is mapped and verified on `main`, with exact files and minimal authorized scope identified.
+Provider-readiness selective integration is mapped and verified on `main`; no missing provider-readiness code is currently authorized or required. The next gate is Project Completion, followed only then by Toobit Binding.
 
 ## 5. FORWARD ROADMAP — AFTER MCP-01 MAIN INTEGRATION
 
