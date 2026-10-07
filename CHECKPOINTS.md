@@ -187,6 +187,6 @@ Safety preserved:
 
 Checkpoint closed. No re-audit unless direct, provable regression.
 
-NEXT ACTION: Open the FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST gate only under explicit Management authorization.
+NEXT ACTION: FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST checkpoint is now OPEN. First action is contract/readiness inspection only; execution remains separately gated.
 
 # END CHECKPOINTS
