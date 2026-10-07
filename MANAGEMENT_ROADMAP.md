@@ -140,9 +140,11 @@ Architectural verdict:
 CORE → EXCHANGE-AGNOSTIC BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
 ### CURRENT FRONTIER
-TOOBIT EXCHANGE BINDING
+FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
-Only the replaceable exchange adapter boundary may now be opened. Toobit must remain outside Core. No wiring into arunda_pipeline.py is permitted at this stage.
+Project Completion and Toobit Binding are CLOSED / VERIFIED.
+
+The active gate is now the final real-market controlled-test gate. The Toobit adapter remains outside Core and arunda_pipeline.py remains unwired.
 
 ### SAFETY
 EXECUTION AUTHORIZATION = FALSE
