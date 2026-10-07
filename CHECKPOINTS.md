@@ -116,10 +116,50 @@ Toobit remains outside Core and is not bound at this gate.
 Only after Project Completion Gate is CLOSED.
 
 Status:
-CURRENT FRONTIER / NOT STARTED
+CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Next action:
-Open the existing replaceable exchange-adapter boundary for Toobit only under an explicitly authorized Toobit Binding checkpoint. Do not wire Toobit into arunda_pipeline.py or Core.
+Verified:
+- Toobit adapter exists at the replaceable exchange boundary.
+- Focused adapter tests passed.
+- Provider-specific implementation remains outside Core.
+- arunda_pipeline.py remains unwired.
+- Order/cancel/withdraw remain fail-closed.
+- Execution authorization remains FALSE.
+
+## FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+Status:
+CURRENT FRONTIER / OPEN / NOT EXECUTED
+
+Verified read-only evidence:
+- Full Read-Only Provider Preflight = PASS on live Toobit.
+- Authoritative Futures instrument resolved uniquely to BTC-SWAP-USDT.
+- ExchangeInfo, Futures balance, leverage, positions, open orders, history orders, and server time returned HTTP 200.
+- Provider preflight evidence constructed successfully.
+- Account state known; position state known with no conflict.
+- Order state known and empty.
+- Contract constraints valid.
+- Timestamp state known.
+- GET-only transport; no write endpoint.
+- CP46-D = 12/12 PASS; git diff --check PASS; targeted py_compile PASS.
+- Commit f80fa83 records the final provider-evidence compatibility fixes.
+
+Safety:
+- EXECUTION AUTHORIZATION = FALSE
+- ORDER WRITE = FORBIDDEN
+- ORDER CANCELLATION = FORBIDDEN
+- WITHDRAW = FORBIDDEN
+- DATABASE WRITE = FORBIDDEN
+
+Authorized scope:
+- Controlled-test contract/readiness inspection only.
+- No additional provider API calls unless separately authorized.
+- No order/cancel/withdraw.
+- No DB mutation.
+- No execution authorization.
+- No Core or arunda_pipeline.py wiring.
+
+NEXT ACTION:
+Perform controlled-test contract/readiness inspection only.
 ## CARDINALITY CONTRACT
 Production remains dynamic:
 `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`
