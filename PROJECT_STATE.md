@@ -164,4 +164,19 @@ No restart. No redesign. No reopening closed checkpoints without proven regressi
 
 The roadmap is the only path.
 
+
+## PHASE B — TOOBIT BINDING CHECKPOINT STATUS
+Status = BUILT / NOT VERIFIED / IN PROGRESS
+
+Scope implemented on main:
+- toobit_exchange_adapter_v0_1.py — replaceable Toobit-specific read-only adapter boundary.
+- test_toobit_exchange_adapter_v0_1.py — focused adapter safety/contract tests.
+- No arunda_pipeline.py wiring.
+- No order/cancel/withdraw implementation; adapter write methods fail closed.
+- No runtime, provider API call, DB mutation, or execution authorization performed.
+
+Evidence commits: a6f5de39 (adapter), dee79d26 (tests).
+
+Verification blocker: repository-side test execution has not yet been performed. Therefore this checkpoint is NOT VERIFIED and must not be closed.
+
 # END PROJECT STATE
