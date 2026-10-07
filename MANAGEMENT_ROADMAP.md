@@ -239,6 +239,6 @@ Explicitly not executed:
 
 Checkpoint is governance-complete. No re-audit unless direct, provable regression.
 
-NEXT ACTION: Define/open the FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST checkpoint only under explicit Management authorization.
+NEXT ACTION: FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST checkpoint is now OPEN. Perform contract/readiness inspection only; no provider API, runtime, order, DB mutation, or execution authorization yet.
 
 # END MASTER MANAGEMENT ROADMAP
