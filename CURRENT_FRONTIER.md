@@ -31,7 +31,6 @@ MCP-01 handoff is complete. Main is canonical. Static/selective integration is V
 ## NEXT ACTION
 **Map the already-closed provider-readiness contracts onto the verified Main integration boundary; no Runtime yet.**
 
-Map the exact carry-forward provider-readiness contracts to Main and identify the minimum evidence-backed integration patch.
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
