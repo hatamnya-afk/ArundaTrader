@@ -246,10 +246,24 @@ def test_futures_short_routes_without_spot_reinterpretation():
 
 
 def test_futures_translation_requires_authoritative_multiplier_and_step():
+    from execution_instrument_contract_v0_1 import (
+        ExecutionInstrumentSpecification,
+    )
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
     evidence = build_toobit_translation_evidence(
         adapter=_FuturesAdapter(),
         canonical_request=_futures_short(),
         venue="FUTURES",
+        execution_instrument=specification,
     )
     assert evidence.provider_symbol == "BTC-SWAP-USDT"
     assert evidence.contract_multiplier == "0.001"
