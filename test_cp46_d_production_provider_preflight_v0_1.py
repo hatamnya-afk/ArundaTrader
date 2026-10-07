@@ -151,6 +151,27 @@ def test_cp46_d_reaches_authoritative_toobit_evidence_for_spot_limit():
     assert result.handoff.preflight is not None
 
 class _FuturesAdapter(_Adapter):
+    def resolve_futures_instrument(self, specification):
+        return _Result(data={
+            "symbol": "BTC-SWAP-USDT",
+            "asset": specification.asset,
+            "status": "TRADING",
+            "settlement_asset": specification.settlement_asset,
+            "instrument_type": specification.instrument_type,
+            "contract_multiplier": "0.001",
+            "filters": {
+                "LOT_SIZE": {
+                    "minQty": "0.001",
+                    "maxQty": "100",
+                    "stepSize": "0.001",
+                },
+                "MIN_NOTIONAL": {
+                    "minNotional": "10",
+                },
+            },
+            "risk_limits": [],
+        })
+
     def futures_trading_constraints(self, asset):
         return _Result(data={
             "asset": asset.upper(),
@@ -305,10 +326,12 @@ def test_futures_can_use_authoritative_neutral_instrument_specification():
     assert result.translation.request.symbol == "BTC-SWAP-USDT"
 
 
-def test_futures_blocks_without_authoritative_execution_instrument_specification():
+def test_futures_policy_produces_instrument_when_caller_does_not_supply_one():
     result = translate_and_preflight_toobit(
         canonical_request=_futures_short(),
         adapter=_FuturesAdapter(),
     )
-    assert result.status == "BLOCK"
-    assert result.reason == "CP46_C_TRANSLATION_BLOCKED"
+    assert result.status == "PASS"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.translation.request.symbol == "BTC-SWAP-USDT"
