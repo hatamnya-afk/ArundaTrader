@@ -4,7 +4,7 @@ import importlib.util
 import sys
 
 
-ROOT = Path(r"C:\Users\ASUS\ArundaTrader")
+ROOT = Path(__file__).resolve().parent
 TRADE_GATE_FILE = ROOT / "trade_gate_engine.py"
 
 
