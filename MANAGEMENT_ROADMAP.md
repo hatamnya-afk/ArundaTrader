@@ -121,7 +121,7 @@ The following historical stages are completed and must not be reopened or re-aud
   - Execution authorization remained false.
   - No order, execution, API write, or production DB mutation occurred.
 
-## 4. CURRENT FRONTIER — PROJECT COMPLETION → TOOBIT BINDING
+## 4. CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ### PROJECT COMPLETION GATE
 Status:
@@ -140,9 +140,9 @@ Architectural verdict:
 CORE → EXCHANGE-AGNOSTIC BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
 ### CURRENT FRONTIER
-TOOBIT EXCHANGE BINDING
+FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
-Only the replaceable exchange adapter boundary may now be opened. Toobit must remain outside Core. No wiring into arunda_pipeline.py is permitted at this stage.
+Project Completion and Toobit Exchange Binding Phase B are CLOSED / VERIFIED. The next gate is the final controlled-test path. Toobit remains outside Core and is reachable only through the verified replaceable adapter boundary.
 
 ### SAFETY
 EXECUTION AUTHORIZATION = FALSE
@@ -152,12 +152,12 @@ DATABASE WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
 ## 5. FORWARD ROADMAP — AFTER PROJECT COMPLETION
 
-Project Completion is CLOSED / VERIFIED.
+Project Completion is CLOSED / VERIFIED and Toobit Exchange Binding Phase B is CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS.
 
 Current route:
-`PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+`PROJECT COMPLETION → TOOBIT BINDING (CLOSED / VERIFIED) → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-Toobit Binding is the only active next gate. It may open only through the existing replaceable exchange-adapter boundary and only under explicit Management authorization.
+The FINAL REAL-MARKET CONTROLLED TEST is now the only active next gate. It may open only through the existing replaceable exchange-adapter boundary and only under explicit Management authorization.
 
 Do not wire Toobit into arunda_pipeline.py. Do not call provider APIs, submit orders, mutate the DB, or enable execution at this frontier.
 
@@ -214,22 +214,31 @@ Every completed checkpoint MUST update the four governance documents before the 
 
 
 ## PHASE B — TOOBIT BINDING CHECKPOINT STATUS
-Current Frontier remains TOOBIT EXCHANGE BINDING.
+Current Frontier: FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
-Checkpoint state: BUILT / NOT VERIFIED / IN PROGRESS
+Checkpoint state: CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Authorized scope executed:
-- Open only the replaceable Toobit adapter boundary.
-- Add a read-only Toobit adapter and focused tests.
-- Preserve provider-neutral Core and protected arunda_pipeline.py.
+Verified scope:
+- Opened only the replaceable Toobit adapter boundary.
+- Added the read-only Toobit adapter and focused tests.
+- Preserved provider-neutral Core and protected arunda_pipeline.py.
+
+Evidence:
+- 6/6 focused adapter tests passed.
+- Static compilation passed.
+- `git diff --check` passed.
+- Provider-authoritative Futures position state preserved and verified.
+- Fix commits `2f3a79a212da209f99a2e6788255f308fc00d4c9` and `30485cb88d10e0ce90d481bfdb54f8eb829451ad` recorded.
 
 Explicitly not executed:
 - provider API calls
-- Runtime
+- Runtime/provider connectivity
 - order/cancel/withdraw
 - DB mutation
 - execution authorization
 
-The checkpoint is not governance-complete until focused verification passes and all four governance documents are synchronized with VERIFIED/CLOSED or BLOCKED state.
+Checkpoint is governance-complete. No re-audit unless direct, provable regression.
+
+NEXT ACTION: Define/open the FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST checkpoint only under explicit Management authorization.
 
 # END MASTER MANAGEMENT ROADMAP
