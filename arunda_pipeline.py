@@ -5274,6 +5274,8 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        from datetime import datetime, timezone
+
         # MCP-01 / CP49 SELECTIVE MAIN INTEGRATION
         # ------------------------------------------------------------------
         # This is downstream evidence integration only. It does not alter
@@ -5288,7 +5290,7 @@ def main() -> int:
             mcp01_evidence_failures,
         ) = integrate_authoritative_birth_and_evidence(
             db_path=str(DB_PATH),
-            cycle_id=f"MCP01-{snapshot_id}",
+            cycle_id=f"MCP01-{datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")}",
             decision_snapshot=decision_snapshot,
             trade_gate_snapshot=trade_gate_snapshot,
             trade_ready_assets=trade_ready_assets,
