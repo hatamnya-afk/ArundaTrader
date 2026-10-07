@@ -117,10 +117,10 @@ Evidence:
 Architecture:
 CORE → EXCHANGE-AGNOSTIC EXECUTION BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
-### NEXT ACTION — TOOBIT EXCHANGE BINDING
-Status = CURRENT FRONTIER / NOT STARTED
+### TOOBIT EXCHANGE BINDING — CLOSED / VERIFIED
+Status = CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Bind Toobit only through the existing replaceable adapter boundary, after an explicitly authorized Toobit Binding checkpoint. Do not wire Toobit into arunda_pipeline.py or Core.
+Toobit binding is implemented only at the existing replaceable adapter boundary. The provider-specific adapter remains outside Core and arunda_pipeline.py remains unwired.
 
 Safety remains:
 EXECUTION AUTHORIZATION = FALSE
@@ -166,17 +166,23 @@ The roadmap is the only path.
 
 
 ## PHASE B — TOOBIT BINDING CHECKPOINT STATUS
-Status = BUILT / NOT VERIFIED / IN PROGRESS
+Status = CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Scope implemented on main:
+Verified scope on main:
 - toobit_exchange_adapter_v0_1.py — replaceable Toobit-specific read-only adapter boundary.
 - test_toobit_exchange_adapter_v0_1.py — focused adapter safety/contract tests.
 - No arunda_pipeline.py wiring.
 - No order/cancel/withdraw implementation; adapter write methods fail closed.
-- No runtime, provider API call, DB mutation, or execution authorization performed.
+- No runtime/provider connectivity was performed.
+- No DB mutation and no execution authorization.
 
-Evidence commits: a6f5de39 (adapter), dee79d26 (tests).
+Evidence:
+- 6/6 focused adapter tests passed.
+- py_compile passed for adapter and focused tests.
+- git diff --check passed.
+- Provider-authoritative Futures position state is preserved without local inference.
+- Fix commits: 2f3a79a2 and 30485cb8.
 
-Verification blocker: repository-side test execution has not yet been performed. Therefore this checkpoint is NOT VERIFIED and must not be closed.
+Checkpoint closure: VERIFIED/CLOSED at the static/read-only adapter contract boundary. Runtime/provider API connectivity remains deferred to the later authorized controlled-test gate.
 
 # END PROJECT STATE
