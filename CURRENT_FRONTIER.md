@@ -4,7 +4,9 @@
 CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ## CURRENT STATE
-The exchange-agnostic Project Completion Gate is CLOSED / VERIFIED at the static contract level. The Core remains provider-neutral and exchange-agnostic. The next lifecycle gate is Toobit Exchange Binding through the existing replaceable adapter boundary.
+Project Completion is CLOSED / VERIFIED and Toobit Binding is CLOSED / VERIFIED at the adapter contract boundary. The active gate is now the final real-market exchange integration / controlled test.
+
+The Core remains provider-neutral and exchange-agnostic. Toobit remains outside Core through the replaceable adapter boundary.
 
 ## AUTHORITATIVE ROUTE
 MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION (CLOSED / VERIFIED) → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
