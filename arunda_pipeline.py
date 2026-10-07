@@ -5220,6 +5220,8 @@ def main() -> int:
                 validated_signal,
                 score_snapshot[asset],
             )
+        from datetime import datetime, timezone
+
         from mcp01_main_integration_boundary_v0_1 import (
             bind_authoritative_decision_birth,
         )
