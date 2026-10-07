@@ -31,10 +31,8 @@ from provider_order_translation_v0_1 import (
     translate_order_request,
 )
 from provider_preflight_v0_1 import ProviderPreflightEvidence
-from execution_instrument_contract_v0_1 import (
-    ExecutionInstrumentSpecification,
-    InstrumentResolutionReason,
-)
+from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
+from execution_instrument_policy_v0_1 import build_execution_instrument_specification
 from toobit_provider_preflight_evidence_v0_1 import (
     build_toobit_provider_preflight_evidence,
 )
@@ -271,6 +269,18 @@ def translate_and_preflight_toobit(
         except Exception as exc:
             return _block(
                 "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE",
+                str(exc),
+            )
+
+    if venue == "FUTURES" and execution_instrument is None:
+        try:
+            execution_instrument = build_execution_instrument_specification(
+                asset=str(canonical_request.asset),
+                venue="FUTURES",
+            )
+        except ValueError as exc:
+            return _block(
+                "EXECUTION_INSTRUMENT_POLICY_BLOCKED",
                 str(exc),
             )
 
