@@ -189,11 +189,13 @@ No next checkpoint starts before synchronization is complete.
 
 ## CURRENT NEXT ACTION
 
-Project Completion is CLOSED / VERIFIED at the exchange-agnostic contract boundary.
+Project Completion and Toobit Binding are CLOSED / VERIFIED.
 
-The active frontier is now Phase B — Toobit Exchange Binding, but only at the replaceable adapter boundary and only under an explicitly authorized checkpoint.
+The active frontier is FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST.
 
-No Core/arunda_pipeline.py wiring to Toobit. No provider API call. No order. No real trade. No DB mutation. No execution authorization.
+The next action is contract/readiness inspection only. This does not authorize additional provider API calls, orders, cancellation, withdrawal, DB mutation, or execution.
+
+No Core/arunda_pipeline.py wiring to Toobit. No execution authorization.
 
 ## PHASE B — TOOBIT EXCHANGE BINDING CHECKPOINT
 Status: BUILT / NOT VERIFIED / IN PROGRESS
