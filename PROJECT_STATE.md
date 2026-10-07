@@ -128,6 +128,23 @@ ORDER WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
 DATABASE WRITE = FORBIDDEN
 NO REAL TRADE
+## FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST — CURRENT CHECKPOINT
+Status = CURRENT FRONTIER / OPEN / NOT EXECUTED
+
+Purpose:
+Open the final controlled-test gate after verified Project Completion and Toobit Binding. This checkpoint is governance-only at opening: no provider API call, runtime execution, order, DB mutation, or execution authorization is performed merely by opening the gate.
+
+Authorized scope at opening:
+- Preserve the verified Core → exchange-agnostic boundary → Toobit adapter architecture.
+- Define and verify the controlled-test contract before any provider connectivity is attempted.
+- Use real-market evidence only; no synthetic/backfilled/interpolated data.
+- Keep `EXECUTION AUTHORIZATION = FALSE` until a separate explicit execution-authorization gate.
+- No changes to `arunda_pipeline.py`, production DB, execution controls, or closed/verified contracts.
+- No new project files are required at checkpoint opening.
+
+NEXT ACTION:
+Perform the controlled-test contract/readiness inspection only. Do not invoke provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
+
 ## REPOSITORY GOVERNANCE
 Canonical branch = `main`
 Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`
