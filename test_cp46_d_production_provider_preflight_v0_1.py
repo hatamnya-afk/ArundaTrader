@@ -198,7 +198,8 @@ class _FuturesAdapter(_Adapter):
             "state_known": True,
             "margin_state_known": True,
             "leverage_state_known": True,
-            "position_conflict": False,
+            "position_state_known": True,
+            "positions": [],
         })
 
     def futures_duplicate_check(self, asset, *, execution_instrument=None):

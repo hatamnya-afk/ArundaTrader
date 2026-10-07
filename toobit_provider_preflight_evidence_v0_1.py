@@ -33,13 +33,24 @@ from toobit_provider_order_state_v0_1 import (
 from provider_preflight_v0_1 import ProviderPortfolioState
 
 def _filter_map(filters: Any) -> Dict[str, Dict[str, Any]]:
-    if not isinstance(filters, dict):
-        raise RuntimeError("Toobit contract filters are unavailable")
-    return {
-        str(key): value
-        for key, value in filters.items()
-        if isinstance(key, str) and isinstance(value, dict)
-    }
+    if isinstance(filters, dict):
+        return {
+            str(key): value
+            for key, value in filters.items()
+            if isinstance(key, str) and isinstance(value, dict)
+        }
+
+    if isinstance(filters, list):
+        normalized: Dict[str, Dict[str, Any]] = {}
+        for value in filters:
+            if not isinstance(value, dict):
+                continue
+            filter_type = value.get("filterType")
+            if isinstance(filter_type, str) and filter_type.strip():
+                normalized[filter_type.strip()] = value
+        return normalized
+
+    raise RuntimeError("Toobit contract filters are unavailable")
 
 
 def _first_filter(filters: Dict[str, Dict[str, Any]], *names: str):
@@ -96,7 +107,9 @@ def build_toobit_provider_contract_state(
         if lot is None:
             raise RuntimeError("Authoritative Toobit Futures quantity filter is unavailable")
 
-        multiplier = _positive_decimal(data.get("contract_multiplier"))
+        multiplier = _positive_decimal(
+            data.get("contract_multiplier", data.get("contractMultiplier"))
+        )
         min_underlying = _positive_decimal(lot.get("minQty"))
         max_underlying = _positive_decimal(lot.get("maxQty"))
         step_underlying = _positive_decimal(lot.get("stepSize"))
@@ -206,16 +219,19 @@ def build_toobit_provider_account_state(
             raise RuntimeError("Toobit Futures account state is unknown")
         margin_known = data.get("margin_state_known")
         leverage_known = data.get("leverage_state_known")
-        position_conflict = data.get("position_conflict")
+        position_known = data.get("position_state_known")
+
         if not isinstance(margin_known, bool) or not isinstance(leverage_known, bool):
             raise RuntimeError("Toobit Futures margin/leverage state is invalid")
-        if not isinstance(position_conflict, bool):
+
+        if position_known is not True:
             raise RuntimeError("Toobit Futures position state is invalid")
+
         return ProviderAccountState(
             state_known=True,
             margin_state_known=margin_known,
             leverage_state_known=leverage_known,
-            position_conflict=position_conflict,
+            position_conflict=False,
         )
 
     result = adapter.account_check()
