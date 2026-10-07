@@ -1,9 +1,9 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-CURRENT FRONTIER — MCP-01 → MAIN / SELECTIVE INTEGRATION
+CURRENT FRONTIER — PROVIDER READINESS → MAIN / SELECTIVE INTEGRATION
 ## CURRENT STATE
-MCP-01 handoff is complete. Main is canonical. Static/selective integration is VERIFIED at the source-boundary level; Runtime remains NOT EXECUTED.
+MCP-01 handoff is complete and frozen. Main is canonical. Provider-readiness contracts are selectively present on Main; Runtime remains NOT EXECUTED.
 
 ## AUTHORITATIVE HANDOFF
 `MCP01_HANDOFF_TO_MAIN.md`
@@ -22,14 +22,16 @@ MCP-01 handoff is complete. Main is canonical. Static/selective integration is V
 - Closed/verified stages remain historical truth unless direct regression is proven.
 
 ## VERIFICATION RESULT
-- CP49 authoritative Decision Birth is bound immediately after semantic Decision.
-- MCP-01 evidence emission is downstream of Decision/Risk/Trade Gate.
-- Required CP49/MCP-01 imports resolve on Main.
-- No new execution path, order write, or provider write was introduced.
+- CP49 authoritative Decision Birth remains bound immediately after semantic Decision.
+- MCP-01 evidence emission remains downstream of Decision/Risk/Trade Gate.
+- Provider-readiness contracts copied selectively from the verified handoff source only.
+- Provider contracts/tests imported with their required local dependencies resolved on Main.
+- No provider execution call was wired into the Runtime path.
+- No order write or provider write was introduced.
 - Runtime/DB execution verification remains intentionally NOT EXECUTED.
 
 ## NEXT ACTION
-**Map the already-closed provider-readiness contracts onto the verified Main integration boundary; no Runtime yet.**
+**Complete static verification of the selective provider-readiness contract set on Main, then identify the minimum missing Main order/canonical-request boundary before any Runtime.**
 
 
 ## SAFETY
