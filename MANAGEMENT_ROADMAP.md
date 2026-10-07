@@ -212,4 +212,24 @@ Preserve provenance and fail-closed behavior.
 
 Every completed checkpoint MUST update the four governance documents before the next frontier begins.
 
+
+## PHASE B — TOOBIT BINDING CHECKPOINT STATUS
+Current Frontier remains TOOBIT EXCHANGE BINDING.
+
+Checkpoint state: BUILT / NOT VERIFIED / IN PROGRESS
+
+Authorized scope executed:
+- Open only the replaceable Toobit adapter boundary.
+- Add a read-only Toobit adapter and focused tests.
+- Preserve provider-neutral Core and protected arunda_pipeline.py.
+
+Explicitly not executed:
+- provider API calls
+- Runtime
+- order/cancel/withdraw
+- DB mutation
+- execution authorization
+
+The checkpoint is not governance-complete until focused verification passes and all four governance documents are synchronized with VERIFIED/CLOSED or BLOCKED state.
+
 # END MASTER MANAGEMENT ROADMAP
