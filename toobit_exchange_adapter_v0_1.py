@@ -258,7 +258,8 @@ class ToobitExchangeAdapter:
                     "state_known": True,
                     "margin_state_known": bool(balance),
                     "leverage_state_known": True,
-                    "position_conflict": False,
+                    "position_state_known": True,
+                    "positions": positions,
                 },
             )
         except Exception as exc:
