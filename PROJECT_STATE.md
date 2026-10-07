@@ -100,47 +100,21 @@ CP41 evidence: 12 focused tests passed; compile/static and scope/diff verificati
 CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` passed; worktree clean at closure; execution authorization false; no runtime order, execution, API write, or DB mutation.
 
 ## CURRENT FRONTIER
-CP44 — REAL-MARKET CONTROLLED TEST
-Status = MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED
+
+### MCP-01 → MAIN / SELECTIVE INTEGRATION
+Status = `HANDOFF_READY / MANAGEMENT-AUTHORIZED / STATIC INTEGRATION BOUNDARY / NOT EXECUTED`
+
+Authoritative handoff:
+`MCP01_HANDOFF_TO_MAIN.md`
+
+MCP-01 verification is complete for the current provider-readiness boundary. Its divergent source branch is evidence only and must not become project truth through wholesale merge.
 
 Current path:
-`ELIGIBLE[N] → REAL/VALIDATED ENTRY → REAL/VALIDATED INVALIDATION → SMART RISK → RISK[N] → TRADE_GATE[N] → TRADE_READY[N] → ORDER INTENT → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY`
+`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
 
-CP44 acceptance boundary:
-REAL_MARKET_DATA
-VALIDATED_OBSERVATIONS
-REAL_CAPITAL_BOUNDARY
-VALID_ENTRY
-VALID_STOP / INVALIDATION
-VALID_QUANTITY
-VALID_EXPOSURE
-DECISION_CONSISTENCY
-TRADE_INTENT_CONSISTENCY
-CONSTRAINT_READINESS
-PROVENANCE
-FAIL_CLOSED
-DYNAMIC_ASSET
-NO_TEST_DATA
-NO_FIXED_15
-NO_ORDER
-NO_AUTHORIZATION
-NO_EXECUTION
-NO_API_WRITE
-NO_DB_WRITE
+Current scope is static/selective integration only. No Runtime, no order, no real trade, no DB mutation, no strategy/Decision/Risk/Gate/Order/Execution redesign, and no new branch.
 
-CP44 operating rule: use the established downstream ELIGIBLE boundary. Do not rebuild Opportunity, Signal, Fusion, Score, or Decision merely to reach CP44. One controlled runtime only; no retry/second runtime.
-
-## FORWARD FRONTIER
-CP45 = EXECUTION AUTHORIZATION BOUNDARY
-Then:
-PROJECT COMPLETION GATE → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED INTEGRATION → CP46 FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
-
-Project completion must be explicitly closed before exchange binding.
-Real execution requires explicit Management authorization after all gates are closed and verified.
-
-## TOOBIT STATUS
-TOOBIT ACCOUNT SIGNATURE = BLOCKED / HTTP 400 / -1022 INVALID_SIGNATURE
-This is an independent Account/Real-Capital path blocker. Previous diagnostics are historical and must not be repeated or bypassed without explicit authorization.
+Carry-forward contracts are authoritative from `MCP01_HANDOFF_TO_MAIN.md`.
 
 ## REPOSITORY GOVERNANCE
 Canonical branch = `main`
