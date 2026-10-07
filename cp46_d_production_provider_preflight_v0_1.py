@@ -31,7 +31,10 @@ from provider_order_translation_v0_1 import (
     translate_order_request,
 )
 from provider_preflight_v0_1 import ProviderPreflightEvidence
-from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
+from execution_instrument_contract_v0_1 import (
+    ExecutionInstrumentSpecification,
+    InstrumentResolutionReason,
+)
 from toobit_provider_preflight_evidence_v0_1 import (
     build_toobit_provider_preflight_evidence,
 )
@@ -69,7 +72,18 @@ def _provider_symbol(
     venue: str = "SPOT",
     execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> str:
-    if venue == "FUTURES" and execution_instrument is not None:
+    if venue == "FUTURES":
+        if execution_instrument is None:
+            raise RuntimeError(
+                "EXECUTION_INSTRUMENT_SPEC_REQUIRED"
+            )
+        if (
+            execution_instrument.asset.strip().upper()
+            != asset.strip().upper()
+        ):
+            raise RuntimeError(
+                "EXECUTION_INSTRUMENT_ASSET_MISMATCH"
+            )
         resolver = getattr(adapter, "resolve_futures_instrument", None)
         if not callable(resolver):
             raise RuntimeError(
