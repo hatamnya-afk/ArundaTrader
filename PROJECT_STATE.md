@@ -101,6 +101,42 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
+### FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST — OPEN
+
+Status = CURRENT FRONTIER / OPEN / NOT EXECUTED
+
+Purpose:
+Open and verify the final real-market controlled-test gate after verified Project Completion and verified Toobit Binding. Opening this gate is governance/readiness control only; it does not authorize execution.
+
+Verified real-market read-only evidence:
+- Full Read-Only Provider Preflight = PASS against live Toobit.
+- Toobit ExchangeInfo returned HTTP 200 and authoritative Futures instrument resolution selected exactly BTC-SWAP-USDT.
+- Futures balance, account leverage, positions, open orders, history orders, and server time returned HTTP 200.
+- Provider preflight evidence was constructed successfully.
+- Provider account state was known with no position conflict; provider order state was known and empty; contract constraints were valid; timestamp state was known.
+- Real provider transport was GET-only.
+- No order submission, cancellation, withdrawal, exchange write, database mutation, or execution authorization occurred.
+- CP46-D focused verification: 12/12 tests passed; git diff --check passed; targeted py_compile passed.
+- Evidence-alignment commit: f80fa83 (CP Controlled Test: align Toobit provider evidence with live state).
+
+Controlled-test boundary:
+- Core remains exchange-agnostic.
+- Toobit remains outside Core through the replaceable adapter boundary.
+- arunda_pipeline.py remains unwired to the Toobit provider-preflight chain.
+- Execution authorization remains FALSE.
+
+Authorized scope now:
+- Inspect and verify the controlled-test contract/readiness boundary.
+- Preserve real-data-only and fail-closed rules.
+- Preserve execution-off safety.
+- No order/cancel/withdraw.
+- No DB mutation.
+- No execution authorization unless separately and explicitly authorized.
+- No modification of closed/verified checkpoints or protected arunda_pipeline.py.
+
+NEXT ACTION:
+Perform controlled-test contract/readiness inspection only. Do not invoke additional provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
+
 ### PROJECT COMPLETION — CLOSED / VERIFIED
 Status = CLOSED / VERIFIED / STATIC CONTRACT PASS
 
