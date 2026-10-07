@@ -5202,6 +5202,122 @@ def main() -> int:
             fail("Dynamic Score cardinality mismatch")
 
         # ------------------------------------------------------------------
+        # CP49 AUTHORITATIVE DECISION BIRTH
+        # ------------------------------------------------------------------
+        # Semantic Decision is evaluated first. The canonical Decision
+        # instance identity is then issued exactly once by the CP49 Birth
+        # issuer. The pipeline never derives or replaces decision_id.
+        #
+        # Persistence remains disabled in this CP47 integration stage:
+        # DB_WRITES=0 is preserved. The Birth record is nevertheless built
+        # from real market provenance and the issued identity is propagated
+        # unchanged into the Dynamic Decision consumer.
+        from cp49_authoritative_decision_birth_issuer_v0_1 import (
+            build_birth_identity_record,
+            issue_canonical_decision_id,
+        )
+
+        canonical_birth_events = {}
+        canonical_decision_ids = {}
+
+        decision_engine_for_birth = load_module(
+            PROJECT_DIR / "decision_engine.py",
+            "arunda_decision_engine_cp49_birth",
+        )
+
+        for asset in market_signal_map:
+            validated_signal = dict(market_signal_map[asset])
+            validation = validation_results[asset]
+            validated_signal["valid"] = validation["valid"]
+            validated_signal["validation"] = validation["validation"]
+
+            semantic_decision = decision_engine_for_birth.determine_decision(
+                validated_signal,
+                score_snapshot[asset],
+            )
+
+            production_input = production_signal_inputs.get(asset)
+            if production_input is None:
+                fail(
+                    f"CP49 AUTHORITATIVE BIRTH PRODUCTION INPUT MISSING: {asset}"
+                )
+
+            snapshot_timestamp = getattr(
+                production_input,
+                "latest_timestamp",
+                None,
+            )
+            if (
+                isinstance(snapshot_timestamp, bool)
+                or not isinstance(snapshot_timestamp, (int, float))
+                or int(snapshot_timestamp) <= 0
+            ):
+                fail(
+                    f"CP49 AUTHORITATIVE BIRTH SNAPSHOT_TIMESTAMP_MISSING: {asset}"
+                )
+
+            market_data_result = market_data_by_symbol.get(
+                f"{asset}/USDT"
+            )
+            if market_data_result is None:
+                fail(
+                    f"CP49 AUTHORITATIVE BIRTH MARKET INPUT MISSING: {asset}"
+                )
+
+            source = getattr(
+                market_data_result,
+                "source",
+                None,
+            )
+            if not isinstance(source, str) or not source.strip():
+                source = getattr(
+                    production_input,
+                    "source_id",
+                    None,
+                )
+
+            if not isinstance(source, str) or not source.strip():
+                fail(
+                    f"CP49 AUTHORITATIVE BIRTH SOURCE_MISSING: {asset}"
+                )
+
+            snapshot_id = (
+                f"{source.strip()}|{asset}/USDT|"
+                f"{production_input.timeframe}|"
+                f"{int(snapshot_timestamp)}"
+            )
+
+            decision_timestamp_ms = int(
+                datetime.now(timezone.utc).timestamp() * 1000
+            )
+
+            birth_context = {
+                "asset": asset,
+                "decision_timestamp_ms": decision_timestamp_ms,
+                "snapshot_id": snapshot_id,
+                "source": source.strip(),
+                "decision": semantic_decision,
+            }
+
+            decision_id = issue_canonical_decision_id(
+                birth_context
+            )
+
+            birth_event = build_birth_identity_record(
+                birth_context,
+                decision_id=decision_id,
+            )
+
+            canonical_birth_events[asset] = birth_event
+            canonical_decision_ids[asset] = decision_id
+
+        if set(canonical_decision_ids) != set(market_signal_map):
+            fail("CP49 AUTHORITATIVE BIRTH CARDINALITY_MISMATCH")
+
+        if len(set(canonical_decision_ids.values())) != len(canonical_decision_ids):
+            fail("CP49 AUTHORITATIVE BIRTH ID_UNIQUENESS_MISMATCH")
+
+        # ------------------------------------------------------------------
         # 9. DYNAMIC DECISION
         # ------------------------------------------------------------------
         from dynamic_decision_contract_boundary_v0_1 import (
@@ -5215,11 +5331,27 @@ def main() -> int:
             validation = validation_results[asset]
             validated_signal["valid"] = validation["valid"]
             validated_signal["validation"] = validation["validation"]
+            canonical_decision_id = canonical_decision_ids.get(asset)
+
+            if (
+                not isinstance(canonical_decision_id, str)
+                or not canonical_decision_id.strip()
+            ):
+                fail(
+                    f"CANONICAL_DECISION_ID_MISSING_AT_REAL_PRODUCER: {asset}"
+                )
+
             decision_snapshot[asset] = build_dynamic_decision(
                 f"{asset}/USDT",
                 validated_signal,
                 score_snapshot[asset],
+                decision_id=canonical_decision_id.strip(),
             )
+
+            if decision_snapshot[asset].get("decision_id") != canonical_decision_id.strip():
+                fail(
+                    f"CP49 DECISION_ID_PROPAGATION_MISMATCH: {asset}"
+                )
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
         from dynamic_risk_contract_boundary_v0_1 import (
