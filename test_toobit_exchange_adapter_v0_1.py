@@ -1,5 +1,6 @@
 """Focused tests for the read-only Toobit exchange adapter."""
 
+from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
 from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
 
 
@@ -109,3 +110,84 @@ def test_futures_account_state_preserves_provider_position_state_without_inferen
         {"symbol": "BTC-SWAP-USDT", "side": "LONG", "positionAmt": "2"}
     ]
     assert "position_conflict" not in result.data
+
+
+def test_futures_instrument_resolution_uses_authoritative_settlement_metadata():
+    def transport(*, method, path, params, headers, base_url):
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [],
+            "contracts": [
+                {
+                    "symbol": "BTC-SWAP-USDT",
+                    "status": "TRADING",
+                    "underlying": "BTC",
+                    "marginToken": "USDT",
+                    "quoteAsset": "USDT",
+                    "filters": [],
+                },
+                {
+                    "symbol": "BTC-SWAP-USDC",
+                    "status": "TRADING",
+                    "underlying": "BTC",
+                    "marginToken": "USDC",
+                    "quoteAsset": "USDC",
+                    "filters": [],
+                },
+            ],
+        }
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+    ).resolve_futures_instrument(specification)
+
+    assert result.allowed is True
+    assert result.data["symbol"] == "BTC-SWAP-USDT"
+
+
+def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contracts():
+    def transport(*, method, path, params, headers, base_url):
+        return {
+            "symbols": [],
+            "contracts": [
+                {
+                    "symbol": "BTC-SWAP-USDT-A",
+                    "status": "TRADING",
+                    "underlying": "BTC",
+                    "marginToken": "USDT",
+                    "quoteAsset": "USDT",
+                },
+                {
+                    "symbol": "BTC-SWAP-USDT-B",
+                    "status": "TRADING",
+                    "underlying": "BTC",
+                    "marginToken": "USDT",
+                    "quoteAsset": "USDT",
+                },
+            ],
+        }
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+    ).resolve_futures_instrument(specification)
+
+    assert result.allowed is False
+    assert result.reason == "AUTHORITATIVE_PROVIDER_INSTRUMENT_AMBIGUOUS"
