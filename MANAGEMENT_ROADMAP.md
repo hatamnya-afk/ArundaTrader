@@ -234,23 +234,23 @@ Preserve provenance and fail-closed behavior.
 Every completed checkpoint MUST update the four governance documents before the next frontier begins.
 
 
-## PHASE B — TOOBIT BINDING CHECKPOINT STATUS
-Current Frontier remains TOOBIT EXCHANGE BINDING.
+## FINAL REAL-MARKET CONTROLLED TEST CHECKPOINT STATUS
+Current Frontier: FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST.
 
-Checkpoint state: BUILT / NOT VERIFIED / IN PROGRESS
+Checkpoint state: OPEN / NOT EXECUTED.
 
-Authorized scope executed:
-- Open only the replaceable Toobit adapter boundary.
-- Add a read-only Toobit adapter and focused tests.
-- Preserve provider-neutral Core and protected arunda_pipeline.py.
+Verified readiness evidence:
+- Toobit Binding checkpoint is CLOSED / VERIFIED.
+- Full Read-Only Provider Preflight = PASS on live Toobit.
+- Authoritative Futures instrument resolved to BTC-SWAP-USDT.
+- Live signed read-only account/order endpoints returned HTTP 200.
+- Provider preflight evidence constructed successfully.
+- CP46-D = 12/12 PASS; git diff --check PASS; targeted py_compile PASS.
+- Commit f80fa83 records the final provider-evidence compatibility fixes.
 
-Explicitly not executed:
-- provider API calls
-- Runtime
-- order/cancel/withdraw
-- DB mutation
-- execution authorization
+The checkpoint is governance-open but execution-closed.
 
-The checkpoint is not governance-complete until focused verification passes and all four governance documents are synchronized with VERIFIED/CLOSED or BLOCKED state.
+NEXT ACTION:
+Perform controlled-test contract/readiness inspection only.
 
 # END MASTER MANAGEMENT ROADMAP
