@@ -65,7 +65,7 @@ class ToobitExchangeAdapter:
     ) -> None:
         self._transport = transport
         self._api_key = api_key or os.getenv("TOOBIT_API_KEY")
-        self._secret_key = secret_key or os.getenv("TOOBIT_SECRET_KEY")
+        self._secret_key = secret_key or os.getenv("TOOBIT_SECRET_KEY") or os.getenv("TOOBIT_API_SECRET")
         self._recv_window = int(recv_window)
 
     def _call(
