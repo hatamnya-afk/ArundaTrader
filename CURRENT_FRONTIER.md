@@ -58,6 +58,6 @@ Minimum next scope:
 - Keep execution authorization FALSE until the controlled-test gate is explicitly closed and Management authorizes execution.
 - Do not submit orders, mutate the DB, or enable execution without explicit authorization.
 
-NEXT ACTION: Define/open the final controlled-test checkpoint under explicit Management authorization; do not execute it yet.
+NEXT ACTION: Controlled-test checkpoint is now OPEN. Perform contract/readiness inspection only; do not invoke provider APIs, runtime execution, orders, DB writes, or execution authorization yet.
 
 # END CURRENT FRONTIER
