@@ -61,18 +61,18 @@ PROVIDER WRITE = FORBIDDEN
 NO REAL TRADE
 
 
-## PHASE B — CURRENT CHECKPOINT STATE
-Status: BUILT / NOT VERIFIED / IN PROGRESS
+## TOOBIT BINDING — CLOSED / VERIFIED
+Status: CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Built:
-- toobit_exchange_adapter_v0_1.py at the existing exchange-adapter boundary.
-- Read-only provider surface for authoritative Toobit server time, exchange constraints, account state, positions/leverage, and open/recent orders.
-- Order submission and cancellation remain explicitly fail-closed.
+The adapter checkpoint is closed. The subsequent controlled-test work has verified the live read-only provider surface.
 
-Not yet verified:
-- Focused test execution.
-- Runtime/provider connectivity.
+## FINAL REAL-MARKET CONTROLLED TEST — CURRENT
+Status: OPEN / NOT EXECUTED
 
-NEXT ACTION: Verify the adapter with the focused test suite only. Do not run provider API calls, runtime, orders, or DB writes.
+The full read-only provider preflight has passed against live Toobit. This is evidence for readiness, not execution authorization.
+
+No order, cancellation, withdrawal, exchange write, DB mutation, or execution authorization has occurred.
+
+NEXT ACTION: Perform controlled-test contract/readiness inspection only.
 
 # END CURRENT FRONTIER
