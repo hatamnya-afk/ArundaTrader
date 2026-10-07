@@ -5274,6 +5274,30 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # MCP-01 / CP49 SELECTIVE MAIN INTEGRATION
+        # ------------------------------------------------------------------
+        # This is downstream evidence integration only. It does not alter
+        # Strategy, Decision semantics, Risk, Trade Gate, or Execution.
+        from mcp01_main_integration_boundary_v0_1 import (
+            integrate_authoritative_birth_and_evidence,
+        )
+
+        (
+            decision_snapshot,
+            mcp01_evidence_persisted,
+            mcp01_evidence_failures,
+        ) = integrate_authoritative_birth_and_evidence(
+            db_path=str(DB_PATH),
+            cycle_id=f"MCP01-{snapshot_id}",
+            decision_snapshot=decision_snapshot,
+            trade_gate_snapshot=trade_gate_snapshot,
+            trade_ready_assets=trade_ready_assets,
+            market_data_by_symbol=market_data_by_symbol,
+        )
+
+        cp49_birth_persisted = len(decision_snapshot)
+
+        # ------------------------------------------------------------------
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
         # ------------------------------------------------------------------
         assert_execution_disabled()
@@ -5305,7 +5329,9 @@ def main() -> int:
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
-        print("DB_WRITES=0")
+        print(f"CP49_BIRTH_DB_WRITES={cp49_birth_persisted}")
+        print(f"MCP01_EVIDENCE_PERSISTED={mcp01_evidence_persisted}")
+        print(f"MCP01_EVIDENCE_PERSISTENCE_FAILURES={len(mcp01_evidence_failures)}")
         print("FAIL_CLOSED=TRUE")
         print("=" * 90)
 
