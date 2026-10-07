@@ -67,10 +67,14 @@ def build_toobit_provider_contract_state(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderContractState:
     """Compose provider contract state in the exact provider quantity unit."""
     if venue == "FUTURES":
-        result = adapter.futures_trading_constraints(asset)
+        result = adapter.futures_trading_constraints(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(result, "allowed", False) is not True:
             raise RuntimeError(
                 "Authoritative Toobit Futures contract state unavailable: "
@@ -279,7 +283,10 @@ def build_toobit_provider_preflight_evidence(
         raise RuntimeError("Asset is required")
 
     contract = build_toobit_provider_contract_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     account = build_toobit_provider_account_state(
         adapter,

@@ -172,7 +172,7 @@ class _FuturesAdapter(_Adapter):
             "risk_limits": [],
         })
 
-    def futures_trading_constraints(self, asset):
+    def futures_trading_constraints(self, asset, *, execution_instrument=None):
         return _Result(data={
             "asset": asset.upper(),
             "symbol": asset.upper() + "-SWAP-USDT",

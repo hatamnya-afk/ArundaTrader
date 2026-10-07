@@ -186,8 +186,55 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def futures_trading_constraints(self, asset: str) -> ToobitAdapterResult:
+    def futures_trading_constraints(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
+                )
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+
+                contracts = self._exchange_info().get("contracts")
+                if not isinstance(contracts, list):
+                    raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+                matches = [
+                    row
+                    for row in contracts
+                    if (
+                        isinstance(row, dict)
+                        and str(row.get("symbol", "")).strip().upper()
+                        == symbol
+                    )
+                ]
+
+                if len(matches) != 1:
+                    raise RuntimeError(
+                        "AUTHORITATIVE_PROVIDER_SYMBOL_UNAVAILABLE:"
+                        f"{asset}:symbol={symbol}:matches={len(matches)}"
+                    )
+
+                return ToobitAdapterResult(True, "OK", matches[0])
+
             row = self._find_asset(
                 self._exchange_info().get("contracts"),
                 asset,
