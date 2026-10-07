@@ -1,65 +1,45 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-CURRENT FRONTIER — PROVIDER READINESS → MAIN / SELECTIVE INTEGRATION — MAP VERIFIED
+CURRENT FRONTIER — PROJECT COMPLETION CLOSED / TOOBIT BINDING NEXT
 
 ## CURRENT STATE
-MCP-01 handoff is complete and frozen. Main is canonical. The provider-readiness forensic map is now verified from the current MAIN tree. The authoritative CP46-D/F provider modules are present on MAIN as selective evidence-backed contracts. Runtime remains NOT EXECUTED.
+The exchange-agnostic Project Completion Gate is CLOSED / VERIFIED at the static contract level. The Core remains provider-neutral and exchange-agnostic. The next lifecycle gate is Toobit Exchange Binding through the existing replaceable adapter boundary.
 
-## AUTHORITATIVE HANDOFFS
-- `MCP01_HANDOFF_TO_MAIN.md`
-- `BUILDER_HANDOFF_PROVIDER_READINESS.md`
+## AUTHORITATIVE ROUTE
+MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION (CLOSED / VERIFIED) → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
 
-## ROUTE
-`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+## PROJECT COMPLETION EVIDENCE
+- exchange_execution_contract.py provides the canonical exchange-neutral order/result contract and execution-off safety contract.
+- pre_execution_readiness_v0_1.py produces PRE_EXECUTION_READY with provider_binding=DEFERRED.
+- execution_ready_package_v0_1.py preserves provider_binding=DEFERRED and execution_authorized=False.
+- Provider-readiness modules remain separate from the Core.
+- arunda_pipeline.py does not bind Toobit or call the provider-preflight chain.
+- exchange_execution_boundary.py is now present on MAIN and restores the required exchange-agnostic fail-closed boundary.
+- The restored boundary validates the canonical request and returns EXECUTION_DISABLED while execution is off; it performs no network/API/order/DB action and does not transform quantity.
+- Static syntax verification passed for the restored boundary.
 
-## ACTIVE SCOPE
-- Static/selective integration map only.
-- MAIN only.
-- No Runtime.
-- No provider API call.
-- No order / real trade.
-- No provider write.
-- No DB mutation.
-- No strategy/Decision/Risk/Gate/Order/Execution redesign.
-- No new branch.
-- Do not wholesale-merge the divergent CP46-F source branch.
-- Closed/verified stages remain historical truth unless direct regression is proven.
+## ARCHITECTURAL VERDICT
+CORE → EXCHANGE-AGNOSTIC EXECUTION BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
-## CURRENT FORENSIC FINDING
-The previous finding was stale and is corrected here. MAIN contains the selective CP46-D/F/provider-readiness contracts:
-- `cp46_d_production_provider_preflight_v0_1.py`
-- `cp46_d_provider_execution_handoff_v0_1.py`
-- `execution_venue_routing_policy_v0_1.py`
-- `provider_order_translation_v0_1.py`
-- `provider_preflight_v0_1.py`
-- `exchange_execution_contract.py`
-- `provider_preflight_evidence_assembler_v0_1.py`
-- `toobit_provider_order_state_v0_1.py`
-- `toobit_provider_preflight_evidence_v0_1.py`
+Toobit is not a Core dependency. It is not wired into arunda_pipeline.py at Project Completion.
 
-The modules are evidence/contract boundaries, not a license to bind Toobit into the Core now. `arunda_pipeline.py` remains exchange-agnostic and does not call the Toobit preflight chain. This is architecturally correct while the Project Completion Gate remains open and Toobit Binding is not yet authorized.
+## CURRENT FRONTIER — PHASE B
+Status:
+CURRENT FRONTIER / NOT STARTED
 
-## REQUIRED MAP
-For each carry-forward contract report PRESENT / PARTIAL / MISSING / BLOCKED with exact MAIN file:function:
-1. CP46-A3 SHORT/Futures vs Spot/SELL routing.
-2. Provider order translation.
-3. Toobit authoritative contract/filter state.
-4. Toobit authoritative account state.
-5. Authoritative open/recent order state.
-6. Authoritative server timestamp.
-7. Futures contract/account/exposure evidence.
-8. Provider preflight fail-closed.
-9. Quantity provenance.
-10. Execution-quality dependency only if proven necessary.
-
-## NEXT ACTION
-No provider-readiness code patch is required at this frontier. Preserve the existing MAIN contracts as selective evidence-backed boundaries. The next advancement is the Project Completion Gate; only after that gate is CLOSED may Toobit Binding connect these contracts to the exchange adapter. Do not wire Toobit into `arunda_pipeline.py` before that gate.
+Minimum next scope:
+1. use the existing exchange-agnostic adapter boundary;
+2. bind Toobit only through that boundary;
+3. preserve provider-neutral Core contracts;
+4. keep execution authorization FALSE;
+5. do not submit orders or call provider APIs until the later authorized controlled-test gate.
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
 ORDER WRITE = FORBIDDEN
 DATABASE WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
+NO REAL TRADE
 
 # END CURRENT FRONTIER
