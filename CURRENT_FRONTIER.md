@@ -42,4 +42,19 @@ DATABASE WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
 NO REAL TRADE
 
+
+## PHASE B — CURRENT CHECKPOINT STATE
+Status: BUILT / NOT VERIFIED / IN PROGRESS
+
+Built:
+- toobit_exchange_adapter_v0_1.py at the existing exchange-adapter boundary.
+- Read-only provider surface for authoritative Toobit server time, exchange constraints, account state, positions/leverage, and open/recent orders.
+- Order submission and cancellation remain explicitly fail-closed.
+
+Not yet verified:
+- Focused test execution.
+- Runtime/provider connectivity.
+
+NEXT ACTION: Verify the adapter with the focused test suite only. Do not run provider API calls, runtime, orders, or DB writes.
+
 # END CURRENT FRONTIER
