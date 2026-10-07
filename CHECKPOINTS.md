@@ -81,120 +81,45 @@ Evidence:
 - No runtime order, execution, API write, or production DB mutation.
 
 ## CP44 — REAL-MARKET CONTROLLED TEST
-Status:
-`CURRENT FRONTIER / MANAGEMENT-AUTHORIZED / NOT YET EXECUTED / NOT VERIFIED / NOT CLOSED`
 
-Required chain:
-`REAL MARKET → VALIDATED OBSERVATIONS → DECISION → TRADE INTENT → PRE-EXECUTION / CONSTRAINT READINESS → CONTROLLED TEST RESULT`
-
-Current downstream route:
-`ELIGIBLE[N] → REAL/VALIDATED ENTRY → REAL/VALIDATED INVALIDATION → SMART RISK → RISK[N] → TRADE_GATE[N] → TRADE_READY[N] → ORDER INTENT → PRE-EXECUTION → EXCHANGE-AGNOSTIC BOUNDARY`
-
-Acceptance evidence:
-- REAL_MARKET_DATA
-- VALIDATED_OBSERVATIONS
-- REAL_CAPITAL_BOUNDARY
-- VALID_ENTRY
-- VALID_STOP / INVALIDATION
-- VALID_QUANTITY
-- VALID_EXPOSURE
-- DECISION_CONSISTENCY
-- TRADE_INTENT_CONSISTENCY
-- CONSTRAINT_READINESS
-- PROVENANCE
-- FAIL_CLOSED
-- DYNAMIC_ASSET
-- NO_TEST_DATA
-- NO_FIXED_15
-- NO_ORDER
-- NO_AUTHORIZATION
-- NO_EXECUTION
-- NO_API_WRITE
-- NO_DB_WRITE
-
-Rules:
-- use established downstream ELIGIBLE boundary
-- do not rebuild upstream Opportunity/Signal/Fusion/Score/Decision
-- one controlled runtime only; no retry/second runtime
-- protected `arunda_pipeline.py` remains untouched unless separately authorized
+Historical controlled-test track. Superseded as the active frontier by the verified MCP-01 provider-readiness handoff and subsequent Project Completion gate. Do not reopen without direct, provable regression.
 
 ## CP45 — EXECUTION AUTHORIZATION BOUNDARY
 Purpose:
-Separate technical `PRE-EXECUTION READY` from permission to execute.
-
-Required:
-- explicit Management authorization boundary
-- fail closed by default
-- no inferred authorization
-- no order during checkpoint
+Separate technical PRE-EXECUTION READY from permission to execute.
 
 Status:
-`NOT STARTED`
+NOT CURRENT — DEFERRED UNTIL THE POST-COMPLETION EXECUTION-AUTHORIZATION PATH.
 
 ## PROJECT COMPLETION GATE
 Purpose:
-Explicitly close the exchange-agnostic project/core before exchange binding.
+Explicitly close the exchange-agnostic Core before any exchange binding.
 
 Status:
-`NOT STARTED`
+CLOSED / VERIFIED / STATIC CONTRACT PASS
+
+Evidence:
+- exchange-neutral canonical order contract exists in exchange_execution_contract.py.
+- Pre-execution readiness and execution-ready package remain provider-deferred.
+- Provider-readiness contracts remain separate from Core.
+- arunda_pipeline.py does not import or call Toobit preflight.
+- The missing exchange_execution_boundary.py required by arunda_pipeline.py was restored as a minimal fail-closed, exchange-agnostic boundary.
+- Boundary contract performs no network, exchange write, order submission, database write, quantity transformation, or Toobit binding.
+- Static syntax verification passed for the restored boundary.
+- Execution authorization remains FALSE.
+
+Architecture verdict:
+CORE → EXCHANGE-AGNOSTIC BOUNDARY → REPLACEABLE EXCHANGE ADAPTER.
+Toobit remains outside Core and is not bound at this gate.
 
 ## PHASE B — TOOBIT EXCHANGE BINDING
 Only after Project Completion Gate is CLOSED.
 
-Purpose:
-- bind Toobit through the existing replaceable adapter boundary
-- preserve provider-neutral Core
-- keep Market Information Arm providers separate from execution
-
 Status:
-`NOT STARTED`
+CURRENT FRONTIER / NOT STARTED
 
-## PHASE C — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
-Verify authorized Toobit account/capital/position/constraint paths and final exchange readiness while preserving fail-closed behavior.
-
-Status:
-`NOT STARTED`
-
-Known independent blocker:
-`HTTP 400 / -1022 INVALID_SIGNATURE` on the Toobit private/account path. Do not bypass or repeat diagnostics without explicit authorization.
-
-## CP46 — FIRST REAL ORDER
-Prerequisites:
-- Project Completion CLOSED / VERIFIED
-- Toobit binding CLOSED / VERIFIED
-- final real-market integration CLOSED / VERIFIED
-- CP45 CLOSED / VERIFIED
-- real capital and opportunity-specific Entry/Invalidation/Quantity/Exposure valid
-- exchange constraints valid
-- explicit Management authorization
-
-Status:
-`NOT STARTED`
-
-## FIRST REAL FILL
-Verify actual exchange acceptance/fill and record actual execution evidence. Never assume a fill.
-
-Status:
-`NOT STARTED`
-
-## REAL OUTCOME
-Capture actual lifecycle outcome, realized result, fees/slippage where available, and exit/invalidation evidence.
-
-Status:
-`NOT STARTED`
-
-## OBSERVATION
-Transform the completed real trade into a structured, provenance-preserving observation.
-
-Status:
-`NOT STARTED`
-
-## CALIBRATION
-Empirically evaluate accumulated real observations and change policy/parameters only through a future authorized checkpoint.
-
-Status:
-`NOT STARTED`
-
+Next action:
+Open the existing replaceable exchange-adapter boundary for Toobit only under an explicitly authorized Toobit Binding checkpoint. Do not wire Toobit into arunda_pipeline.py or Core.
 ## CARDINALITY CONTRACT
 Production remains dynamic:
 `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`
@@ -224,13 +149,10 @@ No next checkpoint starts before synchronization is complete.
 
 ## CURRENT NEXT ACTION
 
-Static/selective integration on `main` only:
-1. map the carry-forward provider-readiness contracts from `MCP01_HANDOFF_TO_MAIN.md`;
-2. identify the exact Main implementation for each contract;
-3. identify only genuinely missing pieces;
-4. define the minimum authorized integration scope.
+Project Completion is CLOSED / VERIFIED at the exchange-agnostic contract boundary.
 
-No Runtime. No order. No real trade. No DB mutation. No new branch. No wholesale branch merge.
+The active frontier is now Phase B — Toobit Exchange Binding, but only at the replaceable adapter boundary and only under an explicitly authorized checkpoint.
 
+No Core/arunda_pipeline.py wiring to Toobit. No provider API call. No order. No real trade. No DB mutation. No execution authorization.
 # END CHECKPOINTS
 # END CHECKPOINTS
