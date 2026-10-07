@@ -121,51 +121,35 @@ The following historical stages are completed and must not be reopened or re-aud
   - Execution authorization remained false.
   - No order, execution, API write, or production DB mutation occurred.
 
-## 4. CURRENT FRONTIER — MCP-01 → MAIN / SELECTIVE INTEGRATION
+## 4. CURRENT FRONTIER — PROJECT COMPLETION → TOOBIT BINDING
 
-### MCP-01 MAIN HANDOFF
+### PROJECT COMPLETION GATE
 Status:
-`HANDOFF_READY / MANAGEMENT-AUTHORIZED / STATIC INTEGRATION BOUNDARY / NOT EXECUTED`
+CLOSED / VERIFIED / STATIC CONTRACT PASS
 
-Authoritative handoff:
-`MCP01_HANDOFF_TO_MAIN.md`
+Evidence:
+- The canonical exchange-neutral execution contract is present.
+- Pre-execution readiness and execution-ready package preserve provider binding as DEFERRED.
+- Provider-readiness modules remain outside the exchange-agnostic Core.
+- arunda_pipeline.py remains free of Toobit preflight binding.
+- The required exchange_execution_boundary.py was restored on MAIN as a minimal fail-closed exchange-agnostic boundary.
+- Static syntax verification passed for the restored boundary.
+- No Runtime, provider API call, order, real trade, or DB mutation was performed.
 
-MCP-01 verification is complete for the current provider-readiness boundary. The divergent source branch is evidence only and MUST NOT be merged wholesale.
+Architectural verdict:
+CORE → EXCHANGE-AGNOSTIC BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
-Canonical route:
-`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+### CURRENT FRONTIER
+TOOBIT EXCHANGE BINDING
 
-Carry-forward contracts:
-- `decision_id` remains authoritative.
-- `case_id`, `trade_event_id`, `runtime_cycle_id`, and `exchange_order_id` remain distinct.
-- Missing outcome evidence becomes `DATA_QUALITY_EVENT`; no fabricated outcome.
-- Quantity provenance remains mandatory.
-- CP46-A3 routing remains authoritative: SHORT requires Futures; Spot SELL is never interpreted as SHORT.
-- Futures readiness uses authoritative provider contract/account state.
-- Futures portfolio exposure is provider-derived; no generic exposure calculation.
-- Provider preflight remains fail-closed.
-- Execution remains OFF until separately authorized.
+Only the replaceable exchange adapter boundary may now be opened. Toobit must remain outside Core. No wiring into arunda_pipeline.py is permitted at this stage.
 
-Explicitly excluded from automatic carry-forward:
-- divergent branch wholesale merge/rebase
-- MCP runtime wrappers and forensic scripts
-- runtime artifacts (`arunda.db`, `__pycache__/`, `runtime_observations/`)
-- unrelated historical artifacts
-- reopening closed/verified checkpoints
-- strategy redesign or DB repair/change
-
-### CURRENT SCOPE
-The selective provider-readiness boundary has now been mapped and verified on `main`.
-
-Verified contracts are present on MAIN for routing, provider translation, authoritative contract/filter state, account state, open/recent orders, server timestamp, Futures evidence, fail-closed preflight, quantity provenance, and execution-off safety.
-
-No code patch is required at this frontier. The minimum correct action is to preserve these contracts without wiring Toobit into the exchange-agnostic Core before the Project Completion Gate. The prior handoff statement claiming the CP46-D/F modules were absent from MAIN was stale and is superseded by the verified MAIN tree.
-
-No Runtime. No provider API call. No order. No real trade. No DB mutation. No strategy/Decision/Risk/Gate/Order/Execution redesign. No new branch.
-
-### EXIT CONDITION
-Provider-readiness selective integration is mapped and verified on `main`; no missing provider-readiness code is currently authorized or required. The next gate is Project Completion, followed only then by Toobit Binding.
-
+### SAFETY
+EXECUTION AUTHORIZATION = FALSE
+ORDER SUBMISSION/CANCELLATION = FORBIDDEN
+WITHDRAWAL = FORBIDDEN
+DATABASE WRITE = FORBIDDEN
+PROVIDER WRITE = FORBIDDEN
 ## 5. FORWARD ROADMAP — AFTER MCP-01 MAIN INTEGRATION
 
 After selective integration is verified, resume:
