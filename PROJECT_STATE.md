@@ -101,21 +101,33 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
-### MCP-01 → MAIN / SELECTIVE INTEGRATION — PROVIDER READINESS MAP VERIFIED
-Status = `HANDOFF_READY / MANAGEMENT-AUTHORIZED / STATIC INTEGRATION BOUNDARY / NOT EXECUTED`
+### PROJECT COMPLETION — CLOSED / VERIFIED
+Status = CLOSED / VERIFIED / STATIC CONTRACT PASS
 
-Authoritative handoff:
-`MCP01_HANDOFF_TO_MAIN.md`
+The exchange-agnostic Core is now closed at the Project Completion Gate. The required exchange boundary is present on MAIN and remains fail-closed. Toobit is still outside Core and is not bound.
 
-MCP-01 verification is complete for the current provider-readiness boundary. Its divergent source branch is evidence only and must not become project truth through wholesale merge. The prior MAIN finding that the CP46-D/F provider modules were absent is corrected: the selective contracts are present on MAIN.
+Evidence:
+- exchange_execution_contract.py defines the canonical exchange-neutral request/result and execution-off safety contract.
+- pre_execution_readiness_v0_1.py and execution_ready_package_v0_1.py keep provider binding deferred.
+- provider-readiness contracts remain separate from Core.
+- arunda_pipeline.py does not call the Toobit preflight chain.
+- exchange_execution_boundary.py is present on MAIN and provides the required fail-closed execute_order boundary.
+- Static syntax verification passed for the restored boundary.
 
-Current path:
-`MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION`
+Architecture:
+CORE → EXCHANGE-AGNOSTIC EXECUTION BOUNDARY → REPLACEABLE EXCHANGE ADAPTER → TOOBIT
 
-Current scope is static/selective integration only. No Runtime, no order, no real trade, no DB mutation, no strategy/Decision/Risk/Gate/Order/Execution redesign, and no new branch.
+### NEXT ACTION — TOOBIT EXCHANGE BINDING
+Status = CURRENT FRONTIER / NOT STARTED
 
-Carry-forward contracts are authoritative from `MCP01_HANDOFF_TO_MAIN.md`.
+Bind Toobit only through the existing replaceable adapter boundary, after an explicitly authorized Toobit Binding checkpoint. Do not wire Toobit into arunda_pipeline.py or Core.
 
+Safety remains:
+EXECUTION AUTHORIZATION = FALSE
+ORDER WRITE = FORBIDDEN
+PROVIDER WRITE = FORBIDDEN
+DATABASE WRITE = FORBIDDEN
+NO REAL TRADE
 ## REPOSITORY GOVERNANCE
 Canonical branch = `main`
 Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`
