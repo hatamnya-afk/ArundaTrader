@@ -1,87 +1,65 @@
 # CP47 — MAIN SELECTIVE INTEGRATION MANIFEST
 
-Status: READY_FOR_ENGINEERED_INTEGRATION
+Status: SELECTIVE_DEPENDENCY_CLOSURE_STAGED
 Base: main
-Source verification branch: cp46-f-futures-readiness-20261006
-Source HEAD: 26b73995cc0f51946af13cfe1574dc28bddf2173
-Created: 2026-10-07
+Source: cp46-f-futures-readiness-20261006 @ 26b73995cc0f51946af13cfe1574dc28bddf2173
+Branch: cp47-main-selective-integration-20261007
 
-## Purpose
+## Current frontier
 
-This branch is the safe integration staging point from the MCP-01 provider-readiness work back into ArundaTrader main.
+Restore the authoritative Dynamic Production dependency closure on main without changing
+strategy semantics, risk policy, gate semantics, quantity semantics, database governance,
+or execution authorization.
 
-It intentionally contains NO copied MCP-01 runtime code yet.
+## Closure staged
 
-## Why no direct copy was performed
+The branch now carries the provider-neutral Dynamic Production stack required by the
+existing main pipeline, including:
 
-The current main branch does not contain the CP46/CP49 provider-boundary modules required by the verified MCP-01 runtime, including:
+- Dynamic universe/opportunity/market-data/signal/validation/news/social/fusion/score/decision boundaries
+- Signal, scoring, risk-budget, risk, position-sizing and Trade Gate engines/contracts
+- Market structure/regime/snapshot/data, indicator, feature and market-analysis dependencies
+- CP44 real portfolio/balance/smart-risk boundaries
+- CP49 authoritative Decision Birth issuer, source boundary, producer and persistence contract
+- CP46 provider preflight/translation/handoff and Toobit read-only boundaries
+- MCP-01 observation/evidence/management projection dependencies
+- execution-contract dependencies needed for fail-closed import/runtime integrity
 
-- execution_venue_routing_policy_v0_1.py
-- toobit_trading_adapter.py
-- provider_preflight_v0_1.py
-- provider_order_translation_v0_1.py
-- toobit_provider_preflight_evidence_v0_1.py
-- cp46_d_production_provider_preflight_v0_1.py
-- cp46_d_provider_execution_handoff_v0_1.py
-- toobit_provider_order_state_v0_1.py
-- toobit_futures_order_transport_v0_1.py
-- toobit_position_reader_v0_1.py
-- cp49_first_execution_contract_v0_1.py
+## Critical identity correction
 
-Main also has a materially older arunda_pipeline.py whose execution architecture is not the same as the verified MCP-01 pipeline.
+Decision identity is NOT issued by Dynamic Decision.
 
-Therefore copying individual files now would create orphaned contracts, unresolved imports, or a split architecture.
+Authoritative flow remains:
 
-## Required integration order
+REAL MARKET → semantic Decision evaluation → CP49 Authoritative Decision Birth issuer
+→ Birth persistence/uniqueness boundary → canonical decision_id → Dynamic Decision consumer
+→ Risk → Trade Gate → Order Intent → Canonical Order Request → Execution boundary.
 
-1. Establish the CP49/CP46 execution-contract dependency layer on this branch.
-2. Port the provider-neutral venue routing contract.
-3. Port Toobit read-only provider boundaries.
-4. Port provider translation and preflight contracts.
-5. Port Futures read-only capability/account/order-state evidence.
-6. Integrate the verified provider boundary into the CURRENT main pipeline only at the canonical-order-request boundary.
-7. Preserve all existing main-branch strategy, signal, risk and gate behavior.
-8. Run focused contract tests.
-9. Run one controlled runtime with execution explicitly OFF.
-10. Only after verification, prepare a normal PR/merge into main.
+The existing real-market snapshot identity is derived from the actual closed-candle timestamp
+and provider source in the CP49 Birth producer. No synthetic snapshot_id is introduced.
 
-## Forbidden
+## Safety invariants
 
-- No merge of cp46-f-futures-readiness-20261006 wholesale.
-- No rebase.
-- No reset.
-- No clean/delete/force.
-- No DB repair/change.
-- No strategy redesign.
-- No synthetic/backfill/interpolation/forward-fill/padding/blending.
+- Execution remains OFF.
+- No real order submission.
 - No execution activation.
-- No reopening CLOSED/VERIFIED stages.
+- No DB repair/change.
+- No synthetic/fill/backfill/interpolation/forward-fill/padding/blending.
+- No strategy/risk/gate redesign.
+- No CLOSED/VERIFIED stage reopened.
+- No wholesale CP46 merge.
+- No reset/rebase/clean/delete/force operations.
 
-## Verified source evidence
+## Verification gate
 
-Latest controlled MCP-01 runtime:
-- Universe 843
-- Opportunity 423
-- Signal 423
-- Validation 423 / failures 0
-- Decision 423
-- CP49 birth persisted 423
-- Risk 423
-- Trade Gate 423
-- Trade Ready 70
-- Execution Quality Ready 50
-- Order Intents 50
-- Canonical Requests 50
-- Evidence persistence failures 0
-- Execution OFF
-- Real Order FALSE
-- Real Trade FALSE
-- Fail Closed TRUE
+Before merge:
+1. Focused CP47 Decision Birth and provider-boundary tests.
+2. Import/static closure verification.
+3. One controlled real-market runtime with execution OFF.
+4. Confirm CP49 Birth persistence, cardinality, identity propagation and fail-closed execution.
+5. PR remains Draft until all gates pass.
 
 ## Management verdict
 
-MAIN IS SAFE.
-MCP-01 IS VERIFIED.
-INTEGRATION MUST BE SELECTIVE, DEPENDENCY-ORDERED, AND TESTED.
-
-The next coding frontier is this branch, not the MCP-01 runtime branch.
+The branch is the selective integration staging line.
+It is NOT merge-ready until the closure is executable and verified end-to-end.
