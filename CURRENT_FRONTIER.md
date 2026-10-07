@@ -1,13 +1,13 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
-CURRENT FRONTIER — PROJECT COMPLETION CLOSED / TOOBIT BINDING NEXT
+CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ## CURRENT STATE
-The exchange-agnostic Project Completion Gate is CLOSED / VERIFIED at the static contract level. The Core remains provider-neutral and exchange-agnostic. The next lifecycle gate is Toobit Exchange Binding through the existing replaceable adapter boundary.
+The exchange-agnostic Project Completion Gate is CLOSED / VERIFIED at the static contract level, and Toobit Exchange Binding Phase B is CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS. The Core remains provider-neutral and exchange-agnostic. The next lifecycle gate is the FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST.
 
 ## AUTHORITATIVE ROUTE
-MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION (CLOSED / VERIFIED) → TOOBIT BINDING → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
+MCP-01 HANDOFF → MAIN → SELECTIVE, EVIDENCE-BACKED INTEGRATION → PROVIDER READINESS → PROJECT COMPLETION (CLOSED / VERIFIED) → TOOBIT BINDING (CLOSED / VERIFIED) → FINAL REAL-MARKET CONTROLLED TEST → EXECUTION AUTHORIZATION → FIRST REAL ORDER → FIRST REAL FILL → REAL OUTCOME → OBSERVATION → CALIBRATION
 
 ## PROJECT COMPLETION EVIDENCE
 - exchange_execution_contract.py provides the canonical exchange-neutral order/result contract and execution-off safety contract.
@@ -24,16 +24,21 @@ CORE → EXCHANGE-AGNOSTIC EXECUTION BOUNDARY → REPLACEABLE EXCHANGE ADAPTER �
 
 Toobit is not a Core dependency. It is not wired into arunda_pipeline.py at Project Completion.
 
-## CURRENT FRONTIER — PHASE B
+## PHASE B — TOOBIT EXCHANGE BINDING
 Status:
-CURRENT FRONTIER / NOT STARTED
+CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
-Minimum next scope:
-1. use the existing exchange-agnostic adapter boundary;
-2. bind Toobit only through that boundary;
-3. preserve provider-neutral Core contracts;
-4. keep execution authorization FALSE;
-5. do not submit orders or call provider APIs until the later authorized controlled-test gate.
+Evidence:
+- `toobit_exchange_adapter_v0_1.py` and focused test `test_toobit_exchange_adapter_v0_1.py` are present at the existing exchange-adapter boundary.
+- 6/6 focused adapter tests passed.
+- Static compilation passed.
+- `git diff --check` passed.
+- Futures position state remains provider-authoritative; no fabricated `position_conflict` value is asserted.
+- Fix commits `2f3a79a212da209f99a2e6788255f308fc00d4c9` and `30485cb88d10e0ce90d481bfdb54f8eb829451ad` preserve and verify that provider-authoritative state.
+- No provider connectivity, runtime execution, order/cancel, DB mutation, or execution authorization occurred.
+
+Next frontier:
+FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
@@ -43,18 +48,16 @@ PROVIDER WRITE = FORBIDDEN
 NO REAL TRADE
 
 
-## PHASE B — CURRENT CHECKPOINT STATE
-Status: BUILT / NOT VERIFIED / IN PROGRESS
+## NEXT CHECKPOINT — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+Status: CURRENT FRONTIER / NOT STARTED
 
-Built:
-- toobit_exchange_adapter_v0_1.py at the existing exchange-adapter boundary.
-- Read-only provider surface for authoritative Toobit server time, exchange constraints, account state, positions/leverage, and open/recent orders.
-- Order submission and cancellation remain explicitly fail-closed.
+Minimum next scope:
+- Open only the explicitly authorized controlled-test gate.
+- Preserve the exchange-agnostic Core and replaceable Toobit adapter boundary.
+- Use only real-market evidence and existing verified contracts.
+- Keep execution authorization FALSE until the controlled-test gate is explicitly closed and Management authorizes execution.
+- Do not submit orders, mutate the DB, or enable execution without explicit authorization.
 
-Not yet verified:
-- Focused test execution.
-- Runtime/provider connectivity.
-
-NEXT ACTION: Verify the adapter with the focused test suite only. Do not run provider API calls, runtime, orders, or DB writes.
+NEXT ACTION: Define/open the final controlled-test checkpoint under explicit Management authorization; do not execute it yet.
 
 # END CURRENT FRONTIER
