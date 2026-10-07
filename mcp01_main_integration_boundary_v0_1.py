@@ -47,21 +47,13 @@ def _market_birth_context(asset: str, market_data: Any) -> dict[str, Any]:
     }
 
 
-def integrate_authoritative_birth_and_evidence(
+def bind_authoritative_decision_birth(
     *,
     db_path: str,
-    cycle_id: str,
     decision_snapshot: Mapping[str, Mapping[str, Any]],
-    trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
-    trade_ready_assets: Sequence[str],
     market_data_by_symbol: Mapping[str, Any],
-) -> tuple[dict[str, dict[str, Any]], int, list[dict[str, str]]]:
-    """Bind CP49 identities and emit frozen MCP-01 evidence.
-
-    Identity is issued only after the supplied semantic decision already exists.
-    The returned decision mapping is a copy; caller-owned strategy objects are
-    never mutated.
-    """
+) -> tuple[dict[str, dict[str, Any]], int]:
+    """Create/persist canonical Decision Birth immediately after semantic Decision."""
     if not isinstance(decision_snapshot, Mapping) or not decision_snapshot:
         raise RuntimeError("MCP01_DECISION_SNAPSHOT_INVALID")
 
@@ -72,10 +64,17 @@ def integrate_authoritative_birth_and_evidence(
         asset = str(raw_asset).strip().upper()
         if not asset or not isinstance(decision, Mapping):
             raise RuntimeError(f"MCP01_DECISION_BIRTH_INPUT_INVALID:{asset}")
-        ctx = _market_birth_context(asset, market_data_by_symbol.get(f"{asset}/USDT"))
+
+        ctx = _market_birth_context(
+            asset,
+            market_data_by_symbol.get(f"{asset}/USDT"),
+        )
         ctx["decision"] = dict(decision)
         decision_id = issue_canonical_decision_id(ctx)
-        birth_events[asset] = build_birth_identity_record(ctx, decision_id=decision_id)
+        birth_events[asset] = build_birth_identity_record(
+            ctx,
+            decision_id=decision_id,
+        )
         issued[asset] = decision_id
 
     with sqlite3.connect(db_path) as conn:
@@ -90,11 +89,23 @@ def integrate_authoritative_birth_and_evidence(
         raise RuntimeError("MCP01_COMMITTED_DECISION_ID_MISMATCH")
 
     bound_decisions: dict[str, dict[str, Any]] = {}
-    for asset, decision in decision_snapshot.items():
+    for raw_asset, decision in decision_snapshot.items():
+        asset = str(raw_asset).strip().upper()
         record = dict(decision)
-        record["decision_id"] = issued[str(asset).strip().upper()]
-        bound_decisions[str(asset).strip().upper()] = record
+        record["decision_id"] = issued[asset]
+        bound_decisions[asset] = record
 
+    return bound_decisions, len(committed)
+
+
+def emit_mcp01_evidence(
+    *,
+    cycle_id: str,
+    decision_snapshot: Mapping[str, Mapping[str, Any]],
+    trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
+    trade_ready_assets: Sequence[str],
+) -> tuple[int, list[dict[str, str]]]:
+    """Emit frozen MCP-01 evidence after authoritative Trader outputs exist."""
     normalized_gate: dict[str, dict[str, Any]] = {}
     for raw_asset, gate in trade_gate_snapshot.items():
         asset = str(raw_asset).strip().upper()
@@ -102,17 +113,15 @@ def integrate_authoritative_birth_and_evidence(
         if "trade_gate_status" not in row and "trade_gate_state" in row:
             row["trade_gate_status"] = row["trade_gate_state"]
         if "decision_id" not in row:
-            row["decision_id"] = bound_decisions.get(asset, {}).get("decision_id")
+            row["decision_id"] = decision_snapshot.get(asset, {}).get("decision_id")
         normalized_gate[asset] = row
 
     events = build_runtime_evidence_events(
         cycle_id=cycle_id,
         emitted_at=datetime.now(timezone.utc).isoformat(),
-        decision_snapshot=bound_decisions,
+        decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
     )
     events = deduplicate_events(events)
-    persisted, failures = persist_events_isolated(events)
-
-    return bound_decisions, persisted, failures
+    return persist_events_isolated(events)
