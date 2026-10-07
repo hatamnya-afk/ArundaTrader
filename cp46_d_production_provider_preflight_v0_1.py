@@ -243,14 +243,30 @@ def translate_and_preflight_toobit(
         and callable(getattr(adapter, "futures_account_state", None))
     ):
         try:
-            futures_constraints = adapter.futures_trading_constraints(
-                canonical_request.asset
-            )
+            if direction == "SHORT":
+                if execution_instrument is None:
+                    execution_instrument = build_execution_instrument_specification(
+                        asset=str(canonical_request.asset),
+                        venue="FUTURES",
+                    )
 
-            if getattr(futures_constraints, "allowed", False) is True:
-                futures_account = adapter.futures_account_state(
-                    canonical_request.asset
+                resolver = getattr(
+                    adapter,
+                    "resolve_futures_instrument",
+                    None,
                 )
+                if not callable(resolver):
+                    return _block(
+                        "AUTHORITATIVE_PROVIDER_INSTRUMENT_RESOLVER_UNAVAILABLE",
+                        "Futures instrument resolver is required.",
+                    )
+
+                futures_constraints = resolver(execution_instrument)
+
+                if getattr(futures_constraints, "allowed", False) is True:
+                    futures_account = adapter.futures_account_state(
+                        canonical_request.asset
+                    )
 
                 if getattr(futures_account, "allowed", False) is not True:
                     return _block(
@@ -272,18 +288,6 @@ def translate_and_preflight_toobit(
                 str(exc),
             )
 
-    if venue == "FUTURES" and execution_instrument is None:
-        try:
-            execution_instrument = build_execution_instrument_specification(
-                asset=str(canonical_request.asset),
-                venue="FUTURES",
-            )
-        except ValueError as exc:
-            return _block(
-                "EXECUTION_INSTRUMENT_POLICY_BLOCKED",
-                str(exc),
-            )
-
     routing = route_venue(
         VenueRoutingRequest(
             direction=direction,
@@ -301,6 +305,13 @@ def translate_and_preflight_toobit(
         )
     try:
         venue = routing.venue.value
+
+        if venue == "FUTURES" and execution_instrument is None:
+            execution_instrument = build_execution_instrument_specification(
+                asset=str(canonical_request.asset),
+                venue="FUTURES",
+            )
+
         evidence = build_toobit_translation_evidence(
             adapter=adapter,
             canonical_request=canonical_request,
