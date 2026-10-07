@@ -154,4 +154,23 @@ Project Completion is CLOSED / VERIFIED at the exchange-agnostic contract bounda
 The active frontier is now Phase B — Toobit Exchange Binding, but only at the replaceable adapter boundary and only under an explicitly authorized checkpoint.
 
 No Core/arunda_pipeline.py wiring to Toobit. No provider API call. No order. No real trade. No DB mutation. No execution authorization.
+
+## PHASE B — TOOBIT EXCHANGE BINDING CHECKPOINT
+Status: BUILT / NOT VERIFIED / IN PROGRESS
+
+Built scope:
+- toobit_exchange_adapter_v0_1.py
+- test_toobit_exchange_adapter_v0_1.py
+
+Safety preserved:
+- Execution authorization FALSE.
+- No order submission/cancellation.
+- No provider API call performed.
+- No DB mutation.
+- No arunda_pipeline.py or Core wiring.
+
+Verification: NOT YET EXECUTED. Checkpoint remains open.
+
+NEXT ACTION: Run focused adapter tests only; close only after verified PASS and synchronize all four governance documents again.
+
 # END CHECKPOINTS
