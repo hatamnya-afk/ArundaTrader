@@ -37,7 +37,7 @@ Verified read-only evidence:
 - Provider preflight evidence constructed successfully.
 - Account/order/contract/timestamp evidence was known and valid; no open/recent order IDs were present.
 - GET-only transport; no write endpoint invoked.
-- CP46-D focused tests = 12/12 PASS.
+- CP46-D test contract = 21/21 PASS across the Toobit adapter and CP46-D provider-preflight suites.
 - git diff --check = PASS.
 - targeted py_compile = PASS.
 - evidence-alignment commit = f80fa83.
@@ -52,6 +52,29 @@ Controlled-test readiness boundary:
 
 NEXT ACTION:
 Perform controlled-test contract/readiness inspection only.
+
+## CP46-D / CP46-A6 CHECKPOINT STATE
+
+CP46-D test contract:
+VERIFIED
+
+Evidence:
+- 21/21 focused tests passed.
+- py_compile PASS.
+- git diff --check PASS.
+- Futures routing, authoritative instrument resolution, contract evidence, provider-native margin state, leverage state, position state, and order state are covered.
+- The focused tests explicitly verify that the Futures path reaches A6 and fails closed on missing exposure authorization.
+
+CP46-A6:
+BLOCKED
+
+Exclusive blocker:
+exposure_allowed has no established provider-native Futures authorization evidence.
+
+This is not a margin, leverage, position, contract, instrument, translation, or routing blocker. Those surfaces are verified. The blocker is specifically the absence of a direct authoritative provider signal permitting additional Futures exposure.
+
+NEXT ACTION:
+Investigate provider-native exposure authorization only. No inference from balance, leverage, margin mode, or empty positions. If direct evidence cannot be established, retain BLOCKED.
 
 ## SAFETY
 EXECUTION AUTHORIZATION = FALSE
