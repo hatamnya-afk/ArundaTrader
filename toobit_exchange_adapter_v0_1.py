@@ -404,11 +404,6 @@ class ToobitExchangeAdapter:
                 raise RuntimeError(
                     "TOOBIT_FUTURES_LEVERAGE_STATE_INVALID"
                 )
-            if not isinstance(positions, list):
-                raise RuntimeError(
-                    "TOOBIT_FUTURES_POSITION_STATE_INVALID"
-                )
-
             leverage_rows = [
                 row
                 for row in leverage
