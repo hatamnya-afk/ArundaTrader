@@ -126,6 +126,20 @@ Verified:
 - Order/cancel/withdraw remain fail-closed.
 - Execution authorization remains FALSE.
 
+## CP EXCHANGE-AGNOSTIC ADAPTER CONTRACT
+Status: CLOSED / VERIFIED / REPLACEABLE
+
+Evidence:
+- `exchange_execution_adapter_contract_v0_1.py` defines the provider-neutral execution adapter boundary.
+- Core-facing contract contains no Toobit name, symbol, transport, credential, or provider-specific field.
+- Toobit conforms as one replaceable adapter implementation.
+- Submission/cancellation remain fail-closed.
+- Structural tests verify the boundary without invoking provider methods.
+
+Commits: `98b75b1`, `3b4f184`, `ded818b`, `ac97549`, `726a6e3`.
+
+Safety: no order, provider write, DB mutation, or execution authorization.
+
 ## CP DYNAMIC EXECUTION ASSET UNIVERSE
 Status: CLOSED / VERIFIED / PROVIDER-DRIVEN
 
