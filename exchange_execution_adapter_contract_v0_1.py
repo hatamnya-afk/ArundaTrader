@@ -1,4 +1,4 @@
-"""ARUNDA TRADER — EXCHANGE-AGNOSTIC ADAPTER CONTRACT v0.1.
+"""ARUNDA TRADER — EXCHANGE-AGNOSTIC ADAPTER CONTRACT v0.2.
 
 Defines the replaceable execution-adapter boundary without naming or importing
 any exchange. Provider-specific translation, transport, authentication and
@@ -13,7 +13,7 @@ NO EXECUTION.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from exchange_execution_contract import (
     CanonicalExecutionResult,
@@ -34,6 +34,22 @@ class ExchangeAdapterCapabilities:
     order_cancellation: bool
 
 
+@dataclass(frozen=True)
+class AdapterOrderPreparation:
+    """Provider-neutral envelope around an adapter-owned order request.
+
+    The request field is intentionally opaque to Core. Only the selected
+    adapter may interpret or submit it. This keeps provider symbols,
+    transport fields and authentication details outside the Core contract.
+    """
+
+    ready: bool
+    reason: str
+    adapter_name: str
+    venue: str
+    request: Any = None
+
+
 @runtime_checkable
 class ExchangeExecutionAdapter(Protocol):
     """Minimal provider-neutral execution adapter boundary.
@@ -47,6 +63,15 @@ class ExchangeExecutionAdapter(Protocol):
         ...
 
     def capabilities(self) -> ExchangeAdapterCapabilities:
+        ...
+
+    def prepare_order(
+        self,
+        request: CanonicalOrderRequest,
+        *,
+        venue: str,
+        execution_instrument: Any,
+    ) -> AdapterOrderPreparation:
         ...
 
     def submit_order(
@@ -75,11 +100,14 @@ def validate_adapter_contract(adapter: Any) -> tuple[bool, str]:
         return False, "ADAPTER_NAME_INVALID"
 
     capabilities = getattr(adapter, "capabilities", None)
+    prepare = getattr(adapter, "prepare_order", None)
     submit = getattr(adapter, "submit_order", None)
     cancel = getattr(adapter, "cancel_order", None)
 
     if not callable(capabilities):
         return False, "ADAPTER_CAPABILITIES_MISSING"
+    if not callable(prepare):
+        return False, "ADAPTER_PREPARE_MISSING"
     if not callable(submit):
         return False, "ADAPTER_SUBMIT_MISSING"
     if not callable(cancel):
@@ -89,6 +117,7 @@ def validate_adapter_contract(adapter: Any) -> tuple[bool, str]:
 
 
 __all__ = [
+    "AdapterOrderPreparation",
     "ExchangeAdapterCapabilities",
     "ExchangeExecutionAdapter",
     "validate_adapter_contract",
