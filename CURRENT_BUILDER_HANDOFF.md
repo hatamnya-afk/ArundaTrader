@@ -1,156 +1,113 @@
 # ARUNDATRADER — CURRENT BUILDER HANDOFF
 
-## CROSS-REPOSITORY MASTER MAP — READ FIRST
+## CANONICAL WORKSPACE
 
-Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` before this handoff. It is the permanent map of the relationship between ArundaTrader and AroondaAI, the three roadmap levels, the closed work that must not be repeated, and the current management direction. This prevents state reconstruction from chat memory.
-## 2026-10-08 — READ THIS FIRST
+`C:\Users\ASUS\ArundaTrader`
 
-This file is the operational handoff for the next Builder session.
-Canonical workspace:
-C:\Users\ASUS\ArundaTrader
+Repository: `hatamnya-afk/ArundaTrader`
 
-Repository:
-hatamnya-afk/ArundaTrader
+Active operational branch: `operational-main-20261007`
 
-Active GitHub branch:
-operational-main-20261007
+Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md`, `REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md`, `FINAL_REAL_ORDER_ATTEMPT_GATE.md`, `PROJECT_STATE.md`, `CURRENT_FRONTIER.md`, and `MANAGEMENT_ROADMAP.md` before making changes.
 
-## 1. MANAGEMENT VERDICT
+## NON-NEGOTIABLE MANAGEMENT MODEL
 
-CP46-A6 = VERIFIED / PASS / CLOSED.
+**Management authorization is ONE-TIME PHASE-ENTRY only.**
 
-The former Toobit provider-capability finding about a missing provider-native
-Futures `exposure_allowed` Boolean is HISTORICAL EXTERNAL PROVIDER-CAPABILITY
-EVIDENCE ONLY. It is NOT an active ArundaTrader blocker.
+The single management decision is:
 
-Architectural decision:
-- Provider-native `exposure_allowed` is NOT required for provider-neutral
-  order-request preparation or a future explicitly authorized order attempt.
-- Zero account balance does NOT locally block construction/submission of an
-  order request.
-- Balance > 0 is NOT provider acceptance.
-- Provider acceptance is NOT a fill.
-- The provider remains authoritative for final acceptance/rejection.
-- Do not infer exposure permission from balance, leverage, margin type, empty
-  positions, risk limits, API-key permission, or hypothetical acceptance.
+`AUTHORIZE REAL-PRODUCTION TRADING PHASE`
 
-## 2. VERIFIED EVIDENCE
+After that decision:
+- trader operates autonomously;
+- Spot and Futures are both in scope;
+- no per-trade management approval exists;
+- Decision → Risk → Trade Gate → Readiness → Order Attempt contracts govern each trade;
+- Toobit/provider is authoritative for ACCEPT/REJECT;
+- zero exchange balance is not a local trade blocker;
+- provider rejection is real evidence and must not cause contract weakening;
+- capital may be added progressively after real outcome/quality evidence;
+- 24/7 operation is a later maturity target.
 
-CP46-A6 focused suite:
-58/58 PASS.
+**No Builder may create, restore, or infer a per-trade management authorization layer.**
 
-Final execution-attempt contract:
-28/28 PASS at commit 448806f.
+## AUTHORIZATION OWNERSHIP
 
-Previously verified Toobit read-only evidence:
-- ExchangeInfo HTTP 200.
-- Authoritative Futures instrument resolved to BTC-SWAP-USDT.
-- Futures balance HTTP 200.
-- Futures account leverage HTTP 200.
-- Futures positions HTTP 200.
-- Futures open orders HTTP 200.
-- Futures history orders HTTP 200.
-- Server time HTTP 200.
-- Provider state was read-only; no order/cancel/withdrawal was performed.
+### 1. Management Phase-Entry Mandate
+Owner: `management_execution_authorization_v0_1.py`
 
-## 3. ARCHITECTURE — DO NOT REDESIGN
+This is the only management authorization concept.
 
-CORE
-→ EXCHANGE-AGNOSTIC EXECUTION BOUNDARY
-→ REPLACEABLE EXCHANGE ADAPTER
-→ TOOBIT
+It covers:
+- REAL_PRODUCTION environment;
+- Spot + Futures;
+- provider;
+- capital policy;
+- evidence-before/evidence-after requirements;
+- mandate identity and expiry.
 
-Toobit is the first execution adapter, not the architecture.
+It does **not** contain:
+- attempt_id;
+- asset;
+- direction;
+- order type;
+- quantity;
+- per-order exposure.
 
-Market-information providers such as KuCoin/Bybit/Gate remain information
-providers, not execution architecture.
+Its active output is `STANDING_MANDATE`.
 
-No provider-specific symbol/payload semantics belong in Core.
+### 2. Technical Execution Authorization Boundary
+Owner: `execution_authorization_boundary_v0_1.py`
 
-## 4. SAFETY — STILL CLOSED
+This boundary does not ask management for permission.
 
-EXECUTION AUTHORIZATION = FALSE
+It verifies that the current ready request is inside the active standing mandate and that the mandate is still valid. It is a technical safety gate, not a second management decision.
 
-Therefore:
-- NO LIVE ORDER.
-- NO ORDER WRITE.
-- NO PROVIDER WRITE.
-- NO WITHDRAWAL.
-- NO DATABASE MUTATION.
-- NO `arunda_pipeline.py` WIRING.
-- NO automatic execution activation.
+## ACTIVE SAFETY STATE
 
-A verified execution contract does NOT authorize a real order.
+`EXECUTION AUTHORIZATION = FALSE` remains the repository safety state until management explicitly authorizes phase entry.
 
-## 5. CURRENT FRONTIER
+Before that decision:
+- NO live order;
+- NO provider write;
+- NO DB mutation;
+- NO `arunda_pipeline.py` wiring;
+- NO execution activation.
 
-EXPLICIT EXECUTION-ATTEMPT READINESS CONTRACT
-EXECUTION-CLOSED
+Readiness, tests, provider metadata, account balance, or this handoff do not constitute phase-entry authorization.
 
-The next Builder must verify/refine only the explicit readiness/authorization
-contract governing a future real attempt.
+## CURRENT FRONTIER
 
-The next real-order attempt requires a SEPARATE explicit management
-authorization and a separately defined scope.
+**REAL-PRODUCTION PHASE-ENTRY REVIEW**
 
-## 6. DO NOT DO
+The next action is to verify the already-built evidence package and present ONE phase-entry decision to management.
 
-- Do not reopen CP46-A6.
-- Do not re-audit closed/verified checkpoints without direct proven regression.
+Do not build another authorization layer.
+
+## DO NOT DO
+
+- Do not reopen closed/verified checkpoints without proven regression.
 - Do not redesign Core.
 - Do not bind Core to Toobit.
 - Do not manufacture `exposure_allowed`.
-- Do not send an order merely as a capability probe.
-- Do not run provider write operations.
+- Do not send an order as a capability probe.
 - Do not mutate the production DB.
 - Do not modify protected `arunda_pipeline.py`.
-- Do not use synthetic data, interpolation, forward-fill, back-fill, padding,
-  fabrication, or silent source blending.
+- Do not use synthetic data, interpolation, forward-fill, back-fill, padding, fabrication, or silent source blending.
 - Do not merge/rebase/reset/clean/delete/force.
-- Do not commit backup/quarantine/runtime artifacts.
+- Do not add another governance document merely to restate this model.
+- Do not create a per-trade management authorization contract.
 
-## 7. LOCAL WORKTREE CONTEXT
+## BUILDER START RULE
 
-At the end of the current Builder session the intended tracked changes are:
-- provider_preflight_v0_1.py
-- test_cp46_a6_provider_preflight_v0_1.py
-- test_cp46_d_production_provider_preflight_v0_1.py
-- test_cp46_d_provider_execution_handoff_v0_1.py
-- test_cp49_toobit_provider_preflight_evidence_v0_1.py
-- PROJECT_STATE.md
-- CURRENT_FRONTIER.md
-- CHECKPOINTS.md
-- MANAGEMENT_ROADMAP.md
+Start from repository state, not chat reconstruction.
 
-Untracked backup/runtime/database artifacts exist locally. They are NOT part
-of the approved A6 change and must not be committed or deleted without
-explicit authorization.
+Verify:
+- branch;
+- HEAD;
+- worktree;
+- the canonical governance documents above.
 
-## 8. GOVERNANCE RULE
-
-At every checkpoint synchronize:
-1. PROJECT_STATE.md
-2. CURRENT_FRONTIER.md
-3. CHECKPOINTS.md
-4. MANAGEMENT_ROADMAP.md
-
-The governance documents are the repository-level source of truth.
-Historical stale A6 BLOCKED language must be treated as historical only once
-the current governance state explicitly records A6 VERIFIED/PASS/CLOSED.
-
-## 9. HANDOFF COMMAND
-
-Start from the canonical workspace and inspect repository state first.
-Do not restart the project.
-
-Required first checks:
-- git branch --show-current
-- git log -1 --oneline
-- git status --short
-- read the four governance documents
-- confirm EXECUTION AUTHORIZATION = FALSE
-- confirm the current frontier above
-
-Then work only inside the explicitly approved frontier.
+If management phase-entry decision is not explicitly `AUTHORIZED`, STOP before execution activation.
 
 END OF HANDOFF
