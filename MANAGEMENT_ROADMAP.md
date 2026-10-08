@@ -465,3 +465,25 @@ The provider-neutral execution path is now contract-complete through the adapter
 
 NEXT ACTION:
 Do not activate execution automatically. Review/approve the explicit real-attempt scope separately before any provider write is permitted.
+
+
+## CURRENT MANAGEMENT FRONTIER — STANDING REAL-PRODUCTION TRADING MANDATE
+
+Status: MANAGEMENT REVIEW / READY FOR PHASE-ENTRY DECISION
+
+The management authorization is clarified as a one-time phase-entry mandate for the initial real-production trading phase, not a requirement to request management permission for every trade.
+
+### Standing scope
+- Market modes: SPOT + FUTURES.
+- Trader operation: autonomous within the already-verified decision, risk, Trade Gate, readiness, and execution contracts.
+- Management role: review accumulated real-market evidence and decide capital scaling, not approve each order.
+- Provider role: authoritative acceptance/rejection of each submitted request.
+- Initial capital: may be zero; zero balance is not a local architecture blocker.
+- Capital scaling: progressive and management-reviewed after real outcome evidence demonstrates acceptable opportunity quality and non-destructive loss behavior.
+- 24-hour operation/analysis: later maturity target after the feedback loop is functioning; not a prerequisite for first real-market operation.
+
+### Required evidence loop
+REAL MARKET -> DECISION -> TRADE GATE -> ORDER ATTEMPT -> PROVIDER RESPONSE -> FILL/REJECTION -> OUTCOME -> OBSERVATION -> CALIBRATION -> MANAGEMENT CAPITAL REVIEW
+
+### Governance rule
+No per-trade management authorization request is required after phase-entry authorization. Any later restriction or halt must be a new explicit management decision, or a fail-closed technical/provider safety condition already defined by the contracts.
