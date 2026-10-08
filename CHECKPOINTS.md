@@ -237,4 +237,23 @@ Verification: CLOSED / VERIFIED at the static/read-only adapter boundary. Runtim
 
 NEXT ACTION: Final controlled-test frontier only.
 
+
+CP46-A6 PROVIDER-NATIVE EXPOSURE INVESTIGATION — CONCLUSION
+
+Investigation result:
+- Toobit's documented read-only Futures surfaces expose balance/availableBalance, leverage and marginType, positions, and risk-limit configuration.
+- The documented API-key permission model distinguishes read permissions from trade permissions; it does not expose a Futures account Boolean equivalent to exposure_allowed.
+- Toobit documents order-time rejection conditions including no-opening-trades, insufficient order margin, and maximum Futures risk-limit exceeded. These are execution-time outcomes/constraints, not a pre-execution provider-native authorization Boolean.
+- Therefore no direct authoritative provider-native Futures exposure_allowed signal has been established.
+
+Classification:
+DIRECT AUTHORITATIVE exposure_allowed = NOT FOUND
+INFERRED exposure_allowed = FORBIDDEN
+UNKNOWN exposure_allowed = YES
+
+Management verdict:
+CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure authorization evidence. Do not convert balance, leverage, marginType, empty positions, risk-limit configuration, API-key trade permission, or hypothetical order acceptance into exposure_allowed=True.
+
+No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
+
 # END CHECKPOINTS
