@@ -126,6 +126,27 @@ Verified:
 - Order/cancel/withdraw remain fail-closed.
 - Execution authorization remains FALSE.
 
+## CP46-D — TOOBIT PROVIDER PREFLIGHT TEST CONTRACT
+Status:
+CLOSED / VERIFIED
+
+Evidence:
+- 21/21 focused tests passed across the Toobit adapter and CP46-D provider-preflight suites.
+- py_compile passed.
+- git diff --check passed.
+- Futures routing, authoritative instrument resolution, contract evidence, provider-native margin state, leverage state, position state, and order state are covered.
+- Tests explicitly verify the strengthened A6 fail-closed behavior.
+
+CP46-A6:
+BLOCKED
+
+Exclusive blocker:
+- provider-native Futures exposure_allowed authorization evidence is unavailable.
+- No inference from balance, leverage, margin mode, or absence of positions is allowed.
+- Production logic remains fail-closed and returns BLOCK_PORTFOLIO_EXPOSURE when exposure authorization is unknown.
+
+No weakening of A6 is permitted.
+
 ## FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 Status:
 CURRENT FRONTIER / OPEN / NOT EXECUTED
@@ -140,7 +161,8 @@ Verified read-only evidence:
 - Contract constraints valid.
 - Timestamp state known.
 - GET-only transport; no write endpoint.
-- CP46-D = 12/12 PASS; git diff --check PASS; targeted py_compile PASS.
+- CP46-D test contract = 21/21 PASS; git diff --check PASS; targeted py_compile PASS.
+- CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure authorization evidence.
 - Commit f80fa83 records the final provider-evidence compatibility fixes.
 
 Safety:
@@ -159,7 +181,7 @@ Authorized scope:
 - No Core or arunda_pipeline.py wiring.
 
 NEXT ACTION:
-Perform controlled-test contract/readiness inspection only.
+Investigate provider-native Futures exposure authorization evidence only; retain fail-closed behavior if unavailable.
 ## CARDINALITY CONTRACT
 Production remains dynamic:
 `ELIGIBLE[N] → RISK[N] → TRADE_GATE[N] → TRADE_READY[N]`
@@ -198,7 +220,7 @@ The next action is contract/readiness inspection only. This does not authorize a
 No Core/arunda_pipeline.py wiring to Toobit. No execution authorization.
 
 ## PHASE B — TOOBIT EXCHANGE BINDING CHECKPOINT
-Status: BUILT / NOT VERIFIED / IN PROGRESS
+Status: CLOSED / VERIFIED / FOCUSED STATIC CONTRACT PASS
 
 Built scope:
 - toobit_exchange_adapter_v0_1.py
@@ -211,8 +233,8 @@ Safety preserved:
 - No DB mutation.
 - No arunda_pipeline.py or Core wiring.
 
-Verification: NOT YET EXECUTED. Checkpoint remains open.
+Verification: CLOSED / VERIFIED at the static/read-only adapter boundary. Runtime/provider connectivity remains governed by the final controlled-test gate.
 
-NEXT ACTION: Run focused adapter tests only; close only after verified PASS and synchronize all four governance documents again.
+NEXT ACTION: Final controlled-test frontier only.
 
 # END CHECKPOINTS
