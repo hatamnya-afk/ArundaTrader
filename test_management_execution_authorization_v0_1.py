@@ -34,6 +34,26 @@ def test_management_authorization_is_one_time_phase_entry_mandate():
     assert "attempt_id" not in result["authorization_observation"]
 
 
+def test_management_boundary_rejects_trade_scoped_fields():
+    for field in (
+        "attempt_id",
+        "asset",
+        "direction",
+        "order_type",
+        "quantity",
+        "per_order_exposure",
+        "exposure",
+    ):
+        value = _base()
+        value[field] = "TRADE-SCOPED"
+        try:
+            evaluate_management_authorization(value)
+        except ValueError as exc:
+            assert str(exc) == "MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN"
+        else:
+            raise AssertionError(f"{field} must never enter management authorization")
+
+
 def test_denied_management_decision_never_produces_execution_authorization():
     result = evaluate_management_authorization(_base(DENIED))
     assert result["management_state"] == DENIED
