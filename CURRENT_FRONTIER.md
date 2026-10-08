@@ -201,3 +201,35 @@ New focused tests are committed but not yet locally executed in this checkpoint 
 NEXT ACTION:
 Builder runs the focused adapter/preparation tests, `py_compile`, and `git diff --check`. Any failure is fixed only within this checkpoint scope; no Core redesign and no pipeline wiring.
 \n\n## CURRENT FRONTIER — PROVIDER-NEUTRAL ORDER ATTEMPT BOUNDARY\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nTarget path:\n`CANONICAL ORDER REQUEST → ADAPTER PREPARATION → OPAQUE PROVIDER ORDER REQUEST → EXPLICIT AUTHORIZATION → PROVIDER ORDER ATTEMPT`\n\nVerified evidence:\n- Prepared-order submission contract added to the replaceable adapter boundary.\n- Final order-attempt boundary validates the canonical request and explicit authorization before invoking `submit_prepared_order`.\n- No authorization inference is permitted.\n- Toobit remains a replaceable adapter and returns fail-closed submission while execution is disabled.\n- Focused suite = 22/22 PASS.\n- py_compile = PASS.\n- git diff --check = PASS.\n\nSafety:\n- EXECUTION AUTHORIZATION = FALSE.\n- ORDER WRITE = FORBIDDEN.\n- PROVIDER WRITE = FORBIDDEN.\n- DATABASE WRITE = FORBIDDEN.\n- No pipeline wiring.\n\nManagement verdict:\nThis frontier is VERIFIED. Do not reopen the preparation boundary or redesign Core.\n\nNEXT ACTION:\nBuild/verify the explicit execution-attempt readiness contract that will govern the eventual real provider attempt, still without enabling execution.\n
+
+## CP FINAL EXECUTION ATTEMPT CONTRACT — VERIFIED
+
+Status: VERIFIED / PASS / EXECUTION-CLOSED
+
+Completed path:
+`Execution Ready Package → Execution-Attempt Readiness → Explicit Authorization → Adapter Preparation → Provider-Neutral Order Attempt → Replaceable Adapter`
+
+Evidence:
+- 28/28 focused tests passed.
+- py_compile PASS.
+- git diff --check PASS.
+- Fast-forward to commit `448806f` completed successfully.
+- Invalid readiness/package alignment blocks before adapter submission.
+- Missing explicit authorization blocks before adapter submission.
+- Explicit valid authorization reaches the replaceable adapter boundary.
+- Toobit remains fail-closed; no real provider write occurs.
+
+Strategic invariants:
+- Core remains exchange-agnostic.
+- Toobit remains a replaceable execution adapter.
+- EXECUTION AUTHORIZATION = FALSE.
+- No order/cancel/withdrawal.
+- No DB mutation.
+- No `arunda_pipeline.py` wiring.
+- No authorization inference.
+
+Management verdict:
+The final provider-neutral execution-attempt contract is VERIFIED and execution-closed.
+
+NEXT FRONTIER:
+Management review of the separately authorized controlled real-order-attempt gate. No execution activation is implied by this verification.
