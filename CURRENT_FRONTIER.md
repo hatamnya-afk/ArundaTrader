@@ -11,9 +11,9 @@
 > Latest verified endpoint: `448806f`.
 >
 > ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — EXPLICIT REAL-ORDER ATTEMPT GATE**
+> **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
 >
-> The next task is to define and inspect the bounded, explicit management gate for a future real provider order attempt. This is preparation/governance only.
+> The standing management model is the one-time real-production phase-entry mandate. The trader does not obtain management approval for individual future orders. This section verifies the boundary between that standing mandate and the technical execution authorization path.
 >
 > ## SAFETY
 > `EXECUTION AUTHORIZATION = FALSE`
@@ -31,7 +31,7 @@
 > - Do not treat historical A6 BLOCKED text as the current frontier.
 >
 > ## ALLOWED NOW
-> - Define the explicit real-attempt gate.
+> - Verify the standing-mandate / technical-authorization boundary.
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
