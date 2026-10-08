@@ -107,3 +107,79 @@ def test_toobit_prepare_rejects_mismatched_instrument():
     )
     assert prepared.ready is False
     assert prepared.reason == "EXECUTION_INSTRUMENT_REQUEST_MISMATCH"
+
+from exchange_execution_adapter_contract_v0_1 import (
+    AdapterOrderPreparation,
+    ExchangeAdapterCapabilities,
+)
+
+
+class FakeAdapter:
+    adapter_name = "REPLACEABLE"
+
+    def capabilities(self):
+        return ExchangeAdapterCapabilities(
+            venue_discovery=True,
+            instrument_resolution=True,
+            constraint_read=True,
+            account_read=True,
+            order_state_read=True,
+            order_submission=True,
+            order_cancellation=True,
+        )
+
+    def prepare_order(self, request, *, venue, execution_instrument):
+        assert request.asset == "BTC"
+        assert venue == "SPOT"
+        return AdapterOrderPreparation(
+            ready=True,
+            reason="READY",
+            adapter_name=self.adapter_name,
+            venue=venue,
+            request={"opaque_provider_payload": True},
+        )
+
+    def submit_order(self, request):
+        raise AssertionError("submission must not occur during preparation")
+
+    def cancel_order(self, *, asset, exchange_order_id):
+        raise AssertionError("cancellation must not occur during preparation")
+
+
+def test_core_handoff_keeps_adapter_request_opaque():
+    prepared = prepare_order_for_adapter(
+        request=_request(),
+        adapter=FakeAdapter(),
+        venue="SPOT",
+        execution_instrument=object(),
+    )
+    assert prepared.ready is True
+    assert prepared.reason == "READY"
+    assert prepared.adapter_name == "REPLACEABLE"
+    assert prepared.request == {"opaque_provider_payload": True}
+
+
+def test_core_handoff_fails_closed_before_adapter_call_for_invalid_request():
+    request = _request()
+    invalid = CanonicalOrderRequest(
+        asset="",
+        direction=request.direction,
+        order_type=request.order_type,
+        quantity=request.quantity,
+        quantity_unit=request.quantity_unit,
+        quantity_source=request.quantity_source,
+        entry_price=request.entry_price,
+        reference_price=request.reference_price,
+        intent_id=request.intent_id,
+        snapshot_id=request.snapshot_id,
+        timestamp=request.timestamp,
+        decision_id=request.decision_id,
+    )
+    prepared = prepare_order_for_adapter(
+        request=invalid,
+        adapter=FakeAdapter(),
+        venue="SPOT",
+        execution_instrument=object(),
+    )
+    assert prepared.ready is False
+    assert prepared.reason == "ASSET_INVALID"
