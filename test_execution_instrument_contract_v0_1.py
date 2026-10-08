@@ -140,3 +140,18 @@ def test_futures_requires_settlement_asset():
 
     assert valid is False
     assert reason == "EXECUTION_INSTRUMENT_SETTLEMENT_ASSET_REQUIRED"
+
+
+
+def test_dynamic_asset_resolution_is_independent_of_btc():
+    for asset in ("ETH", "SOL", "XRP"):
+        result = resolve_provider_instrument(
+            spec(asset=asset),
+            [
+                candidate("ETH-SWAP-USDT", asset="ETH"),
+                candidate("SOL-SWAP-USDT", asset="SOL"),
+                candidate("XRP-SWAP-USDT", asset="XRP"),
+            ],
+        )
+        assert result.status == InstrumentResolutionStatus.RESOLVED
+        assert result.observation["asset"] == asset
