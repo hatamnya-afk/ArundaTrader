@@ -63,6 +63,25 @@ Record, without fabricating or backfilling:
 - post-attempt account/position/order evidence where authorized
 - complete execution state
 
+### MANAGEMENT MANDATE CLARIFICATION — STANDING OPERATIONAL AUTHORIZATION
+The management authorization boundary is a phase-entry mandate, not a per-trade approval loop.
+
+Once management explicitly authorizes the real-production trading phase, the trader is authorized to operate autonomously within its existing contracts for:
+- SPOT trading
+- FUTURES trading
+- the provider/execution instruments permitted by the active contracts
+
+No new management authorization is required for each individual trade. Individual trade selection, sizing, entry/invalidation, risk, and Trade Gate decisions remain inside the trader's existing decision chain.
+
+The provider remains authoritative for final acceptance or rejection. A rejection caused by zero balance, insufficient margin, instrument constraints, permissions, or another provider condition is real provider feedback, not a local reason to fabricate, suppress, or weaken the order attempt.
+
+Initial capital may be zero. Capital is added progressively only after management review of accumulated real-market quality/outcome evidence. The trader does not need capital locally to establish whether the provider accepts or rejects an otherwise valid request.
+
+The operational feedback loop is:
+REAL MARKET -> DECISION -> RISK -> TRADE GATE -> ORDER ATTEMPT -> PROVIDER ACCEPT/REJECT -> FILL/NOT FILLED -> OUTCOME -> OBSERVATION -> CALIBRATION
+
+The 24-hour operating/analyzing mode is a later operational maturity step; it is not a prerequisite for beginning the real-market feedback loop.
+
 ### MANAGEMENT DECISION
 CURRENT DECISION: PREPARE / REVIEW ONLY.
 
@@ -71,9 +90,9 @@ No real order is authorized by this document.
 The next management decision is binary:
 DENY / DEFER
 or
-EXPLICITLY AUTHORIZE ONE BOUNDED REAL ORDER ATTEMPT
+EXPLICITLY AUTHORIZE THE REAL-PRODUCTION TRADING PHASE UNDER THE STANDING OPERATIONAL MANDATE
 
-If authorization is granted later, it must be recorded separately and must not be inferred from this document, a passing test, readiness, account balance, or provider metadata.
+If phase-entry authorization is granted later, it must be recorded separately and must not be inferred from this document, a passing test, readiness, account balance, or provider metadata. Once granted, it is not repeated per trade; the trader operates within the standing mandate and the existing fail-closed contracts.
 
 ### STOP
 After this gate is verified, Builder stops and waits for the separate explicit management authorization.
