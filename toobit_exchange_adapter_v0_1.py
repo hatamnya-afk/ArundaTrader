@@ -396,18 +396,6 @@ class ToobitExchangeAdapter:
                     signed=True,
                 )
             )
-            positions = self._unwrap(
-                self._call(
-                    "GET",
-                    "/api/v1/futures/positions",
-                    params={
-                        "symbol": symbol,
-                        "category": "USDT",
-                    },
-                    signed=True,
-                )
-            )
-
             if not isinstance(balance, list):
                 raise RuntimeError(
                     "TOOBIT_FUTURES_BALANCE_INVALID"
@@ -442,6 +430,23 @@ class ToobitExchangeAdapter:
             if str(margin_type).strip().upper() not in {"CROSS", "ISOLATED"}:
                 raise RuntimeError(
                     "TOOBIT_FUTURES_MARGIN_STATE_UNAVAILABLE"
+                )
+
+            positions = self._unwrap(
+                self._call(
+                    "GET",
+                    "/api/v1/futures/positions",
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                    },
+                    signed=True,
+                )
+            )
+
+            if not isinstance(positions, list):
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_POSITION_STATE_INVALID"
                 )
 
             for row in positions:
