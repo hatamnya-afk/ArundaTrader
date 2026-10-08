@@ -27,7 +27,7 @@ from typing import Any, Callable, Mapping, Optional
 from urllib.parse import urlencode
 
 from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
-from exchange_execution_contract import CanonicalExecutionResult, validate_order_request
+from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest, validate_order_request
 from execution_instrument_contract_v0_1 import (
     ExecutionInstrumentSpecification,
     InstrumentResolutionStatus,
