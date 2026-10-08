@@ -134,8 +134,24 @@ Authorized scope now:
 - No execution authorization unless separately and explicitly authorized.
 - No modification of closed/verified checkpoints or protected arunda_pipeline.py.
 
+CP46-D / CP46-A6 STATUS
+
+CP46-D test contract = VERIFIED.
+Evidence:
+- 21/21 focused tests passed across the Toobit adapter and CP46-D provider-preflight test suites.
+- py_compile passed for the focused adapter/evidence/test modules.
+- git diff --check passed.
+- Futures routing, authoritative instrument resolution, contract evidence, provider-native margin state, leverage state, position state, and order state are covered by the focused contract.
+- The three Futures PASS expectations were aligned to the strengthened A6 fail-closed contract without weakening production logic.
+
+CP46-A6 = BLOCKED exclusively by missing provider-native Futures exposure authorization evidence.
+- exposure_allowed remains UNKNOWN.
+- No inference from balance, leverage, margin mode, or absence of positions is permitted.
+- No provider-native Toobit Boolean authorizing additional Futures exposure has been established.
+- The fail-closed contract correctly returns BLOCK_PORTFOLIO_EXPOSURE when exposure authorization is not directly evidenced.
+
 NEXT ACTION:
-Perform controlled-test contract/readiness inspection only. Do not invoke additional provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
+Investigate only whether Toobit exposes a direct, authoritative Futures exposure-authorization signal. If no such provider-native evidence exists, keep CP46-A6 BLOCKED. Do not fabricate or infer exposure permission. No additional provider API calls, order/cancel/withdraw, DB mutation, execution authorization, or arunda_pipeline.py wiring. Do not invoke additional provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
 
 ### PROJECT COMPLETION — CLOSED / VERIFIED
 Status = CLOSED / VERIFIED / STATIC CONTRACT PASS
