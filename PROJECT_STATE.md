@@ -407,3 +407,19 @@ The provider-neutral execution-attempt composition is VERIFIED. The system can p
 
 CURRENT FRONTIER:
 Controlled decision for the separately authorized real execution-attempt gate; no automatic activation.
+
+
+## NON-NEGOTIABLE OPERATING INVARIANT — DO NOT REPEAT THIS DECISION
+
+The management model is a ONE-TIME PHASE-ENTRY MANDATE, not per-trade approval.
+
+After explicit phase-entry authorization:
+- Spot and Futures are both in scope.
+- The trader operates autonomously under the already-verified Decision/Risk/Trade Gate/Execution contracts.
+- No management approval request is generated for each trade.
+- Zero exchange balance is not a local blocker; the provider is authoritative for acceptance/rejection.
+- Real rejection is evidence and must not trigger contract weakening.
+- Capital is scaled progressively only after real-market outcome/quality evidence and management review.
+- 24-hour operation/analysis is a later maturity stage, not a prerequisite for starting the real feedback loop.
+
+Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this section as active governance constraints. Historical text that conflicts with this invariant is historical residue and MUST NOT reopen the per-trade authorization model.
