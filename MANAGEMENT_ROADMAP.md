@@ -393,3 +393,34 @@ Evidence:
 NEXT ACTION:
 Builder runs local focused tests + py_compile + git diff --check. Then governance is synchronized with actual evidence before the next frontier.
 \n\n## CURRENT ROADMAP FRONTIER — EXCHANGE-AGNOSTIC ORDER ATTEMPT\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nCompleted path:\n`Canonical Order Request → Exchange-Agnostic Adapter Contract → Adapter-Owned Provider Order Preparation → Provider-Neutral Order Attempt Boundary`\n\nEvidence:\n- `submit_prepared_order` is now part of the replaceable adapter contract.\n- Final order-attempt boundary requires explicit valid authorization and delegates only to the selected adapter.\n- Toobit submission remains fail-closed; no real provider write occurs.\n- 22/22 focused tests passed.\n- py_compile passed.\n- git diff --check passed.\n\nStrategic rules remain unchanged:\n- Core is exchange-agnostic.\n- Toobit is replaceable.\n- Provider-specific payload remains inside the adapter.\n- EXECUTION AUTHORIZATION = FALSE until separately and explicitly authorized.\n- No DB mutation and no pipeline wiring.\n\nNEXT FRONTIER:\nExplicit execution-attempt readiness/authorization contract verification, followed only later by a separately authorized real order attempt.\n
+
+## CURRENT ROADMAP FRONTIER — FINAL EXECUTION ATTEMPT CONTRACT
+
+Status: VERIFIED / PASS / EXECUTION-CLOSED
+
+Completed route:
+`Execution Ready Package → Execution-Attempt Readiness → Explicit Authorization → Adapter Preparation → Provider-Neutral Order Attempt → Replaceable Exchange Adapter`
+
+Evidence:
+- `final_execution_attempt_contract_v0_1.py` composes the final provider-neutral execution-attempt route.
+- `test_final_execution_attempt_contract_v0_1.py` verifies the three critical branches.
+- 28/28 focused tests passed across the final contract and all directly dependent execution surfaces.
+- py_compile PASS.
+- git diff --check PASS.
+- Fast-forward to `448806f` PASS.
+
+Management rules remain unchanged:
+- Core remains exchange-agnostic.
+- Toobit remains replaceable.
+- EXECUTION AUTHORIZATION = FALSE.
+- No order/cancel/withdrawal.
+- No DB mutation.
+- No pipeline wiring.
+- No execution activation is implied by contract verification.
+- Provider rejection, if eventually observed under separate explicit authorization, is environment evidence rather than a reason to redesign Core.
+
+Management verdict:
+The provider-neutral execution path is now contract-complete through the adapter-attempt boundary and VERIFIED. The next management gate is a separately authorized controlled real-order attempt; verification itself does not authorize that attempt.
+
+NEXT ACTION:
+Do not activate execution automatically. Review/approve the explicit real-attempt scope separately before any provider write is permitted.
