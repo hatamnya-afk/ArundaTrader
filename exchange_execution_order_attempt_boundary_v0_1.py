@@ -69,6 +69,10 @@ def attempt_prepared_order(
                 execution_ready_package=execution_ready_package,
                 request=request,
             )
+            readiness_observation = dict(readiness_observation)
+            readiness_observation["order_type"] = request.order_type
+            readiness_observation["execution_instrument"] = execution_instrument
+            readiness_observation["venue"] = venue
         except ValueError as exc:
             return blocked_execution_result(
                 asset=request.asset,
