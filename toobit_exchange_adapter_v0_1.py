@@ -21,9 +21,18 @@ import hmac
 import json
 import os
 import time
+from decimal import Decimal, InvalidOperation
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Optional
 from urllib.parse import urlencode
+
+from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest, validate_order_request
+from execution_instrument_contract_v0_1 import (
+    ExecutionInstrumentSpecification,
+    InstrumentResolutionStatus,
+    resolve_provider_instrument,
+)
 
 BASE_URL = "https://api.toobit.com"
 DEFAULT_RECV_WINDOW = 5000
@@ -39,6 +48,14 @@ class ToobitAdapterResult:
 Transport = Callable[..., Mapping[str, Any] | list[Any]]
 
 
+
+
+def _format_provider_quantity(value: Decimal) -> str:
+    text = format(value, "f")
+    if "." in text:
+        text = text.rstrip("0").rstrip(".")
+    return text
+
 class ToobitExchangeAdapter:
     """Provider-specific, read-only Toobit adapter.
 
@@ -48,6 +65,22 @@ class ToobitExchangeAdapter:
     """
 
     name = "TOOBIT"
+
+    @property
+    def adapter_name(self) -> str:
+        return self.name
+
+    def capabilities(self):
+        from exchange_execution_adapter_contract_v0_1 import ExchangeAdapterCapabilities
+        return ExchangeAdapterCapabilities(
+            venue_discovery=True,
+            instrument_resolution=True,
+            constraint_read=True,
+            account_read=True,
+            order_state_read=True,
+            order_submission=False,
+            order_cancellation=False,
+        )
 
     def __init__(
         self,
@@ -59,7 +92,7 @@ class ToobitExchangeAdapter:
     ) -> None:
         self._transport = transport
         self._api_key = api_key or os.getenv("TOOBIT_API_KEY")
-        self._secret_key = secret_key or os.getenv("TOOBIT_SECRET_KEY")
+        self._secret_key = secret_key or os.getenv("TOOBIT_SECRET_KEY") or os.getenv("TOOBIT_API_SECRET")
         self._recv_window = int(recv_window)
 
     def _call(
@@ -169,6 +202,48 @@ class ToobitExchangeAdapter:
             raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
         return data
 
+    def discover_tradable_assets(self, *, venue: str) -> ToobitAdapterResult:
+        """Return the current provider-reported tradable asset universe.
+
+        Discovery is metadata-only. No static coin list is maintained here;
+        Core remains asset-agnostic and exact instrument selection is handled
+        separately by the execution instrument resolver.
+        """
+        try:
+            normalized_venue = str(venue).strip().upper()
+            if normalized_venue not in {"SPOT", "FUTURES"}:
+                raise RuntimeError("EXECUTION_INSTRUMENT_VENUE_INVALID")
+
+            info = self._exchange_info()
+            assets: set[str] = set()
+            rows_key = "symbols" if normalized_venue == "SPOT" else "contracts"
+            rows = info.get(rows_key)
+            if not isinstance(rows, list):
+                raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                if str(row.get("status", "")).strip().upper() != "TRADING":
+                    continue
+                if normalized_venue == "SPOT":
+                    asset = str(row.get("baseAsset", "")).strip().upper()
+                    quote = str(row.get("quoteAsset", "")).strip().upper()
+                    if asset and quote == "USDT":
+                        assets.add(asset)
+                else:
+                    asset = str(row.get("underlying", "")).strip().upper()
+                    if asset:
+                        assets.add(asset)
+
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {"venue": normalized_venue, "assets": sorted(assets)},
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def trading_constraints(self, asset: str) -> ToobitAdapterResult:
         try:
             row = self._find_asset(
@@ -180,14 +255,150 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def futures_trading_constraints(self, asset: str) -> ToobitAdapterResult:
+    def futures_trading_constraints(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
+                )
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+
+                contracts = self._exchange_info().get("contracts")
+                if not isinstance(contracts, list):
+                    raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+                matches = [
+                    row
+                    for row in contracts
+                    if (
+                        isinstance(row, dict)
+                        and str(row.get("symbol", "")).strip().upper()
+                        == symbol
+                    )
+                ]
+
+                if len(matches) != 1:
+                    raise RuntimeError(
+                        "AUTHORITATIVE_PROVIDER_SYMBOL_UNAVAILABLE:"
+                        f"{asset}:symbol={symbol}:matches={len(matches)}"
+                    )
+
+                return ToobitAdapterResult(True, "OK", matches[0])
+
             row = self._find_asset(
                 self._exchange_info().get("contracts"),
                 asset,
                 futures=True,
             )
             return ToobitAdapterResult(True, "OK", row)
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
+    def resolve_futures_instrument(
+        self,
+        specification: ExecutionInstrumentSpecification,
+    ) -> ToobitAdapterResult:
+        """Resolve a provider-neutral Futures instrument specification.
+
+        Provider-specific metadata interpretation remains inside this adapter.
+        The Core never sees or reconstructs the provider symbol.
+        """
+        try:
+            if not isinstance(
+                specification,
+                ExecutionInstrumentSpecification,
+            ):
+                raise RuntimeError("EXECUTION_INSTRUMENT_SPEC_INVALID")
+
+            if specification.venue.strip().upper() != "FUTURES":
+                raise RuntimeError("EXECUTION_INSTRUMENT_VENUE_INVALID")
+
+            contracts = self._exchange_info().get("contracts")
+            if not isinstance(contracts, list):
+                raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+            candidates: list[dict[str, Any]] = []
+            for row in contracts:
+                if not isinstance(row, dict):
+                    continue
+
+                symbol = row.get("symbol")
+                underlying = row.get("underlying")
+                status = row.get("status")
+
+                if not all(
+                    isinstance(value, str) and value.strip()
+                    for value in (symbol, underlying, status)
+                ):
+                    continue
+
+                # Toobit exposes settlement/margin identity as provider
+                # metadata. Never derive it from the provider symbol.
+                settlement_asset = row.get("marginToken")
+                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                    settlement_asset = row.get("quoteAsset")
+
+                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                    continue
+
+                # Toobit uses SWAP contracts for perpetual futures.
+                # This provider-specific interpretation stays in the adapter.
+                instrument_type = (
+                    "PERPETUAL"
+                    if "-SWAP" in symbol.upper()
+                    else None
+                )
+
+                candidates.append(
+                    {
+                        "asset": underlying.strip().upper(),
+                        "venue": "FUTURES",
+                        "settlement_asset": settlement_asset.strip().upper(),
+                        "instrument_type": instrument_type,
+                        "provider_symbol": symbol.strip().upper(),
+                        "status": status.strip().upper(),
+                    }
+                )
+
+            resolved = resolve_provider_instrument(
+                specification,
+                candidates,
+            )
+
+            if resolved.status != InstrumentResolutionStatus.RESOLVED:
+                return ToobitAdapterResult(
+                    False,
+                    resolved.reason,
+                    {"candidate_count": len(candidates)},
+                )
+
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {
+                    "symbol": resolved.provider_symbol,
+                    "instrument": dict(resolved.observation or {}),
+                },
+            )
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
@@ -200,63 +411,141 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def futures_account_state(self, asset: str) -> ToobitAdapterResult:
+    def futures_account_state(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
-            constraints = self.futures_trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-
-            symbol = str(constraints.data["symbol"]).strip().upper()
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
+                )
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+            else:
+                constraints = self.futures_trading_constraints(asset)
+                if (
+                    not constraints.allowed
+                    or not isinstance(constraints.data, dict)
+                ):
+                    raise RuntimeError(constraints.reason)
+                symbol = str(
+                    constraints.data["symbol"]
+                ).strip().upper()
 
             balance = self._unwrap(
-                self._call("GET", "/api/v1/futures/balance", signed=True)
+                self._call(
+                    "GET",
+                    "/api/v1/futures/balance",
+                    signed=True,
+                )
             )
             leverage = self._unwrap(
                 self._call(
                     "GET",
                     "/api/v1/futures/accountLeverage",
-                    params={"symbol": symbol, "category": "USDT"},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                    },
                     signed=True,
                 )
             )
+            if not isinstance(balance, list):
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_BALANCE_INVALID"
+                )
+            if not isinstance(leverage, list):
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_LEVERAGE_STATE_INVALID"
+                )
+            leverage_rows = [
+                row
+                for row in leverage
+                if (
+                    isinstance(row, dict)
+                    and str(
+                        row.get("symbolId", "")
+                    ).strip().upper()
+                    == symbol
+                )
+            ]
+
+            if len(leverage_rows) != 1:
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_LEVERAGE_STATE_UNAVAILABLE"
+                )
+
+            margin_type = leverage_rows[0].get("marginType")
+            if str(margin_type).strip().upper() not in {"CROSS", "ISOLATED"}:
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_MARGIN_STATE_UNAVAILABLE"
+                )
+
             positions = self._unwrap(
                 self._call(
                     "GET",
                     "/api/v1/futures/positions",
-                    params={"symbol": symbol, "category": "USDT"},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                    },
                     signed=True,
                 )
             )
 
-            if not isinstance(balance, list):
-                raise RuntimeError("TOOBIT_FUTURES_BALANCE_INVALID")
-            if not isinstance(leverage, list):
-                raise RuntimeError("TOOBIT_FUTURES_LEVERAGE_STATE_INVALID")
             if not isinstance(positions, list):
-                raise RuntimeError("TOOBIT_FUTURES_POSITION_STATE_INVALID")
-
-            leverage_rows = [
-                row for row in leverage
-                if isinstance(row, dict)
-                and str(row.get("symbolId", "")).strip().upper() == symbol
-            ]
-            if len(leverage_rows) != 1:
-                raise RuntimeError("TOOBIT_FUTURES_LEVERAGE_STATE_UNAVAILABLE")
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_POSITION_STATE_INVALID"
+                )
 
             for row in positions:
                 if not isinstance(row, dict):
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_STATE_INVALID")
-                if str(row.get("symbol", "")).strip().upper() != symbol:
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_SYMBOL_INVALID")
-                if str(row.get("side", "")).upper() not in {"LONG", "SHORT"}:
-                    raise RuntimeError("TOOBIT_FUTURES_POSITION_SIDE_INVALID")
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_STATE_INVALID"
+                    )
+                if (
+                    str(row.get("symbol", ""))
+                    .strip()
+                    .upper()
+                    != symbol
+                ):
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_SYMBOL_INVALID"
+                    )
+                if (
+                    str(row.get("side", "")).upper()
+                    not in {"LONG", "SHORT"}
+                ):
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_SIDE_INVALID"
+                    )
 
             return ToobitAdapterResult(
                 True,
                 "OK",
                 {
                     "state_known": True,
-                    "margin_state_known": bool(balance),
+                    # Toobit accountLeverage returns the provider-native
+                    # margin mode (CROSS/ISOLATED). Presence of that
+                    # authoritative enum is the only basis for knowing
+                    # margin state here; balance presence is not used.
+                    "margin_state_known": True,
+                    "margin_type": str(margin_type).strip().upper(),
                     "leverage_state_known": True,
                     "position_state_known": True,
                     "positions": positions,
@@ -265,63 +554,51 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
-    def duplicate_check(self, asset: str, side: str) -> ToobitAdapterResult:
-        del side
+    def futures_duplicate_check(
+        self,
+        asset: str,
+        *,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
         try:
-            constraints = self.trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-            symbol = str(constraints.data["symbol"]).strip().upper()
-
-            open_orders = self._unwrap(
-                self._call(
-                    "GET",
-                    "/api/v1/spot/openOrders",
-                    params={"symbol": symbol, "limit": 1000},
-                    signed=True,
+            if execution_instrument is not None:
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
                 )
-            )
-            recent_orders = self._unwrap(
-                self._call(
-                    "GET",
-                    "/api/v1/spot/tradeOrders",
-                    params={"symbol": symbol, "limit": 1000},
-                    signed=True,
-                )
-            )
-
-            return ToobitAdapterResult(
-                True,
-                "OK",
-                {
-                    "state_known": True,
-                    "open_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in open_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
-                    ),
-                    "recent_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in recent_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
-                    ),
-                },
-            )
-        except Exception as exc:
-            return ToobitAdapterResult(False, str(exc))
-
-    def futures_duplicate_check(self, asset: str) -> ToobitAdapterResult:
-        try:
-            constraints = self.futures_trading_constraints(asset)
-            if not constraints.allowed or not isinstance(constraints.data, dict):
-                raise RuntimeError(constraints.reason)
-            symbol = str(constraints.data["symbol"]).strip().upper()
+                if (
+                    not resolved.allowed
+                    or not isinstance(resolved.data, dict)
+                ):
+                    raise RuntimeError(
+                        getattr(
+                            resolved,
+                            "reason",
+                            "FUTURES_INSTRUMENT_UNAVAILABLE",
+                        )
+                    )
+                symbol = str(
+                    resolved.data["symbol"]
+                ).strip().upper()
+            else:
+                constraints = self.futures_trading_constraints(asset)
+                if (
+                    not constraints.allowed
+                    or not isinstance(constraints.data, dict)
+                ):
+                    raise RuntimeError(constraints.reason)
+                symbol = str(
+                    constraints.data["symbol"]
+                ).strip().upper()
 
             open_orders = self._unwrap(
                 self._call(
                     "GET",
                     "/api/v2/futures/open-orders",
-                    params={"symbol": symbol, "category": "USDT", "limit": 1000},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                        "limit": 1000,
+                    },
                     signed=True,
                 )
             )
@@ -329,7 +606,11 @@ class ToobitExchangeAdapter:
                 self._call(
                     "GET",
                     "/api/v1/futures/historyOrders",
-                    params={"symbol": symbol, "category": "USDT", "limit": 1000},
+                    params={
+                        "symbol": symbol,
+                        "category": "USDT",
+                        "limit": 1000,
+                    },
                     signed=True,
                 )
             )
@@ -342,17 +623,251 @@ class ToobitExchangeAdapter:
                     "open_order_client_ids": frozenset(
                         str(row["clientOrderId"])
                         for row in open_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
+                        if (
+                            isinstance(row, dict)
+                            and row.get("clientOrderId") is not None
+                        )
                     ),
                     "recent_order_client_ids": frozenset(
                         str(row["clientOrderId"])
                         for row in recent_orders
-                        if isinstance(row, dict) and row.get("clientOrderId") is not None
+                        if (
+                            isinstance(row, dict)
+                            and row.get("clientOrderId") is not None
+                        )
                     ),
                 },
             )
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
+
+
+    def prepare_order(
+        self,
+        request: Any,
+        *,
+        venue: str,
+        execution_instrument: Any,
+    ) -> AdapterOrderPreparation:
+        """Translate a canonical request into an opaque Toobit order payload.
+
+        This method is preparation only. It may read authoritative exchange
+        metadata through the injected transport, but it never submits an order.
+        Canonical quantity remains BASE_ASSET; provider-specific quantity
+        semantics are translated here and never in Core.
+        """
+        normalized_venue = str(venue).strip().upper()
+        adapter_name = self.adapter_name
+
+        valid, reason = validate_order_request(request)
+        if not valid:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason=reason,
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+
+        if normalized_venue not in {"SPOT", "FUTURES"}:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="VENUE_INVALID",
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+
+        if not isinstance(
+            execution_instrument,
+            ExecutionInstrumentSpecification,
+        ):
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="EXECUTION_INSTRUMENT_SPEC_INVALID",
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+
+        if (
+            execution_instrument.asset.strip().upper() != request.asset.strip().upper()
+            or execution_instrument.venue.strip().upper() != normalized_venue
+        ):
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="EXECUTION_INSTRUMENT_REQUEST_MISMATCH",
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+
+        try:
+            if normalized_venue == "FUTURES":
+                resolved = self.resolve_futures_instrument(
+                    execution_instrument
+                )
+                if not resolved.allowed or not isinstance(resolved.data, dict):
+                    raise RuntimeError(resolved.reason)
+
+                row = self.futures_trading_constraints(
+                    request.asset,
+                    execution_instrument=execution_instrument,
+                )
+                if not row.allowed or not isinstance(row.data, dict):
+                    raise RuntimeError(row.reason)
+
+                symbol = str(resolved.data["symbol"]).strip().upper()
+                contract_row = row.data
+                filters = self._filters(contract_row)
+
+                base_quantity = Decimal(str(request.quantity))
+                multiplier = Decimal(
+                    str(contract_row.get("contractMultiplier", ""))
+                )
+                if base_quantity <= 0 or multiplier <= 0:
+                    raise RuntimeError("FUTURES_QUANTITY_INVALID")
+
+                provider_quantity = base_quantity / multiplier
+                if provider_quantity != provider_quantity.to_integral_value():
+                    raise RuntimeError(
+                        "FUTURES_BASE_QUANTITY_NOT_CONTRACT_ALIGNED"
+                    )
+
+                lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
+                if isinstance(lot, dict):
+                    minimum = Decimal(str(lot.get("minQty", "0")))
+                    maximum = Decimal(str(lot.get("maxQty", "0")))
+                    step = Decimal(str(lot.get("stepSize", "0")))
+                    if minimum > 0 and provider_quantity < minimum:
+                        raise RuntimeError("FUTURES_QUANTITY_BELOW_MIN")
+                    if maximum > 0 and provider_quantity > maximum:
+                        raise RuntimeError("FUTURES_QUANTITY_ABOVE_MAX")
+                    if step > 0 and (
+                        provider_quantity / step
+                    ) != (
+                        provider_quantity / step
+                    ).to_integral_value():
+                        raise RuntimeError("FUTURES_QUANTITY_STEP_INVALID")
+
+                payload = {
+                    "symbol": symbol,
+                    "side": "BUY" if request.direction == "LONG" else "SELL",
+                    "positionSide": request.direction,
+                    "type": request.order_type,
+                    "newClientOrderId": request.intent_id,
+                    "quantity": _format_provider_quantity(provider_quantity),
+                    "category": str(
+                        execution_instrument.settlement_asset or "USDT"
+                    ).strip().upper(),
+                }
+
+                return AdapterOrderPreparation(
+                    ready=True,
+                    reason="READY",
+                    adapter_name=adapter_name,
+                    venue=normalized_venue,
+                    request=payload,
+                )
+
+            row = self.trading_constraints(request.asset)
+            if not row.allowed or not isinstance(row.data, dict):
+                raise RuntimeError(row.reason)
+
+            if str(row.data.get("status", "")).strip().upper() != "TRADING":
+                raise RuntimeError("SPOT_INSTRUMENT_NOT_TRADING")
+
+            symbol = (
+                str(row.data.get("symbol", "")).strip().upper()
+            )
+            if not symbol:
+                raise RuntimeError("SPOT_PROVIDER_SYMBOL_UNAVAILABLE")
+
+            filters = self._filters(row.data)
+            base_quantity = Decimal(str(request.quantity))
+            if base_quantity <= 0:
+                raise RuntimeError("SPOT_QUANTITY_INVALID")
+
+            provider_quantity = base_quantity
+            if request.order_type == "MARKET" and request.direction == "LONG":
+                if request.reference_price is None:
+                    raise RuntimeError(
+                        "SPOT_MARKET_BUY_REFERENCE_PRICE_REQUIRED"
+                    )
+                reference_price = Decimal(str(request.reference_price))
+                if reference_price <= 0:
+                    raise RuntimeError(
+                        "SPOT_MARKET_BUY_REFERENCE_PRICE_INVALID"
+                    )
+                provider_quantity = base_quantity * reference_price
+
+            lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
+            if isinstance(lot, dict):
+                minimum = Decimal(str(lot.get("minQty", "0")))
+                maximum = Decimal(str(lot.get("maxQty", "0")))
+                step = Decimal(str(lot.get("stepSize", "0")))
+                if minimum > 0 and provider_quantity < minimum:
+                    raise RuntimeError("SPOT_QUANTITY_BELOW_MIN")
+                if maximum > 0 and provider_quantity > maximum:
+                    raise RuntimeError("SPOT_QUANTITY_ABOVE_MAX")
+                if step > 0 and (
+                    provider_quantity / step
+                ) != (
+                    provider_quantity / step
+                ).to_integral_value():
+                    raise RuntimeError("SPOT_QUANTITY_STEP_INVALID")
+
+            payload = {
+                "symbol": symbol,
+                "side": "BUY" if request.direction == "LONG" else "SELL",
+                "type": request.order_type,
+                "newClientOrderId": request.intent_id,
+                "quantity": _format_provider_quantity(provider_quantity),
+            }
+
+            return AdapterOrderPreparation(
+                ready=True,
+                reason="READY",
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+                request=payload,
+            )
+        except (InvalidOperation, ValueError, TypeError) as exc:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason=f"ORDER_PREPARATION_INVALID:{exc}",
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+        except Exception as exc:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason=str(exc),
+                adapter_name=adapter_name,
+                venue=normalized_venue,
+            )
+
+    def submit_prepared_order(
+        self,
+        preparation: AdapterOrderPreparation,
+        *,
+        canonical_request: CanonicalOrderRequest,
+    ) -> CanonicalExecutionResult:
+        del preparation
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+            asset=canonical_request.asset, direction=canonical_request.direction,
+            executed_quantity=None, executed_price=None, timestamp=None,
+            adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
+            error_message="Order submission is disabled by the current execution contract.",
+        )
+
+    def submit_order(self, request: Any) -> CanonicalExecutionResult:
+        del request
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+            asset=None, direction=None, executed_quantity=None,
+            executed_price=None, timestamp=None, adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
+            error_message="Order submission is disabled by the current execution contract.",
+        )
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs
@@ -361,11 +876,13 @@ class ToobitExchangeAdapter:
             "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
         )
 
-    def cancel_order(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
-        del args, kwargs
-        return ToobitAdapterResult(
-            False,
-            "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED",
+    def cancel_order(self, *, asset: str, exchange_order_id: str) -> CanonicalExecutionResult:
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=exchange_order_id, status="FAIL_CLOSED",
+            asset=asset, direction=None, executed_quantity=None,
+            executed_price=None, timestamp=None, adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED",
+            error_message="Order cancellation is disabled by the current execution contract.",
         )
 
 

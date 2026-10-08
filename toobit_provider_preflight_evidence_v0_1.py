@@ -33,13 +33,24 @@ from toobit_provider_order_state_v0_1 import (
 from provider_preflight_v0_1 import ProviderPortfolioState
 
 def _filter_map(filters: Any) -> Dict[str, Dict[str, Any]]:
-    if not isinstance(filters, dict):
-        raise RuntimeError("Toobit contract filters are unavailable")
-    return {
-        str(key): value
-        for key, value in filters.items()
-        if isinstance(key, str) and isinstance(value, dict)
-    }
+    if isinstance(filters, dict):
+        return {
+            str(key): value
+            for key, value in filters.items()
+            if isinstance(key, str) and isinstance(value, dict)
+        }
+
+    if isinstance(filters, list):
+        normalized: Dict[str, Dict[str, Any]] = {}
+        for value in filters:
+            if not isinstance(value, dict):
+                continue
+            filter_type = value.get("filterType")
+            if isinstance(filter_type, str) and filter_type.strip():
+                normalized[filter_type.strip()] = value
+        return normalized
+
+    raise RuntimeError("Toobit contract filters are unavailable")
 
 
 def _first_filter(filters: Dict[str, Dict[str, Any]], *names: str):
@@ -67,10 +78,14 @@ def build_toobit_provider_contract_state(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderContractState:
     """Compose provider contract state in the exact provider quantity unit."""
     if venue == "FUTURES":
-        result = adapter.futures_trading_constraints(asset)
+        result = adapter.futures_trading_constraints(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(result, "allowed", False) is not True:
             raise RuntimeError(
                 "Authoritative Toobit Futures contract state unavailable: "
@@ -92,7 +107,9 @@ def build_toobit_provider_contract_state(
         if lot is None:
             raise RuntimeError("Authoritative Toobit Futures quantity filter is unavailable")
 
-        multiplier = _positive_decimal(data.get("contract_multiplier"))
+        multiplier = _positive_decimal(
+            data.get("contract_multiplier", data.get("contractMultiplier"))
+        )
         min_underlying = _positive_decimal(lot.get("minQty"))
         max_underlying = _positive_decimal(lot.get("maxQty"))
         step_underlying = _positive_decimal(lot.get("stepSize"))
@@ -183,9 +200,13 @@ def build_toobit_provider_account_state(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderAccountState:
     if venue == "FUTURES":
-        result = adapter.futures_account_state(asset)
+        result = adapter.futures_account_state(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(result, "allowed", False) is not True:
             raise RuntimeError(
                 "Authoritative Toobit Futures account state unavailable: "
@@ -198,16 +219,19 @@ def build_toobit_provider_account_state(
             raise RuntimeError("Toobit Futures account state is unknown")
         margin_known = data.get("margin_state_known")
         leverage_known = data.get("leverage_state_known")
-        position_conflict = data.get("position_conflict")
+        position_known = data.get("position_state_known")
+
         if not isinstance(margin_known, bool) or not isinstance(leverage_known, bool):
             raise RuntimeError("Toobit Futures margin/leverage state is invalid")
-        if not isinstance(position_conflict, bool):
+
+        if position_known is not True:
             raise RuntimeError("Toobit Futures position state is invalid")
+
         return ProviderAccountState(
             state_known=True,
             margin_state_known=margin_known,
             leverage_state_known=leverage_known,
-            position_conflict=position_conflict,
+            position_conflict=False,
         )
 
     result = adapter.account_check()
@@ -266,6 +290,7 @@ def build_toobit_provider_preflight_evidence(
     adapter,
     asset: str,
     venue: str = "SPOT",
+    execution_instrument=None,
 ) -> ProviderPreflightEvidence:
     """Read and compose authoritative Toobit CP46-A6 evidence."""
     if adapter is None:
@@ -274,20 +299,32 @@ def build_toobit_provider_preflight_evidence(
         raise RuntimeError("Asset is required")
 
     contract = build_toobit_provider_contract_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     account = build_toobit_provider_account_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     orders = build_toobit_provider_order_state(
-        adapter, asset, venue=venue,
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
     )
     timestamp = build_toobit_provider_timestamp_state(adapter)
 
     portfolio = None
 
     if venue == "FUTURES":
-        futures_account = adapter.futures_account_state(asset)
+        futures_account = adapter.futures_account_state(
+            asset,
+            execution_instrument=execution_instrument,
+        )
 
         if not getattr(futures_account, "allowed", False):
             raise RuntimeError(
@@ -305,21 +342,13 @@ def build_toobit_provider_preflight_evidence(
                 "Futures account state payload is invalid"
             )
 
+        # Toobit exposes account/position state, leverage, and margin
+        # mode, but no provider-native Futures boolean authorizing
+        # additional portfolio exposure. Do not infer exposure_allowed
+        # from balance, leverage, or absence of positions.
         portfolio = ProviderPortfolioState(
             state_known=state.get("state_known") is True,
-            exposure_allowed=(
-                False
-                if state.get("position_conflict") is True
-                else (
-                    True
-                    if (
-                        state.get("state_known") is True
-                        and state.get("margin_state_known") is True
-                        and state.get("leverage_state_known") is True
-                    )
-                    else None
-                )
-            ),
+            exposure_allowed=None,
         )
 
     return build_provider_preflight_evidence(

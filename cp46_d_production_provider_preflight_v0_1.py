@@ -31,6 +31,8 @@ from provider_order_translation_v0_1 import (
     translate_order_request,
 )
 from provider_preflight_v0_1 import ProviderPreflightEvidence
+from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
+from execution_instrument_policy_v0_1 import build_execution_instrument_specification
 from toobit_provider_preflight_evidence_v0_1 import (
     build_toobit_provider_preflight_evidence,
 )
@@ -66,8 +68,27 @@ def _provider_symbol(
     asset: str,
     *,
     venue: str = "SPOT",
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> str:
     if venue == "FUTURES":
+        if execution_instrument is None:
+            raise RuntimeError(
+                "EXECUTION_INSTRUMENT_SPEC_REQUIRED"
+            )
+        if (
+            execution_instrument.asset.strip().upper()
+            != asset.strip().upper()
+        ):
+            raise RuntimeError(
+                "EXECUTION_INSTRUMENT_ASSET_MISMATCH"
+            )
+        resolver = getattr(adapter, "resolve_futures_instrument", None)
+        if not callable(resolver):
+            raise RuntimeError(
+                "AUTHORITATIVE_PROVIDER_INSTRUMENT_RESOLVER_UNAVAILABLE"
+            )
+        result = resolver(execution_instrument)
+    elif venue == "FUTURES":
         result = adapter.futures_trading_constraints(asset)
     else:
         result = adapter.trading_constraints(asset)
@@ -125,6 +146,7 @@ def build_toobit_translation_evidence(
     canonical_request: Any,
     quote_quantity: Any = None,
     venue: str = "SPOT",
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> ProviderTranslationEvidence:
     if adapter is None:
         raise RuntimeError("Toobit adapter is required")
@@ -135,12 +157,20 @@ def build_toobit_translation_evidence(
 
     # Provider symbol is authoritative exchange metadata. It is never
     # reconstructed from a hardcoded suffix or inferred mapping.
-    symbol = _provider_symbol(adapter, asset, venue=venue)
+    symbol = _provider_symbol(
+        adapter,
+        asset,
+        venue=venue,
+        execution_instrument=execution_instrument,
+    )
 
     contract_multiplier = None
     contract_quantity_step = None
     if venue == "FUTURES":
-        constraints = adapter.futures_trading_constraints(asset)
+        constraints = adapter.futures_trading_constraints(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(constraints, "allowed", False) is not True:
             raise RuntimeError(
                 "AUTHORITATIVE_FUTURES_CONTRACT_STATE_UNAVAILABLE:"
@@ -194,6 +224,7 @@ def translate_and_preflight_toobit(
     canonical_request: Any,
     adapter: Any,
     quote_quantity: Any = None,
+    execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
 ) -> ProductionProviderPreflightResult:
     if adapter is None:
         return _block(
@@ -215,13 +246,41 @@ def translate_and_preflight_toobit(
         and callable(getattr(adapter, "futures_account_state", None))
     ):
         try:
-            futures_constraints = adapter.futures_trading_constraints(
-                canonical_request.asset
-            )
+            if direction == "SHORT":
+                if execution_instrument is None:
+                    execution_instrument = build_execution_instrument_specification(
+                        asset=str(canonical_request.asset),
+                        venue="FUTURES",
+                    )
 
-            if getattr(futures_constraints, "allowed", False) is True:
+                resolver = getattr(
+                    adapter,
+                    "resolve_futures_instrument",
+                    None,
+                )
+                if not callable(resolver):
+                    return _block(
+                        "AUTHORITATIVE_PROVIDER_INSTRUMENT_RESOLVER_UNAVAILABLE",
+                        "Futures instrument resolver is required.",
+                    )
+
+                futures_constraints = resolver(execution_instrument)
+
+                if getattr(futures_constraints, "allowed", False) is not True:
+                    return _block(
+                        "AUTHORITATIVE_PROVIDER_INSTRUMENT_UNAVAILABLE",
+                        str(
+                            getattr(
+                                futures_constraints,
+                                "reason",
+                                "FUTURES_INSTRUMENT_UNAVAILABLE",
+                            )
+                        ),
+                    )
+
                 futures_account = adapter.futures_account_state(
-                    canonical_request.asset
+                    canonical_request.asset,
+                    execution_instrument=execution_instrument,
                 )
 
                 if getattr(futures_account, "allowed", False) is not True:
@@ -259,13 +318,22 @@ def translate_and_preflight_toobit(
                 f"routing_reason={routing.reason.value}"
             ),
         )
+
     try:
         venue = routing.venue.value
+
+        if venue == "FUTURES" and execution_instrument is None:
+            execution_instrument = build_execution_instrument_specification(
+                asset=str(canonical_request.asset),
+                venue="FUTURES",
+            )
+
         evidence = build_toobit_translation_evidence(
             adapter=adapter,
             canonical_request=canonical_request,
             quote_quantity=quote_quantity,
             venue=venue,
+            execution_instrument=execution_instrument,
         )
 
         translation = translate_order_request(
@@ -293,6 +361,7 @@ def translate_and_preflight_toobit(
                 adapter=adapter,
                 asset=canonical_request.asset,
                 venue=venue,
+                execution_instrument=execution_instrument,
             )
         )
 

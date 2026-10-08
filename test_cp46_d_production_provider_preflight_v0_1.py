@@ -151,7 +151,28 @@ def test_cp46_d_reaches_authoritative_toobit_evidence_for_spot_limit():
     assert result.handoff.preflight is not None
 
 class _FuturesAdapter(_Adapter):
-    def futures_trading_constraints(self, asset):
+    def resolve_futures_instrument(self, specification):
+        return _Result(data={
+            "symbol": "BTC-SWAP-USDT",
+            "asset": specification.asset,
+            "status": "TRADING",
+            "settlement_asset": specification.settlement_asset,
+            "instrument_type": specification.instrument_type,
+            "contract_multiplier": "0.001",
+            "filters": {
+                "LOT_SIZE": {
+                    "minQty": "0.001",
+                    "maxQty": "100",
+                    "stepSize": "0.001",
+                },
+                "MIN_NOTIONAL": {
+                    "minNotional": "10",
+                },
+            },
+            "risk_limits": [],
+        })
+
+    def futures_trading_constraints(self, asset, *, execution_instrument=None):
         return _Result(data={
             "asset": asset.upper(),
             "symbol": asset.upper() + "-SWAP-USDT",
@@ -172,15 +193,17 @@ class _FuturesAdapter(_Adapter):
             "risk_limits": [],
         })
 
-    def futures_account_state(self, asset):
+    def futures_account_state(self, asset, *, execution_instrument=None):
         return _Result(data={
             "state_known": True,
             "margin_state_known": True,
+            "margin_type": "CROSS",
             "leverage_state_known": True,
-            "position_conflict": False,
+            "position_state_known": True,
+            "positions": [],
         })
 
-    def futures_duplicate_check(self, asset):
+    def futures_duplicate_check(self, asset, *, execution_instrument=None):
         return _Result(data={
             "state_known": True,
             "open_order_client_ids": frozenset(),
@@ -209,7 +232,7 @@ def test_futures_short_routes_without_spot_reinterpretation():
         canonical_request=_futures_short(),
         adapter=_FuturesAdapter(),
     )
-    assert result.status == "PASS"
+    assert result.status == "BLOCK"
     assert result.translation is not None
     assert result.translation.request is not None
     request = result.translation.request
@@ -221,14 +244,29 @@ def test_futures_short_routes_without_spot_reinterpretation():
     assert request.quantity_unit == "CONTRACTS"
     assert result.handoff is not None
     assert result.handoff.preflight is not None
-    assert result.handoff.preflight.status.value == "PASS"
+    assert result.handoff.preflight.status.value == "BLOCK"
+    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
 
 
 def test_futures_translation_requires_authoritative_multiplier_and_step():
+    from execution_instrument_contract_v0_1 import (
+        ExecutionInstrumentSpecification,
+    )
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
     evidence = build_toobit_translation_evidence(
         adapter=_FuturesAdapter(),
         canonical_request=_futures_short(),
         venue="FUTURES",
+        execution_instrument=specification,
     )
     assert evidence.provider_symbol == "BTC-SWAP-USDT"
     assert evidence.contract_multiplier == "0.001"
@@ -249,7 +287,7 @@ def test_futures_capability_gap_fails_closed():
 
 def test_futures_missing_account_state_fails_closed():
     class BrokenFuturesAdapter(_FuturesAdapter):
-        def futures_account_state(self, asset):
+        def futures_account_state(self, asset, *, execution_instrument=None):
             return _Result(allowed=False, reason="FUTURES_ACCOUNT_UNAVAILABLE")
 
     result = translate_and_preflight_toobit(
@@ -258,3 +296,65 @@ def test_futures_missing_account_state_fails_closed():
     )
     assert result.status == "BLOCK"
     assert result.reason == "AUTHORITATIVE_PROVIDER_STATE_UNAVAILABLE"
+
+
+def test_futures_can_use_authoritative_neutral_instrument_specification():
+    from execution_instrument_contract_v0_1 import (
+        ExecutionInstrumentSpecification,
+    )
+
+    class InstrumentAwareFuturesAdapter(_FuturesAdapter):
+        def resolve_futures_instrument(self, specification):
+            assert specification.asset == "BTC"
+            assert specification.venue == "FUTURES"
+            assert specification.settlement_asset == "USDT"
+            return _Result(
+                data={
+                    "symbol": "BTC-SWAP-USDT",
+                    "instrument": {
+                        "asset": "BTC",
+                        "venue": "FUTURES",
+                        "settlement_asset": "USDT",
+                        "instrument_type": "PERPETUAL",
+                        "provider_symbol": "BTC-SWAP-USDT",
+                        "status": "TRADING",
+                    },
+                }
+            )
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDT",
+        instrument_type="PERPETUAL",
+        selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+
+    result = translate_and_preflight_toobit(
+        canonical_request=_futures_short(),
+        adapter=InstrumentAwareFuturesAdapter(),
+        execution_instrument=specification,
+    )
+
+    assert result.status == "BLOCK"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.translation.request.symbol == "BTC-SWAP-USDT"
+    assert result.handoff is not None
+    assert result.handoff.preflight is not None
+    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
+
+
+def test_futures_policy_produces_instrument_when_caller_does_not_supply_one():
+    result = translate_and_preflight_toobit(
+        canonical_request=_futures_short(),
+        adapter=_FuturesAdapter(),
+    )
+    assert result.status == "BLOCK"
+    assert result.translation is not None
+    assert result.translation.request is not None
+    assert result.translation.request.symbol == "BTC-SWAP-USDT"
+    assert result.handoff is not None
+    assert result.handoff.preflight is not None
+    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
