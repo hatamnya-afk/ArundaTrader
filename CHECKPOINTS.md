@@ -256,4 +256,25 @@ CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure 
 
 No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
 
+## CP46-A6 — PROVIDER CAPABILITY BOUNDARY DECISION
+
+Status:
+- Investigation CLOSED.
+- CP46-A6 BLOCKED / NOT VERIFIABLE.
+- Blocker is external provider evidence capability, not an implementation defect.
+
+Decision contract:
+`exposure_allowed` remains UNKNOWN unless directly established by provider-native authoritative evidence.
+No local inference or order-time probe is admissible as preflight authorization.
+
+Safety:
+- EXECUTION AUTHORIZATION = FALSE
+- ORDER WRITE = FORBIDDEN
+- WITHDRAW = FORBIDDEN
+- DATABASE WRITE = FORBIDDEN
+- No pipeline wiring.
+
+Exit condition:
+A6 can leave BLOCKED only when a direct authoritative provider-native Futures exposure authorization signal is established, or a separately approved management change explicitly revises the execution contract.
+
 # END CHECKPOINTS
