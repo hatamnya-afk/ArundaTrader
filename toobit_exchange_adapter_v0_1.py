@@ -46,6 +46,23 @@ Transport = Callable[..., Mapping[str, Any] | list[Any]]
 
 
 class ToobitExchangeAdapter:
+    @property
+    def adapter_name(self) -> str:
+        return "TOOBIT"
+
+    def capabilities(self):
+        from exchange_execution_adapter_contract_v0_1 import ExchangeAdapterCapabilities
+        return ExchangeAdapterCapabilities(
+            venue_discovery=True,
+            instrument_resolution=True,
+            constraint_read=True,
+            account_read=True,
+            order_state_read=True,
+            order_submission=False,
+            order_cancellation=False,
+        )
+
+
     """Provider-specific, read-only Toobit adapter.
 
     The adapter never performs order submission/cancellation/withdrawal.
@@ -614,6 +631,10 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
+
+    def submit_order(self, request: Any) -> Any:
+        del request
+        return self.order_submission()
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs
