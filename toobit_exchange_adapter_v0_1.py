@@ -818,7 +818,7 @@ class ToobitExchangeAdapter:
                 "side": "BUY" if request.direction == "LONG" else "SELL",
                 "type": request.order_type,
                 "newClientOrderId": request.intent_id,
-                "quantity": format(provider_quantity, "f"),
+                "quantity": _format_provider_quantity(provider_quantity),
             }
 
             return AdapterOrderPreparation(
