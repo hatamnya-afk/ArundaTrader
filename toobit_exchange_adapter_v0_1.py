@@ -438,6 +438,12 @@ class ToobitExchangeAdapter:
                     "TOOBIT_FUTURES_LEVERAGE_STATE_UNAVAILABLE"
                 )
 
+            margin_type = leverage_rows[0].get("marginType")
+            if str(margin_type).strip().upper() not in {"CROSS", "ISOLATED"}:
+                raise RuntimeError(
+                    "TOOBIT_FUTURES_MARGIN_STATE_UNAVAILABLE"
+                )
+
             for row in positions:
                 if not isinstance(row, dict):
                     raise RuntimeError(
@@ -465,7 +471,12 @@ class ToobitExchangeAdapter:
                 "OK",
                 {
                     "state_known": True,
-                    "margin_state_known": bool(balance),
+                    # Toobit accountLeverage returns the provider-native
+                    # margin mode (CROSS/ISOLATED). Presence of that
+                    # authoritative enum is the only basis for knowing
+                    # margin state here; balance presence is not used.
+                    "margin_state_known": True,
+                    "margin_type": str(margin_type).strip().upper(),
                     "leverage_state_known": True,
                     "position_state_known": True,
                     "positions": positions,
