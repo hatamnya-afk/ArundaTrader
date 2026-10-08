@@ -336,3 +336,33 @@ Verification status:
 NEXT ACTION:
 Run the focused local tests and static checks for the new exchange-neutral preparation boundary. If green, synchronize this checkpoint's four governance documents again with the verified evidence, then continue toward provider-order-attempt readiness without enabling execution.
 \n\n## CP EXCHANGE-AGNOSTIC ORDER ATTEMPT BOUNDARY — VERIFIED\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nBuilt:\n- `exchange_execution_adapter_contract_v0_1.py` now includes the provider-neutral `submit_prepared_order` contract.\n- `exchange_execution_order_attempt_boundary_v0_1.py` establishes the final provider-neutral gate from prepared adapter order to a future provider order attempt.\n- Authorization is evaluated explicitly; readiness, adapter capability, account state, or provider metadata cannot infer authorization.\n- Toobit implements the prepared-submission surface but remains fail-closed with `EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED`.\n\nVerification:\n- Focused suite: 22 passed.\n- py_compile: PASS.\n- git diff --check: PASS.\n\nSafety:\n- EXECUTION AUTHORIZATION = FALSE.\n- No real order/cancel/withdrawal.\n- No DB mutation.\n- `arunda_pipeline.py` remains unwired.\n\nManagement verdict:\nThe provider-neutral order-attempt boundary is VERIFIED. The architecture can now reach a selected replaceable adapter only after explicit authorization, while actual provider submission remains separately disabled.\n\nNEXT ACTION:\nAdvance to the explicit execution-attempt contract/readiness gate without activating real execution.\n
+
+## CP FINAL EXECUTION ATTEMPT CONTRACT — VERIFIED
+
+Status = VERIFIED / PASS / EXECUTION-CLOSED
+
+Built:
+- `final_execution_attempt_contract_v0_1.py` composes the provider-neutral final execution-attempt path.
+- The composition delegates readiness alignment, explicit authorization, adapter preparation, and adapter attempt to the already-verified boundaries.
+- `test_final_execution_attempt_contract_v0_1.py` covers unauthorized blocking, authorized reachability of a replaceable adapter, and readiness/package mismatch blocking.
+
+Verification evidence:
+- 28/28 focused tests passed across the final contract, readiness, order-attempt boundary, order preparation, adapter contract, and Toobit adapter suites.
+- py_compile passed for all focused implementation/test modules.
+- git diff --check passed.
+- Fast-forward from 91c82a7 to 448806f completed cleanly.
+
+Safety and architecture:
+- EXECUTION AUTHORIZATION = FALSE.
+- Toobit remains replaceable and outside Core.
+- No real order/cancel/withdrawal.
+- No DB mutation.
+- `arunda_pipeline.py` remains unwired.
+- Toobit submission remains fail-closed.
+- No authorization is inferred or created by the final contract.
+
+Management verdict:
+The provider-neutral execution-attempt composition is VERIFIED. The system can prove the complete pre-attempt route while real execution remains explicitly disabled.
+
+CURRENT FRONTIER:
+Controlled decision for the separately authorized real execution-attempt gate; no automatic activation.
