@@ -56,7 +56,7 @@ def test_invalid_authorization_fields_fail_closed():
         ("authorization_mode", "", "AUTHORIZATION_MODE_INVALID"),
     ):
         value = mandate()
-        value[field] = value
+        value[field] = field == "execution_authorization" ? "" : (field == "authorization_validation" ? "INVALID" : (field == "authorization_source" ? "" : ""))
         with pytest.raises(ValueError, match=reason):
             evaluate_execution_authorization(ready(), value)
 
