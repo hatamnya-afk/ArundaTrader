@@ -142,9 +142,9 @@ def test_final_attempt_accepts_standing_mandate_as_technical_authorization():
     assert result.error_code == "TEST_PROVIDER_REJECTION"
 
 
-def test_final_attempt_has_no_per_trade_management_approval_contract():
+def test_final_attempt_requires_only_standing_mandate_authorization():
     authorization = _standing_mandate()
-    authorization["attempt_id"] = "ATTEMPT-001"
+    assert "attempt_id" not in authorization
     result = run_final_execution_attempt_contract(
         execution_ready_package=_package(),
         request=_request(),
