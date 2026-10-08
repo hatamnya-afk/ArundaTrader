@@ -274,3 +274,18 @@ The final provider-neutral execution-attempt contract is VERIFIED and execution-
 
 NEXT FRONTIER:
 Management review of the separately authorized controlled real-order-attempt gate. No execution activation is implied by this verification.
+
+
+## CURRENT FRONTIER — STANDING REAL-PRODUCTION TRADING MANDATE
+
+Management interpretation: the real trader is intended to trade both Spot and Futures under its existing verified contracts. Management authorization is required to enter the real-production phase, not to approve every individual trade.
+
+Once phase-entry is authorized:
+- no per-trade management permission is required;
+- zero exchange capital is permitted as the starting state;
+- Toobit/provider response is authoritative for acceptance or rejection;
+- real rejection is captured as evidence rather than treated as a reason to weaken the contract;
+- capital is added progressively only after real-market quality/outcome evidence supports it;
+- 24-hour operation is a later maturity target, not a prerequisite for starting the feedback loop.
+
+NEXT ACTION: verify the standing mandate package and obtain the single explicit phase-entry management decision. Do not execute before that decision.
