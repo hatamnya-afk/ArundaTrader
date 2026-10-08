@@ -197,6 +197,7 @@ class _FuturesAdapter(_Adapter):
         return _Result(data={
             "state_known": True,
             "margin_state_known": True,
+            "margin_type": "CROSS",
             "leverage_state_known": True,
             "position_state_known": True,
             "positions": [],
