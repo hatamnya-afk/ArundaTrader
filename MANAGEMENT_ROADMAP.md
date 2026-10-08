@@ -361,3 +361,34 @@ NEXT ACTION:
 Seek authoritative provider clarification/new documented or account-native evidence. Resume only if such evidence exists or a separately approved execution-contract decision changes the requirement.
 
 # END MASTER MANAGEMENT ROADMAP
+
+
+## CURRENT ROADMAP FRONTIER — EXCHANGE-AGNOSTIC ORDER PREPARATION
+
+Management decision:
+The execution roadmap proceeds through the replaceable adapter boundary rather than waiting for a Toobit-specific preflight Boolean that the provider does not expose.
+
+Target:
+`Canonical Order Request → Exchange-Agnostic Adapter Contract → Adapter-Owned Provider Order Preparation → Explicitly Authorized Order Attempt`
+
+Rules:
+- Core remains exchange-agnostic.
+- Toobit remains replaceable.
+- Provider-specific translation stays inside the adapter.
+- Canonical quantity is never mutated by Core.
+- No order/cancel/withdrawal is performed in preparation.
+- No DB mutation.
+- EXECUTION AUTHORIZATION = FALSE.
+- `arunda_pipeline.py` remains unwired until the exchange-neutral completion gate is independently verified.
+
+Current checkpoint:
+CP EXCHANGE-AGNOSTIC ORDER PREPARATION HANDOFF — BUILT / NOT YET LOCALLY VERIFIED.
+
+Evidence:
+- Generic adapter contract extended with opaque preparation envelope.
+- Generic preparation boundary added.
+- Toobit adapter translates Futures base quantity using provider contract multiplier and constructs provider-specific payload internally.
+- Focused tests added.
+
+NEXT ACTION:
+Builder runs local focused tests + py_compile + git diff --check. Then governance is synchronized with actual evidence before the next frontier.
