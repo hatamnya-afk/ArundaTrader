@@ -24,6 +24,7 @@ from exchange_execution_contract import (
     validate_order_request,
 )
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
+from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
 
 
@@ -35,6 +36,7 @@ def attempt_prepared_order(
     adapter: Any,
     venue: str,
     execution_instrument: Any,
+    execution_ready_package: Mapping[str, Any] | None = None,
 ) -> CanonicalExecutionResult:
     """Fail closed unless explicit valid authorization is present.
 
@@ -60,6 +62,20 @@ def attempt_prepared_order(
             error_code=contract_reason,
             error_message=f"Execution adapter contract rejected: {contract_reason}.",
         )
+
+    if execution_ready_package is not None:
+        try:
+            readiness_observation = evaluate_execution_attempt_readiness(
+                execution_ready_package=execution_ready_package,
+                request=request,
+            )
+        except ValueError as exc:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                error_code=str(exc),
+                error_message=f"Execution-attempt readiness rejected: {exc}.",
+            )
 
     try:
         authorization = evaluate_execution_authorization(
