@@ -1,14 +1,18 @@
-"""ARUNDA TRADER — EXPLICIT MANAGEMENT AUTHORIZATION CONTRACT v0.1.
+"""ARUNDA TRADER — REAL-PRODUCTION PHASE-ENTRY MANAGEMENT MANDATE v0.2.
 
-Pure management-decision boundary for one future real provider order attempt.
+This module is the single management boundary for entering the first
+real-production trading phase.
 
-This module does not execute, submit, sign, prepare, mutate a database, contact
-a provider, or enable the production pipeline. It validates a separately
-recorded management decision and, only when explicitly AUTHORIZED, produces
-the bounded authorization observation consumed by the existing execution
-authorization boundary.
+Management authorization is a ONE-TIME PHASE-ENTRY MANDATE.
+It is NOT a per-trade approval and this module never receives or requires an
+individual order-attempt identity.
 
-Management authorization remains distinct from technical readiness.
+After phase entry is explicitly AUTHORIZED, the trader operates autonomously
+inside the existing Spot/Futures decision, risk, trade-gate, readiness, and
+execution contracts. Provider acceptance/rejection remains authoritative.
+
+This module does not execute, submit, sign, prepare, mutate a database,
+contact a provider, or enable the production pipeline.
 """
 
 from __future__ import annotations
@@ -19,33 +23,17 @@ from typing import Any
 
 AUTHORIZED = "AUTHORIZED"
 DENIED = "DENIED"
+DEFERRED = "DEFERRED"
 REAL_PRODUCTION = "REAL_PRODUCTION"
+STANDING_MANDATE = "STANDING_MANDATE"
 
-_REQUIRED_SCOPE = (
-    "venue",
-    "execution_instrument",
-    "asset",
-    "direction",
-    "order_type",
-    "quantity",
-    "max_exposure",
-)
+_REQUIRED_MARKETS = frozenset({"SPOT", "FUTURES"})
 
 
 def _text(value: Any, reason: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(reason)
     return value.strip()
-
-
-def _positive(value: Any, reason: str) -> float:
-    if (
-        not isinstance(value, (int, float))
-        or isinstance(value, bool)
-        or value <= 0
-    ):
-        raise ValueError(reason)
-    return float(value)
 
 
 def _parse_aware(value: Any, reason: str) -> datetime:
@@ -60,43 +48,45 @@ def _parse_aware(value: Any, reason: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def _evidence_list(value: Any, reason: str) -> list[str]:
+def _evidence_list(value: Any, reason: str) -> tuple[str, ...]:
     if not isinstance(value, Sequence) or isinstance(value, (str, bytes)):
         raise ValueError(reason)
 
-    result = []
-    for item in value:
-        result.append(_text(item, reason))
-
+    result = tuple(_text(item, reason) for item in value)
     if not result:
         raise ValueError(reason)
-
     return result
 
 
-def evaluate_management_authorization(
+def _markets(value: Any) -> tuple[str, ...]:
+    if not isinstance(value, Sequence) or isinstance(value, (str, bytes)):
+        raise ValueError("MANAGEMENT_ALLOWED_MARKETS_INVALID")
+
+    result = tuple(dict.fromkeys(_text(item, "MANAGEMENT_ALLOWED_MARKET_INVALID").upper() for item in value))
+    if set(result) != _REQUIRED_MARKETS:
+        raise ValueError("MANAGEMENT_SPOT_FUTURES_SCOPE_INVALID")
+    return result
+
+
+def evaluate_management_phase_entry(
     management_observation: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Validate one explicit management decision for one bounded attempt."""
+    """Validate the single management decision for real-production phase entry."""
 
     if not isinstance(management_observation, Mapping):
-        raise ValueError("MANAGEMENT_AUTHORIZATION_INPUT_INVALID")
+        raise ValueError("MANAGEMENT_PHASE_ENTRY_INPUT_INVALID")
 
     decision = _text(
         management_observation.get("decision"),
         "MANAGEMENT_DECISION_INVALID",
     ).upper()
 
-    if decision not in {AUTHORIZED, DENIED}:
+    if decision not in {AUTHORIZED, DENIED, DEFERRED}:
         raise ValueError("MANAGEMENT_DECISION_INVALID")
 
-    authorization_id = _text(
-        management_observation.get("authorization_id"),
-        "MANAGEMENT_AUTHORIZATION_ID_INVALID",
-    )
-    attempt_id = _text(
-        management_observation.get("attempt_id"),
-        "MANAGEMENT_ATTEMPT_ID_INVALID",
+    mandate_id = _text(
+        management_observation.get("mandate_id"),
+        "MANAGEMENT_MANDATE_ID_INVALID",
     )
     actor = _text(
         management_observation.get("authorized_by"),
@@ -105,6 +95,14 @@ def evaluate_management_authorization(
     source = _text(
         management_observation.get("authorization_source"),
         "MANAGEMENT_AUTHORIZATION_SOURCE_INVALID",
+    )
+    provider = _text(
+        management_observation.get("provider"),
+        "MANAGEMENT_PROVIDER_INVALID",
+    )
+    capital_policy = _text(
+        management_observation.get("capital_policy"),
+        "MANAGEMENT_CAPITAL_POLICY_INVALID",
     )
 
     environment = _text(
@@ -125,41 +123,13 @@ def evaluate_management_authorization(
 
     now = datetime.now(timezone.utc)
     if expires_at <= now:
-        raise ValueError("MANAGEMENT_AUTHORIZATION_EXPIRED")
+        raise ValueError("MANAGEMENT_MANDATE_EXPIRED")
     if expires_at <= issued_at:
         raise ValueError("MANAGEMENT_EXPIRY_BEFORE_ISSUANCE")
 
-    scope = management_observation.get("authorization_scope")
-    if not isinstance(scope, Mapping):
-        raise ValueError("MANAGEMENT_SCOPE_INVALID")
-
-    normalized_scope: dict[str, Any] = {}
-    for key in _REQUIRED_SCOPE:
-        if key not in scope:
-            raise ValueError(f"MANAGEMENT_SCOPE_{key.upper()}_MISSING")
-        normalized_scope[key] = scope[key]
-
-    for key in (
-        "venue",
-        "execution_instrument",
-        "asset",
-        "direction",
-        "order_type",
-    ):
-        normalized_scope[key] = _text(
-            normalized_scope[key],
-            f"MANAGEMENT_SCOPE_{key.upper()}_INVALID",
-        )
-
-    normalized_scope["quantity"] = _positive(
-        normalized_scope["quantity"],
-        "MANAGEMENT_SCOPE_QUANTITY_INVALID",
+    allowed_markets = _markets(
+        management_observation.get("allowed_markets"),
     )
-    normalized_scope["max_exposure"] = _positive(
-        normalized_scope["max_exposure"],
-        "MANAGEMENT_SCOPE_MAX_EXPOSURE_INVALID",
-    )
-
     evidence_before = _evidence_list(
         management_observation.get("evidence_required_before"),
         "MANAGEMENT_EVIDENCE_BEFORE_INVALID",
@@ -171,38 +141,53 @@ def evaluate_management_authorization(
 
     result = {
         "management_state": decision,
-        "management_authorization_id": authorization_id,
-        "attempt_id": attempt_id,
+        "mandate_id": mandate_id,
         "authorized_by": actor,
         "authorization_source": source,
         "environment": environment,
-        "issued_at": issued_at.isoformat(),
-        "expires_at": expires_at.isoformat(),
-        "authorization_scope": normalized_scope,
+        "allowed_markets": allowed_markets,
+        "provider": provider,
+        "capital_policy": capital_policy,
         "evidence_required_before": evidence_before,
         "evidence_required_after": evidence_after,
-        "execution_authorization": False,
+        "autonomous_operation": decision == AUTHORIZED,
+        "per_trade_management_authorization_required": False,
+        "provider_acceptance_rejection_is_authoritative": True,
+        "execution_authorization": (
+            "AUTHORIZED_STANDING_MANDATE" if decision == AUTHORIZED else False
+        ),
     }
 
-    if decision == DENIED:
+    if decision == AUTHORIZED:
+        result["authorization_observation"] = {
+            "execution_authorization": "AUTHORIZED",
+            "authorization_validation": "VALID",
+            "authorization_source": source,
+            "authorization_mode": STANDING_MANDATE,
+            "authorization_id": mandate_id,
+            "mandate_id": mandate_id,
+            "expires_at": expires_at.isoformat(),
+            "environment": environment,
+            "allowed_markets": allowed_markets,
+            "provider": provider,
+        }
+    else:
         result["authorization_observation"] = None
-        return result
 
-    result["authorization_observation"] = {
-        "execution_authorization": "AUTHORIZED",
-        "authorization_validation": "VALID",
-        "authorization_source": source,
-        "authorization_id": authorization_id,
-        "attempt_id": attempt_id,
-        "expires_at": expires_at.isoformat(),
-        "authorization_scope": normalized_scope,
-    }
     return result
+
+
+# Compatibility alias retained only as a name-level migration aid. It now
+# evaluates the phase-entry mandate and cannot represent a per-trade decision.
+evaluate_management_authorization = evaluate_management_phase_entry
 
 
 __all__ = [
     "AUTHORIZED",
     "DENIED",
+    "DEFERRED",
     "REAL_PRODUCTION",
+    "STANDING_MANDATE",
+    "evaluate_management_phase_entry",
     "evaluate_management_authorization",
 ]
