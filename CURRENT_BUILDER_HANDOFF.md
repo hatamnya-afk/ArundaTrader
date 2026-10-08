@@ -38,6 +38,7 @@ After that decision:
 ### 1. Management Phase-Entry Mandate
 Owner: `management_execution_authorization_v0_1.py`
 `management_review_package_v0_1.py` is review-only packaging and is explicitly not an authorization producer.
+Its active input schema is closed: unclassified fields fail closed, and trade/attempt aliases are rejected.
 
 This is the only management authorization concept.
 
