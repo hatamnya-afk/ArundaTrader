@@ -11,9 +11,9 @@
 > Latest verified endpoint: `448806f`.
 >
 > ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — EXPLICIT REAL-ORDER ATTEMPT GATE**
+> **MANAGEMENT REVIEW — REAL-PRODUCTION TRADING PHASE / STANDING OPERATIONAL MANDATE**
 >
-> The next task is to define and inspect the bounded, explicit management gate for a future real provider order attempt. This is preparation/governance only.
+> The next task is to define and inspect the management gate for entry into the real-production trading phase. Management authorization is a phase-entry mandate, not a per-trade approval loop. After authorization, the trader may operate autonomously within the approved Spot/Futures execution contracts; provider acceptance/rejection remains authoritative.
 >
 > ## SAFETY
 > `EXECUTION AUTHORIZATION = FALSE`
@@ -35,7 +35,7 @@
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
-> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+> **STOP CONDITION:** after the standing-mandate package is verified, STOP until management explicitly authorizes entry into the real-production trading phase. After that phase-entry authorization, no per-trade management approval is required; provider write remains governed by the trader's execution contracts and provider response.
 
 ---
 
