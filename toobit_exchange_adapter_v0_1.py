@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Optional
 from urllib.parse import urlencode
 
+from exchange_execution_contract import CanonicalExecutionResult
 from execution_instrument_contract_v0_1 import (
     ExecutionInstrumentSpecification,
     InstrumentResolutionStatus,
@@ -46,9 +47,18 @@ Transport = Callable[..., Mapping[str, Any] | list[Any]]
 
 
 class ToobitExchangeAdapter:
+    """Provider-specific, read-only Toobit adapter.
+
+    The adapter never performs order submission/cancellation/withdrawal.
+    HTTP is not performed unless a transport callable is explicitly
+    injected by a later authorized runtime boundary.
+    """
+
+    name = "TOOBIT"
+
     @property
     def adapter_name(self) -> str:
-        return "TOOBIT"
+        return self.name
 
     def capabilities(self):
         from exchange_execution_adapter_contract_v0_1 import ExchangeAdapterCapabilities
@@ -61,16 +71,6 @@ class ToobitExchangeAdapter:
             order_submission=False,
             order_cancellation=False,
         )
-
-
-    """Provider-specific, read-only Toobit adapter.
-
-    The adapter never performs order submission/cancellation/withdrawal.
-    HTTP is not performed unless a transport callable is explicitly
-    injected by a later authorized runtime boundary.
-    """
-
-    name = "TOOBIT"
 
     def __init__(
         self,
@@ -632,9 +632,15 @@ class ToobitExchangeAdapter:
             return ToobitAdapterResult(False, str(exc))
 
 
-    def submit_order(self, request: Any) -> Any:
+    def submit_order(self, request: Any) -> CanonicalExecutionResult:
         del request
-        return self.order_submission()
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+            asset=None, direction=None, executed_quantity=None,
+            executed_price=None, timestamp=None, adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
+            error_message="Order submission is disabled by the current execution contract.",
+        )
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs
@@ -643,11 +649,13 @@ class ToobitExchangeAdapter:
             "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
         )
 
-    def cancel_order(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
-        del args, kwargs
-        return ToobitAdapterResult(
-            False,
-            "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED",
+    def cancel_order(self, *, asset: str, exchange_order_id: str) -> CanonicalExecutionResult:
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=exchange_order_id, status="FAIL_CLOSED",
+            asset=asset, direction=None, executed_quantity=None,
+            executed_price=None, timestamp=None, adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED",
+            error_message="Order cancellation is disabled by the current execution contract.",
         )
 
 
