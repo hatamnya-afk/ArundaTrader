@@ -29,6 +29,45 @@ STANDING_MANDATE = "STANDING_MANDATE"
 
 _REQUIRED_MARKETS = frozenset({"SPOT", "FUTURES"})
 
+# Management is intentionally a closed-schema boundary. New fields must be
+# explicitly classified as management scope before they can enter this API.
+_ALLOWED_MANAGEMENT_FIELDS = frozenset(
+    {
+        "decision",
+        "mandate_id",
+        "authorized_by",
+        "authorization_source",
+        "environment",
+        "issued_at",
+        "expires_at",
+        "allowed_markets",
+        "provider",
+        "capital_policy",
+        "evidence_required_before",
+        "evidence_required_after",
+    }
+)
+
+_KNOWN_TRADE_SCOPE_FIELDS = frozenset(
+    {
+        "attempt_id",
+        "attemptId",
+        "trade_id",
+        "tradeId",
+        "asset",
+        "symbol",
+        "direction",
+        "side",
+        "order_type",
+        "orderType",
+        "quantity",
+        "qty",
+        "per_order_exposure",
+        "exposure",
+        "exposure_usd",
+    }
+)
+
 
 def _text(value: Any, reason: str) -> str:
     if not isinstance(value, str) or not value.strip():
@@ -76,21 +115,12 @@ def evaluate_management_phase_entry(
     if not isinstance(management_observation, Mapping):
         raise ValueError("MANAGEMENT_PHASE_ENTRY_INPUT_INVALID")
 
-    # These belong to the execution-attempt domain, never to Management.
-    # Reject them at the canonical management boundary so a future caller
-    # cannot silently recreate per-trade authorization semantics.
-    forbidden_trade_fields = {
-        "attempt_id",
-        "asset",
-        "direction",
-        "order_type",
-        "quantity",
-        "per_order_exposure",
-        "exposure",
-    }
-    leaked = forbidden_trade_fields.intersection(management_observation.keys())
-    if leaked:
-        raise ValueError("MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN")
+    supplied_fields = frozenset(management_observation.keys())
+    unknown_fields = supplied_fields - _ALLOWED_MANAGEMENT_FIELDS
+    if unknown_fields:
+        if unknown_fields.intersection(_KNOWN_TRADE_SCOPE_FIELDS):
+            raise ValueError("MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN")
+        raise ValueError("MANAGEMENT_FIELDS_FORBIDDEN")
 
     decision = _text(
         management_observation.get("decision"),
