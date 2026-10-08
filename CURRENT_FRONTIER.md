@@ -11,9 +11,9 @@
 > Latest verified endpoint: `448806f`.
 >
 > ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — EXPLICIT REAL-ORDER ATTEMPT GATE**
+> **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
 >
-> The next task is to define and inspect the bounded, explicit management gate for a future real provider order attempt. This is preparation/governance only.
+> The standing management model is the one-time real-production phase-entry mandate. The trader does not obtain management approval for individual future orders. This section verifies the boundary between that standing mandate and the technical execution authorization path.
 >
 > ## SAFETY
 > `EXECUTION AUTHORIZATION = FALSE`
@@ -31,11 +31,11 @@
 > - Do not treat historical A6 BLOCKED text as the current frontier.
 >
 > ## ALLOWED NOW
-> - Define the explicit real-attempt gate.
+> - Verify the standing-mandate / technical-authorization boundary.
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
-> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+> **STOP CONDITION:** after the gate package is verified, STOP. Provider write remains forbidden until the ONE-TIME MANAGEMENT PHASE-ENTRY MANDATE is explicitly authorized. After that phase-entry authorization, no per-trade management approval is required; each request passes through the existing technical authorization boundary.
 
 ---
 
@@ -51,7 +51,7 @@ The execution boundary now has an explicit provider-neutral adapter contract. Th
 
 Toobit remains only the currently selected concrete execution environment. Its capabilities are advertised separately and its order submission/cancellation are still disabled.
 
-Next: complete the provider-neutral handoff from canonical order request through the selected adapter without binding Core to any exchange. Only after that, under separate explicit authorization, may a real order attempt occur.
+Next: complete the provider-neutral handoff from canonical order request through the selected adapter without binding Core to any exchange. A later real order attempt, once the real-production phase has been explicitly entered, does not require a new management approval; it uses the active standing mandate through the technical authorization boundary.
 
 
 CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
@@ -273,7 +273,7 @@ Management verdict:
 The final provider-neutral execution-attempt contract is VERIFIED and execution-closed.
 
 NEXT FRONTIER:
-Management review of the separately authorized controlled real-order-attempt gate. No execution activation is implied by this verification.
+Management review of the final real-order-attempt gate under the ONE-TIME STANDING PHASE-ENTRY MANDATE. Verification does not activate execution, and no per-trade management approval exists.
 
 
 ## CURRENT FRONTIER — STANDING REAL-PRODUCTION TRADING MANDATE
