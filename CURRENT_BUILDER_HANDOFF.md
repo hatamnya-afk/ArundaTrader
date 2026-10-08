@@ -37,6 +37,7 @@ After that decision:
 
 ### 1. Management Phase-Entry Mandate
 Owner: `management_execution_authorization_v0_1.py`
+`management_review_package_v0_1.py` is review-only packaging and is explicitly not an authorization producer.
 
 This is the only management authorization concept.
 
