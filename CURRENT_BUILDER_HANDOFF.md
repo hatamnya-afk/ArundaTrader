@@ -6,9 +6,9 @@
 
 Repository: `hatamnya-afk/ArundaTrader`
 
-**Canonical branch for new work:** `main`
+**Active consolidation branch:** `operational-main-20261007`
 
-`operational-main-20261007` is a historical operational line preserved for evidence. Do not start new work there.
+`main` is NOT to be merged/reconciled during this consolidation. Main reconciliation is a later, separate governance task.
 
 Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md`, `REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md`, `FINAL_REAL_ORDER_ATTEMPT_GATE.md`, `PROJECT_STATE.md`, `CURRENT_FRONTIER.md`, and `MANAGEMENT_ROADMAP.md` before making changes.
 
@@ -80,9 +80,9 @@ Readiness, tests, provider metadata, account balance, or this handoff do not con
 
 ## CURRENT FRONTIER
 
-**REAL-PRODUCTION PHASE-ENTRY REVIEW**
+**REAL-PRODUCTION PHASE-ENTRY REVIEW / AUTHORIZATION CONSOLIDATION**
 
-The next action is to verify the already-built evidence package and present ONE phase-entry decision to management.
+The current task is repository contract consolidation: eliminate any active/stale per-trade management authorization wording or dependency and verify the standing-mandate boundary.
 
 Do not build another authorization layer.
 
