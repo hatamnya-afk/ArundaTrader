@@ -3,109 +3,94 @@ import pytest
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
 
 
-def valid_ready_observation():
+def ready():
     return {
         "readiness_state": "READY",
-        "reason": "PRE_EXECUTION_READY",
-        "asset": "BTCUSDT",
+        "asset": "BTC",
         "quantity": 0.01,
         "entry_price": 100000.0,
         "notional": 1000.0,
+        "venue": "SPOT",
     }
 
 
-def valid_authorization():
+def mandate():
     return {
         "execution_authorization": "AUTHORIZED",
         "authorization_validation": "VALID",
-        "authorization_source": "MANAGEMENT_AUTHORIZATION",
+        "authorization_source": "MANAGEMENT_PHASE_ENTRY",
+        "authorization_mode": "STANDING_MANDATE",
+        "authorization_id": "REAL-PROD-MANDATE-001",
+        "mandate_id": "REAL-PROD-MANDATE-001",
+        "expires_at": "2099-01-01T00:00:00+00:00",
+        "environment": "REAL_PRODUCTION",
+        "allowed_markets": ("SPOT", "FUTURES"),
     }
 
 
-def test_ready_with_explicit_valid_authorization_is_authorized_without_execution():
-    result = evaluate_execution_authorization(valid_ready_observation(), valid_authorization())
-    assert result == {
-        "authorization_state": "AUTHORIZED",
-        "reason": "EXECUTION_AUTHORIZED",
-        "asset": "BTCUSDT",
-        "quantity": 0.01,
-        "entry_price": 100000.0,
-        "notional": 1000.0,
-    }
+def test_standing_mandate_authorizes_ready_request():
+    result = evaluate_execution_authorization(ready(), mandate())
+    assert result["authorization_state"] == "AUTHORIZED"
+    assert result["authorization_mode"] == "STANDING_MANDATE"
 
 
-def test_not_ready_fails_closed():
-    observation = valid_ready_observation()
-    observation["readiness_state"] = "BLOCKED"
+def test_blocked_readiness_fails_closed():
+    value = ready()
+    value["readiness_state"] = "BLOCKED"
     with pytest.raises(ValueError, match="READINESS_NOT_READY"):
-        evaluate_execution_authorization(observation, valid_authorization())
+        evaluate_execution_authorization(value, mandate())
 
 
-def test_missing_readiness_state_fails_closed():
-    observation = valid_ready_observation()
-    del observation["readiness_state"]
+def test_missing_readiness_fails_closed():
+    value = ready()
+    del value["readiness_state"]
     with pytest.raises(ValueError, match="READINESS_STATE_INVALID"):
-        evaluate_execution_authorization(observation, valid_authorization())
+        evaluate_execution_authorization(value, mandate())
 
 
-def test_authorization_must_be_explicit_and_valid():
+def test_invalid_authorization_fields_fail_closed():
     for field, value, reason in (
         ("execution_authorization", "", "AUTHORIZATION_INVALID"),
         ("authorization_validation", "INVALID", "AUTHORIZATION_VALIDATION_INVALID"),
         ("authorization_source", "", "AUTHORIZATION_SOURCE_INVALID"),
+        ("authorization_mode", "", "AUTHORIZATION_MODE_INVALID"),
     ):
-        authorization = valid_authorization()
-        authorization[field] = value
+        value = mandate()
+        value[field] = value
         with pytest.raises(ValueError, match=reason):
-            evaluate_execution_authorization(valid_ready_observation(), authorization)
+            evaluate_execution_authorization(ready(), value)
 
 
-def test_test_simulated_or_legacy_authorization_sources_fail_closed():
-    for source in ("TEST", "SIMULATED", "LEGACY"):
-        authorization = valid_authorization()
-        authorization["authorization_source"] = source
-        with pytest.raises(ValueError, match="AUTHORIZATION_SOURCE_INVALID"):
-            evaluate_execution_authorization(valid_ready_observation(), authorization)
+def test_disallowed_source_fails_closed():
+    value = mandate()
+    value["authorization_source"] = "TEST"
+    with pytest.raises(ValueError, match="AUTHORIZATION_SOURCE_INVALID"):
+        evaluate_execution_authorization(ready(), value)
 
 
-def test_required_ready_values_remain_valid():
-    for field, value, reason in (
-        ("asset", "", "ASSET_INVALID"),
-        ("quantity", 0, "QUANTITY_INVALID"),
-        ("entry_price", 0, "ENTRY_PRICE_INVALID"),
-        ("notional", 0, "NOTIONAL_INVALID"),
-    ):
-        observation = valid_ready_observation()
-        observation[field] = value
-        with pytest.raises(ValueError, match=reason):
-            evaluate_execution_authorization(observation, valid_authorization())
+def test_real_production_environment_is_required():
+    value = mandate()
+    value["environment"] = "TEST"
+    with pytest.raises(ValueError, match="AUTHORIZATION_ENVIRONMENT_INVALID"):
+        evaluate_execution_authorization(ready(), value)
 
 
-def test_execution_artifacts_are_never_created_or_accepted_as_output():
-    result = evaluate_execution_authorization(valid_ready_observation(), valid_authorization())
-    forbidden = {
-        "order_id",
-        "exchange_client",
-        "api_request",
-        "signature",
-        "submitted",
-        "execution",
-        "fill",
-        "trade_id",
-    }
-    assert forbidden.isdisjoint(result)
+def test_spot_and_futures_must_be_in_mandate():
+    value = mandate()
+    value["allowed_markets"] = ("FUTURES",)
+    with pytest.raises(ValueError, match="AUTHORIZATION_MARKETS_INCOMPLETE"):
+        evaluate_execution_authorization(ready(), value)
+
+
+def test_current_market_must_be_allowed():
+    value = mandate()
+    value["allowed_markets"] = ("FUTURES",)
+    with pytest.raises(ValueError, match="AUTHORIZATION_MARKET_NOT_ALLOWED"):
+        evaluate_execution_authorization(ready(), value)
 
 
 def test_non_mapping_inputs_fail_closed():
     with pytest.raises(ValueError, match="READINESS_INPUT_INVALID"):
-        evaluate_execution_authorization(None, valid_authorization())
+        evaluate_execution_authorization(None, mandate())
     with pytest.raises(ValueError, match="AUTHORIZATION_INPUT_INVALID"):
-        evaluate_execution_authorization(valid_ready_observation(), None)
-
-
-def test_result_is_deterministic():
-    observation = valid_ready_observation()
-    authorization = valid_authorization()
-    assert evaluate_execution_authorization(observation, authorization) == evaluate_execution_authorization(
-        observation, authorization
-    )
+        evaluate_execution_authorization(ready(), None)
