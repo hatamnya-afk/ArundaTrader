@@ -59,7 +59,7 @@ def test_futures_constraints_preserve_provider_contract_metadata():
 
 def test_missing_transport_fails_closed():
     result = ToobitExchangeAdapter().get_server_time()
-    assert result.accepted is False
+    assert result.allowed is False
     assert result.reason == "TOOBIT_TRANSPORT_NOT_CONFIGURED"
 
 
@@ -73,7 +73,7 @@ def test_cancel_is_explicitly_disabled():
     result = ToobitExchangeAdapter().cancel_order(
         asset="BTC", exchange_order_id="test-order-id"
     )
-    assert result.allowed is False
+    assert result.accepted is False
     assert result.reason == "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED"
 
 
