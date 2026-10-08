@@ -34,6 +34,56 @@ def test_management_authorization_is_one_time_phase_entry_mandate():
     assert "attempt_id" not in result["authorization_observation"]
 
 
+def test_management_boundary_rejects_trade_scoped_fields():
+    for field in (
+        "attempt_id",
+        "asset",
+        "direction",
+        "order_type",
+        "quantity",
+        "per_order_exposure",
+        "exposure",
+    ):
+        value = _base()
+        value[field] = "TRADE-SCOPED"
+        try:
+            evaluate_management_authorization(value)
+        except ValueError as exc:
+            assert str(exc) == "MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN"
+        else:
+            raise AssertionError(f"{field} must never enter management authorization")
+
+
+def test_management_boundary_rejects_trade_field_aliases_and_unknown_scope():
+    for field in (
+        "attemptId",
+        "trade_id",
+        "tradeId",
+        "symbol",
+        "side",
+        "orderType",
+        "qty",
+        "exposure_usd",
+    ):
+        value = _base()
+        value[field] = "TRADE-SCOPED"
+        try:
+            evaluate_management_authorization(value)
+        except ValueError as exc:
+            assert str(exc) == "MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN"
+        else:
+            raise AssertionError(f"{field} must never enter management authorization")
+
+    value = _base()
+    value["future_unclassified_field"] = "UNKNOWN"
+    try:
+        evaluate_management_authorization(value)
+    except ValueError as exc:
+        assert str(exc) == "MANAGEMENT_FIELDS_FORBIDDEN"
+    else:
+        raise AssertionError("unclassified management fields must fail closed")
+
+
 def test_denied_management_decision_never_produces_execution_authorization():
     result = evaluate_management_authorization(_base(DENIED))
     assert result["management_state"] == DENIED
@@ -120,9 +170,13 @@ def test_management_authorization_requires_evidence_contract():
             raise AssertionError(f"{field} must be explicit")
 
 
-def test_management_contract_has_no_per_trade_input():
-    value = _base()
-    value["attempt_id"] = "FORBIDDEN-PER-TRADE-FIELD"
-    result = evaluate_management_authorization(value)
-    assert result["authorization_observation"]["authorization_mode"] == STANDING_MANDATE
-    assert "attempt_id" not in result["authorization_observation"]
+def test_management_output_contains_only_standing_mandate_scope():
+    result = evaluate_management_authorization(_base())
+    observation = result["authorization_observation"]
+    assert observation["authorization_mode"] == STANDING_MANDATE
+    assert "attempt_id" not in observation
+    assert "asset" not in observation
+    assert "direction" not in observation
+    assert "order_type" not in observation
+    assert "quantity" not in observation
+    assert "exposure" not in observation

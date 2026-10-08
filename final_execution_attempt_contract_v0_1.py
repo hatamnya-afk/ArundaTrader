@@ -4,7 +4,7 @@ Provider-neutral composition of the final pre-execution path:
 
 Execution Ready Package
     -> Execution-Attempt Readiness
-    -> Explicit Authorization
+    -> Technical Authorization Against Active Standing Mandate
     -> Order Preparation
     -> Replaceable Adapter Attempt
 
@@ -37,8 +37,10 @@ def run_final_execution_attempt_contract(
 ) -> CanonicalExecutionResult:
     """Compose the final contract path and fail closed on invalid inputs.
 
-    No authorization is inferred or created here. A real authorization must
-    arrive through the explicit authorization observation.
+    No management authorization is requested or inferred here. The only
+    management authorization input is the active standing phase-entry mandate;
+    this boundary performs technical validation of that mandate against the
+    current execution-ready request.
     """
     try:
         if not isinstance(execution_ready_package, Mapping):

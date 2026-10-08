@@ -11,9 +11,9 @@
 > Latest verified endpoint: `448806f`.
 >
 > ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — EXPLICIT REAL-ORDER ATTEMPT GATE**
+> **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
 >
-> The next task is to define and inspect the bounded, explicit management gate for a future real provider order attempt. This is preparation/governance only.
+> The next task is to verify the one-time management phase-entry mandate and its separation from technical execution authorization. The management review package is review-only and cannot authorize an individual order attempt.
 >
 > ## SAFETY
 > `EXECUTION AUTHORIZATION = FALSE`
@@ -35,7 +35,7 @@
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
-> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+> **STOP CONDITION:** after the standing-mandate package is verified, STOP. Provider write remains forbidden until the ONE-TIME REAL-PRODUCTION PHASE-ENTRY MANDATE is explicitly authorized. After phase entry, no per-trade management approval is required.
 
 ---
 

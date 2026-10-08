@@ -45,7 +45,7 @@ def _package():
     }
 
 
-def _authorization():
+def _standing_mandate():
     return {
         "execution_authorization": "AUTHORIZED",
         "authorization_validation": "VALID",
@@ -57,3 +57,127 @@ def _authorization():
         "environment": "REAL_PRODUCTION",
         "allowed_markets": ("SPOT", "FUTURES"),
     }
+
+
+class _FakeAdapter:
+    adapter_name = "FAKE_PROVIDER_NEUTRAL"
+
+    def capabilities(self):
+        return ExchangeAdapterCapabilities(
+            venue_discovery=False,
+            instrument_resolution=True,
+            constraint_read=True,
+            account_read=True,
+            order_state_read=True,
+            order_submission=True,
+            order_cancellation=False,
+        )
+
+    def prepare_order(self, request, *, venue, execution_instrument):
+        return AdapterOrderPreparation(
+            ready=True,
+            reason="READY",
+            adapter_name=self.adapter_name,
+            venue=venue,
+            request={"instrument": execution_instrument, "request": request},
+        )
+
+    def submit_prepared_order(self, preparation, *, canonical_request):
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=None,
+            status="PROVIDER_REJECTED",
+            asset=canonical_request.asset,
+            direction=canonical_request.direction,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=canonical_request.timestamp,
+            adapter=self.adapter_name,
+            error_code="TEST_PROVIDER_REJECTION",
+            error_message="Provider rejection is evidence.",
+        )
+
+    def submit_order(self, request):
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=None,
+            status="FAIL_CLOSED",
+            asset=request.asset,
+            direction=request.direction,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=request.timestamp,
+            adapter=self.adapter_name,
+            error_code="DIRECT_SUBMIT_NOT_ALLOWED",
+            error_message="Not used by this contract test.",
+        )
+
+    def cancel_order(self, *, asset, exchange_order_id):
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=exchange_order_id,
+            status="FAIL_CLOSED",
+            asset=asset,
+            direction=None,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=None,
+            adapter=self.adapter_name,
+            error_code="CANCEL_NOT_ALLOWED",
+            error_message="Not used by this contract test.",
+        )
+
+
+def test_final_attempt_accepts_standing_mandate_as_technical_authorization():
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=_standing_mandate(),
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "PROVIDER_REJECTED"
+    assert result.error_code == "TEST_PROVIDER_REJECTION"
+
+
+def test_final_attempt_requires_only_standing_mandate_authorization():
+    authorization = _standing_mandate()
+    assert "attempt_id" not in authorization
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=authorization,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "PROVIDER_REJECTED"
+    assert result.error_code == "TEST_PROVIDER_REJECTION"
+
+
+def test_final_attempt_fails_closed_without_standing_mandate():
+    authorization = _standing_mandate()
+    authorization.pop("authorization_mode")
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=authorization,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+
+
+def test_final_attempt_keeps_attempt_identity_outside_management_authorization():
+    request = _request()
+    authorization = _standing_mandate()
+
+    assert "attempt_id" not in authorization
+    assert hasattr(request, "intent_id")
+    assert hasattr(request, "snapshot_id")

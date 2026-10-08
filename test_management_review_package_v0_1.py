@@ -24,9 +24,9 @@ def _base(**overrides):
 def test_authorized_is_standing_mandate():
     result = build_management_review_package(**_base())
     assert result["management_state"] == "AUTHORIZED"
-    assert result["autonomous_operation"] is True
+    assert result["autonomous_operation_after_phase_entry"] is True
+    assert "execution_authorization" not in result
     assert result["per_trade_management_authorization_required"] is False
-    assert result["execution_authorization"] == "AUTHORIZED_STANDING_MANDATE"
 
 
 def test_both_spot_and_futures_are_allowed():
@@ -46,14 +46,14 @@ def test_zero_capital_is_a_policy_not_a_local_trade_blocker():
 
 def test_denied_does_not_authorize():
     result = build_management_review_package(**_base(decision="DENIED"))
-    assert result["autonomous_operation"] is False
-    assert result["execution_authorization"] is False
+    assert result["autonomous_operation_after_phase_entry"] is False
+    assert "execution_authorization" not in result
 
 
 def test_deferred_does_not_authorize():
     result = build_management_review_package(**_base(decision="DEFERRED"))
-    assert result["autonomous_operation"] is False
-    assert result["execution_authorization"] is False
+    assert result["autonomous_operation_after_phase_entry"] is False
+    assert "execution_authorization" not in result
 
 
 def test_rejects_unknown_market():

@@ -5,7 +5,8 @@ Provider-neutral, pure contract verification for the final execution gate.
 This module does NOT authorize execution, select an exchange, contact a
 provider, mutate state, or submit an order. It establishes whether the
 canonical request and execution-ready package are internally aligned and
-eligible to reach the separate explicit-authorization boundary.
+eligible to reach the technical authorization boundary backed by the active
+standing management mandate.
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ def evaluate_execution_attempt_readiness(
     execution_ready_package: Mapping[str, Any],
     request: CanonicalOrderRequest,
 ) -> dict[str, Any]:
-    """Return a pure readiness observation for the separate auth boundary."""
+    """Return a pure readiness observation for the technical authorization boundary."""
     if not isinstance(execution_ready_package, Mapping):
         raise ValueError("EXECUTION_READY_PACKAGE_INVALID")
 
