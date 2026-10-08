@@ -45,11 +45,23 @@ def _package():
     }
 
 
-def _authorization():
+def _authorization(execution_instrument):
     return {
         "execution_authorization": "AUTHORIZED",
         "authorization_validation": "VALID",
         "authorization_source": "EXPLICIT_USER_AUTHORIZATION",
+        "authorization_id": "AUTH-TEST-001",
+        "attempt_id": "ATTEMPT-TEST-001",
+        "expires_at": "2099-01-01T00:00:00+00:00",
+        "authorization_scope": {
+            "venue": "SPOT",
+            "execution_instrument": execution_instrument,
+            "asset": "BTC",
+            "direction": "LONG",
+            "order_type": "MARKET",
+            "quantity": 1.0,
+            "max_exposure": 100.0,
+        },
     }
 
 
@@ -120,13 +132,14 @@ def test_final_contract_blocks_without_explicit_authorization():
 
 def test_final_contract_reaches_replaceable_adapter_after_explicit_authorization():
     adapter = FakeAdapter()
+    execution_instrument = object()
     result = run_final_execution_attempt_contract(
         execution_ready_package=_package(),
         request=_request(),
-        authorization_observation=_authorization(),
+        authorization_observation=_authorization(execution_instrument),
         adapter=adapter,
         venue="SPOT",
-        execution_instrument=object(),
+        execution_instrument=execution_instrument,
     )
     assert result.accepted is False
     assert result.error_code == "TEST_EXECUTION_DISABLED"
@@ -137,13 +150,14 @@ def test_final_contract_rejects_invalid_package_before_adapter():
     adapter = FakeAdapter()
     package = _package()
     package["quantity"] = 2
+    execution_instrument = object()
     result = run_final_execution_attempt_contract(
         execution_ready_package=package,
         request=_request(),
-        authorization_observation=_authorization(),
+        authorization_observation=_authorization(execution_instrument),
         adapter=adapter,
         venue="SPOT",
-        execution_instrument=object(),
+        execution_instrument=execution_instrument,
     )
     assert result.accepted is False
     assert result.error_code == "READINESS_REQUEST_QUANTITY_MISMATCH"
