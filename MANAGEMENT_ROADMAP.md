@@ -35,7 +35,7 @@
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
-> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+> **STOP CONDITION:** after the gate package is verified, STOP. Provider write remains forbidden until the ONE-TIME REAL-PRODUCTION PHASE-ENTRY MANDATE is explicitly authorized. After that, no per-trade management approval is required; the existing technical authorization boundary validates each ready request against the active standing mandate.
 
 ---
 
@@ -433,7 +433,7 @@ Evidence:
 
 NEXT ACTION:
 Builder runs local focused tests + py_compile + git diff --check. Then governance is synchronized with actual evidence before the next frontier.
-\n\n## CURRENT ROADMAP FRONTIER — EXCHANGE-AGNOSTIC ORDER ATTEMPT\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nCompleted path:\n`Canonical Order Request → Exchange-Agnostic Adapter Contract → Adapter-Owned Provider Order Preparation → Provider-Neutral Order Attempt Boundary`\n\nEvidence:\n- `submit_prepared_order` is now part of the replaceable adapter contract.\n- Final order-attempt boundary requires explicit valid authorization and delegates only to the selected adapter.\n- Toobit submission remains fail-closed; no real provider write occurs.\n- 22/22 focused tests passed.\n- py_compile passed.\n- git diff --check passed.\n\nStrategic rules remain unchanged:\n- Core is exchange-agnostic.\n- Toobit is replaceable.\n- Provider-specific payload remains inside the adapter.\n- EXECUTION AUTHORIZATION = FALSE until separately and explicitly authorized.\n- No DB mutation and no pipeline wiring.\n\nNEXT FRONTIER:\nExplicit execution-attempt readiness/authorization contract verification, followed only later by a separately authorized real order attempt.\n
+\n\n## CURRENT ROADMAP FRONTIER — EXCHANGE-AGNOSTIC ORDER ATTEMPT\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nCompleted path:\n`Canonical Order Request → Exchange-Agnostic Adapter Contract → Adapter-Owned Provider Order Preparation → Provider-Neutral Order Attempt Boundary`\n\nEvidence:\n- `submit_prepared_order` is now part of the replaceable adapter contract.\n- Final order-attempt boundary requires explicit valid authorization and delegates only to the selected adapter.\n- Toobit submission remains fail-closed; no real provider write occurs.\n- 22/22 focused tests passed.\n- py_compile passed.\n- git diff --check passed.\n\nStrategic rules remain unchanged:\n- Core is exchange-agnostic.\n- Toobit is replaceable.\n- Provider-specific payload remains inside the adapter.\n- EXECUTION AUTHORIZATION = FALSE until separately and explicitly authorized.\n- No DB mutation and no pipeline wiring.\n\nNEXT FRONTIER:\nExecution-attempt readiness and technical authorization verification against the active standing mandate. A future real order attempt, after phase-entry authorization, does not require a new management authorization.\n
 
 ## CURRENT ROADMAP FRONTIER — FINAL EXECUTION ATTEMPT CONTRACT
 
@@ -458,10 +458,10 @@ Management rules remain unchanged:
 - No DB mutation.
 - No pipeline wiring.
 - No execution activation is implied by contract verification.
-- Provider rejection, if eventually observed under separate explicit authorization, is environment evidence rather than a reason to redesign Core.
+- Provider rejection, if eventually observed under the active standing mandate after phase entry, is environment evidence rather than a reason to redesign Core.
 
 Management verdict:
-The provider-neutral execution path is now contract-complete through the adapter-attempt boundary and VERIFIED. The next management gate is a separately authorized controlled real-order attempt; verification itself does not authorize that attempt.
+The provider-neutral execution path is now contract-complete through the adapter-attempt boundary and VERIFIED. The next management gate is the ONE-TIME REAL-PRODUCTION PHASE-ENTRY DECISION; verification itself does not authorize that phase entry. After phase entry, the trader operates autonomously and the technical authorization boundary uses the standing mandate for each request.
 
 NEXT ACTION:
 Do not activate execution automatically. Review/approve the explicit real-attempt scope separately before any provider write is permitted.
