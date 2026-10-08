@@ -296,4 +296,21 @@ CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure 
 
 No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
 
+## CP46-A6 — MANAGEMENT DECISION: EXTERNAL PROVIDER CAPABILITY BOUNDARY
+
+Management decision:
+Stop further speculative implementation/search at the current evidence boundary. The investigation is CLOSED, while the checkpoint remains BLOCKED / NOT VERIFIABLE.
+
+Reason:
+No authoritative read-only Toobit Futures signal equivalent to `exposure_allowed` has been established. Existing account/risk fields are evidence of state and constraints, not authorization to increase exposure.
+
+Strategic consequence:
+This is now an external provider-capability dependency. ArundaTrader remains correctly fail-closed. No redesign, weakening, order probe, DB mutation, execution activation, or pipeline wiring is justified.
+
+CURRENT FRONTIER:
+FINAL REAL-MARKET EXECUTION READINESS — PROVIDER EVIDENCE BLOCKED.
+
+NEXT ACTION:
+Seek authoritative provider clarification/new documented or account-native evidence. Resume only if such evidence exists or a separately approved execution-contract decision changes the requirement.
+
 # END MASTER MANAGEMENT ROADMAP
