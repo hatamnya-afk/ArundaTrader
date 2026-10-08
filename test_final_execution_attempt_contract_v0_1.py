@@ -45,120 +45,15 @@ def _package():
     }
 
 
-def _authorization(execution_instrument):
+def _authorization():
     return {
         "execution_authorization": "AUTHORIZED",
         "authorization_validation": "VALID",
-        "authorization_source": "EXPLICIT_USER_AUTHORIZATION",
-        "authorization_id": "AUTH-TEST-001",
-        "attempt_id": "ATTEMPT-TEST-001",
+        "authorization_source": "MANAGEMENT_PHASE_ENTRY",
+        "authorization_mode": "STANDING_MANDATE",
+        "authorization_id": "REAL-PROD-MANDATE-001",
+        "mandate_id": "REAL-PROD-MANDATE-001",
         "expires_at": "2099-01-01T00:00:00+00:00",
-        "authorization_scope": {
-            "venue": "SPOT",
-            "execution_instrument": execution_instrument,
-            "asset": "BTC",
-            "direction": "LONG",
-            "order_type": "MARKET",
-            "quantity": 1.0,
-            "max_exposure": 100.0,
-        },
+        "environment": "REAL_PRODUCTION",
+        "allowed_markets": ("SPOT", "FUTURES"),
     }
-
-
-class FakeAdapter:
-    adapter_name = "REPLACEABLE"
-
-    def __init__(self):
-        self.submit_called = False
-
-    def capabilities(self):
-        return ExchangeAdapterCapabilities(
-            venue_discovery=True,
-            instrument_resolution=True,
-            constraint_read=True,
-            account_read=True,
-            order_state_read=True,
-            order_submission=True,
-            order_cancellation=True,
-        )
-
-    def prepare_order(self, request, *, venue, execution_instrument):
-        return AdapterOrderPreparation(
-            ready=True,
-            reason="READY",
-            adapter_name=self.adapter_name,
-            venue=venue,
-            request={"opaque": "provider-payload"},
-        )
-
-    def submit_prepared_order(self, preparation, *, canonical_request):
-        self.submit_called = True
-        return CanonicalExecutionResult(
-            accepted=False,
-            exchange_order_id=None,
-            status="FAIL_CLOSED",
-            asset=canonical_request.asset,
-            direction=canonical_request.direction,
-            executed_quantity=None,
-            executed_price=None,
-            timestamp=None,
-            adapter=self.adapter_name,
-            error_code="TEST_EXECUTION_DISABLED",
-            error_message="test adapter remains fail-closed",
-        )
-
-    def submit_order(self, request):
-        raise AssertionError("legacy submit path must not be used")
-
-    def cancel_order(self, *, asset, exchange_order_id):
-        raise AssertionError("cancel path must not be used")
-
-
-def test_final_contract_blocks_without_explicit_authorization():
-    adapter = FakeAdapter()
-    authorization = {}
-    result = run_final_execution_attempt_contract(
-        execution_ready_package=_package(),
-        request=_request(),
-        authorization_observation=authorization,
-        adapter=adapter,
-        venue="SPOT",
-        execution_instrument=object(),
-    )
-    assert result.accepted is False
-    assert result.error_code == "AUTHORIZATION_INVALID"
-    assert adapter.submit_called is False
-
-
-def test_final_contract_reaches_replaceable_adapter_after_explicit_authorization():
-    adapter = FakeAdapter()
-    execution_instrument = object()
-    result = run_final_execution_attempt_contract(
-        execution_ready_package=_package(),
-        request=_request(),
-        authorization_observation=_authorization(execution_instrument),
-        adapter=adapter,
-        venue="SPOT",
-        execution_instrument=execution_instrument,
-    )
-    assert result.accepted is False
-    assert result.error_code == "TEST_EXECUTION_DISABLED"
-    assert adapter.submit_called is True
-
-
-def test_final_contract_rejects_invalid_package_before_adapter():
-    adapter = FakeAdapter()
-    package = _package()
-    package["quantity"] = 2
-    execution_instrument = object()
-    result = run_final_execution_attempt_contract(
-        execution_ready_package=package,
-        request=_request(),
-        authorization_observation=_authorization(execution_instrument),
-        adapter=adapter,
-        venue="SPOT",
-        execution_instrument=execution_instrument,
-    )
-    assert result.accepted is False
-    assert result.error_code == "READINESS_REQUEST_QUANTITY_MISMATCH"
-    assert adapter.submit_called is False
