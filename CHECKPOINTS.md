@@ -126,6 +126,21 @@ Verified:
 - Order/cancel/withdraw remain fail-closed.
 - Execution authorization remains FALSE.
 
+## CP DYNAMIC EXECUTION ASSET UNIVERSE
+Status: CLOSED / VERIFIED / PROVIDER-DRIVEN
+
+Evidence:
+- `discover_tradable_assets(venue)` added to the Toobit adapter.
+- Discovery is derived from live provider metadata and only accepts `TRADING` instruments.
+- Spot universe = dynamic USDT base assets.
+- Futures universe = dynamic underlying assets.
+- Exact provider symbol resolution remains independent and fail-closed.
+- Multi-asset tests verify that BTC is not a privileged/default asset.
+
+Commits: `91ffc7e`, `0e3f59e8`, `3b55141a9c2cf3b3d42ee1e285d18fb81c598dd1`.
+
+Safety: read-only metadata discovery only; no order/API write/DB mutation/execution authorization.
+
 ## CP46-D — TOOBIT PROVIDER PREFLIGHT TEST CONTRACT
 Status:
 CLOSED / VERIFIED
