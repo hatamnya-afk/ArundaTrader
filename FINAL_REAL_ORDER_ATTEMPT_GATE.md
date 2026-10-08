@@ -34,6 +34,7 @@ Once explicitly authorized:
 | Concept | Canonical owner |
 |---|---|
 | Management phase entry | `management_execution_authorization_v0_1.py` |
+| Management review packaging | `management_review_package_v0_1.py` — review-only; never an authorization producer |
 | Technical execution authorization | `execution_authorization_boundary_v0_1.py` |
 | Execution readiness | `execution_attempt_readiness_contract_v0_1.py` |
 | Final attempt composition | `final_execution_attempt_contract_v0_1.py` |
