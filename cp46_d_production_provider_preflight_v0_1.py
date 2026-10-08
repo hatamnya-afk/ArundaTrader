@@ -167,7 +167,10 @@ def build_toobit_translation_evidence(
     contract_multiplier = None
     contract_quantity_step = None
     if venue == "FUTURES":
-        constraints = adapter.futures_trading_constraints(asset)
+        constraints = adapter.futures_trading_constraints(
+            asset,
+            execution_instrument=execution_instrument,
+        )
         if getattr(constraints, "allowed", False) is not True:
             raise RuntimeError(
                 "AUTHORITATIVE_FUTURES_CONTRACT_STATE_UNAVAILABLE:"
