@@ -35,6 +35,7 @@ Once explicitly authorized:
 |---|---|
 | Management phase entry | `management_execution_authorization_v0_1.py` |
 | Management review packaging | `management_review_package_v0_1.py` — review-only; never an authorization producer |
+The Management boundary is closed-schema: trade/attempt fields and aliases are rejected, and unclassified fields fail closed.
 | Technical execution authorization | `execution_authorization_boundary_v0_1.py` |
 | Execution readiness | `execution_attempt_readiness_contract_v0_1.py` |
 | Final attempt composition | `final_execution_attempt_contract_v0_1.py` |
