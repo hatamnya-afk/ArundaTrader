@@ -121,7 +121,31 @@ The following historical stages are completed and must not be reopened or re-aud
   - Execution authorization remained false.
   - No order, execution, API write, or production DB mutation occurred.
 
-## 4. CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+## 4. CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
+
+### CP DYNAMIC EXECUTION ASSET UNIVERSE — VERIFIED
+The execution side is now explicitly provider-driven rather than BTC-driven.
+
+- Toobit exposes a read-only dynamic asset discovery surface from authoritative `exchangeInfo` metadata.
+- Spot discovery selects current `TRADING` USDT base assets.
+- Futures discovery selects current `TRADING` contract underlyings.
+- No static production coin list is maintained.
+- BTC has no special status.
+- Exact provider symbol resolution remains a separate fail-closed operation.
+- Multi-asset coverage is verified with ETH/SOL/XRP fixtures.
+
+Commits: `91ffc7e`, `0e3f59e8`, `3b55141a9c2cf3b3d42ee1e285d18fb81c598dd1`.
+
+Management verdict: dynamic asset support is a completed contract improvement. The next frontier is completing the provider handoff to a valid Order Request while keeping Core exchange-agnostic. Toobit rejection, if it occurs later under explicit authorization, is treated as provider/environment evidence and does not justify a BTC-specific or hardcoded Core design.
+
+### Safety
+EXECUTION AUTHORIZATION = FALSE
+ORDER SUBMISSION/CANCELLATION = FORBIDDEN
+WITHDRAWAL = FORBIDDEN
+DATABASE WRITE = FORBIDDEN
+PROVIDER WRITE = FORBIDDEN
+
+## 4A. HISTORICAL FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ### PROJECT COMPLETION GATE
 Status:
