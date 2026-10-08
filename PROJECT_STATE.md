@@ -256,4 +256,18 @@ CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure 
 
 No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
 
+## CP46-A6 — MANAGEMENT DECISION / PROVIDER CAPABILITY BOUNDARY
+
+Decision:
+- The provider-native exposure investigation is CLOSED as an investigation.
+- CP46-A6 itself remains BLOCKED / NOT VERIFIABLE at the current Toobit read-only provider boundary.
+- No code weakening, inference, order-test, or execution workaround is approved.
+- This blocker is classified as an external provider-capability dependency, not an ArundaTrader implementation defect.
+
+Operational consequence:
+- Final real-market controlled test remains execution-closed.
+- EXECUTION AUTHORIZATION remains FALSE.
+- The project must not manufacture an exposure authorization signal locally.
+- The only valid unblock is new authoritative provider evidence or an explicit future management decision that changes the execution contract after separate approval.
+
 # END PROJECT STATE
