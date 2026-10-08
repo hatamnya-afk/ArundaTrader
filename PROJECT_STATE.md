@@ -301,3 +301,37 @@ Operational consequence:
 - The only valid unblock is new authoritative provider evidence or an explicit future management decision that changes the execution contract after separate approval.
 
 # END PROJECT STATE
+
+
+## CURRENT FRONTIER — EXCHANGE-AGNOSTIC ORDER PREPARATION HANDOFF
+
+Status = BUILT / STATIC CONTRACT INTEGRATION — NOT EXECUTED
+
+Management decision:
+- The Core must complete the provider-neutral execution path without becoming dependent on Toobit.
+- Toobit is one replaceable adapter, not the execution architecture.
+- The missing Toobit-specific `exposure_allowed` Boolean is NOT allowed to become a permanent Core-completion blocker.
+- Provider rejection remains valid environmental evidence once an explicitly authorized real order attempt is eventually opened.
+- EXECUTION AUTHORIZATION remains FALSE.
+
+Built:
+- `exchange_execution_adapter_contract_v0_1.py` now defines an opaque `AdapterOrderPreparation` boundary.
+- `exchange_execution_order_preparation_v0_1.py` validates the canonical request and delegates preparation to the selected adapter without inspecting provider fields.
+- Toobit implements adapter-owned preparation, including provider-specific instrument resolution and quantity translation.
+- Futures base-asset quantity is translated inside the adapter using provider contract multiplier; Core quantity remains unchanged.
+- Spot market BUY translation is kept inside the adapter because Toobit's provider semantics use quote-asset quantity for that request form.
+- No order endpoint is called by preparation.
+
+Safety:
+- EXECUTION AUTHORIZATION = FALSE
+- ORDER WRITE = FORBIDDEN
+- PROVIDER WRITE = FORBIDDEN
+- DATABASE WRITE = FORBIDDEN
+- `arunda_pipeline.py` remains unwired to Toobit.
+
+Verification status:
+- Tests were added for the generic adapter contract, exchange-neutral handoff, and Toobit-owned preparation.
+- Local execution of the newly added tests has not yet been performed in this checkpoint environment; do not claim runtime PASS until the Builder runs them locally.
+
+NEXT ACTION:
+Run the focused local tests and static checks for the new exchange-neutral preparation boundary. If green, synchronize this checkpoint's four governance documents again with the verified evidence, then continue toward provider-order-attempt readiness without enabling execution.
