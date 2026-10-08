@@ -74,6 +74,14 @@ class ExchangeExecutionAdapter(Protocol):
     ) -> AdapterOrderPreparation:
         ...
 
+    def submit_prepared_order(
+        self,
+        preparation: AdapterOrderPreparation,
+        *,
+        canonical_request: CanonicalOrderRequest,
+    ) -> CanonicalExecutionResult:
+        ...
+
     def submit_order(
         self,
         request: CanonicalOrderRequest,
@@ -101,6 +109,7 @@ def validate_adapter_contract(adapter: Any) -> tuple[bool, str]:
 
     capabilities = getattr(adapter, "capabilities", None)
     prepare = getattr(adapter, "prepare_order", None)
+    submit_prepared = getattr(adapter, "submit_prepared_order", None)
     submit = getattr(adapter, "submit_order", None)
     cancel = getattr(adapter, "cancel_order", None)
 
@@ -108,6 +117,8 @@ def validate_adapter_contract(adapter: Any) -> tuple[bool, str]:
         return False, "ADAPTER_CAPABILITIES_MISSING"
     if not callable(prepare):
         return False, "ADAPTER_PREPARE_MISSING"
+    if not callable(submit_prepared):
+        return False, "ADAPTER_PREPARED_SUBMIT_MISSING"
     if not callable(submit):
         return False, "ADAPTER_SUBMIT_MISSING"
     if not callable(cancel):
