@@ -1,3 +1,44 @@
+# CURRENT GOVERNANCE OVERRIDE — 2026-10-08
+
+> **THIS SECTION IS THE ACTIVE STATE.**
+> Historical sections below are preserved as evidence/history and MUST NOT be interpreted as the current frontier when they conflict with this section.
+>
+> ## CURRENT CROSS-REPOSITORY MAP
+> Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` first.
+>
+> ## VERIFIED POSITION
+> The provider-neutral execution-attempt contract is VERIFIED / PASS / CLOSED for its defined scope.
+> Latest verified endpoint: `448806f`.
+>
+> ## CURRENT FRONTIER
+> **MANAGEMENT REVIEW — REAL-PRODUCTION TRADING PHASE / STANDING OPERATIONAL MANDATE**
+>
+> The next task is to define and inspect the management gate for entry into the real-production trading phase. Management authorization is a phase-entry mandate, not a per-trade approval loop. After authorization, the trader may operate autonomously within the approved Spot/Futures execution contracts; provider acceptance/rejection remains authoritative.
+>
+> ## SAFETY
+> `EXECUTION AUTHORIZATION = FALSE`
+> `ORDER WRITE = FORBIDDEN`
+> `PROVIDER WRITE = FORBIDDEN`
+> `DATABASE WRITE = FORBIDDEN`
+> `arunda_pipeline.py` remains unwired.
+>
+> ## FORBIDDEN
+> - Do not submit an order.
+> - Do not call provider write endpoints.
+> - Do not activate execution.
+> - Do not reopen CP46-A6.
+> - Do not redesign Core or bind Core to Toobit.
+> - Do not treat historical A6 BLOCKED text as the current frontier.
+>
+> ## ALLOWED NOW
+> - Define the explicit real-attempt gate.
+> - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
+> - Prepare a management decision package.
+>
+> **STOP CONDITION:** after the standing-mandate package is verified, STOP until management explicitly authorizes entry into the real-production trading phase. After that phase-entry authorization, no per-trade management approval is required; provider write remains governed by the trader's execution contracts and provider response.
+
+---
+
 # ARUNDA TRADER — PROJECT STATE
 
 ## PURPOSE
@@ -101,6 +142,88 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
+### EXCHANGE-AGNOSTIC ADAPTER CONTRACT — VERIFIED
+Status = VERIFIED / REPLACEABLE BOUNDARY
+
+A provider-neutral adapter contract is now explicit in `exchange_execution_adapter_contract_v0_1.py`. Core-facing execution uses a replaceable adapter interface; the contract contains no exchange name, provider symbol, transport, credential, or exchange-specific semantics. Toobit is only one concrete adapter implementation.
+
+Verified changes:
+- `ExchangeExecutionAdapter` structural contract established.
+- Adapter capabilities are provider-neutral.
+- Toobit conforms to the replaceable adapter boundary while remaining execution-disabled.
+- Order submission/cancellation remain fail-closed.
+- No Core dependency on Toobit was introduced.
+
+Evidence commits: `98b75b1`, `3b4f184`, `ded818b`, `ac97549`, `726a6e3`.
+
+This checkpoint does NOT authorize execution and does NOT close the final real-market gate.
+
+
+
+### CP DYNAMIC EXECUTION ASSET UNIVERSE — IMPLEMENTED
+Status = VERIFIED / DYNAMIC / PROVIDER-DRIVEN
+
+The execution instrument path is asset-agnostic. Toobit adapter now exposes read-only `discover_tradable_assets(venue)` derived from current authoritative exchange metadata and filtered to `TRADING`. Spot discovery uses live USDT base assets; Futures discovery uses live underlying assets. Exact provider symbol selection remains a separate provider-neutral instrument-resolution step.
+
+No static BTC/ETH/SOL universe was introduced. BTC is not privileged. A newly listed/tradable provider asset can enter the execution asset universe without Core code changes.
+
+Evidence commits: 91ffc7e (dynamic provider asset discovery), 0e3f59e (multi-asset discovery tests), 3b55141 (asset-agnostic resolver test).
+
+SAFETY: discovery is read-only; no order, provider write, DB mutation, execution authorization, or arunda_pipeline.py wiring.
+
+
+### FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST — OPEN
+
+Status = CURRENT FRONTIER / OPEN / NOT EXECUTED
+
+Purpose:
+Open and verify the final real-market controlled-test gate after verified Project Completion and verified Toobit Binding. Opening this gate is governance/readiness control only; it does not authorize execution.
+
+Verified real-market read-only evidence:
+- Full Read-Only Provider Preflight = PASS against live Toobit.
+- Toobit ExchangeInfo returned HTTP 200 and authoritative Futures instrument resolution selected exactly BTC-SWAP-USDT.
+- Futures balance, account leverage, positions, open orders, history orders, and server time returned HTTP 200.
+- Provider preflight evidence was constructed successfully.
+- Provider account state was known with no position conflict; provider order state was known and empty; contract constraints were valid; timestamp state was known.
+- Real provider transport was GET-only.
+- No order submission, cancellation, withdrawal, exchange write, database mutation, or execution authorization occurred.
+- CP46-D focused verification: 12/12 tests passed; git diff --check passed; targeted py_compile passed.
+- Evidence-alignment commit: f80fa83 (CP Controlled Test: align Toobit provider evidence with live state).
+
+Controlled-test boundary:
+- Core remains exchange-agnostic.
+- Toobit remains outside Core through the replaceable adapter boundary.
+- arunda_pipeline.py remains unwired to the Toobit provider-preflight chain.
+- Execution authorization remains FALSE.
+
+Authorized scope now:
+- Inspect and verify the controlled-test contract/readiness boundary.
+- Preserve real-data-only and fail-closed rules.
+- Preserve execution-off safety.
+- No order/cancel/withdraw.
+- No DB mutation.
+- No execution authorization unless separately and explicitly authorized.
+- No modification of closed/verified checkpoints or protected arunda_pipeline.py.
+
+CP46-D / CP46-A6 STATUS
+
+CP46-D test contract = VERIFIED.
+Evidence:
+- 21/21 focused tests passed across the Toobit adapter and CP46-D provider-preflight test suites.
+- py_compile passed for the focused adapter/evidence/test modules.
+- git diff --check passed.
+- Futures routing, authoritative instrument resolution, contract evidence, provider-native margin state, leverage state, position state, and order state are covered by the focused contract.
+- The three Futures PASS expectations were aligned to the strengthened A6 fail-closed contract without weakening production logic.
+
+CP46-A6 = BLOCKED exclusively by missing provider-native Futures exposure authorization evidence.
+- exposure_allowed remains UNKNOWN.
+- No inference from balance, leverage, margin mode, or absence of positions is permitted.
+- No provider-native Toobit Boolean authorizing additional Futures exposure has been established.
+- The fail-closed contract correctly returns BLOCK_PORTFOLIO_EXPOSURE when exposure authorization is not directly evidenced.
+
+NEXT ACTION:
+Investigate only whether Toobit exposes a direct, authoritative Futures exposure-authorization signal. If no such provider-native evidence exists, keep CP46-A6 BLOCKED. Do not fabricate or infer exposure permission. No additional provider API calls, order/cancel/withdraw, DB mutation, execution authorization, or arunda_pipeline.py wiring. Do not invoke additional provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
+
 ### PROJECT COMPLETION — CLOSED / VERIFIED
 Status = CLOSED / VERIFIED / STATIC CONTRACT PASS
 
@@ -128,23 +251,6 @@ ORDER WRITE = FORBIDDEN
 PROVIDER WRITE = FORBIDDEN
 DATABASE WRITE = FORBIDDEN
 NO REAL TRADE
-## FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST — CURRENT CHECKPOINT
-Status = CURRENT FRONTIER / OPEN / NOT EXECUTED
-
-Purpose:
-Open the final controlled-test gate after verified Project Completion and Toobit Binding. This checkpoint is governance-only at opening: no provider API call, runtime execution, order, DB mutation, or execution authorization is performed merely by opening the gate.
-
-Authorized scope at opening:
-- Preserve the verified Core → exchange-agnostic boundary → Toobit adapter architecture.
-- Define and verify the controlled-test contract before any provider connectivity is attempted.
-- Use real-market evidence only; no synthetic/backfilled/interpolated data.
-- Keep `EXECUTION AUTHORIZATION = FALSE` until a separate explicit execution-authorization gate.
-- No changes to `arunda_pipeline.py`, production DB, execution controls, or closed/verified contracts.
-- No new project files are required at checkpoint opening.
-
-NEXT ACTION:
-Perform the controlled-test contract/readiness inspection only. Do not invoke provider APIs, submit/cancel orders, mutate the DB, or enable execution unless separately and explicitly authorized.
-
 ## REPOSITORY GOVERNANCE
 Canonical branch = `main`
 Canonical base commit = `8945316ae1fec74ecfab40ac33ec9593e6d7ca8b`
@@ -202,4 +308,118 @@ Evidence:
 
 Checkpoint closure: VERIFIED/CLOSED at the static/read-only adapter contract boundary. Runtime/provider API connectivity remains deferred to the later authorized controlled-test gate.
 
+
+CP46-A6 PROVIDER-NATIVE EXPOSURE INVESTIGATION — CONCLUSION
+
+Investigation result:
+- Toobit's documented read-only Futures surfaces expose balance/availableBalance, leverage and marginType, positions, and risk-limit configuration.
+- The documented API-key permission model distinguishes read permissions from trade permissions; it does not expose a Futures account Boolean equivalent to exposure_allowed.
+- Toobit documents order-time rejection conditions including no-opening-trades, insufficient order margin, and maximum Futures risk-limit exceeded. These are execution-time outcomes/constraints, not a pre-execution provider-native authorization Boolean.
+- Therefore no direct authoritative provider-native Futures exposure_allowed signal has been established.
+
+Classification:
+DIRECT AUTHORITATIVE exposure_allowed = NOT FOUND
+INFERRED exposure_allowed = FORBIDDEN
+UNKNOWN exposure_allowed = YES
+
+Management verdict:
+CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure authorization evidence. Do not convert balance, leverage, marginType, empty positions, risk-limit configuration, API-key trade permission, or hypothetical order acceptance into exposure_allowed=True.
+
+No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
+
+## CP46-A6 — MANAGEMENT DECISION / PROVIDER CAPABILITY BOUNDARY
+
+Decision:
+- The provider-native exposure investigation is CLOSED as an investigation.
+- CP46-A6 itself remains BLOCKED / NOT VERIFIABLE at the current Toobit read-only provider boundary.
+- No code weakening, inference, order-test, or execution workaround is approved.
+- This blocker is classified as an external provider-capability dependency, not an ArundaTrader implementation defect.
+
+Operational consequence:
+- Final real-market controlled test remains execution-closed.
+- EXECUTION AUTHORIZATION remains FALSE.
+- The project must not manufacture an exposure authorization signal locally.
+- The only valid unblock is new authoritative provider evidence or an explicit future management decision that changes the execution contract after separate approval.
+
 # END PROJECT STATE
+
+
+## CURRENT FRONTIER — EXCHANGE-AGNOSTIC ORDER PREPARATION HANDOFF
+
+Status = BUILT / STATIC CONTRACT INTEGRATION — NOT EXECUTED
+
+Management decision:
+- The Core must complete the provider-neutral execution path without becoming dependent on Toobit.
+- Toobit is one replaceable adapter, not the execution architecture.
+- The missing Toobit-specific `exposure_allowed` Boolean is NOT allowed to become a permanent Core-completion blocker.
+- Provider rejection remains valid environmental evidence once an explicitly authorized real order attempt is eventually opened.
+- EXECUTION AUTHORIZATION remains FALSE.
+
+Built:
+- `exchange_execution_adapter_contract_v0_1.py` now defines an opaque `AdapterOrderPreparation` boundary.
+- `exchange_execution_order_preparation_v0_1.py` validates the canonical request and delegates preparation to the selected adapter without inspecting provider fields.
+- Toobit implements adapter-owned preparation, including provider-specific instrument resolution and quantity translation.
+- Futures base-asset quantity is translated inside the adapter using provider contract multiplier; Core quantity remains unchanged.
+- Spot market BUY translation is kept inside the adapter because Toobit's provider semantics use quote-asset quantity for that request form.
+- No order endpoint is called by preparation.
+
+Safety:
+- EXECUTION AUTHORIZATION = FALSE
+- ORDER WRITE = FORBIDDEN
+- PROVIDER WRITE = FORBIDDEN
+- DATABASE WRITE = FORBIDDEN
+- `arunda_pipeline.py` remains unwired to Toobit.
+
+Verification status:
+- Tests were added for the generic adapter contract, exchange-neutral handoff, and Toobit-owned preparation.
+- Local execution of the newly added tests has not yet been performed in this checkpoint environment; do not claim runtime PASS until the Builder runs them locally.
+
+NEXT ACTION:
+Run the focused local tests and static checks for the new exchange-neutral preparation boundary. If green, synchronize this checkpoint's four governance documents again with the verified evidence, then continue toward provider-order-attempt readiness without enabling execution.
+\n\n## CP EXCHANGE-AGNOSTIC ORDER ATTEMPT BOUNDARY — VERIFIED\n\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nBuilt:\n- `exchange_execution_adapter_contract_v0_1.py` now includes the provider-neutral `submit_prepared_order` contract.\n- `exchange_execution_order_attempt_boundary_v0_1.py` establishes the final provider-neutral gate from prepared adapter order to a future provider order attempt.\n- Authorization is evaluated explicitly; readiness, adapter capability, account state, or provider metadata cannot infer authorization.\n- Toobit implements the prepared-submission surface but remains fail-closed with `EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED`.\n\nVerification:\n- Focused suite: 22 passed.\n- py_compile: PASS.\n- git diff --check: PASS.\n\nSafety:\n- EXECUTION AUTHORIZATION = FALSE.\n- No real order/cancel/withdrawal.\n- No DB mutation.\n- `arunda_pipeline.py` remains unwired.\n\nManagement verdict:\nThe provider-neutral order-attempt boundary is VERIFIED. The architecture can now reach a selected replaceable adapter only after explicit authorization, while actual provider submission remains separately disabled.\n\nNEXT ACTION:\nAdvance to the explicit execution-attempt contract/readiness gate without activating real execution.\n
+
+## CP FINAL EXECUTION ATTEMPT CONTRACT — VERIFIED
+
+Status = VERIFIED / PASS / EXECUTION-CLOSED
+
+Built:
+- `final_execution_attempt_contract_v0_1.py` composes the provider-neutral final execution-attempt path.
+- The composition delegates readiness alignment, explicit authorization, adapter preparation, and adapter attempt to the already-verified boundaries.
+- `test_final_execution_attempt_contract_v0_1.py` covers unauthorized blocking, authorized reachability of a replaceable adapter, and readiness/package mismatch blocking.
+
+Verification evidence:
+- 28/28 focused tests passed across the final contract, readiness, order-attempt boundary, order preparation, adapter contract, and Toobit adapter suites.
+- py_compile passed for all focused implementation/test modules.
+- git diff --check passed.
+- Fast-forward from 91c82a7 to 448806f completed cleanly.
+
+Safety and architecture:
+- EXECUTION AUTHORIZATION = FALSE.
+- Toobit remains replaceable and outside Core.
+- No real order/cancel/withdrawal.
+- No DB mutation.
+- `arunda_pipeline.py` remains unwired.
+- Toobit submission remains fail-closed.
+- No authorization is inferred or created by the final contract.
+
+Management verdict:
+The provider-neutral execution-attempt composition is VERIFIED. The system can prove the complete pre-attempt route while real execution remains explicitly disabled.
+
+CURRENT FRONTIER:
+Controlled decision for the separately authorized real execution-attempt gate; no automatic activation.
+
+
+## NON-NEGOTIABLE OPERATING INVARIANT — DO NOT REPEAT THIS DECISION
+
+The management model is a ONE-TIME PHASE-ENTRY MANDATE, not per-trade approval.
+
+After explicit phase-entry authorization:
+- Spot and Futures are both in scope.
+- The trader operates autonomously under the already-verified Decision/Risk/Trade Gate/Execution contracts.
+- No management approval request is generated for each trade.
+- Zero exchange balance is not a local blocker; the provider is authoritative for acceptance/rejection.
+- Real rejection is evidence and must not trigger contract weakening.
+- Capital is scaled progressively only after real-market outcome/quality evidence and management review.
+- 24-hour operation/analysis is a later maturity stage, not a prerequisite for starting the real feedback loop.
+
+Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this section as active governance constraints. Historical text that conflicts with this invariant is historical residue and MUST NOT reopen the per-trade authorization model.
