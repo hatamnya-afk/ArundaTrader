@@ -843,6 +843,22 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+    def submit_prepared_order(
+        self,
+        preparation: AdapterOrderPreparation,
+        *,
+        canonical_request: CanonicalOrderRequest,
+    ) -> CanonicalExecutionResult:
+        del preparation
+        return CanonicalExecutionResult(
+            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+            asset=canonical_request.asset, direction=canonical_request.direction,
+            executed_quantity=None, executed_price=None, timestamp=None,
+            adapter=self.name,
+            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
+            error_message="Order submission is disabled by the current execution contract.",
+        )
+
     def submit_order(self, request: Any) -> CanonicalExecutionResult:
         del request
         return CanonicalExecutionResult(
