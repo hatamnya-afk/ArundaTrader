@@ -1,6 +1,23 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
+CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
+
+## CP DYNAMIC EXECUTION ASSET UNIVERSE
+Status: VERIFIED / PROVIDER-DRIVEN / ASSET-AGNOSTIC
+
+Implemented on `operational-main-20261007`:
+- Toobit adapter discovers current `TRADING` assets directly from authoritative exchange metadata.
+- Spot discovery is dynamic over live USDT base assets.
+- Futures discovery is dynamic over live contract underlyings.
+- Exact instrument resolution remains separate and fail-closed.
+- No hardcoded BTC/ETH/SOL production universe exists.
+- Multi-asset tests verify ETH/SOL/XRP independently of BTC.
+
+Commits: `91ffc7e`, `0e3f59e8`, `3b55141a`.
+
+The remaining goal is completion of the provider handoff toward a valid Order Request. Provider rejection is an environment outcome, not a reason to hardcode or redesign Core. Execution authorization remains FALSE.
+
 CURRENT FRONTIER — FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
 
 ## CURRENT STATE
