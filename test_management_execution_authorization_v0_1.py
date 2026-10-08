@@ -54,6 +54,36 @@ def test_management_boundary_rejects_trade_scoped_fields():
             raise AssertionError(f"{field} must never enter management authorization")
 
 
+def test_management_boundary_rejects_trade_field_aliases_and_unknown_scope():
+    for field in (
+        "attemptId",
+        "trade_id",
+        "tradeId",
+        "symbol",
+        "side",
+        "orderType",
+        "qty",
+        "exposure_usd",
+    ):
+        value = _base()
+        value[field] = "TRADE-SCOPED"
+        try:
+            evaluate_management_authorization(value)
+        except ValueError as exc:
+            assert str(exc) == "MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN"
+        else:
+            raise AssertionError(f"{field} must never enter management authorization")
+
+    value = _base()
+    value["future_unclassified_field"] = "UNKNOWN"
+    try:
+        evaluate_management_authorization(value)
+    except ValueError as exc:
+        assert str(exc) == "MANAGEMENT_FIELDS_FORBIDDEN"
+    else:
+        raise AssertionError("unclassified management fields must fail closed")
+
+
 def test_denied_management_decision_never_produces_execution_authorization():
     result = evaluate_management_authorization(_base(DENIED))
     assert result["management_state"] == DENIED
