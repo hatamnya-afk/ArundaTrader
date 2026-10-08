@@ -1,4 +1,8 @@
 # ARUNDATRADER — CURRENT BUILDER HANDOFF
+
+## CROSS-REPOSITORY MASTER MAP — READ FIRST
+
+Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` before this handoff. It is the permanent map of the relationship between ArundaTrader and AroondaAI, the three roadmap levels, the closed work that must not be repeated, and the current management direction. This prevents state reconstruction from chat memory.
 ## 2026-10-08 — READ THIS FIRST
 
 This file is the operational handoff for the next Builder session.
