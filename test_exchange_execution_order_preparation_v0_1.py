@@ -139,6 +139,9 @@ class FakeAdapter:
             request={"opaque_provider_payload": True},
         )
 
+    def submit_prepared_order(self, preparation, *, canonical_request):
+        raise AssertionError("submission must not occur during preparation")
+
     def submit_order(self, request):
         raise AssertionError("submission must not occur during preparation")
 
