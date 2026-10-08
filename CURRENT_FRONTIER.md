@@ -171,3 +171,32 @@ NEXT ACTION:
 Obtain new authoritative Toobit provider evidence/clarification for Futures exposure authorization. Until then, remain fail-closed.
 
 # END CURRENT FRONTIER
+
+## CURRENT FRONTIER — EXCHANGE-AGNOSTIC ORDER PREPARATION HANDOFF
+
+Status:
+CURRENT FRONTIER / BUILT / NOT YET LOCALLY VERIFIED
+
+Management decision:
+The project now advances past the Toobit-specific `exposure_allowed` evidence blocker at the Core architecture level. The provider-native exposure gap remains a provider capability issue, but it does not redefine the exchange-neutral completion path.
+
+Target path:
+`TRADE READY → ORDER INTENT → PRE-EXECUTION READY → CANONICAL ORDER REQUEST → REPLACEABLE ADAPTER → OPAQUE PROVIDER ORDER REQUEST → [LATER, EXPLICIT AUTHORIZATION] ORDER ATTEMPT`
+
+Built:
+- Provider-neutral `AdapterOrderPreparation` contract.
+- Provider-neutral preparation boundary.
+- Toobit adapter-owned provider translation.
+- No Core inspection of provider symbol/payload.
+- No order submission, cancellation, DB write, or execution activation.
+
+Important:
+- Canonical quantity remains authoritative BASE_ASSET quantity.
+- Provider-specific quantity conversion belongs only inside the selected adapter.
+- Toobit is the first adapter only and remains replaceable.
+
+Verification:
+New focused tests are committed but not yet locally executed in this checkpoint environment.
+
+NEXT ACTION:
+Builder runs the focused adapter/preparation tests, `py_compile`, and `git diff --check`. Any failure is fixed only within this checkpoint scope; no Core redesign and no pipeline wiring.
