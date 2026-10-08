@@ -101,6 +101,18 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
+### CP DYNAMIC EXECUTION ASSET UNIVERSE — IMPLEMENTED
+Status = VERIFIED / DYNAMIC / PROVIDER-DRIVEN
+
+The execution instrument path is asset-agnostic. Toobit adapter now exposes read-only `discover_tradable_assets(venue)` derived from current authoritative exchange metadata and filtered to `TRADING`. Spot discovery uses live USDT base assets; Futures discovery uses live underlying assets. Exact provider symbol selection remains a separate provider-neutral instrument-resolution step.
+
+No static BTC/ETH/SOL universe was introduced. BTC is not privileged. A newly listed/tradable provider asset can enter the execution asset universe without Core code changes.
+
+Evidence commits: 91ffc7e (dynamic provider asset discovery), 0e3f59e (multi-asset discovery tests), 3b55141 (asset-agnostic resolver test).
+
+SAFETY: discovery is read-only; no order, provider write, DB mutation, execution authorization, or arunda_pipeline.py wiring.
+
+
 ### FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST — OPEN
 
 Status = CURRENT FRONTIER / OPEN / NOT EXECUTED
