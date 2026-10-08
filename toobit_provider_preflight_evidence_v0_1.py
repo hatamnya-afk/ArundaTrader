@@ -342,21 +342,13 @@ def build_toobit_provider_preflight_evidence(
                 "Futures account state payload is invalid"
             )
 
+        # Toobit exposes account/position state, leverage, and margin
+        # mode, but no provider-native Futures boolean authorizing
+        # additional portfolio exposure. Do not infer exposure_allowed
+        # from balance, leverage, or absence of positions.
         portfolio = ProviderPortfolioState(
             state_known=state.get("state_known") is True,
-            exposure_allowed=(
-                False
-                if state.get("position_conflict") is True
-                else (
-                    True
-                    if (
-                        state.get("state_known") is True
-                        and state.get("margin_state_known") is True
-                        and state.get("leverage_state_known") is True
-                    )
-                    else None
-                )
-            ),
+            exposure_allowed=None,
         )
 
     return build_provider_preflight_evidence(
