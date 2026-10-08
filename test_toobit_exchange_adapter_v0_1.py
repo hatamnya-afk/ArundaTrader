@@ -259,3 +259,16 @@ def test_discover_tradable_assets_rejects_invalid_venue():
     result = ToobitExchangeAdapter(transport=lambda **_: {}).discover_tradable_assets(venue="OPTIONS")
     assert result.allowed is False
     assert result.reason == "EXECUTION_INSTRUMENT_VENUE_INVALID"
+
+
+
+def test_toobit_conforms_to_replaceable_exchange_adapter_contract():
+    from exchange_execution_adapter_contract_v0_1 import (
+        ExchangeExecutionAdapter,
+        validate_adapter_contract,
+    )
+    adapter = ToobitExchangeAdapter(transport=lambda **_: {})
+    assert isinstance(adapter, ExchangeExecutionAdapter)
+    assert validate_adapter_contract(adapter) == (True, "VALID")
+    assert adapter.capabilities().order_submission is False
+    assert adapter.capabilities().order_cancellation is False
