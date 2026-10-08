@@ -1,3 +1,44 @@
+# CURRENT GOVERNANCE OVERRIDE — 2026-10-08
+
+> **THIS SECTION IS THE ACTIVE STATE.**
+> Historical sections below are preserved as evidence/history and MUST NOT be interpreted as the current frontier when they conflict with this section.
+>
+> ## CURRENT CROSS-REPOSITORY MAP
+> Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` first.
+>
+> ## VERIFIED POSITION
+> The provider-neutral execution-attempt contract is VERIFIED / PASS / CLOSED for its defined scope.
+> Latest verified endpoint: `448806f`.
+>
+> ## CURRENT FRONTIER
+> **MANAGEMENT REVIEW — EXPLICIT REAL-ORDER ATTEMPT GATE**
+>
+> The next task is to define and inspect the bounded, explicit management gate for a future real provider order attempt. This is preparation/governance only.
+>
+> ## SAFETY
+> `EXECUTION AUTHORIZATION = FALSE`
+> `ORDER WRITE = FORBIDDEN`
+> `PROVIDER WRITE = FORBIDDEN`
+> `DATABASE WRITE = FORBIDDEN`
+> `arunda_pipeline.py` remains unwired.
+>
+> ## FORBIDDEN
+> - Do not submit an order.
+> - Do not call provider write endpoints.
+> - Do not activate execution.
+> - Do not reopen CP46-A6.
+> - Do not redesign Core or bind Core to Toobit.
+> - Do not treat historical A6 BLOCKED text as the current frontier.
+>
+> ## ALLOWED NOW
+> - Define the explicit real-attempt gate.
+> - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
+> - Prepare a management decision package.
+>
+> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+
+---
+
 # ARUNDA TRADER — PROJECT STATE
 
 ## PURPOSE
