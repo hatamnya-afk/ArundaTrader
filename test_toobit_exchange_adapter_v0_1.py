@@ -226,3 +226,36 @@ def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contract
 
     assert result.allowed is False
     assert result.reason == "AUTHORITATIVE_PROVIDER_INSTRUMENT_AMBIGUOUS"
+
+
+
+def test_discover_tradable_assets_is_dynamic_for_spot_and_futures():
+    def transport(*, method, path, params, headers, base_url):
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [
+                {"symbol": "ETHUSDT", "status": "TRADING", "baseAsset": "ETH", "quoteAsset": "USDT"},
+                {"symbol": "SOLUSDT", "status": "TRADING", "baseAsset": "SOL", "quoteAsset": "USDT"},
+                {"symbol": "BTCUSDT", "status": "BREAK", "baseAsset": "BTC", "quoteAsset": "USDT"},
+                {"symbol": "XRPUSDC", "status": "TRADING", "baseAsset": "XRP", "quoteAsset": "USDC"},
+            ],
+            "contracts": [
+                {"symbol": "ETH-SWAP-USDT", "status": "TRADING", "underlying": "ETH"},
+                {"symbol": "SOL-SWAP-USDT", "status": "TRADING", "underlying": "SOL"},
+                {"symbol": "BTC-SWAP-USDT", "status": "BREAK", "underlying": "BTC"},
+                {"symbol": "XRP-SWAP-USDC", "status": "TRADING", "underlying": "XRP"},
+            ],
+        }
+    adapter = ToobitExchangeAdapter(transport=transport)
+    spot = adapter.discover_tradable_assets(venue="SPOT")
+    futures = adapter.discover_tradable_assets(venue="FUTURES")
+    assert spot.allowed is True
+    assert spot.data["assets"] == ["ETH", "SOL"]
+    assert futures.allowed is True
+    assert futures.data["assets"] == ["ETH", "SOL", "XRP"]
+
+
+def test_discover_tradable_assets_rejects_invalid_venue():
+    result = ToobitExchangeAdapter(transport=lambda **_: {}).discover_tradable_assets(venue="OPTIONS")
+    assert result.allowed is False
+    assert result.reason == "EXECUTION_INSTRUMENT_VENUE_INVALID"
