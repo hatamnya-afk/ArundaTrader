@@ -167,7 +167,7 @@ Current route:
 - Provider preflight evidence constructed successfully.
 - Account/order/contract/timestamp evidence was known and valid.
 - GET-only transport; no write endpoint invoked.
-- CP46-D focused tests = 12/12 PASS.
+- CP46-D test contract = 21/21 PASS across the Toobit adapter and CP46-D provider-preflight suites.
 - git diff --check = PASS.
 - targeted py_compile = PASS.
 - evidence-alignment commit = f80fa83.
@@ -181,6 +181,30 @@ Do not withdraw.
 Do not mutate the DB.
 Do not enable execution.
 Do not invoke additional provider APIs unless separately authorized as part of the controlled-test evidence scope.
+
+## CP46-D / CP46-A6 MANAGEMENT STATE
+
+CP46-D test contract = CLOSED / VERIFIED.
+
+Evidence:
+- 21/21 focused tests PASS.
+- py_compile PASS.
+- git diff --check PASS.
+- Futures routing, authoritative instrument resolution, contract evidence, provider-native margin state, leverage state, position state, and order state verified by focused contract tests.
+- A6 fail-closed behavior is explicitly tested.
+
+CP46-A6 = BLOCKED.
+
+Exclusive blocker:
+- No provider-native Toobit Futures signal has been established that directly authorizes additional portfolio exposure.
+- exposure_allowed therefore remains UNKNOWN.
+- Balance presence, leverage presence, margin mode, or empty positions MUST NOT be converted into exposure_allowed=True.
+
+Management verdict:
+The test contract is verified; the execution-readiness gate is correctly blocked. Do not weaken the contract to obtain PASS.
+
+NEXT ACTION:
+Investigate only provider-native Futures exposure authorization evidence. If no direct authoritative signal exists, preserve CP46-A6 as BLOCKED and advance no execution boundary.
 
 ## 6. MANAGEMENT GATES
 
@@ -251,6 +275,6 @@ Verified readiness evidence:
 The checkpoint is governance-open but execution-closed.
 
 NEXT ACTION:
-Perform controlled-test contract/readiness inspection only.
+Provider-native Futures exposure authorization investigation only. No inference, no execution, no DB mutation, no order/cancel/withdraw.
 
 # END MASTER MANAGEMENT ROADMAP
