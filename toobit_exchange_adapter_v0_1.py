@@ -48,7 +48,14 @@ class ToobitAdapterResult:
 Transport = Callable[..., Mapping[str, Any] | list[Any]]
 
 
-class ToobitExchangeAdapter:
+
+
+def _format_provider_quantity(value: Decimal) -> str:
+    text = format(value, "f")
+    if "." in text:
+        text = text.rstrip("0").rstrip(".")
+    return text
+\nclass ToobitExchangeAdapter:
     """Provider-specific, read-only Toobit adapter.
 
     The adapter never performs order submission/cancellation/withdrawal.
@@ -744,7 +751,7 @@ class ToobitExchangeAdapter:
                     "positionSide": request.direction,
                     "type": request.order_type,
                     "newClientOrderId": request.intent_id,
-                    "quantity": format(provider_quantity, "f"),
+                    "quantity": _format_provider_quantity(provider_quantity),
                     "category": str(
                         execution_instrument.settlement_asset or "USDT"
                     ).strip().upper(),
