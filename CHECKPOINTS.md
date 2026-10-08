@@ -307,3 +307,33 @@ Exit condition:
 A6 can leave BLOCKED only when a direct authoritative provider-native Futures exposure authorization signal is established, or a separately approved management change explicitly revises the execution contract.
 
 # END CHECKPOINTS
+
+
+## CP EXCHANGE-AGNOSTIC ORDER PREPARATION HANDOFF
+Status: BUILT / OPEN FOR VERIFICATION
+
+Purpose:
+Complete the exchange-neutral handoff from canonical order request to an opaque provider-order request owned by the selected replaceable adapter.
+
+Built scope:
+- `exchange_execution_adapter_contract_v0_1.py`
+- `exchange_execution_order_preparation_v0_1.py`
+- Toobit adapter preparation implementation
+- Focused tests for contract, handoff, and Toobit translation
+
+Contract:
+- Core validates only canonical/provider-neutral fields.
+- Adapter owns provider symbol, provider quantity semantics, and provider payload.
+- Preparation is read/translation only.
+- No order endpoint is called.
+- No DB mutation.
+- EXECUTION AUTHORIZATION remains FALSE.
+
+Management decision:
+CP46-A6's missing Toobit `exposure_allowed` Boolean is not permitted to halt the provider-neutral architecture. It remains an external provider capability gap. Any future provider rejection is an environment result, not a reason to bind Core to Toobit.
+
+Verification:
+- Newly added tests have not yet been locally executed in this checkpoint environment.
+
+NEXT ACTION:
+Run focused local verification. Only after green results may this checkpoint be marked VERIFIED and governance synchronized as CLOSED/VERIFIED or moved to its next explicit frontier.
