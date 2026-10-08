@@ -6,7 +6,9 @@
 
 Repository: `hatamnya-afk/ArundaTrader`
 
-Active operational branch: `operational-main-20261007`
+**Canonical branch for new work:** `main`
+
+`operational-main-20261007` is a historical operational line preserved for evidence. Do not start new work there.
 
 Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md`, `REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md`, `FINAL_REAL_ORDER_ATTEMPT_GATE.md`, `PROJECT_STATE.md`, `CURRENT_FRONTIER.md`, and `MANAGEMENT_ROADMAP.md` before making changes.
 
