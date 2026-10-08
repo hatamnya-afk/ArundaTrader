@@ -1,4 +1,5 @@
 from exchange_execution_adapter_contract_v0_1 import (
+    AdapterOrderPreparation,
     ExchangeAdapterCapabilities,
     ExchangeExecutionAdapter,
     validate_adapter_contract,
@@ -21,6 +22,15 @@ class FakeAdapter:
             order_state_read=True,
             order_submission=True,
             order_cancellation=True,
+        )
+
+    def prepare_order(self, request, *, venue, execution_instrument):
+        return AdapterOrderPreparation(
+            ready=True,
+            reason="READY",
+            adapter_name=self.adapter_name,
+            venue=venue,
+            request={"opaque": True},
         )
 
     def submit_order(self, request):
@@ -70,6 +80,9 @@ def test_structural_contract_does_not_call_provider():
         adapter_name = "REPLACEABLE"
 
         def capabilities(self):
+            raise AssertionError("provider call must not occur")
+
+        def prepare_order(self, request, *, venue, execution_instrument):
             raise AssertionError("provider call must not occur")
 
         def submit_order(self, request):
