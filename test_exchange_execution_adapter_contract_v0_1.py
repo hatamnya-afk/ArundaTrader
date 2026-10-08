@@ -33,6 +33,21 @@ class FakeAdapter:
             request={"opaque": True},
         )
 
+    def submit_prepared_order(self, preparation, *, canonical_request):
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=None,
+            status="FAIL_CLOSED",
+            asset=canonical_request.asset,
+            direction=canonical_request.direction,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=None,
+            adapter=self.adapter_name,
+            error_code="EXECUTION_DISABLED",
+            error_message="test adapter is not permitted to execute",
+        )
+
     def submit_order(self, request):
         return CanonicalExecutionResult(
             accepted=False,
