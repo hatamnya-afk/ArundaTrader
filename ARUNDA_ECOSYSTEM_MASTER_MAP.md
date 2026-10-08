@@ -114,10 +114,19 @@ Latest known execution-attempt contract:
 448806f
 
 Current frontier:
-MANAGEMENT REVIEW / EXPLICIT EXECUTION-ATTEMPT GATE.
+REAL-PRODUCTION PHASE-ENTRY MANAGEMENT REVIEW.
 
-The next real-order attempt requires separate explicit management authorization.
-A verified contract is never an execution authorization.
+Management authorization is a ONE-TIME PHASE-ENTRY MANDATE, not a per-trade
+approval. After explicit phase-entry authorization, the trader operates
+autonomously for Spot and Futures under the existing Decision → Risk →
+Trade Gate → Readiness → Order Attempt contracts. The provider remains
+authoritative for ACCEPT/REJECT.
+
+The technical execution authorization boundary verifies each ready request
+against the active standing mandate; it does not request management approval
+for each trade.
+
+A verified contract is never, by itself, a phase-entry management decision.
 
 ## 6. ARCHITECTURAL INVARIANTS
 
@@ -146,10 +155,12 @@ A future Builder/Manager must never:
 7. Bind Core directly to Toobit.
 8. Assume a missing artifact must be rebuilt.
 9. Use another workspace as the canonical project.
-10. Infer authorization from readiness or provider metadata.
+10. Infer phase-entry authorization from readiness, provider metadata, account balance, or a passing test.
 11. Activate execution because a contract test passes.
 12. Promote future product vision into Git-backed implementation status without
 explicit management decision.
+13. Recreate a per-trade management authorization layer after phase entry.
+14. Treat zero exchange balance as a local blocker when the provider is the authority for acceptance/rejection.
 
 ## 8. MANDATORY BUILDER ENTRY
 
