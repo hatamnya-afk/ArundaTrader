@@ -101,6 +101,24 @@ CP43 evidence: 77/77 focused tests passed; compile passed; `git diff --check` pa
 
 ## CURRENT FRONTIER
 
+### EXCHANGE-AGNOSTIC ADAPTER CONTRACT — VERIFIED
+Status = VERIFIED / REPLACEABLE BOUNDARY
+
+A provider-neutral adapter contract is now explicit in `exchange_execution_adapter_contract_v0_1.py`. Core-facing execution uses a replaceable adapter interface; the contract contains no exchange name, provider symbol, transport, credential, or exchange-specific semantics. Toobit is only one concrete adapter implementation.
+
+Verified changes:
+- `ExchangeExecutionAdapter` structural contract established.
+- Adapter capabilities are provider-neutral.
+- Toobit conforms to the replaceable adapter boundary while remaining execution-disabled.
+- Order submission/cancellation remain fail-closed.
+- No Core dependency on Toobit was introduced.
+
+Evidence commits: `98b75b1`, `3b4f184`, `ded818b`, `ac97549`, `726a6e3`.
+
+This checkpoint does NOT authorize execution and does NOT close the final real-market gate.
+
+
+
 ### CP DYNAMIC EXECUTION ASSET UNIVERSE — IMPLEMENTED
 Status = VERIFIED / DYNAMIC / PROVIDER-DRIVEN
 
