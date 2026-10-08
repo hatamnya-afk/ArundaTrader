@@ -93,7 +93,7 @@ def test_futures_account_state_preserves_provider_position_state_without_inferen
         if path == "/api/v1/futures/balance":
             return [{"asset": "USDT", "available": "100"}]
         if path == "/api/v1/futures/accountLeverage":
-            return [{"symbolId": "BTC-SWAP-USDT", "leverage": "5"}]
+            return [{"symbolId": "BTC-SWAP-USDT", "leverage": "5", "marginType": "CROSS"}]
         if path == "/api/v1/futures/positions":
             return [{"symbol": "BTC-SWAP-USDT", "side": "LONG", "positionAmt": "2"}]
         raise AssertionError("unexpected path: " + path)
@@ -106,10 +106,45 @@ def test_futures_account_state_preserves_provider_position_state_without_inferen
 
     assert result.allowed is True
     assert result.data["position_state_known"] is True
+    assert result.data["margin_state_known"] is True
+    assert result.data["margin_type"] == "CROSS"
     assert result.data["positions"] == [
         {"symbol": "BTC-SWAP-USDT", "side": "LONG", "positionAmt": "2"}
     ]
     assert "position_conflict" not in result.data
+
+
+def test_futures_account_state_blocks_without_provider_native_margin_type():
+    def transport(*, method, path, params, headers, base_url):
+        if path == "/api/v1/exchangeInfo":
+            return {
+                "symbols": [],
+                "contracts": [
+                    {
+                        "symbol": "BTC-SWAP-USDT",
+                        "status": "TRADING",
+                        "underlying": "BTC",
+                        "contractMultiplier": "0.001",
+                        "filters": [],
+                    }
+                ],
+            }
+        if path == "/api/v1/futures/balance":
+            return [{"asset": "USDT", "available": "100"}]
+        if path == "/api/v1/futures/accountLeverage":
+            return [{"symbolId": "BTC-SWAP-USDT", "leverage": "5"}]
+        if path == "/api/v1/futures/positions":
+            raise AssertionError("position read must not follow unknown margin state")
+        raise AssertionError("unexpected path: " + path)
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+        api_key="test-key",
+        secret_key="test-secret",
+    ).futures_account_state("BTC")
+
+    assert result.allowed is False
+    assert result.reason == "TOOBIT_FUTURES_MARGIN_STATE_UNAVAILABLE"
 
 
 def test_futures_instrument_resolution_uses_authoritative_settlement_metadata():
