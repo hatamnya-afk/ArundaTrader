@@ -55,7 +55,8 @@ def _format_provider_quantity(value: Decimal) -> str:
     if "." in text:
         text = text.rstrip("0").rstrip(".")
     return text
-\nclass ToobitExchangeAdapter:
+
+class ToobitExchangeAdapter:
     """Provider-specific, read-only Toobit adapter.
 
     The adapter never performs order submission/cancellation/withdrawal.
