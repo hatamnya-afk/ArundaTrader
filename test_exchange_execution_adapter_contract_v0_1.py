@@ -100,6 +100,9 @@ def test_structural_contract_does_not_call_provider():
         def prepare_order(self, request, *, venue, execution_instrument):
             raise AssertionError("provider call must not occur")
 
+        def submit_prepared_order(self, preparation, *, canonical_request):
+            raise AssertionError("provider call must not occur")
+
         def submit_order(self, request):
             raise AssertionError("provider call must not occur")
 
