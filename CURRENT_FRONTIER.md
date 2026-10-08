@@ -117,4 +117,28 @@ CP46-A6 remains BLOCKED exclusively by missing provider-native Futures exposure 
 
 No additional provider API call, order, cancel, withdrawal, DB mutation, execution authorization, or pipeline wiring is authorized by this investigation.
 
+## CP46-A6 — FINAL MANAGEMENT DECISION
+
+The provider-native exposure investigation is CLOSED.
+
+Decision:
+CP46-A6 remains BLOCKED / NOT VERIFIABLE because Toobit currently exposes no established read-only provider-native Futures authorization signal equivalent to `exposure_allowed`.
+
+Classification:
+- ArundaTrader defect: NO
+- Missing implementation surface: NO
+- Provider capability/evidence gap: YES
+
+Therefore:
+- Do not modify `provider_preflight_v0_1.py` to infer permission.
+- Do not treat balance, leverage, marginType, empty positions, risk limits, API-key trade permission, or hypothetical order acceptance as authorization.
+- Do not send an order merely to discover whether exposure is accepted.
+- Do not activate execution.
+
+CURRENT FRONTIER:
+FINAL REAL-MARKET EXECUTION READINESS — BLOCKED BY EXTERNAL PROVIDER EVIDENCE GAP.
+
+NEXT ACTION:
+Obtain new authoritative Toobit provider evidence/clarification for Futures exposure authorization. Until then, remain fail-closed.
+
 # END CURRENT FRONTIER
