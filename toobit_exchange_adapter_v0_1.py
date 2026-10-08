@@ -175,6 +175,48 @@ class ToobitExchangeAdapter:
             raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
         return data
 
+    def discover_tradable_assets(self, *, venue: str) -> ToobitAdapterResult:
+        """Return the current provider-reported tradable asset universe.
+
+        Discovery is metadata-only. No static coin list is maintained here;
+        Core remains asset-agnostic and exact instrument selection is handled
+        separately by the execution instrument resolver.
+        """
+        try:
+            normalized_venue = str(venue).strip().upper()
+            if normalized_venue not in {"SPOT", "FUTURES"}:
+                raise RuntimeError("EXECUTION_INSTRUMENT_VENUE_INVALID")
+
+            info = self._exchange_info()
+            assets: set[str] = set()
+            rows_key = "symbols" if normalized_venue == "SPOT" else "contracts"
+            rows = info.get(rows_key)
+            if not isinstance(rows, list):
+                raise RuntimeError("TOOBIT_EXCHANGE_INFO_INVALID")
+
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                if str(row.get("status", "")).strip().upper() != "TRADING":
+                    continue
+                if normalized_venue == "SPOT":
+                    asset = str(row.get("baseAsset", "")).strip().upper()
+                    quote = str(row.get("quoteAsset", "")).strip().upper()
+                    if asset and quote == "USDT":
+                        assets.add(asset)
+                else:
+                    asset = str(row.get("underlying", "")).strip().upper()
+                    if asset:
+                        assets.add(asset)
+
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {"venue": normalized_venue, "assets": sorted(assets)},
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def trading_constraints(self, asset: str) -> ToobitAdapterResult:
         try:
             row = self._find_asset(
