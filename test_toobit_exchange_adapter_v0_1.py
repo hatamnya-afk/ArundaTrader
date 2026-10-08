@@ -70,7 +70,9 @@ def test_order_submission_is_explicitly_disabled():
 
 
 def test_cancel_is_explicitly_disabled():
-    result = ToobitExchangeAdapter().cancel_order(\n        asset="BTC", exchange_order_id="test-order-id"\n    )
+    result = ToobitExchangeAdapter().cancel_order(
+        asset="BTC", exchange_order_id="test-order-id"
+    )
     assert result.allowed is False
     assert result.reason == "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED"
 
