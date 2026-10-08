@@ -76,6 +76,22 @@ def evaluate_management_phase_entry(
     if not isinstance(management_observation, Mapping):
         raise ValueError("MANAGEMENT_PHASE_ENTRY_INPUT_INVALID")
 
+    # These belong to the execution-attempt domain, never to Management.
+    # Reject them at the canonical management boundary so a future caller
+    # cannot silently recreate per-trade authorization semantics.
+    forbidden_trade_fields = {
+        "attempt_id",
+        "asset",
+        "direction",
+        "order_type",
+        "quantity",
+        "per_order_exposure",
+        "exposure",
+    }
+    leaked = forbidden_trade_fields.intersection(management_observation.keys())
+    if leaked:
+        raise ValueError("MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN")
+
     decision = _text(
         management_observation.get("decision"),
         "MANAGEMENT_DECISION_INVALID",
