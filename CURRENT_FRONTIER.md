@@ -1,6 +1,18 @@
 # ARUNDA TRADER — CURRENT FRONTIER
 
 ## STATUS
+CURRENT FRONTIER — PROVIDER-NEUTRAL EXECUTION PATH COMPLETION
+
+## EXCHANGE-AGNOSTIC ADAPTER CONTRACT
+Status: VERIFIED / REPLACEABLE
+
+The execution boundary now has an explicit provider-neutral adapter contract. The Core does not name Toobit and can target another exchange adapter implementing the same contract.
+
+Toobit remains only the currently selected concrete execution environment. Its capabilities are advertised separately and its order submission/cancellation are still disabled.
+
+Next: complete the provider-neutral handoff from canonical order request through the selected adapter without binding Core to any exchange. Only after that, under separate explicit authorization, may a real order attempt occur.
+
+
 CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
 
 ## CP DYNAMIC EXECUTION ASSET UNIVERSE
