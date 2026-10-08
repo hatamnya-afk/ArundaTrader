@@ -35,7 +35,7 @@
 > - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
 > - Prepare a management decision package.
 >
-> **STOP CONDITION:** after the gate package is verified, STOP. A separate explicit execution authorization is required before any provider write.
+> **STOP CONDITION:** after the gate package is verified, STOP. Provider write remains forbidden until the ONE-TIME MANAGEMENT PHASE-ENTRY MANDATE is explicitly authorized. After that phase-entry authorization, no per-trade management approval is required; each request passes through the existing technical authorization boundary.
 
 ---
 
@@ -51,7 +51,7 @@ The execution boundary now has an explicit provider-neutral adapter contract. Th
 
 Toobit remains only the currently selected concrete execution environment. Its capabilities are advertised separately and its order submission/cancellation are still disabled.
 
-Next: complete the provider-neutral handoff from canonical order request through the selected adapter without binding Core to any exchange. Only after that, under separate explicit authorization, may a real order attempt occur.
+Next: complete the provider-neutral handoff from canonical order request through the selected adapter without binding Core to any exchange. A later real order attempt, once the real-production phase has been explicitly entered, does not require a new management approval; it uses the active standing mandate through the technical authorization boundary.
 
 
 CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
@@ -273,7 +273,7 @@ Management verdict:
 The final provider-neutral execution-attempt contract is VERIFIED and execution-closed.
 
 NEXT FRONTIER:
-Management review of the separately authorized controlled real-order-attempt gate. No execution activation is implied by this verification.
+Management review of the final real-order-attempt gate under the ONE-TIME STANDING PHASE-ENTRY MANDATE. Verification does not activate execution, and no per-trade management approval exists.
 
 
 ## CURRENT FRONTIER — STANDING REAL-PRODUCTION TRADING MANDATE
