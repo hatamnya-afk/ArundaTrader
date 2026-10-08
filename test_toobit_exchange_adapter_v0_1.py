@@ -74,7 +74,7 @@ def test_cancel_is_explicitly_disabled():
         asset="BTC", exchange_order_id="test-order-id"
     )
     assert result.accepted is False
-    assert result.reason == "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED"
+    assert result.error_code == "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED"
 
 
 def test_futures_account_state_preserves_provider_position_state_without_inference():
