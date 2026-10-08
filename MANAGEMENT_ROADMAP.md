@@ -121,7 +121,30 @@ The following historical stages are completed and must not be reopened or re-aud
   - Execution authorization remained false.
   - No order, execution, API write, or production DB mutation occurred.
 
-## 4. CURRENT FRONTIER — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
+## 4. CURRENT FRONTIER — PROVIDER-NEUTRAL EXECUTION PATH COMPLETION
+
+### EXCHANGE-AGNOSTIC ADAPTER CONTRACT — VERIFIED
+The execution adapter boundary is now explicit and replaceable.
+
+- Core-facing contract is provider-neutral.
+- No exchange-specific name, symbol, transport, credential, or API semantics are required by Core.
+- Toobit is one concrete adapter, not an architectural dependency.
+- Submission/cancellation remain disabled and fail-closed.
+- Adapter conformance is structurally tested without provider calls.
+
+Commits: `98b75b1`, `3b4f184`, `ded818b`, `ac97549`, `726a6e3`.
+
+Management verdict: **Toobit is an interchangeable execution environment.** The completion target is the Arunda execution path and its provider-neutral boundary, not Toobit itself. A future exchange can replace Toobit by implementing the same adapter contract.
+
+### Safety
+EXECUTION AUTHORIZATION = FALSE
+ORDER SUBMISSION/CANCELLATION = FORBIDDEN
+WITHDRAWAL = FORBIDDEN
+DATABASE WRITE = FORBIDDEN
+PROVIDER WRITE = FORBIDDEN
+
+## 4A. HISTORICAL FINAL REAL-MARKET EXCHANGE INTEGRATION / CONTROLLED TEST
+ — EXECUTION PATH COMPLETION / DYNAMIC ASSET BOUNDARY
 
 ### CP DYNAMIC EXECUTION ASSET UNIVERSE — VERIFIED
 The execution side is now explicitly provider-driven rather than BTC-driven.
