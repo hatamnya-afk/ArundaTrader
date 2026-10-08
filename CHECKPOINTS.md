@@ -338,3 +338,37 @@ Verification:
 NEXT ACTION:
 Run focused local verification. Only after green results may this checkpoint be marked VERIFIED and governance synchronized as CLOSED/VERIFIED or moved to its next explicit frontier.
 \n\n## CP EXCHANGE-AGNOSTIC ORDER ATTEMPT BOUNDARY\nStatus: VERIFIED / PASS / EXECUTION-CLOSED\n\nScope:\n- Provider-neutral prepared-order submission contract.\n- Provider-neutral final order-attempt boundary.\n- Explicit authorization gate before adapter submission.\n- Toobit prepared submission remains fail-closed.\n\nEvidence:\n- 22/22 focused tests passed.\n- py_compile passed.\n- git diff --check passed.\n\nSafety:\n- EXECUTION AUTHORIZATION = FALSE.\n- No order/cancel/withdrawal.\n- No DB mutation.\n- No `arunda_pipeline.py` wiring.\n\nDecision:\nThe exchange-neutral order-attempt boundary is CLOSED/VERIFIED for this scope. CP46-A6 remains a historical external provider-capability blocker only for the specific preflight Boolean; it does not reopen or invalidate this Core boundary.\n\nCURRENT FRONTIER:\nExplicit execution-attempt readiness contract, still execution-disabled.\n\nNEXT ACTION:\nVerify the authorization/readiness contract for a future real attempt without submitting an order.\n
+
+## CP FINAL EXECUTION ATTEMPT CONTRACT
+
+Status: VERIFIED / PASS / EXECUTION-CLOSED
+
+Scope:
+- Compose the already-verified execution-ready package, readiness, authorization, preparation, and replaceable-adapter attempt boundaries.
+- Keep Core provider-neutral.
+- Preserve explicit authorization as a separate gate.
+- Keep Toobit submission fail-closed.
+
+Evidence:
+- 28/28 focused tests passed.
+- py_compile passed.
+- git diff --check passed.
+- Commit `448806f` is the verified implementation/test endpoint after fast-forward from `91c82a7`.
+
+Acceptance:
+- Valid package reaches readiness evaluation.
+- Package/request mismatch blocks before adapter.
+- No explicit authorization blocks before adapter.
+- Explicit valid authorization reaches the replaceable adapter.
+- The test adapter returns `TEST_EXECUTION_DISABLED`; no real order is submitted.
+- Toobit remains execution-disabled.
+
+Safety:
+- EXECUTION AUTHORIZATION = FALSE.
+- ORDER WRITE = FORBIDDEN.
+- WITHDRAW = FORBIDDEN.
+- DATABASE WRITE = FORBIDDEN.
+- `arunda_pipeline.py` remains unwired.
+
+Decision:
+This checkpoint is CLOSED/VERIFIED for its defined contract scope. It does not authorize a real order.
