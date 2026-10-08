@@ -1,13 +1,19 @@
-"""Management review package for transition into autonomous real-order operation.
+"""Management review package for the one-time real-production phase-entry decision.
 
-This module is a governance/readiness artifact only. It does not submit orders,
-contact providers, mutate databases, enable execution, or infer provider
-acceptance.
+This module is review packaging only. It is NOT an authorization producer and
+must never issue, mirror, or synthesize an execution-authorization result.
+The single canonical management authorization owner is
+management_execution_authorization_v0_1.py.
 
-The management decision here authorizes the trader's operational mandate,
-not each individual trade. Individual trade decisions remain the responsibility
-of the existing decision/risk/trade-gate chain, while the provider remains
-authoritative for acceptance/rejection.
+This module does not submit orders, contact providers, mutate databases, enable
+execution, or infer provider acceptance. It packages the management decision
+inputs and policy evidence for review. Individual trade decisions remain the
+responsibility of the existing decision/risk/trade-gate chain, while the
+provider remains authoritative for acceptance/rejection.
+
+IMPORTANT: execution_authorization and per-trade authorization state are
+intentionally absent from this package. A management review package is not a
+second authorization boundary.
 """
 
 from __future__ import annotations
@@ -79,13 +85,10 @@ def build_management_review_package(
         "environment": environment,
         "allowed_markets": markets,
         "provider": provider,
-        "autonomous_operation": decision == "AUTHORIZED",
+        "autonomous_operation_after_phase_entry": decision == "AUTHORIZED",
         "per_trade_management_authorization_required": False,
         "provider_rejection_is_authoritative": True,
         "capital_policy": capital_policy,
         "evidence_required_before": before,
         "evidence_required_after": after,
-        "execution_authorization": (
-            "AUTHORIZED_STANDING_MANDATE" if decision == "AUTHORIZED" else False
-        ),
     }
