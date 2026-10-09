@@ -86,6 +86,7 @@ class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
             error_code=None,
             error_message=None,
             trade_event_id="TRADE-EVENT-FILLED-1",
+            decision_id="DECISION-1",
             fill_outcome="FILLED",
             fill_reason_code="PROVIDER_CONFIRMED_TERMINAL_FILL",
         )
@@ -143,6 +144,7 @@ class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
             error_code=None,
             error_message=None,
             trade_event_id="TRADE-EVENT-1",
+            decision_id="DECISION-1",
         )
 
         with patch.object(

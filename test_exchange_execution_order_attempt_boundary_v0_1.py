@@ -137,3 +137,58 @@ def test_missing_provider_blocks_before_adapter_preparation_or_submission():
     assert adapter.prepare_calls == 0
     assert adapter.submit_prepared_calls == 0
     assert adapter.submit_calls == 0
+
+def test_missing_decision_id_blocks_before_adapter_preparation_or_submission():
+    from dataclasses import replace
+
+    adapter = _TrackingAdapter()
+    request = replace(_request(), decision_id=None)
+
+    result = attempt_prepared_order(
+        request=request,
+        readiness_observation=_readiness(),
+        authorization_observation=_authorized(),
+        adapter=adapter,
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "DECISION_ID_MISSING"
+    assert result.trade_event_id is None
+    assert adapter.prepare_calls == 0
+    assert adapter.submit_prepared_calls == 0
+    assert adapter.submit_calls == 0
+
+
+def test_successful_attempt_carries_boundary_owned_attempt_and_decision_ids():
+    adapter = _TrackingAdapter()
+
+    result = _attempt(adapter, _authorized())
+
+    assert result.decision_id == "decision-001"
+    assert isinstance(result.trade_event_id, str)
+    assert result.trade_event_id.strip()
+    assert adapter.prepare_calls == 1
+    assert adapter.submit_prepared_calls == 1
+    assert adapter.submit_calls == 0
+
+
+def test_submit_exception_preserves_decision_and_attempt_identity():
+    class _RaisingAdapter(_TrackingAdapter):
+        def submit_prepared_order(self, preparation, *, canonical_request):
+            self.submit_prepared_calls += 1
+            raise RuntimeError("controlled test exception")
+
+    adapter = _RaisingAdapter()
+    result = _attempt(adapter, _authorized())
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "ADAPTER_SUBMIT_PREPARED_FAILED"
+    assert result.decision_id == "decision-001"
+    assert isinstance(result.trade_event_id, str)
+    assert result.trade_event_id.strip()
+    assert result.fill_outcome is None
+    assert adapter.prepare_calls == 1
+    assert adapter.submit_prepared_calls == 1
+    assert adapter.submit_calls == 0

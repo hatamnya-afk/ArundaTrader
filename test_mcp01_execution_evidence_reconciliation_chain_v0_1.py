@@ -47,6 +47,7 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
         events = self._events({
             "BTC": {
                 "trade_event_id": trade_event_id,
+                "decision_id": "DECISION-1",
                 "status": "ACCEPTED",
                 "adapter": "CONTROLLED_TEST_ADAPTER",
                 "direction": "LONG",
@@ -84,6 +85,7 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
     def test_missing_attempt_identity_is_data_quality_not_invented_order(self) -> None:
         events = self._events({
             "BTC": {
+                "decision_id": "DECISION-1",
                 "status": "ACCEPTED",
                 "adapter": "CONTROLLED_TEST_ADAPTER",
                 "direction": "LONG",
@@ -115,6 +117,7 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
         events = self._events({
             "BTC": {
                 "trade_event_id": trade_event_id,
+                "decision_id": "DECISION-1",
                 "status": "ACCEPTED",
                 "adapter": "CONTROLLED_TEST_ADAPTER",
                 "direction": "LONG",
@@ -146,6 +149,7 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
             error_code=None,
             error_message=None,
             trade_event_id="TRADE-EVENT-CANONICAL-1",
+            decision_id="DECISION-1",
             fill_outcome="FILLED",
             fill_reason_code="PROVIDER_CONFIRMED_TERMINAL_FILL",
         )
@@ -165,6 +169,51 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
         self.assertEqual(len(reconciled), 1)
         self.assertEqual(reconciled[0]["fill_outcome"], "FILLED")
         self.assertTrue(reconciled[0]["complete"])
+
+    def test_missing_result_decision_id_is_data_quality_only(self) -> None:
+        events = self._events({
+            "BTC": {
+                "trade_event_id": "TRADE-EVENT-MISSING-DECISION",
+                "status": "ACCEPTED",
+                "adapter": "CONTROLLED_TEST_ADAPTER",
+                "direction": "LONG",
+                "fill_outcome": "FILLED",
+            }
+        })
+        self.assertTrue(any(
+            event["event_type"] == EVENT_DATA_QUALITY
+            and event.get("reason_code") == "EXECUTION_RESULT_DECISION_ID_MISSING"
+            for event in events
+        ))
+        self.assertFalse(any(
+            event["event_type"] in {
+                EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT, EVENT_FILL_OUTCOME
+            }
+            for event in events
+        ))
+
+    def test_mismatched_result_decision_id_is_data_quality_only(self) -> None:
+        events = self._events({
+            "BTC": {
+                "decision_id": "OTHER-DECISION",
+                "trade_event_id": "TRADE-EVENT-WRONG-DECISION",
+                "status": "ACCEPTED",
+                "adapter": "CONTROLLED_TEST_ADAPTER",
+                "direction": "LONG",
+                "fill_outcome": "FILLED",
+            }
+        })
+        self.assertTrue(any(
+            event["event_type"] == EVENT_DATA_QUALITY
+            and event.get("reason_code") == "EXECUTION_RESULT_DECISION_ID_MISMATCH"
+            for event in events
+        ))
+        self.assertFalse(any(
+            event["event_type"] in {
+                EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT, EVENT_FILL_OUTCOME
+            }
+            for event in events
+        ))
 
 if __name__ == "__main__":
     unittest.main()

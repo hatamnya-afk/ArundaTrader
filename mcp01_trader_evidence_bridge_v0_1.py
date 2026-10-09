@@ -104,6 +104,41 @@ def build_runtime_evidence_events(
                 f"execution_results asset missing from decision_snapshot: {asset}"
             )
 
+        result_decision_id = result.get("decision_id")
+        snapshot_decision_id = _text(
+            decision_snapshot[asset].get("decision_id"),
+            f"{asset}.decision_id",
+        )
+
+        if not isinstance(result_decision_id, str) or not result_decision_id.strip():
+            payload = {
+                "event_type": EVENT_DATA_QUALITY,
+                "event_timestamp": emitted_at,
+                "cycle_id": cycle_id,
+                "asset": _text(asset, "asset"),
+                "stage": "DATA_QUALITY",
+                "status": result.get("status"),
+                "reason_code": "EXECUTION_RESULT_DECISION_ID_MISSING",
+            }
+            payload["event_id"] = deterministic_event_id(**payload)
+            events.append(build_event(**payload).to_dict())
+            continue
+
+        result_decision_id = result_decision_id.strip()
+        if result_decision_id != snapshot_decision_id:
+            payload = {
+                "event_type": EVENT_DATA_QUALITY,
+                "event_timestamp": emitted_at,
+                "cycle_id": cycle_id,
+                "asset": _text(asset, "asset"),
+                "stage": "DATA_QUALITY",
+                "status": result.get("status"),
+                "reason_code": "EXECUTION_RESULT_DECISION_ID_MISMATCH",
+            }
+            payload["event_id"] = deterministic_event_id(**payload)
+            events.append(build_event(**payload).to_dict())
+            continue
+
         trade_event_id = result.get("trade_event_id")
         if trade_event_id is None:
             payload = {
@@ -120,7 +155,7 @@ def build_runtime_evidence_events(
             continue
 
         trade_event_id = _text(trade_event_id, f"{asset}.trade_event_id")
-        decision_id = _text(decision_snapshot[asset].get("decision_id"), f"{asset}.decision_id")
+        decision_id = result_decision_id
         direction = _optional_text(result.get("direction"), f"{asset}.direction")
 
         order_payload = {

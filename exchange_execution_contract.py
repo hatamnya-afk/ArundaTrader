@@ -79,6 +79,8 @@ class CanonicalExecutionResult:
     # accepted/acknowledged order status must never be promoted to FILLED.
     fill_outcome: Optional[str] = None
     fill_reason_code: Optional[str] = None
+    # Authoritative identity copied from the canonical request.
+    decision_id: Optional[str] = None
 
 
 def build_order_request(
@@ -189,6 +191,7 @@ def blocked_execution_result(
     error_code: str = "EXECUTION_DISABLED",
     error_message: str = "Execution is disabled by contract.",
     trade_event_id: Optional[str] = None,
+    decision_id: Optional[str] = None,
 ) -> CanonicalExecutionResult:
     """
     Contract-level fail-closed result.
@@ -208,6 +211,7 @@ def blocked_execution_result(
         error_code=error_code,
         error_message=error_message,
         trade_event_id=trade_event_id,
+        decision_id=decision_id,
     )
 
 
