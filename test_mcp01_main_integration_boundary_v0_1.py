@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 import mcp01_main_integration_boundary_v0_1 as boundary
@@ -9,6 +12,9 @@ from mcp01_compact_event_evidence_v0_1 import (
     EVENT_FILL_OUTCOME,
     EVENT_ORDER_ATTEMPTED,
     EVENT_PROVIDER_RESULT,
+    append_event_idempotent,
+    build_event,
+    persist_events_isolated,
 )
 from mcp01_outcome_reconciliation_v0_1 import reconcile_outcomes
 
@@ -184,6 +190,56 @@ class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
         )
         self.assertIsNone(trade_chain["fill_outcome"])
         self.assertFalse(trade_chain["complete"])
+
+    def test_mapping_events_are_normalized_and_persisted_idempotently(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            stream_path = Path(directory) / "events.jsonl"
+            event = build_event(
+                event_id="EV-REAL-PERSISTENCE-1",
+                event_type=EVENT_SELECTED,
+                event_timestamp="2026-10-10T00:00:00+00:00",
+                cycle_id="CYCLE-PERSIST-1",
+                decision_id="DECISION-PERSIST-1",
+                asset="BTC",
+                stage="DECISION",
+                status="TRADE",
+            ).to_dict()
+            append = lambda value: append_event_idempotent(value, stream_path=stream_path)
+
+            persisted, failures = persist_events_isolated([event], append_fn=append)
+            self.assertEqual((persisted, failures), (1, []))
+            rows = [json.loads(line) for line in stream_path.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0]["event_id"], "EV-REAL-PERSISTENCE-1")
+            self.assertEqual(rows[0]["decision_id"], "DECISION-PERSIST-1")
+
+            persisted_again, failures_again = persist_events_isolated([event], append_fn=append)
+            self.assertEqual((persisted_again, failures_again), (1, []))
+            rows_again = stream_path.read_text(encoding="utf-8").splitlines()
+            self.assertEqual(len(rows_again), 1)
+
+    def test_invalid_mapping_isolated_without_stopping_later_events(self) -> None:
+        valid = build_event(
+            event_id="EV-VALID-AFTER-INVALID",
+            event_type=EVENT_SELECTED,
+            event_timestamp="2026-10-10T00:00:00+00:00",
+            cycle_id="CYCLE-ISOLATION",
+            decision_id="DECISION-ISOLATION",
+            asset="BTC",
+            stage="DECISION",
+            status="TRADE",
+        ).to_dict()
+        invalid = {**valid, "event_id": "EV-INVALID", "event_type": "UNSUPPORTED"}
+        persisted_events = []
+
+        def append(event):
+            persisted_events.append(event)
+
+        persisted, failures = persist_events_isolated([invalid, valid], append_fn=append)
+        self.assertEqual(persisted, 1)
+        self.assertEqual(len(failures), 1)
+        self.assertEqual(failures[0]["event_id"], "EV-INVALID")
+        self.assertEqual(persisted_events[0].event_id, "EV-VALID-AFTER-INVALID")
 
 
 if __name__ == "__main__":
