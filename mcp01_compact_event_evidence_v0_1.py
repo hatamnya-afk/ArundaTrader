@@ -6,6 +6,7 @@ decision, case, or trade identities.
 from __future__ import annotations
 import hashlib
 import json
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -106,26 +107,42 @@ def append_event_idempotent(event: CompactEvent, stream_path: Path = DEFAULT_STR
     return path
 
 def persist_events_isolated(
-    events: list[CompactEvent],
+    events: list[CompactEvent] | list[Mapping[str, Any]],
     append_fn=append_event_idempotent,
 ) -> tuple[int, list[dict[str, str]]]:
-    """Persist evidence without allowing persistence failure to abort Trader flow.
+    """Persist each CompactEvent or bridge-produced mapping independently.
 
-    Each event is attempted independently. Persistence failures are returned as
-    bounded management diagnostics; they never alter the supplied event list or
-    raise into the Trader pipeline. This boundary does not create replacement
-    evidence when persistence itself is unavailable.
+    The Trader evidence bridge intentionally exports plain dictionaries for
+    transport and reconciliation. Normalize each mapping at this persistence
+    boundary into the canonical CompactEvent type before validation and append.
+    Failures remain isolated per event and are returned as bounded diagnostics;
+    no replacement identity or evidence is generated on persistence failure.
     """
     persisted = 0
     failures: list[dict[str, str]] = []
-    for event in events:
+    for raw_event in events:
+        raw_event_id = (
+            raw_event.event_id
+            if isinstance(raw_event, CompactEvent)
+            else raw_event.get("event_id")
+            if isinstance(raw_event, Mapping)
+            else None
+        )
+        event_id = raw_event_id if isinstance(raw_event_id, str) and raw_event_id else "<unknown>"
         try:
+            if isinstance(raw_event, CompactEvent):
+                event = raw_event
+            elif isinstance(raw_event, Mapping):
+                event = CompactEvent(**dict(raw_event))
+            else:
+                raise TypeError("evidence event must be CompactEvent or a mapping")
+            event.validate()
             append_fn(event)
             persisted += 1
         except Exception as exc:
             failures.append(
                 {
-                    "event_id": event.event_id,
+                    "event_id": event_id,
                     "error_type": f"{type(exc).__module__}.{type(exc).__name__}",
                 }
             )
