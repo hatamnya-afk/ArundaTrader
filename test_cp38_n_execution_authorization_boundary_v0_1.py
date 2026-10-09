@@ -84,10 +84,10 @@ def test_spot_and_futures_must_be_in_mandate():
 
 
 def test_current_market_must_be_allowed():
-    value = mandate()
-    value["allowed_markets"] = ("FUTURES",)
+    value = ready()
+    value["venue"] = "MARGIN"
     with pytest.raises(ValueError, match="AUTHORIZATION_MARKET_NOT_ALLOWED"):
-        evaluate_execution_authorization(ready(), value)
+        evaluate_execution_authorization(value, mandate())
 
 
 def test_non_mapping_inputs_fail_closed():
