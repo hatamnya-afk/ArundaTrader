@@ -172,7 +172,7 @@ def test_final_attempt_fails_closed_without_standing_mandate():
     )
 
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+    assert result.error_code == "AUTHORIZATION_MODE_INVALID"
 
 
 def test_final_attempt_keeps_attempt_identity_outside_management_authorization():
