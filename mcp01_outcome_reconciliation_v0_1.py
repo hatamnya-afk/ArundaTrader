@@ -18,6 +18,7 @@ RECONCILIATION_STATES = (
     "DECISION",
     "ORDER",
     "PROVIDER_RESULT",
+    "FILL_OUTCOME",
     "MARKET_OUTCOME",
     "CASE_OUTCOME",
 )
@@ -26,6 +27,7 @@ _EVENT_STAGE = {
     "TRADE_READY": "DECISION",
     "ORDER_ATTEMPTED": "ORDER",
     "PROVIDER_RESULT": "PROVIDER_RESULT",
+    "FILL_OUTCOME": "FILL_OUTCOME",
     "MARKET_OUTCOME": "MARKET_OUTCOME",
     "CLOSED": "CASE_OUTCOME",
 }
@@ -44,6 +46,7 @@ class OutcomeReconciliation:
     provider: str | None
     provider_status: str | None
     provider_reason_code: str | None
+    fill_outcome: str | None
     market_outcome: str | None
     case_outcome: str | None
     complete: bool
@@ -63,6 +66,7 @@ class OutcomeReconciliation:
             "provider": self.provider,
             "provider_status": self.provider_status,
             "provider_reason_code": self.provider_reason_code,
+            "fill_outcome": self.fill_outcome,
             "market_outcome": self.market_outcome,
             "case_outcome": self.case_outcome,
             "complete": self.complete,
@@ -108,6 +112,7 @@ def _new_state(case_id: str | None, decision_id: str | None, trade_event_id: str
         "provider": None,
         "provider_status": None,
         "provider_reason_code": None,
+        "fill_outcome": None,
         "market_outcome": None,
         "case_outcome": None,
         "events": [],
@@ -165,6 +170,13 @@ def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
         if state_name == "PROVIDER_RESULT":
             state["provider_status"] = _optional_text(event.get("status"), "status")
             state["provider_reason_code"] = _optional_text(event.get("reason_code"), "reason_code")
+        elif state_name == "FILL_OUTCOME":
+            fill_outcome = _require_text(event.get("status"), "status")
+            if fill_outcome not in {"FILLED", "NOT_FILLED"}:
+                raise ValueError("FILL_OUTCOME status must be explicit FILLED or NOT_FILLED")
+            if state["fill_outcome"] is not None and state["fill_outcome"] != fill_outcome:
+                raise ValueError("conflicting fill outcomes for trade_event_id")
+            state["fill_outcome"] = fill_outcome
         elif state_name == "MARKET_OUTCOME":
             state["market_outcome"] = _optional_text(event.get("status"), "status")
 
@@ -205,19 +217,20 @@ def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
             state=states_seen[-1] if states_seen else "DECISION", states_seen=states_seen,
             evidence_count=state["evidence_count"], provider=None, provider_status=None,
             provider_reason_code=None, market_outcome=None, case_outcome=None,
-            complete=False,
+            fill_outcome=None, complete=False,
         ).to_dict())
 
     for key in sorted(trades, key=lambda item: (item[0] or "", item[1] or "")):
         state = trades[key]
         states_seen = tuple(name for name in RECONCILIATION_STATES if name in state["states"])
         state_name = states_seen[-1] if states_seen else "DECISION"
-        complete = all(name in state["states"] for name in ("DECISION", "ORDER", "PROVIDER_RESULT"))
+        complete = all(name in state["states"] for name in ("DECISION", "ORDER", "PROVIDER_RESULT", "FILL_OUTCOME"))
         results.append(OutcomeReconciliation(
             case_id=state["case_id"], decision_id=state["decision_id"], trade_event_id=state["trade_event_id"],
             asset=state["asset"], direction=state["direction"], state=state_name,
             states_seen=states_seen, evidence_count=state["evidence_count"], provider=state["provider"],
             provider_status=state["provider_status"], provider_reason_code=state["provider_reason_code"],
+            fill_outcome=state["fill_outcome"],
             market_outcome=state["market_outcome"], case_outcome=state["case_outcome"], complete=complete,
         ).to_dict())
 
