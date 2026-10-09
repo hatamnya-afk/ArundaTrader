@@ -137,7 +137,7 @@ def reconcile_outcomes(events: Iterable[Mapping[str, object]]) -> list[dict]:
         decision_id = _optional_text(event.get("decision_id"), "decision_id")
         trade_event_id = _optional_text(event.get("trade_event_id"), "trade_event_id")
 
-        if state_name in {"ORDER", "PROVIDER_RESULT", "MARKET_OUTCOME"} and trade_event_id is None:
+        if state_name in {"ORDER", "PROVIDER_RESULT", "FILL_OUTCOME", "MARKET_OUTCOME"} and trade_event_id is None:
             raise ValueError(f"{event_type} requires trade_event_id")
         if state_name == "DECISION" and decision_id is None:
             raise ValueError("TRADE_READY requires decision_id")
