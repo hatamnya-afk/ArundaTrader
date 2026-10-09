@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import unittest
+from dataclasses import asdict
+
+from exchange_execution_contract import CanonicalExecutionResult
 
 from mcp01_compact_event_evidence_v0_1 import (
     EVENT_DATA_QUALITY,
@@ -127,6 +130,41 @@ class ExecutionEvidenceReconciliationChainTests(unittest.TestCase):
         self.assertIsNone(reconciled[0]["fill_outcome"])
         self.assertFalse(reconciled[0]["complete"])
 
+
+
+    def test_canonical_execution_result_preserves_explicit_fill_outcome(self) -> None:
+        result = CanonicalExecutionResult(
+            accepted=True,
+            exchange_order_id="EXCHANGE-ORDER-1",
+            status="ACCEPTED",
+            asset="BTC",
+            direction="LONG",
+            executed_quantity="0.01",
+            executed_price="100000",
+            timestamp="2026-10-09T00:00:00+00:00",
+            adapter="CONTROLLED_TEST_ADAPTER",
+            error_code=None,
+            error_message=None,
+            trade_event_id="TRADE-EVENT-CANONICAL-1",
+            fill_outcome="FILLED",
+            fill_reason_code="PROVIDER_CONFIRMED_TERMINAL_FILL",
+        )
+        events = self._events({"BTC": asdict(result)})
+
+        fill_events = [
+            event for event in events
+            if event["event_type"] == EVENT_FILL_OUTCOME
+        ]
+        self.assertEqual(len(fill_events), 1)
+        self.assertEqual(fill_events[0]["status"], "FILLED")
+        self.assertEqual(
+            fill_events[0]["reason_code"],
+            "PROVIDER_CONFIRMED_TERMINAL_FILL",
+        )
+        reconciled = reconcile_outcomes(events)
+        self.assertEqual(len(reconciled), 1)
+        self.assertEqual(reconciled[0]["fill_outcome"], "FILLED")
+        self.assertTrue(reconciled[0]["complete"])
 
 if __name__ == "__main__":
     unittest.main()
