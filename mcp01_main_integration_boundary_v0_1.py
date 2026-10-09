@@ -104,6 +104,7 @@ def emit_mcp01_evidence(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
     trade_ready_assets: Sequence[str],
+    execution_results: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> tuple[int, list[dict[str, str]]]:
     """Emit frozen MCP-01 evidence after authoritative Trader outputs exist."""
     normalized_gate: dict[str, dict[str, Any]] = {}
@@ -122,6 +123,7 @@ def emit_mcp01_evidence(
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
+        execution_results=execution_results,
     )
     events = deduplicate_events(events)
     return persist_events_isolated(events)
