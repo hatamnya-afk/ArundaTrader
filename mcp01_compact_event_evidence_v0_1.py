@@ -17,10 +17,11 @@ EVENT_SELECTED = "SELECTED"
 EVENT_TRADE_READY = "TRADE_READY"
 EVENT_ORDER_ATTEMPTED = "ORDER_ATTEMPTED"
 EVENT_PROVIDER_RESULT = "PROVIDER_RESULT"
+EVENT_FILL_OUTCOME = "FILL_OUTCOME"
 EVENT_MARKET_OUTCOME = "MARKET_OUTCOME"
 EVENT_CLOSED = "CLOSED"
 EVENT_DATA_QUALITY = "DATA_QUALITY_EVENT"
-EVENT_TYPES = frozenset({EVENT_NEW, EVENT_SELECTED, EVENT_TRADE_READY, EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT, EVENT_MARKET_OUTCOME, EVENT_CLOSED, EVENT_DATA_QUALITY})
+EVENT_TYPES = frozenset({EVENT_NEW, EVENT_SELECTED, EVENT_TRADE_READY, EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT, EVENT_FILL_OUTCOME, EVENT_MARKET_OUTCOME, EVENT_CLOSED, EVENT_DATA_QUALITY})
 STAGES = frozenset({"OPPORTUNITY", "DECISION", "RISK", "TRADE_GATE", "ORDER", "EXECUTION", "MARKET_OUTCOME", "DATA_QUALITY", "MANAGEMENT"})
 DIRECTIONS = frozenset({"LONG", "SHORT", "NONE"})
 DEFAULT_STREAM_PATH = Path(__file__).resolve().parent / "runtime_observations" / "arundatrader_compact_events.jsonl"
@@ -197,6 +198,10 @@ def _validate_event(event: dict[str, Any]) -> None:
     if event["event_type"] == EVENT_PROVIDER_RESULT:
         _require_text(event.get("trade_event_id"), "trade_event_id")
         _require_text(event.get("provider"), "provider")
+    if event["event_type"] == EVENT_FILL_OUTCOME:
+        _require_text(event.get("trade_event_id"), "trade_event_id")
+        if event.get("status") not in {"FILLED", "NOT_FILLED"}:
+            raise ValueError("FILL_OUTCOME status must be explicit FILLED or NOT_FILLED")
     if event["event_type"] == EVENT_MARKET_OUTCOME:
         _require_text(event.get("trade_event_id"), "trade_event_id")
         _require_text(event.get("case_id"), "case_id")

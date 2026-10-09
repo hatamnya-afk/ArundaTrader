@@ -7,6 +7,7 @@ execution, provider logic, or outcome inference.
 from __future__ import annotations
 
 import sqlite3
+from dataclasses import asdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -17,6 +18,7 @@ from cp49_authoritative_decision_birth_issuer_v0_1 import (
 )
 from cp49_authoritative_decision_birth_store_v0_1 import ensure_birth_schema
 from cp49_production_decision_birth_producer_v0_1 import require_production_decision_birth
+from exchange_execution_contract import CanonicalExecutionResult
 from mcp01_compact_event_evidence_v0_1 import (
     persist_events_isolated,
 )
@@ -104,8 +106,31 @@ def emit_mcp01_evidence(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
     trade_ready_assets: Sequence[str],
+    execution_results: Mapping[str, Any] | None = None,
 ) -> tuple[int, list[dict[str, str]]]:
-    """Emit frozen MCP-01 evidence after authoritative Trader outputs exist."""
+    """Emit frozen MCP-01 evidence after authoritative Trader outputs exist.
+
+    The production execution boundary returns CanonicalExecutionResult objects,
+    while the evidence bridge consumes mappings. Adapt those objects without
+    inventing attempt identities or fill outcomes. Existing mapping callers are
+    forwarded unchanged for backwards compatibility.
+    """
+    bridge_execution_results = execution_results
+    if execution_results is not None and any(
+        not isinstance(result, Mapping)
+        for result in execution_results.values()
+    ):
+        bridge_execution_results = {}
+        for raw_asset, result in execution_results.items():
+            if isinstance(result, Mapping):
+                bridge_execution_results[raw_asset] = result
+            elif isinstance(result, CanonicalExecutionResult):
+                bridge_execution_results[raw_asset] = asdict(result)
+            else:
+                raise TypeError(
+                    "execution_results values must be mappings or "
+                    "CanonicalExecutionResult instances"
+                )
     normalized_gate: dict[str, dict[str, Any]] = {}
     for raw_asset, gate in trade_gate_snapshot.items():
         asset = str(raw_asset).strip().upper()
@@ -122,6 +147,7 @@ def emit_mcp01_evidence(
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
+        execution_results=bridge_execution_results,
     )
     events = deduplicate_events(events)
     return persist_events_isolated(events)

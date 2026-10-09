@@ -11,6 +11,7 @@ from typing import Any, Iterable, Mapping
 
 from mcp01_compact_event_evidence_v0_1 import (
     EVENT_DATA_QUALITY,
+    EVENT_FILL_OUTCOME,
     EVENT_ORDER_ATTEMPTED,
     EVENT_PROVIDER_RESULT,
     EVENT_SELECTED,
@@ -145,6 +146,26 @@ def build_runtime_evidence_events(
         }
         provider_payload["event_id"] = deterministic_event_id(**provider_payload)
         events.append(build_event(**provider_payload).to_dict())
+
+        # Fill state must be explicit authoritative input. Provider acceptance,
+        # status text, or absence of a fill field is never interpreted as a fill.
+        fill_outcome = result.get("fill_outcome")
+        if fill_outcome is not None:
+            if fill_outcome not in {"FILLED", "NOT_FILLED"}:
+                raise ValueError(
+                    f"{asset}.fill_outcome must be explicit FILLED or NOT_FILLED"
+                )
+            fill_payload = {
+                **order_payload,
+                "event_type": EVENT_FILL_OUTCOME,
+                "stage": "EXECUTION",
+                "status": fill_outcome,
+                "reason_code": _optional_text(
+                    result.get("fill_reason_code"), f"{asset}.fill_reason_code"
+                ),
+            }
+            fill_payload["event_id"] = deterministic_event_id(**fill_payload)
+            events.append(build_event(**fill_payload).to_dict())
 
     return events
 
