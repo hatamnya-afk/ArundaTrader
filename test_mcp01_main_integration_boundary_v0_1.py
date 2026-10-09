@@ -4,6 +4,13 @@ import unittest
 from unittest.mock import patch
 
 import mcp01_main_integration_boundary_v0_1 as boundary
+from exchange_execution_contract import CanonicalExecutionResult
+from mcp01_compact_event_evidence_v0_1 import (
+    EVENT_FILL_OUTCOME,
+    EVENT_ORDER_ATTEMPTED,
+    EVENT_PROVIDER_RESULT,
+)
+from mcp01_outcome_reconciliation_v0_1 import reconcile_outcomes
 
 
 class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
@@ -56,6 +63,70 @@ class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
         )
 
         self.assertIsNone(build_events.call_args.kwargs["execution_results"])
+
+    def test_canonical_execution_result_reaches_evidence_without_invented_fill(self) -> None:
+        captured_events = []
+        result = CanonicalExecutionResult(
+            accepted=True,
+            exchange_order_id="EXCHANGE-ORDER-1",
+            status="ACCEPTED",
+            asset="BTC",
+            direction="LONG",
+            executed_quantity=0.1,
+            executed_price=50000.0,
+            timestamp="2026-10-09T00:00:00+00:00",
+            adapter="CONTROLLED_TEST_ADAPTER",
+            error_code=None,
+            error_message=None,
+            trade_event_id="TRADE-EVENT-1",
+        )
+
+        with patch.object(
+            boundary,
+            "persist_events_isolated",
+            side_effect=lambda events: (captured_events.extend(events) or (len(events), [])),
+        ):
+            boundary.emit_mcp01_evidence(
+                cycle_id="CYCLE-3",
+                decision_snapshot=self.decisions,
+                trade_gate_snapshot={
+                    "BTC": {
+                        "decision_id": "DECISION-1",
+                        "trade_gate_status": "TRADE_READY",
+                        "direction": "LONG",
+                    }
+                },
+                trade_ready_assets=["BTC"],
+                execution_results={"BTC": result},
+            )
+
+        execution_events = [
+            event for event in captured_events
+            if event["event_type"] in {
+                EVENT_ORDER_ATTEMPTED,
+                EVENT_PROVIDER_RESULT,
+                EVENT_FILL_OUTCOME,
+            }
+        ]
+        self.assertEqual(
+            [event["event_type"] for event in execution_events],
+            [EVENT_ORDER_ATTEMPTED, EVENT_PROVIDER_RESULT],
+        )
+        self.assertEqual(
+            {event["trade_event_id"] for event in execution_events},
+            {"TRADE-EVENT-1"},
+        )
+        self.assertTrue(
+            all(event["decision_id"] == "DECISION-1" for event in execution_events)
+        )
+
+        reconciled = reconcile_outcomes(captured_events)
+        trade_chain = next(
+            row for row in reconciled
+            if row["trade_event_id"] == "TRADE-EVENT-1"
+        )
+        self.assertIsNone(trade_chain["fill_outcome"])
+        self.assertFalse(trade_chain["complete"])
 
 
 if __name__ == "__main__":
