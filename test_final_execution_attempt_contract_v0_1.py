@@ -197,8 +197,8 @@ def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter
     )
 
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
-    assert "AUTHORIZATION_PROVIDER_MISMATCH" in result.error_message
+    assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
+    assert "does not match" in result.error_message
 
 
 def test_final_attempt_fails_closed_when_mandate_provider_is_missing():
@@ -214,5 +214,5 @@ def test_final_attempt_fails_closed_when_mandate_provider_is_missing():
     )
 
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
-    assert "AUTHORIZATION_PROVIDER_MISMATCH" in result.error_message
+    assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
+    assert "does not match" in result.error_message
