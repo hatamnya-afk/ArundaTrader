@@ -24,6 +24,10 @@ class _Adapter:
                         "maxQty": "100000",
                         "stepSize": "1",
                     },
+                    "TRADE_AMOUNT": {
+                        "minAmount": "1",
+                        "maxAmount": "100000000",
+                    },
                     "MIN_NOTIONAL": {
                         "minNotional": "1",
                         "maxNotional": "100000000",
