@@ -84,7 +84,11 @@ def attempt_prepared_order(
     # The standing mandate's provider is part of its scope. Bind it to the
     # selected adapter before preparation/submission; matching SPOT/FUTURES
     # alone must never authorize a different execution provider.
-    mandate_provider = authorization_observation.get("provider")
+    mandate_provider = (
+        authorization_observation.get("provider")
+        if isinstance(authorization_observation, Mapping)
+        else None
+    )
     adapter_provider = getattr(adapter, "adapter_name", None)
     if (
         not isinstance(mandate_provider, str)
