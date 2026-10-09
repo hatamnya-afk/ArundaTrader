@@ -75,6 +75,10 @@ class CanonicalExecutionResult:
     # Issued by the execution boundary for an actual order-attempt call.
     # Never sourced from exchange_order_id or provider response.
     trade_event_id: Optional[str] = None
+    # Explicit provider-confirmed terminal fill state. None means UNKNOWN;
+    # accepted/acknowledged order status must never be promoted to FILLED.
+    fill_outcome: Optional[str] = None
+    fill_reason_code: Optional[str] = None
 
 
 def build_order_request(
