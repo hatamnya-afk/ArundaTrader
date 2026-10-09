@@ -7,7 +7,7 @@ execution, provider logic, or outcome inference.
 from __future__ import annotations
 
 import sqlite3
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
