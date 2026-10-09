@@ -11,7 +11,10 @@ The selected adapter owns provider submission behavior.
 
 from __future__ import annotations
 
+from dataclasses import replace
 from typing import Any, Mapping
+
+from mcp01_trade_event_identity_v0_1 import issue_trade_event_id
 
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
@@ -116,6 +119,11 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Issue the authoritative identity at the actual adapter-attempt boundary,
+    # after all local validation, authorization, and preparation gates pass.
+    # It is never copied from a provider response or exchange order identifier.
+    trade_event_id = issue_trade_event_id()
+
     try:
         result = adapter.submit_prepared_order(
             prepared,
@@ -125,19 +133,24 @@ def attempt_prepared_order(
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
             error_code="ADAPTER_SUBMIT_PREPARED_FAILED",
             error_message=str(exc),
+            trade_event_id=trade_event_id,
         )
 
     if not isinstance(result, CanonicalExecutionResult):
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
             error_code="ADAPTER_EXECUTION_RESULT_INVALID",
             error_message="Adapter returned an invalid canonical execution result.",
+            trade_event_id=trade_event_id,
         )
 
-    return result
+    # The boundary owns the attempt identity. Ignore any adapter-supplied value.
+    return replace(result, trade_event_id=trade_event_id)
 
 
 __all__ = ["attempt_prepared_order"]
