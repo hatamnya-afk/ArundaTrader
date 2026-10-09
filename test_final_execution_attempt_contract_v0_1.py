@@ -51,6 +51,7 @@ def _standing_mandate():
         "authorization_validation": "VALID",
         "authorization_source": "MANAGEMENT_PHASE_ENTRY",
         "authorization_mode": "STANDING_MANDATE",
+        "provider": "FAKE_PROVIDER_NEUTRAL",
         "authorization_id": "REAL-PROD-MANDATE-001",
         "mandate_id": "REAL-PROD-MANDATE-001",
         "expires_at": "2099-01-01T00:00:00+00:00",
@@ -181,3 +182,35 @@ def test_final_attempt_keeps_attempt_identity_outside_management_authorization()
     assert "attempt_id" not in authorization
     assert hasattr(request, "intent_id")
     assert hasattr(request, "snapshot_id")
+
+
+def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter():
+    authorization = _standing_mandate()
+    authorization["provider"] = "OTHER_PROVIDER"
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=authorization,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
+
+
+def test_final_attempt_fails_closed_when_mandate_provider_is_missing():
+    authorization = _standing_mandate()
+    authorization.pop("provider")
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=authorization,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
