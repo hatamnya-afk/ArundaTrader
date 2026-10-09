@@ -12,6 +12,7 @@ from mcp01_compact_event_evidence_v0_1 import (
     EVENT_FILL_OUTCOME,
     EVENT_ORDER_ATTEMPTED,
     EVENT_PROVIDER_RESULT,
+    EVENT_SELECTED,
     append_event_idempotent,
     build_event,
     persist_events_isolated,
