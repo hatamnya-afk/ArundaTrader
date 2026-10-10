@@ -968,30 +968,38 @@ class ToobitExchangeAdapter:
             )
 
         endpoint = "/api/v1/spot/order" if preparation.venue == "SPOT" else "/api/v1/futures/order"
+        submission_error = None
         try:
             response = self._unwrap(self._call("POST", endpoint, params=payload, signed=True))
         except Exception as exc:
-            # Do not retry: a network failure can occur after the exchange
-            # accepted the order. Caller must query provider state by client ID.
-            return CanonicalExecutionResult(
-                accepted=False, exchange_order_id=None, status="UNKNOWN",
-                asset=canonical_request.asset, direction=canonical_request.direction,
-                executed_quantity=None, executed_price=None, timestamp=None,
-                adapter=self.name, error_code="PROVIDER_SUBMISSION_OUTCOME_UNKNOWN",
-                error_message=str(exc), decision_id=canonical_request.decision_id,
-                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
-            )
+            # The POST is never retried. Perform exactly one read-only lookup
+            # using the same provider symbol and client ID before declaring
+            # the result unresolved.
+            submission_error = str(exc)
+            response = None
 
         if not isinstance(response, dict):
-            return CanonicalExecutionResult(
-                accepted=False, exchange_order_id=None, status="UNKNOWN",
-                asset=canonical_request.asset, direction=canonical_request.direction,
-                executed_quantity=None, executed_price=None, timestamp=None,
-                adapter=self.name, error_code="PROVIDER_ORDER_RESPONSE_INVALID",
-                error_message="Provider response is not an order object.",
-                decision_id=canonical_request.decision_id,
-                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+            if response is not None:
+                submission_error = "Provider response is not an order object."
+            reconciled = self.query_order_by_client_id(
+                venue=preparation.venue,
+                symbol=str(payload.get("symbol", "")),
+                client_order_id=canonical_request.intent_id,
             )
+            if reconciled.allowed and isinstance(reconciled.data, dict):
+                response = reconciled.data
+            else:
+                detail = submission_error or "Provider response is not an order object."
+                return CanonicalExecutionResult(
+                    accepted=False, exchange_order_id=None, status="UNKNOWN",
+                    asset=canonical_request.asset, direction=canonical_request.direction,
+                    executed_quantity=None, executed_price=None, timestamp=None,
+                    adapter=self.name,
+                    error_code="PROVIDER_SUBMISSION_OUTCOME_UNKNOWN",
+                    error_message=f"{detail}; reconciliation={reconciled.reason}",
+                    decision_id=canonical_request.decision_id,
+                    fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+                )
 
         client_id = response.get("clientOrderId", response.get("newClientOrderId"))
         order_id = response.get("orderId")
@@ -1008,12 +1016,31 @@ class ToobitExchangeAdapter:
             )
 
         try:
-            raw_executed = response.get("executedQty", response.get("executeQty", "0"))
+            raw_executed = response.get("executedQty")
+            if raw_executed in (None, ""):
+                raw_executed = response.get("executeQty", "0")
             executed = Decimal(str(raw_executed))
-            raw_price = response.get("avgPrice", response.get("price"))
-            price = Decimal(str(raw_price)) if raw_price not in (None, "", "0", "0.0") else None
-            if not executed.is_finite() or executed < 0 or (price is not None and (not price.is_finite() or price <= 0)):
-                raise InvalidOperation("invalid execution fields")
+
+            # Some provider order payloads include avgPrice="0" alongside a
+            # valid execution price. Select the first positive authoritative
+            # price field rather than treating a present zero as final.
+            price = None
+            for raw_price in (
+                response.get("avgPrice"),
+                response.get("price"),
+                response.get("dealPrice"),
+            ):
+                if raw_price in (None, ""):
+                    continue
+                candidate_price = Decimal(str(raw_price))
+                if not candidate_price.is_finite() or candidate_price < 0:
+                    raise InvalidOperation("invalid execution price")
+                if candidate_price > 0:
+                    price = candidate_price
+                    break
+
+            if not executed.is_finite() or executed < 0:
+                raise InvalidOperation("invalid execution quantity")
         except (InvalidOperation, ValueError, TypeError):
             return CanonicalExecutionResult(
                 accepted=False, exchange_order_id=str(order_id), status="UNKNOWN",
