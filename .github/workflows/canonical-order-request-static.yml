@@ -5,18 +5,15 @@ on:
     branches:
       - main
     paths:
-      - "arunda_pipeline.py"
-      - "exchange_execution_boundary.py"
-      - "exchange_execution_contract.py"
-      - "test_exchange_execution_boundary_contract_v0_1.py"
-      - "test_canonical_order_request_builder_contract_v0_1.py"
+      - "**.py"
+      - "requirements.txt"
       - ".github/workflows/canonical-order-request-static.yml"
   push:
     branches:
       - integration/pr13-pr14-attempt-contract-20261010
     paths:
-      - "arunda_pipeline.py"
-      - "test_canonical_order_request_builder_contract_v0_1.py"
+      - "**.py"
+      - "requirements.txt"
       - ".github/workflows/canonical-order-request-static.yml"
 
 permissions:
