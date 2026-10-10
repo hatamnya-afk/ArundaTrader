@@ -70,7 +70,7 @@ def test_toobit_prepare_futures_translates_base_quantity_to_contracts():
     assert prepared.adapter_name == "TOOBIT"
     assert prepared.venue == "FUTURES"
     assert prepared.request["symbol"] == "BTC-SWAP-USDT"
-    assert prepared.request["side"] == "SELL"
+    assert prepared.request["side"] == "SELL_OPEN"
     assert prepared.request["positionSide"] == "SHORT"
     assert prepared.request["quantity"] == "5"
     assert prepared.request["category"] == "USDT"
