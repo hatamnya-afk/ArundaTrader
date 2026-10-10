@@ -4061,7 +4061,7 @@ def build_canonical_order_requests(
                 )
 
             quantity = risk_row.get("position_quantity")
-            if quantity is None or quantity != getattr(intent, "quantity", None):
+            if quantity is None or quantity != intent.get("quantity"):
                 fail(f"Canonical quantity mismatch: {asset}")
 
             if risk_row.get("quantity_unit", POSITION_QUANTITY_UNIT) != POSITION_QUANTITY_UNIT:
