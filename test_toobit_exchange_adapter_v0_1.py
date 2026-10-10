@@ -526,3 +526,65 @@ def test_order_reconciliation_reads_by_client_id_without_submission():
     assert result.reason == "PROVIDER_ORDER_STATE_CONFIRMED"
     assert result.data["status"] == "FILLED"
     assert len(calls) == 1
+
+
+def test_futures_duplicate_check_fails_closed_on_malformed_order_collection():
+    def transport(*, method, path, params, headers, base_url):
+        if path == "/api/v1/exchangeInfo":
+            return {
+                "symbols": [],
+                "contracts": [
+                    {
+                        "symbol": "BTC-SWAP-USDT",
+                        "status": "TRADING",
+                        "underlying": "BTC",
+                        "contractMultiplier": "0.001",
+                        "marginToken": "USDT",
+                    }
+                ],
+            }
+        if path == "/api/v2/futures/open-orders":
+            return {"unexpected": "not-a-list"}
+        if path == "/api/v1/futures/historyOrders":
+            return []
+        raise AssertionError("unexpected path: " + path)
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+        api_key="test-key",
+        secret_key="test-secret",
+    ).futures_duplicate_check("BTC")
+
+    assert result.allowed is False
+    assert result.reason == "TOOBIT_FUTURES_ORDER_STATE_INVALID"
+
+
+def test_futures_duplicate_check_fails_closed_on_order_without_client_identity():
+    def transport(*, method, path, params, headers, base_url):
+        if path == "/api/v1/exchangeInfo":
+            return {
+                "symbols": [],
+                "contracts": [
+                    {
+                        "symbol": "BTC-SWAP-USDT",
+                        "status": "TRADING",
+                        "underlying": "BTC",
+                        "contractMultiplier": "0.001",
+                        "marginToken": "USDT",
+                    }
+                ],
+            }
+        if path == "/api/v2/futures/open-orders":
+            return [{"orderId": "exchange-order-without-client-id"}]
+        if path == "/api/v1/futures/historyOrders":
+            return []
+        raise AssertionError("unexpected path: " + path)
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+        api_key="test-key",
+        secret_key="test-secret",
+    ).futures_duplicate_check("BTC")
+
+    assert result.allowed is False
+    assert result.reason == "TOOBIT_FUTURES_ORDER_CLIENT_ID_UNAVAILABLE"
