@@ -617,27 +617,33 @@ class ToobitExchangeAdapter:
                 )
             )
 
+            # A successful HTTP response is not proof that duplicate state is
+            # known. Reject malformed collections or rows instead of silently
+            # dropping them and returning an incomplete client-ID set.
+            if not isinstance(open_orders, list) or not isinstance(recent_orders, list):
+                raise RuntimeError("TOOBIT_FUTURES_ORDER_STATE_INVALID")
+
+            def _client_ids(rows: list[Any]) -> frozenset[str]:
+                identifiers: set[str] = set()
+                for row in rows:
+                    if not isinstance(row, dict):
+                        raise RuntimeError("TOOBIT_FUTURES_ORDER_STATE_INVALID")
+                    raw_id = row.get("clientOrderId", row.get("newClientOrderId"))
+                    if not isinstance(raw_id, str) or not raw_id.strip():
+                        raise RuntimeError("TOOBIT_FUTURES_ORDER_CLIENT_ID_UNAVAILABLE")
+                    identifiers.add(raw_id.strip())
+                return frozenset(identifiers)
+
+            open_client_ids = _client_ids(open_orders)
+            recent_client_ids = _client_ids(recent_orders)
+
             return ToobitAdapterResult(
                 True,
                 "OK",
                 {
                     "state_known": True,
-                    "open_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in open_orders
-                        if (
-                            isinstance(row, dict)
-                            and row.get("clientOrderId") is not None
-                        )
-                    ),
-                    "recent_order_client_ids": frozenset(
-                        str(row["clientOrderId"])
-                        for row in recent_orders
-                        if (
-                            isinstance(row, dict)
-                            and row.get("clientOrderId") is not None
-                        )
-                    ),
+                    "open_order_client_ids": open_client_ids,
+                    "recent_order_client_ids": recent_client_ids,
                 },
             )
         except Exception as exc:
