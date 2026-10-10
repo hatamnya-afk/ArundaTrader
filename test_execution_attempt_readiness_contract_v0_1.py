@@ -80,3 +80,17 @@ def test_execution_attempt_readiness_rejects_pre_authorized_package():
         assert str(exc) == "EXECUTION_AUTHORIZATION_MUST_REMAIN_EXPLICIT"
     else:
         raise AssertionError("pre-authorized package must fail closed")
+
+
+def test_readiness_rejects_non_finite_exposure():
+    import math
+    import pytest
+
+    for exposure in (math.nan, math.inf, -math.inf):
+        package = _package()
+        package["exposure"] = exposure
+        with pytest.raises(ValueError, match="READINESS_EXPOSURE_INVALID"):
+            evaluate_execution_attempt_readiness(
+                execution_ready_package=package,
+                request=_request(),
+            )
