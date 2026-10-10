@@ -31,7 +31,14 @@ def _transport(*, method, path, params, headers, base_url):
                 "baseAsset": "BTC",
                 "quoteAsset": "USDT",
                 "status": "TRADING",
-                "filters": [],
+                "filters": [
+                    {
+                        "filterType": "LOT_SIZE",
+                        "minQty": "0.0001",
+                        "maxQty": "10",
+                        "stepSize": "0.0001",
+                    },
+                ],
             },
         ],
         "contracts": [
