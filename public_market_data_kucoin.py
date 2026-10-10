@@ -12,7 +12,8 @@ import requests
 
 import importlib.util
 
-STORE_PATH = Path(r"C:\Users\ASUS\ArundaTrader\local_canonical_store_v0.1.py")
+PROJECT_ROOT = Path(__file__).resolve().parent
+STORE_PATH = PROJECT_ROOT / "local_canonical_store_v0.1.py"
 
 spec = importlib.util.spec_from_file_location("local_canonical_store_v01", STORE_PATH)
 if spec is None or spec.loader is None:
@@ -30,7 +31,6 @@ PROVIDER = "KUCOIN"
 SOURCE_TYPE = "CEX_PUBLIC_API"
 TIMEFRAME = "1h"
 
-PROJECT_ROOT = Path(r"C:\Users\ASUS\ArundaTrader")
 FABRIC_STORE = (
     PROJECT_ROOT
     / "public_market_data_fabric"
