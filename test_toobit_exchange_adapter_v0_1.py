@@ -629,8 +629,10 @@ def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missi
         instrument_type="PERPETUAL", selection_source="EXECUTION_POLICY",
         policy_version="v0.1",
     )
+    from dataclasses import replace
+
     result = ToobitExchangeAdapter(transport=transport).prepare_order(
-        _canonical_futures_request(), venue="FUTURES",
+        replace(_canonical_spot_request(), quantity=0.003), venue="FUTURES",
         execution_instrument=specification,
     )
     assert result.ready is False
