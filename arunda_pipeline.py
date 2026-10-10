@@ -4024,8 +4024,10 @@ def build_canonical_order_requests(
                 "results",
             ),
         )
-        risk_rows = exact_asset_rows(risk_rows, "RISK")
+        # Production is a dynamic-universe path; legacy fixed-15 coverage is not applicable.
         r_map = risk_map(risk_rows)
+        if not r_map:
+            fail("Canonical Risk snapshot is empty")
         result = {}
 
         for intent in order_intents:
@@ -4321,10 +4323,8 @@ def verify_execution_boundary_integration(
             return "DEFERRED_NO_CANONICAL_REQUESTS"
 
         for asset, record in canonical_order_requests.items():
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Execution Boundary unexpected asset: {asset}"
-                )
+            if not isinstance(asset, str) or not asset.strip():
+                fail("Execution Boundary asset identity invalid")
 
             if not isinstance(
                 record,
@@ -5298,21 +5298,92 @@ def main() -> int:
         )
 
         # ------------------------------------------------------------------
-        # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
+        # 12. PRODUCTION ORDER-CONTRACT HANDOFF (NO SUBMISSION)
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
-        if trade_ready_assets:
-            print(
-                "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
-            )
+        order_intents = []
+        canonical_order_requests = {}
+        execution_boundary_status = "DEFERRED_NO_TRADE_READY"
 
-        # No OrderIntent creation.
-        # No canonical order request creation.
-        # No exchange submission.
-        # No execution.
-        # No DB writes outside the explicit CP49 authoritative Birth boundary.
+        if trade_ready_assets:
+            # Build only from authoritative snapshots produced in this run.
+            for asset in trade_ready_assets:
+                gate = trade_gate_snapshot.get(asset)
+                opportunity = opportunity_by_asset.get(asset)
+                decision = decision_snapshot.get(asset)
+                risk = risk_snapshot.get(asset)
+                if not all(isinstance(x, dict) for x in (gate, opportunity, decision, risk)):
+                    fail(f"Production order handoff source missing: {asset}")
+                if normalize_status(opportunity.get("status")) != ELIGIBLE_STATUS:
+                    fail(f"Production order handoff Opportunity not ELIGIBLE: {asset}")
+
+                direction = normalize_status(gate.get("direction"))
+                if direction not in VALID_DIRECTIONS:
+                    fail(f"Production order handoff direction invalid: {asset}")
+
+                decision_id = decision.get("decision_id")
+                birth_snapshot_id = decision.get("snapshot_id")
+                if not isinstance(decision_id, str) or not decision_id.strip():
+                    fail(f"Production order handoff Decision Birth missing: {asset}")
+                if not isinstance(birth_snapshot_id, str) or not birth_snapshot_id.strip():
+                    fail(f"Production order handoff Birth snapshot_id missing: {asset}")
+
+                entry_price = opportunity.get("price")
+                confidence = opportunity.get("confidence")
+                intent_timestamp = opportunity.get("timestamp")
+                quantity = risk.get("position_quantity")
+                if not is_finite_number(entry_price) or float(entry_price) <= 0:
+                    fail(f"Production order handoff entry price invalid: {asset}")
+                if not is_finite_number(confidence):
+                    fail(f"Production order handoff confidence invalid: {asset}")
+                if not isinstance(intent_timestamp, str) or not intent_timestamp.strip():
+                    fail(f"Production order handoff timestamp invalid: {asset}")
+                if not is_finite_number(quantity) or float(quantity) <= 0:
+                    fail(f"Production order handoff Risk quantity invalid: {asset}")
+
+                order_intents.append({
+                    "asset": asset,
+                    "direction": direction,
+                    "entry_price": entry_price,
+                    "confidence": confidence,
+                    "regime": None,
+                    "timestamp": intent_timestamp,
+                    "snapshot_id": birth_snapshot_id,
+                    "intent_id": f"OI-{birth_snapshot_id}-{asset}",
+                })
+
+            reference_prices = {}
+            for asset in trade_ready_assets:
+                market_record = market_data_by_symbol.get(f"{asset}/USDT")
+                if market_record is None:
+                    fail(f"Authoritative market record missing for reference price: {asset}")
+                candidate = None
+                if isinstance(market_record, dict):
+                    for key in ("last_price", "last", "price", "close"):
+                        if market_record.get(key) is not None:
+                            candidate = market_record[key]
+                            break
+                else:
+                    for key in ("last_price", "last", "price", "close"):
+                        value = getattr(market_record, key, None)
+                        if value is not None:
+                            candidate = value
+                            break
+                if not is_finite_number(candidate) or float(candidate) <= 0:
+                    fail(f"Authoritative market reference price unavailable: {asset}")
+                reference_prices[asset] = candidate
+
+            canonical_order_requests = build_canonical_order_requests(
+                order_intents=order_intents,
+                risk_snapshot=risk_snapshot,
+                snapshot_id=order_intents[0]["snapshot_id"],
+                decision_snapshot=decision_snapshot,
+                reference_prices=reference_prices,
+            )
+            execution_boundary_status = verify_execution_boundary_integration(
+                canonical_order_requests
+            )
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
@@ -5325,7 +5396,11 @@ def main() -> int:
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
-        print("ORDER_INTENTS_CREATED=0")
+        print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
+        print(f"CANONICAL_ORDER_REQUESTS={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
+        print("ORDER_SUBMISSION=DISABLED")
+        print("EXCHANGE_WRITE=DISABLED")
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
