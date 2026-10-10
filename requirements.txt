@@ -1,0 +1,5 @@
+# Runtime dependencies used by the real-market production adapters.
+# Keep major-version bounds to reduce unreviewed API drift.
+ccxt>=4.4,<5
+requests>=2.31,<3
+websocket-client>=1.8,<2

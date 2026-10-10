@@ -268,6 +268,44 @@ def is_finite_number(
         and not isinstance(value, bool)
         and math.isfinite(float(value))
     )
+
+
+
+def resolve_authoritative_reference_price(market_record: Any) -> int | float:
+    """Resolve a current market price from the provider's actual market record.
+
+    MarketDataResult owns a tuple of real candles rather than top-level
+    last_price/price fields, so its newest candle close is the authoritative
+    fallback. Missing or invalid values fail closed; no intent/entry-price
+    substitution or synthetic price is permitted.
+    """
+    candidate = None
+    if isinstance(market_record, dict):
+        for key in ("last_price", "last", "price", "close"):
+            if market_record.get(key) is not None:
+                candidate = market_record[key]
+                break
+        candles = market_record.get("candles")
+    else:
+        for key in ("last_price", "last", "price", "close"):
+            value = getattr(market_record, key, None)
+            if value is not None:
+                candidate = value
+                break
+        candles = getattr(market_record, "candles", None)
+
+    if candidate is None:
+        if not isinstance(candles, (list, tuple)) or not candles:
+            fail("Authoritative market record has no current real candles")
+        latest_candle = candles[-1]
+        if isinstance(latest_candle, dict):
+            candidate = latest_candle.get("close")
+        else:
+            candidate = getattr(latest_candle, "close", None)
+
+    if not is_finite_number(candidate) or float(candidate) <= 0:
+        fail("Authoritative market reference price unavailable")
+    return candidate
     # ============================================================================
 
     # SUBPROCESS
@@ -3974,15 +4012,9 @@ def validate_current_order_intents(
                         f"Risk quantity missing: {asset}"
                     )
 
-                if risk_quantity != getattr(
-                    intent,
-                    "quantity",
-                    None,
-                ):
-                    fail(
-                        "ORDER_INTENT quantity provenance mismatch: "
-                        f"{asset}"
-                    )
+                # ORDER_INTENT's closed schema intentionally has no
+                # quantity field. Quantity remains authoritative in Risk and
+                # is copied unchanged into the canonical request downstream.
 
         if seen != set(gate_map.keys()):
             fail(
@@ -4000,51 +4032,71 @@ def build_canonical_order_requests(
         order_intents: list[dict],
         risk_snapshot: dict,
         snapshot_id: str,
+        decision_snapshot: dict,
+        reference_prices: dict[str, Any],
     ) -> dict[str, dict]:
-        risk_rows = extract_rows(
-            risk_snapshot,
-            (
-                "risk",
-                "risk_decisions",
-                "decisions",
-                "rows",
-                "assets",
-                "results",
-            ),
-        )
+        """
+        Build fail-closed canonical requests from authoritative upstream facts.
 
-        risk_rows = exact_asset_rows(
-            risk_rows,
-            "RISK",
-        )
+        decision_id is copied from Decision Birth; it is never generated here.
+        reference_prices must be explicitly supplied by the caller from its
+        authoritative market snapshot. entry_price is not silently substituted.
+        The source conversion below separates the upstream sizing provenance
+        (POSITION_SIZING.position_size) from this contract's immediate source
+        field (RISK.position_quantity); the original risk row is not mutated.
+        """
+        if not isinstance(decision_snapshot, dict):
+            fail("Canonical decision snapshot invalid")
 
-        r_map = risk_map(
-            risk_rows
-        )
+        if not isinstance(reference_prices, dict):
+            fail("Canonical reference prices invalid")
+        if not isinstance(snapshot_id, str) or not snapshot_id.strip():
+            fail("Canonical runtime snapshot anchor missing")
+
+        if (
+            isinstance(risk_snapshot, dict)
+            and risk_snapshot
+            and all(isinstance(row, dict) for row in risk_snapshot.values())
+        ):
+            # The current production runtime represents dynamic Risk as asset -> row.
+            risk_rows = list(risk_snapshot.values())
+        else:
+            risk_rows = extract_rows(
+                risk_snapshot,
+                (
+                    "risk",
+                    "risk_decisions",
+                    "decisions",
+                    "rows",
+                    "assets",
+                    "results",
+                ),
+            )
+        # Production is a dynamic-universe path; legacy fixed-15 coverage is not applicable.
+        r_map = risk_map(risk_rows)
+        if not r_map:
+            fail("Canonical Risk snapshot is empty")
+        if not any(
+            isinstance(intent, dict) and intent.get("snapshot_id") == snapshot_id
+            for intent in order_intents
+        ):
+            fail("Canonical runtime snapshot anchor is not present in Decision Birth intents")
 
         result = {}
 
         for intent in order_intents:
-            asset = normalize_asset(
-                intent.get("asset")
-            )
-
+            asset = normalize_asset(intent.get("asset"))
             if asset is None:
-                fail(
-                    "Canonical request asset missing"
-                )
-
+                fail("Canonical request asset missing")
+            intent_snapshot_id = intent.get("snapshot_id")
+            if not isinstance(intent_snapshot_id, str) or not intent_snapshot_id.strip():
+                fail(f"Canonical Decision Birth snapshot_id missing: {asset}")
             if asset in result:
-                fail(
-                    f"Duplicate Canonical request asset: {asset}"
-                )
+                fail(f"Duplicate Canonical request asset: {asset}")
 
             risk_row = r_map.get(asset)
-
             if risk_row is None:
-                fail(
-                    f"Canonical request Risk missing: {asset}"
-                )
+                fail(f"Canonical request Risk missing: {asset}")
 
             risk_status = normalize_status(
                 get_row_value(
@@ -4055,101 +4107,95 @@ def build_canonical_order_requests(
                     "risk_state",
                 )
             )
-
             if risk_status not in APPROVED_RISK_STATUSES:
                 fail(
                     "Canonical request risk status not approved: "
                     f"{asset} -> {risk_status}"
                 )
 
-            quantity = risk_row.get(
-                "position_quantity"
-            )
+            quantity = risk_row.get("position_quantity")
+            if quantity is None:
+                fail(f"Canonical Risk quantity missing: {asset}")
 
-            if quantity != getattr(
-                intent,
-                "quantity",
-                None,
-            ):
-                fail(
-                    f"Canonical quantity mismatch: {asset}"
-                )
-
-            if risk_row.get(
-                "quantity_unit",
-                POSITION_QUANTITY_UNIT,
-            ) != POSITION_QUANTITY_UNIT:
-                fail(
-                    f"Canonical source quantity unit invalid: "
-                    f"{asset}"
-                )
-
-            if risk_row.get(
-                "quantity_source",
-                POSITION_QUANTITY_SOURCE,
-            ) != POSITION_QUANTITY_SOURCE:
+            if risk_row.get("quantity_unit", POSITION_QUANTITY_UNIT) != POSITION_QUANTITY_UNIT:
+                fail(f"Canonical source quantity unit invalid: {asset}")
+            if risk_row.get("quantity_source", POSITION_QUANTITY_SOURCE) != POSITION_QUANTITY_SOURCE:
                 fail(
                     "Canonical source quantity provenance invalid: "
                     f"{asset}"
                 )
 
-            request = (
-                exchange_execution_contract.build_order_request(
-                    asset=asset,
-                    direction=intent["direction"],
-                    order_type="MARKET",
-                    quantity=quantity,
-                    risk=risk_row,
-                    entry_price=intent["entry_price"],
-                    intent_id=intent["intent_id"],
-                    snapshot_id=snapshot_id,
-                    timestamp=intent["timestamp"],
+            decision_row = decision_snapshot.get(asset)
+            if not isinstance(decision_row, dict):
+                fail(f"Canonical Decision Birth record missing: {asset}")
+            decision_id = decision_row.get("decision_id")
+            if not isinstance(decision_id, str) or not decision_id.strip():
+                fail(f"Canonical Decision Birth decision_id missing: {asset}")
+
+            reference_price = reference_prices.get(asset)
+            try:
+                reference_price_is_valid = (
+                    reference_price is not None
+                    and math.isfinite(float(reference_price))
+                    and float(reference_price) > 0
                 )
+            except (TypeError, ValueError, OverflowError):
+                reference_price_is_valid = False
+            if not reference_price_is_valid:
+                fail(f"Canonical authoritative reference price invalid: {asset}")
+
+            # Preserve the original Risk row and its upstream sizing provenance.
+            # The execution contract's quantity_source names the immediate
+            # canonical field from which the exact quantity is copied.
+            contract_risk_row = dict(risk_row)
+            contract_risk_row["quantity_source"] = CANONICAL_QUANTITY_SOURCE
+
+            request = exchange_execution_contract.build_order_request(
+                asset=asset,
+                direction=intent["direction"],
+                order_type="MARKET",
+                risk=contract_risk_row,
+                entry_price=intent["entry_price"],
+                reference_price=reference_price,
+                intent_id=intent["intent_id"],
+                # Each canonical request preserves its own Decision
+                # Birth snapshot. The function argument is only the current
+                # runtime's non-empty batch anchor, not a replacement identity.
+                snapshot_id=intent_snapshot_id,
+                timestamp=intent["timestamp"],
+                decision_id=decision_id,
             )
 
             if not isinstance(
                 request,
                 exchange_execution_contract.CanonicalOrderRequest,
             ):
-                fail(
-                    "CanonicalOrderRequest type invalid: "
-                    f"{asset}"
-                )
+                fail(f"CanonicalOrderRequest type invalid: {asset}")
 
-            exchange_execution_contract.validate_order_request(
-                request
-            )
+            exchange_execution_contract.validate_order_request(request)
 
             if request.quantity != quantity:
-                fail(
-                    f"Canonical quantity != Risk quantity: {asset}"
-                )
-
+                fail(f"Canonical quantity != Risk quantity: {asset}")
             if request.quantity_unit != CANONICAL_QUANTITY_UNIT:
-                fail(
-                    f"Canonical quantity unit invalid: {asset}"
-                )
-
+                fail(f"Canonical quantity unit invalid: {asset}")
             if request.quantity_source != CANONICAL_QUANTITY_SOURCE:
-                fail(
-                    f"Canonical quantity source invalid: {asset}"
-                )
-
-            if request.snapshot_id != snapshot_id:
-                fail(
-                    f"Canonical snapshot mismatch: {asset}"
-                )
-
+                fail(f"Canonical quantity source invalid: {asset}")
+            if request.snapshot_id != intent_snapshot_id:
+                fail(f"Canonical Decision Birth snapshot mismatch: {asset}")
             if request.intent_id != intent["intent_id"]:
-                fail(
-                    f"Canonical intent_id mismatch: {asset}"
-                )
+                fail(f"Canonical intent_id mismatch: {asset}")
+            if request.decision_id != decision_id:
+                fail(f"Canonical decision_id mismatch: {asset}")
+            if request.reference_price != reference_price:
+                fail(f"Canonical reference price mismatch: {asset}")
 
             result[asset] = {
                 "request": request,
                 "quantity": request.quantity,
                 "quantity_unit": request.quantity_unit,
                 "quantity_source": request.quantity_source,
+                "decision_id": request.decision_id,
+                "reference_price": request.reference_price,
             }
 
         return result
@@ -4337,10 +4383,8 @@ def verify_execution_boundary_integration(
             return "DEFERRED_NO_CANONICAL_REQUESTS"
 
         for asset, record in canonical_order_requests.items():
-            if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Execution Boundary unexpected asset: {asset}"
-                )
+            if not isinstance(asset, str) or not asset.strip():
+                fail("Execution Boundary asset identity invalid")
 
             if not isinstance(
                 record,
@@ -5314,21 +5358,83 @@ def main() -> int:
         )
 
         # ------------------------------------------------------------------
-        # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
+        # 12. PRODUCTION ORDER-CONTRACT HANDOFF (NO SUBMISSION)
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
-        if trade_ready_assets:
-            print(
-                "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
-            )
+        order_intents = []
+        canonical_order_requests = {}
+        execution_boundary_status = "DEFERRED_NO_TRADE_READY"
 
-        # No OrderIntent creation.
-        # No canonical order request creation.
-        # No exchange submission.
-        # No execution.
-        # No DB writes outside the explicit CP49 authoritative Birth boundary.
+        if trade_ready_assets:
+            # Build only from authoritative snapshots produced in this run.
+            for asset in trade_ready_assets:
+                gate = trade_gate_snapshot.get(asset)
+                opportunity = opportunity_by_asset.get(asset)
+                decision = decision_snapshot.get(asset)
+                risk = risk_snapshot.get(asset)
+                if not all(isinstance(x, dict) for x in (gate, opportunity, decision, risk)):
+                    fail(f"Production order handoff source missing: {asset}")
+                if normalize_status(opportunity.get("status")) != ELIGIBLE_STATUS:
+                    fail(f"Production order handoff Opportunity not ELIGIBLE: {asset}")
+
+                direction = normalize_status(gate.get("direction"))
+                if direction not in VALID_DIRECTIONS:
+                    fail(f"Production order handoff direction invalid: {asset}")
+
+                decision_id = decision.get("decision_id")
+                birth_snapshot_id = decision.get("snapshot_id")
+                if not isinstance(decision_id, str) or not decision_id.strip():
+                    fail(f"Production order handoff Decision Birth missing: {asset}")
+                if not isinstance(birth_snapshot_id, str) or not birth_snapshot_id.strip():
+                    fail(f"Production order handoff Birth snapshot_id missing: {asset}")
+
+                entry_price = opportunity.get("price")
+                confidence = opportunity.get("confidence")
+                intent_timestamp = opportunity.get("timestamp")
+                quantity = risk.get("position_quantity")
+                if not is_finite_number(entry_price) or float(entry_price) <= 0:
+                    fail(f"Production order handoff entry price invalid: {asset}")
+                if not is_finite_number(confidence):
+                    fail(f"Production order handoff confidence invalid: {asset}")
+                if not isinstance(intent_timestamp, str) or not intent_timestamp.strip():
+                    fail(f"Production order handoff timestamp invalid: {asset}")
+                if not is_finite_number(quantity) or float(quantity) <= 0:
+                    fail(f"Production order handoff Risk quantity invalid: {asset}")
+
+                order_intents.append({
+                    "asset": asset,
+                    "direction": direction,
+                    "entry_price": entry_price,
+                    "confidence": confidence,
+                    "regime": None,
+                    "timestamp": intent_timestamp,
+                    "snapshot_id": birth_snapshot_id,
+                    "intent_id": f"OI-{birth_snapshot_id}-{asset}",
+                })
+
+            reference_prices = {}
+            for asset in trade_ready_assets:
+                market_record = market_data_by_symbol.get(f"{asset}/USDT")
+                if market_record is None:
+                    fail(f"Authoritative market record missing for reference price: {asset}")
+                try:
+                    reference_prices[asset] = resolve_authoritative_reference_price(
+                        market_record
+                    )
+                except RuntimeError as exc:
+                    fail(f"Authoritative market reference price unavailable: {asset}: {exc}")
+
+            canonical_order_requests = build_canonical_order_requests(
+                order_intents=order_intents,
+                risk_snapshot=risk_snapshot,
+                snapshot_id=order_intents[0]["snapshot_id"],
+                decision_snapshot=decision_snapshot,
+                reference_prices=reference_prices,
+            )
+            execution_boundary_status = verify_execution_boundary_integration(
+                canonical_order_requests
+            )
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
@@ -5341,7 +5447,11 @@ def main() -> int:
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
-        print("ORDER_INTENTS_CREATED=0")
+        print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
+        print(f"CANONICAL_ORDER_REQUESTS={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
+        print("ORDER_SUBMISSION=DISABLED")
+        print("EXCHANGE_WRITE=DISABLED")
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")

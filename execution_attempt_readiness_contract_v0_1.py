@@ -12,6 +12,7 @@ standing management mandate.
 from __future__ import annotations
 
 from collections.abc import Mapping
+import math
 from typing import Any
 
 from exchange_execution_contract import CanonicalOrderRequest, validate_order_request
@@ -59,7 +60,12 @@ def evaluate_execution_attempt_readiness(
     if entry_price != request.entry_price:
         raise ValueError("READINESS_REQUEST_ENTRY_PRICE_MISMATCH")
 
-    if not isinstance(exposure, (int, float)) or isinstance(exposure, bool) or exposure <= 0:
+    if (
+        not isinstance(exposure, (int, float))
+        or isinstance(exposure, bool)
+        or not math.isfinite(float(exposure))
+        or exposure <= 0
+    ):
         raise ValueError("READINESS_EXPOSURE_INVALID")
 
     return {

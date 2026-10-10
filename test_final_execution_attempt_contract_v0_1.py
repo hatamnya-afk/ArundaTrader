@@ -45,17 +45,20 @@ def _package():
     }
 
 
-def _standing_mandate():
+def _management_observation(decision="AUTHORIZED"):
     return {
-        "execution_authorization": "AUTHORIZED",
-        "authorization_validation": "VALID",
-        "authorization_source": "MANAGEMENT_PHASE_ENTRY",
-        "authorization_mode": "STANDING_MANDATE",
-        "authorization_id": "REAL-PROD-MANDATE-001",
+        "decision": decision,
         "mandate_id": "REAL-PROD-MANDATE-001",
-        "expires_at": "2099-01-01T00:00:00+00:00",
+        "authorized_by": "MANAGEMENT",
+        "authorization_source": "MANAGEMENT_PHASE_ENTRY",
         "environment": "REAL_PRODUCTION",
-        "allowed_markets": ("SPOT", "FUTURES"),
+        "issued_at": "2026-10-10T00:00:00+00:00",
+        "expires_at": "2099-01-01T00:00:00+00:00",
+        "allowed_markets": ["SPOT", "FUTURES"],
+        "provider": "FAKE_PROVIDER_NEUTRAL",
+        "capital_policy": "ZERO_INITIAL_CAPITAL_PROVIDER_FEEDBACK_THEN_PROGRESSIVE_SCALING",
+        "evidence_required_before": ["canonical_order_path", "provider_readiness"],
+        "evidence_required_after": ["provider_response", "fill_or_not_filled", "outcome"],
     }
 
 
@@ -128,56 +131,102 @@ class _FakeAdapter:
         )
 
 
-def test_final_attempt_accepts_standing_mandate_as_technical_authorization():
+def test_final_attempt_runs_management_producer_then_technical_authorization():
     result = run_final_execution_attempt_contract(
         execution_ready_package=_package(),
         request=_request(),
-        authorization_observation=_standing_mandate(),
+        management_observation=_management_observation(),
         adapter=_FakeAdapter(),
         venue="SPOT",
         execution_instrument="BTC-USDT",
     )
-
     assert result.status == "PROVIDER_REJECTED"
     assert result.error_code == "TEST_PROVIDER_REJECTION"
 
 
-def test_final_attempt_requires_only_standing_mandate_authorization():
-    authorization = _standing_mandate()
-    assert "attempt_id" not in authorization
+def test_final_attempt_keeps_trade_identity_outside_management_scope():
+    request = _request()
+    observation = _management_observation()
+    assert "attempt_id" not in observation
+    assert "asset" not in observation
+    assert hasattr(request, "intent_id")
+    assert hasattr(request, "snapshot_id")
+
+
+def test_final_attempt_fails_closed_without_valid_management_mandate():
+    observation = _management_observation()
+    observation["authorization_source"] = ""
     result = run_final_execution_attempt_contract(
         execution_ready_package=_package(),
         request=_request(),
-        authorization_observation=authorization,
+        management_observation=observation,
         adapter=_FakeAdapter(),
         venue="SPOT",
         execution_instrument="BTC-USDT",
     )
-
-    assert result.status == "PROVIDER_REJECTED"
-    assert result.error_code == "TEST_PROVIDER_REJECTION"
-
-
-def test_final_attempt_fails_closed_without_standing_mandate():
-    authorization = _standing_mandate()
-    authorization.pop("authorization_mode")
-    result = run_final_execution_attempt_contract(
-        execution_ready_package=_package(),
-        request=_request(),
-        authorization_observation=authorization,
-        adapter=_FakeAdapter(),
-        venue="SPOT",
-        execution_instrument="BTC-USDT",
-    )
-
     assert result.status == "FAIL_CLOSED"
     assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
 
 
-def test_final_attempt_keeps_attempt_identity_outside_management_authorization():
-    request = _request()
-    authorization = _standing_mandate()
+def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter():
+    observation = _management_observation()
+    observation["provider"] = "OTHER_PROVIDER"
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        management_observation=observation,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
 
-    assert "attempt_id" not in authorization
-    assert hasattr(request, "intent_id")
-    assert hasattr(request, "snapshot_id")
+
+def test_final_attempt_fails_closed_when_mandate_provider_is_missing():
+    observation = _management_observation()
+    observation.pop("provider")
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        management_observation=observation,
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+
+
+def test_final_attempt_denied_management_decision_never_reaches_adapter():
+    class NoPrepareAdapter(_FakeAdapter):
+        def prepare_order(self, request, *, venue, execution_instrument):
+            raise AssertionError("adapter must not be reached for denied phase entry")
+
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        management_observation=_management_observation("DENIED"),
+        adapter=NoPrepareAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+
+
+def test_final_attempt_rejects_handcrafted_technical_authorization_as_management_input():
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        management_observation={
+            "execution_authorization": "AUTHORIZED",
+            "authorization_validation": "VALID",
+            "authorization_mode": "STANDING_MANDATE",
+        },
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"

@@ -40,6 +40,7 @@ def execute_order(
             direction=getattr(request, "direction", None),
             error_code=reason,
             error_message=f"Canonical order request rejected: {reason}.",
+            decision_id=getattr(request, "decision_id", None),
         )
 
     if adapter is not None:
@@ -54,6 +55,7 @@ def execute_order(
             direction=request.direction,
             error_code="EXECUTION_DISABLED",
             error_message="Execution is disabled by exchange-agnostic contract.",
+            decision_id=request.decision_id,
         )
 
     # This branch is intentionally unreachable while execution is disabled.

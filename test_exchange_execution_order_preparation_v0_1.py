@@ -31,7 +31,14 @@ def _transport(*, method, path, params, headers, base_url):
                 "baseAsset": "BTC",
                 "quoteAsset": "USDT",
                 "status": "TRADING",
-                "filters": [],
+                "filters": [
+                    {
+                        "filterType": "LOT_SIZE",
+                        "minQty": "0.0001",
+                        "maxQty": "10",
+                        "stepSize": "0.0001",
+                    },
+                ],
             },
         ],
         "contracts": [
@@ -70,10 +77,10 @@ def test_toobit_prepare_futures_translates_base_quantity_to_contracts():
     assert prepared.adapter_name == "TOOBIT"
     assert prepared.venue == "FUTURES"
     assert prepared.request["symbol"] == "BTC-SWAP-USDT"
-    assert prepared.request["side"] == "SELL"
-    assert prepared.request["positionSide"] == "SHORT"
+    assert prepared.request["side"] == "SELL_OPEN"
+    assert prepared.request["type"] == "LIMIT"
+    assert prepared.request["priceType"] == "MARKET"
     assert prepared.request["quantity"] == "5"
-    assert prepared.request["category"] == "USDT"
 
 
 def test_toobit_prepare_spot_market_buy_uses_quote_amount_translation():

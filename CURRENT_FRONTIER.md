@@ -8,12 +8,13 @@
 >
 > ## VERIFIED POSITION
 > The provider-neutral execution-attempt contract is VERIFIED / PASS / CLOSED for its defined scope.
-> Latest verified endpoint: `448806f`.
+> Management handoff code: `9c0797a1e27a3be1fe1f6c00fda88ecbbbb72f68` — CI PASS, 487 tests.
+> Phase entry itself remains NOT AUTHORIZED.
 >
 > ## CURRENT FRONTIER
 > **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
 >
-> The standing management model is the one-time real-production phase-entry mandate. The trader does not obtain management approval for individual future orders. This section verifies the boundary between that standing mandate and the technical execution authorization path.
+> The producer-to-consumer handoff is implemented: `run_final_execution_attempt_contract` calls the canonical `evaluate_management_phase_entry` producer and passes only its validated standing-mandate observation to the technical authorization boundary. End-to-end mocked tests prove authorized propagation and fail-closed behavior for denied/invalid/handcrafted input. This is code-contract verification, not a real authorization decision. CURRENT FRONTIER: await the separate explicit one-time real-production phase-entry decision.
 >
 > ## SAFETY
 > `EXECUTION AUTHORIZATION = FALSE`
