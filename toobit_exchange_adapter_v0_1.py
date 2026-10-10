@@ -751,10 +751,13 @@ class ToobitExchangeAdapter:
                 # This adapter currently binds to Toobit's v1 futures endpoint,
                 # whose side is a combined open/close enum. This request opens a
                 # position; closing semantics require a separate approved contract.
+                # Toobit v1 Futures represents a market order as type=LIMIT
+                # plus priceType=MARKET; type=MARKET is not valid on this endpoint.
                 payload = {
                     "symbol": symbol,
                     "side": "BUY_OPEN" if request.direction == "LONG" else "SELL_OPEN",
-                    "type": request.order_type,
+                    "type": "LIMIT" if request.order_type == "MARKET" else request.order_type,
+                    "priceType": "MARKET" if request.order_type == "MARKET" else "INPUT",
                     "newClientOrderId": request.intent_id,
                     "quantity": _format_provider_quantity(provider_quantity),
                 }
