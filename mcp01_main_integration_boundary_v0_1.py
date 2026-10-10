@@ -94,7 +94,14 @@ def bind_authoritative_decision_birth(
     for raw_asset, decision in decision_snapshot.items():
         asset = str(raw_asset).strip().upper()
         record = dict(decision)
+        birth = birth_events[asset]
+        # Propagate the exact persisted Birth identity fields into the
+        # downstream Decision record. The order handoff consumes these fields;
+        # recomputing or omitting them would break snapshot lineage.
         record["decision_id"] = issued[asset]
+        record["snapshot_id"] = birth["snapshot_id"]
+        record["decision_timestamp_ms"] = birth["decision_timestamp_ms"]
+        record["source"] = birth["source"]
         bound_decisions[asset] = record
 
     return bound_decisions, len(committed)
