@@ -4012,6 +4012,8 @@ def build_canonical_order_requests(
 
         if not isinstance(reference_prices, dict):
             fail("Canonical reference prices invalid")
+        if not isinstance(snapshot_id, str) or not snapshot_id.strip():
+            fail("Canonical runtime snapshot anchor missing")
 
         if (
             isinstance(risk_snapshot, dict)
@@ -4042,6 +4044,9 @@ def build_canonical_order_requests(
             asset = normalize_asset(intent.get("asset"))
             if asset is None:
                 fail("Canonical request asset missing")
+            intent_snapshot_id = intent.get("snapshot_id")
+            if not isinstance(intent_snapshot_id, str) or not intent_snapshot_id.strip():
+                fail(f"Canonical Decision Birth snapshot_id missing: {asset}")
             if asset in result:
                 fail(f"Duplicate Canonical request asset: {asset}")
 
@@ -4109,7 +4114,10 @@ def build_canonical_order_requests(
                 entry_price=intent["entry_price"],
                 reference_price=reference_price,
                 intent_id=intent["intent_id"],
-                snapshot_id=snapshot_id,
+                # Each canonical request preserves its own Decision
+                # Birth snapshot. The function argument is only the current
+                # runtime's non-empty batch anchor, not a replacement identity.
+                snapshot_id=intent_snapshot_id,
                 timestamp=intent["timestamp"],
                 decision_id=decision_id,
             )
@@ -4128,8 +4136,8 @@ def build_canonical_order_requests(
                 fail(f"Canonical quantity unit invalid: {asset}")
             if request.quantity_source != CANONICAL_QUANTITY_SOURCE:
                 fail(f"Canonical quantity source invalid: {asset}")
-            if request.snapshot_id != snapshot_id:
-                fail(f"Canonical snapshot mismatch: {asset}")
+            if request.snapshot_id != intent_snapshot_id:
+                fail(f"Canonical Decision Birth snapshot mismatch: {asset}")
             if request.intent_id != intent["intent_id"]:
                 fail(f"Canonical intent_id mismatch: {asset}")
             if request.decision_id != decision_id:
