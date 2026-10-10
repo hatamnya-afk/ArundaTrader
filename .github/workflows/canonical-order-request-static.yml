@@ -3,14 +3,14 @@ name: Canonical order-request static contract
 on:
   pull_request:
     branches:
-      - integration/pr13-pr14-attempt-contract-20261010
+      - main
     paths:
       - "arunda_pipeline.py"
       - "test_canonical_order_request_builder_contract_v0_1.py"
       - ".github/workflows/canonical-order-request-static.yml"
   push:
     branches:
-      - fix/canonical-order-request-contract-20261010
+      - integration/pr13-pr14-attempt-contract-20261010
     paths:
       - "arunda_pipeline.py"
       - "test_canonical_order_request_builder_contract_v0_1.py"
