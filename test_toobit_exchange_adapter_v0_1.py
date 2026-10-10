@@ -1,4 +1,4 @@
-"""Focused tests for the read-only Toobit exchange adapter."""
+"""Focused tests for Toobit read, preparation, and gated-write contracts."""
 
 from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
 from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
@@ -588,3 +588,50 @@ def test_futures_duplicate_check_fails_closed_on_order_without_client_identity()
 
     assert result.allowed is False
     assert result.reason == "TOOBIT_FUTURES_ORDER_CLIENT_ID_UNAVAILABLE"
+
+
+def test_spot_preparation_fails_closed_when_authoritative_lot_filter_is_missing():
+    def transport(*, method, path, params, headers, base_url):
+        return {
+            "symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT", "filters": [],
+            }],
+            "contracts": [],
+        }
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="SPOT", settlement_asset="USDT",
+        instrument_type=None, selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = ToobitExchangeAdapter(transport=transport).prepare_order(
+        _canonical_spot_request(), venue="SPOT",
+        execution_instrument=specification,
+    )
+    assert result.ready is False
+    assert result.reason == "SPOT_LOT_SIZE_UNAVAILABLE"
+
+
+def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missing():
+    def transport(*, method, path, params, headers, base_url):
+        return {
+            "symbols": [],
+            "contracts": [{
+                "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+                "underlying": "BTC", "marginToken": "USDT",
+                "contractMultiplier": "0.001", "filters": [],
+            }],
+        }
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="FUTURES", settlement_asset="USDT",
+        instrument_type="PERPETUAL", selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = ToobitExchangeAdapter(transport=transport).prepare_order(
+        _canonical_futures_request(), venue="FUTURES",
+        execution_instrument=specification,
+    )
+    assert result.ready is False
+    assert result.reason == "FUTURES_LOT_SIZE_UNAVAILABLE"
