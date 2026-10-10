@@ -41,6 +41,15 @@ def test_dynamic_production_dependency_closure_is_present():
     assert not missing, "Missing dynamic production dependencies: " + ", ".join(missing)
 
 
+def test_dynamic_market_data_static_contract_loads_provider_dependencies():
+    import dynamic_market_data_boundary_v0_1 as boundary
+
+    result = boundary.static_contract_check()
+    assert result["STATUS"] == "PASS"
+    assert result["DB_WRITES"] == 0
+    assert result["EXECUTION"] == "OFF"
+
+
 def test_market_data_store_paths_are_checkout_relative():
     kucoin_source = (ROOT / "public_market_data_kucoin.py").read_text(encoding="utf-8-sig")
     store_source = (ROOT / "local_canonical_store_v0.1.py").read_text(encoding="utf-8-sig")
