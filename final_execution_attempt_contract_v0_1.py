@@ -24,32 +24,40 @@ from exchange_execution_contract import (
     blocked_execution_result,
 )
 from exchange_execution_order_attempt_boundary_v0_1 import attempt_prepared_order
+from management_execution_authorization_v0_1 import evaluate_management_phase_entry
 
 
 def run_final_execution_attempt_contract(
     *,
     execution_ready_package: Mapping[str, Any],
     request: CanonicalOrderRequest,
-    authorization_observation: Mapping[str, Any],
+    management_observation: Mapping[str, Any],
     adapter: Any,
     venue: str,
     execution_instrument: Any,
 ) -> CanonicalExecutionResult:
     """Compose the final contract path and fail closed on invalid inputs.
 
-    No management authorization is requested or inferred here. The only
-    management authorization input is the active standing phase-entry mandate;
-    this boundary performs technical validation of that mandate against the
-    current execution-ready request.
+    The canonical one-time management phase-entry observation is passed to
+    the authoritative management producer here. Only the producer's validated
+    standing-mandate output is forwarded to the technical authorization
+    boundary; handcrafted technical authorization mappings cannot bypass it.
     """
     try:
         if not isinstance(execution_ready_package, Mapping):
             raise ValueError("EXECUTION_READY_PACKAGE_INVALID")
-        if not isinstance(authorization_observation, Mapping):
-            raise ValueError("AUTHORIZATION_INPUT_INVALID")
+        if not isinstance(management_observation, Mapping):
+            raise ValueError("MANAGEMENT_PHASE_ENTRY_INPUT_INVALID")
 
-        # The order-attempt boundary performs the authoritative readiness
-        # alignment and explicit authorization checks before adapter submission.
+        management_result = evaluate_management_phase_entry(management_observation)
+        authorization_observation = management_result.get("authorization_observation")
+        if management_result.get("execution_authorization") != "AUTHORIZED_STANDING_MANDATE":
+            raise ValueError("MANAGEMENT_PHASE_ENTRY_NOT_AUTHORIZED")
+        if not isinstance(authorization_observation, Mapping):
+            raise ValueError("MANAGEMENT_AUTHORIZATION_HANDOFF_INVALID")
+
+        # The order-attempt boundary performs authoritative readiness alignment
+        # and technical authorization checks before adapter preparation/submission.
         return attempt_prepared_order(
             request=request,
             readiness_observation={},
