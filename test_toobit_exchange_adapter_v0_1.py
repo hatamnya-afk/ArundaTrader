@@ -287,6 +287,54 @@ def _canonical_spot_request():
     )
 
 
+def test_futures_base_quantity_converts_to_contracts_using_provider_multiplier():
+    from exchange_execution_contract import build_order_request
+
+    def transport(*, method, path, params, headers, base_url):
+        assert method == "GET"
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [],
+            "contracts": [{
+                "symbol": "BTC-SWAP-USDT",
+                "status": "TRADING",
+                "underlying": "BTC",
+                "marginToken": "USDT",
+                "quoteAsset": "USDT",
+                "contractMultiplier": "0.001",
+                "filters": [{
+                    "filterType": "LOT_SIZE",
+                    "minQty": "1",
+                    "maxQty": "1000",
+                    "stepSize": "1",
+                }],
+            }],
+        }
+
+    request = build_order_request(
+        asset="BTC", direction="LONG", order_type="MARKET",
+        risk={"position_quantity": "0.003"},
+        entry_price=None, reference_price="50000",
+        intent_id="futures-intent-001", snapshot_id="birth-BTC-001",
+        timestamp="2026-10-10T00:00:00Z", decision_id="birth-decision-001",
+    )
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="FUTURES", settlement_asset="USDT",
+        instrument_type="PERPETUAL", selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = ToobitExchangeAdapter(transport=transport).prepare_order(
+        request, venue="FUTURES", execution_instrument=specification,
+    )
+    assert result.ready is True
+    # Toobit futures quantity is contracts: 0.003 BTC / 0.001 BTC per contract = 3.
+    assert result.request["quantity"] == "3"
+    assert result.request["symbol"] == "BTC-SWAP-USDT"
+    assert result.request["side"] == "BUY_OPEN"
+    assert result.request["type"] == "LIMIT"
+    assert result.request["priceType"] == "MARKET"
+
+
 def test_spot_market_buy_validates_base_lot_and_sends_quote_amount():
     def transport(*, method, path, params, headers, base_url):
         assert method == "GET"
