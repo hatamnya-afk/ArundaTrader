@@ -54,6 +54,13 @@ class CanonicalOrderRequestBuilderContractTests(unittest.TestCase):
         self.assertIn("request.decision_id != decision_id", source)
         self.assertIn("request.reference_price != reference_price", source)
 
+    def test_each_request_preserves_its_own_decision_birth_snapshot(self) -> None:
+        source = ast.get_source_segment(self.source, self.function) or ""
+        self.assertIn('intent_snapshot_id = intent.get("snapshot_id")', source)
+        self.assertIn("snapshot_id=intent_snapshot_id", source)
+        self.assertIn("request.snapshot_id != intent_snapshot_id", source)
+        self.assertNotIn("snapshot_id=snapshot_id,", source)
+
     def test_original_risk_row_is_not_mutated(self) -> None:
         source = ast.get_source_segment(self.source, self.function) or ""
         self.assertIn("contract_risk_row = dict(risk_row)", source)
