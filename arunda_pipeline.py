@@ -3974,13 +3974,12 @@ def validate_current_order_intents(
                         f"Risk quantity missing: {asset}"
                     )
 
-                if risk_quantity != getattr(
-                    intent,
-                    "quantity",
-                    None,
-                ):
+                # ORDER_INTENT's closed schema intentionally has no
+                # quantity field. Quantity remains authoritative in Risk and
+                # is copied unchanged into the canonical request downstream.
+                if risk_quantity is None:
                     fail(
-                        "ORDER_INTENT quantity provenance mismatch: "
+                        "Risk quantity provenance missing: "
                         f"{asset}"
                     )
 
@@ -4061,8 +4060,8 @@ def build_canonical_order_requests(
                 )
 
             quantity = risk_row.get("position_quantity")
-            if quantity is None or quantity != intent.get("quantity"):
-                fail(f"Canonical quantity mismatch: {asset}")
+            if quantity is None:
+                fail(f"Canonical Risk quantity missing: {asset}")
 
             if risk_row.get("quantity_unit", POSITION_QUANTITY_UNIT) != POSITION_QUANTITY_UNIT:
                 fail(f"Canonical source quantity unit invalid: {asset}")
