@@ -287,6 +287,38 @@ def _canonical_spot_request():
     )
 
 
+def test_spot_market_buy_validates_base_lot_and_sends_quote_amount():
+    def transport(*, method, path, params, headers, base_url):
+        assert method == "GET"
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{
+                    "filterType": "LOT_SIZE", "minQty": "0.0001",
+                    "maxQty": "0.01", "stepSize": "0.0001",
+                }],
+            }],
+            "contracts": [],
+        }
+
+    adapter = ToobitExchangeAdapter(transport=transport)
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="SPOT", settlement_asset="USDT",
+        instrument_type=None, selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = adapter.prepare_order(
+        _canonical_spot_request(), venue="SPOT",
+        execution_instrument=specification,
+    )
+    assert result.ready is True
+    # Canonical quantity is 0.001 BTC; Toobit Spot MARKET BUY takes 50 USDT.
+    assert result.request["quantity"] == "50"
+    assert result.request["symbol"] == "BTCUSDT"
+
+
 def test_submission_stays_closed_and_never_calls_transport(monkeypatch):
     import exchange_execution_contract as contract
     from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
