@@ -25,6 +25,11 @@ class CanonicalOrderRequestBuilderContractTests(unittest.TestCase):
         self.assertIn("decision_snapshot", arg_names)
         self.assertIn("reference_prices", arg_names)
 
+    def test_quantity_is_read_from_dict_order_intent(self) -> None:
+        source = ast.get_source_segment(self.source, self.function) or ""
+        self.assertIn('quantity != intent.get("quantity")', source)
+        self.assertNotIn('getattr(intent, "quantity", None)', source)
+
     def test_contract_builder_receives_quantity_only_through_risk(self) -> None:
         calls = [
             node for node in ast.walk(self.function)
