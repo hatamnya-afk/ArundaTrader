@@ -847,6 +847,40 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+    def query_order_by_client_id(
+        self,
+        *,
+        venue: str,
+        symbol: str,
+        client_order_id: str,
+    ) -> ToobitAdapterResult:
+        """Read provider order state by client ID; never submits or retries an order."""
+        normalized_venue = str(venue).strip().upper()
+        normalized_symbol = str(symbol).strip().upper()
+        client_id = str(client_order_id).strip()
+        if normalized_venue not in {"SPOT", "FUTURES"}:
+            return ToobitAdapterResult(False, "VENUE_INVALID")
+        if not normalized_symbol or not client_id:
+            return ToobitAdapterResult(False, "ORDER_RECONCILIATION_IDENTITY_INVALID")
+        params = {"symbol": normalized_symbol, "origClientOrderId": client_id}
+        if normalized_venue == "FUTURES":
+            params["category"] = "USDT"
+        try:
+            path = "/api/v1/spot/order" if normalized_venue == "SPOT" else "/api/v1/futures/order"
+            response = self._unwrap(self._call("GET", path, params=params, signed=True))
+            if not isinstance(response, dict):
+                return ToobitAdapterResult(False, "PROVIDER_ORDER_RESPONSE_INVALID")
+            observed_client_id = response.get("clientOrderId", response.get("newClientOrderId"))
+            if str(observed_client_id or "") != client_id:
+                return ToobitAdapterResult(False, "PROVIDER_ORDER_IDENTITY_UNCONFIRMED")
+            if str(response.get("symbol", "")).strip().upper() != normalized_symbol:
+                return ToobitAdapterResult(False, "PROVIDER_ORDER_SYMBOL_MISMATCH")
+            if response.get("orderId") in (None, "") or not str(response.get("status", "")).strip():
+                return ToobitAdapterResult(False, "PROVIDER_ORDER_STATE_INCOMPLETE")
+            return ToobitAdapterResult(True, "PROVIDER_ORDER_STATE_CONFIRMED", response)
+        except Exception as exc:
+            return ToobitAdapterResult(False, f"ORDER_RECONCILIATION_FAILED:{exc}")
+
     def submit_prepared_order(
         self,
         preparation: AdapterOrderPreparation,
