@@ -4000,7 +4000,25 @@ def build_canonical_order_requests(
         order_intents: list[dict],
         risk_snapshot: dict,
         snapshot_id: str,
+        decision_snapshot: dict,
+        reference_prices: dict[str, Any],
     ) -> dict[str, dict]:
+        """
+        Build fail-closed canonical requests from authoritative upstream facts.
+
+        decision_id is copied from Decision Birth; it is never generated here.
+        reference_prices must be explicitly supplied by the caller from its
+        authoritative market snapshot. entry_price is not silently substituted.
+        The source conversion below separates the upstream sizing provenance
+        (POSITION_SIZING.position_size) from this contract's immediate source
+        field (RISK.position_quantity); the original risk row is not mutated.
+        """
+        if not isinstance(decision_snapshot, dict):
+            fail("Canonical decision snapshot invalid")
+
+        if not isinstance(reference_prices, dict):
+            fail("Canonical reference prices invalid")
+
         risk_rows = extract_rows(
             risk_snapshot,
             (
@@ -4012,39 +4030,20 @@ def build_canonical_order_requests(
                 "results",
             ),
         )
-
-        risk_rows = exact_asset_rows(
-            risk_rows,
-            "RISK",
-        )
-
-        r_map = risk_map(
-            risk_rows
-        )
-
+        risk_rows = exact_asset_rows(risk_rows, "RISK")
+        r_map = risk_map(risk_rows)
         result = {}
 
         for intent in order_intents:
-            asset = normalize_asset(
-                intent.get("asset")
-            )
-
+            asset = normalize_asset(intent.get("asset"))
             if asset is None:
-                fail(
-                    "Canonical request asset missing"
-                )
-
+                fail("Canonical request asset missing")
             if asset in result:
-                fail(
-                    f"Duplicate Canonical request asset: {asset}"
-                )
+                fail(f"Duplicate Canonical request asset: {asset}")
 
             risk_row = r_map.get(asset)
-
             if risk_row is None:
-                fail(
-                    f"Canonical request Risk missing: {asset}"
-                )
+                fail(f"Canonical request Risk missing: {asset}")
 
             risk_status = normalize_status(
                 get_row_value(
@@ -4055,101 +4054,92 @@ def build_canonical_order_requests(
                     "risk_state",
                 )
             )
-
             if risk_status not in APPROVED_RISK_STATUSES:
                 fail(
                     "Canonical request risk status not approved: "
                     f"{asset} -> {risk_status}"
                 )
 
-            quantity = risk_row.get(
-                "position_quantity"
-            )
+            quantity = risk_row.get("position_quantity")
+            if quantity is None or quantity != getattr(intent, "quantity", None):
+                fail(f"Canonical quantity mismatch: {asset}")
 
-            if quantity != getattr(
-                intent,
-                "quantity",
-                None,
-            ):
-                fail(
-                    f"Canonical quantity mismatch: {asset}"
-                )
-
-            if risk_row.get(
-                "quantity_unit",
-                POSITION_QUANTITY_UNIT,
-            ) != POSITION_QUANTITY_UNIT:
-                fail(
-                    f"Canonical source quantity unit invalid: "
-                    f"{asset}"
-                )
-
-            if risk_row.get(
-                "quantity_source",
-                POSITION_QUANTITY_SOURCE,
-            ) != POSITION_QUANTITY_SOURCE:
+            if risk_row.get("quantity_unit", POSITION_QUANTITY_UNIT) != POSITION_QUANTITY_UNIT:
+                fail(f"Canonical source quantity unit invalid: {asset}")
+            if risk_row.get("quantity_source", POSITION_QUANTITY_SOURCE) != POSITION_QUANTITY_SOURCE:
                 fail(
                     "Canonical source quantity provenance invalid: "
                     f"{asset}"
                 )
 
-            request = (
-                exchange_execution_contract.build_order_request(
-                    asset=asset,
-                    direction=intent["direction"],
-                    order_type="MARKET",
-                    quantity=quantity,
-                    risk=risk_row,
-                    entry_price=intent["entry_price"],
-                    intent_id=intent["intent_id"],
-                    snapshot_id=snapshot_id,
-                    timestamp=intent["timestamp"],
+            decision_row = decision_snapshot.get(asset)
+            if not isinstance(decision_row, dict):
+                fail(f"Canonical Decision Birth record missing: {asset}")
+            decision_id = decision_row.get("decision_id")
+            if not isinstance(decision_id, str) or not decision_id.strip():
+                fail(f"Canonical Decision Birth decision_id missing: {asset}")
+
+            reference_price = reference_prices.get(asset)
+            try:
+                reference_price_is_valid = (
+                    reference_price is not None
+                    and math.isfinite(float(reference_price))
+                    and float(reference_price) > 0
                 )
+            except (TypeError, ValueError, OverflowError):
+                reference_price_is_valid = False
+            if not reference_price_is_valid:
+                fail(f"Canonical authoritative reference price invalid: {asset}")
+
+            # Preserve the original Risk row and its upstream sizing provenance.
+            # The execution contract's quantity_source names the immediate
+            # canonical field from which the exact quantity is copied.
+            contract_risk_row = dict(risk_row)
+            contract_risk_row["quantity_source"] = CANONICAL_QUANTITY_SOURCE
+
+            request = exchange_execution_contract.build_order_request(
+                asset=asset,
+                direction=intent["direction"],
+                order_type="MARKET",
+                risk=contract_risk_row,
+                entry_price=intent["entry_price"],
+                reference_price=reference_price,
+                intent_id=intent["intent_id"],
+                snapshot_id=snapshot_id,
+                timestamp=intent["timestamp"],
+                decision_id=decision_id,
             )
 
             if not isinstance(
                 request,
                 exchange_execution_contract.CanonicalOrderRequest,
             ):
-                fail(
-                    "CanonicalOrderRequest type invalid: "
-                    f"{asset}"
-                )
+                fail(f"CanonicalOrderRequest type invalid: {asset}")
 
-            exchange_execution_contract.validate_order_request(
-                request
-            )
+            exchange_execution_contract.validate_order_request(request)
 
             if request.quantity != quantity:
-                fail(
-                    f"Canonical quantity != Risk quantity: {asset}"
-                )
-
+                fail(f"Canonical quantity != Risk quantity: {asset}")
             if request.quantity_unit != CANONICAL_QUANTITY_UNIT:
-                fail(
-                    f"Canonical quantity unit invalid: {asset}"
-                )
-
+                fail(f"Canonical quantity unit invalid: {asset}")
             if request.quantity_source != CANONICAL_QUANTITY_SOURCE:
-                fail(
-                    f"Canonical quantity source invalid: {asset}"
-                )
-
+                fail(f"Canonical quantity source invalid: {asset}")
             if request.snapshot_id != snapshot_id:
-                fail(
-                    f"Canonical snapshot mismatch: {asset}"
-                )
-
+                fail(f"Canonical snapshot mismatch: {asset}")
             if request.intent_id != intent["intent_id"]:
-                fail(
-                    f"Canonical intent_id mismatch: {asset}"
-                )
+                fail(f"Canonical intent_id mismatch: {asset}")
+            if request.decision_id != decision_id:
+                fail(f"Canonical decision_id mismatch: {asset}")
+            if request.reference_price != reference_price:
+                fail(f"Canonical reference price mismatch: {asset}")
 
             result[asset] = {
                 "request": request,
                 "quantity": request.quantity,
                 "quantity_unit": request.quantity_unit,
                 "quantity_source": request.quantity_source,
+                "decision_id": request.decision_id,
+                "reference_price": request.reference_price,
             }
 
         return result
