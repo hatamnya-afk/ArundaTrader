@@ -66,7 +66,7 @@ def test_missing_transport_fails_closed():
 def test_order_submission_is_explicitly_disabled():
     result = ToobitExchangeAdapter().order_submission()
     assert result.allowed is False
-    assert result.reason == "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED"
+    assert result.reason == "EXECUTION_WRITE_GATES_CLOSED"
 
 
 def test_cancel_is_explicitly_disabled():
@@ -272,7 +272,7 @@ def test_toobit_conforms_to_replaceable_exchange_adapter_contract():
     adapter = ToobitExchangeAdapter(transport=lambda **_: {})
     assert isinstance(adapter, ExchangeExecutionAdapter)
     assert validate_adapter_contract(adapter) == (True, "VALID")
-    assert adapter.capabilities().order_submission is False
+    assert adapter.capabilities().order_submission is True
     assert adapter.capabilities().order_cancellation is False
 
 
