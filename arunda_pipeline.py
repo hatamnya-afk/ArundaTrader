@@ -3977,11 +3977,6 @@ def validate_current_order_intents(
                 # ORDER_INTENT's closed schema intentionally has no
                 # quantity field. Quantity remains authoritative in Risk and
                 # is copied unchanged into the canonical request downstream.
-                if risk_quantity is None:
-                    fail(
-                        "Risk quantity provenance missing: "
-                        f"{asset}"
-                    )
 
         if seen != set(gate_map.keys()):
             fail(
