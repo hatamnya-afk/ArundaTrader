@@ -1,0 +1,35 @@
+name: Canonical order-request static contract
+
+on:
+  pull_request:
+    branches:
+      - integration/pr13-pr14-attempt-contract-20261010
+    paths:
+      - "arunda_pipeline.py"
+      - "test_canonical_order_request_builder_contract_v0_1.py"
+      - ".github/workflows/canonical-order-request-static.yml"
+  push:
+    branches:
+      - fix/canonical-order-request-contract-20261010
+    paths:
+      - "arunda_pipeline.py"
+      - "test_canonical_order_request_builder_contract_v0_1.py"
+      - ".github/workflows/canonical-order-request-static.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile pipeline without running it
+        run: python -m py_compile arunda_pipeline.py
+      - name: Run focused static contract tests
+        run: python -m unittest -v test_canonical_order_request_builder_contract_v0_1.py
