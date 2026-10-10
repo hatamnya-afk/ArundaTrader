@@ -2,14 +2,15 @@
 
 Phase B / Toobit Binding.
 
-This adapter is intentionally READ-ONLY at the current checkpoint.
-It exposes the provider-native read surface required by the existing
-CP46-C / CP46-D preflight contracts and contains NO order, cancel,
-withdrawal, or database-write operation.
+This adapter exposes provider-native read/preparation surfaces and a
+provider submission method guarded by three independent write flags.
+The current repository contract keeps those flags FALSE; this module does
+not authorize execution or enable the production pipeline. Cancellation,
+withdrawal, and database writes are not implemented.
 
-Transport is injected so the adapter boundary can be verified without
-calling Toobit. A live transport may be supplied only at the later
-authorized controlled-test gate.
+Transport is injected so provider behavior can be tested without contacting
+Toobit. A live transport must not be used for an order unless the separate
+management phase-entry gate has been explicitly authorized.
 
 Toobit's documented REST base is https://api.toobit.com.
 """
@@ -57,11 +58,12 @@ def _format_provider_quantity(value: Decimal) -> str:
     return text
 
 class ToobitExchangeAdapter:
-    """Provider-specific, read-only Toobit adapter.
+    """Provider-specific Toobit adapter with an explicitly gated write path.
 
-    The adapter never performs order submission/cancellation/withdrawal.
-    HTTP is not performed unless a transport callable is explicitly
-    injected by a later authorized runtime boundary.
+    Reads and preparation require an injected transport. Prepared order
+    submission additionally requires all independent execution/write flags
+    to be explicitly True. Cancellation, withdrawal, and DB writes remain
+    unavailable; this class does not grant management phase-entry authority.
     """
 
     name = "TOOBIT"
@@ -739,20 +741,29 @@ class ToobitExchangeAdapter:
                     )
 
                 lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
-                if isinstance(lot, dict):
-                    minimum = Decimal(str(lot.get("minQty", "0")))
-                    maximum = Decimal(str(lot.get("maxQty", "0")))
-                    step = Decimal(str(lot.get("stepSize", "0")))
-                    if minimum > 0 and provider_quantity < minimum:
-                        raise RuntimeError("FUTURES_QUANTITY_BELOW_MIN")
-                    if maximum > 0 and provider_quantity > maximum:
-                        raise RuntimeError("FUTURES_QUANTITY_ABOVE_MAX")
-                    if step > 0 and (
-                        provider_quantity / step
-                    ) != (
-                        provider_quantity / step
-                    ).to_integral_value():
-                        raise RuntimeError("FUTURES_QUANTITY_STEP_INVALID")
+                if not isinstance(lot, dict):
+                    raise RuntimeError("FUTURES_LOT_SIZE_UNAVAILABLE")
+                try:
+                    minimum = Decimal(str(lot.get("minQty", "")))
+                    maximum = Decimal(str(lot.get("maxQty", "")))
+                    step = Decimal(str(lot.get("stepSize", "")))
+                except (InvalidOperation, ValueError, TypeError) as exc:
+                    raise RuntimeError("FUTURES_LOT_SIZE_INVALID") from exc
+                if (
+                    not minimum.is_finite()
+                    or not maximum.is_finite()
+                    or not step.is_finite()
+                    or minimum <= 0
+                    or maximum < minimum
+                    or step <= 0
+                ):
+                    raise RuntimeError("FUTURES_LOT_SIZE_INVALID")
+                if provider_quantity < minimum:
+                    raise RuntimeError("FUTURES_QUANTITY_BELOW_MIN")
+                if provider_quantity > maximum:
+                    raise RuntimeError("FUTURES_QUANTITY_ABOVE_MAX")
+                if (provider_quantity / step) != (provider_quantity / step).to_integral_value():
+                    raise RuntimeError("FUTURES_QUANTITY_STEP_INVALID")
 
                 # This adapter currently binds to Toobit's v1 futures endpoint,
                 # whose side is a combined open/close enum. This request opens a
@@ -814,21 +825,30 @@ class ToobitExchangeAdapter:
                 provider_quantity = base_quantity * reference_price
 
             lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
-            if isinstance(lot, dict):
-                minimum = Decimal(str(lot.get("minQty", "0")))
-                maximum = Decimal(str(lot.get("maxQty", "0")))
-                step = Decimal(str(lot.get("stepSize", "0")))
-                filter_quantity = base_quantity if is_market_buy else provider_quantity
-                if minimum > 0 and filter_quantity < minimum:
-                    raise RuntimeError("SPOT_QUANTITY_BELOW_MIN")
-                if maximum > 0 and filter_quantity > maximum:
-                    raise RuntimeError("SPOT_QUANTITY_ABOVE_MAX")
-                if step > 0 and (
-                    filter_quantity / step
-                ) != (
-                    filter_quantity / step
-                ).to_integral_value():
-                    raise RuntimeError("SPOT_QUANTITY_STEP_INVALID")
+            if not isinstance(lot, dict):
+                raise RuntimeError("SPOT_LOT_SIZE_UNAVAILABLE")
+            try:
+                minimum = Decimal(str(lot.get("minQty", "")))
+                maximum = Decimal(str(lot.get("maxQty", "")))
+                step = Decimal(str(lot.get("stepSize", "")))
+            except (InvalidOperation, ValueError, TypeError) as exc:
+                raise RuntimeError("SPOT_LOT_SIZE_INVALID") from exc
+            if (
+                not minimum.is_finite()
+                or not maximum.is_finite()
+                or not step.is_finite()
+                or minimum <= 0
+                or maximum < minimum
+                or step <= 0
+            ):
+                raise RuntimeError("SPOT_LOT_SIZE_INVALID")
+            filter_quantity = base_quantity if is_market_buy else provider_quantity
+            if filter_quantity < minimum:
+                raise RuntimeError("SPOT_QUANTITY_BELOW_MIN")
+            if filter_quantity > maximum:
+                raise RuntimeError("SPOT_QUANTITY_ABOVE_MAX")
+            if (filter_quantity / step) != (filter_quantity / step).to_integral_value():
+                raise RuntimeError("SPOT_QUANTITY_STEP_INVALID")
 
             if is_market_buy:
                 for filter_name in ("MIN_NOTIONAL", "NOTIONAL"):
