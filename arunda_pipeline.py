@@ -4013,17 +4013,25 @@ def build_canonical_order_requests(
         if not isinstance(reference_prices, dict):
             fail("Canonical reference prices invalid")
 
-        risk_rows = extract_rows(
-            risk_snapshot,
-            (
-                "risk",
-                "risk_decisions",
-                "decisions",
-                "rows",
-                "assets",
-                "results",
-            ),
-        )
+        if (
+            isinstance(risk_snapshot, dict)
+            and risk_snapshot
+            and all(isinstance(row, dict) for row in risk_snapshot.values())
+        ):
+            # The current production runtime represents dynamic Risk as asset -> row.
+            risk_rows = list(risk_snapshot.values())
+        else:
+            risk_rows = extract_rows(
+                risk_snapshot,
+                (
+                    "risk",
+                    "risk_decisions",
+                    "decisions",
+                    "rows",
+                    "assets",
+                    "results",
+                ),
+            )
         # Production is a dynamic-universe path; legacy fixed-15 coverage is not applicable.
         r_map = risk_map(risk_rows)
         if not r_map:
