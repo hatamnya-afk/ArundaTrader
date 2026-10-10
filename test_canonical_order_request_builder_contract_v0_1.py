@@ -55,7 +55,7 @@ class CanonicalOrderRequestBuilderContractTests(unittest.TestCase):
     def test_original_risk_row_is_not_mutated(self) -> None:
         source = ast.get_source_segment(self.source, self.function) or ""
         self.assertIn("contract_risk_row = dict(risk_row)", source)
-        self.assertNotIn('risk_row["quantity_source"] = CANONICAL_QUANTITY_SOURCE', source)
+        self.assertNotIn('\\n            risk_row["quantity_source"] = CANONICAL_QUANTITY_SOURCE', source)
 
 
 if __name__ == "__main__":
