@@ -14,7 +14,7 @@ ENGINE = "LOCAL_CANONICAL_STORE_v0.1"
 # HARD BOUNDARY
 # ============================================================
 
-PROJECT_ROOT = Path(r"C:\Users\ASUS\ArundaTrader")
+PROJECT_ROOT = Path(__file__).resolve().parent
 PRODUCTION_DB = PROJECT_ROOT / "arunda.db"
 
 FABRIC_DIR = PROJECT_ROOT / "public_market_data_fabric"
