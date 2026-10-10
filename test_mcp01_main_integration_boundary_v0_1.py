@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import mcp01_main_integration_boundary_v0_1 as boundary
@@ -193,6 +194,40 @@ class EmitMcp01EvidenceExecutionResultsTests(unittest.TestCase):
         )
         self.assertIsNone(trade_chain["fill_outcome"])
         self.assertFalse(trade_chain["complete"])
+
+    def test_authoritative_birth_snapshot_fields_reach_decision_consumer(self) -> None:
+        market = SimpleNamespace(
+            candles=[{"timestamp": 1791596700}],
+            source="TOOBIT_REAL_MARKET",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            db_path = str(Path(directory) / "birth.sqlite3")
+            with (
+                patch.object(boundary, "issue_canonical_decision_id", return_value="DECISION-BIRTH-1"),
+                patch.object(boundary, "ensure_birth_schema"),
+                patch.object(
+                    boundary,
+                    "require_production_decision_birth",
+                    side_effect=lambda events, expected_assets, conn: {
+                        asset: event["decision_id"] for asset, event in events.items()
+                    },
+                ),
+            ):
+                bound, persisted = boundary.bind_authoritative_decision_birth(
+                    db_path=db_path,
+                    decision_snapshot={"BTC": {"decision": "TRADE"}},
+                    market_data_by_symbol={"BTC/USDT": market},
+                )
+
+        self.assertEqual(persisted, 1)
+        self.assertEqual(bound["BTC"]["decision_id"], "DECISION-BIRTH-1")
+        self.assertEqual(
+            bound["BTC"]["snapshot_id"],
+            "TOOBIT_REAL_MARKET|BTC/USDT|1h|1791596700",
+        )
+        self.assertEqual(bound["BTC"]["source"], "TOOBIT_REAL_MARKET")
+        self.assertIsInstance(bound["BTC"]["decision_timestamp_ms"], int)
+        self.assertGreater(bound["BTC"]["decision_timestamp_ms"], 0)
 
     def test_mapping_events_are_normalized_and_persisted_idempotently(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
