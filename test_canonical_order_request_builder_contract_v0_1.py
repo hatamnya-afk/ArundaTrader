@@ -59,6 +59,7 @@ class CanonicalOrderRequestBuilderContractTests(unittest.TestCase):
         self.assertIn('intent_snapshot_id = intent.get("snapshot_id")', source)
         self.assertIn("snapshot_id=intent_snapshot_id", source)
         self.assertIn("request.snapshot_id != intent_snapshot_id", source)
+        self.assertIn("Canonical runtime snapshot anchor is not present in Decision Birth intents", source)
         self.assertNotIn("snapshot_id=snapshot_id,", source)
 
     def test_original_risk_row_is_not_mutated(self) -> None:
