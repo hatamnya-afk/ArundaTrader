@@ -746,16 +746,15 @@ class ToobitExchangeAdapter:
                     ).to_integral_value():
                         raise RuntimeError("FUTURES_QUANTITY_STEP_INVALID")
 
+                # This adapter currently binds to Toobit's v1 futures endpoint,
+                # whose side is a combined open/close enum. This request opens a
+                # position; closing semantics require a separate approved contract.
                 payload = {
                     "symbol": symbol,
-                    "side": "BUY" if request.direction == "LONG" else "SELL",
-                    "positionSide": request.direction,
+                    "side": "BUY_OPEN" if request.direction == "LONG" else "SELL_OPEN",
                     "type": request.order_type,
                     "newClientOrderId": request.intent_id,
                     "quantity": _format_provider_quantity(provider_quantity),
-                    "category": str(
-                        execution_instrument.settlement_asset or "USDT"
-                    ).strip().upper(),
                 }
 
                 return AdapterOrderPreparation(
@@ -849,24 +848,168 @@ class ToobitExchangeAdapter:
         *,
         canonical_request: CanonicalOrderRequest,
     ) -> CanonicalExecutionResult:
-        del preparation
+        """Submit one prepared order only when every independent write gate is open.
+
+        No retries are performed. Any transport ambiguity is reported as
+        UNKNOWN so callers must reconcile by client order ID before any retry.
+        """
+        import exchange_execution_contract as execution_contract
+
+        valid, reason = validate_order_request(canonical_request)
+        if not valid:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code=reason,
+                error_message="Canonical order request rejected.",
+                decision_id=canonical_request.decision_id,
+            )
+
+        if not isinstance(preparation, AdapterOrderPreparation) or not preparation.ready:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="ORDER_PREPARATION_NOT_READY",
+                error_message="Provider order preparation is not ready.",
+                decision_id=canonical_request.decision_id,
+            )
+        if preparation.adapter_name != self.adapter_name or not isinstance(preparation.request, dict):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="ORDER_PREPARATION_ADAPTER_MISMATCH",
+                error_message="Prepared order does not belong to this adapter.",
+                decision_id=canonical_request.decision_id,
+            )
+        payload = dict(preparation.request)
+        if payload.get("newClientOrderId") != canonical_request.intent_id:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="CLIENT_ORDER_ID_MISMATCH",
+                error_message="Prepared client order identity does not match canonical intent.",
+                decision_id=canonical_request.decision_id,
+            )
+        if preparation.venue not in {"SPOT", "FUTURES"}:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="VENUE_INVALID",
+                error_message="Prepared venue is invalid.",
+                decision_id=canonical_request.decision_id,
+            )
+
+        gates = (
+            execution_contract.EXECUTION_ENABLED,
+            execution_contract.ORDER_SUBMISSION_ENABLED,
+            execution_contract.EXCHANGE_WRITE_ENABLED,
+        )
+        if not all(gate is True for gate in gates):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="EXECUTION_WRITE_GATES_CLOSED",
+                error_message="Execution, order-submission, and exchange-write gates must all be explicitly enabled.",
+                decision_id=canonical_request.decision_id,
+            )
+        if self._transport is None:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="TOOBIT_TRANSPORT_NOT_CONFIGURED",
+                error_message="No Toobit transport is configured.",
+                decision_id=canonical_request.decision_id,
+            )
+
+        endpoint = "/api/v1/spot/order" if preparation.venue == "SPOT" else "/api/v1/futures/order"
+        try:
+            response = self._unwrap(self._call("POST", endpoint, params=payload, signed=True))
+        except Exception as exc:
+            # Do not retry: a network failure can occur after the exchange
+            # accepted the order. Caller must query provider state by client ID.
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="UNKNOWN",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PROVIDER_SUBMISSION_OUTCOME_UNKNOWN",
+                error_message=str(exc), decision_id=canonical_request.decision_id,
+                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+            )
+
+        if not isinstance(response, dict):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="UNKNOWN",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PROVIDER_ORDER_RESPONSE_INVALID",
+                error_message="Provider response is not an order object.",
+                decision_id=canonical_request.decision_id,
+                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+            )
+
+        client_id = response.get("clientOrderId", response.get("newClientOrderId"))
+        order_id = response.get("orderId")
+        status = str(response.get("status", "")).strip().upper()
+        if str(client_id or "") != canonical_request.intent_id or order_id in (None, "") or not status:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=str(order_id) if order_id not in (None, "") else None,
+                status="UNKNOWN", asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PROVIDER_ORDER_IDENTITY_UNCONFIRMED",
+                error_message="Provider response lacks matching client identity, order ID, or status.",
+                decision_id=canonical_request.decision_id,
+                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+            )
+
+        try:
+            raw_executed = response.get("executedQty", response.get("executeQty", "0"))
+            executed = Decimal(str(raw_executed))
+            raw_price = response.get("avgPrice", response.get("price"))
+            price = Decimal(str(raw_price)) if raw_price not in (None, "", "0", "0.0") else None
+            if not executed.is_finite() or executed < 0 or (price is not None and (not price.is_finite() or price <= 0)):
+                raise InvalidOperation("invalid execution fields")
+        except (InvalidOperation, ValueError, TypeError):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=str(order_id), status="UNKNOWN",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PROVIDER_EXECUTION_FIELDS_INVALID",
+                error_message="Provider execution fields are invalid.",
+                decision_id=canonical_request.decision_id,
+                fill_outcome="UNKNOWN", fill_reason_code="RECONCILIATION_REQUIRED",
+            )
+
+        terminal_filled = status == "FILLED" and executed > 0 and price is not None
+        fill_outcome = "FILLED" if terminal_filled else ("NOT_FILLED" if status in {"CANCELED", "REJECTED", "EXPIRED"} and executed == 0 else "UNKNOWN")
+        fill_reason = "PROVIDER_CONFIRMED_FILLED" if terminal_filled else ("PROVIDER_TERMINAL_NO_FILL" if fill_outcome == "NOT_FILLED" else "PROVIDER_FILL_NOT_CONFIRMED")
         return CanonicalExecutionResult(
-            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+            accepted=status not in {"REJECTED", "ERROR"},
+            exchange_order_id=str(order_id), status=status,
             asset=canonical_request.asset, direction=canonical_request.direction,
-            executed_quantity=None, executed_price=None, timestamp=None,
-            adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
+            executed_quantity=str(executed) if executed > 0 else None,
+            executed_price=str(price) if price is not None and executed > 0 else None,
+            timestamp=str(response.get("transactTime", response.get("time", response.get("updateTime", "")))) or None,
+            adapter=self.name, error_code=None if status not in {"REJECTED", "ERROR"} else "PROVIDER_REJECTED_ORDER",
+            error_message=None if status not in {"REJECTED", "ERROR"} else "Provider rejected the order.",
+            decision_id=canonical_request.decision_id,
+            fill_outcome=fill_outcome, fill_reason_code=fill_reason,
         )
 
     def submit_order(self, request: Any) -> CanonicalExecutionResult:
-        del request
         return CanonicalExecutionResult(
             accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
-            asset=None, direction=None, executed_quantity=None,
-            executed_price=None, timestamp=None, adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
+            asset=getattr(request, "asset", None), direction=getattr(request, "direction", None),
+            executed_quantity=None, executed_price=None, timestamp=None,
+            adapter=self.name, error_code="ORDER_PREPARATION_REQUIRED",
+            error_message="Provider submission requires an explicit venue and resolved execution instrument.",
+            decision_id=getattr(request, "decision_id", None),
         )
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
