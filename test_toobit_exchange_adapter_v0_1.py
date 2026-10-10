@@ -274,3 +274,103 @@ def test_toobit_conforms_to_replaceable_exchange_adapter_contract():
     assert validate_adapter_contract(adapter) == (True, "VALID")
     assert adapter.capabilities().order_submission is False
     assert adapter.capabilities().order_cancellation is False
+
+
+def _canonical_spot_request():
+    from exchange_execution_contract import build_order_request
+    return build_order_request(
+        asset="BTC", direction="LONG", order_type="MARKET",
+        risk={"position_quantity": "0.001"},
+        entry_price=None, reference_price="50000",
+        intent_id="intent-test-001", snapshot_id="snapshot-test-001",
+        timestamp="2026-10-10T00:00:00Z", decision_id="decision-test-001",
+    )
+
+
+def test_submission_stays_closed_and_never_calls_transport(monkeypatch):
+    import exchange_execution_contract as contract
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    monkeypatch.setattr(contract, "EXECUTION_ENABLED", False)
+    monkeypatch.setattr(contract, "ORDER_SUBMISSION_ENABLED", True)
+    monkeypatch.setattr(contract, "EXCHANGE_WRITE_ENABLED", True)
+    calls = []
+    adapter = ToobitExchangeAdapter(transport=lambda **kwargs: calls.append(kwargs))
+    prep = AdapterOrderPreparation(
+        ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT",
+        request={"symbol": "BTCUSDT", "side": "BUY", "type": "MARKET",
+                 "newClientOrderId": "intent-test-001", "quantity": "50"},
+    )
+    result = adapter.submit_prepared_order(prep, canonical_request=_canonical_spot_request())
+    assert result.accepted is False
+    assert result.error_code == "EXECUTION_WRITE_GATES_CLOSED"
+    assert calls == []
+
+
+def test_submission_reconciles_provider_confirmed_fill_when_gates_explicitly_open(monkeypatch):
+    import exchange_execution_contract as contract
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    monkeypatch.setattr(contract, "EXECUTION_ENABLED", True)
+    monkeypatch.setattr(contract, "ORDER_SUBMISSION_ENABLED", True)
+    monkeypatch.setattr(contract, "EXCHANGE_WRITE_ENABLED", True)
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path, params, headers))
+        assert method == "POST"
+        assert path == "/api/v1/spot/order"
+        assert params["newClientOrderId"] == "intent-test-001"
+        assert params["signature"]
+        assert headers["X-BB-APIKEY"] == "test-key"
+        return {
+            "symbol": "BTCUSDT", "clientOrderId": "intent-test-001",
+            "orderId": "provider-order-001", "status": "FILLED",
+            "executedQty": "0.001", "price": "50000",
+            "transactTime": "1791596700000",
+        }
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    prep = AdapterOrderPreparation(
+        ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT",
+        request={"symbol": "BTCUSDT", "side": "BUY", "type": "MARKET",
+                 "newClientOrderId": "intent-test-001", "quantity": "50"},
+    )
+    result = adapter.submit_prepared_order(prep, canonical_request=_canonical_spot_request())
+    assert len(calls) == 1
+    assert result.accepted is True
+    assert result.exchange_order_id == "provider-order-001"
+    assert result.fill_outcome == "FILLED"
+    assert result.executed_quantity == "0.001"
+    assert result.executed_price == "50000"
+    assert result.decision_id == "decision-test-001"
+
+
+def test_submission_ambiguous_transport_failure_is_unknown_without_retry(monkeypatch):
+    import exchange_execution_contract as contract
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    monkeypatch.setattr(contract, "EXECUTION_ENABLED", True)
+    monkeypatch.setattr(contract, "ORDER_SUBMISSION_ENABLED", True)
+    monkeypatch.setattr(contract, "EXCHANGE_WRITE_ENABLED", True)
+    calls = []
+
+    def transport(**kwargs):
+        calls.append(kwargs)
+        raise TimeoutError("timeout after send")
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    prep = AdapterOrderPreparation(
+        ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT",
+        request={"symbol": "BTCUSDT", "side": "BUY", "type": "MARKET",
+                 "newClientOrderId": "intent-test-001", "quantity": "50"},
+    )
+    result = adapter.submit_prepared_order(prep, canonical_request=_canonical_spot_request())
+    assert len(calls) == 1
+    assert result.status == "UNKNOWN"
+    assert result.fill_outcome == "UNKNOWN"
+    assert result.fill_reason_code == "RECONCILIATION_REQUIRED"
