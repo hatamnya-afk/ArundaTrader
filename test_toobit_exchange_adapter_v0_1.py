@@ -359,7 +359,9 @@ def test_submission_ambiguous_transport_failure_is_unknown_without_retry(monkeyp
 
     def transport(**kwargs):
         calls.append(kwargs)
-        raise TimeoutError("timeout after send")
+        if kwargs["method"] == "POST":
+            raise TimeoutError("timeout after send")
+        raise TimeoutError("reconciliation temporarily unavailable")
 
     adapter = ToobitExchangeAdapter(
         transport=transport, api_key="test-key", secret_key="test-secret"
@@ -370,10 +372,51 @@ def test_submission_ambiguous_transport_failure_is_unknown_without_retry(monkeyp
                  "newClientOrderId": "intent-test-001", "quantity": "50"},
     )
     result = adapter.submit_prepared_order(prep, canonical_request=_canonical_spot_request())
-    assert len(calls) == 1
+    assert [call["method"] for call in calls] == ["POST", "GET"]
     assert result.status == "UNKNOWN"
     assert result.fill_outcome == "UNKNOWN"
     assert result.fill_reason_code == "RECONCILIATION_REQUIRED"
+    assert "reconciliation=ORDER_RECONCILIATION_FAILED" in result.error_message
+
+
+def test_submission_timeout_reconciles_matching_provider_order_without_retry(monkeypatch):
+    import exchange_execution_contract as contract
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    monkeypatch.setattr(contract, "EXECUTION_ENABLED", True)
+    monkeypatch.setattr(contract, "ORDER_SUBMISSION_ENABLED", True)
+    monkeypatch.setattr(contract, "EXCHANGE_WRITE_ENABLED", True)
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path, params))
+        if method == "POST":
+            raise TimeoutError("response lost after accepted request")
+        assert method == "GET"
+        assert path == "/api/v1/spot/order"
+        assert params["origClientOrderId"] == "intent-test-001"
+        return {
+            "symbol": "BTCUSDT", "clientOrderId": "intent-test-001",
+            "orderId": "provider-order-reconciled", "status": "FILLED",
+            "executedQty": "0.001", "avgPrice": "0", "price": "50000",
+            "transactTime": "1791596700000",
+        }
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    prep = AdapterOrderPreparation(
+        ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT",
+        request={"symbol": "BTCUSDT", "side": "BUY", "type": "MARKET",
+                 "newClientOrderId": "intent-test-001", "quantity": "50"},
+    )
+    result = adapter.submit_prepared_order(prep, canonical_request=_canonical_spot_request())
+    assert [call[0] for call in calls] == ["POST", "GET"]
+    assert result.status == "FILLED"
+    assert result.exchange_order_id == "provider-order-reconciled"
+    assert result.fill_outcome == "FILLED"
+    assert result.executed_quantity == "0.001"
+    assert result.executed_price == "50000"
 
 
 def test_order_reconciliation_reads_by_client_id_without_submission():
