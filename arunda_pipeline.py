@@ -268,6 +268,44 @@ def is_finite_number(
         and not isinstance(value, bool)
         and math.isfinite(float(value))
     )
+
+
+
+def resolve_authoritative_reference_price(market_record: Any) -> int | float:
+    """Resolve a current market price from the provider's actual market record.
+
+    MarketDataResult owns a tuple of real candles rather than top-level
+    last_price/price fields, so its newest candle close is the authoritative
+    fallback. Missing or invalid values fail closed; no intent/entry-price
+    substitution or synthetic price is permitted.
+    """
+    candidate = None
+    if isinstance(market_record, dict):
+        for key in ("last_price", "last", "price", "close"):
+            if market_record.get(key) is not None:
+                candidate = market_record[key]
+                break
+        candles = market_record.get("candles")
+    else:
+        for key in ("last_price", "last", "price", "close"):
+            value = getattr(market_record, key, None)
+            if value is not None:
+                candidate = value
+                break
+        candles = getattr(market_record, "candles", None)
+
+    if candidate is None:
+        if not isinstance(candles, (list, tuple)) or not candles:
+            fail("Authoritative market record has no current real candles")
+        latest_candle = candles[-1]
+        if isinstance(latest_candle, dict):
+            candidate = latest_candle.get("close")
+        else:
+            candidate = getattr(latest_candle, "close", None)
+
+    if not is_finite_number(candidate) or float(candidate) <= 0:
+        fail("Authoritative market reference price unavailable")
+    return candidate
     # ============================================================================
 
     # SUBPROCESS
@@ -5374,21 +5412,12 @@ def main() -> int:
                 market_record = market_data_by_symbol.get(f"{asset}/USDT")
                 if market_record is None:
                     fail(f"Authoritative market record missing for reference price: {asset}")
-                candidate = None
-                if isinstance(market_record, dict):
-                    for key in ("last_price", "last", "price", "close"):
-                        if market_record.get(key) is not None:
-                            candidate = market_record[key]
-                            break
-                else:
-                    for key in ("last_price", "last", "price", "close"):
-                        value = getattr(market_record, key, None)
-                        if value is not None:
-                            candidate = value
-                            break
-                if not is_finite_number(candidate) or float(candidate) <= 0:
-                    fail(f"Authoritative market reference price unavailable: {asset}")
-                reference_prices[asset] = candidate
+                try:
+                    reference_prices[asset] = resolve_authoritative_reference_price(
+                        market_record
+                    )
+                except RuntimeError as exc:
+                    fail(f"Authoritative market reference price unavailable: {asset}: {exc}")
 
             canonical_order_requests = build_canonical_order_requests(
                 order_intents=order_intents,
