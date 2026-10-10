@@ -4076,6 +4076,12 @@ def build_canonical_order_requests(
         r_map = risk_map(risk_rows)
         if not r_map:
             fail("Canonical Risk snapshot is empty")
+        if not any(
+            isinstance(intent, dict) and intent.get("snapshot_id") == snapshot_id
+            for intent in order_intents
+        ):
+            fail("Canonical runtime snapshot anchor is not present in Decision Birth intents")
+
         result = {}
 
         for intent in order_intents:
