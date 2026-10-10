@@ -78,7 +78,9 @@ class ToobitExchangeAdapter:
             constraint_read=True,
             account_read=True,
             order_state_read=True,
-            order_submission=False,
+            # Capability means an implemented provider path exists; the separate
+            # execution/write gates still deny all real submission by default.
+            order_submission=True,
             order_cancellation=False,
         )
 
@@ -1014,10 +1016,14 @@ class ToobitExchangeAdapter:
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs
-        return ToobitAdapterResult(
-            False,
-            "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-        )
+        import exchange_execution_contract as execution_contract
+        if not all((
+            execution_contract.EXECUTION_ENABLED is True,
+            execution_contract.ORDER_SUBMISSION_ENABLED is True,
+            execution_contract.EXCHANGE_WRITE_ENABLED is True,
+        )):
+            return ToobitAdapterResult(False, "EXECUTION_WRITE_GATES_CLOSED")
+        return ToobitAdapterResult(False, "PREPARED_ORDER_REQUIRED")
 
     def cancel_order(self, *, asset: str, exchange_order_id: str) -> CanonicalExecutionResult:
         return CanonicalExecutionResult(
