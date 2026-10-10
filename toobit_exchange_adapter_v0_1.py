@@ -789,16 +789,22 @@ class ToobitExchangeAdapter:
                 raise RuntimeError("SPOT_QUANTITY_INVALID")
 
             provider_quantity = base_quantity
-            if request.order_type == "MARKET" and request.direction == "LONG":
+            is_market_buy = (
+                request.order_type == "MARKET"
+                and request.direction == "LONG"
+            )
+            if is_market_buy:
                 if request.reference_price is None:
                     raise RuntimeError(
                         "SPOT_MARKET_BUY_REFERENCE_PRICE_REQUIRED"
                     )
                 reference_price = Decimal(str(request.reference_price))
-                if reference_price <= 0:
+                if not reference_price.is_finite() or reference_price <= 0:
                     raise RuntimeError(
                         "SPOT_MARKET_BUY_REFERENCE_PRICE_INVALID"
                     )
+                # Toobit Spot v1 requires quote-asset amount for MARKET BUY.
+                # Validate LOT_SIZE against canonical base quantity, not quote amount.
                 provider_quantity = base_quantity * reference_price
 
             lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
@@ -806,16 +812,30 @@ class ToobitExchangeAdapter:
                 minimum = Decimal(str(lot.get("minQty", "0")))
                 maximum = Decimal(str(lot.get("maxQty", "0")))
                 step = Decimal(str(lot.get("stepSize", "0")))
-                if minimum > 0 and provider_quantity < minimum:
+                filter_quantity = base_quantity if is_market_buy else provider_quantity
+                if minimum > 0 and filter_quantity < minimum:
                     raise RuntimeError("SPOT_QUANTITY_BELOW_MIN")
-                if maximum > 0 and provider_quantity > maximum:
+                if maximum > 0 and filter_quantity > maximum:
                     raise RuntimeError("SPOT_QUANTITY_ABOVE_MAX")
                 if step > 0 and (
-                    provider_quantity / step
+                    filter_quantity / step
                 ) != (
-                    provider_quantity / step
+                    filter_quantity / step
                 ).to_integral_value():
                     raise RuntimeError("SPOT_QUANTITY_STEP_INVALID")
+
+            if is_market_buy:
+                for filter_name in ("MIN_NOTIONAL", "NOTIONAL"):
+                    notional_filter = filters.get(filter_name)
+                    if not isinstance(notional_filter, dict):
+                        continue
+                    raw_minimum = notional_filter.get(
+                        "minNotional",
+                        notional_filter.get("minNotionalValue", "0"),
+                    )
+                    minimum_notional = Decimal(str(raw_minimum))
+                    if minimum_notional > 0 and provider_quantity < minimum_notional:
+                        raise RuntimeError("SPOT_NOTIONAL_BELOW_MIN")
 
             payload = {
                 "symbol": symbol,
