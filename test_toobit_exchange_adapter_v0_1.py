@@ -374,3 +374,32 @@ def test_submission_ambiguous_transport_failure_is_unknown_without_retry(monkeyp
     assert result.status == "UNKNOWN"
     assert result.fill_outcome == "UNKNOWN"
     assert result.fill_reason_code == "RECONCILIATION_REQUIRED"
+
+
+def test_order_reconciliation_reads_by_client_id_without_submission():
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path, params))
+        assert method == "GET"
+        assert path == "/api/v1/futures/order"
+        assert params["origClientOrderId"] == "intent-test-001"
+        assert params["symbol"] == "BTC-SWAP-USDT"
+        assert params["category"] == "USDT"
+        return {
+            "symbol": "BTC-SWAP-USDT", "clientOrderId": "intent-test-001",
+            "orderId": "provider-order-001", "status": "FILLED",
+            "executedQty": "5", "avgPrice": "50000",
+        }
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    result = adapter.query_order_by_client_id(
+        venue="FUTURES", symbol="BTC-SWAP-USDT",
+        client_order_id="intent-test-001",
+    )
+    assert result.allowed is True
+    assert result.reason == "PROVIDER_ORDER_STATE_CONFIRMED"
+    assert result.data["status"] == "FILLED"
+    assert len(calls) == 1
