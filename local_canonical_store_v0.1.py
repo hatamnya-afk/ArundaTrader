@@ -1,4 +1,4 @@
-# C:\Users\ASUS\ArundaTrader\public_market_data_fabric\local_canonical_store_v0.1.py
+# Checkout-relative local canonical market-data store
 
 from __future__ import annotations
 
