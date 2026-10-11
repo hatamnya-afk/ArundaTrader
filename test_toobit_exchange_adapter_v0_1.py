@@ -200,18 +200,20 @@ def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contract
             "symbols": [],
             "contracts": [
                 {
-                    "symbol": "BTC-SWAP-USDT-A",
+                    "symbol": "BTC-SWAP-USDT",
                     "status": "TRADING",
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                 },
                 {
-                    "symbol": "BTC-SWAP-USDT-B",
+                    "symbol": "BTC-SWAP-USDT",
                     "status": "TRADING",
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                 },
             ],
         }
@@ -337,6 +339,7 @@ def test_futures_base_quantity_converts_to_contracts_using_provider_multiplier()
                 "underlying": "BTC",
                 "marginToken": "USDT",
                 "quoteAsset": "USDT",
+                "inverse": False,
                 "contractMultiplier": "0.001",
                 "filters": [{
                     "filterType": "LOT_SIZE",
