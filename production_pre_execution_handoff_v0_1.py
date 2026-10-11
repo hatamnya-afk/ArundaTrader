@@ -1,0 +1,114 @@
+"""Production handoff from canonical order requests to pre-execution readiness.
+
+This is a pure, fail-closed assembly boundary. It consumes only current-run
+Decision, validation, Risk, Trade Gate and Opportunity records. Venue selection
+is deliberately explicit: a standing mandate allowing SPOT and FUTURES does
+not select one for an individual request.
+"""
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Any
+
+from exchange_execution_contract import CanonicalOrderRequest
+from pre_execution_readiness_v0_1 import build_pre_execution_readiness
+from production_final_execution_context_v0_1 import build_production_final_attempt_context
+
+
+def build_production_pre_execution_handoff(
+    *,
+    request: CanonicalOrderRequest,
+    decision: Mapping[str, Any],
+    validation: Mapping[str, Any],
+    risk: Mapping[str, Any],
+    trade_gate: Mapping[str, Any],
+    opportunity: Mapping[str, Any],
+    venue: str | None = None,
+    management_observation: Mapping[str, Any] | None = None,
+    adapter: Any = None,
+) -> dict[str, Any]:
+    """Build readiness and, only with explicit venue/context, final-attempt context."""
+    if not isinstance(request, CanonicalOrderRequest):
+        raise ValueError("CANONICAL_ORDER_REQUEST_INVALID")
+    for name, value in (
+        ("decision", decision),
+        ("validation", validation),
+        ("risk", risk),
+        ("trade_gate", trade_gate),
+        ("opportunity", opportunity),
+    ):
+        if not isinstance(value, Mapping):
+            raise ValueError(f"PRE_EXECUTION_{name.upper()}_MISSING")
+
+    if decision.get("status") != "READY" or decision.get("state") != "ACTIONABLE":
+        raise ValueError("PRE_EXECUTION_DECISION_NOT_ACTIONABLE_READY")
+    if validation.get("valid") is not True:
+        raise ValueError("PRE_EXECUTION_DECISION_VALIDATION_FAILED")
+    if opportunity.get("status") != "ELIGIBLE":
+        raise ValueError("PRE_EXECUTION_OPPORTUNITY_NOT_ELIGIBLE")
+    if risk.get("risk_state") != "APPROVED":
+        raise ValueError("PRE_EXECUTION_RISK_NOT_APPROVED")
+    if risk.get("position_sizing_state") != "CALCULATED":
+        raise ValueError("PRE_EXECUTION_POSITION_SIZING_NOT_CALCULATED")
+    if trade_gate.get("trade_gate_state") != "TRADE_READY":
+        raise ValueError("PRE_EXECUTION_TRADE_GATE_NOT_READY")
+
+    observed_at = opportunity.get("timestamp")
+    if not isinstance(observed_at, str) or not observed_at.strip():
+        raise ValueError("PRE_EXECUTION_CURRENT_RUN_TIMESTAMP_MISSING")
+
+    readiness = build_pre_execution_readiness({
+        "decision_state": "READY",
+        "decision_validation": "VALID",
+        "asset": request.asset,
+        "direction": request.direction,
+        "entry_price": risk.get("entry_price"),
+        "stop_price": risk.get("stop_price"),
+        "stop_distance": risk.get("stop_distance"),
+        "quantity": risk.get("position_quantity"),
+        "exposure": risk.get("exposure"),
+        "risk_state": "APPROVED",
+        "trade_gate_state": "APPROVED",
+        "policy_version": str(risk.get(
+            "position_sizing_reason",
+            "EXISTING_RISK_BUDGET_AND_POSITION_SIZE_POLICY",
+        )),
+        "provenance": "REAL_MARKET_CURRENT_RUN",
+        "observed_at": observed_at,
+    })
+
+    aligned = {
+        "asset": request.asset,
+        "direction": request.direction,
+        "entry_price": request.entry_price,
+        "quantity": request.quantity,
+    }
+    for field, expected in aligned.items():
+        if readiness.get(field) != expected:
+            raise ValueError(f"PRE_EXECUTION_REQUEST_MISMATCH:{field}")
+
+    result: dict[str, Any] = {
+        "readiness": readiness,
+        "context": None,
+        "status": "PRE_EXECUTION_READY_VENUE_SELECTION_REQUIRED",
+    }
+    if venue is None or not isinstance(venue, str) or not venue.strip():
+        return result
+    if not isinstance(management_observation, Mapping):
+        raise ValueError("MANAGEMENT_MANDATE_MISSING")
+    if adapter is None:
+        raise ValueError("EXECUTION_ADAPTER_INVALID")
+
+    context = build_production_final_attempt_context(
+        request=request,
+        pre_execution_readiness=readiness,
+        management_observation=management_observation,
+        adapter=adapter,
+        venue=venue,
+    )
+    result["context"] = context
+    result["status"] = "FINAL_ATTEMPT_CONTEXT_READY_EXECUTION_STILL_GATED"
+    return result
+
+
+__all__ = ["build_production_pre_execution_handoff"]
