@@ -637,3 +637,75 @@ def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missi
     )
     assert result.ready is False
     assert result.reason == "FUTURES_LOT_SIZE_UNAVAILABLE"
+
+
+@pytest.mark.parametrize(
+    ("direction", "venue", "expected_symbol"),
+    [
+        ("LONG", "SPOT", "BTCUSDT"),
+        ("SHORT", "FUTURES", "BTC-SWAP-USDT"),
+    ],
+)
+def test_canonical_pair_routes_same_base_asset_from_evidence_to_order_preparation(
+    direction, venue, expected_symbol
+):
+    from exchange_execution_contract import build_order_request
+    from execution_instrument_policy_v0_1 import build_execution_instrument_specification
+    from production_intent_venue_policy_v0_1 import produce_authoritative_venue_evidence
+
+    def transport(*, method, path, params, headers, base_url):
+        assert method == "GET"
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{
+                    "filterType": "LOT_SIZE", "minQty": "0.001",
+                    "maxQty": "10", "stepSize": "0.001",
+                }],
+            }],
+            "contracts": [{
+                "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+                "underlying": "BTC", "baseAsset": "BTC-SWAP-USDT",
+                "quoteAsset": "USDT", "marginToken": "USDT",
+                "inverse": False, "contractMultiplier": "0.001",
+                "filters": [{
+                    "filterType": "LOT_SIZE", "minQty": "1",
+                    "maxQty": "1000", "stepSize": "1",
+                }],
+            }],
+        }
+
+    request = build_order_request(
+        asset="BTC/USDT",
+        direction=direction,
+        order_type="MARKET",
+        risk={"position_quantity": "0.003"},
+        entry_price=None,
+        reference_price="50000",
+        intent_id=f"intent-{venue.lower()}-pair",
+        snapshot_id="snapshot-pair",
+        timestamp="2026-10-11T12:00:00Z",
+        decision_id="decision-pair",
+    )
+    adapter = ToobitExchangeAdapter(transport=transport)
+    selection, instrument = produce_authoritative_venue_evidence(
+        request=request, adapter=adapter,
+    )
+    assert selection["venue"] == venue
+    assert instrument["instrument_id"] == expected_symbol
+    assert instrument["intent_id"] == request.intent_id
+
+    execution_instrument = build_execution_instrument_specification(
+        asset=request.asset,
+        venue=venue,
+    )
+    assert execution_instrument.asset == "BTC"
+    preparation = adapter.prepare_order(
+        request,
+        venue=venue,
+        execution_instrument=execution_instrument,
+    )
+    assert preparation.ready is True
+    assert preparation.request["symbol"] == expected_symbol
