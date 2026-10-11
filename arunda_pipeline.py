@@ -4408,6 +4408,7 @@ def build_pre_execution_handoff_snapshot(
 
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
+        pre_execution_handoff_results: dict | None = None,
     ) -> str:
         assert_execution_disabled()
 
@@ -4468,9 +4469,21 @@ def verify_execution_boundary_integration(
             # The production path is explicitly bound to the final-attempt
             # dispatcher. With execution disabled, it must stop before the
             # management/readiness/provider attempt contract is invoked.
+            handoff = (
+                pre_execution_handoff_results.get(asset, {})
+                if isinstance(pre_execution_handoff_results, dict)
+                else {}
+            )
+            context = handoff.get("context") if isinstance(handoff, dict) else None
+            context = context if isinstance(context, dict) else {}
             final_attempt_result = dispatch_final_execution_attempt(
                 request=request,
                 execution_enabled=EXECUTION_ENABLED,
+                execution_ready_package=context.get("execution_ready_package"),
+                management_observation=context.get("management_observation"),
+                adapter=context.get("adapter"),
+                venue=context.get("venue"),
+                execution_instrument=context.get("execution_instrument"),
             )
             if not isinstance(
                 final_attempt_result,
@@ -5536,7 +5549,8 @@ def main() -> int:
                 opportunity_by_asset=opportunity_by_asset,
             )
             execution_boundary_status = verify_execution_boundary_integration(
-                canonical_order_requests
+                canonical_order_requests,
+                pre_execution_handoff_results=pre_execution_handoff_results,
             )
 
         print("=" * 90)
