@@ -39,13 +39,15 @@ class _Adapter:
     def __init__(self, row):
         self.row = row
         self.calls = []
+        self.execution_instrument = None
 
     def trading_constraints(self, asset):
         self.calls.append(("SPOT", asset))
         return SimpleNamespace(allowed=True, reason="OK", data=self.row)
 
-    def futures_trading_constraints(self, asset):
+    def futures_trading_constraints(self, asset, *, execution_instrument=None):
         self.calls.append(("FUTURES", asset))
+        self.execution_instrument = execution_instrument
         return SimpleNamespace(allowed=True, reason="OK", data=self.row)
 
 
@@ -72,6 +74,8 @@ def test_short_uses_futures_constraints():
         observed_at="2026-10-11T12:00:00Z",
     )
     assert adapter.calls == [("FUTURES", "BTC")]
+    assert adapter.execution_instrument.settlement_asset == "USDT"
+    assert adapter.execution_instrument.instrument_type == "PERPETUAL"
     assert selection["venue"] == "FUTURES"
     assert instrument["venue"] == "FUTURES"
 
@@ -183,7 +187,8 @@ def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
         adapter=adapter,
     )
 
-    assert calls == [("GET", "/api/v1/exchangeInfo"), ("GET", "/api/v1/exchangeInfo")]
+    expected_reads = 1 if direction == "LONG" else 2
+    assert calls == [("GET", "/api/v1/exchangeInfo")] * expected_reads
     assert selection["venue"] == ("SPOT" if direction == "LONG" else "FUTURES")
     assert instrument["instrument_id"] == expected_symbol
     assert instrument["instrument_status"] == "TRADING"
