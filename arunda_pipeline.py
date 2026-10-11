@@ -4376,9 +4376,10 @@ def build_pre_execution_handoff_snapshot(
     ) -> dict:
         """Connect canonical requests to current-run pre-execution readiness.
 
-        This does not select SPOT/FUTURES, contact Toobit, or enable execution.
-        Each candidate records an explicit fail-closed status if readiness
-        evidence is inconsistent or venue selection remains unresolved.
+        Each candidate gets deterministic per-intent venue selection plus a
+        public, read-only Toobit instrument metadata check. This function may
+        contact Toobit when the pipeline is run; it never submits or modifies
+        orders, and execution remains disabled. Fail closed on any mismatch.
         """
         from production_pre_execution_handoff_v0_1 import (
             build_production_pre_execution_handoff,
@@ -4389,10 +4390,10 @@ def build_pre_execution_handoff_snapshot(
         from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
         from toobit_read_only_transport_v0_1 import toobit_read_only_transport
 
-        # The only network-capable dependency introduced here is an allowlisted
-        # public GET transport. No credentials are supplied and no write route
-        # exists in this transport. This function is reached only for actual
-        # current-run Trade Ready candidates; this edit does not run the pipeline.
+        # The adapter receives only an allowlisted public GET transport.
+        # The transport rejects every other host/path/method and ignores caller
+        # headers. This call may read Toobit metadata at runtime; this code edit
+        # itself does not run the pipeline or activate any execution/write gate.
         adapter = ToobitExchangeAdapter(transport=toobit_read_only_transport)
         results = {}
         for asset, canonical in canonical_order_requests.items():
