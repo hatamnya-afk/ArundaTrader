@@ -3,15 +3,15 @@
 Pure governance/readiness validation. No provider calls, no order submission,
 no DB mutation, no pipeline wiring, and no execution activation.
 
-The contract validates whether the project has enough evidence to present ONE
-phase-entry decision to management. If that decision is later AUTHORIZED, the
-standing mandate applies to autonomous Spot/Futures operation; no per-trade
-management approval is required.
+This contract evaluates whether evidence is sufficient to present ONE
+phase-entry decision to management. It is readiness-only: the canonical
+management authorization boundary is the sole producer of a standing mandate.
+A readiness result must never issue or mirror execution authorization.
 """
 
 from __future__ import annotations
 
-from typing import Any, Mapping, Sequence
+from typing import Any, Sequence
 
 
 REAL_PRODUCTION = "REAL_PRODUCTION"
@@ -66,9 +66,4 @@ def evaluate_phase_entry_readiness(
         "zero_balance_is_not_local_trade_blocker": True,
         "provider_acceptance_rejection_is_authoritative": True,
         "evidence_requirements": evidence,
-        "execution_authorization": (
-            "AUTHORIZED_STANDING_MANDATE"
-            if management_decision == "AUTHORIZED"
-            else False
-        ),
     }
