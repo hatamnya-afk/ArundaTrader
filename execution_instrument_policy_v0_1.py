@@ -39,7 +39,14 @@ def build_execution_instrument_specification(
 ) -> ExecutionInstrumentSpecification:
     """Build the authoritative provider-neutral execution specification."""
 
-    normalized_asset = str(asset).strip().upper()
+    if not isinstance(asset, str) or not asset.strip():
+        raise ValueError("EXECUTION_INSTRUMENT_ASSET_INVALID")
+    # Canonical requests may carry either a base asset ("BTC") or a pair
+    # ("BTC/USDT"). Execution-instrument identity is always the base asset;
+    # quote/settlement semantics are supplied independently below.
+    normalized_asset = (
+        asset.strip().upper().replace("-", "/").split("/", 1)[0].strip()
+    )
     normalized_venue = str(venue).strip().upper()
 
     if not normalized_asset:
