@@ -154,7 +154,7 @@ def test_provider_evidence_timestamp_is_taken_after_metadata_read(monkeypatch):
             },
             {
                 "symbol": "BTC-SWAP-USDT", "status": "TRADING",
-                "underlying": "BTC", "marginToken": "USDT",
+                "underlying": "BTC", "marginToken": "USDT", "quoteAsset": "USDT",
                 "inverse": False, "contractMultiplier": "0.0001",
             },
         ]),
