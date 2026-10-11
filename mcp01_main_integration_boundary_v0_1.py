@@ -79,13 +79,17 @@ def bind_authoritative_decision_birth(
         )
         issued[asset] = decision_id
 
-    with sqlite3.connect(db_path) as conn:
-        ensure_birth_schema(conn)
-        committed = require_production_decision_birth(
-            birth_events,
-            expected_assets=set(issued),
-            conn=conn,
-        )
+    conn = sqlite3.connect(db_path)
+    try:
+        with conn:
+            ensure_birth_schema(conn)
+            committed = require_production_decision_birth(
+                birth_events,
+                expected_assets=set(issued),
+                conn=conn,
+            )
+    finally:
+        conn.close()
 
     if committed != issued:
         raise RuntimeError("MCP01_COMMITTED_DECISION_ID_MISMATCH")
