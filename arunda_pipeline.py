@@ -4395,6 +4395,8 @@ def build_pre_execution_handoff_snapshot(
                     risk=risk_snapshot.get(asset),
                     trade_gate=trade_gate_snapshot.get(asset),
                     opportunity=opportunity_by_asset.get(asset),
+                    venue_selection_evidence=canonical.get("venue_selection_evidence") if isinstance(canonical, dict) else None,
+                    instrument_evidence=canonical.get("instrument_evidence") if isinstance(canonical, dict) else None,
                 )
             except Exception as exc:
                 results[asset] = {
