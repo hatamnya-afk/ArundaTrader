@@ -17,13 +17,13 @@ def _inputs():
         "decision": {"status": "READY", "state": "ACTIONABLE", "direction": "LONG"},
         "validation": {"valid": True, "validation": "VALID"},
         "risk": {
-            "risk_state": "APPROVED", "position_sizing_state": "CALCULATED",
+            "asset": "BTC/USDT", "direction": "LONG", "risk_state": "APPROVED", "position_sizing_state": "CALCULATED",
             "position_sizing_reason": "EXISTING_RISK_BUDGET_AND_POSITION_SIZE_POLICY",
             "entry_price": 100.0, "stop_price": 94.0, "stop_distance": 6.0,
             "position_quantity": 0.1, "exposure": 10.0,
         },
-        "trade_gate": {"trade_gate_state": "TRADE_READY"},
-        "opportunity": {"status": "ELIGIBLE", "timestamp": "2026-10-11T10:00:00+00:00"},
+        "trade_gate": {"asset": "BTC/USDT", "direction": "LONG", "trade_gate_state": "TRADE_READY"},
+        "opportunity": {"asset": "BTC/USDT", "price": 100.0, "status": "ELIGIBLE", "timestamp": "2026-10-11T10:00:00+00:00"},
     }
 
 
