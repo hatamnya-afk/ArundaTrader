@@ -245,7 +245,7 @@ def test_futures_short_routes_without_spot_reinterpretation():
     assert result.handoff is not None
     assert result.handoff.preflight is not None
     assert result.handoff.preflight.status.value == "BLOCK"
-    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
+    assert result.handoff.preflight.reason.value == "BLOCK_POSITION_CONFLICT"
 
 
 def test_futures_translation_requires_authoritative_multiplier_and_step():
@@ -343,7 +343,7 @@ def test_futures_can_use_authoritative_neutral_instrument_specification():
     assert result.translation.request.symbol == "BTC-SWAP-USDT"
     assert result.handoff is not None
     assert result.handoff.preflight is not None
-    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
+    assert result.handoff.preflight.reason.value == "BLOCK_POSITION_CONFLICT"
 
 
 def test_futures_policy_produces_instrument_when_caller_does_not_supply_one():
@@ -357,4 +357,4 @@ def test_futures_policy_produces_instrument_when_caller_does_not_supply_one():
     assert result.translation.request.symbol == "BTC-SWAP-USDT"
     assert result.handoff is not None
     assert result.handoff.preflight is not None
-    assert result.handoff.preflight.reason.value == "BLOCK_PORTFOLIO_EXPOSURE"
+    assert result.handoff.preflight.reason.value == "BLOCK_POSITION_CONFLICT"
