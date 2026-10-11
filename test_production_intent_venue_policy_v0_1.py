@@ -142,10 +142,18 @@ def test_provider_evidence_timestamp_is_taken_after_metadata_read(monkeypatch):
             "symbol": "BTCUSDT", "status": "TRADING",
             "baseAsset": "BTC", "quoteAsset": "USDT",
         }),
-        ("SHORT", "BTC-SWAP-USDT", "contracts", {
-            "symbol": "BTC-SWAP-USDT", "status": "TRADING",
-            "underlying": "BTC", "marginToken": "USDT",
-        }),
+        ("SHORT", "BTC-SWAP-USDT", "contracts", [
+            {
+                "symbol": "BTC-SWAP", "status": "TRADING",
+                "underlying": "BTC", "marginToken": "BTC",
+                "inverse": True, "contractMultiplier": "1.0",
+            },
+            {
+                "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+                "underlying": "BTC", "marginToken": "USDT",
+                "inverse": False, "contractMultiplier": "0.0001",
+            },
+        ]),
     ],
 )
 def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
@@ -159,9 +167,10 @@ def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
         calls.append((method, path))
         assert method == "GET"
         assert path == "/api/v1/exchangeInfo"
+        rows = row if isinstance(row, list) else [row]
         return {
-            "symbols": [row] if rows_key == "symbols" else [],
-            "contracts": [row] if rows_key == "contracts" else [],
+            "symbols": rows if rows_key == "symbols" else [],
+            "contracts": rows if rows_key == "contracts" else [],
         }
 
     adapter = ToobitExchangeAdapter(transport=transport)
