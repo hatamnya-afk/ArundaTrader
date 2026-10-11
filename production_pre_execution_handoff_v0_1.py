@@ -7,12 +7,29 @@ not select one for an individual request.
 """
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from exchange_execution_contract import CanonicalOrderRequest
 from pre_execution_readiness_v0_1 import build_pre_execution_readiness
 from production_final_execution_context_v0_1 import build_production_final_attempt_context
+
+
+_MANDATE_PATH = Path(__file__).resolve().parent / "management_mandates" / "real_production_standing_mandate_20261011.json"
+
+
+def load_standing_mandate_observation(path: Path | None = None) -> dict[str, Any]:
+    """Load the existing machine-readable standing mandate without mutation."""
+    source = path or _MANDATE_PATH
+    try:
+        payload = json.loads(source.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError("MANAGEMENT_MANDATE_SOURCE_UNAVAILABLE") from exc
+    if not isinstance(payload, dict):
+        raise ValueError("MANAGEMENT_MANDATE_SOURCE_INVALID")
+    return payload
 
 
 def build_production_pre_execution_handoff(
@@ -118,8 +135,10 @@ def build_production_pre_execution_handoff(
     }
     if venue is None or not isinstance(venue, str) or not venue.strip():
         return result
+    if management_observation is None:
+        management_observation = load_standing_mandate_observation()
     if not isinstance(management_observation, Mapping):
-        raise ValueError("MANAGEMENT_MANDATE_MISSING")
+        raise ValueError("MANAGEMENT_MANDATE_SOURCE_INVALID")
     if adapter is None:
         raise ValueError("EXECUTION_ADAPTER_INVALID")
 
@@ -135,4 +154,4 @@ def build_production_pre_execution_handoff(
     return result
 
 
-__all__ = ["build_production_pre_execution_handoff"]
+__all__ = ["build_production_pre_execution_handoff", "load_standing_mandate_observation"]
