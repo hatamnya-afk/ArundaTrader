@@ -81,6 +81,7 @@ def _venue_evidence():
             "asset": "BTC/USDT",
             "venue": "FUTURES",
             "intent_id": "intent",
+            "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
             "observed_at": selected_at,
         },
         "instrument_evidence": {
@@ -88,8 +89,10 @@ def _venue_evidence():
             "provider": "TOOBIT",
             "asset": "BTC/USDT",
             "venue": "FUTURES",
-            "instrument_id": "BTCUSDT-PERP",
+            "intent_id": "intent",
+            "instrument_id": "BTC-SWAP-USDT",
             "instrument_status": "TRADING",
+            "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
             "observed_at": instrument_at,
         },
     }
