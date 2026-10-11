@@ -45,7 +45,7 @@ class DynamicRiskBudgetSizingTests(unittest.TestCase):
         self.assertAlmostEqual(result["AAA"]["position_quantity"], 500.0 / 6.0)
         self.assertAlmostEqual(result["AAA"]["stop_price"], 94.0)
         self.assertAlmostEqual(result["BBB"]["stop_price"], 106.0)
-        self.assertEqual(result["AAA"]["quantity_source"], "RISK.position_quantity")
+        self.assertEqual(result["AAA"]["quantity_source"], "POSITION_SIZING.position_size")
         self.assertEqual(result["AAA"]["quantity_unit"], "BASE_ASSET")
 
     def test_capacity_respects_max_concurrent_and_portfolio_risk(self):
