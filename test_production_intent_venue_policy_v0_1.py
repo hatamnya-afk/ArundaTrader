@@ -183,7 +183,7 @@ def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
         adapter=adapter,
     )
 
-    assert calls == [("GET", "/api/v1/exchangeInfo")]
+    assert calls == [("GET", "/api/v1/exchangeInfo"), ("GET", "/api/v1/exchangeInfo")]
     assert selection["venue"] == ("SPOT" if direction == "LONG" else "FUTURES")
     assert instrument["instrument_id"] == expected_symbol
     assert instrument["instrument_status"] == "TRADING"
