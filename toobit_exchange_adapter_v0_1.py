@@ -357,20 +357,27 @@ class ToobitExchangeAdapter:
 
                 # Toobit exposes settlement/margin identity as provider
                 # metadata. Never derive it from the provider symbol.
+                # Only select the explicitly documented linear, USDT-margined
+                # perpetual contract. Never infer settlement from quoteAsset or
+                # the symbol: inverse/coin-margined instruments must fail closed.
                 settlement_asset = row.get("marginToken")
-                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
-                    settlement_asset = row.get("quoteAsset")
-
-                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                quote_asset = row.get("quoteAsset")
+                inverse = row.get("inverse")
+                normalized_symbol = symbol.strip().upper()
+                normalized_underlying = underlying.strip().upper()
+                if (
+                    not isinstance(settlement_asset, str)
+                    or settlement_asset.strip().upper() != "USDT"
+                    or not isinstance(quote_asset, str)
+                    or quote_asset.strip().upper() != "USDT"
+                    or inverse is not False
+                    or normalized_symbol != f"{normalized_underlying}-SWAP-USDT"
+                ):
                     continue
 
-                # Toobit uses SWAP contracts for perpetual futures.
-                # This provider-specific interpretation stays in the adapter.
-                instrument_type = (
-                    "PERPETUAL"
-                    if "-SWAP" in symbol.upper()
-                    else None
-                )
+                # Exact provider symbol + explicit metadata establish a
+                # perpetual instrument; partial "-SWAP" matches are not enough.
+                instrument_type = "PERPETUAL"
 
                 candidates.append(
                     {
