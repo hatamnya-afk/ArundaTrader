@@ -58,7 +58,17 @@ def resolve_authoritative_venue(
         return blocked("VENUE_SELECTION_FRESHNESS_POLICY_INVALID")
     if not isinstance(mandate, Mapping):
         return blocked("VENUE_SELECTION_MANDATE_MISSING")
-    if mandate.get("decision") != "AUTHORIZED" or mandate.get("provider") != "TOOBIT":
+    if (
+        mandate.get("decision") != "AUTHORIZED"
+        or mandate.get("provider") != "TOOBIT"
+        or mandate.get("environment") != "REAL_PRODUCTION"
+        or not isinstance(mandate.get("mandate_id"), str)
+        or not mandate["mandate_id"].strip()
+        or not isinstance(mandate.get("authorized_by"), str)
+        or not mandate["authorized_by"].strip()
+        or not isinstance(mandate.get("authorization_source"), str)
+        or not mandate["authorization_source"].strip()
+    ):
         return blocked("VENUE_SELECTION_MANDATE_INVALID")
     issued = _instant(mandate.get("issued_at"))
     expires = _instant(mandate.get("expires_at"))
