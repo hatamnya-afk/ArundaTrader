@@ -108,3 +108,34 @@ def test_explicit_venue_without_authoritative_evidence_fails_closed():
     assert result["context"] is None
     assert result["status"] == "PRE_EXECUTION_READY_VENUE_SELECTION_BLOCKED"
     assert result["venue_resolution"]["reason"] == "AUTHORITATIVE_PER_INTENT_MARKET_SELECTION_MISSING"
+
+
+class _Adapter:
+    adapter_name = "TOOBIT"
+
+
+def test_authoritative_selection_and_provider_evidence_build_final_context():
+    values = _inputs()
+    values.update(_venue_evidence())
+    result = build_production_pre_execution_handoff(
+        **values,
+        venue="FUTURES",
+        adapter=_Adapter(),
+    )
+    assert result["status"] == "FINAL_ATTEMPT_CONTEXT_READY"
+    assert result["venue_resolution"]["status"] == "VENUE_SELECTED"
+    assert result["venue_resolution"]["venue"] == "FUTURES"
+    assert result["context"]["venue"] == "FUTURES"
+    assert result["context"]["adapter"].adapter_name == "TOOBIT"
+
+
+def test_explicit_venue_cannot_override_authoritative_selection():
+    values = _inputs()
+    values.update(_venue_evidence())
+    result = build_production_pre_execution_handoff(
+        **values,
+        venue="SPOT",
+        adapter=_Adapter(),
+    )
+    assert result["context"] is None
+    assert result["status"] == "PRE_EXECUTION_BLOCKED_VENUE_EVIDENCE_MISMATCH"
