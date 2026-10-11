@@ -697,8 +697,14 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+        request_base_asset = (
+            request.asset.strip().upper().replace("-", "/").split("/", 1)[0]
+        )
+        instrument_base_asset = (
+            execution_instrument.asset.strip().upper().replace("-", "/").split("/", 1)[0]
+        )
         if (
-            execution_instrument.asset.strip().upper() != request.asset.strip().upper()
+            instrument_base_asset != request_base_asset
             or execution_instrument.venue.strip().upper() != normalized_venue
         ):
             return AdapterOrderPreparation(
@@ -717,7 +723,7 @@ class ToobitExchangeAdapter:
                     raise RuntimeError(resolved.reason)
 
                 row = self.futures_trading_constraints(
-                    request.asset,
+                    execution_instrument.asset,
                     execution_instrument=execution_instrument,
                 )
                 if not row.allowed or not isinstance(row.data, dict):
@@ -787,7 +793,7 @@ class ToobitExchangeAdapter:
                     request=payload,
                 )
 
-            row = self.trading_constraints(request.asset)
+            row = self.trading_constraints(execution_instrument.asset)
             if not row.allowed or not isinstance(row.data, dict):
                 raise RuntimeError(row.reason)
 
