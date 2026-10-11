@@ -97,36 +97,38 @@ risk limits, API-key permission, or hypothetical acceptance.
 
 ## 5. CURRENT ARUNDATRADER SAFETY AND FRONTIER
 
-EXECUTION AUTHORIZATION = FALSE.
+PHASE-ENTRY MANDATE = AUTHORIZED (2026-10-11)  
+Mandate ID: `ARUNDA-REAL-PROD-20261011-001`  
+Decision record: `REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md`
 
-Therefore:
-- no live order;
-- no provider write;
-- no withdrawal;
-- no DB mutation;
-- no automatic execution activation;
-- no Toobit wiring into arunda_pipeline.py.
+This is the one-time management phase-entry decision, not an order instruction.
+The current technical frontier is controlled integration/readiness verification.
+All execution and write controls remain OFF during that verification:
+
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `ORDER_CANCELLATION_ENABLED = FALSE`
+- `WITHDRAWAL_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+
+No live order, provider write, cancellation, withdrawal, production DB mutation,
+or production runtime is implied by the recorded phase-entry decision.
 
 Latest known operational branch:
-operational-main-20261007
+`operational-main-20261007`
 
-Latest known execution-attempt contract:
-448806f
+Latest previously verified execution-attempt contract:
+`448806f`
 
 Current frontier:
-REAL-PRODUCTION PHASE-ENTRY MANAGEMENT REVIEW.
+CONTROLLED PHASE-ENTRY IMPLEMENTATION / READ-ONLY READINESS VERIFICATION.
 
-Management authorization is a ONE-TIME PHASE-ENTRY MANDATE, not a per-trade
-approval. After explicit phase-entry authorization, the trader operates
-autonomously for Spot and Futures under the existing Decision → Risk →
-Trade Gate → Readiness → Order Attempt contracts. The provider remains
-authoritative for ACCEPT/REJECT.
-
-The technical execution authorization boundary verifies each ready request
-against the active standing mandate; it does not request management approval
-for each trade.
-
-A verified contract is never, by itself, a phase-entry management decision.
+After phase entry, the trader does not request management approval for each
+trade. Spot and Futures remain in scope under Decision → Risk → Trade Gate →
+Readiness → Technical Authorization → Order Attempt. The provider remains
+authoritative for ACCEPT/REJECT. This autonomy does not bypass any technical
+gate or authorize execution-flag activation during the current verification.
 
 ## 6. ARCHITECTURAL INVARIANTS
 
