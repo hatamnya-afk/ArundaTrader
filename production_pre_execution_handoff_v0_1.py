@@ -43,6 +43,9 @@ def build_production_pre_execution_handoff(
     venue: str | None = None,
     management_observation: Mapping[str, Any] | None = None,
     adapter: Any = None,
+    venue_selection_evidence: Mapping[str, Any] | None = None,
+    instrument_evidence: Mapping[str, Any] | None = None,
+    max_instrument_evidence_age_seconds: int = 60,
 ) -> dict[str, Any]:
     """Build readiness and, only with explicit venue/context, final-attempt context."""
     if not isinstance(request, CanonicalOrderRequest):
@@ -128,15 +131,44 @@ def build_production_pre_execution_handoff(
         if readiness.get(field) != expected:
             raise ValueError(f"PRE_EXECUTION_REQUEST_MISMATCH:{field}")
 
+    if management_observation is None:
+        management_observation = load_standing_mandate_observation()
+    if not isinstance(management_observation, Mapping):
+        raise ValueError("MANAGEMENT_MANDATE_SOURCE_INVALID")
+
+    # The mandate allows both markets; only the evidence resolver may select
+    # one for this intent. Missing producer evidence remains explicitly blocked.
+    from evidence_based_venue_selection_v0_1 import resolve_authoritative_venue
+
+    venue_resolution = resolve_authoritative_venue(
+        asset=request.asset,
+        mandate=management_observation,
+        selection_evidence=venue_selection_evidence,
+        instrument_evidence=instrument_evidence,
+        now=request.timestamp,
+        max_evidence_age_seconds=max_instrument_evidence_age_seconds,
+    )
     result: dict[str, Any] = {
         "readiness": readiness,
         "context": None,
-        "status": "PRE_EXECUTION_READY_VENUE_SELECTION_REQUIRED",
+        "venue_resolution": venue_resolution,
+        "status": "PRE_EXECUTION_READY_VENUE_SELECTION_BLOCKED",
     }
-    if venue is None or not isinstance(venue, str) or not venue.strip():
+    if venue_resolution.get("status") != "VENUE_SELECTED":
         return result
-    if management_observation is None:
-        management_observation = load_standing_mandate_observation()
+    selected_venue = venue_resolution.get("venue")
+    if venue is not None and (
+        not isinstance(venue, str) or venue.strip().upper() != selected_venue
+    ):
+        result["status"] = "PRE_EXECUTION_BLOCKED_VENUE_EVIDENCE_MISMATCH"
+        result["venue_resolution"] = {
+            **venue_resolution,
+            "status": "VENUE_SELECTION_BLOCKED",
+            "venue": None,
+            "reason": "EXPLICIT_VENUE_DIFFERS_FROM_AUTHORITATIVE_SELECTION",
+        }
+        return result
+    venue = selected_venue
     if not isinstance(management_observation, Mapping):
         raise ValueError("MANAGEMENT_MANDATE_SOURCE_INVALID")
     if adapter is None:
