@@ -4383,11 +4383,25 @@ def build_pre_execution_handoff_snapshot(
         from production_pre_execution_handoff_v0_1 import (
             build_production_pre_execution_handoff,
         )
+        from production_intent_venue_policy_v0_1 import (
+            produce_authoritative_venue_evidence,
+        )
+        from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
+        from toobit_read_only_transport_v0_1 import toobit_read_only_transport
 
+        # The only network-capable dependency introduced here is an allowlisted
+        # public GET transport. No credentials are supplied and no write route
+        # exists in this transport. This function is reached only for actual
+        # current-run Trade Ready candidates; this edit does not run the pipeline.
+        adapter = ToobitExchangeAdapter(transport=toobit_read_only_transport)
         results = {}
         for asset, canonical in canonical_order_requests.items():
             request = canonical.get("request") if isinstance(canonical, dict) else None
             try:
+                selection_evidence, instrument_evidence = produce_authoritative_venue_evidence(
+                    request=request,
+                    adapter=adapter,
+                )
                 results[asset] = build_production_pre_execution_handoff(
                     request=request,
                     decision=decision_snapshot.get(asset),
@@ -4395,8 +4409,9 @@ def build_pre_execution_handoff_snapshot(
                     risk=risk_snapshot.get(asset),
                     trade_gate=trade_gate_snapshot.get(asset),
                     opportunity=opportunity_by_asset.get(asset),
-                    venue_selection_evidence=canonical.get("venue_selection_evidence") if isinstance(canonical, dict) else None,
-                    instrument_evidence=canonical.get("instrument_evidence") if isinstance(canonical, dict) else None,
+                    adapter=adapter,
+                    venue_selection_evidence=selection_evidence,
+                    instrument_evidence=instrument_evidence,
                 )
             except Exception as exc:
                 results[asset] = {
