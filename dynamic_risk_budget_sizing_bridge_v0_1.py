@@ -171,7 +171,7 @@ def build_dynamic_risk_budget_and_sizing(
             "entry_price": candidate["entry_price"],
             "stop_price": candidate["stop_price"],
             "stop_distance": candidate["stop_distance"],
-            "quantity_source": "RISK.position_quantity",
+            "quantity_source": "POSITION_SIZING.position_size",
             "position_quantity_source": "POSITION_SIZING.position_size",
             "quantity_unit": "BASE_ASSET",
             "quantity_recomputed": False,
