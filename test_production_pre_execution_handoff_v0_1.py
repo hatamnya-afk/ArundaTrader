@@ -122,7 +122,7 @@ def test_authoritative_selection_and_provider_evidence_build_final_context():
         venue="FUTURES",
         adapter=_Adapter(),
     )
-    assert result["status"] == "FINAL_ATTEMPT_CONTEXT_READY"
+    assert result["status"] == "FINAL_ATTEMPT_CONTEXT_READY_EXECUTION_STILL_GATED"
     assert result["venue_resolution"]["status"] == "VENUE_SELECTED"
     assert result["venue_resolution"]["venue"] == "FUTURES"
     assert result["context"]["venue"] == "FUTURES"
