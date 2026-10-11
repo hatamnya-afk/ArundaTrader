@@ -17,9 +17,9 @@ def test_provider_namespace_separates_identifiers():
     common = {"intent_id": "INTENT-123", "max_length": 32}
     assert derive_client_order_id(provider_namespace="VENUE-A", **common) != derive_client_order_id(provider_namespace="VENUE-B", **common)
 
-def test_id_is_independent_of_attempt_and_snapshot_metadata():
-    kwargs = {"provider_namespace": "VENUE-A", "intent_id": "INTENT-123", "max_length": 32}
-    assert derive_client_order_id(**kwargs) == derive_client_order_id(**kwargs)
+def test_surrounding_intent_whitespace_does_not_change_canonical_id():
+    common = {"provider_namespace": "VENUE-A", "max_length": 32}
+    assert derive_client_order_id(intent_id=" INTENT-123 ", **common) == derive_client_order_id(intent_id="INTENT-123", **common)
 
 def test_output_uses_safe_alphanumeric_prefix_and_digest():
     value = derive_client_order_id(provider_namespace="VENUE-A", intent_id="INTENT-123", prefix="ar", max_length=32)
