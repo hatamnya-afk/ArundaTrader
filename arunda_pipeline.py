@@ -5326,6 +5326,22 @@ def main() -> int:
         if set(risk_snapshot) != set(decision_snapshot):
             fail("Dynamic Risk cardinality mismatch")
 
+        # Dynamic risk-budget + position-sizing handoff. This uses the current
+        # run's Opportunity price and MarketData candles only; no provider call,
+        # database access, or execution operation is performed here.
+        from capital_config import get_config as get_capital_config
+        from dynamic_risk_budget_sizing_bridge_v0_1 import (
+            build_dynamic_risk_budget_and_sizing,
+        )
+
+        risk_snapshot = build_dynamic_risk_budget_and_sizing(
+            decision_snapshot=decision_snapshot,
+            risk_snapshot=risk_snapshot,
+            opportunity_by_asset=opportunity_by_asset,
+            market_data_by_symbol=market_data_by_symbol,
+            capital_config=get_capital_config(),
+        )
+
         # ------------------------------------------------------------------
         # 11. DYNAMIC TRADE GATE
         # ------------------------------------------------------------------
@@ -5352,6 +5368,22 @@ def main() -> int:
                 decision_snapshot[asset],
                 risk_snapshot[asset],
             )
+
+            # Trade Gate's strategy semantics stay unchanged, but a candidate
+            # cannot cross the production handoff without a valid size derived
+            # from current-run data and the existing risk/stop policy.
+            if (
+                trade_gate_snapshot[asset].get("trade_gate_state") == "TRADE_READY"
+                and risk_snapshot[asset].get("position_sizing_state") != "CALCULATED"
+            ):
+                trade_gate_snapshot[asset]["trade_gate_state"] = "REJECTED"
+                trade_gate_snapshot[asset]["reasons"] = [
+                    "POSITION_SIZING_NOT_READY",
+                    risk_snapshot[asset].get(
+                        "position_sizing_reason",
+                        "POSITION_SIZING_BLOCKED",
+                    ),
+                ]
 
         if set(trade_gate_snapshot) != set(risk_snapshot):
             fail("Dynamic Trade Gate cardinality mismatch")
