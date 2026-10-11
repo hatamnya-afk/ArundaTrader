@@ -1,4 +1,4 @@
-"""ARUNDA TRADER — PROVIDER-NEUTRAL ORDER ATTEMPT BOUNDARY v0.1.
+"""ARUNDA TRADER — PROVIDER-NEUTRAL ORDER ATTEMPT BOUNDARY v0.2.
 
 Final provider-neutral gate between a prepared adapter order and a future
 provider order attempt.
@@ -12,6 +12,7 @@ The selected adapter owns provider submission behavior.
 from __future__ import annotations
 
 from typing import Any, Mapping
+from dataclasses import replace
 
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
@@ -26,6 +27,7 @@ from exchange_execution_contract import (
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
 from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
+from mcp01_trade_event_identity_v0_1 import issue_trade_event_id
 
 
 def attempt_prepared_order(
@@ -116,28 +118,54 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Issued locally at the actual attempt boundary, never copied from provider output.
+    trade_event_id = issue_trade_event_id()
     try:
         result = adapter.submit_prepared_order(
             prepared,
             canonical_request=request,
         )
     except Exception as exc:
-        return blocked_execution_result(
+        # An exception after invoking submission does not prove the provider rejected it.
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=None,
+            status="SUBMISSION_OUTCOME_UNKNOWN",
             asset=request.asset,
             direction=request.direction,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=request.timestamp,
+            adapter=getattr(adapter, "adapter_name", None),
             error_code="ADAPTER_SUBMIT_PREPARED_FAILED",
-            error_message=str(exc),
+            error_message=(
+                "Adapter raised during submission; provider acceptance is unknown "
+                f"and requires reconciliation ({type(exc).__name__})."
+            ),
+            trade_event_id=trade_event_id,
         )
 
     if not isinstance(result, CanonicalExecutionResult):
-        return blocked_execution_result(
+        return CanonicalExecutionResult(
+            accepted=False,
+            exchange_order_id=None,
+            status="SUBMISSION_OUTCOME_UNKNOWN",
             asset=request.asset,
             direction=request.direction,
+            executed_quantity=None,
+            executed_price=None,
+            timestamp=request.timestamp,
+            adapter=getattr(adapter, "adapter_name", None),
             error_code="ADAPTER_EXECUTION_RESULT_INVALID",
-            error_message="Adapter returned an invalid canonical execution result.",
+            error_message=(
+                "Adapter returned an invalid result after submission; provider "
+                "acceptance is unknown and requires reconciliation."
+            ),
+            trade_event_id=trade_event_id,
         )
 
-    return result
+    # Do not trust an adapter-supplied identity; preserve the boundary-issued ID.
+    return replace(result, trade_event_id=trade_event_id)
 
 
 __all__ = ["attempt_prepared_order"]
