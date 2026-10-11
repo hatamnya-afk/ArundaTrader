@@ -182,6 +182,7 @@ import fusion_engine
 import production_fused_score_binding_v0_1
 
 from exchange_execution_boundary import execute_order
+from production_final_execution_attempt_dispatch_v0_1 import dispatch_final_execution_attempt
 
 # ============================================================================
 
@@ -4422,6 +4423,27 @@ def verify_execution_boundary_integration(
                     "EXECUTION SAFETY FAILURE: "
                     f"{asset} returned "
                     f"{result.error_code!r}"
+                )
+
+            # The production path is explicitly bound to the final-attempt
+            # dispatcher. With execution disabled, it must stop before the
+            # management/readiness/provider attempt contract is invoked.
+            final_attempt_result = dispatch_final_execution_attempt(
+                request=request,
+                execution_enabled=EXECUTION_ENABLED,
+            )
+            if not isinstance(
+                final_attempt_result,
+                exchange_execution_contract.CanonicalExecutionResult,
+            ):
+                fail(
+                    f"Final attempt dispatch result invalid: {asset}"
+                )
+            if final_attempt_result.error_code != "EXECUTION_DISABLED":
+                fail(
+                    "FINAL ATTEMPT SAFETY FAILURE: "
+                    f"{asset} returned "
+                    f"{final_attempt_result.error_code!r}"
                 )
 
         return "VERIFIED_BLOCKED"
