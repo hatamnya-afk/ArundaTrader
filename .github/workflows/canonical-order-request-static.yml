@@ -9,6 +9,7 @@ on:
       - fix/production-final-attempt-dispatch-20261011
       - fix/final-attempt-context-handoff-20261011
       - fix/dynamic-risk-budget-sizing-bridge-20261011
+      - fix/production-pre-execution-readiness-connection-20261011
     paths:
       - "**.py"
       - "requirements.txt"
@@ -20,6 +21,7 @@ on:
       - fix/production-final-attempt-dispatch-20261011
       - fix/final-attempt-context-handoff-20261011
       - fix/dynamic-risk-budget-sizing-bridge-20261011
+      - fix/production-pre-execution-readiness-connection-20261011
     paths:
       - "**.py"
       - "requirements.txt"
@@ -39,10 +41,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile pipeline without running it
-        run: python -m py_compile arunda_pipeline.py dynamic_risk_budget_sizing_bridge_v0_1.py test_dynamic_risk_budget_sizing_bridge_v0_1.py
-      - name: Run focused contract tests
-        run: python -m unittest -v test_canonical_order_request_builder_contract_v0_1.py test_exchange_execution_boundary_contract_v0_1.py test_dynamic_risk_budget_sizing_bridge_v0_1.py
+        run: python -m py_compile arunda_pipeline.py dynamic_risk_budget_sizing_bridge_v0_1.py production_pre_execution_handoff_v0_1.py test_dynamic_risk_budget_sizing_bridge_v0_1.py test_production_pre_execution_handoff_v0_1.py
       - name: Install runtime and test dependencies
         run: python -m pip install -r requirements.txt pytest
+      - name: Run focused contract tests
+        run: python -m pytest -q test_canonical_order_request_builder_contract_v0_1.py test_exchange_execution_boundary_contract_v0_1.py test_dynamic_risk_budget_sizing_bridge_v0_1.py test_production_pre_execution_handoff_v0_1.py
       - name: Run full regression suite
         run: python -m pytest -q

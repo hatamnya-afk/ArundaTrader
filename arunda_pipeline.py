@@ -4366,8 +4366,49 @@ def assert_execution_disabled() -> None:
                 )
 
 
+def build_pre_execution_handoff_snapshot(
+        canonical_order_requests: dict,
+        decision_snapshot: dict,
+        validation_results: dict,
+        risk_snapshot: dict,
+        trade_gate_snapshot: dict,
+        opportunity_by_asset: dict,
+    ) -> dict:
+        """Connect canonical requests to current-run pre-execution readiness.
+
+        This does not select SPOT/FUTURES, contact Toobit, or enable execution.
+        Each candidate records an explicit fail-closed status if readiness
+        evidence is inconsistent or venue selection remains unresolved.
+        """
+        from production_pre_execution_handoff_v0_1 import (
+            build_production_pre_execution_handoff,
+        )
+
+        results = {}
+        for asset, canonical in canonical_order_requests.items():
+            request = canonical.get("request") if isinstance(canonical, dict) else None
+            try:
+                results[asset] = build_production_pre_execution_handoff(
+                    request=request,
+                    decision=decision_snapshot.get(asset),
+                    validation=validation_results.get(asset),
+                    risk=risk_snapshot.get(asset),
+                    trade_gate=trade_gate_snapshot.get(asset),
+                    opportunity=opportunity_by_asset.get(asset),
+                )
+            except Exception as exc:
+                results[asset] = {
+                    "readiness": None,
+                    "context": None,
+                    "status": "PRE_EXECUTION_BLOCKED",
+                    "error": f"{type(exc).__name__}:{exc}",
+                }
+        return results
+
+
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
+        pre_execution_handoff_results: dict | None = None,
     ) -> str:
         assert_execution_disabled()
 
@@ -4428,9 +4469,21 @@ def verify_execution_boundary_integration(
             # The production path is explicitly bound to the final-attempt
             # dispatcher. With execution disabled, it must stop before the
             # management/readiness/provider attempt contract is invoked.
+            handoff = (
+                pre_execution_handoff_results.get(asset, {})
+                if isinstance(pre_execution_handoff_results, dict)
+                else {}
+            )
+            context = handoff.get("context") if isinstance(handoff, dict) else None
+            context = context if isinstance(context, dict) else {}
             final_attempt_result = dispatch_final_execution_attempt(
                 request=request,
                 execution_enabled=EXECUTION_ENABLED,
+                execution_ready_package=context.get("execution_ready_package"),
+                management_observation=context.get("management_observation"),
+                adapter=context.get("adapter"),
+                venue=context.get("venue"),
+                execution_instrument=context.get("execution_instrument"),
             )
             if not isinstance(
                 final_attempt_result,
@@ -5418,6 +5471,7 @@ def main() -> int:
 
         order_intents = []
         canonical_order_requests = {}
+        pre_execution_handoff_results = {}
         execution_boundary_status = "DEFERRED_NO_TRADE_READY"
 
         if trade_ready_assets:
@@ -5486,8 +5540,17 @@ def main() -> int:
                 decision_snapshot=decision_snapshot,
                 reference_prices=reference_prices,
             )
+            pre_execution_handoff_results = build_pre_execution_handoff_snapshot(
+                canonical_order_requests=canonical_order_requests,
+                decision_snapshot=decision_snapshot,
+                validation_results=validation_results,
+                risk_snapshot=risk_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+                opportunity_by_asset=opportunity_by_asset,
+            )
             execution_boundary_status = verify_execution_boundary_integration(
-                canonical_order_requests
+                canonical_order_requests,
+                pre_execution_handoff_results=pre_execution_handoff_results,
             )
 
         print("=" * 90)
@@ -5503,6 +5566,10 @@ def main() -> int:
         print(f"TRADE_READY={len(trade_ready_assets)}")
         print(f"ORDER_INTENTS_CREATED={len(order_intents)}")
         print(f"CANONICAL_ORDER_REQUESTS={len(canonical_order_requests)}")
+        print(f"PRE_EXECUTION_READINESS_READY={sum(1 for row in pre_execution_handoff_results.values() if row.get('readiness') is not None)}")
+        print(f"PRE_EXECUTION_READINESS_BLOCKED={sum(1 for row in pre_execution_handoff_results.values() if row.get('readiness') is None)}")
+        print(f"FINAL_ATTEMPT_CONTEXT_READY={sum(1 for row in pre_execution_handoff_results.values() if row.get('context') is not None)}")
+        print(f"FINAL_ATTEMPT_VENUE_SELECTION_REQUIRED={sum(1 for row in pre_execution_handoff_results.values() if row.get('status') == 'PRE_EXECUTION_READY_VENUE_SELECTION_REQUIRED')}")
         print(f"EXECUTION_BOUNDARY_STATUS={execution_boundary_status}")
         print("ORDER_SUBMISSION=DISABLED")
         print("EXCHANGE_WRITE=DISABLED")
