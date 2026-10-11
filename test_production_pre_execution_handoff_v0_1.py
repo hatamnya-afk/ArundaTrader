@@ -1,4 +1,5 @@
 import pytest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 
 from exchange_execution_contract import CanonicalOrderRequest
@@ -142,3 +143,19 @@ def test_explicit_venue_cannot_override_authoritative_selection():
     )
     assert result["context"] is None
     assert result["status"] == "PRE_EXECUTION_BLOCKED_VENUE_EVIDENCE_MISMATCH"
+
+
+def test_pair_asset_survives_handoff_and_becomes_base_asset_execution_spec():
+    values = _inputs()
+    values["request"] = replace(values["request"], asset="BTC/USDT")
+    values.update(_venue_evidence())
+
+    result = build_production_pre_execution_handoff(
+        **values,
+        adapter=_Adapter(),
+    )
+
+    assert result["status"] == "FINAL_ATTEMPT_CONTEXT_READY_EXECUTION_STILL_GATED"
+    assert result["venue_resolution"]["instrument_id"] == "BTC-SWAP-USDT"
+    assert result["context"]["execution_instrument"].asset == "BTC"
+    assert result["context"]["execution_instrument"].venue == "FUTURES"
