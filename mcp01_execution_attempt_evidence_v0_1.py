@@ -19,55 +19,98 @@ from mcp01_compact_event_evidence_v0_1 import (
 from mcp01_trade_event_identity_v0_1 import validate_trade_event_id
 
 
-def build_execution_attempt_events(
-    *, request: CanonicalOrderRequest, result: CanonicalExecutionResult,
-    cycle_id: str | None = None,
-) -> list:
-    """Create an ORDER_ATTEMPTED + PROVIDER_RESULT evidence pair.
-
-    The boundary-issued trade_event_id is mandatory. The provider status is
-    preserved verbatim; this function never infers FILL from acceptance or
-    rejection from a transport exception.
-    """
-    trade_event_id = result.trade_event_id
+def _validate_attempt_identity(request: CanonicalOrderRequest, trade_event_id: str) -> None:
     if not validate_trade_event_id(trade_event_id):
         raise ValueError("AUTHORITATIVE_TRADE_EVENT_ID_REQUIRED")
     if not request.decision_id:
         raise ValueError("AUTHORITATIVE_DECISION_ID_REQUIRED")
-    timestamp = result.timestamp or request.timestamp
-    provider = result.adapter or "PROVIDER_UNKNOWN"
+
+
+def build_order_attempt_event(
+    *,
+    request: CanonicalOrderRequest,
+    trade_event_id: str,
+    provider: str,
+    event_timestamp: str | None = None,
+    cycle_id: str | None = None,
+):
+    """Build ORDER_ATTEMPTED evidence before invoking the provider."""
+    _validate_attempt_identity(request, trade_event_id)
+    timestamp = event_timestamp or request.timestamp
     cycle = cycle_id or request.snapshot_id
-    common = {
-        "event_timestamp": timestamp,
-        "cycle_id": cycle,
-        "decision_id": request.decision_id,
-        "asset": request.asset,
-        "direction": request.direction,
-        "trade_event_id": trade_event_id,
-        "correlation_id": request.snapshot_id,
-    }
-    attempted = build_event(
+    return build_event(
         event_id=deterministic_event_id(
             event_type=EVENT_ORDER_ATTEMPTED, trade_event_id=trade_event_id
         ),
         event_type=EVENT_ORDER_ATTEMPTED,
+        event_timestamp=timestamp,
+        cycle_id=cycle,
+        decision_id=request.decision_id,
+        asset=request.asset,
+        direction=request.direction,
         stage="ORDER",
         status="ATTEMPTED",
         reason_code=None,
         provider=provider,
-        **common,
+        trade_event_id=trade_event_id,
+        correlation_id=request.snapshot_id,
     )
-    provider_result = build_event(
+
+
+def build_provider_result_event(
+    *,
+    request: CanonicalOrderRequest,
+    result: CanonicalExecutionResult,
+    cycle_id: str | None = None,
+):
+    """Build provider-result evidence without inferring fills or rejection."""
+    trade_event_id = result.trade_event_id
+    _validate_attempt_identity(request, trade_event_id)
+    timestamp = result.timestamp or request.timestamp
+    provider = result.adapter or "PROVIDER_UNKNOWN"
+    cycle = cycle_id or request.snapshot_id
+    return build_event(
         event_id=deterministic_event_id(
-            event_type=EVENT_PROVIDER_RESULT, trade_event_id=trade_event_id,
-            status=result.status, error_code=result.error_code,
+            event_type=EVENT_PROVIDER_RESULT,
+            trade_event_id=trade_event_id,
+            status=result.status,
+            error_code=result.error_code,
         ),
         event_type=EVENT_PROVIDER_RESULT,
+        event_timestamp=timestamp,
+        cycle_id=cycle,
+        decision_id=request.decision_id,
+        asset=request.asset,
+        direction=request.direction,
         stage="EXECUTION",
         status=result.status,
         reason_code=result.error_code,
         provider=provider,
-        **common,
+        trade_event_id=trade_event_id,
+        correlation_id=request.snapshot_id,
+    )
+
+
+def build_execution_attempt_events(
+    *,
+    request: CanonicalOrderRequest,
+    result: CanonicalExecutionResult,
+    cycle_id: str | None = None,
+) -> list:
+    """Create an ORDER_ATTEMPTED + PROVIDER_RESULT pair for offline analysis.
+
+    Production boundaries should persist ORDER_ATTEMPTED before submission,
+    then build/persist PROVIDER_RESULT only after a response or unknown outcome.
+    """
+    attempted = build_order_attempt_event(
+        request=request,
+        trade_event_id=result.trade_event_id,
+        provider=result.adapter or "PROVIDER_UNKNOWN",
+        event_timestamp=request.timestamp,
+        cycle_id=cycle_id,
+    )
+    provider_result = build_provider_result_event(
+        request=request, result=result, cycle_id=cycle_id
     )
     return [attempted, provider_result]
 
@@ -102,4 +145,9 @@ def persist_execution_attempt_events(
     }
 
 
-__all__ = ["build_execution_attempt_events", "persist_execution_attempt_events"]
+__all__ = [
+    "build_order_attempt_event",
+    "build_provider_result_event",
+    "build_execution_attempt_events",
+    "persist_execution_attempt_events",
+]
