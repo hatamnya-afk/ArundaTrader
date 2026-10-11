@@ -85,7 +85,7 @@ def produce_authoritative_venue_evidence(
         "venue": venue,
         "instrument_id": instrument_id.strip().upper(),
         "instrument_status": status,
-        "observed_at": timestamp,
+        "observed_at": selection["observed_at"],
         "policy_version": POLICY_VERSION,
     }
     return selection, instrument
