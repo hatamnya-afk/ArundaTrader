@@ -56,14 +56,12 @@ def produce_authoritative_venue_evidence(
     """Select per-intent venue and read matching instrument status from adapter."""
     if adapter is None:
         raise RuntimeError("TOOBIT_ADAPTER_UNAVAILABLE")
-    timestamp = observed_at or datetime.now(timezone.utc).isoformat()
-    selection = select_venue_for_intent(
-        asset=request.asset,
-        direction=request.direction,
-        intent_id=request.intent_id,
-        observed_at=timestamp,
-    )
-    venue = selection["venue"]
+    direction = str(getattr(request, "direction", "")).strip().upper()
+    if direction not in {"LONG", "SHORT"}:
+        raise ValueError("VENUE_POLICY_DIRECTION_UNSUPPORTED")
+    # Resolve the deterministic venue before any provider read, but timestamp
+    # the evidence only after the instrument metadata has actually been read.
+    venue = "SPOT" if direction == "LONG" else "FUTURES"
     if venue == "SPOT":
         result = adapter.trading_constraints(request.asset)
     else:
@@ -78,6 +76,13 @@ def produce_authoritative_venue_evidence(
         raise RuntimeError("TOOBIT_INSTRUMENT_ID_MISSING")
     if status != "TRADING":
         raise RuntimeError("TOOBIT_INSTRUMENT_NOT_TRADING")
+    timestamp = observed_at or datetime.now(timezone.utc).isoformat()
+    selection = select_venue_for_intent(
+        asset=request.asset,
+        direction=direction,
+        intent_id=request.intent_id,
+        observed_at=timestamp,
+    )
     instrument = {
         "source": INSTRUMENT_SOURCE,
         "provider": "TOOBIT",
