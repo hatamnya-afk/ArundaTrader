@@ -76,7 +76,24 @@ def produce_authoritative_venue_evidence(
     if venue == "SPOT":
         result = adapter.trading_constraints(provider_asset)
     else:
-        result = adapter.futures_trading_constraints(provider_asset)
+        # The provider publishes both USDT-margined and coin-margined contracts
+        # for some underlyings. Select the standing policy's USDT-settled
+        # perpetual explicitly; a base-asset-only lookup is ambiguous and must
+        # not accidentally select an inverse contract.
+        from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
+
+        execution_instrument = ExecutionInstrumentSpecification(
+            asset=provider_asset,
+            venue="FUTURES",
+            settlement_asset="USDT",
+            instrument_type="PERPETUAL",
+            selection_source=POLICY_SOURCE,
+            policy_version=POLICY_VERSION,
+        )
+        result = adapter.futures_trading_constraints(
+            provider_asset,
+            execution_instrument=execution_instrument,
+        )
     if not getattr(result, "allowed", False) or not isinstance(getattr(result, "data", None), Mapping):
         reason = getattr(result, "reason", None) or getattr(result, "error", None) or "TOOBIT_INSTRUMENT_READ_FAILED"
         raise RuntimeError(f"TOOBIT_INSTRUMENT_READ_FAILED:{reason}")
