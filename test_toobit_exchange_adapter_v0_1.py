@@ -1,5 +1,7 @@
 """Focused tests for Toobit read, preparation, and gated-write contracts."""
 
+import pytest
+
 from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
 from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
 
