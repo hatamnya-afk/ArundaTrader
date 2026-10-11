@@ -1,4 +1,5 @@
 import pytest
+from datetime import datetime, timedelta, timezone
 
 from exchange_execution_contract import CanonicalOrderRequest
 from production_pre_execution_handoff_v0_1 import build_production_pre_execution_handoff, load_standing_mandate_observation
@@ -69,6 +70,9 @@ def test_standing_mandate_is_loaded_from_authoritative_artifact():
 
 
 def _venue_evidence():
+    now = datetime.now(timezone.utc)
+    selected_at = (now - timedelta(seconds=5)).isoformat()
+    instrument_at = (now - timedelta(seconds=2)).isoformat()
     return {
         "venue_selection_evidence": {
             "source": "AUTHORITATIVE_PER_INTENT_MARKET_POLICY",
@@ -77,7 +81,7 @@ def _venue_evidence():
             "asset": "BTC/USDT",
             "venue": "FUTURES",
             "intent_id": "intent",
-            "observed_at": "2026-10-11T09:59:30Z",
+            "observed_at": selected_at,
         },
         "instrument_evidence": {
             "source": "TOOBIT_READ_ONLY_INSTRUMENT_CONSTRAINTS",
@@ -86,7 +90,7 @@ def _venue_evidence():
             "venue": "FUTURES",
             "instrument_id": "BTCUSDT-PERP",
             "instrument_status": "TRADING",
-            "observed_at": "2026-10-11T09:59:35Z",
+            "observed_at": instrument_at,
         },
     }
 
