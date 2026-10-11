@@ -51,7 +51,7 @@ REAL MARKET
 **Authorization source:** explicit management instruction recorded in the active project conversation  
 **Mandate ID:** ARUNDA-REAL-PROD-20261011-001  
 **Mandate scope:** REAL_PRODUCTION; SPOT + FUTURES; selected execution provider TOOBIT  
-**Mandate validity:** issued 2026-10-11T08:43:04Z; expires 2026-11-10T08:43:04Z (30-day bounded validity)  
+**Mandate validity:** issued 2026-10-11T08:43:04Z; expires 2026-11-10T08:43:04Z. The 30-day window is a conservative technical default selected while recording the decision; it was not a separately specified management preference.  
 **Capital policy:** zero initial exchange balance is allowed; additional capital is added progressively only after management review of real outcome evidence and demonstrated quality.  
 **Per-trade management approval:** NOT REQUIRED.
 
