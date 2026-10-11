@@ -32,7 +32,8 @@ def test_builds_readiness_and_fails_closed_until_venue_is_explicit():
     assert result["readiness"]["readiness_state"] == "PRE_EXECUTION_READY"
     assert result["readiness"]["provider_binding"] == "DEFERRED"
     assert result["context"] is None
-    assert result["status"] == "PRE_EXECUTION_READY_VENUE_SELECTION_REQUIRED"
+    assert result["status"] == "PRE_EXECUTION_READY_VENUE_SELECTION_BLOCKED"
+    assert result["venue_resolution"]["reason"] == "AUTHORITATIVE_PER_INTENT_MARKET_SELECTION_MISSING"
 
 
 @pytest.mark.parametrize("field,value", [
@@ -67,7 +68,39 @@ def test_standing_mandate_is_loaded_from_authoritative_artifact():
     assert set(mandate["allowed_markets"]) == {"SPOT", "FUTURES"}
 
 
-def test_explicit_venue_requires_adapter_even_when_mandate_is_available():
+def _venue_evidence():
+    return {
+        "venue_selection_evidence": {
+            "source": "AUTHORITATIVE_PER_INTENT_MARKET_POLICY",
+            "decision": "SELECTED",
+            "provider": "TOOBIT",
+            "asset": "BTC/USDT",
+            "venue": "FUTURES",
+            "intent_id": "intent",
+            "observed_at": "2026-10-11T09:59:30Z",
+        },
+        "instrument_evidence": {
+            "source": "TOOBIT_READ_ONLY_INSTRUMENT_CONSTRAINTS",
+            "provider": "TOOBIT",
+            "asset": "BTC/USDT",
+            "venue": "FUTURES",
+            "instrument_id": "BTCUSDT-PERP",
+            "instrument_status": "TRADING",
+            "observed_at": "2026-10-11T09:59:35Z",
+        },
+    }
+
+
+def test_authoritative_evidence_selects_venue_but_adapter_is_still_required():
     values = _inputs()
+    values.update(_venue_evidence())
     with pytest.raises(ValueError, match="EXECUTION_ADAPTER_INVALID"):
         build_production_pre_execution_handoff(**values, venue="FUTURES")
+
+
+def test_explicit_venue_without_authoritative_evidence_fails_closed():
+    values = _inputs()
+    result = build_production_pre_execution_handoff(**values, venue="FUTURES")
+    assert result["context"] is None
+    assert result["status"] == "PRE_EXECUTION_READY_VENUE_SELECTION_BLOCKED"
+    assert result["venue_resolution"]["reason"] == "AUTHORITATIVE_PER_INTENT_MARKET_SELECTION_MISSING"
