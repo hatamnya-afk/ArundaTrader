@@ -1,42 +1,43 @@
-# CURRENT GOVERNANCE OVERRIDE — 2026-10-08
+# CURRENT GOVERNANCE OVERRIDE — 2026-10-11
 
-> **THIS SECTION IS THE ACTIVE STATE.**
-> Historical sections below are preserved as evidence/history and MUST NOT be interpreted as the current frontier when they conflict with this section.
->
-> ## CURRENT CROSS-REPOSITORY MAP
-> Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` first.
->
-> ## VERIFIED POSITION
-> The provider-neutral execution-attempt contract is VERIFIED / PASS / CLOSED for its defined scope.
-> Management handoff code: `9c0797a1e27a3be1fe1f6c00fda88ecbbbb72f68` — CI PASS, 487 tests.
-> Phase entry itself remains NOT AUTHORIZED.
->
-> ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
->
-> The producer-to-consumer handoff is implemented: `run_final_execution_attempt_contract` calls the canonical `evaluate_management_phase_entry` producer and passes only its validated standing-mandate observation to the technical authorization boundary. End-to-end mocked tests prove authorized propagation and fail-closed behavior for denied/invalid/handcrafted input. This is code-contract verification, not a real authorization decision. CURRENT FRONTIER: await the separate explicit one-time real-production phase-entry decision.
->
-> ## SAFETY
-> `EXECUTION AUTHORIZATION = FALSE`
-> `ORDER WRITE = FORBIDDEN`
-> `PROVIDER WRITE = FORBIDDEN`
-> `DATABASE WRITE = FORBIDDEN`
-> `arunda_pipeline.py` remains unwired.
->
-> ## FORBIDDEN
-> - Do not submit an order.
-> - Do not call provider write endpoints.
-> - Do not activate execution.
-> - Do not reopen CP46-A6.
-> - Do not redesign Core or bind Core to Toobit.
-> - Do not treat historical A6 BLOCKED text as the current frontier.
->
-> ## ALLOWED NOW
-> - Verify the standing-mandate / technical-authorization boundary.
-> - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
-> - Prepare a management decision package.
->
-> **STOP CONDITION:** after the gate package is verified, STOP. Provider write remains forbidden until the ONE-TIME MANAGEMENT PHASE-ENTRY MANDATE is explicitly authorized. After that phase-entry authorization, no per-trade management approval is required; each request passes through the existing technical authorization boundary.
+> **THIS SECTION IS THE ACTIVE STATE.** Historical sections below are preserved as evidence/history and must not override this state.
+
+## CURRENT CROSS-REPOSITORY MAP
+Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` first.
+
+## VERIFIED POSITION
+- Explicit one-time phase-entry decision: **AUTHORIZED / RECORDED**.
+- Mandate ID: `ARUNDA-REAL-PROD-20261011-001`.
+- Machine-readable mandate: `management_mandates/real_production_standing_mandate_20261011.json`.
+- The authorization is for phase entry; it is not proof of pipeline integration, provider readiness, or first-order readiness.
+- The provider-neutral final-attempt contract and prior management handoff tests are present on the integration candidate branch. New mandate-record tests have been added and still require CI execution on this exact candidate.
+
+## CURRENT FRONTIER
+**EXACT-CANDIDATE CI VERIFICATION / READ-ONLY READINESS**
+
+The management decision stop is cleared. The immediate gate is test execution on this exact commit, followed by current read-only provider evidence. The production pipeline remains unwired and all execution controls remain off.
+
+## ACTIVE SAFETY STATE
+- `PHASE_ENTRY_MANDATE = AUTHORIZED`
+- `EXECUTION_ENABLED = FALSE`
+- `ORDER_SUBMISSION_ENABLED = FALSE`
+- `ORDER_CANCELLATION_ENABLED = FALSE`
+- `WITHDRAWAL_ENABLED = FALSE`
+- `EXCHANGE_WRITE_ENABLED = FALSE`
+- `DATABASE_WRITE_ENABLED = FALSE`
+- No production runtime, live order, provider write, cancellation, withdrawal, or production DB mutation was performed.
+
+The standing mandate does not bypass technical readiness or safety interlocks. After phase entry, the trader does not request per-trade management approval; the existing technical boundary remains authoritative.
+
+## NEXT ACTION
+Run focused and full regression CI on this exact candidate. Then verify current read-only Toobit account/instrument/constraint evidence and the complete decision-to-attempt evidence path. Keep all execution/write flags OFF throughout verification.
+
+## FORBIDDEN
+- Do not infer phase-entry authorization means execution is active.
+- Do not submit live orders or call provider write endpoints during readiness verification.
+- Do not mutate production DB.
+- Do not reopen verified checkpoints without direct regression evidence.
+- Do not redesign the exchange-agnostic Core or weaken contracts to make a provider request pass.
 
 ---
 

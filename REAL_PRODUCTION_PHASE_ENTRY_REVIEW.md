@@ -44,24 +44,29 @@ REAL MARKET
 → CALIBRATION
 → MANAGEMENT CAPITAL REVIEW
 
-## Management decision
-Current state: PENDING.
+## Management decision — AUTHORIZED / RECORDED
 
-Allowed decision:
-- DENY / DEFER phase entry
-- AUTHORIZE REAL-PRODUCTION TRADING PHASE
+**Decision:** AUTHORIZE REAL-PRODUCTION TRADING PHASE  
+**Decision date:** 2026-10-11  
+**Authorization source:** Explicit management instruction in the active project conversation  
+**Mandate ID:** ARUNDA-REAL-PROD-20261011-001  
+**Scope:** REAL_PRODUCTION; SPOT and FUTURES; provider TOOBIT  
+**Validity:** issued 2026-10-11T08:43:04Z; expires 2026-11-10T08:43:04Z. The 30-day window is a conservative technical default, not a separately specified management preference.  
+**Capital policy:** Zero initial exchange balance is allowed; capital is added progressively only after management review of real outcome evidence and demonstrated quality.
 
-The decision is a phase-entry decision. It must not be converted into repeated per-trade approval requests.
+This is a one-time phase-entry decision, not an order instruction. It does not activate execution, enable provider writes, or establish that current provider readiness and the complete pipeline path have been verified. The machine-readable record is `management_mandates/real_production_standing_mandate_20261011.json`.
 
-## Safety before authorization
-Until phase entry is explicitly authorized:
-- EXECUTION AUTHORIZATION = FALSE
-- provider write = forbidden
-- order = forbidden
-- cancellation = forbidden
-- withdrawal = forbidden
-- database mutation = forbidden
-- automatic pipeline wiring = forbidden
+The decision must not be converted into repeated per-trade approval requests.
+
+## Safety after phase-entry decision
+- PHASE_ENTRY_MANDATE = AUTHORIZED
+- EXECUTION_ENABLED = FALSE
+- ORDER_SUBMISSION_ENABLED = FALSE
+- ORDER_CANCELLATION_ENABLED = FALSE
+- WITHDRAWAL_ENABLED = FALSE
+- EXCHANGE_WRITE_ENABLED = FALSE
+- DATABASE_WRITE_ENABLED = FALSE
+- Production Runtime and provider write are not permitted during this verification step.
 
 ## After phase-entry authorization
 The standing mandate becomes operational. The trader does not request management approval for each trade.
@@ -72,6 +77,6 @@ A later management restriction, halt, or capital-scaling decision is a separate 
 The provider is the authority for whether an otherwise valid request is accepted or rejected. ArundaTrader must not manufacture a local acceptance/rejection outcome from balance absence, assumptions, or inferred provider behavior.
 
 ## Review verdict
-READY FOR MANAGEMENT PHASE-ENTRY DECISION — subject to evidence items above being verified from the actual current repository/runtime evidence.
+PHASE ENTRY AUTHORIZED / DECISION RECORDED. Exact-candidate CI, current read-only provider evidence, and the complete production call path remain to be verified before any separate execution activation decision.
 
 # END

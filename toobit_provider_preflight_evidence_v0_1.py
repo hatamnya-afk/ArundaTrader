@@ -227,11 +227,15 @@ def build_toobit_provider_account_state(
         if position_known is not True:
             raise RuntimeError("Toobit Futures position state is invalid")
 
+        # Known position data is not, by itself, proof that a new
+        # order has no position conflict. The provider evidence currently
+        # does not establish account position mode or conflict semantics.
+        # Keep this unknown so the provider-neutral preflight fails closed.
         return ProviderAccountState(
             state_known=True,
             margin_state_known=margin_known,
             leverage_state_known=leverage_known,
-            position_conflict=False,
+            position_conflict=None,
         )
 
     result = adapter.account_check()
