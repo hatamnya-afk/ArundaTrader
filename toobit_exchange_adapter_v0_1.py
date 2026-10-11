@@ -538,6 +538,10 @@ class ToobitExchangeAdapter:
                     raise RuntimeError(
                         "TOOBIT_FUTURES_POSITION_SIDE_INVALID"
                     )
+                if "position" not in row or row["position"] is None:
+                    raise RuntimeError(
+                        "TOOBIT_FUTURES_POSITION_STATE_INVALID"
+                    )
 
             return ToobitAdapterResult(
                 True,
