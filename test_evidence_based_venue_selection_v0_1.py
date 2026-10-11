@@ -6,6 +6,10 @@ from evidence_based_venue_selection_v0_1 import resolve_authoritative_venue
 NOW = "2026-10-11T12:00:00Z"
 MANDATE = {
     "decision": "AUTHORIZED",
+    "mandate_id": "test-mandate",
+    "authorized_by": "PROJECT_MANAGEMENT",
+    "authorization_source": "EXPLICIT_TEST_AUTHORIZATION",
+    "environment": "REAL_PRODUCTION",
     "provider": "TOOBIT",
     "issued_at": "2026-10-11T08:43:04Z",
     "expires_at": "2026-11-10T08:43:04Z",
@@ -128,3 +132,21 @@ def test_missing_expected_intent_blocks():
     result = resolve(expected_intent_id="")
     assert result["status"] == "VENUE_SELECTION_BLOCKED"
     assert result["reason"] == "VENUE_SELECTION_EXPECTED_INTENT_ID_INVALID"
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("environment", "PAPER"),
+        ("mandate_id", ""),
+        ("authorized_by", ""),
+        ("authorization_source", ""),
+    ],
+)
+def test_incomplete_or_nonproduction_mandate_fails_closed(field, value):
+    mandate = dict(MANDATE)
+    mandate[field] = value
+    result = resolve(mandate=mandate)
+    assert result["status"] == "VENUE_SELECTION_BLOCKED"
+    assert result["reason"] == "VENUE_SELECTION_MANDATE_INVALID"
+    assert result["venue"] is None
