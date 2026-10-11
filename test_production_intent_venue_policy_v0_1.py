@@ -192,3 +192,17 @@ def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
     assert selection["venue"] == ("SPOT" if direction == "LONG" else "FUTURES")
     assert instrument["instrument_id"] == expected_symbol
     assert instrument["instrument_status"] == "TRADING"
+
+
+def test_missing_intent_id_blocks_before_provider_read():
+    adapter = _Adapter({"symbol": "BTCUSDT", "status": "TRADING"})
+    with pytest.raises(ValueError, match="VENUE_POLICY_INTENT_ID_INVALID"):
+        produce_authoritative_venue_evidence(
+            request=SimpleNamespace(
+                asset="BTC/USDT",
+                direction="LONG",
+                intent_id="",
+            ),
+            adapter=adapter,
+        )
+    assert adapter.calls == []
