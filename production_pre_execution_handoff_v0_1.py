@@ -143,6 +143,7 @@ def build_production_pre_execution_handoff(
 
     venue_resolution = resolve_authoritative_venue(
         asset=request.asset,
+        expected_intent_id=request.intent_id,
         mandate=management_observation,
         selection_evidence=venue_selection_evidence,
         instrument_evidence=instrument_evidence,
