@@ -25,6 +25,7 @@ def _readiness():
     return {
         "readiness_state": "PRE_EXECUTION_READY",
         "readiness_validation": "VALID",
+        "provider_binding": "DEFERRED",
         "asset": "BTC",
         "direction": "LONG",
         "entry_price": 100.0,
