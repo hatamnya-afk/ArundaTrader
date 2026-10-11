@@ -145,7 +145,7 @@ def build_production_pre_execution_handoff(
         mandate=management_observation,
         selection_evidence=venue_selection_evidence,
         instrument_evidence=instrument_evidence,
-        now=request.timestamp,
+        now=datetime.now(timezone.utc).isoformat(),
         max_evidence_age_seconds=max_instrument_evidence_age_seconds,
     )
     result: dict[str, Any] = {
