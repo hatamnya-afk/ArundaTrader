@@ -136,3 +136,42 @@ def test_missing_evidence_path_blocks_before_provider_call():
     assert result.status == "FAIL_CLOSED"
     assert result.error_code == "EXECUTION_ATTEMPT_EVIDENCE_PATH_REQUIRED"
     assert not adapter.submit_called
+
+
+def test_pre_submit_evidence_write_failure_blocks_adapter_call(tmp_path, monkeypatch):
+    import mcp01_execution_attempt_evidence_v0_1 as evidence
+
+    def fail_write(event, stream_path):
+        raise OSError("simulated evidence disk failure")
+
+    monkeypatch.setattr(evidence, "append_event_idempotent", fail_write)
+    adapter = FakeAdapter(evidence_path=tmp_path / "events.jsonl")
+    result = _run(adapter, tmp_path / "events.jsonl")
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "ORDER_ATTEMPT_EVIDENCE_PERSISTENCE_FAILED"
+    assert validate_trade_event_id(result.trade_event_id)
+    assert not adapter.submit_called
+
+
+def test_provider_result_evidence_failure_surfaces_reconciliation_error(tmp_path, monkeypatch):
+    import mcp01_execution_attempt_evidence_v0_1 as evidence
+
+    original_append = evidence.append_event_idempotent
+
+    def fail_only_provider_result(event, stream_path):
+        if event.event_type == "PROVIDER_RESULT":
+            raise OSError("simulated provider-result evidence failure")
+        return original_append(event, stream_path)
+
+    monkeypatch.setattr(evidence, "append_event_idempotent", fail_only_provider_result)
+    stream = tmp_path / "events.jsonl"
+    adapter = FakeAdapter(evidence_path=stream)
+    result = _run(adapter, stream)
+
+    assert adapter.submit_called
+    assert result.status == "PROVIDER_REJECTED"
+    assert result.error_code == "PROVIDER_RESULT_EVIDENCE_PERSISTENCE_FAILED"
+    assert validate_trade_event_id(result.trade_event_id)
+    rows = [json.loads(line) for line in stream.read_text(encoding="utf-8").splitlines()]
+    assert [row["event_type"] for row in rows] == ["ORDER_ATTEMPTED"]
