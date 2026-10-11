@@ -1,0 +1,34 @@
+{
+  "decision": "AUTHORIZED",
+  "mandate_id": "ARUNDA-REAL-PROD-20261011-001",
+  "authorized_by": "PROJECT_MANAGEMENT",
+  "authorization_source": "EXPLICIT_MANAGEMENT_DECISION_IN_PROJECT_CONVERSATION",
+  "environment": "REAL_PRODUCTION",
+  "issued_at": "2026-10-11T08:43:04Z",
+  "expires_at": "2026-11-10T08:43:04Z",
+  "allowed_markets": [
+    "SPOT",
+    "FUTURES"
+  ],
+  "provider": "TOOBIT",
+  "capital_policy": "ZERO_INITIAL_EXCHANGE_BALANCE_ALLOWED; PROGRESSIVE_CAPITAL_ADDITION_ONLY_AFTER_MANAGEMENT_REVIEW_OF_REAL_OUTCOME_EVIDENCE_AND_DEMONSTRATED_QUALITY",
+  "evidence_required_before": [
+    "canonical_order_path_and_final_attempt_contract_verified",
+    "decision_risk_trade_gate_path_verified",
+    "read_only_provider_instrument_constraints_evidence_current",
+    "exact_provider_instrument_routing_verified_for_attempt",
+    "fail_closed_execution_and_provider_write_interlocks_verified",
+    "execution_attempt_and_outcome_evidence_capture_verified",
+    "zero_initial_exchange_balance_policy_explicit"
+  ],
+  "evidence_required_after": [
+    "provider_response",
+    "provider_order_id_if_accepted",
+    "fill_or_not_filled_evidence",
+    "provider_rejection_reason_if_rejected",
+    "post_attempt_read_only_account_position_order_evidence",
+    "real_outcome",
+    "observation",
+    "calibration"
+  ]
+}

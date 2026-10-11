@@ -44,12 +44,30 @@ REAL MARKET
 → CALIBRATION
 → MANAGEMENT CAPITAL REVIEW
 
-## Management decision
-Current state: PENDING.
+## Management decision — AUTHORIZED
 
-Allowed decision:
-- DENY / DEFER phase entry
-- AUTHORIZE REAL-PRODUCTION TRADING PHASE
+**Decision:** AUTHORIZE REAL-PRODUCTION TRADING PHASE  
+**Decision date:** 2026-10-11  
+**Authorization source:** explicit management instruction recorded in the active project conversation  
+**Mandate ID:** ARUNDA-REAL-PROD-20261011-001  
+**Mandate scope:** REAL_PRODUCTION; SPOT + FUTURES; selected execution provider TOOBIT  
+**Mandate validity:** issued 2026-10-11T08:43:04Z; expires 2026-11-10T08:43:04Z. The 30-day window is a conservative technical default selected while recording the decision; it was not a separately specified management preference.  
+**Capital policy:** zero initial exchange balance is allowed; additional capital is added progressively only after management review of real outcome evidence and demonstrated quality.  
+**Per-trade management approval:** NOT REQUIRED.
+
+This records the one-time phase-entry decision. It does **not** by itself activate execution, enable order submission, invoke a provider write endpoint, authorize cancellation/withdrawal, or permit database mutation. Those technical controls remain fail-closed until the controlled integration and safety verification is complete.
+
+### Required evidence before the first provider write
+1. Canonical order path and final-attempt contract are connected and verified in the authorized production branch.
+2. Real, current read-only provider/instrument/constraint evidence is captured for the exact attempt.
+3. The standing mandate is passed through the canonical evaluator; no handcrafted authorization payload is accepted.
+4. Execution flags and provider write gates are reviewed independently; no flag is enabled by this decision record.
+5. The attempt, provider response, fill/not-filled state, and outcome evidence path is verified.
+6. Regression tests and CI pass for the exact candidate commit.
+7. No production DB write, order submission, cancellation, withdrawal, or runtime execution occurs during this verification step.
+
+The next technical frontier is **controlled phase-entry implementation and read-only readiness verification**. Do not ask management to approve each individual trade; the existing technical boundary governs requests under this standing mandate.
+
 
 The decision is a phase-entry decision. It must not be converted into repeated per-trade approval requests.
 
@@ -72,6 +90,6 @@ A later management restriction, halt, or capital-scaling decision is a separate 
 The provider is the authority for whether an otherwise valid request is accepted or rejected. ArundaTrader must not manufacture a local acceptance/rejection outcome from balance absence, assumptions, or inferred provider behavior.
 
 ## Review verdict
-READY FOR MANAGEMENT PHASE-ENTRY DECISION — subject to evidence items above being verified from the actual current repository/runtime evidence.
+PHASE ENTRY AUTHORIZED / DECISION RECORDED. Technical integration and current read-only provider-evidence verification remain pending. This review artifact does not authorize immediate order submission or execution-flag activation.
 
 # END
