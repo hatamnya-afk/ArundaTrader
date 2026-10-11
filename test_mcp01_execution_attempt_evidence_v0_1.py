@@ -35,7 +35,7 @@ def test_attempt_evidence_is_correlatable_and_persisted_idempotently(tmp_path: P
     assert len(stream.read_text(encoding="utf-8").splitlines()) == 2
 
     reconciled = reconcile_outcomes([
-        {"event_type": "TRADE_READY", "decision_id": "D-1", "case_id": "C-1",
+        {"event_type": "TRADE_READY", "decision_id": "D-1",
          "asset": "BTC", "direction": "LONG"},
         *[event.to_dict() for event in events],
     ])
