@@ -4383,6 +4383,7 @@ def build_pre_execution_handoff_snapshot(
         """
         from production_pre_execution_handoff_v0_1 import (
             build_production_pre_execution_handoff,
+            load_standing_mandate_observation,
         )
         from production_intent_venue_policy_v0_1 import (
             produce_authoritative_venue_evidence,
@@ -4396,6 +4397,23 @@ def build_pre_execution_handoff_snapshot(
         # itself does not run the pipeline or activate any execution/write gate.
         adapter = ToobitExchangeAdapter(transport=toobit_read_only_transport)
         results = {}
+        try:
+            # A valid standing mandate is a prerequisite for any provider read.
+            # If governance evidence is unavailable, block candidates without
+            # contacting the provider or weakening the existing fail-closed gate.
+            management_observation = load_standing_mandate_observation()
+        except Exception as exc:
+            error = f"{type(exc).__name__}:{exc}"
+            return {
+                asset: {
+                    "readiness": None,
+                    "context": None,
+                    "status": "PRE_EXECUTION_BLOCKED",
+                    "error": error,
+                }
+                for asset in canonical_order_requests
+            }
+
         for asset, canonical in canonical_order_requests.items():
             request = canonical.get("request") if isinstance(canonical, dict) else None
             try:
@@ -4410,6 +4428,7 @@ def build_pre_execution_handoff_snapshot(
                     risk=risk_snapshot.get(asset),
                     trade_gate=trade_gate_snapshot.get(asset),
                     opportunity=opportunity_by_asset.get(asset),
+                    management_observation=management_observation,
                     adapter=adapter,
                     venue_selection_evidence=selection_evidence,
                     instrument_evidence=instrument_evidence,
