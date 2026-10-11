@@ -1,18 +1,19 @@
-"""ARUNDA TRADER — PROVIDER-NEUTRAL ORDER ATTEMPT BOUNDARY v0.2.
+"""ARUNDA TRADER — PROVIDER-NEUTRAL ORDER ATTEMPT BOUNDARY v0.3.
 
 Final provider-neutral gate between a prepared adapter order and a future
-provider order attempt.
+provider order attempt. Durable ORDER_ATTEMPTED evidence is written before
+calling the adapter; provider-result evidence is written afterward.
 
 NO automatic authorization.
 NO exchange-specific logic.
 NO database write.
 The selected adapter owns provider submission behavior.
 """
-
 from __future__ import annotations
 
-from typing import Any, Mapping
 from dataclasses import replace
+from pathlib import Path
+from typing import Any, Mapping
 
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
@@ -27,6 +28,11 @@ from exchange_execution_contract import (
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
 from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
+from mcp01_execution_attempt_evidence_v0_1 import (
+    build_order_attempt_event,
+    build_provider_result_event,
+    persist_execution_attempt_events,
+)
 from mcp01_trade_event_identity_v0_1 import issue_trade_event_id
 
 
@@ -39,14 +45,14 @@ def attempt_prepared_order(
     venue: str,
     execution_instrument: Any,
     execution_ready_package: Mapping[str, Any] | None = None,
+    evidence_stream_path: Path | None = None,
 ) -> CanonicalExecutionResult:
-    """Fail closed unless explicit valid authorization is present.
+    """Fail closed unless authorization and pre-submit evidence are valid.
 
-    Preparation is performed before submission so the provider-owned request
-    exists at the final boundary. Authorization is never inferred from
-    readiness, adapter capability, account state, or provider metadata.
+    An explicit JSONL evidence path is required. ORDER_ATTEMPTED must be durably
+    recorded before the provider method is called. Provider outcome is recorded
+    separately afterward. Evidence persistence never writes to the production DB.
     """
-
     valid, reason = validate_order_request(request)
     if not valid:
         return blocked_execution_result(
@@ -118,16 +124,55 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
-    # Issued locally at the actual attempt boundary, never copied from provider output.
+    if evidence_stream_path is None:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="EXECUTION_ATTEMPT_EVIDENCE_PATH_REQUIRED",
+            error_message="No provider call is allowed without an explicit evidence stream path.",
+        )
+
+    # The authoritative ID and durable attempt event exist before the provider call.
     trade_event_id = issue_trade_event_id()
+    try:
+        attempted_event = build_order_attempt_event(
+            request=request,
+            trade_event_id=trade_event_id,
+            provider=getattr(adapter, "adapter_name", None) or "PROVIDER_UNKNOWN",
+            event_timestamp=request.timestamp,
+        )
+    except Exception as exc:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="ORDER_ATTEMPT_EVIDENCE_BUILD_FAILED",
+            error_message=f"Pre-submit evidence construction failed ({type(exc).__name__}).",
+            trade_event_id=trade_event_id,
+        )
+
+    attempt_persistence = persist_execution_attempt_events(
+        [attempted_event], stream_path=Path(evidence_stream_path)
+    )
+    if attempt_persistence["persistence_state"] != "PERSISTED":
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="ORDER_ATTEMPT_EVIDENCE_PERSISTENCE_FAILED",
+            error_message="Pre-submit evidence was not durably recorded; provider call was not made.",
+            trade_event_id=trade_event_id,
+        )
+
     try:
         result = adapter.submit_prepared_order(
             prepared,
             canonical_request=request,
         )
     except Exception as exc:
-        # An exception after invoking submission does not prove the provider rejected it.
-        return CanonicalExecutionResult(
+        # A transport/adapter exception after invocation cannot prove rejection.
+        result = CanonicalExecutionResult(
             accepted=False,
             exchange_order_id=None,
             status="SUBMISSION_OUTCOME_UNKNOWN",
@@ -146,7 +191,7 @@ def attempt_prepared_order(
         )
 
     if not isinstance(result, CanonicalExecutionResult):
-        return CanonicalExecutionResult(
+        result = CanonicalExecutionResult(
             accepted=False,
             exchange_order_id=None,
             status="SUBMISSION_OUTCOME_UNKNOWN",
@@ -163,9 +208,30 @@ def attempt_prepared_order(
             ),
             trade_event_id=trade_event_id,
         )
+    else:
+        # Never accept an adapter-supplied identity as authoritative.
+        result = replace(result, trade_event_id=trade_event_id)
 
-    # Do not trust an adapter-supplied identity; preserve the boundary-issued ID.
-    return replace(result, trade_event_id=trade_event_id)
+    try:
+        provider_event = build_provider_result_event(request=request, result=result)
+        outcome_persistence = persist_execution_attempt_events(
+            [provider_event], stream_path=Path(evidence_stream_path)
+        )
+    except Exception:
+        outcome_persistence = {"persistence_state": "INCOMPLETE"}
+
+    if outcome_persistence.get("persistence_state") != "PERSISTED":
+        # Preserve provider acceptance/order identifiers, but surface missing evidence.
+        return replace(
+            result,
+            error_code="PROVIDER_RESULT_EVIDENCE_PERSISTENCE_FAILED",
+            error_message=(
+                "Provider response was received but result evidence was not durably "
+                f"recorded; original_status={result.status}; reconcile before retry."
+            ),
+        )
+
+    return result
 
 
 __all__ = ["attempt_prepared_order"]
