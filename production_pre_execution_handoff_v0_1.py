@@ -40,8 +40,32 @@ def build_production_pre_execution_handoff(
         if not isinstance(value, Mapping):
             raise ValueError(f"PRE_EXECUTION_{name.upper()}_MISSING")
 
+    def base_asset(value: Any) -> str | None:
+        if not isinstance(value, str) or not value.strip():
+            return None
+        return value.strip().upper().split("/", 1)[0]
+
+    request_asset = base_asset(request.asset)
+    for source_name, source in (
+        ("decision", decision),
+        ("risk", risk),
+        ("trade_gate", trade_gate),
+        ("opportunity", opportunity),
+    ):
+        source_asset = base_asset(source.get("asset"))
+        if source_asset is not None and source_asset != request_asset:
+            raise ValueError("PRE_EXECUTION_ASSET_MISMATCH:" + source_name)
     if decision.get("status") != "READY" or decision.get("state") != "ACTIONABLE":
         raise ValueError("PRE_EXECUTION_DECISION_NOT_ACTIONABLE_READY")
+    if decision.get("direction") != request.direction:
+        raise ValueError("PRE_EXECUTION_DECISION_DIRECTION_MISMATCH")
+    if risk.get("direction") != request.direction:
+        raise ValueError("PRE_EXECUTION_RISK_DIRECTION_MISMATCH")
+    gate_direction = trade_gate.get("direction")
+    if gate_direction is not None and gate_direction != request.direction:
+        raise ValueError("PRE_EXECUTION_TRADE_GATE_DIRECTION_MISMATCH")
+    if opportunity.get("price") != request.entry_price:
+        raise ValueError("PRE_EXECUTION_OPPORTUNITY_ENTRY_PRICE_MISMATCH")
     if validation.get("valid") is not True:
         raise ValueError("PRE_EXECUTION_DECISION_VALIDATION_FAILED")
     if opportunity.get("status") != "ELIGIBLE":
