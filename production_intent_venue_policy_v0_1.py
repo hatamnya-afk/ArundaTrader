@@ -69,6 +69,9 @@ def produce_authoritative_venue_evidence(
     provider_asset = canonical_asset.strip().upper().replace("-", "/").split("/", 1)[0]
     if not provider_asset:
         raise ValueError("VENUE_POLICY_ASSET_INVALID")
+    intent_id = getattr(request, "intent_id", None)
+    if not isinstance(intent_id, str) or not intent_id.strip():
+        raise ValueError("VENUE_POLICY_INTENT_ID_INVALID")
 
     # Resolve the deterministic venue before any provider read, but timestamp
     # the evidence only after the instrument metadata has actually been read.
@@ -108,7 +111,7 @@ def produce_authoritative_venue_evidence(
     selection = select_venue_for_intent(
         asset=request.asset,
         direction=direction,
-        intent_id=request.intent_id,
+        intent_id=intent_id,
         observed_at=timestamp,
     )
     instrument = {
@@ -116,7 +119,7 @@ def produce_authoritative_venue_evidence(
         "provider": "TOOBIT",
         "asset": request.asset,
         "venue": venue,
-        "intent_id": request.intent_id,
+        "intent_id": intent_id,
         "instrument_id": instrument_id.strip().upper(),
         "instrument_status": status,
         "observed_at": selection["observed_at"],
