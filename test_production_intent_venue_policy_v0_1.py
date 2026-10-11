@@ -101,3 +101,35 @@ def test_provider_read_failure_blocks():
             adapter=BrokenAdapter(),
             observed_at="2026-10-11T12:00:00Z",
         )
+
+
+def test_provider_evidence_timestamp_is_taken_after_metadata_read(monkeypatch):
+    import production_intent_venue_policy_v0_1 as policy
+    from datetime import datetime as RealDateTime, timezone
+
+    class Clock:
+        current = "2026-10-11T12:00:00+00:00"
+
+        @staticmethod
+        def fromisoformat(value):
+            return RealDateTime.fromisoformat(value)
+
+        @classmethod
+        def now(cls, tz=None):
+            return RealDateTime.fromisoformat(cls.current)
+
+    class AdvancingAdapter(_Adapter):
+        def trading_constraints(self, asset):
+            result = super().trading_constraints(asset)
+            Clock.current = "2026-10-11T12:00:03+00:00"
+            return result
+
+    monkeypatch.setattr(policy, "datetime", Clock)
+    adapter = AdvancingAdapter({"symbol": "BTCUSDT", "status": "TRADING"})
+    selection, instrument = policy.produce_authoritative_venue_evidence(
+        request=SimpleNamespace(asset="BTC", direction="LONG", intent_id="i-clock"),
+        adapter=adapter,
+    )
+    assert selection["observed_at"] == "2026-10-11T12:00:03+00:00"
+    assert instrument["observed_at"] == selection["observed_at"]
+
