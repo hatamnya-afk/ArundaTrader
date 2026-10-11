@@ -81,6 +81,33 @@ def attempt_prepared_order(
                 error_message=f"Execution-attempt readiness rejected: {exc}.",
             )
 
+    # Bind the selected execution context before technical authorization.
+    readiness_observation = dict(readiness_observation)
+    readiness_observation["order_type"] = request.order_type
+    readiness_observation["execution_instrument"] = execution_instrument
+    readiness_observation["venue"] = venue
+
+    # A standing mandate for another provider must never authorize this adapter.
+    mandate_provider = (
+        authorization_observation.get("provider")
+        if isinstance(authorization_observation, Mapping)
+        else None
+    )
+    adapter_provider = getattr(adapter, "adapter_name", None)
+    if (
+        not isinstance(mandate_provider, str)
+        or not mandate_provider.strip()
+        or not isinstance(adapter_provider, str)
+        or not adapter_provider.strip()
+        or mandate_provider.strip().casefold() != adapter_provider.strip().casefold()
+    ):
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code="AUTHORIZATION_PROVIDER_MISMATCH",
+            error_message="Standing mandate provider does not match the selected execution adapter.",
+        )
+
     try:
         authorization = evaluate_execution_authorization(
             readiness_observation,
