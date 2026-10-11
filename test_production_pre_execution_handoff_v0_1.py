@@ -1,7 +1,7 @@
 import pytest
 
 from exchange_execution_contract import CanonicalOrderRequest
-from production_pre_execution_handoff_v0_1 import build_production_pre_execution_handoff
+from production_pre_execution_handoff_v0_1 import build_production_pre_execution_handoff, load_standing_mandate_observation
 
 
 def _inputs():
@@ -60,7 +60,14 @@ def test_missing_real_current_run_timestamp_fails_closed():
         build_production_pre_execution_handoff(**values)
 
 
-def test_explicit_venue_requires_authoritative_mandate_and_adapter():
+def test_standing_mandate_is_loaded_from_authoritative_artifact():
+    mandate = load_standing_mandate_observation()
+    assert mandate["mandate_id"] == "ARUNDA-REAL-PROD-20261011-001"
+    assert mandate["provider"] == "TOOBIT"
+    assert set(mandate["allowed_markets"]) == {"SPOT", "FUTURES"}
+
+
+def test_explicit_venue_requires_adapter_even_when_mandate_is_available():
     values = _inputs()
-    with pytest.raises(ValueError, match="MANAGEMENT_MANDATE_MISSING"):
+    with pytest.raises(ValueError, match="EXECUTION_ADAPTER_INVALID"):
         build_production_pre_execution_handoff(**values, venue="FUTURES")
