@@ -52,7 +52,7 @@ def test_selects_only_when_policy_and_provider_evidence_agree():
     result = resolve()
     assert result["status"] == "VENUE_SELECTED"
     assert result["venue"] == "FUTURES"
-    assert result["instrument_id"] == "BTCUSDT"
+    assert result["instrument_id"] == "BTC-SWAP-USDT"
 
 
 def test_standing_mandate_allowing_both_does_not_choose_a_venue():
@@ -84,6 +84,7 @@ def test_mismatched_or_stale_instrument_evidence_fails_closed(field, value, reas
     ("venue", "MARGIN", "VENUE_SELECTION_VALUE_INVALID"),
     ("asset", "ETH/USDT", "VENUE_SELECTION_ASSET_MISMATCH"),
     ("provider", "OTHER", "VENUE_SELECTION_PROVIDER_MISMATCH"),
+    ("intent_id", "other-intent", "VENUE_SELECTION_INTENT_ID_MISMATCH"),
     ("observed_at", "2026-10-11T11:00:00Z", "VENUE_SELECTION_EVIDENCE_STALE_OR_INVALID"),
 ])
 def test_invalid_selection_evidence_fails_closed(field, value, reason):
