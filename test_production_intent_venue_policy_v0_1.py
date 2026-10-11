@@ -56,7 +56,7 @@ def test_long_produces_selection_and_fresh_provider_instrument_evidence():
         adapter=adapter,
         observed_at="2026-10-11T12:00:00Z",
     )
-    assert adapter.calls == [("SPOT", "BTC/USDT")]
+    assert adapter.calls == [("SPOT", "BTC")]
     assert selection["venue"] == "SPOT"
     assert instrument["source"] == INSTRUMENT_SOURCE
     assert instrument["instrument_id"] == "BTCUSDT"
@@ -71,7 +71,7 @@ def test_short_uses_futures_constraints():
         adapter=adapter,
         observed_at="2026-10-11T12:00:00Z",
     )
-    assert adapter.calls == [("FUTURES", "BTC/USDT")]
+    assert adapter.calls == [("FUTURES", "BTC")]
     assert selection["venue"] == "FUTURES"
     assert instrument["venue"] == "FUTURES"
 
@@ -133,3 +133,48 @@ def test_provider_evidence_timestamp_is_taken_after_metadata_read(monkeypatch):
     assert selection["observed_at"] == "2026-10-11T12:00:03+00:00"
     assert instrument["observed_at"] == selection["observed_at"]
 
+
+
+@pytest.mark.parametrize(
+    ("direction", "expected_symbol", "rows_key", "row"),
+    [
+        ("LONG", "BTCUSDT", "symbols", {
+            "symbol": "BTCUSDT", "status": "TRADING",
+            "baseAsset": "BTC", "quoteAsset": "USDT",
+        }),
+        ("SHORT", "BTC-SWAP-USDT", "contracts", {
+            "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+            "underlying": "BTC", "marginToken": "USDT",
+        }),
+    ],
+)
+def test_real_adapter_contract_resolves_base_asset_from_canonical_pair(
+    direction, expected_symbol, rows_key, row
+):
+    from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
+
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path))
+        assert method == "GET"
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [row] if rows_key == "symbols" else [],
+            "contracts": [row] if rows_key == "contracts" else [],
+        }
+
+    adapter = ToobitExchangeAdapter(transport=transport)
+    selection, instrument = produce_authoritative_venue_evidence(
+        request=SimpleNamespace(
+            asset="BTC/USDT",
+            direction=direction,
+            intent_id="integration-intent",
+        ),
+        adapter=adapter,
+    )
+
+    assert calls == [("GET", "/api/v1/exchangeInfo")]
+    assert selection["venue"] == ("SPOT" if direction == "LONG" else "FUTURES")
+    assert instrument["instrument_id"] == expected_symbol
+    assert instrument["instrument_status"] == "TRADING"
