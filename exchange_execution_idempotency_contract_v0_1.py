@@ -47,7 +47,7 @@ def derive_client_order_id(*, provider_namespace: str, intent_id: str, prefix: s
             or max_length < len(normalized_prefix) + _MIN_DIGEST_HEX_LENGTH):
         raise ValueError("CLIENT_ORDER_ID_LENGTH_CONSTRAINT_INVALID")
 
-    material = ("ARUNDA_CLIENT_ORDER_ID_V1\\0" + namespace + "\\0" + canonical_intent).encode("utf-8")
+    material = (f"ARUNDA_CLIENT_ORDER_ID_V1:{len(namespace)}:{namespace}:{len(canonical_intent)}:{canonical_intent}").encode("utf-8")
     digest = hashlib.sha256(material).hexdigest()
     return normalized_prefix + digest[: max_length - len(normalized_prefix)]
 
