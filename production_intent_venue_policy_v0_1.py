@@ -116,6 +116,7 @@ def produce_authoritative_venue_evidence(
         "provider": "TOOBIT",
         "asset": request.asset,
         "venue": venue,
+        "intent_id": request.intent_id,
         "instrument_id": instrument_id.strip().upper(),
         "instrument_status": status,
         "observed_at": selection["observed_at"],
