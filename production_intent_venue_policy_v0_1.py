@@ -59,13 +59,24 @@ def produce_authoritative_venue_evidence(
     direction = str(getattr(request, "direction", "")).strip().upper()
     if direction not in {"LONG", "SHORT"}:
         raise ValueError("VENUE_POLICY_DIRECTION_UNSUPPORTED")
+    # Canonical requests may identify a market as "BTC/USDT", while the
+    # Toobit adapter's public constraint contract accepts the base asset ("BTC").
+    # Normalize only the provider lookup argument; keep the canonical request
+    # asset in both evidence records so the resolver can bind evidence to intent.
+    canonical_asset = getattr(request, "asset", None)
+    if not isinstance(canonical_asset, str) or not canonical_asset.strip():
+        raise ValueError("VENUE_POLICY_ASSET_INVALID")
+    provider_asset = canonical_asset.strip().upper().replace("-", "/").split("/", 1)[0]
+    if not provider_asset:
+        raise ValueError("VENUE_POLICY_ASSET_INVALID")
+
     # Resolve the deterministic venue before any provider read, but timestamp
     # the evidence only after the instrument metadata has actually been read.
     venue = "SPOT" if direction == "LONG" else "FUTURES"
     if venue == "SPOT":
-        result = adapter.trading_constraints(request.asset)
+        result = adapter.trading_constraints(provider_asset)
     else:
-        result = adapter.futures_trading_constraints(request.asset)
+        result = adapter.futures_trading_constraints(provider_asset)
     if not getattr(result, "allowed", False) or not isinstance(getattr(result, "data", None), Mapping):
         reason = getattr(result, "reason", None) or getattr(result, "error", None) or "TOOBIT_INSTRUMENT_READ_FAILED"
         raise RuntimeError(f"TOOBIT_INSTRUMENT_READ_FAILED:{reason}")
