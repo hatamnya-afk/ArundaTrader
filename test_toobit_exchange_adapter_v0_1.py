@@ -163,6 +163,7 @@ def test_futures_instrument_resolution_uses_authoritative_settlement_metadata():
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                     "filters": [],
                 },
                 {
@@ -230,6 +231,39 @@ def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contract
 
     assert result.allowed is False
     assert result.reason == "AUTHORITATIVE_PROVIDER_INSTRUMENT_AMBIGUOUS"
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"inverse": True},
+        {"inverse": None},
+        {"marginToken": None},
+        {"quoteAsset": "USDC"},
+        {"symbol": "BTC-SWAP-USDT-ALT"},
+    ],
+)
+def test_futures_instrument_resolution_rejects_noncanonical_or_ambiguous_contract_metadata(overrides):
+    def transport(*, method, path, params, headers, base_url):
+        row = {
+            "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+            "underlying": "BTC", "marginToken": "USDT",
+            "quoteAsset": "USDT", "inverse": False,
+        }
+        for key, value in overrides.items():
+            if value is None:
+                row.pop(key, None)
+            else:
+                row[key] = value
+        return {"symbols": [], "contracts": [row]}
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="FUTURES", settlement_asset="USDT",
+        instrument_type="PERPETUAL", selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = ToobitExchangeAdapter(transport=transport).resolve_futures_instrument(specification)
+    assert result.allowed is False
 
 
 
@@ -622,6 +656,7 @@ def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missi
             "contracts": [{
                 "symbol": "BTC-SWAP-USDT", "status": "TRADING",
                 "underlying": "BTC", "marginToken": "USDT",
+                "quoteAsset": "USDT", "inverse": False,
                 "contractMultiplier": "0.001", "filters": [],
             }],
         }
