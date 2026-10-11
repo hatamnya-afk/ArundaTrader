@@ -6,6 +6,8 @@ on:
       - main
       - integration/pr13-pr14-attempt-contract-20261010
       - management/phase-entry-ci-candidate-20261011
+      - fix/production-final-attempt-dispatch-20261011
+      - fix/final-attempt-context-handoff-20261011
     paths:
       - "**.py"
       - "requirements.txt"
