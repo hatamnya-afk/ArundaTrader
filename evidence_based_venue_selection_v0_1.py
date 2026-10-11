@@ -32,6 +32,7 @@ def _asset(value: Any) -> str | None:
 def resolve_authoritative_venue(
     *,
     asset: str,
+    expected_intent_id: str,
     mandate: Mapping[str, Any],
     selection_evidence: Mapping[str, Any] | None,
     instrument_evidence: Mapping[str, Any] | None,
@@ -57,7 +58,17 @@ def resolve_authoritative_venue(
         return blocked("VENUE_SELECTION_FRESHNESS_POLICY_INVALID")
     if not isinstance(mandate, Mapping):
         return blocked("VENUE_SELECTION_MANDATE_MISSING")
-    if mandate.get("decision") != "AUTHORIZED" or mandate.get("provider") != "TOOBIT":
+    if (
+        mandate.get("decision") != "AUTHORIZED"
+        or mandate.get("provider") != "TOOBIT"
+        or mandate.get("environment") != "REAL_PRODUCTION"
+        or not isinstance(mandate.get("mandate_id"), str)
+        or not mandate["mandate_id"].strip()
+        or not isinstance(mandate.get("authorized_by"), str)
+        or not mandate["authorized_by"].strip()
+        or not isinstance(mandate.get("authorization_source"), str)
+        or not mandate["authorization_source"].strip()
+    ):
         return blocked("VENUE_SELECTION_MANDATE_INVALID")
     issued = _instant(mandate.get("issued_at"))
     expires = _instant(mandate.get("expires_at"))
@@ -66,6 +77,9 @@ def resolve_authoritative_venue(
     allowed = mandate.get("allowed_markets")
     if not isinstance(allowed, list) or not allowed or any(v not in {"SPOT", "FUTURES"} for v in allowed):
         return blocked("VENUE_SELECTION_MANDATE_MARKETS_INVALID")
+
+    if not isinstance(expected_intent_id, str) or not expected_intent_id.strip():
+        return blocked("VENUE_SELECTION_EXPECTED_INTENT_ID_INVALID")
 
     if not isinstance(selection_evidence, Mapping):
         return blocked("AUTHORITATIVE_PER_INTENT_MARKET_SELECTION_MISSING")
@@ -77,6 +91,8 @@ def resolve_authoritative_venue(
         return blocked("VENUE_SELECTION_ASSET_MISMATCH")
     if not isinstance(selection_evidence.get("intent_id"), str) or not selection_evidence["intent_id"].strip():
         return blocked("VENUE_SELECTION_INTENT_ID_MISSING")
+    if selection_evidence["intent_id"] != expected_intent_id:
+        return blocked("VENUE_SELECTION_INTENT_ID_MISMATCH")
     venue = selection_evidence.get("venue")
     if venue not in {"SPOT", "FUTURES"}:
         return blocked("VENUE_SELECTION_VALUE_INVALID")
@@ -97,6 +113,10 @@ def resolve_authoritative_venue(
         return blocked("TOOBIT_INSTRUMENT_ASSET_MISMATCH")
     if instrument_evidence.get("venue") != venue:
         return blocked("TOOBIT_INSTRUMENT_VENUE_MISMATCH")
+    if instrument_evidence.get("intent_id") != expected_intent_id:
+        return blocked("TOOBIT_INSTRUMENT_INTENT_ID_MISMATCH")
+    if instrument_evidence.get("policy_version") != selection_evidence.get("policy_version"):
+        return blocked("TOOBIT_INSTRUMENT_POLICY_VERSION_MISMATCH")
     instrument_id = instrument_evidence.get("instrument_id")
     if not isinstance(instrument_id, str) or not instrument_id.strip():
         return blocked("TOOBIT_INSTRUMENT_ID_MISSING")

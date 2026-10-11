@@ -4376,18 +4376,51 @@ def build_pre_execution_handoff_snapshot(
     ) -> dict:
         """Connect canonical requests to current-run pre-execution readiness.
 
-        This does not select SPOT/FUTURES, contact Toobit, or enable execution.
-        Each candidate records an explicit fail-closed status if readiness
-        evidence is inconsistent or venue selection remains unresolved.
+        Each candidate gets deterministic per-intent venue selection plus a
+        public, read-only Toobit instrument metadata check. This function may
+        contact Toobit when the pipeline is run; it never submits or modifies
+        orders, and execution remains disabled. Fail closed on any mismatch.
         """
         from production_pre_execution_handoff_v0_1 import (
             build_production_pre_execution_handoff,
+            load_standing_mandate_observation,
         )
+        from production_intent_venue_policy_v0_1 import (
+            produce_authoritative_venue_evidence,
+        )
+        from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
+        from toobit_read_only_transport_v0_1 import toobit_read_only_transport
 
+        # The adapter receives only an allowlisted public GET transport.
+        # The transport rejects every other host/path/method and ignores caller
+        # headers. This call may read Toobit metadata at runtime; this code edit
+        # itself does not run the pipeline or activate any execution/write gate.
+        adapter = ToobitExchangeAdapter(transport=toobit_read_only_transport)
         results = {}
+        try:
+            # A valid standing mandate is a prerequisite for any provider read.
+            # If governance evidence is unavailable, block candidates without
+            # contacting the provider or weakening the existing fail-closed gate.
+            management_observation = load_standing_mandate_observation()
+        except Exception as exc:
+            error = f"{type(exc).__name__}:{exc}"
+            return {
+                asset: {
+                    "readiness": None,
+                    "context": None,
+                    "status": "PRE_EXECUTION_BLOCKED",
+                    "error": error,
+                }
+                for asset in canonical_order_requests
+            }
+
         for asset, canonical in canonical_order_requests.items():
             request = canonical.get("request") if isinstance(canonical, dict) else None
             try:
+                selection_evidence, instrument_evidence = produce_authoritative_venue_evidence(
+                    request=request,
+                    adapter=adapter,
+                )
                 results[asset] = build_production_pre_execution_handoff(
                     request=request,
                     decision=decision_snapshot.get(asset),
@@ -4395,8 +4428,10 @@ def build_pre_execution_handoff_snapshot(
                     risk=risk_snapshot.get(asset),
                     trade_gate=trade_gate_snapshot.get(asset),
                     opportunity=opportunity_by_asset.get(asset),
-                    venue_selection_evidence=canonical.get("venue_selection_evidence") if isinstance(canonical, dict) else None,
-                    instrument_evidence=canonical.get("instrument_evidence") if isinstance(canonical, dict) else None,
+                    management_observation=management_observation,
+                    adapter=adapter,
+                    venue_selection_evidence=selection_evidence,
+                    instrument_evidence=instrument_evidence,
                 )
             except Exception as exc:
                 results[asset] = {

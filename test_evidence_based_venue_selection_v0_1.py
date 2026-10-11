@@ -6,6 +6,10 @@ from evidence_based_venue_selection_v0_1 import resolve_authoritative_venue
 NOW = "2026-10-11T12:00:00Z"
 MANDATE = {
     "decision": "AUTHORIZED",
+    "mandate_id": "test-mandate",
+    "authorized_by": "PROJECT_MANAGEMENT",
+    "authorization_source": "EXPLICIT_TEST_AUTHORIZATION",
+    "environment": "REAL_PRODUCTION",
     "provider": "TOOBIT",
     "issued_at": "2026-10-11T08:43:04Z",
     "expires_at": "2026-11-10T08:43:04Z",
@@ -15,6 +19,7 @@ SELECTION = {
     "source": "AUTHORITATIVE_PER_INTENT_MARKET_POLICY",
     "decision": "SELECTED",
     "provider": "TOOBIT",
+    "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
     "asset": "BTC/USDT",
     "venue": "FUTURES",
     "intent_id": "intent-123",
@@ -25,8 +30,10 @@ INSTRUMENT = {
     "provider": "TOOBIT",
     "asset": "BTC/USDT",
     "venue": "FUTURES",
-    "instrument_id": "BTCUSDT",
+    "intent_id": "intent-123",
+    "instrument_id": "BTC-SWAP-USDT",
     "instrument_status": "TRADING",
+    "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
     "observed_at": NOW,
 }
 
@@ -34,6 +41,7 @@ INSTRUMENT = {
 def resolve(**overrides):
     args = {
         "asset": "BTC/USDT",
+        "expected_intent_id": "intent-123",
         "mandate": MANDATE,
         "selection_evidence": SELECTION,
         "instrument_evidence": INSTRUMENT,
@@ -48,7 +56,7 @@ def test_selects_only_when_policy_and_provider_evidence_agree():
     result = resolve()
     assert result["status"] == "VENUE_SELECTED"
     assert result["venue"] == "FUTURES"
-    assert result["instrument_id"] == "BTCUSDT"
+    assert result["instrument_id"] == "BTC-SWAP-USDT"
 
 
 def test_standing_mandate_allowing_both_does_not_choose_a_venue():
@@ -62,6 +70,8 @@ def test_standing_mandate_allowing_both_does_not_choose_a_venue():
     ("venue", "SPOT", "TOOBIT_INSTRUMENT_VENUE_MISMATCH"),
     ("asset", "ETH/USDT", "TOOBIT_INSTRUMENT_ASSET_MISMATCH"),
     ("instrument_status", "HALTED", "TOOBIT_INSTRUMENT_NOT_TRADING"),
+    ("intent_id", "other-intent", "TOOBIT_INSTRUMENT_INTENT_ID_MISMATCH"),
+    ("policy_version", "other-policy", "TOOBIT_INSTRUMENT_POLICY_VERSION_MISMATCH"),
     ("instrument_id", "", "TOOBIT_INSTRUMENT_ID_MISSING"),
     ("observed_at", "2026-10-11T11:00:00Z", "TOOBIT_INSTRUMENT_EVIDENCE_STALE_OR_INVALID"),
 ])
@@ -78,6 +88,7 @@ def test_mismatched_or_stale_instrument_evidence_fails_closed(field, value, reas
     ("venue", "MARGIN", "VENUE_SELECTION_VALUE_INVALID"),
     ("asset", "ETH/USDT", "VENUE_SELECTION_ASSET_MISMATCH"),
     ("provider", "OTHER", "VENUE_SELECTION_PROVIDER_MISMATCH"),
+    ("intent_id", "other-intent", "VENUE_SELECTION_INTENT_ID_MISMATCH"),
     ("observed_at", "2026-10-11T11:00:00Z", "VENUE_SELECTION_EVIDENCE_STALE_OR_INVALID"),
 ])
 def test_invalid_selection_evidence_fails_closed(field, value, reason):
@@ -107,4 +118,35 @@ def test_future_evidence_fails_closed():
     evidence = dict(SELECTION, observed_at="2026-10-11T12:00:01Z")
     result = resolve(selection_evidence=evidence)
     assert result["reason"] == "VENUE_SELECTION_EVIDENCE_STALE_OR_INVALID"
+    assert result["venue"] is None
+
+
+def test_selection_evidence_must_match_expected_intent():
+    result = resolve(expected_intent_id="another-intent")
+    assert result["status"] == "VENUE_SELECTION_BLOCKED"
+    assert result["reason"] == "VENUE_SELECTION_INTENT_ID_MISMATCH"
+    assert result["venue"] is None
+
+
+def test_missing_expected_intent_blocks():
+    result = resolve(expected_intent_id="")
+    assert result["status"] == "VENUE_SELECTION_BLOCKED"
+    assert result["reason"] == "VENUE_SELECTION_EXPECTED_INTENT_ID_INVALID"
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("environment", "PAPER"),
+        ("mandate_id", ""),
+        ("authorized_by", ""),
+        ("authorization_source", ""),
+    ],
+)
+def test_incomplete_or_nonproduction_mandate_fails_closed(field, value):
+    mandate = dict(MANDATE)
+    mandate[field] = value
+    result = resolve(mandate=mandate)
+    assert result["status"] == "VENUE_SELECTION_BLOCKED"
+    assert result["reason"] == "VENUE_SELECTION_MANDATE_INVALID"
     assert result["venue"] is None

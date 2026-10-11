@@ -64,3 +64,24 @@ def test_invalid_venue_blocks():
             asset="BTC",
             venue="OPTIONS",
         )
+
+
+@pytest.mark.parametrize("asset,expected", [
+    ("BTC", "BTC"),
+    ("btc/usdt", "BTC"),
+    ("ETH-USDT", "ETH"),
+])
+def test_policy_normalizes_pair_to_base_asset(asset, expected):
+    spec = build_execution_instrument_specification(
+        asset=asset,
+        venue="FUTURES",
+    )
+    assert spec.asset == expected
+
+
+def test_policy_rejects_non_string_asset():
+    with pytest.raises(ValueError, match="EXECUTION_INSTRUMENT_ASSET_INVALID"):
+        build_execution_instrument_specification(
+            asset=None,
+            venue="FUTURES",
+        )

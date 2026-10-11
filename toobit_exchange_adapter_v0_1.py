@@ -357,20 +357,27 @@ class ToobitExchangeAdapter:
 
                 # Toobit exposes settlement/margin identity as provider
                 # metadata. Never derive it from the provider symbol.
+                # Only select the explicitly documented linear, USDT-margined
+                # perpetual contract. Never infer settlement from quoteAsset or
+                # the symbol: inverse/coin-margined instruments must fail closed.
                 settlement_asset = row.get("marginToken")
-                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
-                    settlement_asset = row.get("quoteAsset")
-
-                if not isinstance(settlement_asset, str) or not settlement_asset.strip():
+                quote_asset = row.get("quoteAsset")
+                inverse = row.get("inverse")
+                normalized_symbol = symbol.strip().upper()
+                normalized_underlying = underlying.strip().upper()
+                if (
+                    not isinstance(settlement_asset, str)
+                    or settlement_asset.strip().upper() != "USDT"
+                    or not isinstance(quote_asset, str)
+                    or quote_asset.strip().upper() != "USDT"
+                    or inverse is not False
+                    or normalized_symbol != f"{normalized_underlying}-SWAP-USDT"
+                ):
                     continue
 
-                # Toobit uses SWAP contracts for perpetual futures.
-                # This provider-specific interpretation stays in the adapter.
-                instrument_type = (
-                    "PERPETUAL"
-                    if "-SWAP" in symbol.upper()
-                    else None
-                )
+                # Exact provider symbol + explicit metadata establish a
+                # perpetual instrument; partial "-SWAP" matches are not enough.
+                instrument_type = "PERPETUAL"
 
                 candidates.append(
                     {
@@ -697,8 +704,14 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+        request_base_asset = (
+            request.asset.strip().upper().replace("-", "/").split("/", 1)[0]
+        )
+        instrument_base_asset = (
+            execution_instrument.asset.strip().upper().replace("-", "/").split("/", 1)[0]
+        )
         if (
-            execution_instrument.asset.strip().upper() != request.asset.strip().upper()
+            instrument_base_asset != request_base_asset
             or execution_instrument.venue.strip().upper() != normalized_venue
         ):
             return AdapterOrderPreparation(
@@ -717,7 +730,7 @@ class ToobitExchangeAdapter:
                     raise RuntimeError(resolved.reason)
 
                 row = self.futures_trading_constraints(
-                    request.asset,
+                    execution_instrument.asset,
                     execution_instrument=execution_instrument,
                 )
                 if not row.allowed or not isinstance(row.data, dict):
@@ -787,7 +800,7 @@ class ToobitExchangeAdapter:
                     request=payload,
                 )
 
-            row = self.trading_constraints(request.asset)
+            row = self.trading_constraints(execution_instrument.asset)
             if not row.allowed or not isinstance(row.data, dict):
                 raise RuntimeError(row.reason)
 

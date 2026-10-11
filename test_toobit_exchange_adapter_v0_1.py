@@ -1,5 +1,7 @@
 """Focused tests for Toobit read, preparation, and gated-write contracts."""
 
+import pytest
+
 from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
 from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
 
@@ -161,6 +163,7 @@ def test_futures_instrument_resolution_uses_authoritative_settlement_metadata():
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                     "filters": [],
                 },
                 {
@@ -197,18 +200,20 @@ def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contract
             "symbols": [],
             "contracts": [
                 {
-                    "symbol": "BTC-SWAP-USDT-A",
+                    "symbol": "BTC-SWAP-USDT",
                     "status": "TRADING",
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                 },
                 {
-                    "symbol": "BTC-SWAP-USDT-B",
+                    "symbol": "BTC-SWAP-USDT",
                     "status": "TRADING",
                     "underlying": "BTC",
                     "marginToken": "USDT",
                     "quoteAsset": "USDT",
+                    "inverse": False,
                 },
             ],
         }
@@ -228,6 +233,39 @@ def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contract
 
     assert result.allowed is False
     assert result.reason == "AUTHORITATIVE_PROVIDER_INSTRUMENT_AMBIGUOUS"
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"inverse": True},
+        {"inverse": None},
+        {"marginToken": None},
+        {"quoteAsset": "USDC"},
+        {"symbol": "BTC-SWAP-USDT-ALT"},
+    ],
+)
+def test_futures_instrument_resolution_rejects_noncanonical_or_ambiguous_contract_metadata(overrides):
+    def transport(*, method, path, params, headers, base_url):
+        row = {
+            "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+            "underlying": "BTC", "marginToken": "USDT",
+            "quoteAsset": "USDT", "inverse": False,
+        }
+        for key, value in overrides.items():
+            if value is None:
+                row.pop(key, None)
+            else:
+                row[key] = value
+        return {"symbols": [], "contracts": [row]}
+
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC", venue="FUTURES", settlement_asset="USDT",
+        instrument_type="PERPETUAL", selection_source="EXECUTION_POLICY",
+        policy_version="v0.1",
+    )
+    result = ToobitExchangeAdapter(transport=transport).resolve_futures_instrument(specification)
+    assert result.allowed is False
 
 
 
@@ -301,6 +339,7 @@ def test_futures_base_quantity_converts_to_contracts_using_provider_multiplier()
                 "underlying": "BTC",
                 "marginToken": "USDT",
                 "quoteAsset": "USDT",
+                "inverse": False,
                 "contractMultiplier": "0.001",
                 "filters": [{
                     "filterType": "LOT_SIZE",
@@ -620,6 +659,7 @@ def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missi
             "contracts": [{
                 "symbol": "BTC-SWAP-USDT", "status": "TRADING",
                 "underlying": "BTC", "marginToken": "USDT",
+                "quoteAsset": "USDT", "inverse": False,
                 "contractMultiplier": "0.001", "filters": [],
             }],
         }
@@ -637,3 +677,75 @@ def test_futures_preparation_fails_closed_when_authoritative_lot_filter_is_missi
     )
     assert result.ready is False
     assert result.reason == "FUTURES_LOT_SIZE_UNAVAILABLE"
+
+
+@pytest.mark.parametrize(
+    ("direction", "venue", "expected_symbol"),
+    [
+        ("LONG", "SPOT", "BTCUSDT"),
+        ("SHORT", "FUTURES", "BTC-SWAP-USDT"),
+    ],
+)
+def test_canonical_pair_routes_same_base_asset_from_evidence_to_order_preparation(
+    direction, venue, expected_symbol
+):
+    from exchange_execution_contract import build_order_request
+    from execution_instrument_policy_v0_1 import build_execution_instrument_specification
+    from production_intent_venue_policy_v0_1 import produce_authoritative_venue_evidence
+
+    def transport(*, method, path, params, headers, base_url):
+        assert method == "GET"
+        assert path == "/api/v1/exchangeInfo"
+        return {
+            "symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{
+                    "filterType": "LOT_SIZE", "minQty": "0.001",
+                    "maxQty": "10", "stepSize": "0.001",
+                }],
+            }],
+            "contracts": [{
+                "symbol": "BTC-SWAP-USDT", "status": "TRADING",
+                "underlying": "BTC", "baseAsset": "BTC-SWAP-USDT",
+                "quoteAsset": "USDT", "marginToken": "USDT",
+                "inverse": False, "contractMultiplier": "0.001",
+                "filters": [{
+                    "filterType": "LOT_SIZE", "minQty": "1",
+                    "maxQty": "1000", "stepSize": "1",
+                }],
+            }],
+        }
+
+    request = build_order_request(
+        asset="BTC/USDT",
+        direction=direction,
+        order_type="MARKET",
+        risk={"position_quantity": "0.003"},
+        entry_price=None,
+        reference_price="50000",
+        intent_id=f"intent-{venue.lower()}-pair",
+        snapshot_id="snapshot-pair",
+        timestamp="2026-10-11T12:00:00Z",
+        decision_id="decision-pair",
+    )
+    adapter = ToobitExchangeAdapter(transport=transport)
+    selection, instrument = produce_authoritative_venue_evidence(
+        request=request, adapter=adapter,
+    )
+    assert selection["venue"] == venue
+    assert instrument["instrument_id"] == expected_symbol
+    assert instrument["intent_id"] == request.intent_id
+
+    execution_instrument = build_execution_instrument_specification(
+        asset=request.asset,
+        venue=venue,
+    )
+    assert execution_instrument.asset == "BTC"
+    preparation = adapter.prepare_order(
+        request,
+        venue=venue,
+        execution_instrument=execution_instrument,
+    )
+    assert preparation.ready is True
+    assert preparation.request["symbol"] == expected_symbol

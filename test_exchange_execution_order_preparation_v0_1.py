@@ -46,6 +46,8 @@ def _transport(*, method, path, params, headers, base_url):
                 "symbol": "BTC-SWAP-USDT",
                 "underlying": "BTC",
                 "marginToken": "USDT",
+                "quoteAsset": "USDT",
+                "inverse": False,
                 "status": "TRADING",
                 "contractMultiplier": "0.001",
                 "filters": [

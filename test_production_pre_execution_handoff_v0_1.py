@@ -1,4 +1,5 @@
 import pytest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 
 from exchange_execution_contract import CanonicalOrderRequest
@@ -81,6 +82,7 @@ def _venue_evidence():
             "asset": "BTC/USDT",
             "venue": "FUTURES",
             "intent_id": "intent",
+            "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
             "observed_at": selected_at,
         },
         "instrument_evidence": {
@@ -88,8 +90,10 @@ def _venue_evidence():
             "provider": "TOOBIT",
             "asset": "BTC/USDT",
             "venue": "FUTURES",
-            "instrument_id": "BTCUSDT-PERP",
+            "intent_id": "intent",
+            "instrument_id": "BTC-SWAP-USDT",
             "instrument_status": "TRADING",
+            "policy_version": "DIRECTIONAL_SPOT_LONG_FUTURES_SHORT_V0_1",
             "observed_at": instrument_at,
         },
     }
@@ -139,3 +143,19 @@ def test_explicit_venue_cannot_override_authoritative_selection():
     )
     assert result["context"] is None
     assert result["status"] == "PRE_EXECUTION_BLOCKED_VENUE_EVIDENCE_MISMATCH"
+
+
+def test_pair_asset_survives_handoff_and_becomes_base_asset_execution_spec():
+    values = _inputs()
+    values["request"] = replace(values["request"], asset="BTC/USDT")
+    values.update(_venue_evidence())
+
+    result = build_production_pre_execution_handoff(
+        **values,
+        adapter=_Adapter(),
+    )
+
+    assert result["status"] == "FINAL_ATTEMPT_CONTEXT_READY_EXECUTION_STILL_GATED"
+    assert result["venue_resolution"]["instrument_id"] == "BTC-SWAP-USDT"
+    assert result["context"]["execution_instrument"].asset == "BTC"
+    assert result["context"]["execution_instrument"].venue == "FUTURES"
