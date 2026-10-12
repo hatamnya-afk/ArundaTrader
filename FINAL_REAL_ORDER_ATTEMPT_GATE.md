@@ -1,5 +1,5 @@
 # FINAL REAL-ORDER ATTEMPT GATE — MANAGEMENT REVIEW PACKAGE
-## ArundaTrader — 2026-10-09
+## ArundaTrader — 2026-10-12
 
 ### PURPOSE
 Define the exact boundary that must be satisfied before a future real provider order attempt can be made under the already-authorized real-production phase.
@@ -27,7 +27,7 @@ Once explicitly authorized:
 - Provider-neutral execution-attempt contract: VERIFIED / PASS.
 - Core remains exchange-agnostic.
 - Toobit remains a replaceable adapter.
-- Execution authorization remains FALSE until the separate phase-entry decision is explicitly granted.
+- The phase-entry decision is now explicitly AUTHORIZED (see MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md). Technical execution authorization remains FALSE until a current request and valid, unexpired standing mandate pass every technical gate.
 
 ### OWNERSHIP
 
@@ -113,17 +113,16 @@ No contract weakening, fabricated acceptance, inferred permission, or synthetic 
 
 ### MANAGEMENT SAFETY BOUNDARY
 
-Until the separate phase-entry decision is explicitly authorized:
-- `EXECUTION AUTHORIZATION = FALSE`
-- provider write = forbidden
-- order = forbidden
-- cancellation = forbidden
-- withdrawal = forbidden
-- database mutation = forbidden
-- automatic pipeline wiring = forbidden
-- execution activation = forbidden
+The phase-entry decision is already explicitly authorized by MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md. That management decision does not override unresolved technical gates.
 
-After phase-entry authorization, the standing mandate becomes the management authorization context. **No new management authorization is requested for individual trades.**
+Current technical interlocks remain:
+- EXECUTION AUTHORIZATION = FALSE until a current ready request and valid, unexpired standing mandate pass technical validation.
+- Provider order submission remains fail-closed in the current Toobit adapter.
+- Order submission/cancellation/withdrawal and provider writes remain forbidden until their specific technical contracts are verified.
+- Database mutation remains forbidden.
+- No production runtime or live order is authorized by this review document.
+
+Once technical gates pass, the standing mandate is the management authorization context. **No new management authorization is requested for individual trades.**
 
 ### EVIDENCE REQUIRED FOR FUTURE AUTHORIZED OPERATION
 
@@ -144,20 +143,26 @@ Record existing real evidence without fabrication or backfill:
 
 The standing mandate itself is not recreated for each attempt.
 
-### MANAGEMENT DECISION
+### CURRENT MANAGEMENT AND TECHNICAL DISPOSITION
 
-CURRENT DECISION: **PREPARE / REVIEW ONLY**
+- Management phase-entry decision: **AUTHORIZED — 2026-10-12**.
+- Current operational branch: operational-main-20261007.
+- Technical real-order gate: **OPEN / BLOCKED / NOT VERIFIED**.
+- Current Toobit adapter: order_submission=False; submit entrypoints fail closed with EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED.
+- Standing mandate artifact: **incomplete for runtime use** because MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md does not carry the required timezone-aware issued_at and expires_at fields. No expiry has been fabricated; management's authorization remains recorded, while technical validation must reject an incomplete mandate.
+- PR #31 (Add atomic per-intent claim store contract) remains Draft and unmerged. Its offline CI run #38237269560 passed 88 tests in 1.28s. This validates only offline contract/recovery fixtures and isolated temporary SQLite, not Toobit API semantics or live execution.
+- Official Toobit material reviewed in PR #31 does not establish client-order-ID maximum length/allowed charset, uniqueness/reuse scope after terminal states, duplicate POST replay semantics, lookup consistency/retention, or exhaustive history recovery by client ID. These must be supported by authoritative documentation or written provider confirmation. Do not guess values.
+- Global Selection Quality Loop focused CI passed 11 tests on the operational branch; production evidence accumulation and calibration effectiveness remain NOT VERIFIED.
 
-No real order is authorized by this document.
+### REQUIRED NEXT ACTIONS — FAIL-CLOSED
 
-The next management decision is binary:
-- DENY / DEFER phase entry
-- or **EXPLICITLY AUTHORIZE THE REAL-PRODUCTION TRADING PHASE UNDER THE STANDING OPERATIONAL MANDATE**
+1. Complete a formally time-bounded standing-mandate observation without inventing issuance/expiry timestamps or silently choosing a policy.
+2. Obtain authoritative Toobit documentation or written support confirmation for the unresolved client-order-ID and ambiguous-recovery semantics.
+3. Implement/verify the provider adapter submit path only against verified constraints; keep unknown outcomes blocked and never blindly retry.
+4. Run focused CI on the intended operational code lineage and verify commit/branch identity.
+5. Verify order-attempt outcome capture and reconciliation contracts before any production runtime.
+6. Do not run a production runtime, send an order, cancel, withdraw, enable execution, or write to the provider/database while any gate remains open.
 
-If phase-entry authorization is granted later, it must be recorded separately. It must not be inferred from this document, a passing test, readiness, account balance, or provider metadata.
-
-### STOP
-
-After this gate is verified, Builder stops and waits for the separate explicit management **phase-entry** decision.
+The standing phase-entry mandate means no per-trade management approval is required; it does **not** waive any of the above technical gates.
 
 # END
