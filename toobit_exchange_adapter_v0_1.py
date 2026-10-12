@@ -913,6 +913,24 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+    def stable_client_order_id_policy(self) -> dict[str, Any]:
+        """Expose only the currently evidenced policy state.
+
+        Toobit docs inspected do not establish the allowed client-ID charset or
+        maximum length. Therefore this policy is deliberately unverified and
+        the final attempt boundary must fail closed until those constraints are
+        authoritatively confirmed. Do not infer limits from examples.
+        """
+        return {
+            "provider_namespace": "TOOBIT-FUTURES",
+            "prefix": "AR",
+            "max_length": None,
+            "allowed_pattern": None,
+            "verified": False,
+            "policy_reference": "https://api-docs.toobit.com/api/usdt-m-api-v2",
+            "verification_blocker": "TOOBIT_CLIENT_ORDER_ID_CHARSET_AND_MAX_LENGTH_UNVERIFIED",
+        }
+
     def bind_stable_client_order_id(
         self,
         preparation: AdapterOrderPreparation,
