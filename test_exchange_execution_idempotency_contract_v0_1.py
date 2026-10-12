@@ -1,7 +1,11 @@
 """Offline tests for deterministic provider client-order ID derivation."""
 import pytest
 
-from exchange_execution_idempotency_contract_v0_1 import (\n    derive_client_order_id,\n    derive_validated_client_order_id,\n    validate_supplied_client_order_id,\n)
+from exchange_execution_idempotency_contract_v0_1 import (
+    derive_client_order_id,
+    derive_validated_client_order_id,
+    validate_supplied_client_order_id,
+)
 
 def test_same_provider_and_intent_produce_same_id_across_calls():
     first = derive_client_order_id(provider_namespace="TOOBIT-FUTURES", intent_id="INTENT-123", max_length=32)
