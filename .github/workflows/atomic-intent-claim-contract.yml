@@ -14,6 +14,10 @@ on:
     branches:
       - "fix/atomic-intent-claim-store-20261012"
     paths:
+      - "exchange_execution_idempotency_contract_v0_1.py"
+      - "exchange_execution_order_reconciliation_contract_v0_1.py"
+      - "test_exchange_execution_idempotency_contract_v0_1.py"
+      - "test_exchange_execution_order_reconciliation_contract_v0_1.py"
       - "exchange_execution_atomic_intent_claim_store_v0_1.py"
       - "test_exchange_execution_atomic_intent_claim_store_v0_1.py"
       - ".github/workflows/atomic-intent-claim-contract.yml"
