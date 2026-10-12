@@ -96,3 +96,44 @@ def test_missing_credentials_or_transport_fail_closed_without_network_fallback()
     )
     assert result.state == "ERROR"
     assert result.detail_code == "TOOBIT_LOOKUP_ERROR:RuntimeError"
+
+
+def test_stable_client_order_id_binding_replaces_intent_id_in_prepared_payload():
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    adapter = ToobitExchangeAdapter()
+    prepared = AdapterOrderPreparation(
+        ready=True,
+        reason="READY",
+        adapter_name="TOOBIT",
+        venue="FUTURES",
+        request={"symbol": "BTCUSDT", "newClientOrderId": "INTENT-OLD", "quantity": "1"},
+    )
+
+    bound = adapter.bind_stable_client_order_id(prepared, "AR-STABLE-001")
+
+    assert bound.ready is True
+    assert bound.request["newClientOrderId"] == "AR-STABLE-001"
+    assert bound.request["symbol"] == "BTCUSDT"
+    assert prepared.request["newClientOrderId"] == "INTENT-OLD"
+
+
+def test_stable_client_order_id_binding_rejects_missing_id_and_invalid_payload():
+    from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
+
+    adapter = ToobitExchangeAdapter()
+    prepared = AdapterOrderPreparation(
+        ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT", request={}
+    )
+    missing = adapter.bind_stable_client_order_id(prepared, "  ")
+    invalid = adapter.bind_stable_client_order_id(
+        AdapterOrderPreparation(
+            ready=True, reason="READY", adapter_name="TOOBIT", venue="SPOT", request=None
+        ),
+        "AR-STABLE-002",
+    )
+
+    assert missing.ready is False
+    assert missing.reason == "STABLE_CLIENT_ORDER_ID_REQUIRED"
+    assert invalid.ready is False
+    assert invalid.reason == "TOOBIT_ORDER_PAYLOAD_INVALID"
