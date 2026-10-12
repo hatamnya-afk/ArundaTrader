@@ -59,12 +59,15 @@ def _latest_candle(market_data: Any, asset: str) -> tuple[int, float, str]:
     if not candles:
         raise ValueError(f"MARKET_CANDLES_MISSING:{asset}")
     candle = candles[-1]
-    ts = _timestamp(_mapping_value(candle, "timestamp"), "candle.timestamp")
+    timestamp_value = _mapping_value(candle, "timestamp")
     price_value = _mapping_value(candle, "close")
-    if price_value is None:
+    if isinstance(candle, Sequence) and not isinstance(candle, (str, bytes)) and len(candle) >= 5:
         # CCXT-style OHLCV arrays: [timestamp, open, high, low, close, volume].
-        if isinstance(candle, Sequence) and not isinstance(candle, (str, bytes)) and len(candle) >= 5:
+        if timestamp_value is None:
+            timestamp_value = candle[0]
+        if price_value is None:
             price_value = candle[4]
+    ts = _timestamp(timestamp_value, "candle.timestamp")
     price = _finite_positive(price_value, "candle.close")
     return ts, price, source
 
