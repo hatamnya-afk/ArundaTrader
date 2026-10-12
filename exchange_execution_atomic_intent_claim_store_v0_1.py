@@ -83,7 +83,8 @@ class SQLiteIntentClaimStore:
         parent = Path(self.path).expanduser().resolve().parent
         if not parent.exists():
             raise ValueError("CLAIM_STORE_PARENT_DIRECTORY_MISSING")
-        with self._connect() as connection:
+        connection = self._connect()
+        try:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS execution_intent_claim (
@@ -109,6 +110,8 @@ class SQLiteIntentClaimStore:
                 )
                 """
             )
+        finally:
+            connection.close()
 
     @staticmethod
     def _required(value: str, reason: str) -> str:
@@ -204,6 +207,22 @@ class SQLiteIntentClaimStore:
             if old_status in (PROVIDER_ACCEPTED, PROVIDER_REJECTED) and status != old_status:
                 connection.execute("ROLLBACK")
                 raise ValueError("TERMINAL_CLAIM_STATE_CANNOT_CHANGE")
+            allowed_next = {
+                CLAIMED: {CLAIMED, SUBMISSION_OUTCOME_UNKNOWN, RECONCILIATION_REQUIRED, PROVIDER_ACCEPTED, PROVIDER_REJECTED},
+                SUBMISSION_OUTCOME_UNKNOWN: {SUBMISSION_OUTCOME_UNKNOWN, RECONCILIATION_REQUIRED, PROVIDER_ACCEPTED, PROVIDER_REJECTED},
+                RECONCILIATION_REQUIRED: {RECONCILIATION_REQUIRED, PROVIDER_ACCEPTED, PROVIDER_REJECTED},
+                PROVIDER_ACCEPTED: {PROVIDER_ACCEPTED},
+                PROVIDER_REJECTED: {PROVIDER_REJECTED},
+            }
+            if status not in allowed_next.get(old_status, set()):
+                connection.execute("ROLLBACK")
+                raise ValueError("CLAIM_STATE_TRANSITION_INVALID")
+            if status == PROVIDER_ACCEPTED and (not exchange_order_id or not provider_status):
+                connection.execute("ROLLBACK")
+                raise ValueError("ACCEPTED_ORDER_EVIDENCE_REQUIRED")
+            if status == PROVIDER_REJECTED and not (provider_status or detail_code):
+                connection.execute("ROLLBACK")
+                raise ValueError("REJECTION_EVIDENCE_REQUIRED")
             if old_status == RECONCILIATION_REQUIRED and status == CLAIMED:
                 connection.execute("ROLLBACK")
                 raise ValueError("CLAIM_CANNOT_BE_REOPENED")
@@ -237,11 +256,14 @@ class SQLiteIntentClaimStore:
     def get(self, *, provider_namespace: str, intent_id: str) -> Optional[IntentClaim]:
         provider = self._required(provider_namespace, "PROVIDER_NAMESPACE_REQUIRED").upper()
         intent = self._required(intent_id, "CANONICAL_INTENT_ID_REQUIRED")
-        with self._connect() as connection:
+        connection = self._connect()
+        try:
             row = connection.execute(
                 "SELECT * FROM execution_intent_claim WHERE provider_namespace = ? AND intent_id = ?",
                 (provider, intent),
             ).fetchone()
+        finally:
+            connection.close()
         return IntentClaim(**dict(row)) if row is not None else None
 
 
