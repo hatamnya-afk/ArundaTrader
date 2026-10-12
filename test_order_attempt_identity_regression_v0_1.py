@@ -94,12 +94,13 @@ class FakeAdapter:
         raise AssertionError("cancel must not be used")
 
 
-def _run(adapter, evidence_path=None):
+def _run(adapter, evidence_path=None, stable_client_order_id="AR-TEST-CLIENT-001"):
     return attempt_prepared_order(
         request=request(), readiness_observation=readiness(),
         authorization_observation=authorization(), adapter=adapter,
         venue="SPOT", execution_instrument="BTCUSDT",
         evidence_stream_path=evidence_path,
+        stable_client_order_id=stable_client_order_id,
     )
 
 
@@ -128,6 +129,17 @@ def test_submission_exception_is_unknown_and_both_events_are_recorded(tmp_path):
     assert adapter.attempt_evidence_seen_before_submit
     assert [row["event_type"] for row in rows] == ["ORDER_ATTEMPTED", "PROVIDER_RESULT"]
     assert rows[1]["status"] == "SUBMISSION_OUTCOME_UNKNOWN"
+
+
+def test_missing_stable_client_order_id_blocks_before_provider_call(tmp_path):
+    stream = tmp_path / "events.jsonl"
+    adapter = FakeAdapter(evidence_path=stream)
+    result = _run(adapter, stream, stable_client_order_id=None)
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "STABLE_CLIENT_ORDER_ID_REQUIRED"
+    assert not adapter.submit_called
+    assert not stream.exists()
 
 
 def test_missing_evidence_path_blocks_before_provider_call():
