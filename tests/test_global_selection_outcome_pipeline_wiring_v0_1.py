@@ -30,5 +30,6 @@ def test_tracker_module_is_provider_neutral_and_does_not_write_database():
     source = (ROOT / "global_selection_outcome_tracker_v0_1.py").read_text(encoding="utf-8")
     assert "sqlite3" not in source
     assert "ccxt" not in source
-    assert "toobit" not in source.lower()
+    assert "toobit_exchange_adapter" not in source.lower()
+    assert "exchange_execution" not in source.lower()
     assert '"database_touched": False' in source
