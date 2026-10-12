@@ -155,3 +155,48 @@ def test_provider_acceptance_requires_order_identity_evidence(tmp_path):
     store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
     with pytest.raises(ValueError, match="ACCEPTED_ORDER_EVIDENCE_REQUIRED"):
         store.transition(provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED)
+
+
+def test_identical_provider_evidence_is_idempotent(tmp_path):
+    store = SQLiteIntentClaimStore(tmp_path / "claims.sqlite3")
+    store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
+    args = dict(
+        provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED,
+        trade_event_id="TE-1", decision_id="D-1", exchange_order_id="EX-1",
+        provider_status="NEW", evidence_event_id="EV-1",
+    )
+    first = store.transition(**args)
+    second = store.transition(**args)
+    assert first.exchange_order_id == second.exchange_order_id == "EX-1"
+    assert first.evidence_event_id == second.evidence_event_id == "EV-1"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("decision_id", "D-OTHER"),
+        ("exchange_order_id", "EX-OTHER"),
+        ("evidence_event_id", "EV-OTHER"),
+        ("trade_event_id", "TE-OTHER"),
+    ],
+)
+def test_conflicting_evidence_cannot_overwrite_existing_claim(tmp_path, field, value):
+    store = SQLiteIntentClaimStore(tmp_path / "claims.sqlite3")
+    store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
+    store.transition(
+        provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED,
+        trade_event_id="TE-1", decision_id="D-1", exchange_order_id="EX-1",
+        provider_status="NEW", evidence_event_id="EV-1",
+    )
+    update = {
+        "provider_namespace": "P", "intent_id": "I-1", "status": PROVIDER_ACCEPTED,
+        "trade_event_id": "TE-1", "decision_id": "D-1", "exchange_order_id": "EX-1",
+        "provider_status": "NEW", "evidence_event_id": "EV-1",
+    }
+    update[field] = value
+    with pytest.raises(ValueError, match="EVIDENCE_IDENTITY_CONFLICT"):
+        store.transition(**update)
+    current = store.get(provider_namespace="P", intent_id="I-1")
+    assert current.decision_id == "D-1"
+    assert current.exchange_order_id == "EX-1"
+    assert current.evidence_event_id == "EV-1"
