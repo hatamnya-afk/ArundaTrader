@@ -88,6 +88,9 @@ def test_no_trade_direction_keeps_directional_quality_unscored():
     assert result["latest_absolute_return_pct"] == pytest.approx(-5.0)
     assert result["latest_directional_return_pct"] is None
     assert result["max_favorable_excursion_pct"] is None
+    assert result["counterfactual_best_direction"] == "SHORT"
+    assert result["counterfactual_best_return_pct"] == pytest.approx(5.0)
+    assert result["counterfactual_note"] == "HINDSIGHT_REVIEW_ONLY_NOT_A_TRADABLE_SIGNAL"
 
 
 def test_reference_selection_is_provider_neutral_and_requires_real_market_data():
