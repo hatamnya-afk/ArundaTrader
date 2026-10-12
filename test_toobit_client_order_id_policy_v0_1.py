@@ -18,6 +18,10 @@ def test_toobit_policy_records_only_officially_supported_futures_id_facts():
     assert evidence["submit_parameter"] == "newClientOrderId"
     assert evidence["lookup_parameter"] == "origClientOrderId"
     assert evidence["lookup_endpoint"] == "GET /api/v2/futures/order"
+    assert evidence["history_endpoint"] == "GET /api/v2/futures/history-orders"
+    assert evidence["history_cursor"] == "orderId"
+    assert evidence["history_limit_default"] == 20
+    assert evidence["history_limit_max"] == 1000
     assert evidence["duplicate_error_code"] == -1141
     assert evidence["duplicate_error_name"] == "ORDER_DUPLICATED"
     assert evidence["documented_uniqueness_scope"] == "among open orders"
@@ -34,6 +38,9 @@ def test_toobit_policy_does_not_promote_partial_evidence_to_execution_approval()
     assert "CLIENT_ORDER_ID_ALLOWED_CHARSET" in policy["unverified"]
     assert "RETRY_OR_REPLAY_IDEMPOTENCY_SEMANTICS" in policy["unverified"]
     assert "LOOKUP_CONSISTENCY_AND_RETENTION" in policy["unverified"]
+    assert "HISTORY_LOOKUP_COMPLETENESS_AND_PAGINATION" in policy["unverified"]
+    assert "WRITTEN_PROVIDER_CONFIRMATION" in policy["unverified"]
+    assert policy["evidence_record"] == "TOOBIT_CLIENT_ORDER_ID_OFFICIAL_EVIDENCE_V0_2.md"
     assert policy["verification_blocker"] == (
         "TOOBIT_CLIENT_ORDER_ID_CHARSET_AND_MAX_LENGTH_UNVERIFIED"
     )
@@ -52,3 +59,11 @@ def test_toobit_official_duplicate_error_is_not_misrepresented_as_idempotent_rep
     assert evidence["duplicate_error_name"] == "ORDER_DUPLICATED"
     assert "RETRY_OR_REPLAY_IDEMPOTENCY_SEMANTICS" in policy["unverified"]
     assert policy["verified"] is False
+
+
+def test_official_evidence_record_is_not_an_execution_policy_approval():
+    policy = toobit_futures_client_order_id_policy()
+    assert policy["evidence_status"] == "PARTIALLY_VERIFIED"
+    assert policy["verified"] is False
+    assert policy["max_length"] is None
+    assert policy["allowed_pattern"] is None
