@@ -78,4 +78,33 @@ The provider is the authority for whether an otherwise valid request is accepted
 
 Continue by verifying each outstanding precondition against current repository/runtime evidence. Do not infer a successful live path from offline tests, and do not activate the pipeline until the exact technical gate is verified.
 
+
+## STATIC TECHNICAL GATE AUDIT — 2026-10-12
+
+Scope: source inspection only. No production runtime, live order, provider write, database access/mutation, or pipeline activation was performed.
+
+### Confirmed
+1. Management phase-entry decision is recorded as AUTHORIZED in `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`.
+2. `management_execution_authorization_v0_1.py` emits a structured `authorization_observation` for an authorized standing mandate and requires timezone-aware `issued_at` and future `expires_at`.
+3. `execution_authorization_boundary_v0_1.py` validates the active mandate, expiry, REAL_PRODUCTION environment, SPOT/FUTURES scope, and request venue. It does not itself submit orders.
+4. `execution_attempt_readiness_contract_v0_1.py` requires a valid canonical request and a validated execution-ready package, while preserving `execution_authorized=False` and `provider_binding=DEFERRED`.
+5. `exchange_execution_order_attempt_boundary_v0_1.py` would call `adapter.submit_prepared_order` after its gates pass. That makes adapter capability and the active gate evidence material prerequisites.
+6. `toobit_exchange_adapter_v0_1.py` currently advertises `order_submission=False`, `order_cancellation=False`, and its class documentation describes a read-only adapter. No supported live submit operation was verified in this adapter.
+7. PR #31 remains Draft/unmerged. Its CI evidence (88 tests) is offline/mock/isolated-SQLite evidence only, not live-provider verification.
+
+### Blocking evidence before any real order attempt
+- **ACTIVE MANDATE INSTANCE:** The management code requires `issued_at` and `expires_at`, and the technical boundary rejects expired/missing expiry. The policy/repository does not establish a mandate duration. Do not invent one or manufacture an active observation from a decision record alone.
+- **PROVIDER SUBMISSION CAPABILITY:** Current Toobit adapter is read-only and declares submission disabled; no actual provider submit path has been verified.
+- **ORDER-ID / AMBIGUOUS RECOVERY:** Toobit client-order-ID charset/maximum length, reuse scope, duplicate POST semantics, lookup consistency/retention, and exhaustive recovery remain unverified in PR #31. The fail-closed block must remain.
+- **END-TO-END EVIDENCE:** A current real request flowing through Decision → Risk → Trade Gate → readiness → authorization → provider result → fill/not-filled → real outcome/observation has not been evidenced by this static audit.
+- **TEST EXECUTION:** The four governance updates and current branch code were not run in a local test environment by this audit. No new test-pass claim is made.
+
+### Verdict
+**MANAGEMENT PHASE ENTRY: AUTHORIZED.**
+**TECHNICAL REAL-ORDER READINESS: BLOCKED / NOT VERIFIED.**
+**EXECUTION AUTHORIZATION: FALSE.**
+**LIVE ORDER / PROVIDER WRITE / DATABASE WRITE / PIPELINE ACTIVATION: NOT PERFORMED AND NOT CLEARED.**
+
+Next work is to resolve the active-mandate expiry policy and provider execution/recovery contract, then add/run focused tests and re-evaluate the final gate. This is not a request for per-trade approval.
+
 # END
