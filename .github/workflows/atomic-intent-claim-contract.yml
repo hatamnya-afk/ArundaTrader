@@ -15,6 +15,7 @@ on:
       - "toobit_exchange_adapter_v0_1.py"
       - "toobit_client_order_id_policy_v0_1.py"
       - "test_toobit_client_order_id_policy_v0_1.py"
+      - "TOOBIT_CLIENT_ORDER_ID_OFFICIAL_EVIDENCE_V0_2.md"
       - "test_toobit_client_order_lookup_v0_1.py"
       - "test_order_idempotency_cycle_contract_v0_1.py"
       - "mcp01_compact_event_evidence_v0_1.py"
