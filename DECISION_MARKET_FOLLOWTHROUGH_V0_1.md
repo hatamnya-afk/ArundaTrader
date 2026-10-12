@@ -5,7 +5,7 @@ Measure how real market prices behaved after an authoritative decision, independ
 
 ## Inputs
 - Persisted, authoritative `decision_id`, asset, LONG/SHORT direction, decision timestamp (Unix milliseconds), decision reference price, and one source identifier.
-- Actual OHLC candles for the same asset and same source, with candle-close timestamps strictly after the decision and an observed candle ending exactly at the requested horizon.
+- Actual OHLC candles for the same asset and same source, each carrying open and close timestamps. A candle contributes only when its open timestamp is strictly after the decision; the evaluation requires an observed candle closing exactly at the requested horizon.
 - The horizon is supplied by the caller; this contract does not invent a universal horizon.
 
 ## Outputs
