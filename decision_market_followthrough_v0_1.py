@@ -23,8 +23,9 @@ def evaluate_followthrough(
 
     Decision keys: decision_id, asset, direction, decision_timestamp_ms,
     decision_price, source_id.
-    Candle keys: timestamp_ms, asset, source_id, open, high, low, close.
-    Candle timestamps represent the source candle's close time. The endpoint
+    Candle keys: start_timestamp_ms, timestamp_ms (close time), asset, source_id,
+    open, high, low, close. Only candles whose open time is strictly after the
+    decision may contribute. The endpoint
     is the first eligible candle at/after horizon_end_ms. If it is absent,
     return INCOMPLETE rather than treating a shorter window as a full horizon.
     """
@@ -53,7 +54,12 @@ def evaluate_followthrough(
         if not isinstance(raw, Mapping):
             raise ValueError("each candle must be a mapping")
         ts = _positive_int(raw.get("timestamp_ms"), "candle.timestamp_ms")
-        if ts <= decision_ts:
+        start_ts = _positive_int(raw.get("start_timestamp_ms"), "candle.start_timestamp_ms")
+        if ts < start_ts:
+            raise ValueError("candle close timestamp precedes its open timestamp")
+        # A candle overlapping the decision may contain pre-decision highs/lows.
+        # Exclude it entirely rather than contaminating follow-through metrics.
+        if ts <= decision_ts or start_ts <= decision_ts:
             continue
         if raw.get("asset") != decision["asset"]:
             raise ValueError("asset mismatch in post-decision candle")
@@ -67,7 +73,7 @@ def evaluate_followthrough(
             raise ValueError("invalid candle high")
         if values["low"] > min(values["open"], values["close"], values["high"]):
             raise ValueError("invalid candle low")
-        eligible.append({"timestamp_ms": ts, **values})
+        eligible.append({"start_timestamp_ms": start_ts, "timestamp_ms": ts, **values})
 
     eligible.sort(key=lambda item: item["timestamp_ms"])
     eligible = [c for c in eligible if c["timestamp_ms"] <= horizon_end]
