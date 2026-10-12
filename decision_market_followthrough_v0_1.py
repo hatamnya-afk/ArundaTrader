@@ -25,9 +25,9 @@ def evaluate_followthrough(
     decision_price, source_id.
     Candle keys: start_timestamp_ms, timestamp_ms (close time), asset, source_id,
     open, high, low, close. Only candles whose open time is strictly after the
-    decision may contribute. The endpoint
-    is the first eligible candle at/after horizon_end_ms. If it is absent,
-    return INCOMPLETE rather than treating a shorter window as a full horizon.
+    decision may contribute. A candle closing exactly at horizon_end_ms is
+    required; if absent, return INCOMPLETE rather than treating a shorter or
+    longer window as the requested horizon.
     """
     required_decision = (
         "decision_id", "asset", "direction", "decision_timestamp_ms",
@@ -96,8 +96,8 @@ def evaluate_followthrough(
             "is_trade_pnl": False,
         }
 
-    # Endpoint inclusion is exact by design: a candle after the horizon is
-    # not silently substituted. Caller must supply the candle closing at it.
+    # The horizon endpoint is exact: a candle after the horizon is never
+    # substituted for a missing candle at the requested endpoint.
     window = [c for c in eligible if c["timestamp_ms"] <= endpoint["timestamp_ms"]]
     if not window or endpoint["timestamp_ms"] != horizon_end:
         return {
