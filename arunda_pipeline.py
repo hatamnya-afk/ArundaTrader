@@ -5260,6 +5260,18 @@ def main() -> int:
             f"persisted:{global_selection_tracking['events_persisted']}|"
             f"skipped:{len(global_selection_tracking['skipped'])}"
         )
+        quality_horizons = global_selection_tracking["quality_summary"]["overall"]["horizons"]
+        print(
+            "GLOBAL_SELECTION_QUALITY="
+            + "|".join(
+                f"{horizon}:scored={quality_horizons[horizon]['direction_scored_count']},"
+                f"wins={quality_horizons[horizon]['wins']},"
+                f"losses={quality_horizons[horizon]['losses']},"
+                f"win_rate_pct={quality_horizons[horizon]['win_rate_pct']},"
+                f"pending={quality_horizons[horizon]['pending_count']}"
+                for horizon in ("1h", "4h", "24h")
+            )
+        )
 
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
