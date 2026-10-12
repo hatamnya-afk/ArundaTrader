@@ -19,7 +19,7 @@ The management decision does not itself authorize a live submission. Static insp
 - `PROVIDER WRITE = FORBIDDEN` while any required gate evidence is missing.
 - `DATABASE WRITE = FORBIDDEN`.
 - `arunda_pipeline.py` is wired to the provider-neutral Global Selection Quality Loop after authoritative Decision birth and before Dynamic Risk; this does not activate order execution or provider writes.
-- PR #31 remains Draft and unmerged.
+- PR #31 remains Draft and unmerged; its base is the candidate branch `fix/stable-client-order-id-contract-20261012`, not the operational branch, so it is not eligible for direct promotion to production. Offline CI run 38237269560 passed 88 tests, but official Toobit client-ID and ambiguous-recovery guarantees remain unresolved.
 - No production runtime, live order, cancel, withdrawal, or live provider write as part of this verification.
 
 ## ALLOWED NOW
