@@ -18,7 +18,8 @@ def decision(direction="LONG"):
 
 
 def candle(ts, o, h, l, c, source="kucoin:BTC/USDT:1m", asset="BTC/USDT"):
-    return {"timestamp_ms": ts, "asset": asset, "source_id": source,
+    return {"start_timestamp_ms": ts - 400, "timestamp_ms": ts,
+            "asset": asset, "source_id": source,
             "open": o, "high": h, "low": l, "close": c}
 
 
@@ -84,6 +85,29 @@ class FollowthroughTests(unittest.TestCase):
             horizon_end_ms=2000,
         )
         self.assertEqual(result["quality_metrics"]["max_favorable_excursion_pct"], 2.0)
+
+    def test_candle_overlapping_decision_is_excluded(self):
+        result = evaluate_followthrough(
+            decision=decision(),
+            candles=[
+                {"start_timestamp_ms": 800, "timestamp_ms": 1200, "asset": "BTC/USDT",
+                 "source_id": "kucoin:BTC/USDT:1m", "open": 100, "high": 150,
+                 "low": 50, "close": 101},
+                candle(2000, 100, 102, 99, 101),
+            ],
+            horizon_end_ms=2000,
+        )
+        self.assertEqual(result["quality_metrics"]["max_favorable_excursion_pct"], 2.0)
+
+    def test_close_before_open_timestamp_rejected(self):
+        with self.assertRaisesRegex(ValueError, "close timestamp precedes"):
+            evaluate_followthrough(
+                decision=decision(),
+                candles=[{"start_timestamp_ms": 2100, "timestamp_ms": 2000,
+                          "asset": "BTC/USDT", "source_id": "kucoin:BTC/USDT:1m",
+                          "open": 100, "high": 102, "low": 99, "close": 101}],
+                horizon_end_ms=2000,
+            )
 
     def test_horizon_must_be_after_decision(self):
         with self.assertRaisesRegex(ValueError, "horizon_end_ms must be later"):
