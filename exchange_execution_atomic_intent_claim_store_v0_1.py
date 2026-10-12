@@ -217,10 +217,12 @@ class SQLiteIntentClaimStore:
             if status not in allowed_next.get(old_status, set()):
                 connection.execute("ROLLBACK")
                 raise ValueError("CLAIM_STATE_TRANSITION_INVALID")
-            if status == PROVIDER_ACCEPTED and (not exchange_order_id or not provider_status):
+            if status == PROVIDER_ACCEPTED and not all((
+                trade_event_id, decision_id, exchange_order_id, provider_status, evidence_event_id
+            )):
                 connection.execute("ROLLBACK")
                 raise ValueError("ACCEPTED_ORDER_EVIDENCE_REQUIRED")
-            if status == PROVIDER_REJECTED and not (provider_status or detail_code):
+            if status == PROVIDER_REJECTED and not ((provider_status or detail_code) and evidence_event_id):
                 connection.execute("ROLLBACK")
                 raise ValueError("REJECTION_EVIDENCE_REQUIRED")
             if old_status == RECONCILIATION_REQUIRED and status == CLAIMED:
