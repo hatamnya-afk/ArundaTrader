@@ -151,7 +151,10 @@ def test_track_cycle_records_selection_then_real_followup(tmp_path):
     )
     assert second["observations_seen"] == 1
     assert second["outcomes"][0]["latest_directional_return_pct"] == pytest.approx(2.0)
-    assert len(load_events(path)) == 2
+    persisted = load_events(path)
+    assert sum(row["event_type"] == "SELECTION" for row in persisted) == 1
+    assert sum(row["event_type"] == "MARKET_OBSERVATION" for row in persisted) == 1
+    assert sum(row["event_type"] == "OUTCOME_EVALUATION" for row in persisted) == 1
 
 
 def test_missing_decision_id_is_reported_not_fabricated(tmp_path):
