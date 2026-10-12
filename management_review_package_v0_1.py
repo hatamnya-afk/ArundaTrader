@@ -69,8 +69,8 @@ def build_management_review_package(
         raise ValueError("capital_policy is required")
 
     markets = tuple(dict.fromkeys(str(m).upper() for m in allowed_markets))
-    if not markets or not set(markets).issubset(ALLOWED_MARKETS):
-        raise ValueError("allowed_markets must contain only SPOT and/or FUTURES")
+    if set(markets) != ALLOWED_MARKETS:
+        raise ValueError("allowed_markets must include both SPOT and FUTURES")
 
     before = tuple(str(x).strip() for x in evidence_required_before if str(x).strip())
     after = tuple(str(x).strip() for x in evidence_required_after if str(x).strip())
