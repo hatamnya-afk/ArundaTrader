@@ -8,19 +8,23 @@ A stable provider client-order ID must be derived from the canonical intent_id, 
 
 ## Implemented in this branch
 - Pure deterministic candidate-ID derivation (exchange_execution_idempotency_contract_v0_1.py).
-- Offline tests for repeatability, intent separation, provider namespace separation, output constraints, and invalid inputs.
-- No network/file/database I/O and no execution wiring.
+- Provider-neutral reconciliation policy that never authorizes a retry.
+- Isolated SQLite intent-claim store (exchange_execution_atomic_intent_claim_store_v0_1.py) using a real composite primary key, provider-scoped unique client ID, and `BEGIN IMMEDIATE` transaction.
+- Claim evidence columns for `intent_id`, `client_order_id`, `trade_event_id`, `decision_id`, provider order ID/status, evidence event ID, timestamps, and detail code.
+- Permanent claims: no release/delete API; unknown outcomes and process restarts do not silently free the intent.
+- Offline tests include a multi-process contention scenario against the actual SQLite unique-key implementation.
+- The claim store is not wired into the order-attempt boundary and is not a production database. The caller must provide an isolated path; tests must never target the production DB.
 
 ## Mandatory integration gates still OPEN
-1. **Provider constraints:** verify the concrete provider client-order ID charset, length, uniqueness scope, and lookup consistency. The generic default is not approved for a provider until verified.
+1. **Provider constraints — PARTIALLY DOCUMENTED, NOT VERIFIED:** official Toobit USDT-M API docs describe `newClientOrderId` as unique among open orders and show a lookup parameter `origClientOrderId`; the docs inspected did not establish a maximum length, permitted character set, cross-endpoint uniqueness, or complete lookup consistency. Do not treat generic prefix/length defaults as approved. Sources: https://api-docs.toobit.com/api/usdt-m-account-and-trading and https://api-docs.toobit.com/api/usdt-m-api-v2.
 2. **Read-only lookup:** concrete adapter must query by the same client-order ID and return a typed result that distinguishes FOUND, NOT_FOUND, MULTIPLE, and ERROR. A NOT_FOUND result after a previous attempt is not permission to retry.
 3. **Durable evidence:** persist the stable client-order ID alongside canonical intent and attempt evidence before any submission call. The current `CompactEvent` schema has no `client_order_id` field, so the end-to-end mapping is not yet represented. Its `append_event_idempotent` helper scans and appends JSONL without a cross-process atomic claim; it is not a safe per-intent concurrency lock.
-4. **Atomic per-intent claim:** implement a durable compare-and-set/unique-key claim so concurrent callers and process restarts cannot both claim the same intent. The existing JSONL append helper is not atomic across processes. An in-memory lock or test fake is not sufficient evidence; use an isolated, explicitly approved durable claim store and test its uniqueness/transaction semantics without touching the production DB.
+4. **Atomic per-intent claim:** a provider-neutral SQLite claim-store contract is now added and uses a database primary key/unique constraint plus an immediate transaction. Its concurrency/restart tests are committed but have NOT been executed here. This is a candidate isolated store only; production suitability, lifecycle, backup/retention, filesystem durability, and integration remain unverified. It must not point at the production DB. The existing JSONL append helper remains non-atomic across processes.
 5. **Outcome reconciliation:** ambiguous provider responses and evidence-persistence failures must remain blocked for reconciliation; never infer rejection from timeout, exception, or absence from a limited query.
-6. **Tests:** offline unit tests plus concurrency/restart tests against the actual durable claim implementation; provider lookup contract tests with no order writes.
+6. **Tests:** run the full offline test set, including actual multi-process SQLite contention, restart persistence, storage errors, identity conflicts, state transitions, and provider lookup policy. Tests have NOT BEEN EXECUTED in this environment; no green status is claimed.
 7. **Review:** keep this work layered on PR #29 and PR #28. Do not merge or wire production execution based solely on this contract.
 
 ## Current decision
-PRODUCTION_DUPLICATE_ORDER_PREVENTION = NOT VERIFIED.
+PRODUCTION_DUPLICATE_ORDER_PREVENTION = NOT VERIFIED.\nATOMIC_CLAIM_STORE_CONTRACT = IMPLEMENTED / TEST EXECUTION PENDING.\nTOOBIT_CLIENT_ID_CONSTRAINTS = PARTIALLY DOCUMENTED / NOT VERIFIED.
 REAL_ORDER_SUBMISSION = NOT AUTHORIZED.
 PRODUCTION_PIPELINE_WIRING = OUT OF SCOPE.
