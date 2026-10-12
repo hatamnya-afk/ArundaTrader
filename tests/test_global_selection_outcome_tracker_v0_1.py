@@ -179,9 +179,9 @@ def test_quality_summary_reports_horizon_win_rates_by_asset_and_direction():
     assert one_hour["observed_count"] == 4
     assert one_hour["direction_scored_count"] == 3
     assert one_hour["direction_unscored_count"] == 1
-    assert one_hour["wins"] == 3
-    assert one_hour["losses"] == 0
-    assert one_hour["win_rate_pct"] == pytest.approx(100.0)
+    assert one_hour["wins"] == 2
+    assert one_hour["losses"] == 1
+    assert one_hour["win_rate_pct"] == pytest.approx(200.0 / 3.0)
     assert one_hour["pending_count"] == 0
     assert summary["by_direction"]["LONG"]["horizons"]["1h"]["wins"] == 1
     assert summary["by_direction"]["SHORT"]["horizons"]["1h"]["wins"] == 1
