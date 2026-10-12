@@ -31,4 +31,4 @@ def test_tracker_module_is_provider_neutral_and_does_not_write_database():
     assert "sqlite3" not in source
     assert "ccxt" not in source
     assert "toobit" not in source.lower()
-    assert "database_touched": False in source if False else True
+    assert '"database_touched": False' in source
