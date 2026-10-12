@@ -128,7 +128,13 @@ def test_not_found_after_prior_attempt_keeps_claim_and_requires_reconciliation(t
         provider_namespace="TOOBIT-FUTURES",
         intent_id=request.intent_id,
     )
+    duplicate_claim = reopened.claim(
+        provider_namespace="TOOBIT-FUTURES",
+        intent_id=request.intent_id,
+        client_order_id=client_id,
+    )
 
+    assert duplicate_claim.outcome == "ALREADY_CLAIMED"
     assert lookup.state == "NOT_FOUND"
     assert decision.state == "RECONCILIATION_REQUIRED"
     assert decision.may_submit is False
