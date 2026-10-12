@@ -5243,6 +5243,24 @@ def main() -> int:
             f"MCP01-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}"
         )
 
+        # GLOBAL SELECTION QUALITY LOOP — independent of venue listing/order state.
+        # This observes prior decisions against later real market data and records
+        # this cycle's decision anchors. It does not alter strategy or execution.
+        from global_selection_outcome_tracker_v0_1 import track_cycle
+
+        global_selection_tracking = track_cycle(
+            decisions=decision_snapshot,
+            market_data_by_symbol=market_data_by_symbol,
+            cycle_timestamp_ms=int(datetime.now(timezone.utc).timestamp() * 1000),
+        )
+        print(
+            "GLOBAL_SELECTION_TRACKING="
+            f"selections:{global_selection_tracking['selections_seen']}|"
+            f"observations:{global_selection_tracking['observations_seen']}|"
+            f"persisted:{global_selection_tracking['events_persisted']}|"
+            f"skipped:{len(global_selection_tracking['skipped'])}"
+        )
+
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
         from dynamic_risk_contract_boundary_v0_1 import (
