@@ -137,3 +137,11 @@ def test_stable_client_order_id_binding_rejects_missing_id_and_invalid_payload()
     assert missing.reason == "STABLE_CLIENT_ORDER_ID_REQUIRED"
     assert invalid.ready is False
     assert invalid.reason == "TOOBIT_ORDER_PAYLOAD_INVALID"
+
+
+def test_toobit_policy_does_not_claim_unverified_id_constraints():
+    policy = ToobitExchangeAdapter().stable_client_order_id_policy()
+    assert policy["verified"] is False
+    assert policy["max_length"] is None
+    assert policy["allowed_pattern"] is None
+    assert policy["verification_blocker"] == "TOOBIT_CLIENT_ORDER_ID_CHARSET_AND_MAX_LENGTH_UNVERIFIED"
