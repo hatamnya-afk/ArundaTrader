@@ -24,7 +24,7 @@ The management decision does not itself authorize a live submission. Static insp
 - `ORDER WRITE = FORBIDDEN` while any required gate evidence is missing.
 - `PROVIDER WRITE = FORBIDDEN` while any required gate evidence is missing.
 - `DATABASE WRITE = FORBIDDEN`.
-- `arunda_pipeline.py` remains unwired.
+- `arunda_pipeline.py` is wired to the provider-neutral Global Selection Quality Loop after authoritative Decision birth and before Dynamic Risk; this does not activate order execution or provider writes.
 - PR #31 remains Draft and unmerged.
 - No production runtime, live order, cancel, withdrawal, or live provider write as part of this verification.
 
