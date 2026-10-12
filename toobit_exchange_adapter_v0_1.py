@@ -28,6 +28,7 @@ from urllib.parse import urlencode
 
 from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest, validate_order_request
+from exchange_execution_order_reconciliation_contract_v0_1 import ProviderOrderLookup
 from execution_instrument_contract_v0_1 import (
     ExecutionInstrumentSpecification,
     InstrumentResolutionStatus,
@@ -553,6 +554,75 @@ class ToobitExchangeAdapter:
             )
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
+
+    def lookup_futures_order_by_client_order_id(
+        self,
+        client_order_id: str,
+        *,
+        category: str = "USDT",
+    ) -> ProviderOrderLookup:
+        """Read one regular Futures order by its client ID; never writes.
+
+        Only Toobit's explicit -2013 NO_SUCH_ORDER response is classified as
+        NOT_FOUND. Transport failures, permission errors, timeouts, malformed
+        payloads, and identity mismatches remain ERROR. A NOT_FOUND observation
+        is evidence about this query only and never authorizes retry.
+        """
+        client_id = client_order_id.strip() if isinstance(client_order_id, str) else ""
+        normalized_category = str(category).strip().upper()
+        if not client_id or normalized_category not in {"USDT", "USDC"}:
+            return ProviderOrderLookup(
+                state="ERROR",
+                detail_code="LOOKUP_INPUT_INVALID",
+            )
+        try:
+            raw = self._call(
+                "GET",
+                "/api/v2/futures/order",
+                params={
+                    "origClientOrderId": client_id,
+                    "category": normalized_category,
+                },
+                signed=True,
+            )
+            if isinstance(raw, dict) and raw.get("code") in (-2013, "-2013"):
+                return ProviderOrderLookup(
+                    state="NOT_FOUND",
+                    detail_code="TOOBIT_NO_SUCH_ORDER",
+                )
+            data = self._unwrap(raw)
+            if not isinstance(data, dict):
+                return ProviderOrderLookup(
+                    state="ERROR",
+                    detail_code="TOOBIT_ORDER_LOOKUP_RESPONSE_INVALID",
+                )
+            observed_client_id = data.get("clientOrderId")
+            exchange_order_id = data.get("orderId")
+            provider_status = data.get("status")
+            if (
+                not isinstance(observed_client_id, str)
+                or observed_client_id != client_id
+                or exchange_order_id is None
+                or not str(exchange_order_id).strip()
+                or not isinstance(provider_status, str)
+                or not provider_status.strip()
+            ):
+                return ProviderOrderLookup(
+                    state="ERROR",
+                    detail_code="TOOBIT_ORDER_LOOKUP_IDENTITY_INVALID",
+                )
+            return ProviderOrderLookup(
+                state="FOUND",
+                client_order_id=observed_client_id,
+                exchange_order_id=str(exchange_order_id),
+                provider_status=provider_status,
+                detail_code="TOOBIT_DIRECT_ORDER_LOOKUP",
+            )
+        except Exception as exc:
+            return ProviderOrderLookup(
+                state="ERROR",
+                detail_code=f"TOOBIT_LOOKUP_ERROR:{type(exc).__name__}",
+            )
 
     def futures_duplicate_check(
         self,
