@@ -12,6 +12,7 @@ from global_selection_outcome_tracker_v0_1 import (
     build_selection_event,
     evaluate_selection_outcomes,
     load_events,
+    summarize_selection_quality,
     track_cycle,
 )
 
@@ -158,6 +159,44 @@ def test_track_cycle_records_selection_then_real_followup(tmp_path):
     assert sum(row["event_type"] == "SELECTION" for row in persisted) == 1
     assert sum(row["event_type"] == "MARKET_OBSERVATION" for row in persisted) == 1
     assert sum(row["event_type"] == "OUTCOME_EVALUATION" for row in persisted) == 1
+
+
+
+def test_quality_summary_reports_horizon_win_rates_by_asset_and_direction():
+    long_good = selection("LONG", decision_id="D-LONG-GOOD", price=100.0)
+    long_bad = selection("LONG", decision_id="D-LONG-BAD", price=100.0)
+    short_good = selection("SHORT", decision_id="D-SHORT-GOOD", price=100.0)
+    no_direction = selection("NONE", decision_id="D-NONE", price=100.0)
+    outcomes = evaluate_selection_outcomes([
+        long_good, observation(long_good, BASE + 3_600_000, 102.0),
+        long_bad, observation(long_bad, BASE + 3_600_000, 99.0),
+        short_good, observation(short_good, BASE + 3_600_000, 98.0),
+        no_direction, observation(no_direction, BASE + 3_600_000, 97.0),
+    ])
+    summary = summarize_selection_quality(outcomes)
+    one_hour = summary["overall"]["horizons"]["1h"]
+    assert summary["selection_count"] == 4
+    assert one_hour["observed_count"] == 4
+    assert one_hour["direction_scored_count"] == 3
+    assert one_hour["direction_unscored_count"] == 1
+    assert one_hour["wins"] == 3
+    assert one_hour["losses"] == 0
+    assert one_hour["win_rate_pct"] == pytest.approx(100.0)
+    assert one_hour["pending_count"] == 0
+    assert summary["by_direction"]["LONG"]["horizons"]["1h"]["wins"] == 1
+    assert summary["by_direction"]["SHORT"]["horizons"]["1h"]["wins"] == 1
+    assert summary["interpretation"]["pending_excluded_from_win_rate"] is True
+
+
+def test_quality_summary_does_not_call_pending_selections_losses():
+    pending = evaluate_selection_outcomes([selection("LONG", decision_id="D-PENDING")])
+    summary = summarize_selection_quality(pending)
+    one_hour = summary["overall"]["horizons"]["1h"]
+    assert one_hour["observed_count"] == 0
+    assert one_hour["pending_count"] == 1
+    assert one_hour["direction_scored_count"] == 0
+    assert one_hour["wins"] == 0
+    assert one_hour["win_rate_pct"] is None
 
 
 def test_missing_decision_id_is_reported_not_fabricated(tmp_path):
