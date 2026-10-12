@@ -125,6 +125,30 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Bind the exact ID recorded in evidence into provider-native payloads.
+    # Adapters without a binding hook retain their existing opaque contract;
+    # provider adapters that implement it must return a READY preparation.
+    bind_client_order_id = getattr(adapter, "bind_stable_client_order_id", None)
+    if callable(bind_client_order_id):
+        try:
+            prepared = bind_client_order_id(prepared, stable_client_order_id)
+        except Exception as exc:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=getattr(adapter, "adapter_name", None),
+                error_code="STABLE_CLIENT_ORDER_ID_BINDING_FAILED",
+                error_message=f"Provider client-order ID binding failed ({type(exc).__name__}).",
+            )
+        if not isinstance(prepared, AdapterOrderPreparation) or not prepared.ready:
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                adapter=getattr(adapter, "adapter_name", None),
+                error_code=getattr(prepared, "reason", "STABLE_CLIENT_ORDER_ID_BINDING_FAILED"),
+                error_message="Provider payload did not accept the stable client-order ID.",
+            )
+
     if evidence_stream_path is None:
         return blocked_execution_result(
             asset=request.asset,
