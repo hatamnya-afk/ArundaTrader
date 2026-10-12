@@ -46,6 +46,7 @@ def attempt_prepared_order(
     execution_instrument: Any,
     execution_ready_package: Mapping[str, Any] | None = None,
     evidence_stream_path: Path | None = None,
+    stable_client_order_id: str | None = None,
 ) -> CanonicalExecutionResult:
     """Fail closed unless authorization and pre-submit evidence are valid.
 
@@ -141,6 +142,7 @@ def attempt_prepared_order(
             trade_event_id=trade_event_id,
             provider=getattr(adapter, "adapter_name", None) or "PROVIDER_UNKNOWN",
             event_timestamp=request.timestamp,
+            client_order_id=stable_client_order_id,
         )
     except Exception as exc:
         return blocked_execution_result(
@@ -213,7 +215,10 @@ def attempt_prepared_order(
         result = replace(result, trade_event_id=trade_event_id)
 
     try:
-        provider_event = build_provider_result_event(request=request, result=result)
+        provider_event = build_provider_result_event(
+            request=request, result=result,
+            client_order_id=stable_client_order_id,
+        )
         outcome_persistence = persist_execution_attempt_events(
             [provider_event], stream_path=Path(evidence_stream_path)
         )
