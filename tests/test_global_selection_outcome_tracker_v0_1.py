@@ -5,6 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
+from global_selection_quality_report_v0_1 import build_quality_report
+
 from global_selection_outcome_tracker_v0_1 import (
     LAUNCH_TIMESTAMP_MS,
     append_events_idempotent,
@@ -197,6 +199,35 @@ def test_quality_summary_does_not_call_pending_selections_losses():
     assert one_hour["direction_scored_count"] == 0
     assert one_hour["wins"] == 0
     assert one_hour["win_rate_pct"] is None
+
+
+
+def test_quality_report_ranks_only_assets_with_minimum_real_observation_sample():
+    events = []
+    for asset, direction, first_price, second_price in [
+        ("BTC", "LONG", 100.0, 103.0),
+        ("BTC", "LONG", 100.0, 102.0),
+        ("ETH", "SHORT", 100.0, 101.0),
+    ]:
+        decision_id = f"D-{asset}-{len(events)}"
+        sel = selection(direction, decision_id=decision_id, price=100.0)
+        sel["asset"] = asset
+        events.append(sel)
+        for ts, price in [(BASE + 3_600_000, first_price), (BASE + 4_000_000, second_price)]:
+            obs = observation(sel, ts, price)
+            obs["asset"] = asset
+            events.append(obs)
+    report = build_quality_report(events, min_sample_size=2)
+    ranked = report["rankings_by_horizon"]["1h"]
+    assert [row["asset"] for row in ranked] == ["BTC"]
+    assert ranked[0]["sample_count"] == 2
+    assert report["interpretation"]["report_is_not_a_trading_signal"] is True
+    assert report["interpretation"]["database_touched"] is False
+
+
+def test_quality_report_rejects_invalid_minimum_sample_size():
+    with pytest.raises(ValueError, match="positive integer"):
+        build_quality_report([], min_sample_size=0)
 
 
 def test_missing_decision_id_is_reported_not_fabricated(tmp_path):
