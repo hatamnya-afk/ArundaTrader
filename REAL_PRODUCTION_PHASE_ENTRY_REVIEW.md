@@ -76,7 +76,14 @@ The provider is the authority for whether an otherwise valid request is accepted
 **MANAGEMENT PHASE ENTRY: AUTHORIZED.**
 **TECHNICAL REAL-ORDER READINESS: NOT YET VERIFIED.**
 
-Continue by verifying each outstanding precondition against current repository/runtime evidence. Do not infer a successful live path from offline tests, and do not activate the pipeline until the exact technical gate is verified.
+Continue by verifying each outstanding precondition against current repository/runtime evidence. Do not infer a successful live path from offline tests, and do not activate order execution until the exact technical gate is verified.
+
+## GLOBAL SELECTION QUALITY LOOP — 2026-10-12
+- Code integrated on `operational-main-20261007`; focused GitHub Actions contract/wiring tests: **11 passed**.
+- The normal pipeline now records canonical decision/selection anchors and later real-market observations independently of Toobit listing and order submission.
+- Append-only evidence stream: `runtime_observations/global_selection_outcomes.jsonl`; outcome summaries include observed 1h/4h/24h horizons, directional return, favorable/adverse excursion, and hindsight-only counterfactual movement for review of possible missed opportunities.
+- No production DB write, live order, provider write, or production runtime was performed. Actual production observation accumulation and calibration effectiveness remain **NOT VERIFIED**.
+- This tracking loop does not satisfy the separate real-order gate. Toobit order submission remains disabled/unverified, and trade/provider outcome capture remains NOT VERIFIED.
 
 
 ## STATIC TECHNICAL GATE AUDIT — 2026-10-12
