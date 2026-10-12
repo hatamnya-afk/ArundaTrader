@@ -21,7 +21,7 @@ A stable provider client-order ID must be derived from the canonical intent_id, 
 3. **Durable evidence:** persist the stable client-order ID alongside canonical intent and attempt evidence before any submission call. The compact-event schema now has additive optional `intent_id` and `client_order_id` fields, preserving existing positional construction. The attempt-evidence builders and provider-neutral attempt boundary propagate the same supplied stable client ID into `ORDER_ATTEMPTED` and `PROVIDER_RESULT`. This proves an offline mapping path only: the ID is still optional, no concrete provider lookup supplies/validates it, and the JSONL append helper remains non-atomic across processes; none of these is a production idempotency guarantee.
 4. **Atomic per-intent claim:** a provider-neutral SQLite claim-store contract is now added and uses a database primary key/unique constraint plus an immediate transaction. Its concurrency/restart tests and evidence-conflict tests are now executed by GitHub Actions and PASS on the PR test ref. This is still a candidate isolated store only; production suitability, lifecycle, backup/retention, filesystem durability, and integration remain unverified. It must not point at the production DB. The existing JSONL append helper remains non-atomic across processes.
 5. **Outcome reconciliation:** ambiguous provider responses and evidence-persistence failures must remain blocked for reconciliation; never infer rejection from timeout, exception, or absence from a limited query.
-6. **Tests:** the full offline contract set now runs in GitHub Actions, including multi-process SQLite contention, restart persistence, identity conflicts, state transitions, immutable evidence, stable-ID derivation, and reconciliation policy. The most recent completed CI run (38208792643) is PASS: 43 tests passed in 0.91s; it validates offline contracts only and does not establish provider-side idempotency.
+6. **Tests:** the full offline contract set now runs in GitHub Actions, including multi-process SQLite contention, restart persistence, identity conflicts, state transitions, immutable evidence, stable-ID derivation, and reconciliation policy. The most recent completed CI run for the expanded contract and attempt-evidence suite (38209173445) is PASS: 51 tests passed in 0.98s; it validates offline contracts only and does not establish provider-side idempotency.
 7. **Review:** keep this work layered on PR #29 and PR #28. Do not merge or wire production execution based solely on this contract.
 
 ## Current decision
@@ -29,6 +29,6 @@ PRODUCTION_DUPLICATE_ORDER_PREVENTION = NOT VERIFIED.
 ATOMIC_CLAIM_STORE_CONTRACT = IMPLEMENTED / OFFLINE CI PASS (43 TESTS).
 TOOBIT_CLIENT_ID_CONSTRAINTS = PARTIALLY DOCUMENTED / NOT VERIFIED.
 READ_ONLY_LOOKUP_ADAPTER = NOT IMPLEMENTED / NOT VERIFIED.
-COMPACT_EVENT_IDENTITY_MAPPING = ADDITIVE PATH IMPLEMENTED; CI VERIFICATION PENDING; MANDATORY PROVIDER-SUPPLIED ID / LOOKUP NOT VERIFIED.
+COMPACT_EVENT_IDENTITY_MAPPING = ADDITIVE PATH IMPLEMENTED / OFFLINE CI PASS (51 TESTS); STABLE ID REMAINS OPTIONAL AT BOUNDARY; PROVIDER LOOKUP NOT VERIFIED.
 REAL_ORDER_SUBMISSION = NOT AUTHORIZED.
 PRODUCTION_PIPELINE_WIRING = OUT OF SCOPE.
