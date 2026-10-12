@@ -1,7 +1,7 @@
 """Offline tests for deterministic provider client-order ID derivation."""
 import pytest
 
-from exchange_execution_idempotency_contract_v0_1 import derive_client_order_id
+from exchange_execution_idempotency_contract_v0_1 import (\n    derive_client_order_id,\n    derive_validated_client_order_id,\n    validate_supplied_client_order_id,\n)
 
 def test_same_provider_and_intent_produce_same_id_across_calls():
     first = derive_client_order_id(provider_namespace="TOOBIT-FUTURES", intent_id="INTENT-123", max_length=32)
@@ -39,3 +39,48 @@ def test_invalid_contract_inputs_fail_closed(kwargs, reason):
 def test_boolean_length_is_rejected_even_though_bool_is_an_int():
     with pytest.raises(ValueError, match="CLIENT_ORDER_ID_LENGTH_CONSTRAINT_INVALID"):
         derive_client_order_id(provider_namespace="VENUE-A", intent_id="I-1", max_length=True)
+
+
+def _verified_policy():
+    return {
+        "provider_namespace": "TOOBIT-FUTURES-TEST",
+        "prefix": "AR",
+        "max_length": 32,
+        "allowed_pattern": r"^AR[A-F0-9]{30}$",
+        "verified": True,
+        "policy_reference": "offline-test-fixture:provider-policy-v1",
+    }
+
+
+def test_verified_policy_derives_deterministic_canonical_id_and_validates_it():
+    policy = _verified_policy()
+    first = derive_validated_client_order_id(policy=policy, intent_id="INTENT-9")
+    second = derive_validated_client_order_id(policy=policy, intent_id="INTENT-9")
+    assert first == second
+    assert len(first) == 32
+    assert validate_supplied_client_order_id(
+        policy=policy, intent_id="INTENT-9", client_order_id=first
+    ) == first
+
+
+def test_policy_rejects_unverified_provider_constraints():
+    policy = _verified_policy()
+    policy["verified"] = False
+    with pytest.raises(ValueError, match="CLIENT_ORDER_ID_PROVIDER_POLICY_UNVERIFIED"):
+        derive_validated_client_order_id(policy=policy, intent_id="INTENT-9")
+
+
+def test_policy_rejects_charset_mismatch():
+    policy = _verified_policy()
+    policy["allowed_pattern"] = r"^ONLY-DASHES$"
+    with pytest.raises(ValueError, match="CLIENT_ORDER_ID_CHARSET_INVALID"):
+        derive_validated_client_order_id(policy=policy, intent_id="INTENT-9")
+
+
+def test_supplied_id_must_match_canonical_intent_derivation():
+    with pytest.raises(ValueError, match="CLIENT_ORDER_ID_NOT_CANONICAL"):
+        validate_supplied_client_order_id(
+            policy=_verified_policy(),
+            intent_id="INTENT-9",
+            client_order_id="AR-CALLER-CHOSEN",
+        )
