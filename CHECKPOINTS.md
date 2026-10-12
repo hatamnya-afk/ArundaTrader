@@ -408,3 +408,9 @@ Safety:
 
 Decision:
 This checkpoint is CLOSED/VERIFIED for its defined contract scope. It does not authorize a real order.
+
+
+## GLOBAL SELECTION QUALITY SUMMARY UPDATE — 2026-10-12
+- Aggregate quality summary implemented in `global_selection_outcome_tracker_v0_1.py`, exposed in `track_cycle` results and logged by the normal pipeline as `GLOBAL_SELECTION_QUALITY` for 1h/4h/24h.
+- Metrics include grouping by asset/direction, observed vs pending counts, directional wins/losses/flats, win rate, mean/median return; pending data and `NONE` direction are excluded from directional scoring as appropriate.
+- Focused CI passed: 14 tests, run 38266144409, commit `f746115f8bec76616a2f7b1c1e9a0933fb475fab`. No production runtime or live-market outcome accumulation was performed.
