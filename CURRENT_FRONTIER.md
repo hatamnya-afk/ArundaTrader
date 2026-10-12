@@ -11,7 +11,13 @@
 
 ## CURRENT TECHNICAL FRONTIER
 **FINAL REAL-ORDER GATE — OPEN / NOT VERIFIED.**
-The management decision does not itself authorize a live submission. Static inspection has found unresolved technical prerequisites: the current Toobit adapter advertises order submission as disabled and has no verified submit path; the active mandate needs an explicit valid expiry; Toobit client-order-ID constraints and ambiguous recovery semantics remain unverified on Draft PR #31; and end-to-end real outcome/observation capture is not yet proven.
+The management decision does not itself authorize a live submission. Static inspection has found unresolved technical prerequisites: the current Toobit adapter advertises order submission as disabled and has no verified submit path; the active mandate needs an explicit valid expiry; Toobit client-order-ID constraints and ambiguous recovery semantics remain unverified on Draft PR #31. **Trade/order outcome capture remains NOT VERIFIED.**
+
+## GLOBAL SELECTION QUALITY LOOP — 2026-10-12
+- **Code state: BUILT / FOCUSED CI PASS (11 tests).** The normal pipeline now emits provider-neutral selection anchors and follows later real-market observations for decisions whose assets have real market data in the global market arm; this is independent of Toobit listing and order submission.
+- Append-only evidence: `runtime_observations/global_selection_outcomes.jsonl`. It records canonical decision identity, selection time, direction, reference price/source, subsequent observed prices, 1h/4h/24h horizon status, directional return, favorable/adverse excursion, and hindsight-only counterfactual movement for missed-opportunity review.
+- Missing observations remain pending or are reported as skipped; no synthetic data or inferred outcome is created. The tracker does not write the production database and does not change decisions or execution flags.
+- **Production evidence accumulation and calibration effectiveness: NOT VERIFIED** because no production runtime was executed for this code change. This loop does not clear the final real-order gate or authorize an order.
 
 ## SAFETY — ACTIVE
 - `EXECUTION AUTHORIZATION = FALSE` until the technical boundary validates a current ready request against a valid standing-mandate observation.
