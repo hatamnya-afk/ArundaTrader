@@ -57,4 +57,4 @@ The evidence ledger may be marked partially evidence-verified, but the adapter e
 ## Verification
 - Dedicated tests: `test_toobit_client_order_id_policy_v0_1.py`
 - Workflow: `.github/workflows/atomic-intent-claim-contract.yml`
-- Latest observed CI before this evidence-record-only change: 71 tests passed (offline/fake-transport suite). No live provider request was made.
+- Latest observed policy-test CI: run 38234889128 passed 72 tests in 1.27s (offline/fake-transport suite). No live provider request was made.
