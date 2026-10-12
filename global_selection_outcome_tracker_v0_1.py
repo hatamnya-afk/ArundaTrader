@@ -216,11 +216,40 @@ def evaluate_selection_outcomes(
                                           "absolute_return_pct": None, "directional_return_pct": None}
         latest = rows[-1] if rows else None
         latest_pct = ((float(latest["price"]) / reference) - 1.0) * 100.0 if latest else None
+        raw_returns = [
+            ((float(row["price"]) / reference) - 1.0) * 100.0
+            for row in rows
+        ]
+        counterfactual_best_index = (
+            max(range(len(raw_returns)), key=lambda index: abs(raw_returns[index]))
+            if raw_returns else None
+        )
+        counterfactual_best_return = (
+            raw_returns[counterfactual_best_index]
+            if counterfactual_best_index is not None else None
+        )
+        counterfactual_best_direction = (
+            "LONG" if counterfactual_best_return > 0
+            else "SHORT" if counterfactual_best_return < 0
+            else "NONE" if counterfactual_best_return is not None
+            else None
+        )
         results.append({
             "decision_id": decision_id, "asset": selection["asset"],
             "direction": direction, "decision": selection.get("decision"),
+            "selection_rationale": selection.get("rationale", ""),
             "selected_at_ms": selected_at, "reference_price": reference,
             "observation_count": len(rows),
+            "counterfactual_best_direction": counterfactual_best_direction,
+            "counterfactual_best_return_pct": (
+                abs(counterfactual_best_return)
+                if counterfactual_best_return is not None else None
+            ),
+            "counterfactual_best_observed_at_ms": (
+                int(rows[counterfactual_best_index]["observed_at_ms"])
+                if counterfactual_best_index is not None else None
+            ),
+            "counterfactual_note": "HINDSIGHT_REVIEW_ONLY_NOT_A_TRADABLE_SIGNAL",
             "latest_observed_at_ms": int(latest["observed_at_ms"]) if latest else None,
             "latest_price": float(latest["price"]) if latest else None,
             "latest_absolute_return_pct": latest_pct,
