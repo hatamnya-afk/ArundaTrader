@@ -229,10 +229,10 @@ def evaluate_selection_outcomes(
             if counterfactual_best_index is not None else None
         )
         counterfactual_best_direction = (
-            "LONG" if counterfactual_best_return > 0
+            None if counterfactual_best_return is None
+            else "LONG" if counterfactual_best_return > 0
             else "SHORT" if counterfactual_best_return < 0
-            else "NONE" if counterfactual_best_return is not None
-            else None
+            else "NONE"
         )
         results.append({
             "decision_id": decision_id, "asset": selection["asset"],
