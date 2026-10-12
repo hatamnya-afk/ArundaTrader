@@ -1,7 +1,6 @@
 """Offline tests against the actual SQLite unique-key claim implementation."""
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
-import sqlite3
 
 import pytest
 
@@ -109,7 +108,7 @@ def test_provider_evidence_identity_mapping_is_persisted(tmp_path):
 def test_terminal_provider_acceptance_cannot_be_changed_to_rejected(tmp_path):
     store = SQLiteIntentClaimStore(tmp_path / "claims.sqlite3")
     store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
-    store.transition(provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED)
+    store.transition(provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED, exchange_order_id="EX-1", provider_status="NEW")
     from exchange_execution_atomic_intent_claim_store_v0_1 import PROVIDER_REJECTED
     with pytest.raises(ValueError, match="TERMINAL_CLAIM_STATE_CANNOT_CHANGE"):
         store.transition(provider_namespace="P", intent_id="I-1", status=PROVIDER_REJECTED)
