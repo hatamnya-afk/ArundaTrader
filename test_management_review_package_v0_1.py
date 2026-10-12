@@ -56,6 +56,24 @@ def test_deferred_does_not_authorize():
     assert "execution_authorization" not in result
 
 
+def test_rejects_spot_only_phase_entry_scope():
+    try:
+        build_management_review_package(**_base(allowed_markets=["SPOT"]))
+    except ValueError as exc:
+        assert "both SPOT and FUTURES" in str(exc)
+    else:
+        raise AssertionError("phase-entry mandate must include both Spot and Futures")
+
+
+def test_rejects_futures_only_phase_entry_scope():
+    try:
+        build_management_review_package(**_base(allowed_markets=["FUTURES"]))
+    except ValueError as exc:
+        assert "both SPOT and FUTURES" in str(exc)
+    else:
+        raise AssertionError("phase-entry mandate must include both Spot and Futures")
+
+
 def test_rejects_unknown_market():
     try:
         build_management_review_package(**_base(allowed_markets=["SPOT", "OPTIONS"]))
