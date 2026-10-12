@@ -324,6 +324,10 @@ def track_cycle(
         symbol = f"{selection['asset']}/USDT"
         market_data = market_data_by_symbol.get(symbol)
         if market_data is None:
+            skipped.append({
+                "asset": selection["asset"],
+                "reason": "FOLLOWUP_MARKET_DATA_MISSING",
+            })
             continue
         try:
             observation = build_market_observation_event(selection=selection, market_data=market_data)
