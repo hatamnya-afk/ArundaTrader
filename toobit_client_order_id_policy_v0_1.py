@@ -34,6 +34,10 @@ def toobit_futures_client_order_id_policy() -> dict[str, Any]:
             "lookup_parameter": "origClientOrderId",
             "lookup_endpoint": "GET /api/v2/futures/order",
             "lookup_identity_fields": ["clientOrderId", "orderId", "status"],
+            "history_endpoint": "GET /api/v2/futures/history-orders",
+            "history_cursor": "orderId",
+            "history_limit_default": 20,
+            "history_limit_max": 1000,
             "duplicate_error_code": -1141,
             "duplicate_error_name": "ORDER_DUPLICATED",
             "duplicate_error_message": "Duplicate clientOrderId",
@@ -50,7 +54,10 @@ def toobit_futures_client_order_id_policy() -> dict[str, Any]:
             "RETRY_OR_REPLAY_IDEMPOTENCY_SEMANTICS",
             "LOOKUP_CONSISTENCY_AND_RETENTION",
             "HISTORY_LOOKUP_COMPLETENESS_AND_PAGINATION",
+            "V2_UNIQUENESS_SCOPE",
+            "WRITTEN_PROVIDER_CONFIRMATION",
         ],
+        "evidence_record": "TOOBIT_CLIENT_ORDER_ID_OFFICIAL_EVIDENCE_V0_2.md",
         "verification_blocker": (
             "TOOBIT_CLIENT_ORDER_ID_CHARSET_AND_MAX_LENGTH_UNVERIFIED"
         ),
