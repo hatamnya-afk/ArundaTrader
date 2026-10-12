@@ -16,6 +16,14 @@ def test_global_selection_tracker_is_wired_after_authoritative_decision_birth():
     assert "cycle_timestamp_ms=int(datetime.now(timezone.utc).timestamp() * 1000)" in source
 
 
+
+def test_pipeline_emits_aggregated_selection_quality_metrics():
+    source = (ROOT / "arunda_pipeline.py").read_text(encoding="utf-8")
+    assert 'global_selection_tracking["quality_summary"]["overall"]["horizons"]' in source
+    assert '"GLOBAL_SELECTION_QUALITY="' in source
+    assert 'for horizon in ("1h", "4h", "24h")' in source
+
+
 def test_tracker_wiring_does_not_enable_or_submit_execution():
     source = (ROOT / "arunda_pipeline.py").read_text(encoding="utf-8")
     tracker_call = source.index("global_selection_tracking = track_cycle(")
