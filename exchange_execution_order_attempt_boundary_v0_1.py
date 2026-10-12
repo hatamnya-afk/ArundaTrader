@@ -128,7 +128,7 @@ def attempt_prepared_order(
             canonical_client_order_id = validate_supplied_client_order_id(
                 policy=policy,
                 intent_id=request.intent_id,
-                client_order_id=canonical_client_order_id,
+                client_order_id=stable_client_order_id,
             )
     except (ValueError, TypeError, KeyError) as exc:
         reason = str(exc) or "CLIENT_ORDER_ID_POLICY_INVALID"
