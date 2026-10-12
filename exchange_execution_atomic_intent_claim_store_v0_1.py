@@ -195,7 +195,7 @@ class SQLiteIntentClaimStore:
             connection.execute("BEGIN IMMEDIATE")
             row = connection.execute(
                 """
-                SELECT status FROM execution_intent_claim
+                SELECT * FROM execution_intent_claim
                 WHERE provider_namespace = ? AND intent_id = ?
                 """,
                 (provider, intent),
@@ -204,6 +204,19 @@ class SQLiteIntentClaimStore:
                 connection.execute("ROLLBACK")
                 raise KeyError("INTENT_CLAIM_NOT_FOUND")
             old_status = row["status"]
+            proposed_evidence = {
+                "trade_event_id": trade_event_id,
+                "decision_id": decision_id,
+                "exchange_order_id": exchange_order_id,
+                "provider_status": provider_status,
+                "evidence_event_id": evidence_event_id,
+                "detail_code": detail_code,
+            }
+            for field, proposed in proposed_evidence.items():
+                existing = row[field]
+                if proposed is not None and existing is not None and proposed != existing:
+                    connection.execute("ROLLBACK")
+                    raise ValueError("EVIDENCE_IDENTITY_CONFLICT")
             if old_status in (PROVIDER_ACCEPTED, PROVIDER_REJECTED) and status != old_status:
                 connection.execute("ROLLBACK")
                 raise ValueError("TERMINAL_CLAIM_STATE_CANNOT_CHANGE")
