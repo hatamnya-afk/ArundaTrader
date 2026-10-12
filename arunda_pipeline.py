@@ -5272,6 +5272,35 @@ def main() -> int:
                 for horizon in ("1h", "4h", "24h")
             )
         )
+        quality_summary = global_selection_tracking["quality_summary"]
+        for asset, asset_summary in sorted(quality_summary["by_asset"].items()):
+            asset_horizons = asset_summary["horizons"]
+            print(
+                "GLOBAL_SELECTION_QUALITY_BY_ASSET="
+                f"asset:{asset}|"
+                + "|".join(
+                    f"{horizon}:scored={asset_horizons[horizon]['direction_scored_count']},"
+                    f"wins={asset_horizons[horizon]['wins']},"
+                    f"losses={asset_horizons[horizon]['losses']},"
+                    f"win_rate_pct={asset_horizons[horizon]['win_rate_pct']},"
+                    f"pending={asset_horizons[horizon]['pending_count']}"
+                    for horizon in ("1h", "4h", "24h")
+                )
+            )
+        for direction, direction_summary in sorted(quality_summary["by_direction"].items()):
+            direction_horizons = direction_summary["horizons"]
+            print(
+                "GLOBAL_SELECTION_QUALITY_BY_DIRECTION="
+                f"direction:{direction}|"
+                + "|".join(
+                    f"{horizon}:scored={direction_horizons[horizon]['direction_scored_count']},"
+                    f"wins={direction_horizons[horizon]['wins']},"
+                    f"losses={direction_horizons[horizon]['losses']},"
+                    f"win_rate_pct={direction_horizons[horizon]['win_rate_pct']},"
+                    f"pending={direction_horizons[horizon]['pending_count']}"
+                    for horizon in ("1h", "4h", "24h")
+                )
+            )
 
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
