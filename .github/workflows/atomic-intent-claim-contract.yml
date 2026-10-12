@@ -13,6 +13,8 @@ on:
       - "test_exchange_execution_order_attempt_boundary_v0_1.py"
       - "test_order_attempt_identity_regression_v0_1.py"
       - "toobit_exchange_adapter_v0_1.py"
+      - "toobit_client_order_id_policy_v0_1.py"
+      - "test_toobit_client_order_id_policy_v0_1.py"
       - "test_toobit_client_order_lookup_v0_1.py"
       - "test_order_idempotency_cycle_contract_v0_1.py"
       - "mcp01_compact_event_evidence_v0_1.py"
@@ -55,4 +57,4 @@ jobs:
       - name: Install test dependency
         run: python -m pip install --disable-pip-version-check pytest
       - name: Run offline contract and evidence mapping tests
-        run: python -m pytest -q test_exchange_execution_idempotency_contract_v0_1.py test_exchange_execution_order_reconciliation_contract_v0_1.py test_exchange_execution_atomic_intent_claim_store_v0_1.py test_mcp01_execution_attempt_evidence_v0_1.py test_exchange_execution_order_attempt_boundary_v0_1.py test_order_attempt_identity_regression_v0_1.py test_toobit_client_order_lookup_v0_1.py test_order_idempotency_cycle_contract_v0_1.py
+        run: python -m pytest -q test_exchange_execution_idempotency_contract_v0_1.py test_exchange_execution_order_reconciliation_contract_v0_1.py test_exchange_execution_atomic_intent_claim_store_v0_1.py test_mcp01_execution_attempt_evidence_v0_1.py test_exchange_execution_order_attempt_boundary_v0_1.py test_order_attempt_identity_regression_v0_1.py test_toobit_client_order_lookup_v0_1.py test_toobit_client_order_id_policy_v0_1.py test_order_idempotency_cycle_contract_v0_1.py
