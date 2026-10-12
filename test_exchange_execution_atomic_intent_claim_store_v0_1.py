@@ -86,7 +86,7 @@ def test_reconciliation_state_cannot_be_reopened_as_claimed(tmp_path):
     store = SQLiteIntentClaimStore(tmp_path / "claims.sqlite3")
     store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
     store.transition(provider_namespace="P", intent_id="I-1", status=RECONCILIATION_REQUIRED)
-    with pytest.raises(ValueError, match="CLAIM_CANNOT_BE_REOPENED"):
+    with pytest.raises(ValueError, match="CLAIM_STATE_TRANSITION_INVALID"):
         store.transition(provider_namespace="P", intent_id="I-1", status=CLAIMED)
 
 
@@ -148,3 +148,10 @@ def test_invalid_status_is_rejected(tmp_path):
 def test_no_release_or_delete_api_exists():
     assert not hasattr(SQLiteIntentClaimStore, "release")
     assert not hasattr(SQLiteIntentClaimStore, "delete")
+
+
+def test_provider_acceptance_requires_order_identity_evidence(tmp_path):
+    store = SQLiteIntentClaimStore(tmp_path / "claims.sqlite3")
+    store.claim(provider_namespace="P", intent_id="I-1", client_order_id="C-1")
+    with pytest.raises(ValueError, match="ACCEPTED_ORDER_EVIDENCE_REQUIRED"):
+        store.transition(provider_namespace="P", intent_id="I-1", status=PROVIDER_ACCEPTED)
