@@ -134,6 +134,21 @@ def attempt_prepared_order(
             error_message="No provider call is allowed without an explicit evidence stream path.",
         )
 
+    # A provider attempt must never proceed without the caller's stable ID.
+    # Provider-specific derivation/constraints remain a separate acceptance gate;
+    # this boundary refuses to invent an ID or fall back to attempt identity.
+    if not isinstance(stable_client_order_id, str) or not stable_client_order_id.strip():
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="STABLE_CLIENT_ORDER_ID_REQUIRED",
+            error_message=(
+                "No provider call is allowed without a stable client order ID "
+                "derived from the canonical intent and validated for this provider."
+            ),
+        )
+
     # The authoritative ID and durable attempt event exist before the provider call.
     trade_event_id = issue_trade_event_id()
     try:
