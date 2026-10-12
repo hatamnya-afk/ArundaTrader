@@ -45,13 +45,14 @@ REAL MARKET
 → MANAGEMENT CAPITAL REVIEW
 
 ## Management decision
-Current state: PENDING.
+Current state: **AUTHORIZED — 2026-10-12**.
 
-Allowed decision:
-- DENY / DEFER phase entry
-- AUTHORIZE REAL-PRODUCTION TRADING PHASE
+Authoritative decision record: `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`.
+The project owner explicitly authorized entry into the real-production trading phase on 2026-10-12.
 
-The decision is a phase-entry decision. It must not be converted into repeated per-trade approval requests.
+This is a one-time standing phase-entry mandate covering SPOT and FUTURES. It must not be converted into repeated per-trade approval requests.
+
+**Important:** the management decision is granted; this does not waive the listed technical/provider preconditions for an actual order attempt. The current active authorization observation and all order-attempt evidence must still validate at the technical gate.
 
 ## Safety before authorization
 Until phase entry is explicitly authorized:
@@ -72,6 +73,9 @@ A later management restriction, halt, or capital-scaling decision is a separate 
 The provider is the authority for whether an otherwise valid request is accepted or rejected. ArundaTrader must not manufacture a local acceptance/rejection outcome from balance absence, assumptions, or inferred provider behavior.
 
 ## Review verdict
-READY FOR MANAGEMENT PHASE-ENTRY DECISION — subject to evidence items above being verified from the actual current repository/runtime evidence.
+**MANAGEMENT PHASE ENTRY: AUTHORIZED.**
+**TECHNICAL REAL-ORDER READINESS: NOT YET VERIFIED.**
+
+Continue by verifying each outstanding precondition against current repository/runtime evidence. Do not infer a successful live path from offline tests, and do not activate the pipeline until the exact technical gate is verified.
 
 # END
