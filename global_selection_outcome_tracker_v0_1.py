@@ -265,6 +265,86 @@ def evaluate_selection_outcomes(
     return results
 
 
+
+def summarize_selection_quality(
+    outcomes: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Aggregate observed selection quality without treating pending data as failure."""
+    def summarize_group(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+        horizon_summary: dict[str, Any] = {}
+        for horizon in HORIZONS_MS:
+            observed = [
+                row["horizons"][horizon]
+                for row in rows
+                if isinstance(row.get("horizons"), Mapping)
+                and row["horizons"].get(horizon, {}).get("status") == "OBSERVED"
+            ]
+            directional = [
+                float(item["directional_return_pct"])
+                for item in observed
+                if item.get("directional_return_pct") is not None
+            ]
+            ordered = sorted(directional)
+            n = len(ordered)
+            if n:
+                mid = n // 2
+                median = ordered[mid] if n % 2 else (ordered[mid - 1] + ordered[mid]) / 2.0
+                wins = sum(value > 0 for value in ordered)
+                losses = sum(value < 0 for value in ordered)
+                flats = n - wins - losses
+                mean = sum(ordered) / n
+            else:
+                median = mean = None
+                wins = losses = flats = 0
+            horizon_summary[horizon] = {
+                "observed_count": len(observed),
+                "pending_count": len(rows) - len(observed),
+                "direction_scored_count": n,
+                "direction_unscored_count": len(observed) - n,
+                "wins": wins,
+                "losses": losses,
+                "flat": flats,
+                "win_rate_pct": (wins / n * 100.0) if n else None,
+                "mean_directional_return_pct": mean,
+                "median_directional_return_pct": median,
+            }
+        return {
+            "selection_count": len(rows),
+            "with_market_observations": sum(
+                row.get("outcome_state") == "OBSERVATIONS_AVAILABLE" for row in rows
+            ),
+            "awaiting_real_market_observation": sum(
+                row.get("outcome_state") != "OBSERVATIONS_AVAILABLE" for row in rows
+            ),
+            "horizons": horizon_summary,
+        }
+
+    rows = list(outcomes)
+    by_asset: dict[str, list[Mapping[str, Any]]] = {}
+    by_direction: dict[str, list[Mapping[str, Any]]] = {}
+    for row in rows:
+        by_asset.setdefault(str(row.get("asset", "UNKNOWN")), []).append(row)
+        by_direction.setdefault(str(row.get("direction", "UNKNOWN")), []).append(row)
+    return {
+        "schema": "arunda.global_selection_quality_summary",
+        "schema_version": "1.0",
+        "basis": "REAL_MARKET_OBSERVATIONS_ONLY",
+        "selection_count": len(rows),
+        "overall": summarize_group(rows),
+        "by_asset": {
+            key: summarize_group(value) for key, value in sorted(by_asset.items())
+        },
+        "by_direction": {
+            key: summarize_group(value) for key, value in sorted(by_direction.items())
+        },
+        "interpretation": {
+            "pending_excluded_from_win_rate": True,
+            "direction_none_excluded_from_directional_returns": True,
+            "no_observations_means_no_quality_claim": True,
+        },
+    }
+
+
 def load_events(stream_path: Path = DEFAULT_STREAM_PATH) -> list[dict[str, Any]]:
     path = Path(stream_path)
     if not path.exists():
@@ -358,6 +438,7 @@ def track_cycle(
         "selections_seen": len(selections),
         "observations_seen": sum(1 for row in all_events if row.get("event_type") == "MARKET_OBSERVATION"),
         "outcomes": outcomes,
+        "quality_summary": summarize_selection_quality(outcomes),
         "events_persisted": persisted,
         "persistence_failures": failures,
         "skipped": skipped,
@@ -369,5 +450,5 @@ def track_cycle(
 __all__ = [
     "build_selection_event", "build_market_observation_event",
     "append_events_idempotent", "evaluate_selection_outcomes",
-    "load_events", "track_cycle", "DEFAULT_STREAM_PATH", "HORIZONS_MS",
+    "load_events", "track_cycle", "summarize_selection_quality", "DEFAULT_STREAM_PATH", "HORIZONS_MS",
 ]
