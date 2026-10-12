@@ -21,6 +21,10 @@ def test_pipeline_emits_aggregated_selection_quality_metrics():
     source = (ROOT / "arunda_pipeline.py").read_text(encoding="utf-8")
     assert 'global_selection_tracking["quality_summary"]["overall"]["horizons"]' in source
     assert '"GLOBAL_SELECTION_QUALITY="' in source
+    assert '"GLOBAL_SELECTION_QUALITY_BY_ASSET="' in source
+    assert '"GLOBAL_SELECTION_QUALITY_BY_DIRECTION="' in source
+    assert 'quality_summary["by_asset"]' in source
+    assert 'quality_summary["by_direction"]' in source
     assert 'for horizon in ("1h", "4h", "24h")' in source
 
 
