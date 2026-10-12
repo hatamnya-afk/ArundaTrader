@@ -23,9 +23,11 @@ def test_attempt_evidence_is_correlatable_and_persisted_idempotently(tmp_path: P
         error_code="FAKE_REJECT", error_message="synthetic unit-test response",
         trade_event_id=issue_trade_event_id(),
     )
-    events = build_execution_attempt_events(request=request, result=result)
+    events = build_execution_attempt_events(request=request, result=result, client_order_id="AR0123456789ABCDEF")
     assert [event.event_type for event in events] == ["ORDER_ATTEMPTED", "PROVIDER_RESULT"]
     assert all(event.trade_event_id == result.trade_event_id for event in events)
+    assert all(event.intent_id == request.intent_id for event in events)
+    assert all(event.client_order_id == "AR0123456789ABCDEF" for event in events)
 
     stream = tmp_path / "events.jsonl"
     first = persist_execution_attempt_events(events, stream_path=stream)
