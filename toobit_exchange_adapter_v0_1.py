@@ -913,6 +913,52 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+    def bind_stable_client_order_id(
+        self,
+        preparation: AdapterOrderPreparation,
+        stable_client_order_id: str | None,
+    ) -> AdapterOrderPreparation:
+        """Bind the evidence ID into the provider payload without submission.
+
+        This does not validate Toobit's undocumented charset/length or prove
+        provider-side idempotency; those remain explicit acceptance blockers.
+        """
+        client_id = (
+            stable_client_order_id.strip()
+            if isinstance(stable_client_order_id, str)
+            else ""
+        )
+        if not client_id:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="STABLE_CLIENT_ORDER_ID_REQUIRED",
+                adapter_name=self.adapter_name,
+                venue=preparation.venue,
+            )
+        if not isinstance(preparation, AdapterOrderPreparation) or not preparation.ready:
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="ORDER_PREPARATION_NOT_READY",
+                adapter_name=self.adapter_name,
+                venue=getattr(preparation, "venue", "UNKNOWN"),
+            )
+        if not isinstance(preparation.request, Mapping):
+            return AdapterOrderPreparation(
+                ready=False,
+                reason="TOOBIT_ORDER_PAYLOAD_INVALID",
+                adapter_name=self.adapter_name,
+                venue=preparation.venue,
+            )
+        payload = dict(preparation.request)
+        payload["newClientOrderId"] = client_id
+        return AdapterOrderPreparation(
+            ready=True,
+            reason="READY",
+            adapter_name=preparation.adapter_name,
+            venue=preparation.venue,
+            request=payload,
+        )
+
     def submit_prepared_order(
         self,
         preparation: AdapterOrderPreparation,
