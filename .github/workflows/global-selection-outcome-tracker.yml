@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - fix/global-selection-outcome-loop-20261012
+      - operational-main-20261007
     paths:
       - "global_selection_outcome_tracker_v0_1.py"
       - "tests/test_global_selection_outcome_tracker_v0_1.py"
