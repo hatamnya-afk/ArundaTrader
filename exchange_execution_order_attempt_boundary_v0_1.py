@@ -204,7 +204,7 @@ def attempt_prepared_order(
             trade_event_id=trade_event_id,
             provider=getattr(adapter, "adapter_name", None) or "PROVIDER_UNKNOWN",
             event_timestamp=request.timestamp,
-            client_order_id=stable_client_order_id,
+            client_order_id=canonical_client_order_id,
         )
     except Exception as exc:
         return blocked_execution_result(
@@ -279,7 +279,7 @@ def attempt_prepared_order(
     try:
         provider_event = build_provider_result_event(
             request=request, result=result,
-            client_order_id=stable_client_order_id,
+            client_order_id=canonical_client_order_id,
         )
         outcome_persistence = persist_execution_attempt_events(
             [provider_event], stream_path=Path(evidence_stream_path)
