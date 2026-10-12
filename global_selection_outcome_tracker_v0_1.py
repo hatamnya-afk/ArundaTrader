@@ -177,6 +177,9 @@ def evaluate_selection_outcomes(
             selections[decision_id] = event
         elif event_type == "MARKET_OBSERVATION":
             observations.setdefault(decision_id, []).append(event)
+        elif event_type == "OUTCOME_EVALUATION":
+            # Derived snapshots are durable audit records, never source observations.
+            continue
         else:
             raise ValueError(f"unsupported event_type: {event_type}")
     results = []
@@ -300,6 +303,22 @@ def track_cycle(
         except (TypeError, ValueError) as exc:
             skipped.append({"asset": selection["asset"], "reason": str(exc)})
     persisted, failures = append_events_idempotent(pending_events, stream_path)
+    all_events = load_events(stream_path)
+    outcomes = evaluate_selection_outcomes(all_events)
+    outcome_events = []
+    for outcome in outcomes:
+        latest_ts = outcome.get("latest_observed_at_ms")
+        if latest_ts is None:
+            continue
+        outcome_events.append({
+            "schema": SCHEMA, "schema_version": SCHEMA_VERSION,
+            "event_type": "OUTCOME_EVALUATION",
+            "event_id": f"OUTCOME:{outcome['decision_id']}:{latest_ts}",
+            **outcome,
+        })
+    outcome_persisted, outcome_failures = append_events_idempotent(outcome_events, stream_path)
+    persisted += outcome_persisted
+    failures.extend(outcome_failures)
     all_events = load_events(stream_path)
     outcomes = evaluate_selection_outcomes(all_events)
     return {
