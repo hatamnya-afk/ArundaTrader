@@ -40,13 +40,14 @@ class CompactEvent:
     reason_code: str | None = None
     provider: str | None = None
     trade_event_id: str | None = None
-    intent_id: str | None = None
-    client_order_id: str | None = None
     correlation_id: str | None = None
     source_system: str = "ArundaTrader"
     environment_id: str = "arundatrader"
     schema: str = MCP01_SCHEMA
     schema_version: str = MCP01_SCHEMA_VERSION
+    # Additive identity fields are appended to preserve existing positional construction.
+    intent_id: str | None = None
+    client_order_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
