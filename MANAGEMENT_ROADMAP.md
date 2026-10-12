@@ -1,41 +1,36 @@
-# CURRENT GOVERNANCE OVERRIDE — 2026-10-08
+# CURRENT GOVERNANCE OVERRIDE — 2026-10-12
 
-> **THIS SECTION IS THE ACTIVE STATE.**
-> Historical sections below are preserved as evidence/history and MUST NOT be interpreted as the current frontier when they conflict with this section.
->
-> ## CURRENT CROSS-REPOSITORY MAP
-> Read `ARUNDA_ECOSYSTEM_MASTER_MAP.md` first.
->
-> ## VERIFIED POSITION
-> The provider-neutral execution-attempt contract is VERIFIED / PASS / CLOSED for its defined scope.
-> Latest verified endpoint: `448806f`.
->
-> ## CURRENT FRONTIER
-> **MANAGEMENT REVIEW — ONE-TIME REAL-PRODUCTION PHASE-ENTRY / STANDING MANDATE**
->
-> The next task is to verify the one-time management phase-entry mandate and its separation from technical execution authorization. The management review package is review-only and cannot authorize an individual order attempt.
->
-> ## SAFETY
-> `EXECUTION AUTHORIZATION = FALSE`
-> `ORDER WRITE = FORBIDDEN`
-> `PROVIDER WRITE = FORBIDDEN`
-> `DATABASE WRITE = FORBIDDEN`
-> `arunda_pipeline.py` remains unwired.
->
-> ## FORBIDDEN
-> - Do not submit an order.
-> - Do not call provider write endpoints.
-> - Do not activate execution.
-> - Do not reopen CP46-A6.
-> - Do not redesign Core or bind Core to Toobit.
-> - Do not treat historical A6 BLOCKED text as the current frontier.
->
-> ## ALLOWED NOW
-> - Define the explicit real-attempt gate.
-> - Verify its preconditions, authorization separation, scope, safety interlocks, and evidence requirements.
-> - Prepare a management decision package.
->
-> **STOP CONDITION:** after the standing-mandate package is verified, STOP. Provider write remains forbidden until the ONE-TIME REAL-PRODUCTION PHASE-ENTRY MANDATE is explicitly authorized. After that, no per-trade management approval is required; the existing technical authorization boundary validates each ready request against the active standing mandate.
+> **THIS SECTION IS THE ACTIVE STATE.** Historical sections below are preserved as evidence/history and must not override this state.
+
+## VERIFIED MANAGEMENT POSITION
+- One-time REAL_PRODUCTION phase-entry mandate: **AUTHORIZED — 2026-10-12**.
+- Provider: TOOBIT. Markets in scope: SPOT and FUTURES.
+- Standing mandate: no per-trade management approval.
+- Zero initial exchange balance is an allowed starting environmental state; provider responses/outcomes must be genuine.
+- Authoritative decision record: `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`.
+
+## CURRENT TECHNICAL FRONTIER
+**FINAL REAL-ORDER GATE — OPEN / NOT VERIFIED.**
+The management decision does not itself authorize a live submission. Static inspection has found unresolved technical prerequisites: the current Toobit adapter advertises order submission as disabled and has no verified submit path; the active mandate needs an explicit valid expiry; Toobit client-order-ID constraints and ambiguous recovery semantics remain unverified on Draft PR #31; and end-to-end real outcome/observation capture is not yet proven.
+
+## SAFETY — ACTIVE
+- `EXECUTION AUTHORIZATION = FALSE` until the technical boundary validates a current ready request against a valid standing-mandate observation.
+- `ORDER WRITE = FORBIDDEN` while any required gate evidence is missing.
+- `PROVIDER WRITE = FORBIDDEN` while any required gate evidence is missing.
+- `DATABASE WRITE = FORBIDDEN`.
+- `arunda_pipeline.py` remains unwired.
+- PR #31 remains Draft and unmerged.
+- No production runtime, live order, cancel, withdrawal, or live provider write as part of this verification.
+
+## ALLOWED NOW
+- Static contract and code-path verification.
+- Offline focused tests and CI evidence review.
+- Read-only provider evidence only where explicitly permitted by existing scope.
+- Resolve technical blockers without weakening safety, idempotency, provenance, or fail-closed behavior.
+- Keep the canonical four governance documents synchronized.
+
+## ADVANCEMENT RULE
+Continue from this frontier without re-auditing closed stages. The standing management mandate eliminates per-trade management approvals, but each candidate still must independently pass the existing Decision → Risk → Trade Gate → readiness → technical authorization → adapter/provider contracts. Do not submit a live order until every current technical/provider precondition is evidenced and the adapter genuinely supports the required operation.
 
 ---
 
