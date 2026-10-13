@@ -112,7 +112,11 @@ def build_runtime_evidence_events(
                 "asset": _text(asset, "asset"),
                 "stage": "DATA_QUALITY",
                 "status": result.get("status"),
-                "reason_code": "TRADE_EVENT_ID_MISSING_AT_EXECUTION_RESULT",
+                "reason_code": (
+                    result.get("error_code")
+                    if isinstance(result.get("error_code"), str) and result.get("error_code").strip()
+                    else "TRADE_EVENT_ID_MISSING_AT_EXECUTION_RESULT"
+                ),
             }
             payload["event_id"] = deterministic_event_id(**payload)
             events.append(build_event(**payload).to_dict())
