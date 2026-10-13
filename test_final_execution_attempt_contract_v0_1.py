@@ -2,6 +2,7 @@ from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
     ExchangeAdapterCapabilities,
 )
+import exchange_execution_order_attempt_boundary_v0_1 as order_attempt_boundary
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
 from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
 
@@ -43,6 +44,19 @@ def _package():
         "provenance": "REAL_MARKET",
         "observed_at": "2026-10-08T00:00:00+00:00",
     }
+
+
+def _simulate_enabled_controls_for_isolated_contract_test(monkeypatch):
+    # Test-only seam: production safety constants remain OFF.
+    monkeypatch.setattr(
+        order_attempt_boundary,
+        "safety_contract",
+        lambda: {
+            "EXECUTION_ENABLED": True,
+            "ORDER_SUBMISSION_ENABLED": True,
+            "EXCHANGE_WRITE_ENABLED": True,
+        },
+    )
 
 
 def _management_observation(decision="AUTHORIZED"):
@@ -131,7 +145,8 @@ class _FakeAdapter:
         )
 
 
-def test_final_attempt_runs_management_producer_then_technical_authorization():
+def test_final_attempt_runs_management_producer_then_technical_authorization(monkeypatch):
+    _simulate_enabled_controls_for_isolated_contract_test(monkeypatch)
     result = run_final_execution_attempt_contract(
         execution_ready_package=_package(),
         request=_request(),
@@ -168,7 +183,8 @@ def test_final_attempt_fails_closed_without_valid_management_mandate():
     assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
 
 
-def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter():
+def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter(monkeypatch):
+    _simulate_enabled_controls_for_isolated_contract_test(monkeypatch)
     observation = _management_observation()
     observation["provider"] = "OTHER_PROVIDER"
     result = run_final_execution_attempt_contract(
@@ -181,6 +197,28 @@ def test_final_attempt_fails_closed_when_mandate_provider_does_not_match_adapter
     )
     assert result.status == "FAIL_CLOSED"
     assert result.error_code == "AUTHORIZATION_PROVIDER_MISMATCH"
+
+
+def test_final_attempt_fails_closed_with_controls_off_before_adapter_is_reached():
+    class NoAdapterCalls(_FakeAdapter):
+        def prepare_order(self, request, *, venue, execution_instrument):
+            raise AssertionError("adapter preparation must not run while controls are OFF")
+
+        def submit_prepared_order(self, preparation, *, canonical_request):
+            raise AssertionError("adapter submission must not run while controls are OFF")
+
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        management_observation=_management_observation(),
+        adapter=NoAdapterCalls(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.accepted is False
+    assert result.exchange_order_id is None
 
 
 def test_final_attempt_fails_closed_when_mandate_provider_is_missing():
