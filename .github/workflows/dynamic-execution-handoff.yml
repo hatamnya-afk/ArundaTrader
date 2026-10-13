@@ -8,6 +8,9 @@ on:
       - "arunda_pipeline.py"
       - "dynamic_*_boundary_v0_1.py"
       - "dynamic_execution_handoff_v0_1.py"
+      - "market_regime_engine.py"
+      - "market_structure_engine.py"
+      - "test_dynamic_execution_regime_connection_v0_1.py"
       - "mcp01_main_integration_boundary_v0_1.py"
       - "test_dynamic_execution_handoff_v0_1.py"
       - "test_mcp01_execution_results_handoff_v0_1.py"
@@ -61,6 +64,7 @@ jobs:
           signal_logic.py
           indicator_engine.py
           market_structure_engine.py
+          market_regime_engine.py
           feature_engine.py
           decision_engine.py
           decision_contract.py
@@ -82,4 +86,5 @@ jobs:
         run: >-
           python -m pytest -q
           test_dynamic_execution_handoff_v0_1.py
+          test_dynamic_execution_regime_connection_v0_1.py
           test_mcp01_execution_results_handoff_v0_1.py
