@@ -92,8 +92,22 @@ def build_order_intents_and_boundary_results(
             price = opportunity.get("price", opportunity.get("entry_price"))
             confidence = opportunity.get("confidence")
             opportunity_timestamp = opportunity.get("timestamp")
-            if price is None or confidence is None or not isinstance(opportunity_timestamp, str) or not opportunity_timestamp.strip():
+            if price is None or confidence is None or opportunity_timestamp is None:
                 raise ValueError("OPPORTUNITY_PRICE_CONFIDENCE_TIMESTAMP_MISSING")
+            if isinstance(opportunity_timestamp, str):
+                timestamp_value = opportunity_timestamp.strip()
+                if not timestamp_value:
+                    raise ValueError("OPPORTUNITY_TIMESTAMP_INVALID")
+            elif (
+                isinstance(opportunity_timestamp, (int, float))
+                and not isinstance(opportunity_timestamp, bool)
+                and math.isfinite(float(opportunity_timestamp))
+                and float(opportunity_timestamp) > 0
+            ):
+                # Preserve the exact source timestamp value; do not infer its unit.
+                timestamp_value = str(opportunity_timestamp)
+            else:
+                raise ValueError("OPPORTUNITY_TIMESTAMP_INVALID")
             for field_name, numeric_value in (("price", price), ("confidence", confidence)):
                 if isinstance(numeric_value, bool) or not isinstance(numeric_value, (int, float)) or not math.isfinite(float(numeric_value)):
                     raise ValueError(f"OPPORTUNITY_{field_name.upper()}_INVALID")
@@ -133,7 +147,7 @@ def build_order_intents_and_boundary_results(
             if not isinstance(market_ts, (int, float)) or not isinstance(source, str) or not source.strip():
                 raise ValueError("CURRENT_MARKET_SNAPSHOT_PROVENANCE_INVALID")
             snapshot_id = f"{source.strip()}|{asset}/USDT|1h|{int(market_ts)}"
-            regime = decision.get("regime")
+            regime = decision.get("regime", opportunity.get("regime"))
             if not isinstance(regime, str) or not regime.strip():
                 raise ValueError("DECISION_REGIME_MISSING")
 
@@ -144,7 +158,7 @@ def build_order_intents_and_boundary_results(
                 "entry_price": price,
                 "confidence": confidence,
                 "regime": regime.strip(),
-                "timestamp": opportunity_timestamp.strip(),
+                "timestamp": timestamp_value,
                 "snapshot_id": snapshot_id,
                 "intent_id": intent_id,
             }
@@ -163,7 +177,7 @@ def build_order_intents_and_boundary_results(
                 reference_price=price,
                 intent_id=intent_id,
                 snapshot_id=snapshot_id,
-                timestamp=opportunity_timestamp.strip(),
+                timestamp=timestamp_value,
                 decision_id=decision_id.strip(),
             )
             valid, reason = contract.validate_order_request(request)
