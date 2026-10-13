@@ -24,6 +24,7 @@ from exchange_execution_contract import (
     CanonicalExecutionResult,
     CanonicalOrderRequest,
     blocked_execution_result,
+    safety_contract,
     validate_order_request,
 )
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
@@ -47,6 +48,27 @@ def attempt_prepared_order(
     exists at the final boundary. Authorization is never inferred from
     readiness, adapter capability, account state, or provider metadata.
     """
+
+    # Independent fail-closed hard stop. Pipeline guards do not protect direct
+    # callers of this boundary, including the final-attempt contract.
+    safety = safety_contract()
+    required_controls = (
+        "EXECUTION_ENABLED",
+        "ORDER_SUBMISSION_ENABLED",
+        "EXCHANGE_WRITE_ENABLED",
+    )
+    if any(safety.get(name) is not True for name in required_controls):
+        return blocked_execution_result(
+            asset=getattr(request, "asset", None),
+            direction=getattr(request, "direction", None),
+            error_code="EXECUTION_DISABLED",
+            error_message=(
+                "Execution attempt blocked: EXECUTION_ENABLED, "
+                "ORDER_SUBMISSION_ENABLED, and EXCHANGE_WRITE_ENABLED "
+                "must all be explicitly True."
+            ),
+            decision_id=getattr(request, "decision_id", None),
+        )
 
     # Decision identity is mandatory at this boundary and must be rejected
     # before adapter validation, preparation, or submission.
