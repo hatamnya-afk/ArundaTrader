@@ -39,6 +39,10 @@ def test_trade_ready_builds_intent_request_and_fail_closed_result():
     assert blocked == {}
     assert requests["BTC"].decision_id == "DECISION-1"
     assert requests["BTC"].quantity == 0.01
+    assert set(intents["BTC"]) == {
+        "asset", "direction", "entry_price", "confidence",
+        "regime", "timestamp", "snapshot_id", "intent_id",
+    }
     assert results["BTC"].error_code == "EXECUTION_DISABLED"
     assert results["BTC"].exchange_order_id is None
     assert results["BTC"].trade_event_id is None
@@ -65,3 +69,20 @@ def test_ineligible_opportunity_fails_closed():
     intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
     assert not intents and not requests and not results
     assert blocked["BTC"] == "CURRENT_ELIGIBLE_OPPORTUNITY_MISSING"
+
+
+
+def test_nonpositive_quantity_fails_closed():
+    args = _fixtures()
+    args["risk_snapshot"]["BTC"]["position_quantity"] = 0
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert not intents and not requests and not results
+    assert blocked["BTC"] == "RISK_POSITION_QUANTITY_NOT_POSITIVE"
+
+
+def test_decision_identity_mismatch_fails_closed():
+    args = _fixtures()
+    args["trade_gate_snapshot"]["BTC"]["decision_id"] = "OTHER-DECISION"
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert not intents and not requests and not results
+    assert blocked["BTC"] == "DECISION_ID_LINEAGE_MISMATCH"
