@@ -109,3 +109,51 @@ def test_emit_mcp01_evidence_rejects_arbitrary_execution_result_object():
             trade_ready_assets=(),
             execution_results={"BTC": UnknownResult()},
         )
+
+
+def test_canonical_execution_result_becomes_correlated_order_and_provider_events():
+    result = CanonicalExecutionResult(
+        accepted=False,
+        exchange_order_id=None,
+        status="SUBMISSION_OUTCOME_UNKNOWN",
+        asset="BTC",
+        direction="LONG",
+        executed_quantity=None,
+        executed_price=None,
+        timestamp=None,
+        adapter="TOOBIT",
+        error_code="TIMEOUT",
+        error_message="Provider outcome requires reconciliation",
+        trade_event_id="TRADE-EVENT-E2E",
+    )
+
+    with patch.object(
+        boundary, "persist_events_isolated", return_value=(3, [])
+    ) as persist:
+        result_summary = boundary.emit_mcp01_evidence(
+            cycle_id="cycle-e2e",
+            decision_snapshot={
+                "BTC": {"decision_id": "DECISION-E2E", "decision": "BUY"}
+            },
+            trade_gate_snapshot={
+                "BTC": {
+                    "decision_id": "DECISION-E2E",
+                    "trade_gate_status": "HOLD",
+                    "direction": "LONG",
+                }
+            },
+            trade_ready_assets=(),
+            execution_results={"BTC": result},
+        )
+
+    assert result_summary == (3, [])
+    events = [event.to_dict() for event in persist.call_args.args[0]]
+    order_events = [event for event in events if event["event_type"] == "ORDER_ATTEMPTED"]
+    provider_events = [event for event in events if event["event_type"] == "PROVIDER_RESULT"]
+    assert len(order_events) == 1
+    assert len(provider_events) == 1
+    assert order_events[0]["trade_event_id"] == "TRADE-EVENT-E2E"
+    assert provider_events[0]["trade_event_id"] == "TRADE-EVENT-E2E"
+    assert order_events[0]["decision_id"] == "DECISION-E2E"
+    assert provider_events[0]["reason_code"] == "TIMEOUT"
+    assert provider_events[0]["status"] == "SUBMISSION_OUTCOME_UNKNOWN"
