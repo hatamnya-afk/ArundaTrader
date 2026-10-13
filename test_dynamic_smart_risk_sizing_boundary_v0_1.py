@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import replace
-
 import pytest
 
 from real_capital_observation_contract_v0_1 import RealCapitalObservation
@@ -107,6 +105,7 @@ def test_stop_asset_direction_and_entry_must_match_current_candidate():
     args["stop_policy_observation"] = {
         **args["stop_policy_observation"],
         "entry_price": 61000.0,
+        "stop_distance": 2000.0,
     }
     with pytest.raises(ValueError, match="SMART_RISK_STOP_ENTRY_MISMATCH"):
         build_dynamic_smart_risk_decision(**args)
