@@ -5425,10 +5425,15 @@ def main() -> int:
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
-        if trade_ready_assets:
+        if trade_ready_assets and not runtime_order_intents:
             print(
                 "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
+                "OrderIntent/request construction blocked by missing or invalid upstream contract fields."
+            )
+        elif runtime_order_intents:
+            print(
+                "OrderIntent and CanonicalOrderRequest created; "
+                "execution boundary remains fail-closed and no order was submitted."
             )
 
         # No OrderIntent creation.
@@ -5448,7 +5453,9 @@ def main() -> int:
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
-        print("ORDER_INTENTS_CREATED=0")
+        print(f"ORDER_INTENTS_CREATED={len(runtime_order_intents)}")
+        print(f"CANONICAL_ORDER_REQUESTS={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_RESULTS={len(execution_results)}")
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
