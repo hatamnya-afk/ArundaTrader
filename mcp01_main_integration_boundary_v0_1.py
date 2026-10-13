@@ -19,6 +19,7 @@ from cp49_authoritative_decision_birth_issuer_v0_1 import (
 from cp49_authoritative_decision_birth_store_v0_1 import ensure_birth_schema
 from cp49_production_decision_birth_producer_v0_1 import require_production_decision_birth
 from mcp01_compact_event_evidence_v0_1 import (
+    build_event,
     persist_events_isolated,
 )
 from mcp01_trader_evidence_bridge_v0_1 import (
@@ -121,7 +122,7 @@ def emit_mcp01_evidence(
     normalized_execution_results: dict[str, dict[str, Any]] = {}
     if execution_results is not None:
         if not isinstance(execution_results, Mapping):
-            raise ValueError("MCP01_EXECUTION_RESULTS_INVALID")
+            raise TypeError("MCP01_EXECUTION_RESULTS_MUST_BE_MAPPING")
         for raw_asset, raw_result in execution_results.items():
             asset = str(raw_asset).strip().upper()
             if not asset:
@@ -131,7 +132,7 @@ def emit_mcp01_evidence(
             elif is_dataclass(raw_result) and not isinstance(raw_result, type):
                 normalized_execution_results[asset] = asdict(raw_result)
             else:
-                raise ValueError(f"MCP01_EXECUTION_RESULT_NOT_STRUCTURED:{asset}")
+                raise TypeError(f"MCP01_EXECUTION_RESULT_TYPE_INVALID:{asset}")
 
     events = build_runtime_evidence_events(
         cycle_id=cycle_id,
@@ -139,7 +140,8 @@ def emit_mcp01_evidence(
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
-        execution_results=normalized_execution_results,
+        execution_results=(normalized_execution_results if execution_results is not None else None),
     )
     events = deduplicate_events(events)
-    return persist_events_isolated(events)
+    validated_events = [build_event(**event) for event in events]
+    return persist_events_isolated(validated_events)
