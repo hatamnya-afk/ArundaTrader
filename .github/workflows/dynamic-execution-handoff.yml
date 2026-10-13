@@ -1,0 +1,55 @@
+name: Dynamic Execution Handoff
+
+on:
+  pull_request:
+    branches:
+      - operational-main-20261007
+    paths:
+      - "arunda_pipeline.py"
+      - "dynamic_*_boundary_v0_1.py"
+      - "dynamic_execution_handoff_v0_1.py"
+      - "mcp01_main_integration_boundary_v0_1.py"
+      - "test_dynamic_execution_handoff_v0_1.py"
+      - "test_mcp01_execution_results_handoff_v0_1.py"
+      - ".github/workflows/dynamic-execution-handoff.yml"
+  push:
+    branches:
+      - fix/operational-dynamic-execution-connection-20261013
+    paths:
+      - "arunda_pipeline.py"
+      - "dynamic_*_boundary_v0_1.py"
+      - "dynamic_execution_handoff_v0_1.py"
+      - "mcp01_main_integration_boundary_v0_1.py"
+      - "test_dynamic_execution_handoff_v0_1.py"
+      - "test_mcp01_execution_results_handoff_v0_1.py"
+      - ".github/workflows/dynamic-execution-handoff.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  focused-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Compile connected pipeline modules
+        run: >-
+          python -m py_compile
+          arunda_pipeline.py
+          dynamic_execution_handoff_v0_1.py
+          dynamic_decision_contract_boundary_v0_1.py
+          mcp01_main_integration_boundary_v0_1.py
+          mcp01_trader_evidence_bridge_v0_1.py
+          exchange_execution_contract.py
+          exchange_execution_boundary.py
+      - name: Run focused execution handoff tests
+        run: >-
+          python -m pytest -q
+          test_dynamic_execution_handoff_v0_1.py
+          test_mcp01_execution_results_handoff_v0_1.py
