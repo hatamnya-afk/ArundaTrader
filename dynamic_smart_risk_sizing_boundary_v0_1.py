@@ -7,8 +7,8 @@ must supply independently sourced current-cycle observations.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import asdict
 from typing import Any
+import math
 
 from real_capital_observation_contract_v0_1 import RealCapitalObservation
 from smart_risk_engine_v0_1 import build_smart_risk
@@ -59,7 +59,7 @@ def build_dynamic_smart_risk_decision(
         entry = float(entry_price)
     except (TypeError, ValueError):
         raise ValueError("SMART_RISK_ENTRY_INVALID") from None
-    if not __import__("math").isfinite(entry) or entry <= 0:
+    if not math.isfinite(entry) or entry <= 0:
         raise ValueError("SMART_RISK_ENTRY_INVALID")
 
     if not isinstance(capital, RealCapitalObservation):
@@ -117,15 +117,8 @@ def build_dynamic_smart_risk_decision(
         "direction": stop_inputs["direction"],
         "entry_price": stop_inputs["entry_price"],
         "stop_distance": stop_inputs["stop_distance"],
-        "correlation_adjustment": 1.0,
-        "liquidity_adjustment": 1.0,
-        "execution_adjustment": 1.0,
     }
 
-    # The adjustment factors above are neutral multipliers only; they do not
-    # claim that correlation, liquidity, or execution observations were made.
-    # If such a policy is required, it must be supplied explicitly in the
-    # validated observation and this adapter must be extended to validate it.
     decision = build_smart_risk(observation, policy)
     decision.validate()
     return decision
