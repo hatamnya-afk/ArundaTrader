@@ -8,6 +8,8 @@ on:
       - "arunda_pipeline.py"
       - "dynamic_*_boundary_v0_1.py"
       - "dynamic_execution_handoff_v0_1.py"
+      - "dynamic_smart_risk_sizing_boundary_v0_1.py"
+      - "test_dynamic_smart_risk_sizing_boundary_v0_1.py"
       - "market_regime_engine.py"
       - "market_structure_engine.py"
       - "test_dynamic_execution_regime_connection_v0_1.py"
@@ -60,6 +62,14 @@ jobs:
           dynamic_risk_contract_boundary_v0_1.py
           dynamic_trade_gate_contract_boundary_v0_1.py
           dynamic_execution_handoff_v0_1.py
+          dynamic_smart_risk_sizing_boundary_v0_1.py
+          real_capital_observation_contract_v0_1.py
+          smart_risk_contract_v0_1.py
+          smart_risk_engine_v0_1.py
+          smart_risk_entry_stop_bridge_v0_1.py
+          smart_risk_policy_bridge_v0_1.py
+          smart_risk_portfolio_bridge_v0_1.py
+          validated_stop_risk_policy_source_contract_v0_1.py
           market_analysis_engine.py
           signal_logic.py
           indicator_engine.py
@@ -86,5 +96,6 @@ jobs:
         run: >-
           python -m pytest -q
           test_dynamic_execution_handoff_v0_1.py
+          test_dynamic_smart_risk_sizing_boundary_v0_1.py
           test_dynamic_execution_regime_connection_v0_1.py
           test_mcp01_execution_results_handoff_v0_1.py
