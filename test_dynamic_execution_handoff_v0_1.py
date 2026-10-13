@@ -30,6 +30,7 @@ def _fixtures():
         "opportunity_by_asset": {"BTC": opportunity},
         "ready_opportunity_assets": ["BTC"],
         "market_data_by_symbol": {"BTC/USDT": market},
+        "regime_snapshot": {"BTC/USDT": {"regime": "TRENDING"}},
     }
 
 
@@ -86,3 +87,12 @@ def test_decision_identity_mismatch_fails_closed():
     intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
     assert not intents and not requests and not results
     assert blocked["BTC"] == "DECISION_ID_LINEAGE_MISMATCH"
+
+
+
+def test_missing_authoritative_regime_fails_closed():
+    args = _fixtures()
+    args["regime_snapshot"] = {}
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert not intents and not requests and not results
+    assert blocked["BTC"] == "CURRENT_MARKET_REGIME_MISSING"
