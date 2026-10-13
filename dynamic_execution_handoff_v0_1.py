@@ -6,7 +6,7 @@ runtime evidence. It never enables execution or contacts a provider.
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from datetime import datetime, timezone
+import math
 from typing import Any
 
 import exchange_execution_contract as contract
@@ -79,6 +79,9 @@ def build_order_intents_and_boundary_results(
             decision_id = decision.get("decision_id")
             if not isinstance(decision_id, str) or not decision_id.strip():
                 raise ValueError("AUTHORITATIVE_DECISION_ID_MISSING")
+            gate_decision_id = gate.get("decision_id")
+            if gate_decision_id is not None and gate_decision_id != decision_id:
+                raise ValueError("DECISION_ID_LINEAGE_MISMATCH")
             direction = str(gate.get("direction", decision.get("direction", ""))).strip().upper()
             if direction not in contract.VALID_DIRECTIONS:
                 raise ValueError("DIRECTION_INVALID")
@@ -91,6 +94,13 @@ def build_order_intents_and_boundary_results(
             opportunity_timestamp = opportunity.get("timestamp")
             if price is None or confidence is None or not isinstance(opportunity_timestamp, str) or not opportunity_timestamp.strip():
                 raise ValueError("OPPORTUNITY_PRICE_CONFIDENCE_TIMESTAMP_MISSING")
+            for field_name, numeric_value in (("price", price), ("confidence", confidence)):
+                if isinstance(numeric_value, bool) or not isinstance(numeric_value, (int, float)) or not math.isfinite(float(numeric_value)):
+                    raise ValueError(f"OPPORTUNITY_{field_name.upper()}_INVALID")
+            if float(price) <= 0:
+                raise ValueError("OPPORTUNITY_PRICE_NOT_POSITIVE")
+            if float(confidence) < 0 or float(confidence) > 1:
+                raise ValueError("OPPORTUNITY_CONFIDENCE_OUT_OF_RANGE")
 
             risk = risks.get(asset)
             if risk is None:
@@ -101,6 +111,10 @@ def build_order_intents_and_boundary_results(
             quantity = risk.get("position_quantity")
             if quantity is None:
                 raise ValueError("RISK_POSITION_QUANTITY_MISSING")
+            if isinstance(quantity, bool) or not isinstance(quantity, (int, float)) or not math.isfinite(float(quantity)):
+                raise ValueError("RISK_POSITION_QUANTITY_INVALID")
+            if float(quantity) <= 0:
+                raise ValueError("RISK_POSITION_QUANTITY_NOT_POSITIVE")
             if risk.get("quantity_unit", contract.QUANTITY_UNIT_BASE_ASSET) != contract.QUANTITY_UNIT_BASE_ASSET:
                 raise ValueError("RISK_QUANTITY_UNIT_INVALID")
             if risk.get("quantity_source", contract.QUANTITY_SOURCE_RISK_POSITION) != contract.QUANTITY_SOURCE_RISK_POSITION:
@@ -133,11 +147,13 @@ def build_order_intents_and_boundary_results(
                 "timestamp": opportunity_timestamp.strip(),
                 "snapshot_id": snapshot_id,
                 "intent_id": intent_id,
-                "decision_id": decision_id.strip(),
-                "quantity": quantity,
-                "quantity_unit": contract.QUANTITY_UNIT_BASE_ASSET,
-                "quantity_source": contract.QUANTITY_SOURCE_RISK_POSITION,
             }
+            required_intent_fields = {
+                "asset", "direction", "entry_price", "confidence",
+                "regime", "timestamp", "snapshot_id", "intent_id",
+            }
+            if set(intent) != required_intent_fields:
+                raise ValueError("ORDER_INTENT_FIELD_CONTRACT_MISMATCH")
             request = contract.build_order_request(
                 asset=asset,
                 direction=direction,
