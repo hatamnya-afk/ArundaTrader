@@ -5356,6 +5356,53 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # DYNAMIC ORDER-INTENT -> CANONICAL REQUEST -> EXECUTION BOUNDARY
+        # ------------------------------------------------------------------
+        from dynamic_execution_handoff_v0_1 import (
+            build_order_intents_and_boundary_results,
+        )
+
+        ready_opportunity_assets = []
+        for ready_result in ready_opportunity_results:
+            ready_opportunity = getattr(ready_result, "opportunity", None)
+            if ready_opportunity is None and isinstance(ready_result, dict):
+                ready_opportunity = ready_result.get("opportunity")
+            if not isinstance(ready_opportunity, dict):
+                continue
+            ready_identity = ready_opportunity.get(
+                "asset",
+                ready_opportunity.get("symbol"),
+            )
+            if isinstance(ready_identity, str) and ready_identity.strip():
+                ready_opportunity_assets.append(
+                    ready_identity.strip().upper().split("/", 1)[0]
+                )
+
+        (
+            runtime_order_intents,
+            canonical_order_requests,
+            execution_results,
+            execution_handoff_blocked,
+        ) = build_order_intents_and_boundary_results(
+            decision_snapshot=decision_snapshot,
+            trade_gate_snapshot=trade_gate_snapshot,
+            risk_snapshot=risk_snapshot,
+            opportunity_by_asset=opportunity_by_asset,
+            ready_opportunity_assets=ready_opportunity_assets,
+            market_data_by_symbol=market_data_by_symbol,
+        )
+
+        print(f"RUNTIME_ORDER_INTENTS_CREATED={len(runtime_order_intents)}")
+        print(f"CANONICAL_ORDER_REQUESTS_VALIDATED={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_RESULTS={len(execution_results)}")
+        print(f"EXECUTION_HANDOFF_BLOCKED={len(execution_handoff_blocked)}")
+        for blocked_asset, blocked_reason in sorted(execution_handoff_blocked.items()):
+            print(
+                "EXECUTION_HANDOFF_BLOCKED_ASSET="
+                f"{blocked_asset}|reason={blocked_reason}"
+            )
+
+        # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
         from mcp01_main_integration_boundary_v0_1 import (
@@ -5370,6 +5417,7 @@ def main() -> int:
             decision_snapshot=decision_snapshot,
             trade_gate_snapshot=trade_gate_snapshot,
             trade_ready_assets=trade_ready_assets,
+            execution_results=execution_results,
         )
 
         # ------------------------------------------------------------------
