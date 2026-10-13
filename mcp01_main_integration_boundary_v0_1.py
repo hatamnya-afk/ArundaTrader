@@ -136,7 +136,7 @@ def emit_mcp01_evidence(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
     trade_ready_assets: Sequence[str],
-    execution_results: Mapping[str, Mapping[str, Any]] | None = None,
+    execution_results: Mapping[str, Any] | None = None,
 ) -> tuple[int, list[dict[str, str]]]:
     """Emit frozen MCP-01 evidence after authoritative Trader outputs exist.
 
