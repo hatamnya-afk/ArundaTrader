@@ -7,6 +7,7 @@ execution, provider logic, or outcome inference.
 from __future__ import annotations
 
 import sqlite3
+from dataclasses import asdict, is_dataclass
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -17,6 +18,7 @@ from cp49_authoritative_decision_birth_issuer_v0_1 import (
 )
 from cp49_authoritative_decision_birth_store_v0_1 import ensure_birth_schema
 from cp49_production_decision_birth_producer_v0_1 import require_production_decision_birth
+from exchange_execution_contract import CanonicalExecutionResult
 from mcp01_compact_event_evidence_v0_1 import (
     persist_events_isolated,
 )
@@ -98,6 +100,35 @@ def bind_authoritative_decision_birth(
     return bound_decisions, len(committed)
 
 
+def _normalize_execution_results(
+    execution_results: Mapping[str, Any] | None,
+) -> dict[str, dict[str, Any]] | None:
+    """Convert canonical execution result objects to the evidence bridge shape.
+
+    Only the canonical result contract is converted. Mapping inputs remain
+    accepted for existing callers and tests; arbitrary objects fail closed.
+    No trade identity is inferred and no provider outcome is synthesized.
+    """
+    if execution_results is None:
+        return None
+    if not isinstance(execution_results, Mapping):
+        raise TypeError("MCP01_EXECUTION_RESULTS_MUST_BE_MAPPING")
+
+    normalized: dict[str, dict[str, Any]] = {}
+    for raw_asset, result in execution_results.items():
+        asset = str(raw_asset).strip().upper()
+        if not asset:
+            raise ValueError("MCP01_EXECUTION_RESULT_ASSET_INVALID")
+        if isinstance(result, CanonicalExecutionResult):
+            row = asdict(result)
+        elif isinstance(result, Mapping):
+            row = dict(result)
+        else:
+            raise TypeError(f"MCP01_EXECUTION_RESULT_TYPE_INVALID:{asset}")
+        normalized[asset] = row
+    return normalized
+
+
 def emit_mcp01_evidence(
     *,
     cycle_id: str,
@@ -112,8 +143,7 @@ def emit_mcp01_evidence(
     canonical results. This function only forwards them to the evidence bridge;
     it never attempts an order, infers identities, or creates provider outcomes.
     """
-    if execution_results is not None and not isinstance(execution_results, Mapping):
-        raise TypeError("MCP01_EXECUTION_RESULTS_MUST_BE_MAPPING")
+    normalized_execution_results = _normalize_execution_results(execution_results)
 
     normalized_gate: dict[str, dict[str, Any]] = {}
     for raw_asset, gate in trade_gate_snapshot.items():
@@ -131,7 +161,7 @@ def emit_mcp01_evidence(
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
-        execution_results=execution_results,
+        execution_results=normalized_execution_results,
     )
     events = deduplicate_events(events)
     return persist_events_isolated(events)
