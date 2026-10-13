@@ -104,8 +104,17 @@ def emit_mcp01_evidence(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
     trade_ready_assets: Sequence[str],
+    execution_results: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> tuple[int, list[dict[str, str]]]:
-    """Emit frozen MCP-01 evidence after authoritative Trader outputs exist."""
+    """Emit frozen MCP-01 evidence after authoritative Trader outputs exist.
+
+    ``execution_results`` must come from the execution boundary's returned
+    canonical results. This function only forwards them to the evidence bridge;
+    it never attempts an order, infers identities, or creates provider outcomes.
+    """
+    if execution_results is not None and not isinstance(execution_results, Mapping):
+        raise TypeError("MCP01_EXECUTION_RESULTS_MUST_BE_MAPPING")
+
     normalized_gate: dict[str, dict[str, Any]] = {}
     for raw_asset, gate in trade_gate_snapshot.items():
         asset = str(raw_asset).strip().upper()
@@ -122,6 +131,7 @@ def emit_mcp01_evidence(
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
+        execution_results=execution_results,
     )
     events = deduplicate_events(events)
     return persist_events_isolated(events)
