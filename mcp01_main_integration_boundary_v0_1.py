@@ -20,6 +20,7 @@ from cp49_authoritative_decision_birth_store_v0_1 import ensure_birth_schema
 from cp49_production_decision_birth_producer_v0_1 import require_production_decision_birth
 from exchange_execution_contract import CanonicalExecutionResult
 from mcp01_compact_event_evidence_v0_1 import (
+    build_event,
     persist_events_isolated,
 )
 from mcp01_trader_evidence_bridge_v0_1 import (
@@ -164,4 +165,5 @@ def emit_mcp01_evidence(
         execution_results=normalized_execution_results,
     )
     events = deduplicate_events(events)
-    return persist_events_isolated(events)
+    compact_events = [build_event(**event) for event in events]
+    return persist_events_isolated(compact_events)
