@@ -42,8 +42,38 @@ jobs:
         run: >-
           python -m py_compile
           arunda_pipeline.py
-          dynamic_execution_handoff_v0_1.py
+          production_universe_contract_v0_1.py
+          dynamic_opportunity_universe_boundary_v0_1.py
+          dynamic_market_data_boundary_v0_1.py
+          production_signal_input_boundary_v0_1.py
+          production_universe_binding.py
+          dynamic_signal_semantic_layer.py
+          dynamic_validation_boundary_v0_1.py
+          dynamic_news_boundary_v0_1.py
+          dynamic_social_boundary_v0_1.py
+          dynamic_fusion_boundary_v0_1.py
+          dynamic_score_contract_boundary_v0_1.py
           dynamic_decision_contract_boundary_v0_1.py
+          dynamic_risk_contract_boundary_v0_1.py
+          dynamic_trade_gate_contract_boundary_v0_1.py
+          dynamic_execution_handoff_v0_1.py
+          market_analysis_engine.py
+          signal_logic.py
+          indicator_engine.py
+          market_structure_engine.py
+          feature_engine.py
+          decision_engine.py
+          decision_contract.py
+          opportunity_engine.py
+          public_market_data_kucoin.py
+          public_market_data_failover_v0.1.py
+          signal_validator.py
+          news_arm_v0_1.py
+          social_arm_v0_1.py
+          fusion_engine.py
+          score_producer.py
+          risk_engine.py
+          trade_gate_engine.py
           mcp01_main_integration_boundary_v0_1.py
           mcp01_trader_evidence_bridge_v0_1.py
           exchange_execution_contract.py
