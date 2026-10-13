@@ -105,7 +105,7 @@ def build_order_intents_and_boundary_results(
             risk = risks.get(asset)
             if risk is None:
                 raise ValueError("RISK_RECORD_MISSING")
-            risk_status = str(risk.get("risk_status", risk.get("risk_state", risk.get("status", risk.get("decision", "")))).strip().upper()
+            risk_status = str(risk.get("risk_status", risk.get("risk_state", risk.get("status", risk.get("decision", ""))))) .strip().upper()
             if risk_status not in _APPROVED_RISK:
                 raise ValueError("RISK_NOT_APPROVED")
             quantity = risk.get("position_quantity")
