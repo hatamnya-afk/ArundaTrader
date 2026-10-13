@@ -5356,6 +5356,41 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # CURRENT-CYCLE ORDER INTENT -> CANONICAL REQUEST -> FAIL-CLOSED RESULT
+        # ------------------------------------------------------------------
+        from dynamic_execution_handoff_v0_1 import build_order_intents_and_boundary_results
+
+        ready_opportunity_assets = []
+        for ready_result in ready_opportunity_results:
+            ready_opportunity = getattr(ready_result, "opportunity", None)
+            if ready_opportunity is None and isinstance(ready_result, dict):
+                ready_opportunity = ready_result.get("opportunity", ready_result)
+            if isinstance(ready_opportunity, dict):
+                ready_identity = ready_opportunity.get("asset", ready_opportunity.get("symbol"))
+                if isinstance(ready_identity, str) and ready_identity.strip():
+                    ready_opportunity_assets.append(normalize_asset(ready_identity.strip().split("/", 1)[0]))
+
+        (
+            order_intents_by_asset,
+            canonical_order_requests,
+            execution_results,
+            execution_handoff_blocked,
+        ) = build_order_intents_and_boundary_results(
+            decision_snapshot=decision_snapshot,
+            trade_gate_snapshot=trade_gate_snapshot,
+            risk_snapshot=risk_snapshot,
+            opportunity_by_asset=opportunity_by_asset,
+            ready_opportunity_assets=ready_opportunity_assets,
+            market_data_by_symbol=market_data_by_symbol,
+        )
+        print(f"ORDER_INTENTS_CREATED={len(order_intents_by_asset)}")
+        print(f"CANONICAL_ORDER_REQUESTS={len(canonical_order_requests)}")
+        print(f"EXECUTION_BOUNDARY_RESULTS={len(execution_results)}")
+        print(f"EXECUTION_HANDOFF_BLOCKED={len(execution_handoff_blocked)}")
+        for blocked_asset, reason in sorted(execution_handoff_blocked.items()):
+            print(f"EXECUTION_HANDOFF_BLOCKED[{blocked_asset}]={reason}")
+
+        # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
         from mcp01_main_integration_boundary_v0_1 import (
@@ -5370,6 +5405,7 @@ def main() -> int:
             decision_snapshot=decision_snapshot,
             trade_gate_snapshot=trade_gate_snapshot,
             trade_ready_assets=trade_ready_assets,
+            execution_results=execution_results,
         )
 
         # ------------------------------------------------------------------
@@ -5377,17 +5413,11 @@ def main() -> int:
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
-        if trade_ready_assets:
-            print(
-                "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
-            )
+        if trade_ready_assets and not order_intents_by_asset:
+            print("TRADE_READY exists but no valid OrderIntent was created; inspect execution handoff blockers above.")
 
-        # No OrderIntent creation.
-        # No canonical order request creation.
-        # No exchange submission.
-        # No execution.
-        # No DB writes outside the explicit CP49 authoritative Birth boundary.
+        # Execution-boundary results are observed; live provider submission remains disabled.
+        # No exchange order is sent. No DB writes outside the explicit CP49 authoritative Birth boundary.
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
@@ -5400,7 +5430,6 @@ def main() -> int:
         print(f"RISK_READY={len(risk_snapshot)}")
         print(f"TRADE_GATE_READY={len(trade_gate_snapshot)}")
         print(f"TRADE_READY={len(trade_ready_assets)}")
-        print("ORDER_INTENTS_CREATED=0")
         print("REAL_ORDER=FALSE")
         print("REAL_TRADE=FALSE")
         print("EXECUTION=OFF")
