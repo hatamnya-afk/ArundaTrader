@@ -26,6 +26,17 @@ def _asset_key(value: Any) -> str:
     return value.strip().upper().split("/", 1)[0]
 
 
+def _asset_matches(source: Any, canonical_asset: str) -> bool:
+    if not isinstance(source, str) or not source.strip():
+        return False
+    normalized = source.strip().upper()
+    return normalized in {
+        canonical_asset,
+        f"{canonical_asset}/USDT",
+        f"{canonical_asset}USDT",
+    }
+
+
 def _same_number(left: Any, right: Any) -> bool:
     if isinstance(left, bool) or isinstance(right, bool):
         return False
@@ -79,7 +90,7 @@ def build_dynamic_smart_risk_decision(
             raise ValueError(f"SMART_RISK_CAPITAL_PORTFOLIO_MISMATCH:{field}")
 
     stop = validate_stop_risk_policy_source(stop_policy_observation)
-    if _asset_key(stop["asset"]) != canonical_asset:
+    if not _asset_matches(stop["asset"], canonical_asset):
         raise ValueError("SMART_RISK_STOP_ASSET_MISMATCH")
     if stop["direction"] != direction:
         raise ValueError("SMART_RISK_STOP_DIRECTION_MISMATCH")
