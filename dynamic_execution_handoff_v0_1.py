@@ -40,6 +40,41 @@ def _get_risk_rows(risk_snapshot: Mapping[str, Any]) -> dict[str, Mapping[str, A
     return rows
 
 
+
+def _resolve_authoritative_regime(
+    regime_snapshot: Mapping[str, Any] | None,
+    asset: str,
+) -> str:
+    """Resolve regime only from the existing authoritative market-regime source."""
+    if not isinstance(regime_snapshot, Mapping):
+        raise ValueError("CURRENT_MARKET_REGIME_MISSING")
+    symbol = f"{asset}/USDT"
+    direct = regime_snapshot.get(symbol)
+    if isinstance(direct, Mapping) and "regime" in direct:
+        value = direct["regime"]
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        raise ValueError("CURRENT_MARKET_REGIME_INVALID")
+    direct = regime_snapshot.get(asset)
+    if isinstance(direct, Mapping) and "regime" in direct:
+        value = direct["regime"]
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        raise ValueError("CURRENT_MARKET_REGIME_INVALID")
+    for key, row in regime_snapshot.items():
+        normalized = str(key).strip().upper()
+        if normalized not in {asset, symbol}:
+            continue
+        if not isinstance(row, Mapping) or "regime" not in row:
+            continue
+        value = row["regime"]
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+        raise ValueError("CURRENT_MARKET_REGIME_INVALID")
+    raise ValueError("CURRENT_MARKET_REGIME_MISSING")
+
+
+
 def build_order_intents_and_boundary_results(
     *,
     decision_snapshot: Mapping[str, Mapping[str, Any]],
@@ -48,6 +83,7 @@ def build_order_intents_and_boundary_results(
     opportunity_by_asset: Mapping[str, Mapping[str, Any]],
     ready_opportunity_assets: Sequence[str],
     market_data_by_symbol: Mapping[str, Any],
+    regime_snapshot: Mapping[str, Any] | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[str, contract.CanonicalOrderRequest], dict[str, contract.CanonicalExecutionResult], dict[str, str]]:
     """Build validated intents/requests for TRADE_READY assets, then call the
     exchange-agnostic boundary. With current safety flags, results are blocked;
@@ -147,9 +183,7 @@ def build_order_intents_and_boundary_results(
             if not isinstance(market_ts, (int, float)) or not isinstance(source, str) or not source.strip():
                 raise ValueError("CURRENT_MARKET_SNAPSHOT_PROVENANCE_INVALID")
             snapshot_id = f"{source.strip()}|{asset}/USDT|1h|{int(market_ts)}"
-            regime = decision.get("regime", opportunity.get("regime"))
-            if not isinstance(regime, str) or not regime.strip():
-                raise ValueError("DECISION_REGIME_MISSING")
+            regime = _resolve_authoritative_regime(regime_snapshot, asset)
 
             intent_id = f"OI-{decision_id.strip()}"
             intent = {
