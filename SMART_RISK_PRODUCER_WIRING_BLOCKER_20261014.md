@@ -79,3 +79,17 @@ The authoritative ledger contract and focused tests now encode these requirement
 **Current status:** dual-market/dual-currency input contract = implemented on candidate; current production ledger producer = **NOT VERIFIED**; real approved valuation policy/source = **BLOCKED**; Smart Risk production wiring = **BLOCKED**; latest CI for these latest commits = **NOT VERIFIED** until a run tied to these commits is confirmed.
 
 No runtime, live exchange API call, order, database write, or operational-branch modification was performed.
+
+
+## Valuation policy evidence boundary — 2026-10-14 continuation
+
+Added `approved_valuation_policy_source_contract_v0_1.py` and focused tests. The contract requires an explicit approval state, policy ID/version, approval reference, approver identity, approval/effective timestamps, and separately declared USDT and USDC rate-source references. It rejects naive timestamps, inactive/future approval windows, missing currency rate-source declarations, and untraceable references.
+
+The authoritative ledger contract now calls this validator, requires policy identity/version to match the ledger declaration, and requires each cycle's currency-rate source to match the source named by the policy evidence. Focused tests cover missing/unapproved policy evidence and mismatched rate-source/policy identity. The workflow compiles and tests the new boundary.
+
+Important limits:
+- The approval record and rate-source references are supplied evidence; this validator does not authenticate their provenance cryptographically or grant management approval.
+- The test fixtures are synthetic and are not approved policy, live rates, account balances, or production capital.
+- This remains an input-validation boundary, not the missing account-wide Spot + Futures ledger producer. It does not aggregate provider balances, account for liabilities/margin/equity, enumerate all positions, or calculate allocated risk.
+
+**Status:** policy-evidence contract = implemented on candidate; authenticated management approval = NOT VERIFIED; live rate source = NOT VERIFIED; authoritative account-wide ledger producer = NOT VERIFIED; Smart Risk pipeline wiring = BLOCKED. Latest CI result remains NOT VERIFIED because no matching run/status has yet been returned for the latest candidate commits. No runtime, exchange call, order attempt, database write, or operational-branch modification was performed.
