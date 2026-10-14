@@ -8,7 +8,7 @@ from account_wide_futures_coverage_contract_v0_1 import validate_account_wide_fu
 
 
 def build_toobit_account_wide_futures_observation(
-    *, adapter_result: Any, observed_at: str, cycle_id: str,
+    *, positions_adapter_result: Any, balances_adapter_result: Any, observed_at: str, cycle_id: str,
     account_scope: str, provenance: str,
 ) -> dict[str, Any]:
     def blocked(reason: str) -> dict[str, Any]:
@@ -21,15 +21,20 @@ def build_toobit_account_wide_futures_observation(
                           (provenance, "FUTURES_OBSERVATION_PROVENANCE_MISSING")):
         if not isinstance(value, str) or not value.strip():
             return blocked(reason)
-    if getattr(adapter_result, "allowed", False) is not True:
-        return blocked(str(getattr(adapter_result, "reason", "FUTURES_PROVIDER_READ_UNAVAILABLE")))
-    data = getattr(adapter_result, "data", None)
-    if not isinstance(data, Mapping) or data.get("coverage_scope") != "ACCOUNT_WIDE":
+    for result, reason in ((positions_adapter_result, "FUTURES_POSITION_PROVIDER_READ_UNAVAILABLE"),
+                           (balances_adapter_result, "FUTURES_BALANCE_PROVIDER_READ_UNAVAILABLE")):
+        if getattr(result, "allowed", False) is not True:
+            return blocked(str(getattr(result, "reason", reason)))
+    position_data = getattr(positions_adapter_result, "data", None)
+    balance_data = getattr(balances_adapter_result, "data", None)
+    if not isinstance(position_data, Mapping) or position_data.get("coverage_scope") != "ACCOUNT_WIDE":
         return blocked("FUTURES_PROVIDER_ACCOUNT_WIDE_COVERAGE_REQUIRED")
-    if data.get("categories_queried") != ["USDT", "USDC"]:
+    if not isinstance(balance_data, Mapping) or balance_data.get("coverage_scope") != "ACCOUNT_WIDE":
+        return blocked("FUTURES_PROVIDER_ACCOUNT_WIDE_BALANCE_COVERAGE_REQUIRED")
+    if position_data.get("categories_queried") != ["USDT", "USDC"] or balance_data.get("categories_queried") != ["USDT", "USDC"]:
         return blocked("FUTURES_BOTH_SETTLEMENT_CATEGORIES_REQUIRED")
-    positions_by_category = data.get("positions_by_category")
-    balances_by_category = data.get("balances_by_category")
+    positions_by_category = position_data.get("positions_by_category")
+    balances_by_category = balance_data.get("balances_by_category")
     if not isinstance(positions_by_category, Mapping) or set(positions_by_category) != {"USDT", "USDC"}:
         return blocked("FUTURES_ACCOUNT_WIDE_POSITION_CATEGORIES_INVALID")
     if not isinstance(balances_by_category, Mapping) or set(balances_by_category) != {"USDT", "USDC"}:
