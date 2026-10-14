@@ -12,6 +12,8 @@ on:
       - "dynamic_smart_risk_pipeline_adapter_v0_1.py"
       - "smart_risk_readonly_producer_boundary_v0_1.py"
       - "authoritative_portfolio_risk_ledger_contract_v0_1.py"
+      - "toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
+      - "test_toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
       - "test_authoritative_portfolio_risk_ledger_contract_v0_1.py"
       - "approved_valuation_policy_source_contract_v0_1.py"
       - "test_approved_valuation_policy_source_contract_v0_1.py"
@@ -98,6 +100,7 @@ jobs:
           toobit_raw_account_observation_producer_v0_1.py
           toobit_raw_position_observation_producer_v0_1.py
           authoritative_portfolio_risk_ledger_contract_v0_1.py
+          toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py
           approved_valuation_policy_source_contract_v0_1.py
           real_capital_observation_contract_v0_1.py
           smart_risk_contract_v0_1.py
@@ -138,6 +141,7 @@ jobs:
           test_toobit_raw_account_observation_producer_v0_1.py
           test_toobit_raw_position_observation_producer_v0_1.py
           test_authoritative_portfolio_risk_ledger_contract_v0_1.py
+          test_toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py
           test_approved_valuation_policy_source_contract_v0_1.py
           test_toobit_exchange_adapter_v0_1.py
           test_dynamic_execution_regime_connection_v0_1.py
