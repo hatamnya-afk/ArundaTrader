@@ -126,3 +126,13 @@ Focused CI for the account-wide producer completed successfully on commit `8e181
 - **Still NOT VERIFIED against a live Toobit account:** no live API calls were made in this frontier. Endpoint completeness is grounded in official documentation and fake-transport contract tests, not a live response capture. All test amounts and rates are synthetic.
 - **Smart Risk remains gated on real per-position risk evidence:** provider position rows do not provide approved stop/risk allocation evidence. The account-wide ledger needs a complete risk allocation for every open position and matching total; no risk is inferred from size, margin, or PnL. An approved stop/risk policy and authenticated valuation/rate approval artifacts must be supplied before the bridge can produce a live Smart Risk quantity.
 - No order, cancellation, withdrawal, production runtime, database write, or operational-branch modification was performed. The candidate PR is CI-only and must not be merged as part of this frontier.
+
+
+## 2026-10-14 — Smart Risk bridge hardening and verification retry
+
+- Hardened `smart_risk_authoritative_ledger_source_bridge_v0_1.py`: now requires ledger ID/version and policy approval reference, explicit Spot/Futures observation timestamps, timezone-aware timestamps, market observations not later than the ledger timestamp, unique normalized asset names, finite positive rates, rate source/reference provenance, matching cycle and valuation-policy identity/version, non-future rate timestamps, and USDT base rate exactly 1.0. Invalid evidence returns BLOCKED and no capital/portfolio source.
+- Expanded bridge fixtures and fail-closed regression tests for cycle mismatch, policy mismatch, non-finite rates, future rates, market timestamps after ledger time, and duplicate asset labels after normalization. Fixture values remain synthetic test data only.
+- Latest candidate commit: `1fe698584aaf0766589bbcecbd7da4282ca159ec`.
+- Latest focused CI: [run #109 / ID 38625769869](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38625769869). Compile step PASS; focused test suite **158 passed in 0.68s**.
+- This is code/contract verification only. The bridge remains a read-only candidate integration and is not connected to the operational `arunda_pipeline.py`; no live account observation, approved production rate/policy evidence, or authenticated per-position risk-allocation ledger was created by these changes.
+- Operational branch remains unchanged; PR #35 remains Draft and unmerged. No live exchange API request, production runtime, order/cancel/withdrawal, or database write was performed.
