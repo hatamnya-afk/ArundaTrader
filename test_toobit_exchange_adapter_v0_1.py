@@ -77,6 +77,44 @@ def test_cancel_is_explicitly_disabled():
     assert result.error_code == "EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED"
 
 
+def test_spot_account_balance_read_preserves_provider_native_rows():
+    expected = [
+        {"asset": "USDT", "free": "100.25", "locked": "2.00"},
+        {"asset": "BTC", "free": "0.01", "locked": "0"},
+    ]
+
+    def transport(*, method, path, params, headers, base_url):
+        assert method == "GET"
+        assert path == "/api/v1/account"
+        assert headers.get("X-BB-APIKEY") == "test-key"
+        assert "signature" in params
+        return {"balances": expected}
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+        api_key="test-key",
+        secret_key="test-secret",
+    ).get_spot_account_balances()
+
+    assert result.allowed is True
+    assert result.data["state_known"] is True
+    assert result.data["balances"] == expected
+
+
+def test_spot_account_balance_read_blocks_malformed_rows():
+    def transport(*, method, path, params, headers, base_url):
+        return {"balances": [{"asset": "USDT"}, None]}
+
+    result = ToobitExchangeAdapter(
+        transport=transport,
+        api_key="test-key",
+        secret_key="test-secret",
+    ).get_spot_account_balances()
+
+    assert result.allowed is False
+    assert result.reason == "TOOBIT_ACCOUNT_BALANCES_INVALID"
+
+
 def test_futures_account_state_preserves_provider_position_state_without_inference():
     def transport(*, method, path, params, headers, base_url):
         if path == "/api/v1/exchangeInfo":
