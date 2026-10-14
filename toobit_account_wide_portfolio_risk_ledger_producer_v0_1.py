@@ -18,6 +18,7 @@ from authoritative_portfolio_risk_ledger_contract_v0_1 import (
     build_authoritative_portfolio_risk_ledger_observation,
 )
 from all_asset_valuation_contract_v0_1 import validate_all_asset_valuation_evidence
+from account_wide_futures_coverage_contract_v0_1 import validate_account_wide_futures_coverage
 
 
 _SUPPORTED = {"USDT", "USDC"}
@@ -174,6 +175,15 @@ def build_toobit_account_wide_portfolio_risk_ledger(
         positions = futures_observation.get("positions")
         if futures_observation.get("positions_coverage") != "ACCOUNT_WIDE" or not isinstance(positions, list) or any(not isinstance(p, Mapping) for p in positions):
             raise ValueError("PORTFOLIO_LEDGER_ACCOUNT_WIDE_POSITIONS_REQUIRED")
+        coverage_evidence = futures_observation.get("coverage_evidence")
+        if coverage_evidence is not None:
+            coverage = validate_account_wide_futures_coverage(coverage_evidence)
+            if coverage.get("coverage_state") != "AVAILABLE":
+                raise ValueError(coverage.get("coverage_block_reason") or "PORTFOLIO_LEDGER_FUTURES_COVERAGE_INVALID")
+            def identities(rows):
+                return sorted((str(row.get("symbol", "")).strip().upper(), str(row.get("side", "")).strip().upper()) for row in rows)
+            if identities(positions) != identities(coverage.get("positions") or []):
+                raise ValueError("PORTFOLIO_LEDGER_FUTURES_COVERAGE_POSITION_SET_MISMATCH")
         if allocated_risk_usdt is None:
             raise ValueError("PORTFOLIO_LEDGER_ALLOCATED_RISK_EVIDENCE_REQUIRED")
         allocated_risk = _number(allocated_risk_usdt, "PORTFOLIO_LEDGER_ALLOCATED_RISK_INVALID")
