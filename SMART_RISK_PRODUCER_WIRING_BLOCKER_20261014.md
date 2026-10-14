@@ -65,3 +65,17 @@ Management selected **both Toobit Spot and Toobit Futures** for the first real-a
 **Status after this change:** the dual-market *input contract* is defined on the candidate branch. A real account-wide ledger producer, policy-valued Spot/Futures balances, policy approval evidence, and current-cycle portfolio risk totals remain **NOT VERIFIED / BLOCKED**. The contract's test fixture is synthetic test data only and must never be treated as production capital or live account evidence.
 
 No pipeline wiring, runtime, exchange request, order attempt, database write, or operational-branch modification was performed.
+
+
+## Management decisions confirmed — 2026-10-14
+
+- Account scope: **Toobit Spot + Toobit Futures**.
+- Reporting currency: **USDT**, with explicit support for both USDT and USDC source balances.
+- USDC must not be treated as equal to USDT by assumption. Each currency observation must provide a positive finite conversion rate to USDT, rate source, rate timestamp, the same approved valuation policy ID/version, and the same declared ledger cycle. USDT base rate must be exactly 1.0.
+- Both market coverages, account-wide scope, cycle identity, and approved versioned valuation policy are required. A contract fixture is not approval evidence or live account data.
+
+The authoritative ledger contract and focused tests now encode these requirements. They validate supplied evidence only; they do **not** fetch raw account data, prove policy approval, compute balances from provider responses, or calculate portfolio risk.
+
+**Current status:** dual-market/dual-currency input contract = implemented on candidate; current production ledger producer = **NOT VERIFIED**; real approved valuation policy/source = **BLOCKED**; Smart Risk production wiring = **BLOCKED**; latest CI for these latest commits = **NOT VERIFIED** until a run tied to these commits is confirmed.
+
+No runtime, live exchange API call, order, database write, or operational-branch modification was performed.
