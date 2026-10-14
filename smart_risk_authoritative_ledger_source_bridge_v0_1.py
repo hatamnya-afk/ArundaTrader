@@ -6,6 +6,8 @@ turns a blocked/incompletely valued ledger into capital.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from datetime import datetime
+import math
 from typing import Any
 
 from smart_risk_readonly_producer_boundary_v0_1 import evaluate_readonly_smart_risk_cycle
@@ -24,18 +26,58 @@ def build_smart_risk_sources_from_authoritative_ledger(
             raise ValueError("SMART_RISK_AUTHORITATIVE_LEDGER_NOT_VALID")
         if ledger_observation.get("coverage_scope") != "ACCOUNT_WIDE" or set(ledger_observation.get("market_coverage") or []) != {"SPOT", "FUTURES"}:
             raise ValueError("SMART_RISK_ACCOUNT_WIDE_SPOT_FUTURES_COVERAGE_REQUIRED")
-        for key in ("account_scope", "observed_at", "cycle_id", "provenance", "valuation_policy_id", "valuation_policy_version"):
+        for key in ("account_scope", "observed_at", "spot_observed_at", "futures_observed_at",
+                    "cycle_id", "provenance", "valuation_policy_id", "valuation_policy_version",
+                    "valuation_policy_approval_id", "ledger_id", "ledger_version"):
             value = ledger_observation.get(key)
             if not isinstance(value, str) or not value.strip():
                 raise ValueError("SMART_RISK_LEDGER_" + key.upper() + "_MISSING")
+        def aware_timestamp(value: Any, reason: str) -> datetime:
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(reason)
+            try:
+                parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+            except ValueError:
+                raise ValueError(reason) from None
+            if parsed.tzinfo is None or parsed.utcoffset() is None:
+                raise ValueError(reason)
+            return parsed
+        ledger_time = aware_timestamp(ledger_observation["observed_at"], "SMART_RISK_LEDGER_TIMESTAMP_INVALID")
+        spot_time = aware_timestamp(ledger_observation["spot_observed_at"], "SMART_RISK_LEDGER_SPOT_TIMESTAMP_INVALID")
+        futures_time = aware_timestamp(ledger_observation["futures_observed_at"], "SMART_RISK_LEDGER_FUTURES_TIMESTAMP_INVALID")
+        if spot_time > ledger_time or futures_time > ledger_time:
+            raise ValueError("SMART_RISK_LEDGER_MARKET_TIMESTAMP_AFTER_LEDGER")
         if ledger_observation.get("valuation_policy_state") != "APPROVED":
             raise ValueError("SMART_RISK_APPROVED_VALUATION_POLICY_REQUIRED")
         rates = ledger_observation.get("asset_valuation_evidence")
         valued_assets = ledger_observation.get("valued_assets")
         if not isinstance(rates, Mapping) or not isinstance(valued_assets, list) or not valued_assets:
             raise ValueError("SMART_RISK_ALL_NONZERO_ASSETS_MUST_BE_VALUED")
-        if set(str(asset).upper() for asset in valued_assets) != set(str(asset).upper() for asset in rates):
+        normalized_assets = [str(asset).strip().upper() for asset in valued_assets]
+        if any(not asset for asset in normalized_assets) or len(set(normalized_assets)) != len(normalized_assets):
             raise ValueError("SMART_RISK_ASSET_VALUATION_COVERAGE_MISMATCH")
+        normalized_rates = {str(asset).strip().upper(): row for asset, row in rates.items()}
+        if len(normalized_rates) != len(rates) or set(normalized_assets) != set(normalized_rates):
+            raise ValueError("SMART_RISK_ASSET_VALUATION_COVERAGE_MISMATCH")
+        for asset, row in normalized_rates.items():
+            if not isinstance(row, Mapping):
+                raise ValueError("SMART_RISK_ASSET_RATE_EVIDENCE_INVALID:" + asset)
+            rate = row.get("rate_to_usdt")
+            if isinstance(rate, bool) or not isinstance(rate, (int, float)) or not math.isfinite(float(rate)) or rate <= 0:
+                raise ValueError("SMART_RISK_ASSET_RATE_INVALID:" + asset)
+            for field in ("rate_source", "source_reference", "cycle_id", "valuation_policy_id", "valuation_policy_version"):
+                if not isinstance(row.get(field), str) or not row[field].strip():
+                    raise ValueError("SMART_RISK_ASSET_RATE_" + field.upper() + "_MISSING:" + asset)
+            if row["cycle_id"] != ledger_observation["cycle_id"]:
+                raise ValueError("SMART_RISK_ASSET_RATE_CYCLE_MISMATCH:" + asset)
+            if row["valuation_policy_id"] != ledger_observation["valuation_policy_id"] or row["valuation_policy_version"] != ledger_observation["valuation_policy_version"]:
+                raise ValueError("SMART_RISK_ASSET_RATE_POLICY_MISMATCH:" + asset)
+            rate_time = aware_timestamp(row.get("rate_observed_at"), "SMART_RISK_ASSET_RATE_TIMESTAMP_INVALID:" + asset)
+            age = (ledger_time - rate_time).total_seconds()
+            if age < 0:
+                raise ValueError("SMART_RISK_ASSET_RATE_FROM_FUTURE:" + asset)
+            if asset == "USDT" and float(rate) != 1.0:
+                raise ValueError("SMART_RISK_USDT_BASE_RATE_MUST_EQUAL_ONE")
         available_capital = ledger_observation.get("portfolio_capital")
         usable_capital = ledger_observation.get("usable_capital")
         allocated_risk = ledger_observation.get("allocated_risk")
