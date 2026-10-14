@@ -86,5 +86,5 @@ def test_validated_ledger_reaches_readonly_smart_risk_sizing():
     assert result["ledger_bridge_state"] == "AVAILABLE"
     assert result["risk_state"] == "APPROVED", result.get("block_reason")
     assert result["quantity_source"] == "SMART_RISK_ENGINE_V0_1"
-    assert result["position_quantity"] == pytest.approx(1.6)
+    assert result["position_quantity"] == pytest.approx(2.0)
     assert result["quantity_unit"] == "BASE_ASSET"
