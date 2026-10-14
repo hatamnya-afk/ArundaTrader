@@ -48,7 +48,7 @@ footer{color:var(--muted);font-size:12px;margin-top:18px}@media(max-width:600px)
 <footer>منبع: runtime_observations/global_selection_outcomes.jsonl · بدون تماس با صرافی · بدون تغییر پایگاه‌داده یا وضعیت اجرا</footer>
 </main><script>
 let report=null, horizon='1h';
-const fmt=(v,suffix='')=>v===null||v===undefined?'—':Number(v).toLocaleString('en-US',{maximumFractionDigits:2})+suffix;
+const esc=(v)=>String(v).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));\nconst fmt=(v,suffix='')=>v===null||v===undefined?'—':Number(v).toLocaleString('en-US',{maximumFractionDigits:2})+suffix;
 function metric(label,value){return '<div class="card"><div class="label">'+label+'</div><div class="metric">'+value+'</div></div>'}
 function render(){
  if(!report)return;
@@ -60,7 +60,7 @@ function render(){
  metric('بازده میانه ۱س',fmt(o.horizons?.['1h']?.median_directional_return_pct,'%'))
  ].join('');
  const rows=report.rankings_by_horizon?.[horizon]||[];
- document.getElementById('rows').innerHTML=rows.map(r=>'<tr><td><b>'+String(r.asset)+'</b></td><td>'+fmt(r.sample_count)+'</td><td>'+fmt(r.win_rate_pct,'%')+'</td><td>'+fmt(r.mean_directional_return_pct,'%')+'</td><td>'+fmt(r.median_directional_return_pct,'%')+'</td><td>'+fmt(r.mean_max_favorable_excursion_pct,'%')+'</td><td>'+fmt(r.mean_max_adverse_excursion_pct,'%')+'</td></tr>').join('');
+ document.getElementById('rows').innerHTML=rows.map(r=>'<tr><td><b>'+esc(r.asset)+'</b></td><td>'+fmt(r.sample_count)+'</td><td>'+fmt(r.win_rate_pct,'%')+'</td><td>'+fmt(r.mean_directional_return_pct,'%')+'</td><td>'+fmt(r.median_directional_return_pct,'%')+'</td><td>'+fmt(r.mean_max_favorable_excursion_pct,'%')+'</td><td>'+fmt(r.mean_max_adverse_excursion_pct,'%')+'</td></tr>').join('');
  document.getElementById('empty').hidden=rows.length>0;
  document.getElementById('details').textContent='حداقل نمونه برای رتبه‌بندی: '+report.min_sample_size+' | مبنای شواهد: بازار واقعی | رویدادهای انتخاب: '+report.selection_count+' | گزارش صرفاً توصیفی است.';
 }
