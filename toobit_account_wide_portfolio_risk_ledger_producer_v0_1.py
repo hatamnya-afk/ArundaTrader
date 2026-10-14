@@ -194,8 +194,20 @@ def build_toobit_account_wide_portfolio_risk_ledger(
                 raise ValueError("PORTFOLIO_LEDGER_CURRENCY_POLICY_MISMATCH")
             if row.get("cycle_id") != cycle_id:
                 raise ValueError("PORTFOLIO_LEDGER_CURRENCY_CYCLE_MISMATCH")
-            if row.get("rate_source") != policy["approved_rate_sources"][currency]["source"]:
+            approved_rate_source = policy["approved_rate_sources"][currency]
+            if row.get("rate_source") != approved_rate_source["source"]:
                 raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_NOT_APPROVED")
+            if row.get("source_reference") != approved_rate_source["source_reference"]:
+                raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_REFERENCE_NOT_APPROVED")
+            rate_time = _aware_timestamp(row.get("rate_observed_at"), "PORTFOLIO_LEDGER_CURRENCY_RATE_TIMESTAMP_INVALID")
+            rate_age = (ledger_time - rate_time).total_seconds()
+            if rate_age < 0:
+                raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_FROM_FUTURE")
+            if max_rate_age_seconds is None:
+                if rate_time != ledger_time:
+                    raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_FRESHNESS_POLICY_REQUIRED")
+            elif isinstance(max_rate_age_seconds, bool) or not isinstance(max_rate_age_seconds, int) or max_rate_age_seconds < 0 or rate_age > max_rate_age_seconds:
+                raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_STALE")
             rates[currency] = _number(row.get("rate_to_usdt"), "PORTFOLIO_LEDGER_CURRENCY_RATE_INVALID", allow_zero=False)
             if currency == "USDT" and rates[currency] != 1.0:
                 raise ValueError("PORTFOLIO_LEDGER_USDT_BASE_RATE_MUST_EQUAL_ONE")
