@@ -73,7 +73,7 @@ def build_toobit_account_wide_futures_observation(
     return {
         "observation_state": "AVAILABLE",
         "observation_validation": "PROVIDER_CONTRACT_AND_SHAPE_VALID",
-        "observation_source": "TOOBIT_FUTURES_ACCOUNT_WIDE_GET",
+        "observation_source": "TOOBIT_FUTURES_ACCOUNT_GET",
         "account_scope": account_scope.strip(), "cycle_id": cycle_id.strip(),
         "observed_at": observed_at.strip(), "provenance": provenance.strip(),
         "coverage_scope": "ACCOUNT_WIDE", "positions_coverage": "ACCOUNT_WIDE",
