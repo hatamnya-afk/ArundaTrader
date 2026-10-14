@@ -370,3 +370,42 @@ def test_account_wide_futures_positions_rejects_malformed_or_duplicate_rows():
     ).futures_account_wide_positions()
     assert result.allowed is False
     assert "POSITION_DUPLICATE" in result.reason
+
+
+
+def test_account_wide_futures_balances_reads_both_categories_and_normalizes_explicit_fields():
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path, dict(params)))
+        assert method == "GET"
+        assert path == "/api/v1/futures/balance"
+        if params.get("category") == "USDT":
+            return [{"coin": "USDT", "balance": "100.50", "availableBalance": "80.25"}]
+        if params.get("category") == "USDC":
+            return [{"coin": "USDC", "balance": "50", "availableBalance": "40"}]
+        raise AssertionError("unexpected category")
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="fixture-key", secret_key="fixture-secret"
+    ).futures_account_wide_balances()
+
+    assert result.allowed is True
+    assert result.data["coverage_scope"] == "ACCOUNT_WIDE"
+    assert result.data["balances_by_category"]["USDT"][0]["total_amount"] == 100.5
+    assert result.data["balances_by_category"]["USDT"][0]["usable_amount"] == 80.25
+    assert result.data["balances_by_category"]["USDC"][0]["usable_amount"] == 40.0
+    assert len(calls) == 2
+
+
+def test_account_wide_futures_balances_rejects_usable_greater_than_total():
+    def transport(*, method, path, params, headers, base_url):
+        if params.get("category") == "USDT":
+            return [{"coin": "USDT", "balance": "10", "availableBalance": "11"}]
+        return []
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="fixture-key", secret_key="fixture-secret"
+    ).futures_account_wide_balances()
+    assert result.allowed is False
+    assert "BALANCE_AMOUNT_INVALID" in result.reason
