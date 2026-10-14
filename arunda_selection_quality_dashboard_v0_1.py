@@ -55,9 +55,9 @@ function render(){
  const o=report.overall||{};
  document.getElementById('metrics').innerHTML=[
  metric('کل انتخاب‌ها',fmt(report.selection_count)),
- metric('نمونه‌های ارزیابی‌شده در ۱س',fmt(o['1h']?.direction_scored_count??0)),
- metric('نرخ برد ۱س',fmt(o['1h']?.win_rate_pct,'%')),
- metric('بازده میانه ۱س',fmt(o['1h']?.median_directional_return_pct,'%'))
+ metric('نمونه‌های ارزیابی‌شده در ۱س',fmt(o.horizons?.['1h']?.direction_scored_count??0)),
+ metric('نرخ برد ۱س',fmt(o.horizons?.['1h']?.win_rate_pct,'%')),
+ metric('بازده میانه ۱س',fmt(o.horizons?.['1h']?.median_directional_return_pct,'%'))
  ].join('');
  const rows=report.rankings_by_horizon?.[horizon]||[];
  document.getElementById('rows').innerHTML=rows.map(r=>'<tr><td><b>'+String(r.asset)+'</b></td><td>'+fmt(r.sample_count)+'</td><td>'+fmt(r.win_rate_pct,'%')+'</td><td>'+fmt(r.mean_directional_return_pct,'%')+'</td><td>'+fmt(r.median_directional_return_pct,'%')+'</td><td>'+fmt(r.mean_max_favorable_excursion_pct,'%')+'</td><td>'+fmt(r.mean_max_adverse_excursion_pct,'%')+'</td></tr>').join('');
