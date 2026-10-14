@@ -99,9 +99,7 @@ def evaluate_readonly_smart_risk_cycle(
         portfolio_for_sizing = {
             **portfolio_row,
             "portfolio_capital": capital_row["available_capital"],
-            "usable_capital": min(
-                capital_row["usable_capital"], portfolio_row["usable_capital"]
-            ),
+            "usable_capital": portfolio_row["usable_capital"],
             "observed_at": capital_row["observed_at"],
         }
         return evaluate_smart_risk_for_asset(
