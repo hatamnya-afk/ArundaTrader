@@ -47,6 +47,21 @@ def valid_ledger():
         "valuation_policy_state": "APPROVED",
         "valuation_policy_id": policy_id,
         "valuation_policy_version": policy_version,
+        "valuation_policy_evidence": {
+            "approval_state": "APPROVED",
+            "policy_id": policy_id,
+            "policy_version": policy_version,
+            "approval_id": "management-approval-ref-test-fixture",
+            "approved_by": "test-fixture-role",
+            "approval_source": "git:test-fixture/valuation-policy",
+            "approved_at": "2026-10-14T17:00:00Z",
+            "effective_from": "2026-10-14T17:00:00Z",
+            "effective_until": "2026-10-15T17:00:00Z",
+            "approved_rate_sources": {
+                "USDT": {"source": "APPROVED_BASE_CURRENCY_RULE", "source_reference": "git:test-fixture/usdt"},
+                "USDC": {"source": "APPROVED_USDC_USDT_RATE_SOURCE", "source_reference": "https://rates.example.invalid/test-fixture"},
+            },
+        },
         "reporting_currency": "USDT",
         "currency_valuation_evidence": currency_evidence,
         "portfolio_capital": 7997.5,
@@ -191,3 +206,28 @@ def test_ledger_contract_has_no_execution_side_effect_surface():
         "trade_id", "withdrawal", "execution_authorization", "order_write",
     }
     assert forbidden.isdisjoint(result)
+
+
+
+def test_ledger_requires_explicit_valuation_policy_approval_evidence():
+    row = valid_ledger()
+    row.pop("valuation_policy_evidence")
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "VALUATION_POLICY_APPROVAL_EVIDENCE_REQUIRED"
+
+
+def test_currency_rate_source_must_match_approved_policy():
+    row = valid_ledger()
+    row["currency_valuation_evidence"]["USDC"]["rate_source"] = "UNAPPROVED_SOURCE"
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_NOT_APPROVED"
+
+
+def test_policy_identity_must_match_ledger_policy_identity():
+    row = valid_ledger()
+    row["valuation_policy_evidence"]["policy_version"] = "different-version"
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_VALUATION_POLICY_EVIDENCE_MISMATCH"
