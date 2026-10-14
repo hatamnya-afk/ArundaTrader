@@ -39,6 +39,39 @@ def _blocked(reason: str, *, spot: Any = None, futures: Any = None) -> dict[str,
     }
 
 
+def _capital_only_blocked(
+    reason: str, *, portfolio_capital: float, usable_capital: float,
+    policy: Mapping[str, Any], valuation: Mapping[str, Any],
+    spot: Mapping[str, Any], futures: Mapping[str, Any],
+) -> dict[str, Any]:
+    return {
+        "producer_state": "PARTIAL",
+        "producer_block_reason": reason,
+        "capital_state": "AVAILABLE",
+        "capital_validation": "VALID",
+        "capital_source": "TOOBIT_ACCOUNT_WIDE_SPOT_FUTURES_VALUED_BALANCES_V0_1",
+        "available_capital": portfolio_capital,
+        "usable_capital": usable_capital,
+        "reporting_currency": "USDT",
+        "valuation_policy_state": "APPROVED",
+        "valuation_policy_id": policy["policy_id"],
+        "valuation_policy_version": policy["policy_version"],
+        "valued_assets": valuation["valued_assets"],
+        "asset_valuation_evidence": valuation["asset_rates"],
+        "observed_at": spot["observed_at"],
+        "cycle_id": spot["cycle_id"],
+        "account_scope": spot["account_scope"],
+        "provenance": "Spot/Futures balance evidence; portfolio risk remains blocked",
+        "portfolio_state": "BLOCKED",
+        "portfolio_block_reason": reason,
+        "portfolio_capital": portfolio_capital,
+        "allocated_risk": None,
+        "concurrent_positions": None,
+        "spot_observation": dict(spot),
+        "futures_observation": dict(futures),
+    }
+
+
 def _number(value: Any, reason: str, *, allow_zero: bool = True) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ValueError(reason)
@@ -174,24 +207,41 @@ def build_toobit_account_wide_portfolio_risk_ledger(
 
         positions = futures_observation.get("positions")
         if futures_observation.get("positions_coverage") != "ACCOUNT_WIDE" or not isinstance(positions, list) or any(not isinstance(p, Mapping) for p in positions):
+            if all_asset_result:
+                return _capital_only_blocked("PORTFOLIO_LEDGER_ACCOUNT_WIDE_POSITIONS_REQUIRED", portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
             raise ValueError("PORTFOLIO_LEDGER_ACCOUNT_WIDE_POSITIONS_REQUIRED")
         coverage_evidence = futures_observation.get("coverage_evidence")
         if coverage_evidence is not None:
             coverage = validate_account_wide_futures_coverage(coverage_evidence)
             if coverage.get("coverage_state") != "AVAILABLE":
-                raise ValueError(coverage.get("coverage_block_reason") or "PORTFOLIO_LEDGER_FUTURES_COVERAGE_INVALID")
+                reason = coverage.get("coverage_block_reason") or "PORTFOLIO_LEDGER_FUTURES_COVERAGE_INVALID"
+                if all_asset_result:
+                    return _capital_only_blocked(reason, portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
+                raise ValueError(reason)
             def identities(rows):
                 return sorted((str(row.get("symbol", "")).strip().upper(), str(row.get("side", "")).strip().upper()) for row in rows)
             if identities(positions) != identities(coverage.get("positions") or []):
-                raise ValueError("PORTFOLIO_LEDGER_FUTURES_COVERAGE_POSITION_SET_MISMATCH")
+                reason = "PORTFOLIO_LEDGER_FUTURES_COVERAGE_POSITION_SET_MISMATCH"
+                if all_asset_result:
+                    return _capital_only_blocked(reason, portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
+                raise ValueError(reason)
         if allocated_risk_usdt is None:
+            if all_asset_result:
+                return _capital_only_blocked("PORTFOLIO_LEDGER_ALLOCATED_RISK_EVIDENCE_REQUIRED", portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
             raise ValueError("PORTFOLIO_LEDGER_ALLOCATED_RISK_EVIDENCE_REQUIRED")
         allocated_risk = _number(allocated_risk_usdt, "PORTFOLIO_LEDGER_ALLOCATED_RISK_INVALID")
         position_risk_sum = 0.0
         for position in positions:
-            risk = _number(position.get("allocated_risk_usdt"), "PORTFOLIO_LEDGER_POSITION_RISK_MISSING")
+            try:
+                risk = _number(position.get("allocated_risk_usdt"), "PORTFOLIO_LEDGER_POSITION_RISK_MISSING")
+            except ValueError as exc:
+                if all_asset_result:
+                    return _capital_only_blocked(str(exc), portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
+                raise
             position_risk_sum += risk
         if not math.isclose(position_risk_sum, allocated_risk, rel_tol=1e-9, abs_tol=1e-9):
+            if all_asset_result:
+                return _capital_only_blocked("PORTFOLIO_LEDGER_ALLOCATED_RISK_TOTAL_MISMATCH", portfolio_capital=portfolio_capital, usable_capital=usable_capital, policy=policy, valuation=all_asset_result, spot=spot_observation, futures=futures_observation)
             raise ValueError("PORTFOLIO_LEDGER_ALLOCATED_RISK_TOTAL_MISMATCH")
 
         currency_evidence = {}
