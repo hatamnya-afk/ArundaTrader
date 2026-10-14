@@ -77,7 +77,7 @@ def test_same_cycle_validated_inputs_reach_smart_risk_sizing():
         stop_policy_observation=stop,
         risk_policy_observation=policy,
     )
-    assert result["risk_state"] == "APPROVED"
+    assert result["risk_state"] == "APPROVED", result
     assert result["quantity_source"] == "SMART_RISK_ENGINE_V0_1"
     assert result["position_quantity"] == 2.0
     assert result["quantity_unit"] == "BASE_ASSET"
