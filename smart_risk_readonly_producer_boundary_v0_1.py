@@ -98,6 +98,7 @@ def evaluate_readonly_smart_risk_cycle(
         # The sizing contract consumes a single coherent capital/portfolio view.
         portfolio_for_sizing = {
             **portfolio_row,
+            "portfolio_validation": "VALID",
             "portfolio_capital": capital_row["available_capital"],
             "usable_capital": portfolio_row["usable_capital"],
             "observed_at": capital_row["observed_at"],
