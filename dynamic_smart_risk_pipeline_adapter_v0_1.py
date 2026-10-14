@@ -47,7 +47,18 @@ def evaluate_smart_risk_for_asset(
             "missing_observations": missing,
         }
 
+    # Capital, portfolio, and per-asset stop evidence must describe the same
+    # observation cycle. Policy is version-matched by the sizing boundary.
     try:
+        capital_time = getattr(capital_observation, "observed_at", None)
+        portfolio_time = portfolio_observation.get("observed_at")
+        stop_time = stop_policy_observation.get("observed_at")
+        cycle_times = (capital_time, portfolio_time, stop_time)
+        if any(not isinstance(value, str) or not value.strip() for value in cycle_times):
+            raise ValueError("SMART_RISK_CYCLE_TIMESTAMP_MISSING")
+        if len(set(cycle_times)) != 1:
+            raise ValueError("SMART_RISK_OBSERVATION_CYCLE_MISMATCH")
+
         decision = build_dynamic_smart_risk_decision(
             asset=asset,
             direction=direction,
