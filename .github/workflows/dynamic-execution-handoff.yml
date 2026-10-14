@@ -1,4 +1,4 @@
-name: Dynamic Execution Handoff # Smart Risk producer boundary validated portfolio
+name: Dynamic Execution Handoff # Smart Risk account-wide evidence and all-asset valuation verification
 
 on:
   pull_request:
