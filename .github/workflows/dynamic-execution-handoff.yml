@@ -11,6 +11,8 @@ on:
       - "dynamic_smart_risk_sizing_boundary_v0_1.py"
       - "dynamic_smart_risk_pipeline_adapter_v0_1.py"
       - "test_dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "test_toobit_exchange_adapter_v0_1.py"
       - "test_dynamic_smart_risk_sizing_boundary_v0_1.py"
       - "market_regime_engine.py"
       - "market_structure_engine.py"
@@ -105,5 +107,6 @@ jobs:
           test_dynamic_execution_handoff_v0_1.py
           test_dynamic_smart_risk_sizing_boundary_v0_1.py
           test_dynamic_smart_risk_pipeline_adapter_v0_1.py
+          test_toobit_exchange_adapter_v0_1.py
           test_dynamic_execution_regime_connection_v0_1.py
           test_mcp01_execution_results_handoff_v0_1.py
