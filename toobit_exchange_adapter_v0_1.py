@@ -567,6 +567,7 @@ class ToobitExchangeAdapter:
                     "margin_type": str(margin_type).strip().upper(),
                     "leverage_state_known": True,
                     "position_state_known": True,
+                    "balances": balance,
                     "positions": positions,
                 },
             )
