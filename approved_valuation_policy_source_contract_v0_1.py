@@ -74,8 +74,11 @@ def validate_approved_valuation_policy_evidence(
         raise ValueError("VALUATION_POLICY_APPROVAL_SOURCE_INVALID")
 
     raw_rates = policy_evidence.get("approved_rate_sources")
-    if not isinstance(raw_rates, Mapping) or {str(k).upper() for k in raw_rates} != {"USDT", "USDC"}:
-        raise ValueError("VALUATION_POLICY_USDT_USDC_RATE_SOURCES_REQUIRED")
+    if not isinstance(raw_rates, Mapping):
+        raise ValueError("VALUATION_POLICY_APPROVED_RATE_SOURCES_REQUIRED")
+    normalized_keys = [str(k).strip().upper() for k in raw_rates]
+    if len(set(normalized_keys)) != len(normalized_keys) or not {"USDT", "USDC"}.issubset(set(normalized_keys)):
+        raise ValueError("VALUATION_POLICY_USDT_USDC_AND_UNIQUE_ASSET_RATE_SOURCES_REQUIRED")
     rates: dict[str, dict[str, str]] = {}
     for raw_currency, raw_row in raw_rates.items():
         currency = str(raw_currency).upper()
@@ -100,7 +103,7 @@ def validate_approved_valuation_policy_evidence(
         "effective_until": effective_until.isoformat(),
         "valuation_observed_at": observed_at.isoformat(),
         "reporting_currency": "USDT",
-        "supported_currencies": ["USDT", "USDC"],
+        "supported_currencies": sorted(rates),
         "approved_rate_sources": rates,
         "approval_authenticity": "UPSTREAM_AUTHENTICATION_REQUIRED",
     }
