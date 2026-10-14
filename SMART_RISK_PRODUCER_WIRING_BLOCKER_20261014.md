@@ -35,3 +35,19 @@ The presence of validators and bridge modules is not evidence that the underlyin
 ## Next required engineering step
 
 Next: obtain/authorize the valuation policy needed to turn provider-native balances into policy-valued capital; identify an authoritative current portfolio/position-risk ledger; and identify the approved versioned per-asset stop and risk policy. The raw account and position producers are intentionally not wired into Smart Risk because their outputs are raw evidence, not policy-valued capital or an account-wide portfolio risk observation. Each eventual producer must emit current-cycle values with source, timestamp, account/asset scope, and provenance; reject stale/mismatched observations; and retain `EXECUTION_ENABLED = FALSE`. Only after these inputs are grounded should producer-specific tests and post-Risk Smart Risk wiring be attempted. No Decision/Trade Gate semantics or order behavior may be changed.
+
+
+## Account-wide ledger source inspection — 2026-10-14 continuation
+
+A recursive static inventory of the candidate branch tree (186 tracked files) found no distinct account-wide portfolio/position-risk ledger producer or persistent ledger module. The matching files were limited to the existing portfolio validator/bridge, Smart Risk sizing/orchestration contracts, risk engine, Toobit adapter/preflight, and the raw symbol-scoped position observation producer. This is a source-tree finding only; no runtime or exchange request was made.
+
+Added `authoritative_portfolio_risk_ledger_contract_v0_1.py` as a **versioned input contract, not a producer**. It fails closed when the ledger is absent, not validated, missing identity/version/account scope/timestamp/provenance, or does not explicitly declare `coverage_scope=ACCOUNT_WIDE`. It rejects the raw symbol-scoped Toobit positions source and validates explicitly supplied capital/risk/position totals without deriving any of them. Focused tests cover absent ledger, valid explicit ledger shape, symbol-scope rejection, missing metadata, invalid risk values, and side-effect surface.
+
+The contract and tests are included in the candidate branch's focused CI workflow. The workflow result is **NOT VERIFIED** until a matching run is observed. This change does not establish that a real ledger exists, does not connect the contract to Smart Risk or `arunda_pipeline.py`, and does not clear the production blocker.
+
+## Remaining authoritative inputs
+
+- A real account-wide ledger source and its approved ownership/provenance remain **NOT VERIFIED**.
+- Approved valuation and usable-capital policy remains **BLOCKED**.
+- Valid per-asset entry/stop policy and approved versioned risk policy remain **BLOCKED / NOT VERIFIED**.
+- Smart Risk production wiring remains **BLOCKED**; no fallback to legacy sizing is authorized.
