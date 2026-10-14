@@ -1,4 +1,4 @@
-name: Dynamic Execution Handoff # Smart Risk producer boundary verification
+name: Dynamic Execution Handoff # Smart Risk producer boundary diagnostics
 
 on:
   pull_request:
