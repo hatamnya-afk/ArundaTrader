@@ -75,7 +75,7 @@ def validate_approved_valuation_policy_evidence(
 
     raw_rates = policy_evidence.get("approved_rate_sources")
     if not isinstance(raw_rates, Mapping):
-        raise ValueError("VALUATION_POLICY_APPROVED_RATE_SOURCES_REQUIRED")
+        raise ValueError("VALUATION_POLICY_USDT_USDC_RATE_SOURCES_REQUIRED")
     normalized_keys = [str(k).strip().upper() for k in raw_rates]
     if len(set(normalized_keys)) != len(normalized_keys) or not {"USDT", "USDC"}.issubset(set(normalized_keys)):
         raise ValueError("VALUATION_POLICY_USDT_USDC_AND_UNIQUE_ASSET_RATE_SOURCES_REQUIRED")
