@@ -8,7 +8,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from all_asset_valuation_contract_v0_1 import validate_all_asset_valuation_evidence
+from smart_risk_readonly_producer_boundary_v0_1 import evaluate_readonly_smart_risk_cycle
 
 
 def build_smart_risk_sources_from_authoritative_ledger(
@@ -79,4 +79,23 @@ def build_smart_risk_sources_from_authoritative_ledger(
         return blocked(str(exc).strip() or "SMART_RISK_LEDGER_BRIDGE_INVALID")
 
 
-__all__ = ["build_smart_risk_sources_from_authoritative_ledger"]
+def evaluate_smart_risk_from_authoritative_ledger(
+    *, ledger_observation: Mapping[str, Any] | None, asset: str, direction: str,
+    entry_price: float, stop_policy_observation: Mapping[str, Any] | None,
+    risk_policy_observation: Mapping[str, Any] | None,
+) -> dict[str, Any]:
+    bridge = build_smart_risk_sources_from_authoritative_ledger(ledger_observation)
+    if bridge.get("bridge_state") != "AVAILABLE":
+        return {"risk_state": "BLOCKED", "block_reason": bridge.get("bridge_block_reason"),
+                "position_quantity": None, "quantity_source": None}
+    result = evaluate_readonly_smart_risk_cycle(
+        asset=asset, direction=direction, entry_price=entry_price,
+        capital_source_observation=bridge["capital_source_observation"],
+        portfolio_source_observation=bridge["portfolio_source_observation"],
+        stop_policy_observation=stop_policy_observation,
+        risk_policy_observation=risk_policy_observation,
+    )
+    return {**result, "ledger_bridge_state": "AVAILABLE"}
+
+
+__all__ = ["build_smart_risk_sources_from_authoritative_ledger", "evaluate_smart_risk_from_authoritative_ledger"]
