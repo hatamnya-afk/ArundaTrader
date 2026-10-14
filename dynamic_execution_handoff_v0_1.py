@@ -167,7 +167,24 @@ def build_order_intents_and_boundary_results(
                 raise ValueError("RISK_POSITION_QUANTITY_NOT_POSITIVE")
             if risk.get("quantity_unit", contract.QUANTITY_UNIT_BASE_ASSET) != contract.QUANTITY_UNIT_BASE_ASSET:
                 raise ValueError("RISK_QUANTITY_UNIT_INVALID")
-            if risk.get("quantity_source", contract.QUANTITY_SOURCE_RISK_POSITION) != contract.QUANTITY_SOURCE_RISK_POSITION:
+            quantity_source = risk.get("quantity_source", contract.QUANTITY_SOURCE_RISK_POSITION)
+            if quantity_source == contract.QUANTITY_SOURCE_SMART_RISK_ENGINE:
+                # Smart Risk provenance is accepted only with its matching validated
+                # capital/portfolio/stop-policy lineage; never relabel its source.
+                if risk.get("risk_source") != "VALIDATED_REAL_CAPITAL_PORTFOLIO_STOP_POLICY":
+                    raise ValueError("SMART_RISK_SOURCE_PROVENANCE_INVALID")
+                policy_version = risk.get("risk_policy_version")
+                if not isinstance(policy_version, str) or not policy_version.strip():
+                    raise ValueError("SMART_RISK_POLICY_VERSION_MISSING")
+                risk_budget = risk.get("risk_budget")
+                if (
+                    isinstance(risk_budget, bool)
+                    or not isinstance(risk_budget, (int, float))
+                    or not math.isfinite(float(risk_budget))
+                    or float(risk_budget) <= 0
+                ):
+                    raise ValueError("SMART_RISK_BUDGET_INVALID")
+            elif quantity_source != contract.QUANTITY_SOURCE_RISK_POSITION:
                 raise ValueError("RISK_QUANTITY_PROVENANCE_INVALID")
             for flag in ("quantity_changed", "quantity_recomputed", "quantity_rescaled", "quantity_rounded", "quantity_clipped"):
                 if risk.get(flag, False) is not False:
