@@ -118,7 +118,7 @@ def test_nonzero_unvalued_asset_blocks_instead_of_understating_capital():
     spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.01})
     result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
     assert result["producer_state"] == "BLOCKED"
-    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_UNVALUED_NONZERO_ASSET:SPOT:BTC"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_ALL_ASSET_VALUATION_EVIDENCE_REQUIRED"
 
 
 def test_cycle_mismatch_blocks():
