@@ -21,7 +21,6 @@ def validate_account_wide_futures_coverage(evidence: Mapping[str, Any] | None) -
             ("cycle_id", "FUTURES_CYCLE_ID_MISSING"),
             ("observed_at", "FUTURES_OBSERVED_AT_MISSING"),
             ("provider_endpoint", "FUTURES_PROVIDER_ENDPOINT_MISSING"),
-            ("provider_request_id", "FUTURES_PROVIDER_REQUEST_ID_MISSING"),
             ("provenance", "FUTURES_PROVENANCE_MISSING"),
         ):
             value = evidence.get(key)
@@ -39,31 +38,33 @@ def validate_account_wide_futures_coverage(evidence: Mapping[str, Any] | None) -
                 or isinstance(total, bool) or not isinstance(total, int) or total < 1
                 or received != total):
             raise ValueError("FUTURES_PAGINATION_PAGE_COUNT_MISMATCH")
+        semantics = evidence.get("provider_contract_semantics")
+        if semantics != "DOCUMENTED_ALL_CONTRACT_POSITIONS_WHEN_SYMBOL_OMITTED":
+            raise ValueError("FUTURES_ENDPOINT_ACCOUNT_WIDE_SEMANTICS_UNVERIFIED")
         positions = evidence.get("positions")
         if not isinstance(positions, list) or any(not isinstance(row, Mapping) for row in positions):
             raise ValueError("FUTURES_POSITION_ROWS_INVALID")
         ids = []
         for row in positions:
-            position_id = row.get("position_id")
-            if not isinstance(position_id, str) or not position_id.strip():
-                raise ValueError("FUTURES_POSITION_ID_MISSING")
+            symbol = row.get("symbol")
+            side = str(row.get("side", "")).strip().upper()
+            if not isinstance(symbol, str) or not symbol.strip() or side not in {"LONG", "SHORT"}:
+                raise ValueError("FUTURES_POSITION_IDENTITY_MISSING")
+            position_id = symbol.strip().upper() + ":" + side
             if position_id in ids:
                 raise ValueError("FUTURES_POSITION_ID_DUPLICATE")
             ids.append(position_id)
-            risk = row.get("allocated_risk_usdt")
-            if isinstance(risk, bool) or not isinstance(risk, (int, float)) or risk < 0:
-                raise ValueError("FUTURES_POSITION_ALLOCATED_RISK_MISSING")
         return {
             "coverage_state": "AVAILABLE", "coverage_validation": "VALID",
             "coverage_scope": "ACCOUNT_WIDE", "account_scope": evidence["account_scope"].strip(),
             "cycle_id": evidence["cycle_id"].strip(), "observed_at": evidence["observed_at"].strip(),
             "provider_endpoint": evidence["provider_endpoint"].strip(),
-            "provider_request_id": evidence["provider_request_id"].strip(),
             "http_method": "GET", "pagination_complete": True,
             "pages_received": received, "pages_total": total,
             "position_count": len(positions), "positions": [dict(row) for row in positions],
             "provenance": evidence["provenance"].strip(),
-            "provider_completeness_claim": "REQUIRES_ENDPOINT_SEMANTICS_VERIFICATION",
+            "provider_contract_semantics": semantics,
+            "provider_completeness_claim": "DOCUMENTATION_CONTRACT_ONLY_RUNTIME_RESPONSE_STILL_REQUIRED",
         }
     except (TypeError, ValueError) as exc:
         return blocked(str(exc).strip() or "FUTURES_COVERAGE_INVALID")
