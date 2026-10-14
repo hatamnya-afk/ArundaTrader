@@ -8,6 +8,7 @@ any non-zero unsupported asset blocks rather than silently understating equity.
 from __future__ import annotations
 
 from collections.abc import Mapping
+from datetime import datetime
 import math
 from typing import Any
 
@@ -100,10 +101,9 @@ def _balance_totals(observation: Mapping[str, Any], market: str) -> dict[str, di
         usable = _number(row.get("usable_amount"), f"PORTFOLIO_LEDGER_{market}_USABLE_AMOUNT_INVALID")
         if usable > total:
             raise ValueError(f"PORTFOLIO_LEDGER_{market}_USABLE_EXCEEDS_TOTAL")
-        if asset not in totals:
-            totals[asset] = {"total_amount": 0.0, "usable_amount": 0.0}
-        totals[asset]["total_amount"] += total
-        totals[asset]["usable_amount"] += usable
+        if asset in totals:
+            raise ValueError(f"PORTFOLIO_LEDGER_{market}_DUPLICATE_BALANCE_ASSET:{asset}")
+        totals[asset] = {"total_amount": total, "usable_amount": usable}
     for currency in _SUPPORTED:
         totals.setdefault(currency, {"total_amount": 0.0, "usable_amount": 0.0})
     return totals
@@ -124,6 +124,7 @@ def build_toobit_account_wide_portfolio_risk_ledger(
     allocated_risk_usdt: float | None,
     asset_valuation_evidence: Mapping[str, Any] | None = None,
     max_rate_age_seconds: int | None = None,
+    max_observation_age_seconds: int | None = None,
 ) -> dict[str, Any]:
     """Aggregate normalized read-only observations; fail closed on incomplete coverage.
 
@@ -142,13 +143,38 @@ def build_toobit_account_wide_portfolio_risk_ledger(
         ):
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"PORTFOLIO_LEDGER_{label}_MISSING")
+        def _aware_timestamp(value: Any, reason: str) -> datetime:
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(reason)
+            try:
+                parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+            except ValueError:
+                raise ValueError(reason) from None
+            if parsed.tzinfo is None or parsed.utcoffset() is None:
+                raise ValueError(reason)
+            return parsed
+
+        ledger_time = _aware_timestamp(observed_at, "PORTFOLIO_LEDGER_TIMESTAMP_INVALID")
+        if max_observation_age_seconds is not None and (
+            isinstance(max_observation_age_seconds, bool)
+            or not isinstance(max_observation_age_seconds, int)
+            or max_observation_age_seconds < 0
+        ):
+            raise ValueError("PORTFOLIO_LEDGER_OBSERVATION_MAX_AGE_INVALID")
         for market, row in (("SPOT", spot_observation), ("FUTURES", futures_observation)):
             if row.get("account_scope") != account_scope:
                 raise ValueError(f"PORTFOLIO_LEDGER_{market}_ACCOUNT_SCOPE_MISMATCH")
             if row.get("cycle_id") != cycle_id:
                 raise ValueError(f"PORTFOLIO_LEDGER_{market}_CYCLE_MISMATCH")
-            if row.get("observed_at") != observed_at:
-                raise ValueError(f"PORTFOLIO_LEDGER_{market}_TIMESTAMP_MISMATCH")
+            source_time = _aware_timestamp(row.get("observed_at"), f"PORTFOLIO_LEDGER_{market}_TIMESTAMP_INVALID")
+            age = (ledger_time - source_time).total_seconds()
+            if age < 0:
+                raise ValueError(f"PORTFOLIO_LEDGER_{market}_TIMESTAMP_FROM_FUTURE")
+            if max_observation_age_seconds is None:
+                if source_time != ledger_time:
+                    raise ValueError(f"PORTFOLIO_LEDGER_{market}_TIMESTAMP_ALIGNMENT_POLICY_REQUIRED")
+            elif age > max_observation_age_seconds:
+                raise ValueError(f"PORTFOLIO_LEDGER_{market}_OBSERVATION_STALE")
             if row.get("coverage_scope") != "ACCOUNT_WIDE":
                 raise ValueError(f"PORTFOLIO_LEDGER_{market}_ACCOUNT_WIDE_COVERAGE_REQUIRED")
 
