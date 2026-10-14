@@ -97,3 +97,33 @@ def test_validated_ledger_reaches_readonly_smart_risk_sizing():
     assert result["quantity_source"] == "SMART_RISK_ENGINE_V0_1"
     assert result["position_quantity"] == pytest.approx(2.0)
     assert result["quantity_unit"] == "BASE_ASSET"
+
+
+@pytest.mark.parametrize("mutate,reason", [
+    (lambda row: row["asset_valuation_evidence"]["BTC"].update({"cycle_id": "stale-cycle"}),
+     "SMART_RISK_ASSET_RATE_CYCLE_MISMATCH:BTC"),
+    (lambda row: row["asset_valuation_evidence"]["BTC"].update({"valuation_policy_version": "old"}),
+     "SMART_RISK_ASSET_RATE_POLICY_MISMATCH:BTC"),
+    (lambda row: row["asset_valuation_evidence"]["BTC"].update({"rate_to_usdt": float("nan")}),
+     "SMART_RISK_ASSET_RATE_INVALID:BTC"),
+    (lambda row: row["asset_valuation_evidence"]["BTC"].update({"rate_observed_at": "2026-10-14T18:01:00Z"}),
+     "SMART_RISK_ASSET_RATE_FROM_FUTURE:BTC"),
+    (lambda row: row.update({"spot_observed_at": "2026-10-14T18:01:00Z"}),
+     "SMART_RISK_LEDGER_MARKET_TIMESTAMP_AFTER_LEDGER"),
+])
+def test_bridge_rejects_tampered_rate_or_market_timestamps(mutate, reason):
+    row = ledger()
+    mutate(row)
+    result = build_smart_risk_sources_from_authoritative_ledger(row)
+    assert result["bridge_state"] == "BLOCKED"
+    assert result["bridge_block_reason"] == reason
+    assert result["capital_source_observation"] is None
+    assert result["portfolio_source_observation"] is None
+
+
+def test_bridge_rejects_duplicate_asset_names_after_normalization():
+    row = ledger()
+    row["valued_assets"] = ["BTC", "btc", "USDC", "USDT"]
+    result = build_smart_risk_sources_from_authoritative_ledger(row)
+    assert result["bridge_state"] == "BLOCKED"
+    assert result["bridge_block_reason"] == "SMART_RISK_ASSET_VALUATION_COVERAGE_MISMATCH"
