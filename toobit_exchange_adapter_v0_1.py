@@ -574,6 +574,65 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
+    def futures_account_wide_balances(self) -> ToobitAdapterResult:
+        """Read provider-native Futures balances for both settlement categories."""
+        try:
+            by_category: dict[str, list[dict[str, Any]]] = {}
+            for category in ("USDT", "USDC"):
+                rows = self._unwrap(
+                    self._call(
+                        "GET",
+                        "/api/v1/futures/balance",
+                        params={"category": category},
+                        signed=True,
+                    )
+                )
+                if not isinstance(rows, list):
+                    raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_BALANCES_INVALID:{category}")
+                normalized = []
+                seen = set()
+                for row in rows:
+                    if not isinstance(row, dict):
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ROW_INVALID:{category}")
+                    asset = row.get("coin")
+                    if not isinstance(asset, str) or not asset.strip():
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ASSET_MISSING:{category}")
+                    asset = asset.strip().upper()
+                    if asset in seen:
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ASSET_DUPLICATE:{category}:{asset}")
+                    seen.add(asset)
+                    total = row.get("balance")
+                    usable = row.get("availableBalance")
+                    try:
+                        total_number = Decimal(str(total))
+                        usable_number = Decimal(str(usable))
+                    except (InvalidOperation, TypeError, ValueError):
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_AMOUNT_INVALID:{category}:{asset}") from None
+                    if not total_number.is_finite() or not usable_number.is_finite() or total_number < 0 or usable_number < 0 or usable_number > total_number:
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_AMOUNT_INVALID:{category}:{asset}")
+                    normalized.append({
+                        "asset": asset,
+                        "total_amount": float(total_number),
+                        "usable_amount": float(usable_number),
+                        "provider_native": dict(row),
+                        "category": category,
+                    })
+                by_category[category] = normalized
+            return ToobitAdapterResult(
+                True, "OK",
+                {
+                    "state_known": True,
+                    "coverage_scope": "ACCOUNT_WIDE",
+                    "categories_queried": ["USDT", "USDC"],
+                    "balances_by_category": by_category,
+                    "provider_endpoint": "/api/v1/futures/balance",
+                    "provider_contract_reference": "https://api-docs.toobit.com/api/usdt-m-account-and-trading",
+                    "read_only": True,
+                },
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def futures_account_wide_positions(self) -> ToobitAdapterResult:
         """Read all current Futures positions across USDT-M and USDC-M.
 
