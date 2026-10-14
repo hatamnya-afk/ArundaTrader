@@ -51,3 +51,17 @@ The contract and tests are included in the candidate branch's focused CI workflo
 - Approved valuation and usable-capital policy remains **BLOCKED**.
 - Valid per-asset entry/stop policy and approved versioned risk policy remain **BLOCKED / NOT VERIFIED**.
 - Smart Risk production wiring remains **BLOCKED**; no fallback to legacy sizing is authorized.
+
+
+## Phase-one account scope decision — 2026-10-14
+
+Management selected **both Toobit Spot and Toobit Futures** for the first real-account phase. The candidate ledger contract and focused tests were tightened accordingly:
+
+- A valid ledger observation must explicitly declare account-wide coverage and both `SPOT` and `FUTURES`; either market alone, symbol-scoped evidence, or an unrecognized coverage declaration blocks.
+- The ledger must identify one cycle plus separate Spot and Futures observation timestamps; this contract does not assume those timestamps are identical.
+- The ledger must identify an approved valuation policy and its version. This is a required declaration, not proof that the policy or source is actually approved by management.
+- Portfolio capital, usable capital, allocated risk, and concurrent-position totals must be supplied by an authoritative ledger. This contract does not calculate them from raw exchange balances or positions.
+
+**Status after this change:** the dual-market *input contract* is defined on the candidate branch. A real account-wide ledger producer, policy-valued Spot/Futures balances, policy approval evidence, and current-cycle portfolio risk totals remain **NOT VERIFIED / BLOCKED**. The contract's test fixture is synthetic test data only and must never be treated as production capital or live account evidence.
+
+No pipeline wiring, runtime, exchange request, order attempt, database write, or operational-branch modification was performed.
