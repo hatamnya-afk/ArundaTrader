@@ -153,3 +153,42 @@ def test_no_execution_or_database_side_effect_surface():
     result = build()
     forbidden = {"order_id", "submit_order", "cancel_order", "database_write", "execution_enabled"}
     assert forbidden.isdisjoint(result)
+
+
+
+def test_general_valuation_includes_every_nonzero_asset_in_usable_and_total_capital():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.005})
+    pol = policy()
+    pol["approved_rate_sources"]["BTC"] = {
+        "source": "BTC_RATE", "source_reference": "https://rates.example.invalid/btc"
+    }
+    observed = "2026-10-14T18:00:00Z"
+    all_rates = {
+        "USDT": {"rate_to_usdt": 1.0, "rate_source": "USDT_BASE",
+                 "source_reference": "git:test-fixture/usdt", "rate_observed_at": observed,
+                 "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "USDC": {"rate_to_usdt": 0.999, "rate_source": "USDC_RATE",
+                 "source_reference": "https://rates.example.invalid/fixture", "rate_observed_at": observed,
+                 "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "BTC": {"rate_to_usdt": 65000.0, "rate_source": "BTC_RATE",
+                "source_reference": "https://rates.example.invalid/btc", "rate_observed_at": observed,
+                "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+    }
+    result = build(
+        spot_observation=spot, futures_observation=futures,
+        valuation_policy_evidence=pol, currency_valuation_evidence=currency,
+        asset_valuation_evidence=all_rates, max_rate_age_seconds=60,
+    )
+    assert result["producer_state"] == "AVAILABLE"
+    assert result["portfolio_capital"] == pytest.approx(2249.7)
+    assert result["usable_capital"] == pytest.approx(1704.77)
+    assert "BTC" in result["valued_assets"]
+
+
+def test_general_valuation_blocks_missing_nonzero_asset_rate():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.01})
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert "ALL_ASSET_VALUATION_EVIDENCE_REQUIRED" in result["producer_block_reason"]
