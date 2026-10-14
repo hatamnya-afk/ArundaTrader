@@ -17,8 +17,8 @@ def valid_policy():
         "effective_from": "2026-10-14T17:00:00Z",
         "effective_until": "2026-10-15T17:00:00Z",
         "approved_rate_sources": {
-            "USDT": {"source": "approved-base-currency-rule", "source_reference": "git:policy/usdt-base-rate"},
-            "USDC": {"source": "approved-usdc-usdt-rate", "source_reference": "https://rates.example.invalid/policy-reference"},
+            "USDT": {"source": "APPROVED_BASE_CURRENCY_RULE", "source_reference": "git:policy/usdt-base-rate"},
+            "USDC": {"source": "APPROVED_USDC_USDT_RATE_SOURCE", "source_reference": "https://rates.example.invalid/policy-reference"},
         },
     }
 
