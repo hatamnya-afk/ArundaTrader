@@ -402,6 +402,25 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
+    def get_spot_account_balances(self) -> ToobitAdapterResult:
+        """Return provider-native spot balance rows from a signed GET-only read.
+
+        Values are deliberately not converted into capital or risk: the caller
+        must apply an approved valuation/scope policy and preserve provenance.
+        """
+        try:
+            data = self._unwrap(self._call("GET", "/api/v1/account", signed=True))
+            if not isinstance(data, dict) or not isinstance(data.get("balances"), list):
+                raise RuntimeError("TOOBIT_ACCOUNT_STATE_INVALID")
+            balances = data["balances"]
+            if any(not isinstance(row, dict) for row in balances):
+                raise RuntimeError("TOOBIT_ACCOUNT_BALANCES_INVALID")
+            return ToobitAdapterResult(
+                True, "OK", {"state_known": True, "balances": balances}
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def account_check(self) -> ToobitAdapterResult:
         try:
             data = self._unwrap(self._call("GET", "/api/v1/account", signed=True))
@@ -548,7 +567,123 @@ class ToobitExchangeAdapter:
                     "margin_type": str(margin_type).strip().upper(),
                     "leverage_state_known": True,
                     "position_state_known": True,
+                    "balances": balance,
                     "positions": positions,
+                },
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
+    def futures_account_wide_balances(self) -> ToobitAdapterResult:
+        """Read provider-native Futures balances for both settlement categories."""
+        try:
+            by_category: dict[str, list[dict[str, Any]]] = {}
+            for category in ("USDT", "USDC"):
+                rows = self._unwrap(
+                    self._call(
+                        "GET",
+                        "/api/v1/futures/balance",
+                        params={"category": category},
+                        signed=True,
+                    )
+                )
+                if not isinstance(rows, list):
+                    raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_BALANCES_INVALID:{category}")
+                normalized = []
+                seen = set()
+                for row in rows:
+                    if not isinstance(row, dict):
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ROW_INVALID:{category}")
+                    asset = row.get("coin")
+                    if not isinstance(asset, str) or not asset.strip():
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ASSET_MISSING:{category}")
+                    asset = asset.strip().upper()
+                    if asset in seen:
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_ASSET_DUPLICATE:{category}:{asset}")
+                    seen.add(asset)
+                    total = row.get("balance")
+                    usable = row.get("availableBalance")
+                    try:
+                        total_number = Decimal(str(total))
+                        usable_number = Decimal(str(usable))
+                    except (InvalidOperation, TypeError, ValueError):
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_AMOUNT_INVALID:{category}:{asset}") from None
+                    if not total_number.is_finite() or not usable_number.is_finite() or total_number < 0 or usable_number < 0 or usable_number > total_number:
+                        raise RuntimeError(f"TOOBIT_FUTURES_BALANCE_AMOUNT_INVALID:{category}:{asset}")
+                    normalized.append({
+                        "asset": asset,
+                        "total_amount": float(total_number),
+                        "usable_amount": float(usable_number),
+                        "provider_native": dict(row),
+                        "category": category,
+                    })
+                by_category[category] = normalized
+            return ToobitAdapterResult(
+                True, "OK",
+                {
+                    "state_known": True,
+                    "coverage_scope": "ACCOUNT_WIDE",
+                    "categories_queried": ["USDT", "USDC"],
+                    "balances_by_category": by_category,
+                    "provider_endpoint": "/api/v1/futures/balance",
+                    "provider_contract_reference": "https://api-docs.toobit.com/api/usdt-m-account-and-trading",
+                    "read_only": True,
+                },
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
+    def futures_account_wide_positions(self) -> ToobitAdapterResult:
+        """Read all current Futures positions across USDT-M and USDC-M.
+
+        Toobit documents GET /api/v1/futures/positions as returning all contract
+        positions when symbol is omitted. USDT-M and USDC-M are separate
+        categories, so both read-only requests are required. No live call is
+        made unless an explicitly injected transport is supplied.
+        """
+        try:
+            by_category: dict[str, list[dict[str, Any]]] = {}
+            for category in ("USDT", "USDC"):
+                rows = self._unwrap(
+                    self._call(
+                        "GET",
+                        "/api/v1/futures/positions",
+                        params={"category": category},
+                        signed=True,
+                    )
+                )
+                if not isinstance(rows, list):
+                    raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITIONS_INVALID:{category}")
+                normalized: list[dict[str, Any]] = []
+                seen: set[tuple[str, str]] = set()
+                for row in rows:
+                    if not isinstance(row, dict):
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_ROW_INVALID:{category}")
+                    symbol = row.get("symbol")
+                    side = str(row.get("side", "")).strip().upper()
+                    if not isinstance(symbol, str) or not symbol.strip():
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_SYMBOL_MISSING:{category}")
+                    if side not in {"LONG", "SHORT"}:
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_SIDE_INVALID:{category}")
+                    identity = (symbol.strip().upper(), side)
+                    if identity in seen:
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_DUPLICATE:{category}")
+                    seen.add(identity)
+                    normalized.append(dict(row))
+                by_category[category] = normalized
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {
+                    "state_known": True,
+                    "coverage_scope": "ACCOUNT_WIDE",
+                    "categories_queried": ["USDT", "USDC"],
+                    "positions_by_category": by_category,
+                    "provider_endpoint": "/api/v1/futures/positions",
+                    "provider_contract_reference": "https://api-docs.toobit.com/api/usdt-m-account-and-trading",
+                    "provider_contract_semantics": "DOCUMENTED_ALL_CONTRACT_POSITIONS_WHEN_SYMBOL_OMITTED",
+                    "pagination": "NOT_DOCUMENTED_FOR_CURRENT_POSITION_ENDPOINT",
+                    "read_only": True,
                 },
             )
         except Exception as exc:

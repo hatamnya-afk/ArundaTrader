@@ -1,0 +1,268 @@
+import pytest
+
+from toobit_account_wide_portfolio_risk_ledger_producer_v0_1 import (
+    build_toobit_account_wide_portfolio_risk_ledger,
+)
+
+
+def policy():
+    return {
+        "approval_state": "APPROVED",
+        "policy_id": "fixture-policy",
+        "policy_version": "v1",
+        "approval_id": "fixture-approval",
+        "approved_by": "test-fixture-only",
+        "approval_source": "git:test-fixture/approval",
+        "approved_at": "2026-10-14T17:00:00Z",
+        "effective_from": "2026-10-14T17:00:00Z",
+        "effective_until": "2026-10-15T17:00:00Z",
+        "approved_rate_sources": {
+            "USDT": {"source": "USDT_BASE", "source_reference": "git:test-fixture/usdt"},
+            "USDC": {"source": "USDC_RATE", "source_reference": "https://rates.example.invalid/fixture"},
+        },
+    }
+
+
+def observations():
+    common = {
+        "observation_state": "AVAILABLE",
+        "account_scope": "TOOBIT:ACCOUNT:FIXTURE",
+        "cycle_id": "cycle-fixture-1",
+        "observed_at": "2026-10-14T18:00:00Z",
+        "coverage_scope": "ACCOUNT_WIDE",
+    }
+    spot = {
+        **common,
+        "observation_source": "TOOBIT_SPOT_ACCOUNT_GET",
+        "balances": [
+            {"asset": "USDT", "total_amount": 1000.0, "usable_amount": 900.0},
+            {"asset": "USDC", "total_amount": 200.0, "usable_amount": 150.0},
+        ],
+    }
+    futures = {
+        **common,
+        "observation_source": "TOOBIT_FUTURES_ACCOUNT_GET",
+        "balances": [
+            {"asset": "USDT", "total_amount": 300.0, "usable_amount": 250.0},
+            {"asset": "USDC", "total_amount": 100.0, "usable_amount": 80.0},
+        ],
+        "positions_coverage": "ACCOUNT_WIDE",
+        "positions": [
+            {"symbol": "BTC-SWAP-USDT", "allocated_risk_usdt": 12.0},
+            {"symbol": "ETH-SWAP-USDT", "allocated_risk_usdt": 8.0},
+        ],
+    }
+    currency = {
+        "USDT": {
+            "rate_to_usdt": 1.0, "rate_source": "USDT_BASE", "source_reference": "git:test-fixture/usdt",
+            "rate_observed_at": "2026-10-14T18:00:00Z",
+            "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1",
+            "cycle_id": "cycle-fixture-1",
+        },
+        "USDC": {
+            "rate_to_usdt": 0.999, "rate_source": "USDC_RATE", "source_reference": "https://rates.example.invalid/fixture",
+            "rate_observed_at": "2026-10-14T18:00:00Z",
+            "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1",
+            "cycle_id": "cycle-fixture-1",
+        },
+    }
+    return spot, futures, currency
+
+
+def build(**overrides):
+    spot, futures, currency = observations()
+    args = {
+        "spot_observation": spot,
+        "futures_observation": futures,
+        "valuation_policy_evidence": policy(),
+        "currency_valuation_evidence": currency,
+        "ledger_id": "fixture-ledger",
+        "ledger_version": "v1",
+        "account_scope": "TOOBIT:ACCOUNT:FIXTURE",
+        "observed_at": "2026-10-14T18:00:00Z",
+        "cycle_id": "cycle-fixture-1",
+        "provenance": "test fixture only; not exchange data",
+        "allocated_risk_usdt": 20.0,
+    }
+    args.update(overrides)
+    return build_toobit_account_wide_portfolio_risk_ledger(**args)
+
+
+def test_aggregates_explicit_account_wide_dual_market_stablecoin_evidence():
+    result = build()
+    assert result["producer_state"] == "AVAILABLE"
+    assert result["portfolio_state"] == "AVAILABLE"
+    assert result["portfolio_capital"] == pytest.approx(1599.7)
+    assert result["usable_capital"] == pytest.approx(1379.77)
+    assert result["allocated_risk"] == 20.0
+    assert result["concurrent_positions"] == 2
+    assert result["market_coverage"] == ["SPOT", "FUTURES"]
+
+
+def test_missing_one_market_blocks():
+    result = build(futures_observation=None)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["portfolio_capital"] is None
+
+
+def test_symbol_scoped_futures_positions_block():
+    spot, futures, currency = observations()
+    futures["positions_coverage"] = "SYMBOL_SCOPED"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_ACCOUNT_WIDE_POSITIONS_REQUIRED"
+
+
+def test_nonzero_unvalued_asset_blocks_instead_of_understating_capital():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.01})
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_ALL_ASSET_VALUATION_EVIDENCE_REQUIRED"
+
+
+def test_cycle_mismatch_blocks():
+    spot, futures, currency = observations()
+    futures["cycle_id"] = "different-cycle"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_FUTURES_CYCLE_MISMATCH"
+
+
+def test_allocated_risk_must_match_position_evidence():
+    result = build(allocated_risk_usdt=19.0)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_ALLOCATED_RISK_TOTAL_MISMATCH"
+
+
+def test_unapproved_rate_source_blocks():
+    spot, futures, currency = observations()
+    currency["USDC"]["rate_source"] = "UNAPPROVED"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_NOT_APPROVED"
+
+
+def test_missing_valuation_policy_blocks():
+    result = build(valuation_policy_evidence=None)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["portfolio_capital"] is None
+
+
+def test_no_execution_or_database_side_effect_surface():
+    result = build()
+    forbidden = {"order_id", "submit_order", "cancel_order", "database_write", "execution_enabled"}
+    assert forbidden.isdisjoint(result)
+
+
+
+def test_general_valuation_includes_every_nonzero_asset_in_usable_and_total_capital():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.005})
+    pol = policy()
+    pol["approved_rate_sources"]["BTC"] = {
+        "source": "BTC_RATE", "source_reference": "https://rates.example.invalid/btc"
+    }
+    observed = "2026-10-14T18:00:00Z"
+    all_rates = {
+        "USDT": {"rate_to_usdt": 1.0, "rate_source": "USDT_BASE",
+                 "source_reference": "git:test-fixture/usdt", "rate_observed_at": observed,
+                 "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "USDC": {"rate_to_usdt": 0.999, "rate_source": "USDC_RATE",
+                 "source_reference": "https://rates.example.invalid/fixture", "rate_observed_at": observed,
+                 "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "BTC": {"rate_to_usdt": 65000.0, "rate_source": "BTC_RATE",
+                "source_reference": "https://rates.example.invalid/btc", "rate_observed_at": observed,
+                "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+    }
+    result = build(
+        spot_observation=spot, futures_observation=futures,
+        valuation_policy_evidence=pol, currency_valuation_evidence=currency,
+        asset_valuation_evidence=all_rates, max_rate_age_seconds=60,
+    )
+    assert result["producer_state"] == "AVAILABLE"
+    assert result["portfolio_capital"] == pytest.approx(2249.7)
+    assert result["usable_capital"] == pytest.approx(1704.77)
+    assert "BTC" in result["valued_assets"]
+
+
+def test_general_valuation_blocks_missing_nonzero_asset_rate():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.01})
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert "ALL_ASSET_VALUATION_EVIDENCE_REQUIRED" in result["producer_block_reason"]
+
+
+
+def test_approved_all_asset_valuation_can_publish_usable_capital_while_risk_remains_blocked():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "BTC", "total_amount": 0.01, "usable_amount": 0.005})
+    pol = policy()
+    pol["approved_rate_sources"]["BTC"] = {
+        "source": "BTC_RATE", "source_reference": "https://rates.example.invalid/btc"
+    }
+    observed = "2026-10-14T18:00:00Z"
+    rates = {
+        "USDT": {"rate_to_usdt": 1.0, "rate_source": "USDT_BASE", "source_reference": "git:test-fixture/usdt", "rate_observed_at": observed, "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "USDC": {"rate_to_usdt": 0.999, "rate_source": "USDC_RATE", "source_reference": "https://rates.example.invalid/fixture", "rate_observed_at": observed, "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+        "BTC": {"rate_to_usdt": 65000.0, "rate_source": "BTC_RATE", "source_reference": "https://rates.example.invalid/btc", "rate_observed_at": observed, "valuation_policy_id": "fixture-policy", "valuation_policy_version": "v1", "cycle_id": "cycle-fixture-1"},
+    }
+    for position in futures["positions"]:
+        position.pop("allocated_risk_usdt", None)
+    result = build(
+        spot_observation=spot, futures_observation=futures, valuation_policy_evidence=pol,
+        currency_valuation_evidence=currency, asset_valuation_evidence=rates,
+        max_rate_age_seconds=60, allocated_risk_usdt=None,
+    )
+    assert result["producer_state"] == "PARTIAL"
+    assert result["capital_state"] == "AVAILABLE"
+    assert result["available_capital"] == pytest.approx(2249.7)
+    assert result["usable_capital"] == pytest.approx(1704.77)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["allocated_risk"] is None
+
+
+def test_duplicate_asset_balance_rows_block_instead_of_double_counting():
+    spot, futures, currency = observations()
+    spot["balances"].append({"asset": "usdt", "total_amount": 1000.0, "usable_amount": 900.0})
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_SPOT_DUPLICATE_BALANCE_ASSET:USDT"
+
+
+def test_rate_source_reference_must_match_approved_policy():
+    spot, futures, currency = observations()
+    currency["USDC"]["source_reference"] = "https://unapproved.example.invalid/rate"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_RATE_REFERENCE_NOT_APPROVED"
+
+
+def test_stale_spot_observation_requires_and_obeys_explicit_freshness_policy():
+    spot, futures, currency = observations()
+    spot["observed_at"] = "2026-10-14T17:59:45Z"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_SPOT_TIMESTAMP_ALIGNMENT_POLICY_REQUIRED"
+    result = build(spot_observation=spot, futures_observation=futures,
+                   currency_valuation_evidence=currency, max_observation_age_seconds=30)
+    assert result["producer_state"] == "AVAILABLE"
+
+
+def test_future_spot_observation_blocks():
+    spot, futures, currency = observations()
+    spot["observed_at"] = "2026-10-14T18:01:00Z"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency,
+                   max_observation_age_seconds=30)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_SPOT_TIMESTAMP_FROM_FUTURE"
+
+
+def test_stale_currency_rate_blocks_when_explicit_freshness_policy_is_configured():
+    spot, futures, currency = observations()
+    currency["USDC"]["rate_observed_at"] = "2026-10-14T17:00:00Z"
+    result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency,
+                   max_rate_age_seconds=30)
+    assert result["producer_state"] == "BLOCKED"
+    assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_RATE_STALE"

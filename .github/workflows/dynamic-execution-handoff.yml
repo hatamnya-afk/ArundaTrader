@@ -1,0 +1,188 @@
+name: Dynamic Execution Handoff # Smart Risk account-wide evidence and all-asset valuation verification retry-3-capital-risk-separation
+
+on:
+  pull_request:
+    branches:
+      - operational-main-20261007
+    paths:
+      - "arunda_pipeline.py"
+      - "dynamic_*_boundary_v0_1.py"
+      - "dynamic_execution_handoff_v0_1.py"
+      - "dynamic_smart_risk_sizing_boundary_v0_1.py"
+      - "dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "smart_risk_readonly_producer_boundary_v0_1.py"
+      - "test_smart_risk_authoritative_ledger_source_bridge_v0_1.py"
+      - "smart_risk_authoritative_ledger_source_bridge_v0_1.py"
+      - "authoritative_portfolio_risk_ledger_contract_v0_1.py"
+      - "account_wide_futures_coverage_contract_v0_1.py"
+      - "test_account_wide_futures_coverage_contract_v0_1.py"
+      - "all_asset_valuation_contract_v0_1.py"
+      - "test_all_asset_valuation_contract_v0_1.py"
+      - "toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
+      - "toobit_account_wide_futures_observation_producer_v0_1.py"
+      - "test_toobit_account_wide_futures_observation_producer_v0_1.py"
+      - "test_toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
+      - "test_authoritative_portfolio_risk_ledger_contract_v0_1.py"
+      - "approved_valuation_policy_source_contract_v0_1.py"
+      - "test_approved_valuation_policy_source_contract_v0_1.py"
+      - "test_smart_risk_readonly_producer_boundary_v0_1.py"
+      - "test_dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "test_toobit_exchange_adapter_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "test_toobit_exchange_adapter_v0_1.py"
+      - "toobit_raw_account_observation_producer_v0_1.py"
+      - "toobit_account_wide_spot_observation_producer_v0_1.py"
+      - "test_toobit_account_wide_spot_observation_producer_v0_1.py"
+      - "test_toobit_raw_account_observation_producer_v0_1.py"
+      - "toobit_raw_position_observation_producer_v0_1.py"
+      - "test_toobit_raw_position_observation_producer_v0_1.py"
+      - "test_dynamic_smart_risk_sizing_boundary_v0_1.py"
+      - "market_regime_engine.py"
+      - "market_structure_engine.py"
+      - "test_dynamic_execution_regime_connection_v0_1.py"
+      - "mcp01_main_integration_boundary_v0_1.py"
+      - "test_dynamic_execution_handoff_v0_1.py"
+      - "test_mcp01_execution_results_handoff_v0_1.py"
+      - ".github/workflows/dynamic-execution-handoff.yml"
+  push:
+    branches:
+      - fix/operational-dynamic-execution-connection-20261013
+      - fix/smart-risk-handoff-contract-20261014
+    paths:
+      - "arunda_pipeline.py"
+      - "dynamic_*_boundary_v0_1.py"
+      - "dynamic_execution_handoff_v0_1.py"
+      - "dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "smart_risk_readonly_producer_boundary_v0_1.py"
+      - "test_toobit_account_wide_futures_observation_producer_v0_1.py"
+      - "toobit_account_wide_futures_observation_producer_v0_1.py"
+      - "test_smart_risk_authoritative_ledger_source_bridge_v0_1.py"
+      - "smart_risk_authoritative_ledger_source_bridge_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "test_toobit_exchange_adapter_v0_1.py"
+      - "toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
+      - "test_toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py"
+      - "test_account_wide_futures_coverage_contract_v0_1.py"
+      - "test_all_asset_valuation_contract_v0_1.py"
+      - "authoritative_portfolio_risk_ledger_contract_v0_1.py"
+      - "account_wide_futures_coverage_contract_v0_1.py"
+      - "test_account_wide_futures_coverage_contract_v0_1.py"
+      - "all_asset_valuation_contract_v0_1.py"
+      - "test_all_asset_valuation_contract_v0_1.py"
+      - "test_authoritative_portfolio_risk_ledger_contract_v0_1.py"
+      - "approved_valuation_policy_source_contract_v0_1.py"
+      - "test_approved_valuation_policy_source_contract_v0_1.py"
+      - "test_toobit_raw_position_observation_producer_v0_1.py"
+      - "toobit_raw_position_observation_producer_v0_1.py"
+      - "test_toobit_raw_account_observation_producer_v0_1.py"
+      - "toobit_raw_account_observation_producer_v0_1.py"
+      - "toobit_account_wide_spot_observation_producer_v0_1.py"
+      - "test_toobit_account_wide_spot_observation_producer_v0_1.py"
+      - "test_smart_risk_readonly_producer_boundary_v0_1.py"
+      - "test_dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "test_dynamic_smart_risk_sizing_boundary_v0_1.py"
+      - "mcp01_main_integration_boundary_v0_1.py"
+      - "test_dynamic_execution_handoff_v0_1.py"
+      - "test_mcp01_execution_results_handoff_v0_1.py"
+      - ".github/workflows/dynamic-execution-handoff.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  focused-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Compile connected pipeline modules
+        run: >-
+          python -m py_compile
+          arunda_pipeline.py
+          production_universe_contract_v0_1.py
+          dynamic_opportunity_universe_boundary_v0_1.py
+          dynamic_market_data_boundary_v0_1.py
+          production_signal_input_boundary_v0_1.py
+          production_universe_binding.py
+          dynamic_signal_semantic_layer.py
+          dynamic_validation_boundary_v0_1.py
+          dynamic_news_boundary_v0_1.py
+          dynamic_social_boundary_v0_1.py
+          dynamic_fusion_boundary_v0_1.py
+          dynamic_score_contract_boundary_v0_1.py
+          dynamic_decision_contract_boundary_v0_1.py
+          dynamic_risk_contract_boundary_v0_1.py
+          dynamic_trade_gate_contract_boundary_v0_1.py
+          dynamic_execution_handoff_v0_1.py
+          dynamic_smart_risk_sizing_boundary_v0_1.py
+          dynamic_smart_risk_pipeline_adapter_v0_1.py
+          smart_risk_readonly_producer_boundary_v0_1.py
+          smart_risk_authoritative_ledger_source_bridge_v0_1.py
+          toobit_account_wide_futures_observation_producer_v0_1.py
+          toobit_account_wide_spot_observation_producer_v0_1.py
+          toobit_raw_account_observation_producer_v0_1.py
+          toobit_account_wide_spot_observation_producer_v0_1.py
+          toobit_raw_position_observation_producer_v0_1.py
+          authoritative_portfolio_risk_ledger_contract_v0_1.py
+          account_wide_futures_coverage_contract_v0_1.py
+          all_asset_valuation_contract_v0_1.py
+          toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py
+          toobit_account_wide_futures_observation_producer_v0_1.py
+          approved_valuation_policy_source_contract_v0_1.py
+          real_capital_observation_contract_v0_1.py
+          smart_risk_contract_v0_1.py
+          smart_risk_engine_v0_1.py
+          smart_risk_entry_stop_bridge_v0_1.py
+          smart_risk_policy_bridge_v0_1.py
+          smart_risk_portfolio_bridge_v0_1.py
+          validated_stop_risk_policy_source_contract_v0_1.py
+          market_analysis_engine.py
+          signal_logic.py
+          indicator_engine.py
+          market_structure_engine.py
+          market_regime_engine.py
+          feature_engine.py
+          decision_engine.py
+          decision_contract.py
+          opportunity_engine.py
+          public_market_data_kucoin.py
+          public_market_data_failover_v0.1.py
+          signal_validator.py
+          news_arm_v0_1.py
+          social_arm_v0_1.py
+          fusion_engine.py
+          score_producer.py
+          risk_engine.py
+          trade_gate_engine.py
+          mcp01_main_integration_boundary_v0_1.py
+          mcp01_trader_evidence_bridge_v0_1.py
+          exchange_execution_contract.py
+          exchange_execution_boundary.py
+      - name: Run focused execution handoff tests
+        run: >-
+          python -m pytest -q
+          test_dynamic_execution_handoff_v0_1.py
+          test_dynamic_smart_risk_sizing_boundary_v0_1.py
+          test_dynamic_smart_risk_pipeline_adapter_v0_1.py
+          test_smart_risk_readonly_producer_boundary_v0_1.py
+          test_smart_risk_authoritative_ledger_source_bridge_v0_1.py
+          test_toobit_account_wide_futures_observation_producer_v0_1.py
+          test_toobit_account_wide_spot_observation_producer_v0_1.py
+          test_toobit_raw_account_observation_producer_v0_1.py
+          test_toobit_account_wide_spot_observation_producer_v0_1.py
+          test_toobit_raw_position_observation_producer_v0_1.py
+          test_authoritative_portfolio_risk_ledger_contract_v0_1.py
+          test_account_wide_futures_coverage_contract_v0_1.py
+          test_all_asset_valuation_contract_v0_1.py
+          test_toobit_account_wide_portfolio_risk_ledger_producer_v0_1.py
+          test_toobit_account_wide_futures_observation_producer_v0_1.py
+          test_approved_valuation_policy_source_contract_v0_1.py
+          test_toobit_exchange_adapter_v0_1.py
+          test_dynamic_execution_regime_connection_v0_1.py
+          test_mcp01_execution_results_handoff_v0_1.py

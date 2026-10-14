@@ -7,6 +7,7 @@ execution, provider logic, or outcome inference.
 from __future__ import annotations
 
 import sqlite3
+from dataclasses import asdict, is_dataclass
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -18,6 +19,7 @@ from cp49_authoritative_decision_birth_issuer_v0_1 import (
 from cp49_authoritative_decision_birth_store_v0_1 import ensure_birth_schema
 from cp49_production_decision_birth_producer_v0_1 import require_production_decision_birth
 from mcp01_compact_event_evidence_v0_1 import (
+    build_event,
     persist_events_isolated,
 )
 from mcp01_trader_evidence_bridge_v0_1 import (
@@ -104,6 +106,7 @@ def emit_mcp01_evidence(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
     trade_ready_assets: Sequence[str],
+    execution_results: Mapping[str, Any] | None = None,
 ) -> tuple[int, list[dict[str, str]]]:
     """Emit frozen MCP-01 evidence after authoritative Trader outputs exist."""
     normalized_gate: dict[str, dict[str, Any]] = {}
@@ -116,12 +119,29 @@ def emit_mcp01_evidence(
             row["decision_id"] = decision_snapshot.get(asset, {}).get("decision_id")
         normalized_gate[asset] = row
 
+    normalized_execution_results: dict[str, dict[str, Any]] = {}
+    if execution_results is not None:
+        if not isinstance(execution_results, Mapping):
+            raise TypeError("MCP01_EXECUTION_RESULTS_MUST_BE_MAPPING")
+        for raw_asset, raw_result in execution_results.items():
+            asset = str(raw_asset).strip().upper()
+            if not asset:
+                raise ValueError("MCP01_EXECUTION_RESULT_ASSET_INVALID")
+            if isinstance(raw_result, Mapping):
+                normalized_execution_results[asset] = dict(raw_result)
+            elif is_dataclass(raw_result) and not isinstance(raw_result, type):
+                normalized_execution_results[asset] = asdict(raw_result)
+            else:
+                raise TypeError(f"MCP01_EXECUTION_RESULT_TYPE_INVALID:{asset}")
+
     events = build_runtime_evidence_events(
         cycle_id=cycle_id,
         emitted_at=datetime.now(timezone.utc).isoformat(),
         decision_snapshot=decision_snapshot,
         trade_gate_snapshot=normalized_gate,
         trade_ready_assets=trade_ready_assets,
+        execution_results=(normalized_execution_results if execution_results is not None else None),
     )
     events = deduplicate_events(events)
-    return persist_events_isolated(events)
+    validated_events = [build_event(**event) for event in events]
+    return persist_events_isolated(validated_events)
