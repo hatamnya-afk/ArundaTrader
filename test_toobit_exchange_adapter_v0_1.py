@@ -313,3 +313,60 @@ def test_toobit_conforms_to_replaceable_exchange_adapter_contract():
     assert validate_adapter_contract(adapter) == (True, "VALID")
     assert adapter.capabilities().order_submission is False
     assert adapter.capabilities().order_cancellation is False
+
+
+
+def test_account_wide_futures_positions_reads_both_categories_without_symbol_filter():
+    calls = []
+
+    def transport(*, method, path, params, headers, base_url):
+        calls.append((method, path, dict(params)))
+        assert method == "GET"
+        assert path == "/api/v1/futures/positions"
+        assert "symbol" not in params
+        if params.get("category") == "USDT":
+            return [{"symbol": "BTC-SWAP-USDT", "side": "LONG", "position": "1"}]
+        if params.get("category") == "USDC":
+            return [{"symbol": "ETH-SWAP-USDC", "side": "SHORT", "position": "2"}]
+        raise AssertionError("unexpected category")
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="fixture-key", secret_key="fixture-secret"
+    ).futures_account_wide_positions()
+
+    assert result.allowed is True
+    assert result.data["coverage_scope"] == "ACCOUNT_WIDE"
+    assert result.data["categories_queried"] == ["USDT", "USDC"]
+    assert len(result.data["positions_by_category"]["USDT"]) == 1
+    assert len(result.data["positions_by_category"]["USDC"]) == 1
+    assert len(calls) == 2
+    assert all(call[2].get("signature") for call in calls)
+
+
+def test_account_wide_futures_positions_fail_closed_if_one_category_fails():
+    def transport(*, method, path, params, headers, base_url):
+        if params.get("category") == "USDT":
+            return []
+        return {"code": 500, "msg": "fixture error"}
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="fixture-key", secret_key="fixture-secret"
+    ).futures_account_wide_positions()
+    assert result.allowed is False
+    assert "TOOBIT_PROVIDER_ERROR" in result.reason
+
+
+def test_account_wide_futures_positions_rejects_malformed_or_duplicate_rows():
+    def transport(*, method, path, params, headers, base_url):
+        if params.get("category") == "USDT":
+            return [
+                {"symbol": "BTC-SWAP-USDT", "side": "LONG"},
+                {"symbol": "BTC-SWAP-USDT", "side": "LONG"},
+            ]
+        return []
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="fixture-key", secret_key="fixture-secret"
+    ).futures_account_wide_positions()
+    assert result.allowed is False
+    assert "POSITION_DUPLICATE" in result.reason
