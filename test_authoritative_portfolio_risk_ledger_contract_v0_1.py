@@ -6,6 +6,29 @@ from authoritative_portfolio_risk_ledger_contract_v0_1 import (
 
 
 def valid_ledger():
+    policy_id = "toobit-dual-market-valuation"
+    policy_version = "v2"
+    cycle_id = "cycle-20261014T180000Z"
+    currency_evidence = {
+        "USDT": {
+            "raw_amount": 5000.0,
+            "rate_to_usdt": 1.0,
+            "rate_source": "APPROVED_BASE_CURRENCY_RULE",
+            "rate_observed_at": "2026-10-14T17:59:58Z",
+            "valuation_policy_id": policy_id,
+            "valuation_policy_version": policy_version,
+            "cycle_id": cycle_id,
+        },
+        "USDC": {
+            "raw_amount": 3000.0,
+            "rate_to_usdt": 0.9995,
+            "rate_source": "APPROVED_USDC_USDT_RATE_SOURCE",
+            "rate_observed_at": "2026-10-14T17:59:58Z",
+            "valuation_policy_id": policy_id,
+            "valuation_policy_version": policy_version,
+            "cycle_id": cycle_id,
+        },
+    }
     return {
         "ledger_state": "AVAILABLE",
         "ledger_validation": "VALID",
@@ -15,17 +38,19 @@ def valid_ledger():
         "account_scope": "TOOBIT:SPOT_AND_FUTURES:ACCOUNT",
         "coverage_scope": "ACCOUNT_WIDE",
         "market_coverage": ["SPOT", "FUTURES"],
-        "asset_scope": "USDT",
+        "asset_scope": "USDT_REPORTING",
         "observed_at": "2026-10-14T18:00:00Z",
-        "cycle_id": "cycle-20261014T180000Z",
+        "cycle_id": cycle_id,
         "spot_observed_at": "2026-10-14T17:59:58Z",
         "futures_observed_at": "2026-10-14T17:59:59Z",
         "provenance": "explicit authoritative ledger snapshot",
         "valuation_policy_state": "APPROVED",
-        "valuation_policy_id": "toobit-dual-market-valuation",
-        "valuation_policy_version": "v1",
-        "portfolio_capital": 10000.0,
-        "usable_capital": 8000.0,
+        "valuation_policy_id": policy_id,
+        "valuation_policy_version": policy_version,
+        "reporting_currency": "USDT",
+        "currency_valuation_evidence": currency_evidence,
+        "portfolio_capital": 7997.5,
+        "usable_capital": 7000.0,
         "allocated_risk": 250.0,
         "concurrent_positions": 2,
     }
@@ -40,7 +65,7 @@ def test_missing_authoritative_ledger_blocks_without_defaults():
     assert result["portfolio_capital"] is None
 
 
-def test_explicit_account_wide_spot_and_futures_ledger_is_normalized():
+def test_explicit_dual_market_dual_currency_ledger_is_normalized():
     result = build_authoritative_portfolio_risk_ledger_observation(valid_ledger())
     assert result["portfolio_state"] == "AVAILABLE"
     assert result["portfolio_validation"] == "VALID"
@@ -48,10 +73,13 @@ def test_explicit_account_wide_spot_and_futures_ledger_is_normalized():
     assert result["market_coverage"] == ["SPOT", "FUTURES"]
     assert result["cycle_id"] == "cycle-20261014T180000Z"
     assert result["valuation_policy_id"] == "toobit-dual-market-valuation"
-    assert result["valuation_policy_version"] == "v1"
+    assert result["valuation_policy_version"] == "v2"
+    assert result["reporting_currency"] == "USDT"
+    assert set(result["currency_valuation_evidence"]) == {"USDT", "USDC"}
+    assert result["currency_valuation_evidence"]["USDC"]["rate_to_usdt"] == 0.9995
     assert result["ledger_id"] == "portfolio-ledger-001"
-    assert result["portfolio_capital"] == 10000.0
-    assert result["usable_capital"] == 8000.0
+    assert result["portfolio_capital"] == 7997.5
+    assert result["usable_capital"] == 7000.0
     assert result["allocated_risk"] == 250.0
     assert result["concurrent_positions"] == 2
 
@@ -103,6 +131,37 @@ def test_unapproved_valuation_policy_blocks():
     assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_APPROVED_VALUATION_POLICY_REQUIRED"
 
 
+@pytest.mark.parametrize("evidence", [None, {}, {"USDT": {}} , {"USDT": {}, "BTC": {}}])
+def test_missing_or_unapproved_currency_valuation_evidence_blocks(evidence):
+    row = valid_ledger()
+    row["currency_valuation_evidence"] = evidence
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_USDT_USDC_VALUATION_EVIDENCE_REQUIRED"
+
+
+def test_currency_valuation_requires_same_policy_and_cycle():
+    row = valid_ledger()
+    row["currency_valuation_evidence"]["USDC"]["valuation_policy_version"] = "old-version"
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_POLICY_MISMATCH"
+
+    row = valid_ledger()
+    row["currency_valuation_evidence"]["USDC"]["cycle_id"] = "other-cycle"
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_CURRENCY_CYCLE_MISMATCH"
+
+
+def test_usdt_base_currency_rate_must_be_one():
+    row = valid_ledger()
+    row["currency_valuation_evidence"]["USDT"]["rate_to_usdt"] = 0.99
+    result = build_authoritative_portfolio_risk_ledger_observation(row)
+    assert result["portfolio_state"] == "BLOCKED"
+    assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_USDT_BASE_RATE_MUST_EQUAL_ONE"
+
+
 def test_non_authoritative_source_and_invalid_risk_fields_block():
     row = valid_ledger()
     row["ledger_source"] = "TOOBIT_FUTURES_POSITIONS_GET"
@@ -119,7 +178,7 @@ def test_non_authoritative_source_and_invalid_risk_fields_block():
 
 def test_usable_capital_cannot_exceed_portfolio_capital():
     row = valid_ledger()
-    row["usable_capital"] = 10001
+    row["usable_capital"] = 10000
     result = build_authoritative_portfolio_risk_ledger_observation(row)
     assert result["portfolio_state"] == "BLOCKED"
     assert result["portfolio_block_reason"] == "PORTFOLIO_LEDGER_USABLE_CAPITAL_INVALID"
