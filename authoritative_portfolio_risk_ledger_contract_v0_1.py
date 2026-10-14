@@ -11,6 +11,10 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
+from approved_valuation_policy_source_contract_v0_1 import (
+    validate_approved_valuation_policy_evidence,
+)
+
 
 _FORBIDDEN_SOURCES = {"TEST", "LEGACY", "SIMULATED", "TOOBIT_FUTURES_POSITIONS_GET"}
 _REQUIRED_MARKETS = {"SPOT", "FUTURES"}
@@ -61,7 +65,8 @@ def _finite_number(value: Any, reason: str, *, positive: bool = False) -> float:
 
 
 def _validate_currency_evidence(
-    evidence: Any, *, policy_id: str, policy_version: str, cycle_id: str
+    evidence: Any, *, policy_id: str, policy_version: str, cycle_id: str,
+    approved_rate_sources: Mapping[str, Mapping[str, str]],
 ) -> dict[str, dict[str, Any]]:
     if not isinstance(evidence, Mapping) or {str(k).upper() for k in evidence} != _REQUIRED_CURRENCIES:
         raise ValueError("PORTFOLIO_LEDGER_USDT_USDC_VALUATION_EVIDENCE_REQUIRED")
@@ -76,6 +81,8 @@ def _validate_currency_evidence(
         rate_source = _nonempty(row, "rate_source", "PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_MISSING")
         if rate_source.upper() in _FORBIDDEN_SOURCES:
             raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_INVALID")
+        if rate_source != approved_rate_sources[currency]["source"]:
+            raise ValueError("PORTFOLIO_LEDGER_CURRENCY_RATE_SOURCE_NOT_APPROVED")
         rate_timestamp = _nonempty(
             row, "rate_observed_at", "PORTFOLIO_LEDGER_CURRENCY_RATE_TIMESTAMP_MISSING"
         )
@@ -151,11 +158,21 @@ def build_authoritative_portfolio_risk_ledger_observation(
         reporting_currency = ledger_observation.get("reporting_currency")
         if reporting_currency != "USDT":
             raise ValueError("PORTFOLIO_LEDGER_REPORTING_CURRENCY_MUST_BE_USDT")
+        policy_evidence = validate_approved_valuation_policy_evidence(
+            ledger_observation.get("valuation_policy_evidence"),
+            valuation_observed_at=observed_at,
+        )
+        if (
+            policy_evidence["policy_id"] != valuation_policy_id
+            or policy_evidence["policy_version"] != valuation_policy_version
+        ):
+            raise ValueError("PORTFOLIO_LEDGER_VALUATION_POLICY_EVIDENCE_MISMATCH")
         currency_evidence = _validate_currency_evidence(
             ledger_observation.get("currency_valuation_evidence"),
             policy_id=valuation_policy_id,
             policy_version=valuation_policy_version,
             cycle_id=cycle_id,
+            approved_rate_sources=policy_evidence["approved_rate_sources"],
         )
 
         portfolio_capital = _finite_number(
@@ -191,6 +208,7 @@ def build_authoritative_portfolio_risk_ledger_observation(
             "valuation_policy_state": "APPROVED",
             "valuation_policy_id": valuation_policy_id,
             "valuation_policy_version": valuation_policy_version,
+            "valuation_policy_approval_id": policy_evidence["approval_id"],
             "reporting_currency": "USDT",
             "currency_valuation_evidence": currency_evidence,
             "portfolio_capital": portfolio_capital,
