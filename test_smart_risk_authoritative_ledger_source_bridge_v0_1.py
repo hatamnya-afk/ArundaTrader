@@ -54,3 +54,37 @@ def test_missing_ledger_blocks():
     result = build_smart_risk_sources_from_authoritative_ledger(None)
     assert result["bridge_state"] == "BLOCKED"
     assert result["capital_source_observation"] is None
+
+
+
+def test_validated_ledger_reaches_readonly_smart_risk_sizing():
+    from smart_risk_authoritative_ledger_source_bridge_v0_1 import evaluate_smart_risk_from_authoritative_ledger
+
+    row = ledger()
+    row.update({
+        "portfolio_capital": 1000.0, "usable_capital": 800.0,
+        "allocated_risk": 10.0, "concurrent_positions": 1,
+    })
+    stop = {
+        "observation_validation": "VALID", "observation_state": "AVAILABLE",
+        "observation_source": "APPROVED_ENTRY_STOP_POLICY",
+        "provenance": "fixture stop policy", "asset": "BTC", "direction": "LONG",
+        "entry_price": 100.0, "stop_price": 95.0, "stop_distance": 5.0,
+        "risk_policy_version": "risk-v1", "risk_policy_validation": "VALID",
+        "risk_per_trade": 0.01, "max_portfolio_risk": 0.05,
+        "max_concurrent_positions": 5, "observed_at": "2026-10-14T18:00:00Z",
+    }
+    policy = {
+        "policy_version": "risk-v1", "policy_validation": "VALID",
+        "risk_per_trade": 0.01, "max_portfolio_risk": 0.05,
+        "max_concurrent_positions": 5,
+    }
+    result = evaluate_smart_risk_from_authoritative_ledger(
+        ledger_observation=row, asset="BTC", direction="LONG", entry_price=100.0,
+        stop_policy_observation=stop, risk_policy_observation=policy,
+    )
+    assert result["ledger_bridge_state"] == "AVAILABLE"
+    assert result["risk_state"] == "APPROVED", result.get("block_reason")
+    assert result["quantity_source"] == "SMART_RISK_ENGINE_V0_1"
+    assert result["position_quantity"] == pytest.approx(1.6)
+    assert result["quantity_unit"] == "BASE_ASSET"
