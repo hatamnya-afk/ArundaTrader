@@ -34,6 +34,8 @@ on:
       - "dynamic_*_boundary_v0_1.py"
       - "dynamic_execution_handoff_v0_1.py"
       - "dynamic_smart_risk_pipeline_adapter_v0_1.py"
+      - "smart_risk_readonly_producer_boundary_v0_1.py"
+      - "test_smart_risk_readonly_producer_boundary_v0_1.py"
       - "test_dynamic_smart_risk_pipeline_adapter_v0_1.py"
       - "test_dynamic_smart_risk_sizing_boundary_v0_1.py"
       - "mcp01_main_integration_boundary_v0_1.py"
