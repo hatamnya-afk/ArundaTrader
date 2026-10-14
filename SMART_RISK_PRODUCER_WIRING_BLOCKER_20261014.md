@@ -136,3 +136,25 @@ Focused CI for the account-wide producer completed successfully on commit `8e181
 - Latest focused CI: [run #109 / ID 38625769869](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38625769869). Compile step PASS; focused test suite **158 passed in 0.68s**.
 - This is code/contract verification only. The bridge remains a read-only candidate integration and is not connected to the operational `arunda_pipeline.py`; no live account observation, approved production rate/policy evidence, or authenticated per-position risk-allocation ledger was created by these changes.
 - Operational branch remains unchanged; PR #35 remains Draft and unmerged. No live exchange API request, production runtime, order/cancel/withdrawal, or database write was performed.
+
+
+## 2026-10-14 — Ledger evidence integrity hardening (CI #118)
+
+The ledger producer and regression suite were tightened after examining the actual aggregation path:
+
+- Duplicate balance rows for the same normalized asset in one market now block rather than being summed, preventing duplicate provider rows from inflating capital.
+- Spot and Futures timestamps are parsed as timezone-aware values; future-dated observations block. Different observation times are accepted only when an explicit `max_observation_age_seconds` freshness policy is supplied. Without that policy, timestamps must match exactly.
+- Currency-rate source references must match the approved policy reference, not just the source label.
+- Currency rates require timezone-aware observation timestamps; future/stale rates block. Different rate timestamps require an explicit `max_rate_age_seconds` policy; no freshness window is silently invented.
+- Regression coverage added for duplicate assets, mismatched source references, stale observations, future observations, and stale currency rates.
+
+Latest candidate code/test commit: `47720737c50988217c732a13074ccf10be7e3456`.
+Focused CI run #118 / ID `38627405754`: compile PASS; **163 passed in 0.79s**. [View run](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38627405754).
+
+## Actual-evidence gate — still open
+
+These changes harden the acceptance boundary; they do not create real account evidence or management approval. The current frontier still prohibits live exchange API requests and production runtime. Therefore no claim is made that this run observed the user's Toobit balances, open positions, current exchange rates, or authentic management risk-policy approval.
+
+To clear the real-evidence gate, the intake must contain authenticated, current-cycle read-only Spot and both Futures settlement-category account observations; complete account-wide position coverage; approved rate-source references and fresh rates for every non-zero asset; and explicit per-position stop/risk allocations reconciled to the portfolio total. The risk-policy artifact must include a verifiable approval identity/reference, version, effective interval, risk-per-trade, maximum portfolio risk, and maximum concurrent positions. Plain strings saying `APPROVED` or test fixtures do not authenticate these facts.
+
+Until those authentic artifacts are supplied through an authorized evidence-capture path, actual capital and portfolio risk remain **NOT VERIFIED / BLOCKED**, and Smart Risk production wiring remains blocked. Operational branch remains unchanged; PR #35 remains Draft/unmerged; no order, cancellation, withdrawal, production runtime, live API call, or DB write was performed.
