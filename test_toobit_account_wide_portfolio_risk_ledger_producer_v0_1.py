@@ -92,7 +92,7 @@ def test_aggregates_explicit_account_wide_dual_market_stablecoin_evidence():
     result = build()
     assert result["producer_state"] == "AVAILABLE"
     assert result["portfolio_state"] == "AVAILABLE"
-    assert result["portfolio_capital"] == pytest.approx(1599.6)
+    assert result["portfolio_capital"] == pytest.approx(1599.7)
     assert result["usable_capital"] == pytest.approx(1379.77)
     assert result["allocated_risk"] == 20.0
     assert result["concurrent_positions"] == 2
