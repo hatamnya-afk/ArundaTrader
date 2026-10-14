@@ -402,6 +402,25 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
+    def get_spot_account_balances(self) -> ToobitAdapterResult:
+        """Return provider-native spot balance rows from a signed GET-only read.
+
+        Values are deliberately not converted into capital or risk: the caller
+        must apply an approved valuation/scope policy and preserve provenance.
+        """
+        try:
+            data = self._unwrap(self._call("GET", "/api/v1/account", signed=True))
+            if not isinstance(data, dict) or not isinstance(data.get("balances"), list):
+                raise RuntimeError("TOOBIT_ACCOUNT_STATE_INVALID")
+            balances = data["balances"]
+            if any(not isinstance(row, dict) for row in balances):
+                raise RuntimeError("TOOBIT_ACCOUNT_BALANCES_INVALID")
+            return ToobitAdapterResult(
+                True, "OK", {"state_known": True, "balances": balances}
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def account_check(self) -> ToobitAdapterResult:
         try:
             data = self._unwrap(self._call("GET", "/api/v1/account", signed=True))
