@@ -17,6 +17,7 @@ from approved_valuation_policy_source_contract_v0_1 import (
 from authoritative_portfolio_risk_ledger_contract_v0_1 import (
     build_authoritative_portfolio_risk_ledger_observation,
 )
+from all_asset_valuation_contract_v0_1 import validate_all_asset_valuation_evidence
 
 
 _SUPPORTED = {"USDT", "USDC"}
@@ -65,8 +66,6 @@ def _balance_totals(observation: Mapping[str, Any], market: str) -> dict[str, di
         usable = _number(row.get("usable_amount"), f"PORTFOLIO_LEDGER_{market}_USABLE_AMOUNT_INVALID")
         if usable > total:
             raise ValueError(f"PORTFOLIO_LEDGER_{market}_USABLE_EXCEEDS_TOTAL")
-        if asset not in _SUPPORTED and total > 0:
-            raise ValueError(f"PORTFOLIO_LEDGER_UNVALUED_NONZERO_ASSET:{market}:{asset}")
         if asset not in totals:
             totals[asset] = {"total_amount": 0.0, "usable_amount": 0.0}
         totals[asset]["total_amount"] += total
@@ -89,6 +88,8 @@ def build_toobit_account_wide_portfolio_risk_ledger(
     cycle_id: str,
     provenance: str,
     allocated_risk_usdt: float | None,
+    asset_valuation_evidence: Mapping[str, Any] | None = None,
+    max_rate_age_seconds: int | None = None,
 ) -> dict[str, Any]:
     """Aggregate normalized read-only observations; fail closed on incomplete coverage.
 
@@ -141,16 +142,32 @@ def build_toobit_account_wide_portfolio_risk_ledger(
 
         spot = _balance_totals(spot_observation, "SPOT")
         futures = _balance_totals(futures_observation, "FUTURES")
-        portfolio_capital = sum(
-            spot[currency]["total_amount"] * rates[currency]
-            + futures[currency]["total_amount"] * rates[currency]
-            for currency in _SUPPORTED
-        )
-        usable_capital = sum(
-            spot[currency]["usable_amount"] * rates[currency]
-            + futures[currency]["usable_amount"] * rates[currency]
-            for currency in _SUPPORTED
-        )
+        asset_totals = {}
+        for asset in set(spot) | set(futures):
+            asset_totals[asset] = {
+                "total_amount": spot.get(asset, {"total_amount": 0.0})["total_amount"] + futures.get(asset, {"total_amount": 0.0})["total_amount"],
+                "usable_amount": spot.get(asset, {"usable_amount": 0.0})["usable_amount"] + futures.get(asset, {"usable_amount": 0.0})["usable_amount"],
+            }
+        nonzero_totals = {asset: row["total_amount"] for asset, row in asset_totals.items() if row["total_amount"] > 0}
+        all_asset_result = None
+        if asset_valuation_evidence is not None:
+            if max_rate_age_seconds is None:
+                raise ValueError("PORTFOLIO_LEDGER_ALL_ASSET_RATE_MAX_AGE_REQUIRED")
+            all_asset_result = validate_all_asset_valuation_evidence(
+                balances_by_asset=nonzero_totals,
+                valuation_evidence=asset_valuation_evidence,
+                policy_evidence=valuation_policy_evidence,
+                observed_at=observed_at,
+                cycle_id=cycle_id,
+                max_rate_age_seconds=max_rate_age_seconds,
+            )
+            if all_asset_result.get("valuation_state") != "AVAILABLE":
+                raise ValueError(all_asset_result.get("valuation_block_reason") or "PORTFOLIO_LEDGER_ALL_ASSET_VALUATION_INVALID")
+            rates = {asset: row["rate_to_usdt"] for asset, row in all_asset_result["asset_rates"].items()}
+        elif any(asset not in _SUPPORTED and row["total_amount"] > 0 for asset, row in asset_totals.items()):
+            raise ValueError("PORTFOLIO_LEDGER_ALL_ASSET_VALUATION_EVIDENCE_REQUIRED")
+        portfolio_capital = sum(row["total_amount"] * rates[asset] for asset, row in asset_totals.items() if row["total_amount"] > 0)
+        usable_capital = sum(row["usable_amount"] * rates[asset] for asset, row in asset_totals.items() if row["usable_amount"] > 0)
         if portfolio_capital <= 0 or usable_capital <= 0 or usable_capital > portfolio_capital:
             raise ValueError("PORTFOLIO_LEDGER_CAPITAL_OR_USABLE_CAPITAL_INVALID")
 
@@ -169,12 +186,13 @@ def build_toobit_account_wide_portfolio_risk_ledger(
 
         currency_evidence = {}
         for currency in sorted(_SUPPORTED):
-            total = spot[currency]["total_amount"] + futures[currency]["total_amount"]
+            total = asset_totals.get(currency, {"total_amount": 0.0})["total_amount"]
+            row = (asset_valuation_evidence or {}).get(currency) or currency_valuation_evidence[currency]
             currency_evidence[currency] = {
                 "raw_amount": total,
                 "rate_to_usdt": rates[currency],
-                "rate_source": policy["approved_rate_sources"][currency]["source"],
-                "rate_observed_at": currency_valuation_evidence[currency]["rate_observed_at"],
+                "rate_source": row["rate_source"],
+                "rate_observed_at": row["rate_observed_at"],
                 "valuation_policy_id": policy["policy_id"],
                 "valuation_policy_version": policy["policy_version"],
                 "cycle_id": cycle_id,
@@ -194,6 +212,9 @@ def build_toobit_account_wide_portfolio_risk_ledger(
             "valuation_policy_evidence": dict(valuation_policy_evidence),
             "reporting_currency": "USDT",
             "currency_valuation_evidence": currency_evidence,
+            "asset_balance_totals": nonzero_totals if all_asset_result else None,
+            "asset_valuation_evidence": asset_valuation_evidence if all_asset_result else None,
+            "max_rate_age_seconds": max_rate_age_seconds if all_asset_result else None,
             "portfolio_capital": portfolio_capital, "usable_capital": usable_capital,
             "allocated_risk": allocated_risk, "concurrent_positions": len(positions),
         }
