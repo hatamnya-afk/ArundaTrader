@@ -574,6 +574,62 @@ class ToobitExchangeAdapter:
         except Exception as exc:
             return ToobitAdapterResult(False, str(exc))
 
+    def futures_account_wide_positions(self) -> ToobitAdapterResult:
+        """Read all current Futures positions across USDT-M and USDC-M.
+
+        Toobit documents GET /api/v1/futures/positions as returning all contract
+        positions when symbol is omitted. USDT-M and USDC-M are separate
+        categories, so both read-only requests are required. No live call is
+        made unless an explicitly injected transport is supplied.
+        """
+        try:
+            by_category: dict[str, list[dict[str, Any]]] = {}
+            for category in ("USDT", "USDC"):
+                rows = self._unwrap(
+                    self._call(
+                        "GET",
+                        "/api/v1/futures/positions",
+                        params={"category": category},
+                        signed=True,
+                    )
+                )
+                if not isinstance(rows, list):
+                    raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITIONS_INVALID:{category}")
+                normalized: list[dict[str, Any]] = []
+                seen: set[tuple[str, str]] = set()
+                for row in rows:
+                    if not isinstance(row, dict):
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_ROW_INVALID:{category}")
+                    symbol = row.get("symbol")
+                    side = str(row.get("side", "")).strip().upper()
+                    if not isinstance(symbol, str) or not symbol.strip():
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_SYMBOL_MISSING:{category}")
+                    if side not in {"LONG", "SHORT"}:
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_SIDE_INVALID:{category}")
+                    identity = (symbol.strip().upper(), side)
+                    if identity in seen:
+                        raise RuntimeError(f"TOOBIT_FUTURES_ACCOUNT_WIDE_POSITION_DUPLICATE:{category}")
+                    seen.add(identity)
+                    normalized.append(dict(row))
+                by_category[category] = normalized
+            return ToobitAdapterResult(
+                True,
+                "OK",
+                {
+                    "state_known": True,
+                    "coverage_scope": "ACCOUNT_WIDE",
+                    "categories_queried": ["USDT", "USDC"],
+                    "positions_by_category": by_category,
+                    "provider_endpoint": "/api/v1/futures/positions",
+                    "provider_contract_reference": "https://api-docs.toobit.com/api/usdt-m-account-and-trading",
+                    "provider_contract_semantics": "DOCUMENTED_ALL_CONTRACT_POSITIONS_WHEN_SYMBOL_OMITTED",
+                    "pagination": "NOT_DOCUMENTED_FOR_CURRENT_POSITION_ENDPOINT",
+                    "read_only": True,
+                },
+            )
+        except Exception as exc:
+            return ToobitAdapterResult(False, str(exc))
+
     def futures_duplicate_check(
         self,
         asset: str,
