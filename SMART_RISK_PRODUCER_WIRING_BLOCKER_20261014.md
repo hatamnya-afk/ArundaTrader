@@ -103,3 +103,13 @@ Important integration limit: the current Toobit Futures adapter method is symbol
 
 
 Focused CI for the account-wide producer completed successfully on commit `8e181d65dcbb3ef598495a90211652d5c2ed0bae`: run #58 / [run ID 38618998806](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38618998806), with compile and focused test steps successful. This verifies the pure aggregation/validation code against fixtures; it does not verify a live provider's account-wide source or authorize production wiring.
+
+
+## 2026-10-14 — Account-wide Futures and all-asset valuation contract increment
+
+- Added `account_wide_futures_coverage_contract_v0_1.py` and focused tests. It rejects symbol-scoped responses, unproven pagination completeness, mismatched page counts, non-GET access, duplicate position IDs, and missing explicit per-position risk. It deliberately labels endpoint completeness semantics as requiring independent verification; caller-supplied flags alone do not prove Toobit endpoint behavior.
+- Added `all_asset_valuation_contract_v0_1.py` and focused tests. It requires an explicit approved, versioned source for every non-zero asset in the supplied balance union; verifies rate freshness against a configured maximum age, cycle and policy alignment, source/reference matching, and does not assume USDC parity with USDT.
+- Wired both modules and tests into the candidate branch's focused CI compile/test steps.
+- **Integration gate remains closed:** these new contracts are not yet connected to the account-wide ledger producer. Do not connect until focused CI passes and the real provider endpoint's account-wide completeness semantics are documented/verified. The current adapter remains symbol-scoped; no endpoint or pagination behavior has been invented.
+- The generic valuation contract is a tested-contract candidate only; actual all-asset aggregation and authoritative-ledger schema still require a compatible integration change after CI verification.
+- No live exchange API calls, runtime, orders, cancellations, withdrawals, or DB writes. Operational branch unchanged. All fixture values are synthetic and not production account evidence.
