@@ -14,6 +14,7 @@ from typing import Any
 from approved_valuation_policy_source_contract_v0_1 import (
     validate_approved_valuation_policy_evidence,
 )
+from all_asset_valuation_contract_v0_1 import validate_all_asset_valuation_evidence
 
 
 _FORBIDDEN_SOURCES = {"TEST", "LEGACY", "SIMULATED", "TOOBIT_FUTURES_POSITIONS_GET"}
@@ -174,6 +175,18 @@ def build_authoritative_portfolio_risk_ledger_observation(
             cycle_id=cycle_id,
             approved_rate_sources=policy_evidence["approved_rate_sources"],
         )
+        asset_valuation_result = None
+        if ledger_observation.get("asset_balance_totals") is not None or ledger_observation.get("asset_valuation_evidence") is not None:
+            asset_valuation_result = validate_all_asset_valuation_evidence(
+                balances_by_asset=ledger_observation.get("asset_balance_totals"),
+                valuation_evidence=ledger_observation.get("asset_valuation_evidence"),
+                policy_evidence=ledger_observation.get("valuation_policy_evidence"),
+                observed_at=observed_at,
+                cycle_id=cycle_id,
+                max_rate_age_seconds=ledger_observation.get("max_rate_age_seconds"),
+            )
+            if asset_valuation_result.get("valuation_state") != "AVAILABLE":
+                raise ValueError(asset_valuation_result.get("valuation_block_reason") or "PORTFOLIO_LEDGER_ALL_ASSET_VALUATION_INVALID")
 
         portfolio_capital = _finite_number(
             ledger_observation.get("portfolio_capital"), "PORTFOLIO_LEDGER_CAPITAL_INVALID", positive=True
@@ -211,6 +224,8 @@ def build_authoritative_portfolio_risk_ledger_observation(
             "valuation_policy_approval_id": policy_evidence["approval_id"],
             "reporting_currency": "USDT",
             "currency_valuation_evidence": currency_evidence,
+            "asset_valuation_evidence": asset_valuation_result.get("asset_rates") if asset_valuation_result else None,
+            "valued_assets": asset_valuation_result.get("valued_assets") if asset_valuation_result else ["USDT", "USDC"],
             "portfolio_capital": portfolio_capital,
             "usable_capital": usable_capital,
             "allocated_risk": allocated_risk,
