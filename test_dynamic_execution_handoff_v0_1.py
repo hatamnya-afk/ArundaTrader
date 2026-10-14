@@ -96,3 +96,41 @@ def test_missing_authoritative_regime_fails_closed():
     intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
     assert not intents and not requests and not results
     assert blocked["BTC"] == "CURRENT_MARKET_REGIME_MISSING"
+
+
+
+def test_smart_risk_quantity_provenance_passes_without_relabeling():
+    args = _fixtures()
+    risk = args["risk_snapshot"]["BTC"]
+    risk.update({
+        "quantity_source": "SMART_RISK_ENGINE_V0_1",
+        "risk_source": "VALIDATED_REAL_CAPITAL_PORTFOLIO_STOP_POLICY",
+        "risk_policy_version": "risk-policy-v1",
+        "risk_budget": 12.5,
+    })
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert blocked == {}
+    assert requests["BTC"].quantity == 0.01
+    assert requests["BTC"].quantity_source == "SMART_RISK_ENGINE_V0_1"
+    assert results["BTC"].error_code == "EXECUTION_DISABLED"
+
+
+def test_smart_risk_quantity_rejects_missing_validated_source():
+    args = _fixtures()
+    risk = args["risk_snapshot"]["BTC"]
+    risk.update({
+        "quantity_source": "SMART_RISK_ENGINE_V0_1",
+        "risk_policy_version": "risk-policy-v1",
+        "risk_budget": 12.5,
+    })
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert not intents and not requests and not results
+    assert blocked["BTC"] == "SMART_RISK_SOURCE_PROVENANCE_INVALID"
+
+
+def test_unknown_quantity_source_fails_closed():
+    args = _fixtures()
+    args["risk_snapshot"]["BTC"]["quantity_source"] = "RENAMED_TO_LOOK_VALID"
+    intents, requests, results, blocked = build_order_intents_and_boundary_results(**args)
+    assert not intents and not requests and not results
+    assert blocked["BTC"] == "RISK_QUANTITY_PROVENANCE_INVALID"
