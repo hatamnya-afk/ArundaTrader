@@ -78,7 +78,7 @@ def validate_approved_valuation_policy_evidence(
         raise ValueError("VALUATION_POLICY_USDT_USDC_RATE_SOURCES_REQUIRED")
     normalized_keys = [str(k).strip().upper() for k in raw_rates]
     if len(set(normalized_keys)) != len(normalized_keys) or not {"USDT", "USDC"}.issubset(set(normalized_keys)):
-        raise ValueError("VALUATION_POLICY_USDT_USDC_AND_UNIQUE_ASSET_RATE_SOURCES_REQUIRED")
+        raise ValueError("VALUATION_POLICY_USDT_USDC_RATE_SOURCES_REQUIRED")
     rates: dict[str, dict[str, str]] = {}
     for raw_currency, raw_row in raw_rates.items():
         currency = str(raw_currency).upper()
