@@ -146,6 +146,7 @@ def test_futures_account_state_preserves_provider_position_state_without_inferen
 
     assert result.allowed is True
     assert result.data["position_state_known"] is True
+    assert result.data["balances"] == [{"asset": "USDT", "available": "100"}]
     assert result.data["margin_state_known"] is True
     assert result.data["margin_type"] == "CROSS"
     assert result.data["positions"] == [
