@@ -241,7 +241,7 @@ def test_rate_source_reference_must_match_approved_policy():
 
 def test_stale_spot_observation_requires_and_obeys_explicit_freshness_policy():
     spot, futures, currency = observations()
-    spot["observed_at"] = "2026-10-14T17:59:00Z"
+    spot["observed_at"] = "2026-10-14T17:59:45Z"
     result = build(spot_observation=spot, futures_observation=futures, currency_valuation_evidence=currency)
     assert result["producer_state"] == "BLOCKED"
     assert result["producer_block_reason"] == "PORTFOLIO_LEDGER_SPOT_TIMESTAMP_ALIGNMENT_POLICY_REQUIRED"
