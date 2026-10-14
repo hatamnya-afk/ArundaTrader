@@ -1,8 +1,10 @@
-"""Versioned contract for authoritative account-wide portfolio risk ledger input.
+"""Versioned contract for authoritative Spot + Futures portfolio risk input.
 
-This module validates an explicitly supplied ledger observation. It does not
-discover positions, call an exchange, value balances, or calculate allocated
-risk. Missing or symbol-scoped evidence remains BLOCKED.
+This module validates an explicitly supplied account-wide ledger observation.
+It does not discover positions, call an exchange, value balances, or calculate
+allocated risk. A ledger is accepted only when it explicitly covers both
+Toobit Spot and Futures in one declared observation cycle and cites an approved,
+versioned valuation policy. Missing evidence remains BLOCKED.
 """
 from __future__ import annotations
 
@@ -12,6 +14,7 @@ from typing import Any
 
 
 _FORBIDDEN_SOURCES = {"TEST", "LEGACY", "SIMULATED", "TOOBIT_FUTURES_POSITIONS_GET"}
+_REQUIRED_MARKETS = {"SPOT", "FUTURES"}
 
 
 def _blocked(reason: str) -> dict[str, Any]:
@@ -26,6 +29,12 @@ def _blocked(reason: str) -> dict[str, Any]:
         "ledger_id": None,
         "ledger_version": None,
         "observed_at": None,
+        "cycle_id": None,
+        "market_coverage": None,
+        "spot_observed_at": None,
+        "futures_observed_at": None,
+        "valuation_policy_id": None,
+        "valuation_policy_version": None,
         "portfolio_capital": None,
         "usable_capital": None,
         "allocated_risk": None,
@@ -52,7 +61,7 @@ def _finite_number(value: Any, reason: str, *, positive: bool = False) -> float:
 def build_authoritative_portfolio_risk_ledger_observation(
     ledger_observation: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
-    """Validate a real account-wide ledger observation; never infer missing fields."""
+    """Validate explicit dual-market account-wide evidence; infer no missing fields."""
     if ledger_observation is None:
         return _blocked("AUTHORITATIVE_ACCOUNT_WIDE_PORTFOLIO_RISK_LEDGER_REQUIRED")
     if not isinstance(ledger_observation, Mapping):
@@ -65,6 +74,14 @@ def build_authoritative_portfolio_risk_ledger_observation(
             raise ValueError("PORTFOLIO_LEDGER_VALIDATION_INVALID")
         if ledger_observation.get("coverage_scope") != "ACCOUNT_WIDE":
             raise ValueError("PORTFOLIO_LEDGER_ACCOUNT_WIDE_COVERAGE_REQUIRED")
+
+        coverage = ledger_observation.get("market_coverage")
+        if (
+            not isinstance(coverage, (list, tuple, set, frozenset))
+            or any(not isinstance(item, str) for item in coverage)
+            or {item.strip().upper() for item in coverage} != _REQUIRED_MARKETS
+        ):
+            raise ValueError("PORTFOLIO_LEDGER_SPOT_AND_FUTURES_COVERAGE_REQUIRED")
 
         ledger_id = _nonempty(ledger_observation, "ledger_id", "PORTFOLIO_LEDGER_ID_MISSING")
         ledger_version = _nonempty(
@@ -82,8 +99,26 @@ def build_authoritative_portfolio_risk_ledger_observation(
         observed_at = _nonempty(
             ledger_observation, "observed_at", "PORTFOLIO_LEDGER_TIMESTAMP_MISSING"
         )
+        cycle_id = _nonempty(ledger_observation, "cycle_id", "PORTFOLIO_LEDGER_CYCLE_ID_MISSING")
+        spot_observed_at = _nonempty(
+            ledger_observation, "spot_observed_at", "PORTFOLIO_LEDGER_SPOT_TIMESTAMP_MISSING"
+        )
+        futures_observed_at = _nonempty(
+            ledger_observation, "futures_observed_at", "PORTFOLIO_LEDGER_FUTURES_TIMESTAMP_MISSING"
+        )
         provenance = _nonempty(
             ledger_observation, "provenance", "PORTFOLIO_LEDGER_PROVENANCE_MISSING"
+        )
+
+        if ledger_observation.get("valuation_policy_state") != "APPROVED":
+            raise ValueError("PORTFOLIO_LEDGER_APPROVED_VALUATION_POLICY_REQUIRED")
+        valuation_policy_id = _nonempty(
+            ledger_observation, "valuation_policy_id", "PORTFOLIO_LEDGER_VALUATION_POLICY_ID_MISSING"
+        )
+        valuation_policy_version = _nonempty(
+            ledger_observation,
+            "valuation_policy_version",
+            "PORTFOLIO_LEDGER_VALUATION_POLICY_VERSION_MISSING",
         )
 
         portfolio_capital = _finite_number(
@@ -119,7 +154,14 @@ def build_authoritative_portfolio_risk_ledger_observation(
             "ledger_id": ledger_id,
             "ledger_version": ledger_version,
             "coverage_scope": "ACCOUNT_WIDE",
+            "market_coverage": ["SPOT", "FUTURES"],
             "observed_at": observed_at,
+            "cycle_id": cycle_id,
+            "spot_observed_at": spot_observed_at,
+            "futures_observed_at": futures_observed_at,
+            "valuation_policy_state": "APPROVED",
+            "valuation_policy_id": valuation_policy_id,
+            "valuation_policy_version": valuation_policy_version,
             "portfolio_capital": portfolio_capital,
             "usable_capital": usable_capital,
             "allocated_risk": allocated_risk,
