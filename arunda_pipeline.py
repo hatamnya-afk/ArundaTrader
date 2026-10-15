@@ -181,7 +181,6 @@ import exchange_execution_contract
 import fusion_engine
 import production_fused_score_binding_v0_1
 
-from exchange_execution_boundary import execute_order
 from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
 
 # ============================================================================
