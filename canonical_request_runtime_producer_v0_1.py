@@ -10,7 +10,10 @@ from typing import Any
 
 from exchange_execution_contract import build_order_request, validate_order_request
 from execution_ready_package_v0_1 import build_execution_ready_package
-from execution_instrument_policy_v0_1 import build_execution_instrument_specification
+from execution_instrument_contract_v0_1 import (
+    ExecutionInstrumentSpecification,
+    validate_execution_instrument,
+)
 from execution_runtime_policy_source_v0_1 import load_authoritative_execution_runtime_policy
 
 
@@ -98,16 +101,27 @@ def produce_canonical_requests_from_runtime_outputs(
             raise ValueError(f"DECISION_EXECUTION_VENUE_POLICY_MISMATCH:{asset}")
         if venue == "FUTURES" and execution_policy.get("futures_exposure_allowed") is not True:
             raise ValueError(f"FUTURES_EXPOSURE_NOT_EXPLICITLY_ALLOWED:{asset}")
-        instrument = build_execution_instrument_specification(asset=asset, venue=venue)
         if venue == "FUTURES":
-            from dataclasses import replace
-            instrument = replace(
-                instrument,
+            instrument = ExecutionInstrumentSpecification(
+                asset=asset,
+                venue=venue,
                 settlement_asset=execution_policy["settlement_asset"],
                 instrument_type=execution_policy["instrument_type"],
-                policy_version=execution_policy["policy_version"],
                 selection_source="AUTHORITATIVE_DEPLOYMENT_EXECUTION_POLICY",
+                policy_version=execution_policy["policy_version"],
             )
+        else:
+            instrument = ExecutionInstrumentSpecification(
+                asset=asset,
+                venue=venue,
+                settlement_asset=None,
+                instrument_type=None,
+                selection_source="AUTHORITATIVE_DEPLOYMENT_EXECUTION_POLICY",
+                policy_version=execution_policy["policy_version"],
+            )
+        instrument_valid, instrument_reason = validate_execution_instrument(instrument)
+        if not instrument_valid:
+            raise ValueError(f"EXECUTION_INSTRUMENT_POLICY_INVALID:{asset}:{instrument_reason}")
 
         readiness = {
             "readiness_state": "PRE_EXECUTION_READY",
