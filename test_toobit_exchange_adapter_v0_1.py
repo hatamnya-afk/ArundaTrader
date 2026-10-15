@@ -162,6 +162,51 @@ def test_futures_account_state_uses_selected_usdc_category():
     assert result.data["margin_type"] == "ISOLATED"
 
 
+def test_futures_duplicate_check_uses_selected_usdc_category():
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDC",
+        instrument_type="PERPETUAL",
+        selection_source="TEST_FIXTURE",
+        policy_version="test-only",
+    )
+
+    def transport(*, method, path, params, headers, base_url):
+        if path == "/api/v1/exchangeInfo":
+            return {
+                "symbols": [],
+                "contracts": [
+                    {
+                        "symbol": "BTC-SWAP-USDC",
+                        "status": "TRADING",
+                        "underlying": "BTC",
+                        "marginToken": "USDC",
+                        "quoteAsset": "USDC",
+                        "contractMultiplier": "0.001",
+                        "filters": [],
+                    }
+                ],
+            }
+        if path == "/api/v2/futures/open-orders":
+            assert params["category"] == "USDC"
+            assert params["symbol"] == "BTC-SWAP-USDC"
+            return []
+        if path == "/api/v1/futures/historyOrders":
+            assert params["category"] == "USDC"
+            assert params["symbol"] == "BTC-SWAP-USDC"
+            return []
+        raise AssertionError("unexpected path: " + path)
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    ).futures_duplicate_check("BTC", execution_instrument=specification)
+
+    assert result.allowed is True
+    assert result.data["open_order_client_ids"] == frozenset()
+    assert result.data["recent_order_client_ids"] == frozenset()
+
+
 def test_futures_account_state_blocks_without_provider_native_margin_type():
     def transport(*, method, path, params, headers, base_url):
         if path == "/api/v1/exchangeInfo":
