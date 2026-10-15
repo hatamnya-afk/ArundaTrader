@@ -4321,13 +4321,16 @@ def assert_execution_disabled() -> None:
 
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
+        *,
+        adapter: Any = None,
+        claim_store: Any = None,
     ) -> str:
-        """Run the final contract only from authentic upstream producer records.
+        """Compose authentic runtime records with injected execution dependencies.
 
-        Raw producer inputs are preferred: readiness + the one-time standing
-        mandate are converted by the dedicated producers. Prebuilt package and
-        authorization observations remain accepted only for compatibility tests.
-        The adapter is deliberately None; this boundary cannot submit.
+        This function never constructs an adapter, creates a claim database,
+        enables execution, or performs provider I/O. Deployment wiring must
+        inject a submit-capable adapter and durable isolated claim store only
+        behind the separately authorized execution gate. Defaults stay fail-closed.
         """
         assert_execution_disabled()
 
@@ -4378,9 +4381,10 @@ def verify_execution_boundary_integration(
                 execution_ready_package=package,
                 request=request,
                 authorization_observation=authorization_observation,
-                adapter=None,
+                adapter=adapter,
                 venue=venue,
                 execution_instrument=execution_instrument,
+                claim_store=claim_store,
             )
 
             if not isinstance(result, exchange_execution_contract.CanonicalExecutionResult):
