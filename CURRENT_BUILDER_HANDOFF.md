@@ -1,3 +1,14 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — ORDER RECONCILIATION
+>
+> - Added `exchange_execution_order_reconciliation_v0_1.py`: queries the exact client ID through the read-only adapter, validates identity, persists immutable reconciliation evidence in the explicitly supplied isolated claim store, and resolves a claim only when a positive order response matches the expected client ID and symbol.
+> - Missing/error/malformed/mismatched lookup stays `UNRESOLVED_KEEP_QUARANTINED`; nonterminal claim transitions to `RECONCILIATION_REQUIRED`. No claim release, retry, resubmit, or inference of non-execution. Evidence persistence failure is explicit and never authorizes another POST.
+> - CI on `2d37c36726b5542b8e79c8f4e4eefdb4c3bc2cad`: phase-entry focused verification PASS, 57 tests; focused execution contract PASS, 56 tests. Offline tests only.
+> - Toobit Spot docs specify client ID uniqueness among open orders, not lifetime uniqueness. The durable Core claim store prevents reuse within its provider namespace for intents recorded in that store; this does not cover external actors or missing historical records. Negative single-order lookup is not proof of non-execution.
+> - Official docs: https://api-docs.toobit.com/api/spot-account-and-trading.html and https://api-docs.toobit.com/api/usdt-m-api-v2
+> - LIVE GATE remains BLOCKED: provider submission disabled; no production pipeline wiring, order, cancellation, provider write, production runtime, or production DB write. No Futures exposure permission is inferred.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — AMBIGUOUS ORDER RECONCILIATION CONTRACT
 >
 > - Added `exchange_execution_order_reconciliation_v0_1.py`: takes an existing durable intent claim, queries the exact provider client ID through the adapter's read-only query, validates identity, persists immutable reconciliation evidence in the explicitly supplied claim/evidence store, and transitions the claim to `PROVIDER_ACCEPTED` / `PROVIDER_REJECTED` only for a positive identity-matched order result.
