@@ -34,6 +34,12 @@ Official Toobit API documentation describes Spot `newClientOrderId` as unique am
 
 This is still **not** production authorization: it has not been connected to the operational pipeline, does not implement automatic ambiguous-outcome reconciliation, and has not been tested against a live provider. Fake-transport tests prove only local request/response behavior. Do not set the opt-in on a production runtime until the standing mandate, account/instrument constraints, client-order lookup recovery, and controlled-order gate are verified.
 
+## Static review blocker — Futures lookup endpoint mismatch
+
+The existing `ToobitExchangeAdapter.futures_duplicate_check` currently combines the v2 open-orders endpoint (`GET /api/v2/futures/open-orders`) with the legacy `GET /api/v1/futures/historyOrders` path. The current official Toobit v2 documentation identifies the regular Futures history endpoint as `GET /api/v2/futures/history-orders`, and the single-order lookup as `GET /api/v2/futures/order` with `origClientOrderId` or `orderId`. See https://api-docs.toobit.com/api/usdt-m-api-v2 and https://api-docs.toobit.com/api/usdt-m-account-and-trading.html.
+
+This is a **BLOCKED static finding**, not a live-provider failure: no exchange request was made. Until the adapter endpoint and fake-transport regression tests are corrected and pass, the existing Futures duplicate-check/reconciliation lookup path must not be marked VERIFIED for operational recovery. Do not infer that a missing row proves non-acceptance; keep `safe_to_retry=false`.
+
 ## Explicitly not completed
 
 - No live provider response has been captured by this contract.
