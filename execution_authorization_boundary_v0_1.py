@@ -104,6 +104,10 @@ def _evaluate_standing_mandate(
     if not {"SPOT", "FUTURES"}.issubset(normalized_markets):
         raise ValueError("AUTHORIZATION_MARKETS_INCOMPLETE")
 
+    attempt_id = _require_nonempty_string(
+        readiness.get("attempt_id"), "AUTHORIZATION_ATTEMPT_ID_INVALID"
+    )
+
     venue = _require_nonempty_string(readiness.get("venue"), "AUTHORIZATION_VENUE_INVALID").upper()
     if venue not in normalized_markets:
         raise ValueError("AUTHORIZATION_MARKET_NOT_ALLOWED")
@@ -117,6 +121,7 @@ def _evaluate_standing_mandate(
         "mandate_expiry_policy": expiry_policy,
         "venue": venue,
         "mandate_id": mandate_id,
+        "attempt_id": attempt_id,
     }
     if expires_at is not None:
         result["expires_at"] = expires_at
