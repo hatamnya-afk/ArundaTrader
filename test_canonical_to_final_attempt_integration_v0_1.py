@@ -3,6 +3,8 @@
 Uses only in-memory fixtures and a fake adapter that returns a rejection.
 Never contacts an exchange or persists a claim to a database.
 """
+import json
+from unittest.mock import patch
 from canonical_request_runtime_producer_v0_1 import (
     produce_canonical_requests_from_runtime_outputs,
 )
@@ -16,20 +18,26 @@ from test_final_execution_attempt_contract_v0_1 import (
 
 
 def test_canonical_runtime_output_reaches_final_attempt_boundary_offline():
-    decision, risk, gate, intents, _management_observation = snapshots()
-    records = produce_canonical_requests_from_runtime_outputs(
-        decision_snapshot=decision,
-        risk_snapshot=risk,
-        trade_gate_snapshot=gate,
-        order_intents=intents,
-        management_observation={
-            "decision": "AUTHORIZED",
-            "mandate_id": "TEST-ONLY",
-            "issued_at": "test",
-            "expires_at": "test",
-            "environment": "REAL_PRODUCTION",
-        },
-    )
+    policy = json.dumps({
+        "policy_id": "TEST-ONLY-POLICY",
+        "policy_version": "TEST-ONLY-V1",
+        "venue": "SPOT",
+    })
+    with patch.dict("os.environ", {"ARUNDA_EXECUTION_POLICY_JSON": policy}):
+        decision, risk, gate, intents, _management_observation = snapshots()
+        records = produce_canonical_requests_from_runtime_outputs(
+            decision_snapshot=decision,
+            risk_snapshot=risk,
+            trade_gate_snapshot=gate,
+            order_intents=intents,
+            management_observation={
+                "decision": "AUTHORIZED",
+                "mandate_id": "TEST-ONLY",
+                "issued_at": "test",
+                "expires_at": "test",
+                "environment": "REAL_PRODUCTION",
+            },
+        )
     record = records["BTC"]
 
     result = run_final_execution_attempt_contract(
