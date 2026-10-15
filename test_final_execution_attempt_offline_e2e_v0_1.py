@@ -5,6 +5,9 @@ All provider responses are deterministic fixtures; no network call or real order
 
 import tempfile
 import unittest
+from unittest.mock import patch
+
+import exchange_execution_contract as execution_contract
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -87,13 +90,18 @@ class FinalExecutionAttemptOfflineE2ETests(unittest.TestCase):
         )
         with tempfile.TemporaryDirectory() as directory:
             store = SQLiteIntentClaimStore(Path(directory) / "claims.sqlite3")
-            result = run_final_execution_attempt_contract(
-                execution_ready_package=context["execution_ready_package"],
-                request=request,
-                authorization_observation=context["authorization_observation"],
-                adapter=adapter, venue="SPOT",
-                execution_instrument=instrument, claim_store=store,
-            )
+            with patch.object(execution_contract, "safety_contract", return_value={
+                "EXECUTION_ENABLED": True,
+                "ORDER_SUBMISSION_ENABLED": True,
+                "EXCHANGE_WRITE_ENABLED": True,
+            }):
+                result = run_final_execution_attempt_contract(
+                    execution_ready_package=context["execution_ready_package"],
+                    request=request,
+                    authorization_observation=context["authorization_observation"],
+                    adapter=adapter, venue="SPOT",
+                    execution_instrument=instrument, claim_store=store,
+                )
             claim = store.get(
                 provider_namespace="ARUNDA-EXECUTION",
                 intent_id=request.intent_id,
