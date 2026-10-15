@@ -68,13 +68,6 @@ def capture_execution_attempt_outcome(
             reason="NO_PROVIDER_RESPONSE_FAIL_CLOSED_BOUNDARY_RESULT",
             stream_path=str(stream_path),
         )
-    if not result.timestamp:
-        return OutcomeCaptureResult(
-            execution_result=result,
-            capture_state="NOT_CAPTURED",
-            reason="PROVIDER_RESPONSE_TIMESTAMP_MISSING",
-            stream_path=str(stream_path),
-        )
     if not result.trade_event_id:
         return OutcomeCaptureResult(
             execution_result=result,
@@ -96,7 +89,15 @@ def capture_execution_attempt_outcome(
         client_order_id=request.intent_id,
         source_observation_id=_observation_id(result),
     )
-    persisted = append_execution_outcome_record(record, stream_path=Path(stream_path))
+    try:
+        persisted = append_execution_outcome_record(record, stream_path=Path(stream_path))
+    except Exception as exc:
+        return OutcomeCaptureResult(
+            execution_result=result,
+            capture_state="PERSISTENCE_FAILED",
+            reason=f"{type(exc).__name__}:{exc}",
+            stream_path=str(stream_path),
+        )
     return OutcomeCaptureResult(
         execution_result=result,
         capture_state=persisted["state"],
