@@ -158,19 +158,29 @@ def evaluate_management_phase_entry(
     if environment != REAL_PRODUCTION:
         raise ValueError("MANAGEMENT_ENVIRONMENT_INVALID")
 
-    issued_at = _parse_aware(
-        management_observation.get("issued_at"),
-        "MANAGEMENT_ISSUED_AT_INVALID",
+    # Issuance time is audit metadata, not an authorization prerequisite.
+    # Never fabricate a precise timestamp when the management record only
+    # establishes a calendar date or an explicit decision.
+    issued_raw = management_observation.get("issued_at")
+    issued_at = (
+        _parse_aware(issued_raw, "MANAGEMENT_ISSUED_AT_INVALID")
+        if issued_raw is not None
+        else None
     )
-    expires_at = _parse_aware(
-        management_observation.get("expires_at"),
-        "MANAGEMENT_EXPIRY_INVALID",
+
+    # A standing phase-entry mandate does not expire by default. An expiry
+    # may be supplied only when management explicitly adopts a timed mandate.
+    expires_raw = management_observation.get("expires_at")
+    expires_at = (
+        _parse_aware(expires_raw, "MANAGEMENT_EXPIRY_INVALID")
+        if expires_raw is not None
+        else None
     )
 
     now = datetime.now(timezone.utc)
-    if expires_at <= now:
+    if expires_at is not None and expires_at <= now:
         raise ValueError("MANAGEMENT_MANDATE_EXPIRED")
-    if expires_at <= issued_at:
+    if issued_at is not None and expires_at is not None and expires_at <= issued_at:
         raise ValueError("MANAGEMENT_EXPIRY_BEFORE_ISSUANCE")
 
     allowed_markets = _markets(
@@ -212,7 +222,11 @@ def evaluate_management_phase_entry(
             "authorization_mode": STANDING_MANDATE,
             "authorization_id": mandate_id,
             "mandate_id": mandate_id,
-            "expires_at": expires_at.isoformat(),
+            "issued_at": issued_at.isoformat() if issued_at is not None else None,
+            "expires_at": expires_at.isoformat() if expires_at is not None else None,
+            "mandate_expiry_policy": (
+                "EXPLICIT_EXPIRY" if expires_at is not None else "NON_EXPIRING_STANDING_MANDATE"
+            ),
             "environment": environment,
             "allowed_markets": allowed_markets,
             "provider": provider,
