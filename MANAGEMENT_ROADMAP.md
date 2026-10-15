@@ -1,3 +1,15 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — ORDER RECONCILIATION CONTRACT
+>
+> - Added `execution_order_reconciliation_v0_1.py`: only already-fenced ambiguous claims may be reconciled; exact client-ID and symbol identity must match; no order submit/cancel/retry is performed.
+> - Added durable normalized reconciliation evidence to the isolated `SQLiteIntentClaimStore`: client ID, venue/symbol, provider order ID/status, executed quantity/price, provider timestamp, detail code and observation timestamp. Evidence ID reuse with conflicting contents fails closed.
+> - Corrected Toobit Futures lookup to documented `GET /api/v1/futures/order`. Official docs: [Spot Query Order](https://api-docs.toobit.com/api/spot-account-and-trading.html) and [Futures Query Order](https://api-docs.toobit.com/api/usdt-m-account-and-trading.html) both document `origClientOrderId`; Futures also documents category and order status fields.
+> - Client ID is deterministic (`A` + 31 SHA-256 hex chars of canonical intent ID). Toobit documents Spot client IDs as unique among open orders, not globally unique forever. Therefore the safety invariant is Arunda's permanent unique constraint in the durable claim store; collision means block before submission. This guarantee is not a production guarantee until that store is durably configured and wired into the authorized runtime.
+> - **Offline verification:** [Focused Execution Contract Tests](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38802980657) — 57 passed; [Phase-entry focused verification](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38802986919) — 58 tests, OK. Scope is offline contract tests only.
+> - A negative/failed/malformed lookup is **not** proof of non-execution. It records `UNRESOLVED_KEEP_QUARANTINED` / `RECONCILIATION_REQUIRED`; no resubmit is allowed. This resolves the ambiguity safely by policy, not by assuming an undocumented provider guarantee.
+> - **Operational status remains BLOCKED / NOT VERIFIED:** the durable claim/evidence store and reconciliation helper are not wired into `arunda_pipeline.py` or an authorized production runtime. No provider write, order, cancellation, production runtime, or production DB write was performed; submission switches remain OFF.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — AMBIGUOUS ORDER RECONCILIATION CONTRACT
 >
 > - Added `exchange_execution_order_reconciliation_v0_1.py`: takes an existing durable intent claim, queries the exact provider client ID through the adapter's read-only query, validates identity, persists immutable reconciliation evidence in the explicitly supplied claim/evidence store, and transitions the claim to `PROVIDER_ACCEPTED` / `PROVIDER_REJECTED` only for a positive identity-matched order result.
