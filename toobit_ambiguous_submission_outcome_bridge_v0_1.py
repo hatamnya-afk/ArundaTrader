@@ -74,13 +74,21 @@ def capture_reconciled_toobit_outcome(
             "safe_to_retry": False,
         }
 
-    captured = capture_toobit_read_only_order_observation(
-        request=request,
-        provider_order=order,
-        trade_event_id=trade_event_id,
-        observed_at=observed_at,
-        stream_path=Path(stream_path),
-    )
+    try:
+        captured = capture_toobit_read_only_order_observation(
+            request=request,
+            provider_order=order,
+            trade_event_id=trade_event_id,
+            observed_at=observed_at,
+            stream_path=Path(stream_path),
+        )
+    except Exception as exc:
+        return {
+            "reconciliation_state": FOUND,
+            "capture_state": "PERSISTENCE_FAILED",
+            "reason": f"{type(exc).__name__}:{exc}",
+            "safe_to_retry": False,
+        }
     return {
         "reconciliation_state": FOUND,
         "capture_state": captured.get("state", "PERSISTENCE_FAILED"),
