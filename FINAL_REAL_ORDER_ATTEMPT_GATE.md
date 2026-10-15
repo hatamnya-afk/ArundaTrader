@@ -165,4 +165,16 @@ The standing mandate itself is not recreated for each attempt.
 
 The standing phase-entry mandate means no per-trade management approval is required; it does **not** waive any of the above technical gates.
 
+
+### CURRENT CANDIDATE UPDATE — 2026-10-15
+
+PR #38, isolated on \`feature/execution-outcome-evidence-contract-20261015\`, now contains an offline-tested outcome-capture/recovery candidate:
+- Exact-client-ID read-only order lookup: Spot \`GET /api/v1/spot/order\`; Futures \`GET /api/v2/futures/order\`.
+- Futures history lookup uses documented \`GET /api/v2/futures/history-orders\`.
+- Exact client-ID and symbol validation before capture; missing/error/conflicting observations remain unresolved and \`safe_to_retry=false\`.
+- CI passed 51 fake-transport/offline tests on commit \`ed34ec0f5c31a82809ec7e1237bb239a6bd33196\`: [run 38721082194](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721082194).
+
+This candidate does **not** clear the gate. It is not merged or wired into production; the operational adapter remains submission-disabled. The active standing mandate still lacks verified timezone-aware \`issued_at\`/\`expires_at\`; Toobit client-ID constraints, duplicate-POST behavior, lookup consistency/retention, and exhaustive recovery semantics remain unverified. No live API request or order was made.
+
+
 # END
