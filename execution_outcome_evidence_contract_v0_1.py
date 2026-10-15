@@ -96,6 +96,7 @@ def build_execution_outcome_record(
     exchange_order_id: str | None = None,
     executed_quantity: Any = None,
     executed_price: Any = None,
+    attempt_error_code: str | None = None,
 ) -> dict[str, Any]:
     """Normalize one observed provider fact without inventing missing outcomes."""
     provider = _required_text(provider, "provider").upper()
@@ -144,8 +145,10 @@ def build_execution_outcome_record(
         "fill_inferred": False,
     }
     if source_kind == "ATTEMPT_EVENT":
-        record["provider_status"] = status
         record["provider_timestamp"] = None
+        record["attempt_error_code"] = (
+            None if attempt_error_code is None else _required_text(attempt_error_code, "attempt_error_code")
+        )
     return record
 
 
