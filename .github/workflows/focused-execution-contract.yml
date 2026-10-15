@@ -20,6 +20,7 @@ on:
       - "test_execution_order_reconciliation_v0_1.py"
       - "execution_order_reconciliation_v0_1.py"
       - "test_toobit_https_transport_v0_1.py"
+      - "toobit_https_transport_v0_1.py"
       - "test_toobit_exchange_adapter_v0_1.py"
       - "test_pipeline_final_execution_attempt_wiring_v0_1.py"
       - "test_final_execution_attempt_offline_e2e_v0_1.py"

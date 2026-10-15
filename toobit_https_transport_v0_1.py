@@ -16,6 +16,8 @@ _ALLOWED_HOST = "api.toobit.com"
 _ALLOWED_PATHS = {
     ("GET", "/api/v1/time"),
     ("GET", "/api/v1/exchangeInfo"),
+    ("GET", "/api/v1/spot/order"),
+    ("GET", "/api/v2/futures/order"),
     ("POST", "/api/v1/spot/order"),
     ("POST", "/api/v2/futures/order"),
 }

@@ -1,11 +1,34 @@
 """Allowlist tests; no network calls are performed."""
 
 import unittest
+from io import BytesIO
+from unittest.mock import patch
 
 from toobit_https_transport_v0_1 import toobit_https_transport
 
 
 class ToobitTransportTests(unittest.TestCase):
+    def test_read_only_order_query_routes_are_allowlisted_without_network(self):
+        routes = (
+            "/api/v1/spot/order",
+            "/api/v2/futures/order",
+        )
+        for path in routes:
+            with self.subTest(path=path):
+                with patch(
+                    "toobit_https_transport_v0_1.urlopen",
+                    return_value=BytesIO(b'{"code":200,"data":{}}'),
+                ) as mocked_urlopen:
+                    result = toobit_https_transport(
+                        method="GET",
+                        path=path,
+                        params={"origClientOrderId": "A-test"},
+                        headers={"X-BB-APIKEY": "test-key"},
+                        base_url="https://api.toobit.com",
+                    )
+                self.assertEqual(result, {"code": 200, "data": {}})
+                mocked_urlopen.assert_called_once()
+
     def test_transport_rejects_non_allowlisted_write_route(self):
         with self.assertRaisesRegex(ValueError, "ENDPOINT_NOT_ALLOWLISTED"):
             toobit_https_transport(
