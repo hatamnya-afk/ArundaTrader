@@ -77,6 +77,58 @@ def test_fail_closed_boundary_result_is_not_misrepresented_as_provider_evidence(
     assert not (tmp_path / "outcomes.jsonl").exists()
 
 
+def test_ambiguous_submission_is_persisted_as_local_attempt_event_not_provider_response(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    ambiguous = result(
+        accepted=False,
+        exchange_order_id=None,
+        status="SUBMISSION_UNKNOWN",
+        executed_quantity=None,
+        executed_price=None,
+        timestamp=None,
+        error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+        error_message="simulated timeout; do not retry",
+    )
+    observed_at = "2026-10-15T08:02:03Z"
+    first = capture_execution_attempt_outcome(
+        request=request(), result=ambiguous, stream_path=path,
+        attempt_observed_at=observed_at,
+    )
+    second = capture_execution_attempt_outcome(
+        request=request(), result=ambiguous, stream_path=path,
+        attempt_observed_at=observed_at,
+    )
+
+    assert first.capture_state == "PERSISTED"
+    assert second.capture_state == "ALREADY_PERSISTED"
+    row = json.loads(path.read_text(encoding="utf-8").strip())
+    assert row["event_type"] == "EXECUTION_ATTEMPT_OUTCOME_OBSERVED"
+    assert row["source_kind"] == "ATTEMPT_EVENT"
+    assert row["provider_status"] == "SUBMISSION_UNKNOWN"
+    assert row["outcome_state"] == "SUBMISSION_UNKNOWN"
+    assert row["observed_at"] == observed_at
+    assert row["observed_at_source"] == "LOCAL_CAPTURE_CLOCK"
+    assert row["provider_timestamp"] is None
+    assert row["attempt_error_code"] == "PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS"
+    assert row["exchange_order_id"] is None
+    assert row["executed_quantity"] is None
+    assert row["executed_price"] is None
+    assert row["fill_inferred"] is False
+    assert len(path.read_text(encoding="utf-8").splitlines()) == 1
+
+
+def test_missing_provider_timestamp_is_still_blocked_for_non_ambiguous_result(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    outcome = capture_execution_attempt_outcome(
+        request=request(),
+        result=result(timestamp=None),
+        stream_path=path,
+    )
+    assert outcome.capture_state == "NOT_CAPTURED"
+    assert outcome.reason == "PROVIDER_RESPONSE_TIMESTAMP_MISSING"
+    assert not path.exists()
+
+
 def test_missing_authoritative_decision_id_is_not_persisted(tmp_path):
     req = request()
     req = CanonicalOrderRequest(
