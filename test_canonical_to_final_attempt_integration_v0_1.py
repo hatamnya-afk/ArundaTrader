@@ -4,6 +4,7 @@ Uses only in-memory fixtures and a fake adapter that returns a rejection.
 Never contacts an exchange or persists a claim to a database.
 """
 import json
+import exchange_execution_contract as execution_contract
 from unittest.mock import patch
 from canonical_request_runtime_producer_v0_1 import (
     produce_canonical_requests_from_runtime_outputs,
@@ -40,15 +41,20 @@ def test_canonical_runtime_output_reaches_final_attempt_boundary_offline():
         )
     record = records["BTC"]
 
-    result = run_final_execution_attempt_contract(
-        execution_ready_package=record["execution_ready_package"],
-        request=record["request"],
-        authorization_observation=_standing_mandate(),
-        adapter=_FakeAdapter(),
-        venue=record["venue"],
-        execution_instrument=record["execution_instrument"],
-        claim_store=_FakeClaimStore(),
-    )
+    with patch.object(execution_contract, "safety_contract", return_value={
+        "EXECUTION_ENABLED": True,
+        "ORDER_SUBMISSION_ENABLED": True,
+        "EXCHANGE_WRITE_ENABLED": True,
+    }):
+        result = run_final_execution_attempt_contract(
+            execution_ready_package=record["execution_ready_package"],
+            request=record["request"],
+            authorization_observation=_standing_mandate(),
+            adapter=_FakeAdapter(),
+            venue=record["venue"],
+            execution_instrument=record["execution_instrument"],
+            claim_store=_FakeClaimStore(),
+        )
 
     # Proves the canonical request reaches the final boundary and the adapter
     # is invoked only as an offline test double; no accepted order is produced.
