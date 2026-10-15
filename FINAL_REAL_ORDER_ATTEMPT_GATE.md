@@ -196,3 +196,12 @@ Transport exceptions and malformed/mismatched responses remain `SUBMISSION_OUTCO
 The standing mandate remains one-time phase-entry authorization; no per-trade management approval is introduced. Historical lines above that say submission is unimplemented or the pipeline is unwired are superseded by this current implementation status; the default-off safety state remains intact.
 
 # END
+
+
+## Addendum — 2026-10-15 — Read-only order reconciliation
+
+- Added the fail-closed reconciliation coordinator and offline tests. Positive identity-matched provider lookup persists immutable evidence and can resolve an existing claim; negative, failed, malformed, or mismatched lookup persists `UNRESOLVED_KEEP_QUARANTINED` and keeps the claim in `RECONCILIATION_REQUIRED`. It never retries or authorizes resubmission.
+- CI at commit `2d37c36726b5542b8e79c8f4e4eefdb4c3bc2cad`: phase-entry focused verification PASS (57 tests); focused execution contract PASS (56 tests). Offline scope only.
+- Toobit Spot client-order IDs are documented as unique among open orders; lifetime uniqueness is not established. The durable claim store enforces no reuse for intents represented in its provider namespace, but cannot prove the absence of external/unrecorded orders.
+- Official references: https://api-docs.toobit.com/api/spot-account-and-trading.html and https://api-docs.toobit.com/api/usdt-m-api-v2
+- Production order gate remains BLOCKED / NOT VERIFIED: submission disabled, no pipeline wiring, no provider writes, no live order, no cancellation, no production runtime or production DB write. No Futures exposure permission is inferred.
