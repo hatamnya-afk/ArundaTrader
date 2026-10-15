@@ -321,7 +321,7 @@ Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this sec
 - SQLite claim store is isolated from the production trading DB and prevents replay across restarts.
 - Pre-submit durable fence and post-response accepted/rejected evidence persistence are connected.
 - Offline end-to-end lifecycle test passed with a mock provider response and exactly one mock POST.
-- Focused CI #42 PASS on `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522
+- Focused CI #52 PASS on `a2c2c0cae8742d36eb1f3f1b005426abe39541ac`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780574776
 
 **BLOCKED / NOT VERIFIED**
 - Live attempt remains blocked because the authoritative standing-mandate artifact lacks timezone-aware `issued_at` and `expires_at`.

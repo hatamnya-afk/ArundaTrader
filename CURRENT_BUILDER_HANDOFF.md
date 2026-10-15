@@ -124,7 +124,7 @@ Implemented and verified:
 - The durable SQLite claim store rejects the production trading DB path. One stable client ID is derived from canonical intent; one provider POST maximum; no retry loop.
 - Provider response identity is checked. Durable claim state records provider acceptance/rejection after the pre-submit outcome-unknown fence. Unknown/malformed outcomes remain non-replayable.
 - Offline end-to-end fixture covers canonical request → standing-mandate contract → adapter → one mock POST → durable provider-accepted evidence.
-- Focused CI run #42 PASS on `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522
+- Focused CI run #52 PASS on `a2c2c0cae8742d36eb1f3f1b005426abe39541ac`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780574776
 
 Not cleared for live execution:
 - The authoritative standing-mandate record still lacks timezone-aware `issued_at` and `expires_at`. No timestamps or expiry policy have been fabricated.
