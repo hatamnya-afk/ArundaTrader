@@ -10,6 +10,8 @@ on:
       - "final_execution_attempt_contract_v0_1.py"
       - "exchange_execution_order_attempt_boundary_v0_1.py"
       - "execution_attempt_readiness_contract_v0_1.py"
+      - "mandate_revocation_contract_v0_1.py"
+      - "test_mandate_revocation_contract_v0_1.py"
       - "exchange_execution_adapter_contract_v0_1.py"
       - "exchange_execution_contract.py"
       - "exchange_execution_order_preparation_v0_1.py"
@@ -57,6 +59,7 @@ jobs:
           python -m pytest -q
           test_management_execution_authorization_v0_1.py
           test_final_execution_attempt_contract_v0_1.py
+          test_mandate_revocation_contract_v0_1.py
           test_toobit_submit_adapter_contract_v0_1.py
           test_runtime_order_intent_and_mandate_sources_v0_1.py
           test_execution_attempt_runtime_producers_v0_1.py
