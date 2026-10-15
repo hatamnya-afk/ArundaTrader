@@ -34,6 +34,7 @@ def run_final_execution_attempt_contract(
     adapter: Any,
     venue: str,
     execution_instrument: Any,
+    claim_store: Any = None,
 ) -> CanonicalExecutionResult:
     """Compose the final contract path and fail closed on invalid inputs.
 
@@ -58,6 +59,7 @@ def run_final_execution_attempt_contract(
             venue=venue,
             execution_instrument=execution_instrument,
             execution_ready_package=execution_ready_package,
+            claim_store=claim_store,
         )
     except Exception as exc:
         return blocked_execution_result(
