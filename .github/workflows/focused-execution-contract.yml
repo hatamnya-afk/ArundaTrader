@@ -1,0 +1,43 @@
+name: Focused Execution Contract Tests
+
+on:
+  push:
+    branches:
+      - operational-main-20261007
+    paths:
+      - "management_execution_authorization_v0_1.py"
+      - "execution_authorization_boundary_v0_1.py"
+      - "final_execution_attempt_contract_v0_1.py"
+      - "exchange_execution_order_attempt_boundary_v0_1.py"
+      - "execution_attempt_readiness_contract_v0_1.py"
+      - "exchange_execution_adapter_contract_v0_1.py"
+      - "exchange_execution_contract.py"
+      - "exchange_execution_order_preparation_v0_1.py"
+      - "test_management_execution_authorization_v0_1.py"
+      - "test_final_execution_attempt_contract_v0_1.py"
+      - ".github/workflows/focused-execution-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout operational branch
+        uses: actions/checkout@v4
+        with:
+          ref: operational-main-20261007
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test runner
+        run: python -m pip install --upgrade pytest
+      - name: Run focused authorization and final-attempt tests
+        run: >-
+          python -m pytest -q
+          test_management_execution_authorization_v0_1.py
+          test_final_execution_attempt_contract_v0_1.py
