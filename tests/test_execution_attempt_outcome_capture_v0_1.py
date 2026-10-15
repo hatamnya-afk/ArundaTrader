@@ -8,7 +8,10 @@ from exchange_execution_contract import (
     QUANTITY_SOURCE_RISK_POSITION,
     QUANTITY_UNIT_BASE_ASSET,
 )
-from execution_attempt_outcome_capture_v0_1 import (\n    capture_execution_attempt_outcome,\n    run_final_execution_attempt_with_outcome_capture,\n)
+from execution_attempt_outcome_capture_v0_1 import (
+    capture_execution_attempt_outcome,
+    run_final_execution_attempt_with_outcome_capture,
+)
 
 
 def request():
