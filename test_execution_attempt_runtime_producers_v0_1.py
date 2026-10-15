@@ -81,17 +81,21 @@ class RuntimeProducerTests(unittest.TestCase):
         self.assertIs(result["execution_authorized"], False)
         self.assertIs(result["execution_submitted"], False)
 
-    def test_missing_expiry_fails_closed_without_inventing_time(self):
+    def test_revocation_controlled_mandate_needs_no_calendar_expiry(self):
         mandate = valid_mandate()
         mandate.pop("expires_at")
-        with self.assertRaisesRegex(ValueError, "MANAGEMENT_EXPIRY_INVALID"):
-            produce_final_execution_attempt_context(
-                readiness=valid_readiness(),
-                management_observation=mandate,
-                request=valid_request(),
-                venue="SPOT",
-                execution_instrument="BTC-USDT",
-            )
+        mandate.pop("issued_at")
+        mandate["mandate_expiry_policy"] = "REVOCATION_CONTROLLED_NO_CALENDAR_EXPIRY"
+        result = produce_final_execution_attempt_context(
+            readiness=valid_readiness(),
+            management_observation=mandate,
+            request=valid_request(),
+            venue="SPOT",
+            execution_instrument="BTC-USDT",
+        )
+        self.assertEqual(result["authorization_observation"]["authorization_mode"], "STANDING_MANDATE")
+        self.assertIs(result["execution_authorized"], False)
+        self.assertIs(result["execution_submitted"], False)
 
     def test_package_rejects_missing_upstream_risk_field(self):
         readiness = valid_readiness()
