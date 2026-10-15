@@ -10,7 +10,7 @@ Represent a provider response or read-only lookup as append-only outcome evidenc
 
 - The caller must supply an explicit evidence stream path; there is no implicit production path.
 - The module makes no network calls and does not call Toobit.
-- OPEN/NEW/ACCEPTED never implies a fill.
+- OPEN/NEW/ACCEPTED never implies a fill; an explicit provider `executedQty=0` is preserved as zero rather than rejected or converted into a fill.
 - FILLED and PARTIALLY_FILLED require explicit positive execution quantity and price; incomplete records remain explicitly incomplete.
 - CANCELED/CANCELLED/EXPIRED without execution quantity remain unreconciled; terminal status alone does not prove zero fills.
 - Unknown provider statuses remain UNKNOWN.
@@ -28,7 +28,7 @@ Represent a provider response or read-only lookup as append-only outcome evidenc
 
 Official Toobit API documentation describes Spot `newClientOrderId` as unique among open orders and documents order lookup by order ID or original client order ID. That does not establish exactly-once POST behavior or safe retry after an ambiguous timeout; those guarantees remain unverified. (https://api-docs.toobit.com/api/spot-account-and-trading.html)
 
-## Explicitly not completed
+## Opt-in Toobit submission candidate (not production-wired)\n\n`toobit_controlled_execution_adapter_v0_1.py` is a separate adapter subclass; the existing read-only adapter is unchanged. Its `allow_order_submission` option defaults to `false`, so capabilities advertise submission disabled and no transport call occurs by default. If explicitly opted in for a controlled technical test, it makes exactly one signed POST to the documented Spot or Futures v2 route and never retries. A transport exception is reported as `SUBMISSION_UNKNOWN`, not rejection or success, and the error explicitly requires reconciliation by client order ID before any retry. Only explicit provider execution fields are carried; the order price is never treated as fill price.\n\nThis is still **not** production authorization: it has not been connected to the operational pipeline, does not implement automatic ambiguous-outcome reconciliation, and has not been tested against a live provider. Fake-transport tests prove only local request/response behavior. Do not set the opt-in on a production runtime until the standing mandate, account/instrument constraints, client-order lookup recovery, and controlled-order gate are verified.\n\n## Explicitly not completed
 
 - No live provider response has been captured by this contract.
 - No adapter integration, production pipeline wiring, authorization change, order write, cancellation, database write, or runtime was performed.
