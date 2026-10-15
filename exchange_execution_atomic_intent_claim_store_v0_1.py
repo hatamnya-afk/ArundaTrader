@@ -213,6 +213,11 @@ class SQLiteIntentClaimStore:
                 "detail_code": detail_code,
             }
             for field, proposed in proposed_evidence.items():
+                # detail_code describes the current state transition and may
+                # advance from the pre-submit fence to the terminal outcome.
+                # Identity-bearing evidence fields remain immutable.
+                if field == "detail_code":
+                    continue
                 existing = row[field]
                 if proposed is not None and existing is not None and proposed != existing:
                     connection.execute("ROLLBACK")
