@@ -5388,7 +5388,28 @@ def main() -> int:
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
-        final_attempt_boundary_status = verify_execution_boundary_integration({})
+        from canonical_request_runtime_producer_v0_1 import (
+            produce_canonical_requests_from_runtime_outputs,
+        )
+
+        try:
+            canonical_order_requests = produce_canonical_requests_from_runtime_outputs(
+                decision_snapshot=decision_snapshot,
+                risk_snapshot=risk_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+            )
+        except (TypeError, ValueError) as exc:
+            canonical_order_requests = {}
+            print(f"CANONICAL_REQUEST_PRODUCER_STATUS=BLOCKED:{exc}")
+        else:
+            print(
+                "CANONICAL_REQUEST_PRODUCER_STATUS="
+                f"PRODUCED:{len(canonical_order_requests)}"
+            )
+
+        final_attempt_boundary_status = verify_execution_boundary_integration(
+            canonical_order_requests
+        )
         print(f"FINAL_EXECUTION_ATTEMPT_BOUNDARY={final_attempt_boundary_status}")
 
         if trade_ready_assets:
