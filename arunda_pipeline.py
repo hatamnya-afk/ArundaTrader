@@ -182,6 +182,7 @@ import fusion_engine
 import production_fused_score_binding_v0_1
 
 from exchange_execution_boundary import execute_order
+from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
 
 # ============================================================================
 
@@ -4322,65 +4323,59 @@ def assert_execution_disabled() -> None:
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
     ) -> str:
+        """Compose the final attempt contract while preserving fail-closed safety.
+
+        The production orchestrator currently creates no canonical order requests.
+        If a future caller supplies one, authentic readiness and standing-mandate
+        observations are mandatory. The adapter is deliberately None here, so
+        this integration cannot submit an order.
+        """
         assert_execution_disabled()
 
-        if not isinstance(
-            canonical_order_requests,
-            dict,
-        ):
-            fail(
-                "Execution Boundary canonical requests "
-                "must be dict"
-            )
+        if not isinstance(canonical_order_requests, dict):
+            fail("Execution Boundary canonical requests must be dict")
 
         if not canonical_order_requests:
             return "DEFERRED_NO_CANONICAL_REQUESTS"
 
         for asset, record in canonical_order_requests.items():
             if asset not in EXPECTED_ASSET_SET:
-                fail(
-                    f"Execution Boundary unexpected asset: {asset}"
-                )
-
-            if not isinstance(
-                record,
-                dict,
-            ):
-                fail(
-                    f"Execution Boundary record invalid: {asset}"
-                )
+                fail(f"Execution Boundary unexpected asset: {asset}")
+            if not isinstance(record, dict):
+                fail(f"Execution Boundary record invalid: {asset}")
 
             request = record.get("request")
+            if not isinstance(request, exchange_execution_contract.CanonicalOrderRequest):
+                fail(f"Canonical request missing: {asset}")
 
-            if not isinstance(
-                request,
-                exchange_execution_contract.CanonicalOrderRequest,
-            ):
-                fail(
-                    f"Canonical request missing: {asset}"
-                )
+            required_context = (
+                "execution_ready_package",
+                "authorization_observation",
+                "venue",
+                "execution_instrument",
+            )
+            if any(record.get(key) is None for key in required_context):
+                return "BLOCKED_FINAL_ATTEMPT_CONTEXT_MISSING"
 
-            result = execute_order(
+            result = run_final_execution_attempt_contract(
+                execution_ready_package=record["execution_ready_package"],
                 request=request,
+                authorization_observation=record["authorization_observation"],
                 adapter=None,
+                venue=record["venue"],
+                execution_instrument=record["execution_instrument"],
             )
 
-            if not isinstance(
-                result,
-                exchange_execution_contract.CanonicalExecutionResult,
-            ):
-                fail(
-                    f"Execution boundary result invalid: {asset}"
-                )
+            if not isinstance(result, exchange_execution_contract.CanonicalExecutionResult):
+                fail(f"Final execution attempt result invalid: {asset}")
+            if result.accepted is not False:
+                fail(f"EXECUTION SAFETY FAILURE: {asset} unexpectedly accepted")
+            if result.exchange_order_id is not None or result.trade_event_id is not None:
+                fail(f"EXECUTION SAFETY FAILURE: {asset} produced order/attempt identity")
+            if not result.error_code:
+                fail(f"Final execution attempt was not explicitly blocked: {asset}")
 
-            if result.error_code != "EXECUTION_DISABLED":
-                fail(
-                    "EXECUTION SAFETY FAILURE: "
-                    f"{asset} returned "
-                    f"{result.error_code!r}"
-                )
-
-        return "VERIFIED_BLOCKED"
+        return "VERIFIED_BLOCKED_FINAL_ATTEMPT"
 
 
 def assert_no_execution_boundary(
@@ -5376,6 +5371,9 @@ def main() -> int:
         # 12. EXECUTION BOUNDARY ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CONTRACT CHECK ONLY
         # ------------------------------------------------------------------
         assert_execution_disabled()
+
+        final_attempt_boundary_status = verify_execution_boundary_integration({})
+        print(f"FINAL_EXECUTION_ATTEMPT_BOUNDARY={final_attempt_boundary_status}")
 
         if trade_ready_assets:
             print(
