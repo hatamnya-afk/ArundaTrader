@@ -49,6 +49,20 @@ def _revocation_controlled_mandate():
     return value
 
 
+class _FakeClaim:
+    outcome = "CLAIMED"
+
+
+class _FakeClaimStore:
+    """In-memory test double; never touches production state or a database."""
+
+    def claim(self, **kwargs):
+        return _FakeClaim()
+
+    def transition(self, **kwargs):
+        return None
+
+
 class _FakeAdapter:
     adapter_name = "FAKE_PROVIDER_NEUTRAL"
 
@@ -63,6 +77,7 @@ class _FakeAdapter:
         return AdapterOrderPreparation(
             ready=True, reason="READY", adapter_name=self.adapter_name, venue=venue,
             request={"instrument": execution_instrument, "request": request},
+            client_order_id=f"fake-{request.intent_id}",
         )
 
     def submit_prepared_order(self, preparation, *, canonical_request):
@@ -97,6 +112,7 @@ def _run(authorization):
         execution_ready_package=_package(), request=_request(),
         authorization_observation=authorization, adapter=_FakeAdapter(),
         venue="SPOT", execution_instrument="BTC-USDT",
+        claim_store=_FakeClaimStore(),
     )
 
 
@@ -117,7 +133,7 @@ def test_final_attempt_rejects_missing_expiry_policy_when_expiry_is_absent():
     authorization.pop("expires_at")
     result = _run(authorization)
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+    assert result.error_code == "AUTHORIZATION_EXPIRY_POLICY_INVALID"
 
 
 def test_final_attempt_requires_only_standing_mandate_authorization():
@@ -133,7 +149,7 @@ def test_final_attempt_fails_closed_without_standing_mandate():
     authorization.pop("authorization_mode")
     result = _run(authorization)
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+    assert result.error_code == "AUTHORIZATION_MODE_INVALID"
 
 
 def test_final_attempt_keeps_attempt_identity_outside_management_authorization():
