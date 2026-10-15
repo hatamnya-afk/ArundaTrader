@@ -260,3 +260,44 @@ def test_read_only_client_id_reconciliation_keeps_missing_order_unresolved():
     assert result.data["resubmit_allowed"] is False
     assert len(calls) == 1
     assert calls[0][0] == "GET"
+
+
+def test_read_only_client_id_reconciliation_uses_documented_futures_query_endpoint():
+    from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
+
+    calls = []
+    def transport(*, method, path, params, **kwargs):
+        calls.append((method, path, dict(params)))
+        assert method == "GET"
+        assert path == "/api/v1/futures/order"
+        assert params["category"] == "USDT"
+        return {
+            "symbol": "BTC-SWAP-USDT",
+            "orderId": "futures-reconcile-1",
+            "clientOrderId": params["origClientOrderId"],
+            "status": "PARTIALLY_FILLED",
+            "executedQty": "1",
+            "avgPrice": "65000",
+            "updateTime": "1792000000000",
+        }
+
+    class _ResolvedAdapter(ToobitExchangeAdapter):
+        def resolve_futures_instrument(self, specification):
+            return ToobitAdapterResult(True, "RESOLVED", {"symbol": "BTC-SWAP-USDT"})
+
+    adapter = _ResolvedAdapter(transport=transport, api_key="test-key", secret_key="test-secret")
+    instrument = ExecutionInstrumentSpecification(
+        asset="BTC", venue="FUTURES", settlement_asset="USDT",
+        instrument_type="PERPETUAL", selection_source="POLICY",
+        policy_version="test-policy",
+    )
+    result = adapter.query_order_by_client_order_id(
+        venue="FUTURES", symbol="BTC-SWAP-USDT",
+        client_order_id="A0123456789abcdefghijklmnopqrstuv",
+        execution_instrument=instrument,
+    )
+    assert result.allowed is True
+    assert result.reason == "ORDER_FOUND"
+    assert result.data["provider_status"] == "PARTIALLY_FILLED"
+    assert len(calls) == 1
+    assert calls[0][0] == "GET"
