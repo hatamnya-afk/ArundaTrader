@@ -178,3 +178,22 @@ def test_explicit_zero_executed_quantity_is_valid_provider_evidence():
     assert record["outcome_state"] == "OPEN"
     assert record["executed_quantity"] == "0"
     assert record["fill_inferred"] is False
+
+
+
+def test_read_only_lookup_timestamp_is_not_mislabeled_as_provider_timestamp():
+    record = make_record(
+        source_kind="READ_ONLY_LOOKUP",
+        observed_at="2026-10-15T08:00:00Z",
+    )
+    assert record["observed_at"] == "2026-10-15T08:00:00Z"
+    assert record["captured_at"]
+    assert record["provider_timestamp_known"] is False
+
+
+def test_provider_response_with_explicit_timestamp_marks_provider_timestamp_known():
+    record = make_record(
+        source_kind="PROVIDER_RESPONSE",
+        observed_at="2026-10-15T08:00:00Z",
+    )
+    assert record["provider_timestamp_known"] is True
