@@ -20,6 +20,7 @@ on:
       - "tests/test_standing_mandate_service_preflight_v0_1.py"
       - "ops/Configure-ArundaMandateJournal.ps1"
       - "ops/Activate-ArundaStandingMandate.py"
+      - "ops/management_phase_entry_observation_20261012.json"
       - "tests/test_activate_standing_mandate_script.py"
       - "STANDING_MANDATE_SERVICE_CONFIGURATION_V0_1.md"
       - ".github/workflows/standing-mandate-contract.yml"
