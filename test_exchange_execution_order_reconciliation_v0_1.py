@@ -127,5 +127,38 @@ class AmbiguousOrderReconciliationTests(unittest.TestCase):
             )
 
 
+    def test_existing_terminal_exchange_order_id_cannot_be_replaced(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = make_store(Path(directory) / "claims.sqlite3")
+            store.transition(
+                provider_namespace="ARUNDA-EXECUTION",
+                intent_id="INTENT-RECON-1",
+                status=PROVIDER_ACCEPTED,
+                trade_event_id="trade-event-1",
+                decision_id="decision-birth-1",
+                exchange_order_id="original-order",
+                provider_status="FILLED",
+                evidence_event_id="trade-event-1:provider-response",
+                detail_code="ORIGINAL_ACCEPTANCE",
+            )
+            adapter = FakeAdapter(ToobitAdapterResult(True, "ORDER_FOUND", {
+                "state_known": True,
+                "client_order_id": "A0123456789abcdefghijklmnopqrstuv",
+                "symbol": "BTCUSDT",
+                "exchange_order_id": "different-order",
+                "provider_status": "FILLED",
+            }))
+            result = reconcile_ambiguous_order(
+                claim_store=store, adapter=adapter,
+                provider_namespace="ARUNDA-EXECUTION",
+                intent_id="INTENT-RECON-1", venue="SPOT", symbol="BTCUSDT",
+            )
+            self.assertEqual(result["state"], "UNRESOLVED_KEEP_QUARANTINED")
+            self.assertFalse(result["resubmit_allowed"])
+            claim = store.get(provider_namespace="ARUNDA-EXECUTION", intent_id="INTENT-RECON-1")
+            self.assertEqual(claim.status, PROVIDER_ACCEPTED)
+            self.assertEqual(claim.exchange_order_id, "original-order")
+
+
 if __name__ == "__main__":
     unittest.main()
