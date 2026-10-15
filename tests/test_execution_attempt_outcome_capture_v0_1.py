@@ -188,6 +188,17 @@ def test_submission_unknown_without_provider_timestamp_is_persisted_with_local_c
     assert row["executed_quantity"] is None
     assert row["executed_price"] is None
     assert row["fill_inferred"] is False
+    replay = capture_execution_attempt_outcome(
+        request=request(),
+        result=result(
+            accepted=False, exchange_order_id=None, status="SUBMISSION_UNKNOWN",
+            timestamp=None, executed_quantity=None, executed_price=None,
+            error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+        ),
+        stream_path=path,
+    )
+    assert replay.capture_state == "ALREADY_PERSISTED"
+    assert len(path.read_text(encoding="utf-8").splitlines()) == 1
 
 
 def test_persistence_failure_is_reported_explicitly(tmp_path):
