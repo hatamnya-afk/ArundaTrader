@@ -64,6 +64,27 @@ def attempt_prepared_order(
             error_message=f"Execution adapter contract rejected: {contract_reason}.",
         )
 
+    # Reject read-only adapters before claiming/quarantining an intent.
+    # Capability discovery is local adapter metadata; it must not submit.
+    try:
+        capabilities = adapter.capabilities()
+    except Exception as exc:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="ADAPTER_CAPABILITIES_UNAVAILABLE",
+            error_message=f"Adapter capability check failed closed: {exc}",
+        )
+    if getattr(capabilities, "order_submission", None) is not True:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="ADAPTER_ORDER_SUBMISSION_UNSUPPORTED",
+            error_message="Selected adapter does not advertise order-submission capability; no claim or provider call was made.",
+        )
+
     if execution_ready_package is not None:
         try:
             readiness_observation = evaluate_execution_attempt_readiness(
