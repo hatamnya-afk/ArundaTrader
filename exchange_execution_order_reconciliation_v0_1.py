@@ -5,6 +5,8 @@ The caller supplies the explicitly isolated durable claim/evidence store.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 from typing import Any
 
 
@@ -79,7 +81,8 @@ def reconcile_ambiguous_order(
     if found:
         provider_status = str(data["provider_status"]).strip().upper()
         exchange_order_id = str(data["exchange_order_id"]).strip()
-        evidence_id = f"reconciliation:{intent_id}:{client_order_id}:{exchange_order_id}"
+        fingerprint = hashlib.sha256(json.dumps(data, sort_keys=True, default=str, separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
+        evidence_id = f"reconciliation:{intent_id}:{client_order_id}:{exchange_order_id}:{fingerprint}"
         state = "ORDER_FOUND"
         detail_code = "READ_ONLY_PROVIDER_ORDER_IDENTITY_MATCHED"
         try:
@@ -139,7 +142,8 @@ def reconcile_ambiguous_order(
     reason = getattr(result, "reason", "ORDER_LOOKUP_UNRESOLVED") if result is not None else "ORDER_LOOKUP_EXCEPTION"
     if isinstance(data, dict) and data.get("state_known") is False:
         query_detail = str(data.get("detail", query_detail))
-    evidence_id = f"reconciliation-unresolved:{intent_id}:{client_order_id}"
+    unresolved_fingerprint = hashlib.sha256(json.dumps({"reason": str(reason), "detail": query_detail}, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
+    evidence_id = f"reconciliation-unresolved:{intent_id}:{client_order_id}:{unresolved_fingerprint}"
     detail_code = str(reason)
     try:
         claim_store.record_reconciliation_evidence(
