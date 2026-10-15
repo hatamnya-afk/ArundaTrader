@@ -929,6 +929,22 @@ class ToobitExchangeAdapter:
             expected_symbol = str(payload.get("symbol", "")).strip().upper()
             if symbol != expected_symbol:
                 raise ValueError("PROVIDER_SYMBOL_MISMATCH")
+            if status in {"REJECTED", "ORDER_REJECTED"}:
+                return CanonicalExecutionResult(
+                    accepted=False,
+                    exchange_order_id=order_id,
+                    status="PROVIDER_REJECTED",
+                    asset=canonical_request.asset,
+                    direction=canonical_request.direction,
+                    executed_quantity=data.get("executedQty"),
+                    executed_price=data.get("avgPrice"),
+                    timestamp=str(data.get("time") or data.get("transactTime") or data.get("updateTime") or "") or None,
+                    adapter=self.name,
+                    error_code="TOOBIT_PROVIDER_REJECTED",
+                    error_message="Provider response explicitly reports a rejected order.",
+                )
+            if status not in {"NEW", "PENDING_NEW", "PARTIALLY_FILLED", "FILLED"}:
+                raise ValueError("PROVIDER_ORDER_STATUS_UNRECOGNIZED")
             executed_quantity = data.get("executedQty")
             executed_price = data.get("avgPrice")
             return CanonicalExecutionResult(
