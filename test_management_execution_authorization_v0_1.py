@@ -180,3 +180,28 @@ def test_management_output_contains_only_standing_mandate_scope():
     assert "order_type" not in observation
     assert "quantity" not in observation
     assert "exposure" not in observation
+
+def test_standing_mandate_needs_no_fabricated_issue_or_expiry_timestamp():
+    value = _base()
+    value.pop("issued_at")
+    value.pop("expires_at")
+
+    result = evaluate_management_authorization(value)
+    observation = result["authorization_observation"]
+
+    assert result["management_state"] == AUTHORIZED
+    assert result["per_trade_management_authorization_required"] is False
+    assert observation["issued_at"] is None
+    assert observation["expires_at"] is None
+    assert observation["mandate_expiry_policy"] == "NON_EXPIRING_STANDING_MANDATE"
+
+
+def test_explicit_expiry_still_must_be_timezone_aware_and_future():
+    value = _base()
+    value["expires_at"] = "2099-01-01T00:00:00"
+    try:
+        evaluate_management_authorization(value)
+    except ValueError as exc:
+        assert str(exc) == "MANAGEMENT_EXPIRY_INVALID"
+    else:
+        raise AssertionError("naive explicit expiry must be rejected")

@@ -605,7 +605,7 @@ class ToobitExchangeAdapter:
             recent_orders = self._unwrap(
                 self._call(
                     "GET",
-                    "/api/v1/futures/historyOrders",
+                    "/api/v2/futures/history-orders",
                     params={
                         "symbol": symbol,
                         "category": "USDT",

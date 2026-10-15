@@ -19,6 +19,8 @@ from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
 
+from standing_mandate_lifecycle_v0_1 import reduce_mandate_lifecycle
+
 READY = "READY"
 AUTHORIZED = "AUTHORIZED"
 VALID = "VALID"
@@ -48,7 +50,11 @@ def _require_nonempty_string(value: Any, reason: str) -> str:
     return value.strip()
 
 
-def _parse_future_expiry(value: Any) -> str:
+def _parse_future_expiry(value: Any) -> str | None:
+    # No expiry is the defined default for a standing phase-entry mandate.
+    # If management explicitly supplies one, it must be aware and in future.
+    if value is None:
+        return None
     if not isinstance(value, str) or not value.strip():
         raise ValueError("AUTHORIZATION_EXPIRY_INVALID")
 
@@ -89,6 +95,10 @@ def _evaluate_standing_mandate(
         mandate.get("mandate_id") or mandate.get("authorization_id"),
         "AUTHORIZATION_MANDATE_ID_INVALID",
     )
+    lifecycle = reduce_mandate_lifecycle(
+        mandate.get("mandate_lifecycle_events"),
+        expected_mandate_id=mandate_id,
+    )
     expires_at = _parse_future_expiry(mandate.get("expires_at"))
 
     environment = _require_nonempty_string(
@@ -119,8 +129,13 @@ def _evaluate_standing_mandate(
         "authorization_source": source,
         "authorization_mode": STANDING_MANDATE,
         "expires_at": expires_at,
+        "mandate_expiry_policy": (
+            "EXPLICIT_EXPIRY" if expires_at is not None else "NON_EXPIRING_STANDING_MANDATE"
+        ),
         "venue": venue,
         "mandate_id": mandate_id,
+        "mandate_state": lifecycle["mandate_state"],
+        "lifecycle_event_count": lifecycle["lifecycle_event_count"],
     }
 
 

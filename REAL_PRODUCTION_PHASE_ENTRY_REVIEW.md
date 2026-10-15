@@ -1,3 +1,41 @@
+## SERVICE CONFIGURATION + OPERATIONAL PATH AUDIT — 2026-10-15
+
+- Candidate branch now contains a Windows persistent-journal configuration script (`ops/Configure-ArundaMandateJournal.ps1`), a validated/dry-run-first management activation CLI (`ops/Activate-ArundaStandingMandate.py`), the structured phase-entry observation, and a read-only startup preflight (`standing_mandate_service_preflight_v0_1.py`).
+- Configuration defaults to `C:\\ProgramData\\ArundaTrader\\security\\standing_mandate_lifecycle.jsonl`, requires the actual runtime identity as an explicit parameter, applies restrictive ACLs to the directory and existing journal/lock files, and sets machine-level `ARUNDA_MANDATE_LIFECYCLE_PATH`. It does not write or seed the journal. The activation CLI defaults to dry-run and writes ACTIVATE only with explicit `--confirm-activate`.
+- Focused CI: standing-mandate + startup/activation preflight **54 passed** ([run 38728746302](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38728746302)); execution-outcome evidence **58 passed** ([run 38728746246](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38728746246)).
+- Operational path audit on `operational-main-20261007`: `arunda_pipeline.py` still calls `exchange_execution_boundary.execute_order`; `EXECUTION_ENABLED=False`; the operational Toobit adapter advertises `order_submission=False` and fail-closes submission. The candidate lifecycle-aware attempt boundary is not wired into the operational pipeline.
+- **Not deployed / NOT VERIFIED:** this repository-only session cannot inspect the Windows host, identify the actual service/task identity, apply the host ACL/environment, persist the management activation event, restart the process, or run host preflight. Do not represent the journal as configured or the operational path as connected until those host checks pass.
+- Safety remains unchanged: no operational branch edits, no merge, no production runtime, no provider/database writes, no order/cancel/withdrawal, and no execution flag activation. PR #38 remains open/unmerged. Provider client-order-ID and ambiguous POST recovery semantics remain unresolved.
+
+## DURABLE MANDATE JOURNAL — CANDIDATE INTEGRATION PASS (2026-10-15)
+
+- Connected the durable lifecycle journal to the isolated provider-neutral order-attempt boundary. Every attempt now requires `ARUNDA_MANDATE_LIFECYCLE_PATH`, rereads authoritative journal history, and overwrites any in-memory lifecycle snapshot before authorization. Missing path/history, corrupt journal, revoked or replaced mandate fail closed before adapter submission.
+- Added explicit `record_management_phase_entry(...)` to persist activation from a validated authorized REAL_PRODUCTION phase-entry result. Runtime never silently seeds or repairs the journal.
+- Focused standing-mandate CI: **42 passed in 0.17s** ([run 38727000052](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38727000052)); execution-outcome CI passed ([run 38727000334](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38727000334)).
+- Scope: feature branch / PR #38 only. Not wired into `operational-main-20261007`; no production path or runtime configuration has been deployed. The journal location, OS permissions, backup/recovery policy, and actual operational wiring still require verification. Keep real submission disabled and PR unmerged; all provider semantics and real-production gates remain unresolved.
+
+## STANDING-MANDATE LIFECYCLE — DURABLE JOURNAL CONTRACT PASS (2026-10-15)
+
+- Standing phase-entry mandate is non-expiring by default; explicit expiry remains optional and is enforced when provided. Per-trade management approval remains forbidden.
+- Technical authorization rejects missing/invalid lifecycle history and revoked or superseded mandate identities. The append-only JSONL lifecycle journal supports management ACTIVATE/REVOKE/REPLACE events, validates transitions before append, fsyncs committed rows, and uses an OS lock for append coordination.
+- Focused CI: **28 passed in 0.16s** (run [38726220987](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38726220987)); outcome-evidence CI also passed (run [38726221006](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38726221006)).
+- **Remaining integration gate:** no production runtime currently reads the durable journal before every execution authorization, and the authoritative journal path/access-control/backup policy has not been configured or verified. Therefore lifecycle revocation/replacement is implemented and offline-tested, but not yet enforced by the operational production path. Keep provider submission disabled, do not merge PR #38, and do not claim real-order readiness.
+
+## STANDING-MANDATE LIFECYCLE — CANDIDATE CI PASS (2026-10-15)
+
+- Standing mandate is non-expiring by default; explicit expiry remains supported only if management supplies it. No fabricated issuance/expiry timestamps.
+- Technical authorization now requires lifecycle history and rejects revoked/superseded mandate identities, duplicate event IDs, invalid transitions, or non-management event authority.
+- Focused CI: 24 passed in 0.08s (run [38725859677](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38725859677)); outcome-evidence CI also passed (run [38725859582](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38725859582)).
+- **Important unresolved integration gate:** lifecycle reducer is pure/offline. The initial activation event is emitted by the mandate producer, but no durable authoritative append-only lifecycle store or production read integration exists yet. Therefore revocation/replacement is contract-tested, not yet operationally enforceable across restarts. Keep real execution blocked, provider submission disabled, and PR unmerged.
+
+## STANDING-MANDATE POLICY UPDATE — 2026-10-15 (CANDIDATE BRANCH ONLY)
+
+- Management authorization dated 2026-10-12 is a one-time standing phase-entry decision; it does not require per-trade management approval.
+- A precise `issued_at` timestamp is optional audit metadata. The validator must not fabricate one when the decision record contains only a date/source.
+- `expires_at` is optional. No expiry duration was set by management, so the default is a non-expiring standing mandate. If an expiry is explicitly supplied, it must be timezone-aware, in the future, and later than `issued_at` when that timestamp is present.
+- The management validator and technical authorization boundary were updated on the isolated PR #38 feature branch, with focused tests added. This does NOT activate production execution, clear the final real-order gate, wire the candidate into the operational branch, or establish a persistent revocation registry.
+- **Still BLOCKED / NOT VERIFIED:** operational Toobit submission remains disabled; client-order-ID constraints, duplicate-POST semantics, lookup consistency/retention/exhaustiveness remain unresolved; candidate recovery is not production-wired and no live outcome evidence exists. Keep `safe_to_retry=false`; do not merge PR #38 or send an order based on this change alone.
+
 # REAL-PRODUCTION PHASE ENTRY REVIEW — v0.1
 
 ## Purpose
@@ -92,7 +130,7 @@ Scope: source inspection only. No production runtime, live order, provider write
 
 ### Confirmed
 1. Management phase-entry decision is recorded as AUTHORIZED in `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`.
-2. `management_execution_authorization_v0_1.py` emits a structured `authorization_observation` for an authorized standing mandate and requires timezone-aware `issued_at` and future `expires_at`.
+2. `management_execution_authorization_v0_1.py` emits a structured authorization observation. Precise `issued_at` is optional audit metadata; `expires_at` is optional for a standing mandate unless management explicitly chooses a timed mandate.
 3. `execution_authorization_boundary_v0_1.py` validates the active mandate, expiry, REAL_PRODUCTION environment, SPOT/FUTURES scope, and request venue. It does not itself submit orders.
 4. `execution_attempt_readiness_contract_v0_1.py` requires a valid canonical request and a validated execution-ready package, while preserving `execution_authorized=False` and `provider_binding=DEFERRED`.
 5. `exchange_execution_order_attempt_boundary_v0_1.py` would call `adapter.submit_prepared_order` after its gates pass. That makes adapter capability and the active gate evidence material prerequisites.
@@ -113,5 +151,36 @@ Scope: source inspection only. No production runtime, live order, provider write
 **LIVE ORDER / PROVIDER WRITE / DATABASE WRITE / PIPELINE ACTIVATION: NOT PERFORMED AND NOT CLEARED.**
 
 Next work is to resolve the active-mandate expiry policy and provider execution/recovery contract, then add/run focused tests and re-evaluate the final gate. This is not a request for per-trade approval.
+
+
+## CURRENT UPDATE — PR #38 OUTCOME CAPTURE / AMBIGUOUS RECOVERY — 2026-10-15
+
+Candidate branch: \`feature/execution-outcome-evidence-contract-20261015\`; reviewed commit \`ed34ec0f5c31a82809ec7e1237bb239a6bd33196\`; PR #38 remains open and unmerged against \`operational-main-20261007\`.
+
+### Candidate work now built and offline-verified
+- Corrected the Futures history read endpoint to \`GET /api/v2/futures/history-orders\`.
+- Added exact-client-ID read-only recovery for Spot \`GET /api/v1/spot/order\` and Futures \`GET /api/v2/futures/order\`.
+- Validates both returned \`clientOrderId\` and provider symbol before outcome capture.
+- Provider lookup errors, missing rows, malformed observations, and identity conflicts remain non-retryable; no POST retry or inferred fill is introduced.
+- Focused CI passed **51 tests** on the candidate commit: [run 38721082194](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721082194) and [run 38721075314](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721075314). These are fake-transport/offline tests only.
+
+### Remaining blockers — final gate still open
+1. The operational Toobit adapter remains submission-disabled; candidate code has not been promoted or wired to production.
+2. The authorized management decision lacks the timezone-aware \`issued_at\` and \`expires_at\` required by the mandate validator. No timestamp or expiry duration has been invented.
+3. Official Toobit docs do not establish client-ID maximum length/allowed charset, reuse/uniqueness after terminal orders, duplicate-POST replay semantics, or lookup consistency/retention/exhaustive recovery.
+4. No live provider observation or end-to-end production outcome has been captured; no live Toobit API request was made during this work.
+
+**Current verdict:** MANAGEMENT PHASE ENTRY = AUTHORIZED; CANDIDATE OUTCOME/RECOVERY CONTRACT = OFFLINE CI PASS; TECHNICAL REAL-ORDER READINESS = BLOCKED / NOT VERIFIED; EXECUTION AUTHORIZATION = FALSE. PR #38 remains unmerged. No production runtime, order, cancellation, withdrawal, provider write, or database mutation was performed. Keep \`safe_to_retry=false\` for every ambiguous submission.
+
+
+
+## CURRENT UPDATE — OUTCOME EVIDENCE FORENSIC PASS — 2026-10-15
+
+- New isolated candidate head: `411395402de8a9aeb78bf8454649c1516a110700`; PR #38 remains open/unmerged against `operational-main-20261007`.
+- Static review found and fixed a provenance defect: a local timestamp for a `READ_ONLY_LOOKUP` was being labeled `provider_timestamp_known=true`. The schema now marks provider time known only for an explicitly timestamped `PROVIDER_RESPONSE`; read-only lookup time remains local observation time.
+- Recovery now validates the timezone-aware local observation timestamp before making its GET request; naive/invalid values fail closed without transport activity.
+- Added tests for timestamp provenance, invalid timestamp rejection before network, malformed lookup rows, and local timestamp generation.
+- GitHub Actions run [38721872191](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721872191) passed **56 tests** (offline/fake transport).
+- This closes the current offline contract defect found in this review, but **does not** clear the real-order gate. Management mandate timestamp fields and Toobit live semantics remain unverified; no production wiring, live API request, order, cancellation, withdrawal, or database write occurred. `safe_to_retry=false` remains mandatory.
 
 # END

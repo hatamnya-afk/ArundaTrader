@@ -11,6 +11,10 @@ The selected adapter owns provider submission behavior.
 
 from __future__ import annotations
 
+from dataclasses import replace
+from uuid import uuid4
+import os
+from pathlib import Path
 from typing import Any, Mapping
 
 from exchange_execution_adapter_contract_v0_1 import (
@@ -26,6 +30,7 @@ from exchange_execution_contract import (
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
 from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
+from standing_mandate_lifecycle_store_v0_1 import require_active_mandate
 
 
 def attempt_prepared_order(
@@ -82,9 +87,28 @@ def attempt_prepared_order(
             )
 
     try:
+        # The live attempt boundary never trusts an in-memory lifecycle snapshot.
+        # It must reread the configured durable journal for every attempt.
+        lifecycle_path = os.environ.get("ARUNDA_MANDATE_LIFECYCLE_PATH")
+        if not lifecycle_path or not lifecycle_path.strip():
+            raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_REQUIRED")
+        lifecycle_target = Path(lifecycle_path).expanduser()
+        if not lifecycle_target.is_absolute():
+            raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_MUST_BE_ABSOLUTE")
+        if lifecycle_target.is_symlink():
+            raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_SYMLINK_FORBIDDEN")
+        mandate_id = authorization_observation.get("mandate_id") or authorization_observation.get("authorization_id")
+        if not isinstance(mandate_id, str) or not mandate_id.strip():
+            raise ValueError("AUTHORIZATION_MANDATE_ID_INVALID")
+        authoritative_events = require_active_mandate(
+            lifecycle_target,
+            expected_mandate_id=mandate_id.strip(),
+        )
+        durable_authorization = dict(authorization_observation)
+        durable_authorization["mandate_lifecycle_events"] = authoritative_events
         authorization = evaluate_execution_authorization(
             readiness_observation,
-            authorization_observation,
+            durable_authorization,
         )
     except ValueError as exc:
         return blocked_execution_result(
@@ -116,6 +140,9 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Identity is minted by the authoritative boundary immediately before
+    # the one adapter attempt. It is not derived from provider order IDs.
+    trade_event_id = "TE-" + uuid4().hex
     try:
         result = adapter.submit_prepared_order(
             prepared,
@@ -127,6 +154,7 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code="ADAPTER_SUBMIT_PREPARED_FAILED",
             error_message=str(exc),
+            trade_event_id=trade_event_id,
         )
 
     if not isinstance(result, CanonicalExecutionResult):
@@ -135,9 +163,11 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code="ADAPTER_EXECUTION_RESULT_INVALID",
             error_message="Adapter returned an invalid canonical execution result.",
+            trade_event_id=trade_event_id,
         )
 
-    return result
+    # Provider adapters cannot replace the boundary-issued attempt identity.
+    return replace(result, trade_event_id=trade_event_id)
 
 
 __all__ = ["attempt_prepared_order"]

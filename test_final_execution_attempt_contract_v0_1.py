@@ -1,9 +1,30 @@
+import os
+import pytest
+
+from standing_mandate_lifecycle_store_v0_1 import append_lifecycle_event
+
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
     ExchangeAdapterCapabilities,
 )
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
 from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
+
+
+@pytest.fixture(autouse=True)
+def _durable_mandate_journal(tmp_path, monkeypatch):
+    journal = tmp_path / "standing-mandate.jsonl"
+    append_lifecycle_event(
+        journal,
+        {
+            "event_id": "PHASE_ENTRY_ACTIVATE:REAL-PROD-MANDATE-001",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+    )
+    monkeypatch.setenv("ARUNDA_MANDATE_LIFECYCLE_PATH", str(journal))
+    return journal
 
 
 def _request():
@@ -53,7 +74,15 @@ def _standing_mandate():
         "authorization_mode": "STANDING_MANDATE",
         "authorization_id": "REAL-PROD-MANDATE-001",
         "mandate_id": "REAL-PROD-MANDATE-001",
-        "expires_at": "2099-01-01T00:00:00+00:00",
+        "mandate_lifecycle_events": (
+            {
+                "event_id": "PHASE_ENTRY_ACTIVATE:REAL-PROD-MANDATE-001",
+                "event_type": "ACTIVATE",
+                "mandate_id": "REAL-PROD-MANDATE-001",
+                "authority": "MANAGEMENT",
+            },
+        ),
+        "expires_at": None,
         "environment": "REAL_PRODUCTION",
         "allowed_markets": ("SPOT", "FUTURES"),
     }
@@ -171,7 +200,7 @@ def test_final_attempt_fails_closed_without_standing_mandate():
     )
 
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
+    assert result.error_code == "AUTHORIZATION_MODE_INVALID"
 
 
 def test_final_attempt_keeps_attempt_identity_outside_management_authorization():
@@ -181,3 +210,41 @@ def test_final_attempt_keeps_attempt_identity_outside_management_authorization()
     assert "attempt_id" not in authorization
     assert hasattr(request, "intent_id")
     assert hasattr(request, "snapshot_id")
+
+
+def test_final_attempt_rereads_durable_lifecycle_and_blocks_after_revocation(
+    _durable_mandate_journal,
+):
+    append_lifecycle_event(
+        _durable_mandate_journal,
+        {
+            "event_id": "MANAGEMENT_REVOKE:REAL-PROD-MANDATE-001",
+            "event_type": "REVOKE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+    )
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=_standing_mandate(),
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "MANDATE_NOT_ACTIVE"
+
+
+def test_final_attempt_fails_closed_if_durable_journal_path_is_unconfigured(monkeypatch):
+    monkeypatch.delenv("ARUNDA_MANDATE_LIFECYCLE_PATH", raising=False)
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=_package(),
+        request=_request(),
+        authorization_observation=_standing_mandate(),
+        adapter=_FakeAdapter(),
+        venue="SPOT",
+        execution_instrument="BTC-USDT",
+    )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "MANDATE_LIFECYCLE_STORE_PATH_REQUIRED"

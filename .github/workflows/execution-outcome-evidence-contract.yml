@@ -1,0 +1,60 @@
+name: Execution outcome evidence contract
+
+on:
+  pull_request:
+    paths:
+      - "execution_outcome_evidence_contract_v0_1.py"
+      - "execution_attempt_outcome_capture_v0_1.py"
+      - "toobit_order_observation_normalizer_v0_1.py"
+      - "toobit_controlled_execution_adapter_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "toobit_ambiguous_submission_reconciliation_v0_1.py"
+      - "toobit_ambiguous_submission_outcome_bridge_v0_1.py"
+      - "toobit_ambiguous_submission_recovery_v0_1.py"
+      - "exchange_execution_order_attempt_boundary_v0_1.py"
+      - "tests/test_exchange_execution_order_attempt_boundary_v0_1.py"
+      - "tests/test_toobit_order_observation_normalizer_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_reconciliation_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_outcome_bridge_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_recovery_v0_1.py"
+      - "tests/test_execution_outcome_evidence_contract_v0_1.py"
+      - "tests/test_execution_attempt_outcome_capture_v0_1.py"
+      - ".github/workflows/execution-outcome-evidence-contract.yml"
+  push:
+    branches:
+      - "feature/execution-outcome-evidence-contract-20261015"
+    paths:
+      - "execution_outcome_evidence_contract_v0_1.py"
+      - "execution_attempt_outcome_capture_v0_1.py"
+      - "toobit_order_observation_normalizer_v0_1.py"
+      - "toobit_controlled_execution_adapter_v0_1.py"
+      - "toobit_ambiguous_submission_recovery_v0_1.py"
+      - "toobit_ambiguous_submission_reconciliation_v0_1.py"
+      - "toobit_ambiguous_submission_outcome_bridge_v0_1.py"
+      - "exchange_execution_order_attempt_boundary_v0_1.py"
+      - "tests/test_exchange_execution_order_attempt_boundary_v0_1.py"
+      - "tests/test_toobit_controlled_execution_adapter_v0_1.py"
+      - "tests/test_toobit_exchange_adapter_history_endpoint_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_recovery_v0_1.py"
+      - "tests/test_execution_outcome_evidence_contract_v0_1.py"
+      - "tests/test_toobit_order_observation_normalizer_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_reconciliation_v0_1.py"
+      - "tests/test_toobit_ambiguous_submission_outcome_bridge_v0_1.py"
+      - ".github/workflows/execution-outcome-evidence-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  outcome-evidence-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pytest
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Run outcome evidence contract tests
+        run: python -m pytest -q tests/test_execution_outcome_evidence_contract_v0_1.py tests/test_execution_attempt_outcome_capture_v0_1.py tests/test_toobit_order_observation_normalizer_v0_1.py tests/test_toobit_controlled_execution_adapter_v0_1.py tests/test_toobit_ambiguous_submission_reconciliation_v0_1.py tests/test_toobit_ambiguous_submission_outcome_bridge_v0_1.py tests/test_toobit_ambiguous_submission_recovery_v0_1.py tests/test_toobit_exchange_adapter_history_endpoint_v0_1.py tests/test_exchange_execution_order_attempt_boundary_v0_1.py
