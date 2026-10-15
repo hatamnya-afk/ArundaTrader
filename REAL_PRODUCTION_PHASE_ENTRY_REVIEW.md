@@ -1,3 +1,12 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — SIGNED POST + FUTURES SETTLEMENT ALIGNMENT
+>
+> - Signed Toobit POST parameters now travel in the documented `application/x-www-form-urlencoded` body, while GET query parameters remain in the URL. A mocked transport test verifies body, signature field, content type, and no query-string submission.
+> - Futures account-state and duplicate-order reads now use the selected execution instrument's settlement category (`USDT` or `USDC`) rather than hardcoding `USDT`; unknown categories fail closed. Added USDC fixture tests for account state and duplicate checks.
+> - **Focused Execution Contract CI: PASS** ([run 38805534608](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38805534608)): 101 passed, 2 subtests passed. **Phase-entry verification: PASS** ([run 38805534537](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38805534537)): 60 tests passed.
+> - No live provider calls, orders, cancellations, production runtime, production DB writes, or execution switch changes occurred. Production order path remains BLOCKED / NOT VERIFIED pending authorized runtime wiring, current-run authoritative execution instrument/context, and a genuine Futures exposure-permission source.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — SIGNED POST TRANSPORT FIX
 >
 > - Static review found the HTTPS transport was placing signed Toobit POST parameters in the URL query. Official Toobit signing examples send signed POST parameters in an `application/x-www-form-urlencoded` request body. The transport now keeps GET parameters in the URL and sends POST parameters in the form body; no retry or redirect behavior was added.
