@@ -1,3 +1,10 @@
+## STANDING-MANDATE LIFECYCLE — CANDIDATE CI PASS (2026-10-15)
+
+- Standing mandate is non-expiring by default; explicit expiry remains supported only if management supplies it. No fabricated issuance/expiry timestamps.
+- Technical authorization now requires lifecycle history and rejects revoked/superseded mandate identities, duplicate event IDs, invalid transitions, or non-management event authority.
+- Focused CI: 24 passed in 0.08s (run [38725859677](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38725859677)); outcome-evidence CI also passed (run [38725859582](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38725859582)).
+- **Important unresolved integration gate:** lifecycle reducer is pure/offline. The initial activation event is emitted by the mandate producer, but no durable authoritative append-only lifecycle store or production read integration exists yet. Therefore revocation/replacement is contract-tested, not yet operationally enforceable across restarts. Keep real execution blocked, provider submission disabled, and PR unmerged.
+
 ## STANDING-MANDATE POLICY UPDATE — 2026-10-15 (CANDIDATE BRANCH ONLY)
 
 - Management authorization dated 2026-10-12 is a one-time standing phase-entry decision; it does not require per-trade management approval.
