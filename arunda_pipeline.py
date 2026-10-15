@@ -5441,8 +5441,30 @@ def main() -> int:
                 f"PRODUCED:{len(canonical_order_requests)}"
             )
 
+        # Dependency wiring is explicit and fail-closed. No adapter or claim
+        # database is constructed on the default path.
+        execution_adapter = None
+        execution_claim_store = None
+        if (
+            os.getenv("ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT") == "1"
+            or os.getenv("ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION") == "1"
+        ):
+            try:
+                from execution_dependency_runtime_factory_v0_1 import (
+                    load_execution_dependencies,
+                )
+                execution_adapter, execution_claim_store = load_execution_dependencies(
+                    production_database_path=DB_PATH,
+                )
+            except (OSError, TypeError, ValueError) as exc:
+                print(f"EXECUTION_DEPENDENCIES_STATUS=BLOCKED:{exc}")
+            else:
+                print("EXECUTION_DEPENDENCIES_STATUS=INJECTED")
+
         final_attempt_boundary_status = verify_execution_boundary_integration(
-            canonical_order_requests
+            canonical_order_requests,
+            adapter=execution_adapter,
+            claim_store=execution_claim_store,
         )
         print(f"FINAL_EXECUTION_ATTEMPT_BOUNDARY={final_attempt_boundary_status}")
 
@@ -5452,11 +5474,11 @@ def main() -> int:
                 "OrderIntent creation/submission remains disabled."
             )
 
-        # No OrderIntent creation.
-        # No canonical order request creation.
-        # No exchange submission.
-        # No execution.
-        # No DB writes outside the explicit CP49 authoritative Birth boundary.
+        # Runtime order attempts remain disabled unless both explicit opt-in
+        # switches, valid standing-mandate evidence, and every technical gate pass.
+        # This code path does not itself enable execution or authorize an order.
+        # No DB writes outside the explicit CP49 authoritative Birth boundary
+        # plus the isolated claim-store initialization behind explicit opt-in.
 
         print("=" * 90)
         print("FULL DYNAMIC UNIVERSE STATIC/CONTROLLED ORCHESTRATION COMPLETE")
