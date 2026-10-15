@@ -5388,15 +5388,45 @@ def main() -> int:
         # ------------------------------------------------------------------
         assert_execution_disabled()
 
+        from runtime_order_intent_producer_v0_1 import (
+            produce_runtime_order_intents,
+        )
+        from management_mandate_record_source_v0_1 import (
+            load_authoritative_management_mandate,
+        )
         from canonical_request_runtime_producer_v0_1 import (
             produce_canonical_requests_from_runtime_outputs,
         )
+
+        try:
+            runtime_order_intents = produce_runtime_order_intents(
+                decision_snapshot=decision_snapshot,
+                risk_snapshot=risk_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+                opportunity_by_asset=opportunity_by_asset,
+                market_data_by_symbol=market_data_by_symbol,
+            )
+        except (TypeError, ValueError) as exc:
+            runtime_order_intents = {}
+            print(f"ORDER_INTENT_PRODUCER_STATUS=BLOCKED:{exc}")
+        else:
+            print(f"ORDER_INTENT_PRODUCER_STATUS=PRODUCED:{len(runtime_order_intents)}")
+
+        try:
+            management_observation = load_authoritative_management_mandate()
+        except (TypeError, ValueError) as exc:
+            management_observation = None
+            print(f"MANAGEMENT_MANDATE_SOURCE_STATUS=BLOCKED:{exc}")
+        else:
+            print("MANAGEMENT_MANDATE_SOURCE_STATUS=VALIDATED")
 
         try:
             canonical_order_requests = produce_canonical_requests_from_runtime_outputs(
                 decision_snapshot=decision_snapshot,
                 risk_snapshot=risk_snapshot,
                 trade_gate_snapshot=trade_gate_snapshot,
+                order_intents=runtime_order_intents,
+                management_observation=management_observation,
             )
         except (TypeError, ValueError) as exc:
             canonical_order_requests = {}
