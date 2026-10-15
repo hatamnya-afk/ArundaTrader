@@ -12,6 +12,7 @@ The selected adapter owns provider submission behavior.
 from __future__ import annotations
 
 from typing import Any, Mapping
+from uuid import uuid4
 
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
@@ -175,13 +176,16 @@ def attempt_prepared_order(
             error_message=f"Intent claim outcome={getattr(claim, 'outcome', 'INVALID')}; submission suppressed.",
         )
 
-    # Fence before crossing the provider boundary. A crash after this point
-    # never permits a second POST; conservative quarantine is preferable.
+    # Allocate a local attempt/evidence identity before crossing the provider
+    # boundary. A crash after the durable fence never permits a second POST.
+    trade_event_id = str(uuid4())
+    evidence_event_id = f"{trade_event_id}:provider-response"
     try:
         claim_store.transition(
             provider_namespace="ARUNDA-EXECUTION",
             intent_id=request.intent_id,
             status="SUBMISSION_OUTCOME_UNKNOWN",
+            trade_event_id=trade_event_id,
             decision_id=request.decision_id,
             detail_code="SUBMISSION_BOUNDARY_ENTERED_OUTCOME_PENDING",
         )
@@ -212,9 +216,63 @@ def attempt_prepared_order(
             error_message="Invalid response after the single allowed call; keep claim quarantined and reconcile read-only.",
         )
 
-    # Provider response is not permission to reopen the intent. A separate
-    # reconciliation step must bind authoritative order/outcome evidence.
-    return result
+    # Persist authoritative provider outcome when the adapter returned a
+    # complete, classified response. Unknown/malformed outcomes stay fenced.
+    try:
+        if result.accepted is True and result.exchange_order_id and result.status:
+            claim_store.transition(
+                provider_namespace="ARUNDA-EXECUTION",
+                intent_id=request.intent_id,
+                status="PROVIDER_ACCEPTED",
+                trade_event_id=trade_event_id,
+                decision_id=request.decision_id,
+                exchange_order_id=str(result.exchange_order_id),
+                provider_status=str(result.status),
+                evidence_event_id=evidence_event_id,
+                detail_code="PROVIDER_ACCEPTANCE_RESPONSE_CAPTURED",
+            )
+        elif result.status == "PROVIDER_REJECTED" and result.error_code:
+            claim_store.transition(
+                provider_namespace="ARUNDA-EXECUTION",
+                intent_id=request.intent_id,
+                status="PROVIDER_REJECTED",
+                trade_event_id=trade_event_id,
+                decision_id=request.decision_id,
+                provider_status=str(result.status),
+                evidence_event_id=evidence_event_id,
+                detail_code=str(result.error_code),
+            )
+    except Exception as exc:
+        # The provider call has already happened; never retry to repair evidence.
+        return CanonicalExecutionResult(
+            accepted=result.accepted,
+            exchange_order_id=result.exchange_order_id,
+            status="OUTCOME_EVIDENCE_PERSISTENCE_FAILED",
+            asset=result.asset,
+            direction=result.direction,
+            executed_quantity=result.executed_quantity,
+            executed_price=result.executed_price,
+            timestamp=result.timestamp,
+            adapter=result.adapter,
+            error_code="CLAIM_EVIDENCE_PERSISTENCE_FAILED",
+            error_message=f"Provider response returned but durable evidence update failed: {exc}",
+            trade_event_id=trade_event_id,
+        )
+
+    return CanonicalExecutionResult(
+        accepted=result.accepted,
+        exchange_order_id=result.exchange_order_id,
+        status=result.status,
+        asset=result.asset,
+        direction=result.direction,
+        executed_quantity=result.executed_quantity,
+        executed_price=result.executed_price,
+        timestamp=result.timestamp,
+        adapter=result.adapter,
+        error_code=result.error_code,
+        error_message=result.error_message,
+        trade_event_id=trade_event_id,
+    )
 
 
 __all__ = ["attempt_prepared_order"]
