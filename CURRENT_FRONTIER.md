@@ -1,3 +1,12 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — RECONCILIATION TRANSPORT TESTS
+>
+> - The Toobit HTTPS transport allowlist now includes the read-only Spot order query route `/api/v1/spot/order` and Futures order query route `/api/v2/futures/order`. The existing POST allowlist is unchanged.
+> - Added mocked-transport tests for both GET routes; no network call is made by these tests.
+> - Focused CI on commit `42f70801901ff81740cf883565758929e5276526`: 98 passed, 2 subtests passed ([run](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38804457253)). Phase-entry focused CI: 59 tests OK ([run](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38804457237)).
+> - These are offline results only. `EXECUTION_ENABLED = False`; no production runtime, provider order, cancellation, or production DB write occurred. Live execution readiness remains BLOCKED / NOT VERIFIED.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — FUTURES RECONCILIATION ROUTE + EXPANDED OFFLINE VERIFICATION
 >
 > - Static review found the read-only Futures reconciliation query was still using the legacy `/api/v1/futures/order` route while the adapter's current Futures order submission contract uses v2. Updated the query route to documented `GET /api/v2/futures/order`, preserving the exact `origClientOrderId` and settlement category inputs. Official Toobit v2 docs list the GET route and client-order-ID query parameter: https://api-docs.toobit.com/api/usdt-m-api-v2.
