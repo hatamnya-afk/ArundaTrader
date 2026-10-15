@@ -1,8 +1,5 @@
 from management_execution_authorization_v0_1 import (
-    AUTHORIZED,
-    DEFERRED,
-    DENIED,
-    STANDING_MANDATE,
+    AUTHORIZED, DEFERRED, DENIED, REVOCATION_CONTROLLED, STANDING_MANDATE,
     evaluate_management_authorization,
 )
 
@@ -34,16 +31,30 @@ def test_management_authorization_is_one_time_phase_entry_mandate():
     assert "attempt_id" not in result["authorization_observation"]
 
 
+def test_revocation_controlled_mandate_does_not_require_calendar_timestamps():
+    value = _base()
+    value.pop("issued_at")
+    value.pop("expires_at")
+    result = evaluate_management_authorization(value)
+    observation = result["authorization_observation"]
+    assert result["mandate_expiry_policy"] == REVOCATION_CONTROLLED
+    assert observation["mandate_expiry_policy"] == REVOCATION_CONTROLLED
+    assert "issued_at" not in observation
+    assert "expires_at" not in observation
+    assert observation["authorization_mode"] == STANDING_MANDATE
+
+
+def test_audit_issuance_timestamp_does_not_create_an_implicit_expiry():
+    value = _base()
+    value.pop("expires_at")
+    value["issued_at"] = "2020-01-01T00:00:00+00:00"
+    result = evaluate_management_authorization(value)
+    assert result["mandate_expiry_policy"] == REVOCATION_CONTROLLED
+    assert "expires_at" not in result["authorization_observation"]
+
+
 def test_management_boundary_rejects_trade_scoped_fields():
-    for field in (
-        "attempt_id",
-        "asset",
-        "direction",
-        "order_type",
-        "quantity",
-        "per_order_exposure",
-        "exposure",
-    ):
+    for field in ("attempt_id", "asset", "direction", "order_type", "quantity", "per_order_exposure", "exposure"):
         value = _base()
         value[field] = "TRADE-SCOPED"
         try:
@@ -55,16 +66,7 @@ def test_management_boundary_rejects_trade_scoped_fields():
 
 
 def test_management_boundary_rejects_trade_field_aliases_and_unknown_scope():
-    for field in (
-        "attemptId",
-        "trade_id",
-        "tradeId",
-        "symbol",
-        "side",
-        "orderType",
-        "qty",
-        "exposure_usd",
-    ):
+    for field in ("attemptId", "trade_id", "tradeId", "symbol", "side", "orderType", "qty", "exposure_usd"):
         value = _base()
         value[field] = "TRADE-SCOPED"
         try:
@@ -73,7 +75,6 @@ def test_management_boundary_rejects_trade_field_aliases_and_unknown_scope():
             assert str(exc) == "MANAGEMENT_TRADE_SCOPE_FIELDS_FORBIDDEN"
         else:
             raise AssertionError(f"{field} must never enter management authorization")
-
     value = _base()
     value["future_unclassified_field"] = "UNKNOWN"
     try:
@@ -109,7 +110,7 @@ def test_management_authorization_requires_real_production_environment():
         raise AssertionError("TEST environment must be rejected")
 
 
-def test_management_authorization_requires_future_expiry():
+def test_management_authorization_rejects_expired_explicit_calendar_mandate():
     value = _base()
     value["expires_at"] = "2020-01-01T00:00:00+00:00"
     try:
@@ -117,10 +118,10 @@ def test_management_authorization_requires_future_expiry():
     except ValueError as exc:
         assert str(exc) == "MANAGEMENT_MANDATE_EXPIRED"
     else:
-        raise AssertionError("expired mandate must be rejected")
+        raise AssertionError("explicitly expired mandate must be rejected")
 
 
-def test_management_authorization_requires_expiry_after_issuance():
+def test_management_authorization_requires_expiry_after_issuance_when_both_are_present():
     value = _base()
     value["issued_at"] = "2099-01-01T00:00:00+00:00"
     value["expires_at"] = "2099-01-01T00:00:00+00:00"
