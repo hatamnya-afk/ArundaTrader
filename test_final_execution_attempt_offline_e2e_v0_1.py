@@ -99,6 +99,13 @@ class FinalExecutionAttemptOfflineE2ETests(unittest.TestCase):
                     execution_ready_package=context["execution_ready_package"],
                     request=request,
                     authorization_observation=context["authorization_observation"],
+                    mandate_status_observation={
+                        "mandate_id": context["authorization_observation"]["mandate_id"],
+                        "status": "ACTIVE", "source": "UNIT_TEST_MANAGEMENT_REGISTRY",
+                        "record_id": "unit-e2e-status-001",
+                        "observed_at": now.isoformat(), "max_age_seconds": 60,
+                        "freshness_policy_id": "unit-test-freshness-v1",
+                    },
                     adapter=adapter, venue="SPOT",
                     execution_instrument=instrument, claim_store=store,
                 )
