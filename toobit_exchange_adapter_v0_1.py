@@ -1,15 +1,9 @@
-"""ARUNDA TRADER — TOOBIT EXCHANGE ADAPTER v0.1
+"""ARUNDA TRADER — TOOBIT EXCHANGE ADAPTER v0.1.
 
-Phase B / Toobit Binding.
-
-This adapter is intentionally READ-ONLY at the current checkpoint.
-It exposes the provider-native read surface required by the existing
-CP46-C / CP46-D preflight contracts and contains NO order, cancel,
-withdrawal, or database-write operation.
-
-Transport is injected so the adapter boundary can be verified without
-calling Toobit. A live transport may be supplied only at the later
-authorized controlled-test gate.
+Provider-specific read surface plus explicitly opt-in order submission.
+Submission defaults OFF, requires injected transport and credentials, uses
+one signed POST without retries, and strictly validates provider response
+identity. Cancellation and withdrawal remain unsupported.
 
 Toobit's documented REST base is https://api.toobit.com.
 """
