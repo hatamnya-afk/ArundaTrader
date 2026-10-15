@@ -78,7 +78,12 @@ class ToobitExchangeAdapter:
             constraint_read=True,
             account_read=True,
             order_state_read=True,
-            order_submission=False,
+            order_submission=(
+                self._order_submission_enabled
+                and self._transport is not None
+                and bool(self._api_key)
+                and bool(self._secret_key)
+            ),
             order_cancellation=False,
         )
 
@@ -89,11 +94,14 @@ class ToobitExchangeAdapter:
         api_key: Optional[str] = None,
         secret_key: Optional[str] = None,
         recv_window: int = DEFAULT_RECV_WINDOW,
+        enable_order_submission: bool = False,
     ) -> None:
         self._transport = transport
         self._api_key = api_key or os.getenv("TOOBIT_API_KEY")
         self._secret_key = secret_key or os.getenv("TOOBIT_SECRET_KEY") or os.getenv("TOOBIT_API_SECRET")
         self._recv_window = int(recv_window)
+        # Submission is opt-in and remains off for every existing caller.
+        self._order_submission_enabled = enable_order_submission is True
 
     def _call(
         self,
@@ -751,7 +759,7 @@ class ToobitExchangeAdapter:
                     "side": "BUY" if request.direction == "LONG" else "SELL",
                     "positionSide": request.direction,
                     "type": request.order_type,
-                    "newClientOrderId": request.intent_id,
+                    "newClientOrderId": self._stable_client_order_id(request.intent_id),
                     "quantity": _format_provider_quantity(provider_quantity),
                     "category": str(
                         execution_instrument.settlement_asset or "USDT"
@@ -764,6 +772,7 @@ class ToobitExchangeAdapter:
                     adapter_name=adapter_name,
                     venue=normalized_venue,
                     request=payload,
+                    client_order_id=payload["newClientOrderId"],
                 )
 
             row = self.trading_constraints(request.asset)
@@ -817,7 +826,7 @@ class ToobitExchangeAdapter:
                 "symbol": symbol,
                 "side": "BUY" if request.direction == "LONG" else "SELL",
                 "type": request.order_type,
-                "newClientOrderId": request.intent_id,
+                "newClientOrderId": self._stable_client_order_id(request.intent_id),
                 "quantity": _format_provider_quantity(provider_quantity),
             }
 
@@ -827,6 +836,7 @@ class ToobitExchangeAdapter:
                 adapter_name=adapter_name,
                 venue=normalized_venue,
                 request=payload,
+                client_order_id=payload["newClientOrderId"],
             )
         except (InvalidOperation, ValueError, TypeError) as exc:
             return AdapterOrderPreparation(
@@ -843,37 +853,126 @@ class ToobitExchangeAdapter:
                 venue=normalized_venue,
             )
 
+    @staticmethod
+    def _stable_client_order_id(intent_id: str) -> str:
+        # Provider-facing identity is deterministic, bounded, and opaque to Core.
+        digest = hashlib.sha256(("ARUNDA-EXECUTION:" + intent_id).encode("utf-8")).hexdigest()
+        return "A" + digest[:31]
+
     def submit_prepared_order(
         self,
         preparation: AdapterOrderPreparation,
         *,
         canonical_request: CanonicalOrderRequest,
     ) -> CanonicalExecutionResult:
-        del preparation
-        return CanonicalExecutionResult(
-            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
-            asset=canonical_request.asset, direction=canonical_request.direction,
-            executed_quantity=None, executed_price=None, timestamp=None,
-            adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
-        )
+        if not self.capabilities().order_submission:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="ORDER_SUBMISSION_NOT_ENABLED",
+                error_message="Submission requires explicit opt-in, injected transport, and credentials.",
+            )
+        if not isinstance(preparation, AdapterOrderPreparation) or not preparation.ready:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PREPARED_ORDER_INVALID",
+                error_message="A ready adapter-owned preparation is required.",
+            )
+        payload = preparation.request
+        if not isinstance(payload, dict) or preparation.client_order_id != payload.get("newClientOrderId"):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="PREPARED_ORDER_IDENTITY_INVALID",
+                error_message="Prepared client-order identity does not match the provider payload.",
+            )
+        if preparation.venue not in {"SPOT", "FUTURES"}:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="VENUE_INVALID",
+                error_message="Unsupported venue.",
+            )
+
+        path = "/api/v1/spot/order" if preparation.venue == "SPOT" else "/api/v2/futures/order"
+        try:
+            raw = self._call("POST", path, params=payload, signed=True)
+        except Exception as exc:
+            # A transport exception after crossing POST is ambiguous: never retry here.
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="SUBMISSION_OUTCOME_UNKNOWN",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="SUBMISSION_OUTCOME_UNKNOWN",
+                error_message=f"Provider POST outcome requires reconciliation: {exc}",
+            )
+
+        if isinstance(raw, dict) and raw.get("code") not in (None, 0, 200, "0", "200"):
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="PROVIDER_REJECTED",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code=f"TOOBIT_PROVIDER_REJECTED:{raw.get('code')}",
+                error_message=str(raw.get("msg", "Provider rejected order.")),
+            )
+        try:
+            data = self._unwrap(raw)
+            if not isinstance(data, dict):
+                raise ValueError("PROVIDER_ORDER_RESPONSE_INVALID")
+            order_id = str(data.get("orderId", "")).strip()
+            client_id = str(data.get("clientOrderId", "")).strip()
+            symbol = str(data.get("symbol", "")).strip().upper()
+            status = str(data.get("status", "")).strip().upper()
+            if not order_id or not client_id or not status:
+                raise ValueError("PROVIDER_ORDER_RESPONSE_INCOMPLETE")
+            if client_id != preparation.client_order_id:
+                raise ValueError("PROVIDER_CLIENT_ORDER_ID_MISMATCH")
+            expected_symbol = str(payload.get("symbol", "")).strip().upper()
+            if symbol != expected_symbol:
+                raise ValueError("PROVIDER_SYMBOL_MISMATCH")
+            executed_quantity = data.get("executedQty")
+            executed_price = data.get("avgPrice")
+            return CanonicalExecutionResult(
+                accepted=True,
+                exchange_order_id=order_id,
+                status=status,
+                asset=canonical_request.asset,
+                direction=canonical_request.direction,
+                executed_quantity=executed_quantity,
+                executed_price=executed_price,
+                timestamp=str(data.get("time") or data.get("transactTime") or data.get("updateTime") or "") or None,
+                adapter=self.name,
+                error_code=None,
+                error_message=None,
+            )
+        except Exception as exc:
+            return CanonicalExecutionResult(
+                accepted=False, exchange_order_id=None, status="SUBMISSION_OUTCOME_UNKNOWN",
+                asset=canonical_request.asset, direction=canonical_request.direction,
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter=self.name, error_code="SUBMISSION_OUTCOME_UNKNOWN",
+                error_message=f"Provider response could not be authoritatively reconciled: {exc}",
+            )
 
     def submit_order(self, request: Any) -> CanonicalExecutionResult:
-        del request
         return CanonicalExecutionResult(
             accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
-            asset=None, direction=None, executed_quantity=None,
-            executed_price=None, timestamp=None, adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
+            asset=getattr(request, "asset", None), direction=getattr(request, "direction", None),
+            executed_quantity=None, executed_price=None, timestamp=None,
+            adapter=self.name, error_code="PREPARED_ORDER_REQUIRED",
+            error_message="Direct submit is forbidden; prepare through the canonical adapter boundary first.",
         )
 
     def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
         del args, kwargs
         return ToobitAdapterResult(
-            False,
-            "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
+            self.capabilities().order_submission,
+            "READY" if self.capabilities().order_submission else "ORDER_SUBMISSION_NOT_ENABLED",
         )
 
     def cancel_order(self, *, asset: str, exchange_order_id: str) -> CanonicalExecutionResult:
