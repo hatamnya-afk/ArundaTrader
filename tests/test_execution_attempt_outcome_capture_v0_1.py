@@ -162,3 +162,40 @@ def test_final_attempt_boundary_identity_flows_into_outcome_capture(tmp_path, mo
     assert row["trade_event_id"] == outcome.execution_result.trade_event_id
     assert row["decision_id"] == "DEC-1"
     assert row["fill_inferred"] is False
+
+
+def test_submission_unknown_without_provider_timestamp_is_persisted_with_local_capture_time(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    outcome = capture_execution_attempt_outcome(
+        request=request(),
+        result=result(
+            accepted=False, exchange_order_id=None, status="SUBMISSION_UNKNOWN",
+            timestamp=None, executed_quantity=None, executed_price=None,
+            error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+        ),
+        stream_path=path,
+    )
+    assert outcome.capture_state == "PERSISTED"
+    row = json.loads(path.read_text(encoding="utf-8").strip())
+    assert row["trade_event_id"] == "TE-1"
+    assert row["decision_id"] == "DEC-1"
+    assert row["client_order_id"] == "INT-1"
+    assert row["provider_status"] == "SUBMISSION_UNKNOWN"
+    assert row["outcome_state"] == "UNKNOWN"
+    assert row["observed_at"] is None
+    assert row["provider_timestamp_known"] is False
+    assert row["captured_at"]
+    assert row["executed_quantity"] is None
+    assert row["executed_price"] is None
+    assert row["fill_inferred"] is False
+
+
+def test_persistence_failure_is_reported_explicitly(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    path.mkdir()
+    outcome = capture_execution_attempt_outcome(
+        request=request(), result=result(), stream_path=path
+    )
+    assert outcome.capture_state == "PERSISTENCE_FAILED"
+    assert outcome.reason.startswith("IsADirectoryError:")
+    assert path.is_dir()
