@@ -1,0 +1,27 @@
+{
+  "management_observation": {
+    "decision": "AUTHORIZED",
+    "mandate_id": "MANAGEMENT_PHASE_ENTRY_DECISION_20261012",
+    "authorized_by": "Project owner / Management",
+    "authorization_source": "MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md",
+    "environment": "REAL_PRODUCTION",
+    "provider": "TOOBIT",
+    "capital_policy": "ZERO_INITIAL_CAPITAL",
+    "allowed_markets": [
+      "SPOT",
+      "FUTURES"
+    ],
+    "evidence_required_before": [
+      "Current execution-ready package and readiness validation",
+      "Active durable standing-mandate lifecycle",
+      "Authoritative provider instrument and constraints",
+      "Fail-closed ambiguous submission recovery"
+    ],
+    "evidence_required_after": [
+      "Exact provider order outcome",
+      "Acceptance and fill represented as distinct states",
+      "Append-only execution outcome evidence",
+      "No blind retry after an ambiguous submission"
+    ]
+  }
+}
