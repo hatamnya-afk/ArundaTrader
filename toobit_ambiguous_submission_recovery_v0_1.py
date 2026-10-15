@@ -47,6 +47,24 @@ def recover_ambiguous_toobit_submission(
             "reason": "CANONICAL_ORDER_REQUEST_INVALID",
             "safe_to_retry": False,
         }
+    local_observed_at = observed_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    try:
+        parsed_observed_at = datetime.fromisoformat(local_observed_at.strip().replace("Z", "+00:00"))
+    except (AttributeError, ValueError):
+        return {
+            "reconciliation_state": INVALID_OBSERVATION,
+            "capture_state": "NOT_CAPTURED",
+            "reason": "LOCAL_OBSERVATION_TIMESTAMP_INVALID",
+            "safe_to_retry": False,
+        }
+    if parsed_observed_at.tzinfo is None or parsed_observed_at.utcoffset() is None:
+        return {
+            "reconciliation_state": INVALID_OBSERVATION,
+            "capture_state": "NOT_CAPTURED",
+            "reason": "LOCAL_OBSERVATION_TIMESTAMP_MUST_BE_TIMEZONE_AWARE",
+            "safe_to_retry": False,
+        }
+
     client_order_id = request.intent_id
     if not isinstance(client_order_id, str) or not client_order_id.strip():
         return {
@@ -155,7 +173,6 @@ def recover_ambiguous_toobit_submission(
             "safe_to_retry": False,
         }
 
-    local_observed_at = observed_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     return capture_reconciled_toobit_outcome(
         request=request,
         reconciliation=reconciliation,
