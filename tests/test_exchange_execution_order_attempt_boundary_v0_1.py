@@ -86,6 +86,7 @@ def test_attempt_boundary_overwrites_provider_attempt_identity(monkeypatch):
     assert observed.trade_event_id.startswith("TE-")
     assert observed.trade_event_id != "PROVIDER-FORGED"
     assert len(observed.trade_event_id) == len("TE-") + 32
+    assert observed.trade_event_id[3:].isalnum()
 
 
 def test_ambiguous_adapter_exception_retains_boundary_attempt_identity(monkeypatch):
