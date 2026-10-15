@@ -26,6 +26,7 @@ from exchange_execution_contract import (
     validate_order_request,
 )
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
+from mandate_revocation_contract_v0_1 import evaluate_mandate_revocation_observation
 from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
 
@@ -35,6 +36,7 @@ def attempt_prepared_order(
     request: CanonicalOrderRequest,
     readiness_observation: Mapping[str, Any],
     authorization_observation: Mapping[str, Any],
+    mandate_status_observation: Mapping[str, Any] | None = None,
     adapter: Any,
     venue: str,
     execution_instrument: Any,
@@ -79,6 +81,22 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code="GLOBAL_EXECUTION_SAFETY_GATE_INVALID",
             error_message="Global execution/write safety contract could not be verified.",
+        )
+
+    # A standing mandate without a fresh authoritative status observation
+    # cannot be treated as active. The source and freshness policy are supplied
+    # by management runtime wiring; this boundary never fabricates them.
+    try:
+        evaluate_mandate_revocation_observation(
+            mandate=authorization_observation,
+            observation=mandate_status_observation,
+        )
+    except ValueError as exc:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code=str(exc),
+            error_message=f"Standing-mandate status verification failed closed: {exc}.",
         )
 
     contract_valid, contract_reason = validate_adapter_contract(adapter)
