@@ -11,7 +11,14 @@
 
 ## CURRENT TECHNICAL FRONTIER
 **FINAL REAL-ORDER GATE — OPEN / NOT VERIFIED.**
-The management decision does not itself authorize a live submission. Static inspection has found unresolved technical prerequisites: the current Toobit adapter advertises order submission as disabled and has no verified submit path; the active mandate needs an explicit valid expiry; Toobit client-order-ID constraints and ambiguous recovery semantics remain unverified on Draft PR #31. **Trade/order outcome capture remains NOT VERIFIED.**
+Management phase-entry authorization is recorded, but it does not authorize a live submission by itself. The operational Toobit adapter remains submission-disabled. The standing mandate still lacks a verified timezone-aware issuance and expiry; official provider documentation still leaves client-order-ID constraints and ambiguous POST/recovery semantics unresolved. Outcome capture/reconciliation is offline-tested on isolated PR #38 only and is not operationally wired; no real outcome evidence exists.
+
+## PR #38 candidate evidence — 2026-10-15 (isolated; not operational promotion)
+- Candidate branch: `feature/execution-outcome-evidence-contract-20261015`; current reviewed commit: `ed34ec0f5c31a82809ec7e1237bb239a6bd33196`; PR #38 targets `operational-main-20261007` and remains open/unmerged.
+- Built on this candidate: append-only outcome capture, fail-closed ambiguous-submission classification, exact client-ID read-only lookup for Spot `GET /api/v1/spot/order` and Futures `GET /api/v2/futures/order`, exact client-ID/symbol validation, and a bridge that persists only an exact provider row. A failed lookup or missing row never makes retry safe.
+- Focused GitHub Actions CI passed **51 tests** on this candidate (run [38721082194](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721082194); duplicate event run [38721075314](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721075314)). These are fake-transport/offline tests, not live Toobit verification.
+- **Still BLOCKED / NOT VERIFIED:** operational branch's provider adapter remains submission-disabled; the standing mandate has no evidenced timezone-aware `issued_at` and `expires_at`; official docs do not establish client-ID length/charset, reuse/uniqueness after terminal orders, duplicate-POST semantics, or lookup consistency/retention/exhaustiveness; the candidate recovery path is not wired to production runtime and no live outcome evidence exists.
+- Safety remains unchanged: no production runtime, provider write, order, cancellation, withdrawal, or database mutation. Keep `safe_to_retry=false`; do not merge PR #38 or claim real-order readiness from this CI.
 
 ## GLOBAL SELECTION QUALITY LOOP — 2026-10-12
 - **Code state: BUILT / FOCUSED CI PASS (16 tests; run 38266864429, commit `9af0c20ec4b46891ead075a11b4e1a83401ecb73`).** The normal pipeline emits provider-neutral selection anchors, follows later real-market observations, and reports aggregated quality metrics; independent of Toobit listing and order submission.
