@@ -105,6 +105,43 @@ def test_same_observation_identity_with_conflicting_payload_fails_closed(tmp_pat
         append_execution_outcome_record(conflict, stream_path=path)
 
 
+def test_ambiguous_attempt_event_is_not_misclassified_as_provider_response():
+    record = make_record(
+        source_kind="ATTEMPT_EVENT",
+        provider_status="SUBMISSION_UNKNOWN",
+        observed_at="2026-10-15T08:00:00Z",
+        exchange_order_id=None,
+        executed_quantity=None,
+        executed_price=None,
+        attempt_error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+    )
+    assert record["event_type"] == "EXECUTION_ATTEMPT_OUTCOME_OBSERVED"
+    assert record["source_kind"] == "ATTEMPT_EVENT"
+    assert record["outcome_state"] == "SUBMISSION_UNKNOWN"
+    assert record["outcome_reason"] == "POST_OUTCOME_AMBIGUOUS_RECONCILIATION_REQUIRED_NO_RETRY"
+    assert record["observed_at_source"] == "LOCAL_CAPTURE_CLOCK"
+    assert record["provider_timestamp"] is None
+    assert record["attempt_error_code"] == "PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS"
+    assert record["exchange_order_id"] is None
+    assert record["executed_quantity"] is None
+    assert record["executed_price"] is None
+    assert record["fill_inferred"] is False
+
+
+def test_ambiguous_submission_cannot_be_mislabeled_as_provider_response():
+    with pytest.raises(ValueError, match="AMBIGUOUS_SUBMISSION_MUST_BE_ATTEMPT_EVENT"):
+        make_record(source_kind="PROVIDER_RESPONSE", provider_status="SUBMISSION_UNKNOWN")
+
+
+def test_attempt_event_cannot_claim_provider_fill_facts():
+    with pytest.raises(ValueError, match="ATTEMPT_EVENT_CANNOT_CLAIM_PROVIDER_EXECUTION_FACTS"):
+        make_record(
+            source_kind="ATTEMPT_EVENT",
+            provider_status="SUBMISSION_UNKNOWN",
+            exchange_order_id="EX-1",
+        )
+
+
 def test_source_kind_is_constrained():
     with pytest.raises(ValueError, match="SOURCE_KIND_INVALID"):
         make_record(source_kind="TEST_FIXTURE")

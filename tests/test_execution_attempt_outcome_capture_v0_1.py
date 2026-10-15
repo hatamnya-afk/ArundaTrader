@@ -77,6 +77,58 @@ def test_fail_closed_boundary_result_is_not_misrepresented_as_provider_evidence(
     assert not (tmp_path / "outcomes.jsonl").exists()
 
 
+def test_ambiguous_submission_is_persisted_as_local_attempt_event_not_provider_response(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    ambiguous = result(
+        accepted=False,
+        exchange_order_id=None,
+        status="SUBMISSION_UNKNOWN",
+        executed_quantity=None,
+        executed_price=None,
+        timestamp=None,
+        error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+        error_message="simulated timeout; do not retry",
+    )
+    observed_at = "2026-10-15T08:02:03Z"
+    first = capture_execution_attempt_outcome(
+        request=request(), result=ambiguous, stream_path=path,
+        attempt_observed_at=observed_at,
+    )
+    second = capture_execution_attempt_outcome(
+        request=request(), result=ambiguous, stream_path=path,
+        attempt_observed_at=observed_at,
+    )
+
+    assert first.capture_state == "PERSISTED"
+    assert second.capture_state == "ALREADY_PERSISTED"
+    row = json.loads(path.read_text(encoding="utf-8").strip())
+    assert row["event_type"] == "EXECUTION_ATTEMPT_OUTCOME_OBSERVED"
+    assert row["source_kind"] == "ATTEMPT_EVENT"
+    assert row["provider_status"] == "SUBMISSION_UNKNOWN"
+    assert row["outcome_state"] == "SUBMISSION_UNKNOWN"
+    assert row["observed_at"] == observed_at
+    assert row["observed_at_source"] == "LOCAL_CAPTURE_CLOCK"
+    assert row["provider_timestamp"] is None
+    assert row["attempt_error_code"] == "PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS"
+    assert row["exchange_order_id"] is None
+    assert row["executed_quantity"] is None
+    assert row["executed_price"] is None
+    assert row["fill_inferred"] is False
+    assert len(path.read_text(encoding="utf-8").splitlines()) == 1
+
+
+def test_missing_provider_timestamp_is_still_blocked_for_non_ambiguous_result(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    outcome = capture_execution_attempt_outcome(
+        request=request(),
+        result=result(timestamp=None),
+        stream_path=path,
+    )
+    assert outcome.capture_state == "NOT_CAPTURED"
+    assert outcome.reason == "PROVIDER_RESPONSE_TIMESTAMP_MISSING"
+    assert not path.exists()
+
+
 def test_missing_authoritative_decision_id_is_not_persisted(tmp_path):
     req = request()
     req = CanonicalOrderRequest(
@@ -111,6 +163,69 @@ def test_final_attempt_composition_preserves_fail_closed_and_does_not_fake_provi
     assert outcome.capture_state == "NOT_CAPTURED"
     assert outcome.reason == "NO_PROVIDER_RESPONSE_FAIL_CLOSED_BOUNDARY_RESULT"
     assert not path.exists()
+
+
+def test_final_attempt_composition_persists_ambiguous_boundary_identity(tmp_path, monkeypatch):
+    from exchange_execution_adapter_contract_v0_1 import (
+        AdapterOrderPreparation, ExchangeAdapterCapabilities,
+    )
+    import exchange_execution_order_attempt_boundary_v0_1 as boundary
+
+    class TimeoutAdapter:
+        adapter_name = "FAKE"
+        def capabilities(self):
+            return ExchangeAdapterCapabilities(True, True, True, True, True, True, False)
+        def prepare_order(self, request, *, venue, execution_instrument):
+            return AdapterOrderPreparation(True, "READY", "FAKE", venue, {"symbol": "BTCUSDT"})
+        def submit_prepared_order(self, preparation, *, canonical_request):
+            return result(
+                accepted=False, exchange_order_id=None, status="SUBMISSION_UNKNOWN",
+                executed_quantity=None, executed_price=None, timestamp=None,
+                adapter="FAKE", error_code="PROVIDER_SUBMISSION_OUTCOME_AMBIGUOUS",
+                error_message="simulated timeout; do not retry",
+                trade_event_id="PROVIDER-CANNOT-OWN-ID",
+            )
+        def submit_order(self, request):
+            raise AssertionError("direct submission bypass")
+        def cancel_order(self, *, asset, exchange_order_id):
+            raise AssertionError("cancel must not be called")
+
+    monkeypatch.setattr(boundary, "evaluate_execution_attempt_readiness", lambda **kwargs: {
+        "readiness_state": "READY", "readiness_validation": "VALID",
+        "asset": "BTC", "direction": "LONG", "quantity": "0.01",
+        "entry_price": None, "notional": 600, "provider_binding": "DEFERRED",
+        "execution_authorized": False,
+    })
+    monkeypatch.setattr(boundary, "evaluate_execution_authorization", lambda *args: {
+        "authorization_state": "AUTHORIZED",
+    })
+    monkeypatch.setattr(boundary, "prepare_order_for_adapter", lambda **kwargs:
+        AdapterOrderPreparation(True, "READY", "FAKE", "SPOT", {"symbol": "BTCUSDT"}))
+
+    path = tmp_path / "outcomes.jsonl"
+    outcome = run_final_execution_attempt_with_outcome_capture(
+        execution_ready_package={"package_state": "EXECUTION_READY_PACKAGE"},
+        request=request(),
+        authorization_observation={"mandate_id": "TEST-ONLY"},
+        adapter=TimeoutAdapter(),
+        venue="SPOT",
+        execution_instrument=None,
+        stream_path=path,
+    )
+
+    row = json.loads(path.read_text(encoding="utf-8").strip())
+    assert outcome.execution_result.status == "SUBMISSION_UNKNOWN"
+    assert outcome.execution_result.trade_event_id.startswith("TE-")
+    assert outcome.execution_result.trade_event_id != "PROVIDER-CANNOT-OWN-ID"
+    assert outcome.capture_state == "PERSISTED"
+    assert row["trade_event_id"] == outcome.execution_result.trade_event_id
+    assert row["decision_id"] == "DEC-1"
+    assert row["source_kind"] == "ATTEMPT_EVENT"
+    assert row["provider_timestamp"] is None
+    assert row["outcome_state"] == "SUBMISSION_UNKNOWN"
+    assert row["executed_quantity"] is None
+    assert row["executed_price"] is None
+    assert row["fill_inferred"] is False
 
 
 def test_final_attempt_boundary_identity_flows_into_outcome_capture(tmp_path, monkeypatch):

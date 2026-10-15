@@ -19,7 +19,7 @@ from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrder
 
 SCHEMA = "arunda.execution_outcome_evidence"
 SCHEMA_VERSION = "1.0"
-SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP"})
+SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP", "ATTEMPT_EVENT"})
 
 _OPEN_STATUSES = frozenset({"NEW", "OPEN", "ACCEPTED", "PENDING"})
 _PARTIAL_STATUSES = frozenset({"PARTIALLY_FILLED", "PARTIAL_FILL"})
@@ -61,6 +61,8 @@ def _optional_decimal(value: Any, field: str, *, allow_zero: bool = False) -> st
 
 
 def _classify(status: str, quantity: str | None, price: str | None) -> tuple[str, str]:
+    if status == "SUBMISSION_UNKNOWN":
+        return "SUBMISSION_UNKNOWN", "POST_OUTCOME_AMBIGUOUS_RECONCILIATION_REQUIRED_NO_RETRY"
     if status in _OPEN_STATUSES:
         return "OPEN", "PROVIDER_STATUS_ONLY_NO_FILL_INFERRED"
     if status in _FILLED_STATUSES:
@@ -94,8 +96,9 @@ def build_execution_outcome_record(
     exchange_order_id: str | None = None,
     executed_quantity: Any = None,
     executed_price: Any = None,
+    attempt_error_code: str | None = None,
 ) -> dict[str, Any]:
-    """Normalize one observed provider fact without inventing missing outcomes."""
+    """Normalize provider facts or a separately typed local attempt event."""
     provider = _required_text(provider, "provider").upper()
     decision_id = _required_text(decision_id, "decision_id")
     intent_id = _required_text(intent_id, "intent_id")
@@ -106,6 +109,14 @@ def build_execution_outcome_record(
     if source_kind not in SOURCE_KINDS:
         raise ValueError("SOURCE_KIND_INVALID")
     status = _required_text(provider_status, "provider_status").upper()
+    if status == "SUBMISSION_UNKNOWN" and source_kind != "ATTEMPT_EVENT":
+        raise ValueError("AMBIGUOUS_SUBMISSION_MUST_BE_ATTEMPT_EVENT")
+    if source_kind == "ATTEMPT_EVENT" and status != "SUBMISSION_UNKNOWN":
+        raise ValueError("ATTEMPT_EVENT_STATUS_INVALID")
+    if source_kind == "ATTEMPT_EVENT" and any(
+        value is not None for value in (exchange_order_id, executed_quantity, executed_price)
+    ):
+        raise ValueError("ATTEMPT_EVENT_CANNOT_CLAIM_PROVIDER_EXECUTION_FACTS")
     timestamp = _timestamp_utc(observed_at)
     quantity = _optional_decimal(executed_quantity, "executed_quantity", allow_zero=True)
     price = _optional_decimal(executed_price, "executed_price")
@@ -114,10 +125,15 @@ def build_execution_outcome_record(
 
     identity = f"{provider}|{trade_event_id}|{source_kind}|{source_observation_id}"
     event_id = "OUT-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()
-    return {
+    event_type = (
+        "EXECUTION_ATTEMPT_OUTCOME_OBSERVED"
+        if source_kind == "ATTEMPT_EVENT"
+        else "PROVIDER_OUTCOME_OBSERVED"
+    )
+    record = {
         "schema": SCHEMA,
         "schema_version": SCHEMA_VERSION,
-        "event_type": "PROVIDER_OUTCOME_OBSERVED",
+        "event_type": event_type,
         "event_id": event_id,
         "provider": provider,
         "decision_id": decision_id,
@@ -128,6 +144,7 @@ def build_execution_outcome_record(
         "source_observation_id": source_observation_id,
         "source_kind": source_kind,
         "observed_at": timestamp,
+        "observed_at_source": "LOCAL_CAPTURE_CLOCK" if source_kind == "ATTEMPT_EVENT" else "PROVIDER_OR_LOOKUP_OBSERVATION",
         "provider_status": status,
         "outcome_state": outcome_state,
         "outcome_reason": reason,
@@ -135,6 +152,12 @@ def build_execution_outcome_record(
         "executed_price": price,
         "fill_inferred": False,
     }
+    if source_kind == "ATTEMPT_EVENT":
+        record["provider_timestamp"] = None
+        record["attempt_error_code"] = (
+            None if attempt_error_code is None else _required_text(attempt_error_code, "attempt_error_code")
+        )
+    return record
 
 
 def build_outcome_record_from_canonical_result(
