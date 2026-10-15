@@ -29,7 +29,7 @@ jobs:
             execution_authorization_boundary_v0_1.py \
             final_execution_attempt_contract_v0_1.py \
             exchange_execution_contract.py \
-            arunda_pipeline.py
+            runtime_order_intent_producer_v0_1.py \\\n            management_mandate_record_source_v0_1.py \\\n            arunda_pipeline.py
       - name: Run focused contract tests
         run: |
           python -m unittest -v \
