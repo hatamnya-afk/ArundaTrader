@@ -4,7 +4,12 @@ import json
 
 import pytest
 
+from exchange_execution_contract import (
+    CanonicalExecutionResult, CanonicalOrderRequest,
+    QUANTITY_UNIT_BASE_ASSET, QUANTITY_SOURCE_RISK_POSITION,
+)
 from execution_outcome_evidence_contract_v0_1 import (
+    build_outcome_record_from_canonical_result,
     append_execution_outcome_record,
     build_execution_outcome_record,
 )
@@ -103,3 +108,66 @@ def test_same_observation_identity_with_conflicting_payload_fails_closed(tmp_pat
 def test_source_kind_is_constrained():
     with pytest.raises(ValueError, match="SOURCE_KIND_INVALID"):
         make_record(source_kind="TEST_FIXTURE")
+
+
+
+def test_canonical_result_is_bound_to_authoritative_request_identity():
+    request = CanonicalOrderRequest(
+        asset="BTC",
+        direction="LONG",
+        order_type="MARKET",
+        quantity="0.01",
+        quantity_unit=QUANTITY_UNIT_BASE_ASSET,
+        quantity_source=QUANTITY_SOURCE_RISK_POSITION,
+        entry_price=None,
+        reference_price=None,
+        intent_id="INT-1",
+        snapshot_id="SNAP-1",
+        timestamp="2026-10-15T08:00:00Z",
+        decision_id="DEC-1",
+    )
+    result = CanonicalExecutionResult(
+        accepted=True,
+        exchange_order_id="EX-1",
+        status="FILLED",
+        asset="BTC",
+        direction="LONG",
+        executed_quantity="0.01",
+        executed_price="60000",
+        timestamp="2026-10-15T08:01:00Z",
+        adapter="TOOBIT",
+        error_code=None,
+        error_message=None,
+        trade_event_id="TE-1",
+    )
+    record = build_outcome_record_from_canonical_result(
+        request=request,
+        result=result,
+        client_order_id="CID-1",
+        source_observation_id="OBS-RESULT-1",
+    )
+    assert record["decision_id"] == "DEC-1"
+    assert record["intent_id"] == "INT-1"
+    assert record["trade_event_id"] == "TE-1"
+    assert record["outcome_state"] == "FILLED"
+
+
+def test_canonical_result_asset_mismatch_rejected():
+    request = CanonicalOrderRequest(
+        asset="BTC", direction="LONG", order_type="MARKET", quantity="0.01",
+        quantity_unit=QUANTITY_UNIT_BASE_ASSET,
+        quantity_source=QUANTITY_SOURCE_RISK_POSITION,
+        entry_price=None, reference_price=None, intent_id="INT-1",
+        snapshot_id="SNAP-1", timestamp="2026-10-15T08:00:00Z", decision_id="DEC-1",
+    )
+    result = CanonicalExecutionResult(
+        accepted=True, exchange_order_id="EX-1", status="FILLED",
+        asset="ETH", direction="LONG", executed_quantity="0.01",
+        executed_price="60000", timestamp="2026-10-15T08:01:00Z",
+        adapter="TOOBIT", error_code=None, error_message=None, trade_event_id="TE-1",
+    )
+    with pytest.raises(ValueError, match="PROVIDER_RESULT_ASSET_MISMATCH"):
+        build_outcome_record_from_canonical_result(
+            request=request, result=result, client_order_id="CID-1",
+            source_observation_id="OBS-RESULT-2",
+        )
