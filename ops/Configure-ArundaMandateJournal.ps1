@@ -27,9 +27,20 @@ if (-not $directory) { throw 'JournalPath must have a parent directory.' }
 # A management-authorized ACTIVATE event must be persisted separately.
 if ($PSCmdlet.ShouldProcess($directory, 'Create protected journal directory and set ACL')) {
     New-Item -ItemType Directory -Path $directory -Force | Out-Null
-    & icacls.exe $directory /inheritance:r /grant:r 'SYSTEM:(OI)(CI)F' 'BUILTIN\Administrators:(OI)(CI)F' "$($ServiceIdentity):(OI)(CI)M"
+    $aclGrants = @('SYSTEM:(OI)(CI)F', 'BUILTIN\Administrators:(OI)(CI)F', "$($ServiceIdentity):(OI)(CI)M")
+    & icacls.exe $directory /inheritance:r /grant:r $aclGrants
     if ($LASTEXITCODE -ne 0) {
         throw "Failed to apply journal directory ACL (icacls exit $LASTEXITCODE)."
+    }
+
+    # Existing journal/lock files must not retain broader pre-existing ACLs.
+    foreach ($existingFile in @($JournalPath, "$JournalPath.lock")) {
+        if (Test-Path -LiteralPath $existingFile -PathType Leaf) {
+            & icacls.exe $existingFile /inheritance:r /grant:r 'SYSTEM:F' 'BUILTIN\Administrators:F' "$($ServiceIdentity):M"
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to apply file ACL to $existingFile (icacls exit $LASTEXITCODE)."
+            }
+        }
     }
 }
 
