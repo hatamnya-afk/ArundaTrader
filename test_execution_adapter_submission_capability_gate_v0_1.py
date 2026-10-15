@@ -1,5 +1,7 @@
 """Read-only adapters must be rejected before any durable intent claim."""
 
+import unittest
+
 from exchange_execution_adapter_contract_v0_1 import ExchangeAdapterCapabilities
 from exchange_execution_contract import CanonicalOrderRequest
 from exchange_execution_order_attempt_boundary_v0_1 import attempt_prepared_order
@@ -87,3 +89,12 @@ def test_read_only_adapter_is_blocked_before_claim_and_provider_call():
     assert adapter.submit_calls == 0
     assert claim_store.claim_calls == 0
     assert claim_store.transition_calls == 0
+
+
+class ReadOnlyAdapterGateTests(unittest.TestCase):
+    def test_read_only_adapter_is_blocked_before_claim_and_provider_call(self):
+        test_read_only_adapter_is_blocked_before_claim_and_provider_call()
+
+
+if __name__ == "__main__":
+    unittest.main()
