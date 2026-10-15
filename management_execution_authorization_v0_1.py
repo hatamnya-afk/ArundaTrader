@@ -222,6 +222,14 @@ def evaluate_management_phase_entry(
             "authorization_mode": STANDING_MANDATE,
             "authorization_id": mandate_id,
             "mandate_id": mandate_id,
+            "mandate_lifecycle_events": (
+                {
+                    "event_id": f"PHASE_ENTRY_ACTIVATE:{mandate_id}",
+                    "event_type": "ACTIVATE",
+                    "mandate_id": mandate_id,
+                    "authority": "MANAGEMENT",
+                },
+            ),
             "issued_at": issued_at.isoformat() if issued_at is not None else None,
             "expires_at": expires_at.isoformat() if expires_at is not None else None,
             "mandate_expiry_policy": (
