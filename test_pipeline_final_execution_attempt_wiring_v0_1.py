@@ -77,6 +77,25 @@ class FinalAttemptPipelineWiringTests(unittest.TestCase):
         self.assertIsNone(calls[0]["adapter"])
         self.assertIs(calls[0]["request"], record["request"])
 
+    def test_injected_adapter_and_claim_store_reach_final_contract(self):
+        verify, calls, Request, _ = _load_verifier()
+        adapter = object()
+        claim_store = object()
+        record = {
+            "request": Request(),
+            "execution_ready_package": {"source": "test fixture only"},
+            "authorization_observation": {"source": "test fixture only"},
+            "venue": "SPOT",
+            "execution_instrument": "BTC-USDT",
+        }
+        self.assertEqual(
+            verify({"BTC": record}, adapter=adapter, claim_store=claim_store),
+            "VERIFIED_BLOCKED_FINAL_ATTEMPT",
+        )
+        self.assertEqual(len(calls), 1)
+        self.assertIs(calls[0]["adapter"], adapter)
+        self.assertIs(calls[0]["claim_store"], claim_store)
+
     def test_main_invokes_verifier_and_verifier_calls_final_contract(self):
         tree = ast.parse(PIPELINE_PATH.read_text(encoding="utf-8-sig"))
         main = next(
