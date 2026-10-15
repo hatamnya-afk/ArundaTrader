@@ -11,6 +11,7 @@ standing management mandate.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from typing import Any
 
@@ -59,8 +60,22 @@ def evaluate_execution_attempt_readiness(
     if entry_price != request.entry_price:
         raise ValueError("READINESS_REQUEST_ENTRY_PRICE_MISMATCH")
 
-    if not isinstance(exposure, (int, float)) or isinstance(exposure, bool) or exposure <= 0:
+    if (
+        not isinstance(exposure, (int, float))
+        or isinstance(exposure, bool)
+        or not math.isfinite(float(exposure))
+        or float(exposure) <= 0
+    ):
         raise ValueError("READINESS_EXPOSURE_INVALID")
+
+    # With BASE_ASSET quantities, exposure must reconcile to quantity × entry.
+    # A policy-specific maximum is not invented here; it must come from an
+    # authoritative upstream risk/capital-policy source before it can be enforced.
+    expected_exposure = float(request.quantity) * float(request.entry_price)
+    if not math.isfinite(expected_exposure) or not math.isclose(
+        float(exposure), expected_exposure, rel_tol=1e-9, abs_tol=1e-9
+    ):
+        raise ValueError("READINESS_EXPOSURE_ARITHMETIC_MISMATCH")
 
     return {
         "readiness_state": READY,
