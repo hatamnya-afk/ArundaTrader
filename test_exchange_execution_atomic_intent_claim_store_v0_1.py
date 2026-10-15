@@ -2,6 +2,7 @@
 
 All storage is temporary and isolated; no production DB or provider is used.
 """
+import ast
 import tempfile
 import unittest
 from pathlib import Path
@@ -65,6 +66,27 @@ class DurableIntentClaimTests(unittest.TestCase):
             result = store.claim(provider_namespace="ARUNDA-EXECUTION",
                                  intent_id="INTENT-5", client_order_id="CLIENT-4")
             self.assertEqual(result.outcome, "CLIENT_ORDER_ID_COLLISION")
+
+
+    def test_attempt_boundary_has_one_submit_call_after_durable_claim_fence(self):
+        source = Path(__file__).with_name("exchange_execution_order_attempt_boundary_v0_1.py").read_text(encoding="utf-8")
+        tree = ast.parse(source)
+        function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "attempt_prepared_order")
+        submit_calls = [node for node in ast.walk(function) if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "submit_prepared_order"]
+        claim_calls = [node for node in ast.walk(function) if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "claim"]
+        fence_calls = [node for node in ast.walk(function) if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "transition"]
+        self.assertEqual(len(submit_calls), 1)
+        self.assertEqual(len(claim_calls), 1)
+        self.assertEqual(len(fence_calls), 1)
+        self.assertLess(claim_calls[0].lineno, submit_calls[0].lineno)
+        self.assertLess(fence_calls[0].lineno, submit_calls[0].lineno)
+
+    def test_attempt_boundary_requires_stable_client_id_and_claim_store(self):
+        source = Path(__file__).with_name("exchange_execution_order_attempt_boundary_v0_1.py").read_text(encoding="utf-8")
+        self.assertIn("DURABLE_INTENT_CLAIM_STORE_REQUIRED", source)
+        self.assertIn("STABLE_CLIENT_ORDER_ID_REQUIRED", source)
+        self.assertIn("INTENT_ALREADY_CLAIMED_NO_RESUBMIT", source)
+        self.assertIn("SUBMISSION_OUTCOME_UNKNOWN", source)
 
 
 if __name__ == "__main__":
