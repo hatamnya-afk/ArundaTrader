@@ -31,6 +31,10 @@ jobs:
             execution_authorization_boundary_v0_1.py \
             final_execution_attempt_contract_v0_1.py \
             exchange_execution_contract.py \
+            exchange_execution_adapter_contract_v0_1.py \
+            exchange_execution_atomic_intent_claim_store_v0_1.py \
+            exchange_execution_order_attempt_boundary_v0_1.py \
+            final_execution_attempt_contract_v0_1.py \
             arunda_pipeline.py
       - name: Run focused contract tests
         run: |
@@ -38,4 +42,5 @@ jobs:
             test_canonical_request_runtime_producer_v0_1.py \
             test_runtime_order_intent_and_mandate_sources_v0_1.py \
             test_execution_attempt_runtime_producers_v0_1.py \
-            test_pipeline_final_execution_attempt_wiring_v0_1.py
+            test_pipeline_final_execution_attempt_wiring_v0_1.py \
+            test_exchange_execution_atomic_intent_claim_store_v0_1.py
