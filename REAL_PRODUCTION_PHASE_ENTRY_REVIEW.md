@@ -1,3 +1,11 @@
+## STANDING-MANDATE POLICY UPDATE — 2026-10-15 (CANDIDATE BRANCH ONLY)
+
+- Management authorization dated 2026-10-12 is a one-time standing phase-entry decision; it does not require per-trade management approval.
+- A precise `issued_at` timestamp is optional audit metadata. The validator must not fabricate one when the decision record contains only a date/source.
+- `expires_at` is optional. No expiry duration was set by management, so the default is a non-expiring standing mandate. If an expiry is explicitly supplied, it must be timezone-aware, in the future, and later than `issued_at` when that timestamp is present.
+- The management validator and technical authorization boundary were updated on the isolated PR #38 feature branch, with focused tests added. This does NOT activate production execution, clear the final real-order gate, wire the candidate into the operational branch, or establish a persistent revocation registry.
+- **Still BLOCKED / NOT VERIFIED:** operational Toobit submission remains disabled; client-order-ID constraints, duplicate-POST semantics, lookup consistency/retention/exhaustiveness remain unresolved; candidate recovery is not production-wired and no live outcome evidence exists. Keep `safe_to_retry=false`; do not merge PR #38 or send an order based on this change alone.
+
 # REAL-PRODUCTION PHASE ENTRY REVIEW — v0.1
 
 ## Purpose
@@ -92,7 +100,7 @@ Scope: source inspection only. No production runtime, live order, provider write
 
 ### Confirmed
 1. Management phase-entry decision is recorded as AUTHORIZED in `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`.
-2. `management_execution_authorization_v0_1.py` emits a structured `authorization_observation` for an authorized standing mandate and requires timezone-aware `issued_at` and future `expires_at`.
+2. `management_execution_authorization_v0_1.py` emits a structured authorization observation. Precise `issued_at` is optional audit metadata; `expires_at` is optional for a standing mandate unless management explicitly chooses a timed mandate.
 3. `execution_authorization_boundary_v0_1.py` validates the active mandate, expiry, REAL_PRODUCTION environment, SPOT/FUTURES scope, and request venue. It does not itself submit orders.
 4. `execution_attempt_readiness_contract_v0_1.py` requires a valid canonical request and a validated execution-ready package, while preserving `execution_authorized=False` and `provider_binding=DEFERRED`.
 5. `exchange_execution_order_attempt_boundary_v0_1.py` would call `adapter.submit_prepared_order` after its gates pass. That makes adapter capability and the active gate evidence material prerequisites.
