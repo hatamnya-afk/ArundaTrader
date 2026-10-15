@@ -14,6 +14,7 @@ from __future__ import annotations
 from typing import Any, Mapping
 from uuid import uuid4
 
+import exchange_execution_contract as contract
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
     validate_adapter_contract,
@@ -54,6 +55,30 @@ def attempt_prepared_order(
             direction=getattr(request, "direction", None),
             error_code=reason,
             error_message=f"Canonical order request rejected: {reason}.",
+        )
+
+    # Global execution/write gates are mandatory at the final provider boundary.
+    # Defaults remain closed; this code never enables any flag.
+    try:
+        safety = contract.safety_contract()
+        required_flags = (
+            "EXECUTION_ENABLED",
+            "ORDER_SUBMISSION_ENABLED",
+            "EXCHANGE_WRITE_ENABLED",
+        )
+        if not isinstance(safety, dict) or any(safety.get(flag) is not True for flag in required_flags):
+            return blocked_execution_result(
+                asset=request.asset,
+                direction=request.direction,
+                error_code="GLOBAL_EXECUTION_SAFETY_GATE_CLOSED",
+                error_message="Global execution/write safety gates are not all enabled.",
+            )
+    except Exception:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code="GLOBAL_EXECUTION_SAFETY_GATE_INVALID",
+            error_message="Global execution/write safety contract could not be verified.",
         )
 
     contract_valid, contract_reason = validate_adapter_contract(adapter)
@@ -104,9 +129,14 @@ def attempt_prepared_order(
                 error_message=f"Execution-attempt readiness rejected: {exc}.",
             )
 
+    # Bind this technical authorization decision to this one invocation.
+    # The management mandate remains standing; the technical grant is attempt-scoped.
+    attempt_id = str(uuid4())
     try:
+        readiness_for_authorization = dict(readiness_observation)
+        readiness_for_authorization["attempt_id"] = attempt_id
         authorization = evaluate_execution_authorization(
-            readiness_observation,
+            readiness_for_authorization,
             authorization_observation,
         )
     except ValueError as exc:
@@ -115,6 +145,14 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code=str(exc),
             error_message=f"Explicit execution authorization rejected: {exc}.",
+        )
+
+    if authorization.get("attempt_id") != attempt_id:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code="AUTHORIZATION_ATTEMPT_ID_MISMATCH",
+            error_message="Technical authorization is not bound to this exact attempt.",
         )
 
     if authorization.get("authorization_state") != "AUTHORIZED":
