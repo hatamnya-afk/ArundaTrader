@@ -9,8 +9,13 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 from collections.abc import Mapping
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from management_execution_authorization_v0_1 import evaluate_management_phase_entry
 from standing_mandate_lifecycle_store_v0_1 import record_management_phase_entry
