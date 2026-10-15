@@ -51,6 +51,13 @@ def test_opt_in_spot_submit_sends_once_and_validates_provider_response():
     calls = []
     def transport(*, method, path, params, headers, base_url):
         calls.append((method, path, dict(params), dict(headers), base_url))
+        if method == "GET" and path == "/api/v1/exchangeInfo":
+            return {"symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{"filterType": "LOT_SIZE", "minQty": "0.00001",
+                             "maxQty": "100000", "stepSize": "0.00001"}],
+            }], "contracts": []}
         assert method == "POST"
         assert path == "/api/v1/spot/order"
         assert params["symbol"] == "BTCUSDT"
@@ -84,7 +91,7 @@ def test_opt_in_spot_submit_sends_once_and_validates_provider_response():
     assert result.accepted is True
     assert result.exchange_order_id == "order-123"
     assert result.status == "NEW"
-    assert len(calls) == 1
+    assert len([call for call in calls if call[0] == "POST"]) == 1
 
 
 def test_client_order_id_is_stable_for_same_canonical_intent():
@@ -100,6 +107,13 @@ def test_transport_exception_is_ambiguous_and_never_retried():
     calls = []
     def transport(**kwargs):
         calls.append(kwargs)
+        if kwargs["method"] == "GET" and kwargs["path"] == "/api/v1/exchangeInfo":
+            return {"symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{"filterType": "LOT_SIZE", "minQty": "0.00001",
+                             "maxQty": "100000", "stepSize": "0.00001"}],
+            }], "contracts": []}
         raise TimeoutError("fixture timeout after request boundary")
     adapter = ToobitExchangeAdapter(
         transport=transport, api_key="test-key", secret_key="test-secret",
@@ -111,11 +125,18 @@ def test_transport_exception_is_ambiguous_and_never_retried():
     assert result.accepted is False
     assert result.status == "SUBMISSION_OUTCOME_UNKNOWN"
     assert result.error_code == "SUBMISSION_OUTCOME_UNKNOWN"
-    assert len(calls) == 1
+    assert len([call for call in calls if call["method"] == "POST"]) == 1
 
 
 def test_response_identity_mismatch_is_not_reported_as_acceptance():
-    def transport(*, params, **kwargs):
+    def transport(*, method, path, params, **kwargs):
+        if method == "GET" and path == "/api/v1/exchangeInfo":
+            return {"symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{"filterType": "LOT_SIZE", "minQty": "0.00001",
+                             "maxQty": "100000", "stepSize": "0.00001"}],
+            }], "contracts": []}
         return {
             "symbol": "BTCUSDT", "orderId": "order-123",
             "clientOrderId": "different-client-id", "status": "NEW",
