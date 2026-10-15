@@ -173,7 +173,7 @@ Status: **EXECUTION PATH CODE VERIFIED / LIVE ATTEMPT BLOCKED**.
 - Adapter remains submission-OFF by default; runtime injection requires both `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1`, credentials, and an absolute separate `ARUNDA_EXECUTION_CLAIM_DB`.
 - The claim factory refuses to use the production trading database. Stable intent-derived client ID, atomic durable claim, pre-submit outcome-unknown fence, one POST maximum, response identity checks, and accepted/rejected outcome persistence are implemented.
 - Offline end-to-end test verifies exactly one mocked POST and durable provider-accepted state.
-- Focused CI #42 PASS: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522 (commit `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`).
+- Latest focused CI run #52 PASS: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780574776 (commit `a2c2c0cae8742d36eb1f3f1b005426abe39541ac`) (commit `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`).
 
 ### Remaining live gate
 
