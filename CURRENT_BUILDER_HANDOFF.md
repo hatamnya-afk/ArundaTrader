@@ -114,4 +114,23 @@ Verify:
 
 If management phase-entry decision is not explicitly `AUTHORIZED`, STOP before execution activation.
 
+## CURRENT EXECUTION-PATH STATUS — 2026-10-15 (SUPERSEDES OLDER WIRING NOTES)
+
+Operational branch: `operational-main-20261007`.
+
+Implemented and verified:
+- `arunda_pipeline.py` now passes explicit adapter + durable claim-store dependencies to the final-attempt verifier; no dependencies are constructed on the default path.
+- Toobit submission adapter and allowlisted HTTPS transport are implemented for the documented Spot order endpoint and Futures v2 order endpoint. Submission requires two explicit runtime switches, credentials, and an absolute isolated claim-store path.
+- The durable SQLite claim store rejects the production trading DB path. One stable client ID is derived from canonical intent; one provider POST maximum; no retry loop.
+- Provider response identity is checked. Durable claim state records provider acceptance/rejection after the pre-submit outcome-unknown fence. Unknown/malformed outcomes remain non-replayable.
+- Offline end-to-end fixture covers canonical request → standing-mandate contract → adapter → one mock POST → durable provider-accepted evidence.
+- Focused CI run #42 PASS on `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522
+
+Not cleared for live execution:
+- The authoritative standing-mandate record still lacks timezone-aware `issued_at` and `expires_at`. No timestamps or expiry policy have been fabricated.
+- No production runtime, live provider POST/order, cancellation, or production DB write was performed.
+- Do not enable the two submission switches while the active mandate and all technical gates remain invalid. This is not a per-trade approval dependency.
+
+Older statements in this handoff that the pipeline is unwired or Toobit has no submission implementation are historical and are superseded by this status. Execution remains OFF by default.
+
 END OF HANDOFF
