@@ -38,6 +38,7 @@ jobs:
             toobit_exchange_adapter_v0_1.py \
             toobit_https_transport_v0_1.py \
             execution_dependency_runtime_factory_v0_1.py \
+            test_final_execution_attempt_offline_e2e_v0_1.py \
             arunda_pipeline.py
       - name: Run focused contract tests
         run: |
@@ -50,5 +51,6 @@ jobs:
             test_toobit_submit_adapter_contract_v0_1.py \
             test_toobit_https_transport_v0_1.py \
             test_execution_dependency_runtime_factory_v0_1.py \
+            test_final_execution_attempt_offline_e2e_v0_1.py \
             test_toobit_exchange_adapter_v0_1.py \
             test_exchange_execution_atomic_intent_claim_store_v0_1.py
