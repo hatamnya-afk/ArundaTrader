@@ -147,3 +147,56 @@ def test_invalid_futures_category_is_blocked_before_transport(tmp_path):
     assert result["safe_to_retry"] is False
     assert calls == []
     assert not path.exists()
+
+
+
+def test_invalid_observation_timestamp_fails_before_provider_lookup(tmp_path):
+    calls = []
+    path = tmp_path / "outcomes.jsonl"
+    result = recover_ambiguous_toobit_submission(
+        adapter=adapter_for(lambda **kwargs: calls.append(kwargs) or {}),
+        request=request(), venue="SPOT", symbol="BTCUSDT",
+        trade_event_id="TE-1", observed_at="2026-10-15T08:01:00",
+        stream_path=path,
+    )
+    assert result["reconciliation_state"] == "INVALID_OBSERVATION"
+    assert result["reason"] == "LOCAL_OBSERVATION_TIMESTAMP_MUST_BE_TIMEZONE_AWARE"
+    assert result["safe_to_retry"] is False
+    assert calls == []
+    assert not path.exists()
+
+
+def test_malformed_provider_lookup_row_fails_closed_without_persistence(tmp_path):
+    calls = []
+    path = tmp_path / "outcomes.jsonl"
+    result = recover_ambiguous_toobit_submission(
+        adapter=adapter_for(lambda **kwargs: calls.append(kwargs) or {"status": "FILLED"}),
+        request=request(), venue="SPOT", symbol="BTCUSDT",
+        trade_event_id="TE-1", observed_at="2026-10-15T08:01:00Z",
+        stream_path=path,
+    )
+    assert len(calls) == 1
+    assert result["reconciliation_state"] == "INVALID_OBSERVATION"
+    assert result["reason"] == "PROVIDER_LOOKUP_CLIENT_ORDER_ID_MISMATCH"
+    assert result["capture_state"] == "NOT_CAPTURED"
+    assert result["safe_to_retry"] is False
+    assert not path.exists()
+
+
+def test_default_observation_timestamp_is_local_timezone_aware_time(tmp_path):
+    import datetime
+
+    row = {
+        "symbol": "BTCUSDT", "clientOrderId": "INT-1", "orderId": "SPOT-2",
+        "status": "NEW", "executedQty": "0",
+    }
+    result = recover_ambiguous_toobit_submission(
+        adapter=adapter_for(lambda **kwargs: row),
+        request=request(), venue="SPOT", symbol="BTCUSDT",
+        trade_event_id="TE-1", stream_path=tmp_path / "outcomes.jsonl",
+    )
+    assert result["capture_state"] == "PERSISTED"
+    observed_at = result["record"]["observed_at"]
+    parsed = datetime.datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
+    assert parsed.tzinfo is not None and parsed.utcoffset() is not None
+    assert result["record"]["provider_timestamp_known"] is True
