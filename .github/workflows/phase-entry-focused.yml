@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - operational-main-20261007
+  push:
+    branches:
+      - operational-main-20261007
   workflow_dispatch:
 
 permissions:
