@@ -37,6 +37,7 @@ def attempt_prepared_order(
     venue: str,
     execution_instrument: Any,
     execution_ready_package: Mapping[str, Any] | None = None,
+    claim_store: Any = None,
 ) -> CanonicalExecutionResult:
     """Fail closed unless explicit valid authorization is present.
 
@@ -116,27 +117,82 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Core-owned namespace prevents an adapter/venue switch from reopening an intent.
+    if claim_store is None:
+        return blocked_execution_result(
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="DURABLE_INTENT_CLAIM_STORE_REQUIRED",
+            error_message="Provider submission requires a durable Core intent claim store.",
+        )
+    client_order_id = getattr(prepared, "client_order_id", None)
+    if not isinstance(client_order_id, str) or not client_order_id.strip():
+        return blocked_execution_result(
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="STABLE_CLIENT_ORDER_ID_REQUIRED",
+            error_message="Adapter must provide a stable client order ID before submission.",
+        )
     try:
-        result = adapter.submit_prepared_order(
-            prepared,
-            canonical_request=request,
+        claim = claim_store.claim(
+            provider_namespace="ARUNDA-EXECUTION",
+            intent_id=request.intent_id,
+            client_order_id=client_order_id,
         )
     except Exception as exc:
         return blocked_execution_result(
-            asset=request.asset,
-            direction=request.direction,
-            error_code="ADAPTER_SUBMIT_PREPARED_FAILED",
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="DURABLE_INTENT_CLAIM_FAILED",
             error_message=str(exc),
+        )
+    if getattr(claim, "outcome", None) != "CLAIMED":
+        return blocked_execution_result(
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="INTENT_ALREADY_CLAIMED_NO_RESUBMIT",
+            error_message=f"Intent claim outcome={getattr(claim, 'outcome', 'INVALID')}; submission suppressed.",
+        )
+
+    # Fence before crossing the provider boundary. A crash after this point
+    # never permits a second POST; conservative quarantine is preferable.
+    try:
+        claim_store.transition(
+            provider_namespace="ARUNDA-EXECUTION",
+            intent_id=request.intent_id,
+            status="SUBMISSION_OUTCOME_UNKNOWN",
+            decision_id=request.decision_id,
+            detail_code="SUBMISSION_BOUNDARY_ENTERED_OUTCOME_PENDING",
+        )
+    except Exception as exc:
+        return blocked_execution_result(
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="INTENT_OUTCOME_FENCE_FAILED",
+            error_message=str(exc),
+        )
+
+    # Exactly one invocation; no retry loop. Claim remains held for every outcome.
+    try:
+        result = adapter.submit_prepared_order(prepared, canonical_request=request)
+    except Exception as exc:
+        return blocked_execution_result(
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="SUBMISSION_OUTCOME_UNKNOWN",
+            error_message=f"Provider call raised after attempt fence; do not resubmit. {exc}",
         )
 
     if not isinstance(result, CanonicalExecutionResult):
         return blocked_execution_result(
-            asset=request.asset,
-            direction=request.direction,
-            error_code="ADAPTER_EXECUTION_RESULT_INVALID",
-            error_message="Adapter returned an invalid canonical execution result.",
+            asset=request.asset, direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="SUBMISSION_OUTCOME_UNKNOWN",
+            error_message="Invalid response after the single allowed call; keep claim quarantined and reconcile read-only.",
         )
 
+    # Provider response is not permission to reopen the intent. A separate
+    # reconciliation step must bind authoritative order/outcome evidence.
     return result
 
 
