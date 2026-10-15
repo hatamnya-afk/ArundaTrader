@@ -77,9 +77,12 @@ class DurableIntentClaimTests(unittest.TestCase):
         fence_calls = [node for node in ast.walk(function) if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "transition"]
         self.assertEqual(len(submit_calls), 1)
         self.assertEqual(len(claim_calls), 1)
-        self.assertEqual(len(fence_calls), 1)
+        self.assertGreaterEqual(len(fence_calls), 2)
         self.assertLess(claim_calls[0].lineno, submit_calls[0].lineno)
-        self.assertLess(fence_calls[0].lineno, submit_calls[0].lineno)
+        self.assertLess(min(node.lineno for node in fence_calls), submit_calls[0].lineno)
+        self.assertTrue(any(node.lineno > submit_calls[0].lineno for node in fence_calls))
+        self.assertIn("PROVIDER_ACCEPTED", source)
+        self.assertIn("PROVIDER_REJECTED", source)
 
     def test_attempt_boundary_requires_stable_client_id_and_claim_store(self):
         source = Path(__file__).with_name("exchange_execution_order_attempt_boundary_v0_1.py").read_text(encoding="utf-8")
