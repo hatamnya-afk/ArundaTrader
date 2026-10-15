@@ -7,8 +7,10 @@ on:
       - "execution_authorization_boundary_v0_1.py"
       - "test_management_execution_authorization_v0_1.py"
       - "test_execution_authorization_boundary_standing_mandate_v0_1.py"
-      - "test_final_execution_attempt_contract_v0_1.py"
+      - "test_final_execution_attempt_contract_v0_1.py test_standing_mandate_lifecycle_store_v0_1.py"
       - "standing_mandate_lifecycle_v0_1.py"
+      - "standing_mandate_lifecycle_store_v0_1.py"
+      - "test_standing_mandate_lifecycle_store_v0_1.py"
       - ".github/workflows/standing-mandate-contract.yml"
   push:
     branches:
