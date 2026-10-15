@@ -19,6 +19,8 @@ on:
       - "standing_mandate_service_preflight_v0_1.py"
       - "tests/test_standing_mandate_service_preflight_v0_1.py"
       - "ops/Configure-ArundaMandateJournal.ps1"
+      - "ops/Activate-ArundaStandingMandate.py"
+      - "tests/test_activate_standing_mandate_script.py"
       - "STANDING_MANDATE_SERVICE_CONFIGURATION_V0_1.md"
       - ".github/workflows/standing-mandate-contract.yml"
   push:
@@ -38,4 +40,4 @@ jobs:
       - name: Install pytest
         run: python -m pip install --disable-pip-version-check pytest
       - name: Test management and execution authorization boundaries
-        run: python -m pytest -q test_management_execution_authorization_v0_1.py test_execution_authorization_boundary_standing_mandate_v0_1.py tests/test_exchange_execution_order_attempt_boundary_v0_1.py tests/test_execution_attempt_outcome_capture_v0_1.py test_final_execution_attempt_contract_v0_1.py test_standing_mandate_lifecycle_store_v0_1.py tests/test_standing_mandate_service_preflight_v0_1.py
+        run: python -m pytest -q test_management_execution_authorization_v0_1.py test_execution_authorization_boundary_standing_mandate_v0_1.py tests/test_exchange_execution_order_attempt_boundary_v0_1.py tests/test_execution_attempt_outcome_capture_v0_1.py test_final_execution_attempt_contract_v0_1.py test_standing_mandate_lifecycle_store_v0_1.py tests/test_standing_mandate_service_preflight_v0_1.py tests/test_activate_standing_mandate_script.py
