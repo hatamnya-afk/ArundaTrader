@@ -42,6 +42,14 @@ def reconcile_ambiguous_submission(
             if observed_id == client_order_id.strip():
                 order_id = row.get("orderId")
                 identity = str(order_id) if order_id is not None else "CLIENT:" + observed_id
+                prior = matches.get(identity)
+                if prior is not None and dict(prior) != dict(row):
+                    return {
+                        "state": CONFLICT,
+                        "reason": "CONFLICTING_PROVIDER_FACTS_FOR_SAME_ORDER_ID",
+                        "matches": (prior, row),
+                        "safe_to_retry": False,
+                    }
                 matches[identity] = row
 
     if len(matches) > 1:
