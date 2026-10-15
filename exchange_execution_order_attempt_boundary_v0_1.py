@@ -34,6 +34,10 @@ from mcp01_execution_attempt_evidence_v0_1 import (
     persist_execution_attempt_events,
 )
 from mcp01_trade_event_identity_v0_1 import issue_trade_event_id
+from exchange_execution_idempotency_contract_v0_1 import (
+    derive_validated_client_order_id,
+    validate_supplied_client_order_id,
+)
 
 
 def attempt_prepared_order(
@@ -46,6 +50,7 @@ def attempt_prepared_order(
     execution_instrument: Any,
     execution_ready_package: Mapping[str, Any] | None = None,
     evidence_stream_path: Path | None = None,
+    stable_client_order_id: str | None = None,
 ) -> CanonicalExecutionResult:
     """Fail closed unless authorization and pre-submit evidence are valid.
 
@@ -110,6 +115,34 @@ def attempt_prepared_order(
             error_message="Explicit execution authorization is required.",
         )
 
+    # A provider must declare a verified, evidence-backed ID policy before
+    # any attempt can proceed. No generic max length/charset is guessed.
+    policy_provider = getattr(adapter, "stable_client_order_id_policy", None)
+    try:
+        policy = policy_provider() if callable(policy_provider) else None
+        if stable_client_order_id is None:
+            canonical_client_order_id = derive_validated_client_order_id(
+                policy=policy, intent_id=request.intent_id
+            )
+        else:
+            canonical_client_order_id = validate_supplied_client_order_id(
+                policy=policy,
+                intent_id=request.intent_id,
+                client_order_id=stable_client_order_id,
+            )
+    except (ValueError, TypeError, KeyError) as exc:
+        reason = str(exc) or "CLIENT_ORDER_ID_POLICY_INVALID"
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code=reason,
+            error_message=(
+                "Stable client-order ID could not be derived and validated "
+                "against a verified provider policy; no provider attempt was made."
+            ),
+        )
+
     prepared = prepare_order_for_adapter(
         request=request,
         adapter=adapter,
@@ -120,8 +153,38 @@ def attempt_prepared_order(
         return blocked_execution_result(
             asset=request.asset,
             direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
             error_code=getattr(prepared, "reason", "ORDER_PREPARATION_BLOCKED"),
             error_message="Provider order preparation did not reach READY.",
+        )
+
+    # Bind the same canonical ID to provider payload and evidence.
+    bind_client_order_id = getattr(adapter, "bind_stable_client_order_id", None)
+    if not callable(bind_client_order_id):
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="STABLE_CLIENT_ORDER_ID_BINDING_UNSUPPORTED",
+            error_message="Adapter cannot bind the canonical stable ID into its provider payload.",
+        )
+    try:
+        prepared = bind_client_order_id(prepared, canonical_client_order_id)
+    except Exception as exc:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code="STABLE_CLIENT_ORDER_ID_BINDING_FAILED",
+            error_message=f"Provider client-order ID binding failed ({type(exc).__name__}).",
+        )
+    if not isinstance(prepared, AdapterOrderPreparation) or not prepared.ready:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code=getattr(prepared, "reason", "STABLE_CLIENT_ORDER_ID_BINDING_FAILED"),
+            error_message="Provider payload did not accept the canonical stable client-order ID.",
         )
 
     if evidence_stream_path is None:
@@ -141,6 +204,7 @@ def attempt_prepared_order(
             trade_event_id=trade_event_id,
             provider=getattr(adapter, "adapter_name", None) or "PROVIDER_UNKNOWN",
             event_timestamp=request.timestamp,
+            client_order_id=canonical_client_order_id,
         )
     except Exception as exc:
         return blocked_execution_result(
@@ -213,7 +277,10 @@ def attempt_prepared_order(
         result = replace(result, trade_event_id=trade_event_id)
 
     try:
-        provider_event = build_provider_result_event(request=request, result=result)
+        provider_event = build_provider_result_event(
+            request=request, result=result,
+            client_order_id=canonical_client_order_id,
+        )
         outcome_persistence = persist_execution_attempt_events(
             [provider_event], stream_path=Path(evidence_stream_path)
         )

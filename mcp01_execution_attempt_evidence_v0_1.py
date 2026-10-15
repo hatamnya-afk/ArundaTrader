@@ -33,6 +33,7 @@ def build_order_attempt_event(
     provider: str,
     event_timestamp: str | None = None,
     cycle_id: str | None = None,
+    client_order_id: str | None = None,
 ):
     """Build ORDER_ATTEMPTED evidence before invoking the provider."""
     _validate_attempt_identity(request, trade_event_id)
@@ -53,6 +54,8 @@ def build_order_attempt_event(
         reason_code=None,
         provider=provider,
         trade_event_id=trade_event_id,
+        intent_id=request.intent_id,
+        client_order_id=client_order_id,
         correlation_id=request.snapshot_id,
     )
 
@@ -62,6 +65,7 @@ def build_provider_result_event(
     request: CanonicalOrderRequest,
     result: CanonicalExecutionResult,
     cycle_id: str | None = None,
+    client_order_id: str | None = None,
 ):
     """Build provider-result evidence without inferring fills or rejection."""
     trade_event_id = result.trade_event_id
@@ -87,6 +91,8 @@ def build_provider_result_event(
         reason_code=result.error_code,
         provider=provider,
         trade_event_id=trade_event_id,
+        intent_id=request.intent_id,
+        client_order_id=client_order_id,
         correlation_id=request.snapshot_id,
     )
 
@@ -96,6 +102,7 @@ def build_execution_attempt_events(
     request: CanonicalOrderRequest,
     result: CanonicalExecutionResult,
     cycle_id: str | None = None,
+    client_order_id: str | None = None,
 ) -> list:
     """Create an ORDER_ATTEMPTED + PROVIDER_RESULT pair for offline analysis.
 
@@ -108,9 +115,11 @@ def build_execution_attempt_events(
         provider=result.adapter or "PROVIDER_UNKNOWN",
         event_timestamp=request.timestamp,
         cycle_id=cycle_id,
+        client_order_id=client_order_id,
     )
     provider_result = build_provider_result_event(
-        request=request, result=result, cycle_id=cycle_id
+        request=request, result=result, cycle_id=cycle_id,
+        client_order_id=client_order_id,
     )
     return [attempted, provider_result]
 

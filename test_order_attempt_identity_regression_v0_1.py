@@ -11,6 +11,7 @@ from exchange_execution_adapter_contract_v0_1 import (
 )
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
 from exchange_execution_order_attempt_boundary_v0_1 import attempt_prepared_order
+from exchange_execution_idempotency_contract_v0_1 import derive_validated_client_order_id
 from mcp01_trade_event_identity_v0_1 import validate_trade_event_id
 
 
@@ -55,6 +56,7 @@ class FakeAdapter:
         self.raises = raises
         self.submit_called = False
         self.attempt_evidence_seen_before_submit = False
+        self.submitted_client_order_id = None
 
     def capabilities(self):
         return ExchangeAdapterCapabilities(
@@ -63,14 +65,33 @@ class FakeAdapter:
             order_submission=True, order_cancellation=False,
         )
 
+    def stable_client_order_id_policy(self):
+        return {
+            "provider_namespace": "FAKE_PROVIDER-SPOT",
+            "prefix": "AR",
+            "max_length": 32,
+            "allowed_pattern": r"^AR[A-F0-9]{30}$",
+            "verified": True,
+            "policy_reference": "offline-test-fixture:fake-provider-policy-v1",
+        }
+
     def prepare_order(self, request, *, venue, execution_instrument):
         return AdapterOrderPreparation(
             ready=True, reason="READY", adapter_name=self.adapter_name,
             venue=venue, request={"instrument": execution_instrument},
         )
 
+    def bind_stable_client_order_id(self, preparation, client_order_id):
+        payload = dict(preparation.request)
+        payload["newClientOrderId"] = client_order_id
+        return AdapterOrderPreparation(
+            ready=True, reason="READY", adapter_name=self.adapter_name,
+            venue=preparation.venue, request=payload,
+        )
+
     def submit_prepared_order(self, preparation, *, canonical_request):
         self.submit_called = True
+        self.submitted_client_order_id = preparation.request.get("newClientOrderId")
         if self.evidence_path and self.evidence_path.exists():
             rows = [json.loads(line) for line in self.evidence_path.read_text(encoding="utf-8").splitlines()]
             self.attempt_evidence_seen_before_submit = (
@@ -94,12 +115,13 @@ class FakeAdapter:
         raise AssertionError("cancel must not be used")
 
 
-def _run(adapter, evidence_path=None):
+def _run(adapter, evidence_path=None, stable_client_order_id=None):
     return attempt_prepared_order(
         request=request(), readiness_observation=readiness(),
         authorization_observation=authorization(), adapter=adapter,
         venue="SPOT", execution_instrument="BTCUSDT",
         evidence_stream_path=evidence_path,
+        stable_client_order_id=stable_client_order_id,
     )
 
 
@@ -128,6 +150,52 @@ def test_submission_exception_is_unknown_and_both_events_are_recorded(tmp_path):
     assert adapter.attempt_evidence_seen_before_submit
     assert [row["event_type"] for row in rows] == ["ORDER_ATTEMPTED", "PROVIDER_RESULT"]
     assert rows[1]["status"] == "SUBMISSION_OUTCOME_UNKNOWN"
+
+
+def test_boundary_derives_canonical_stable_id_from_intent_and_binds_it(tmp_path):
+    stream = tmp_path / "events.jsonl"
+    adapter = FakeAdapter(evidence_path=stream)
+    result = _run(adapter, stream)
+    expected = derive_validated_client_order_id(
+        policy=adapter.stable_client_order_id_policy(),
+        intent_id=request().intent_id,
+    )
+    rows = [json.loads(line) for line in stream.read_text(encoding="utf-8").splitlines()]
+
+    assert result.status == "PROVIDER_REJECTED"
+    assert adapter.submit_called
+    assert adapter.submitted_client_order_id == expected
+    assert all(row["client_order_id"] == expected for row in rows)
+
+
+def test_noncanonical_caller_supplied_id_fails_before_provider_call(tmp_path):
+    stream = tmp_path / "events.jsonl"
+    adapter = FakeAdapter(evidence_path=stream)
+    result = _run(adapter, stream, stable_client_order_id="AR-CALLER-CHOSEN")
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "CLIENT_ORDER_ID_NOT_CANONICAL"
+    assert not adapter.submit_called
+    assert not stream.exists()
+
+
+def test_unverified_provider_policy_fails_closed(tmp_path):
+    stream = tmp_path / "events.jsonl"
+    adapter = FakeAdapter(evidence_path=stream)
+    adapter.stable_client_order_id_policy = lambda: {
+        "provider_namespace": "FAKE_PROVIDER-SPOT",
+        "prefix": "AR",
+        "max_length": 32,
+        "allowed_pattern": r"^AR[A-F0-9]{30}$",
+        "verified": False,
+        "policy_reference": "unverified-fixture",
+    }
+    result = _run(adapter, stream)
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "CLIENT_ORDER_ID_PROVIDER_POLICY_UNVERIFIED"
+    assert not adapter.submit_called
+    assert not stream.exists()
 
 
 def test_missing_evidence_path_blocks_before_provider_call():

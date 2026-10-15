@@ -1,0 +1,65 @@
+name: Atomic intent claim contract
+
+on:
+  pull_request:
+    paths:
+      - "exchange_execution_atomic_intent_claim_store_v0_1.py"
+      - "test_exchange_execution_atomic_intent_claim_store_v0_1.py"
+      - "exchange_execution_idempotency_contract_v0_1.py"
+      - "test_exchange_execution_idempotency_contract_v0_1.py"
+      - "exchange_execution_order_reconciliation_contract_v0_1.py"
+      - "test_exchange_execution_order_reconciliation_contract_v0_1.py"
+      - "exchange_execution_order_attempt_boundary_v0_1.py"
+      - "test_exchange_execution_order_attempt_boundary_v0_1.py"
+      - "test_order_attempt_identity_regression_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "toobit_client_order_id_policy_v0_1.py"
+      - "test_toobit_client_order_id_policy_v0_1.py"
+      - "TOOBIT_CLIENT_ORDER_ID_OFFICIAL_EVIDENCE_V0_2.md"
+      - "test_toobit_client_order_lookup_v0_1.py"
+      - "test_order_idempotency_cycle_contract_v0_1.py"
+      - "test_order_ambiguous_recovery_matrix_v0_1.py"
+      - "mcp01_compact_event_evidence_v0_1.py"
+      - "mcp01_execution_attempt_evidence_v0_1.py"
+      - "test_mcp01_execution_attempt_evidence_v0_1.py"
+      - ".github/workflows/atomic-intent-claim-contract.yml"
+  push:
+    branches:
+      - "fix/atomic-intent-claim-store-20261012"
+    paths:
+      - "exchange_execution_atomic_intent_claim_store_v0_1.py"
+      - "test_exchange_execution_atomic_intent_claim_store_v0_1.py"
+      - "exchange_execution_idempotency_contract_v0_1.py"
+      - "test_exchange_execution_idempotency_contract_v0_1.py"
+      - "exchange_execution_order_reconciliation_contract_v0_1.py"
+      - "test_exchange_execution_order_reconciliation_contract_v0_1.py"
+      - "exchange_execution_order_attempt_boundary_v0_1.py"
+      - "test_exchange_execution_order_attempt_boundary_v0_1.py"
+      - "test_order_attempt_identity_regression_v0_1.py"
+      - "toobit_exchange_adapter_v0_1.py"
+      - "toobit_client_order_id_policy_v0_1.py"
+      - "test_toobit_client_order_id_policy_v0_1.py"
+      - "test_toobit_client_order_lookup_v0_1.py"
+      - "test_order_idempotency_cycle_contract_v0_1.py"
+      - "test_order_ambiguous_recovery_matrix_v0_1.py"
+      - "mcp01_compact_event_evidence_v0_1.py"
+      - "mcp01_execution_attempt_evidence_v0_1.py"
+      - "test_mcp01_execution_attempt_evidence_v0_1.py"
+      - ".github/workflows/atomic-intent-claim-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-claim-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Run offline contract, recovery matrix, and evidence mapping tests
+        run: python -m pytest -q test_exchange_execution_idempotency_contract_v0_1.py test_exchange_execution_order_reconciliation_contract_v0_1.py test_exchange_execution_atomic_intent_claim_store_v0_1.py test_mcp01_execution_attempt_evidence_v0_1.py test_exchange_execution_order_attempt_boundary_v0_1.py test_order_attempt_identity_regression_v0_1.py test_toobit_client_order_lookup_v0_1.py test_toobit_client_order_id_policy_v0_1.py test_order_idempotency_cycle_contract_v0_1.py test_order_ambiguous_recovery_matrix_v0_1.py

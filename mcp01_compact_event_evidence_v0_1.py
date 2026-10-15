@@ -45,6 +45,9 @@ class CompactEvent:
     environment_id: str = "arundatrader"
     schema: str = MCP01_SCHEMA
     schema_version: str = MCP01_SCHEMA_VERSION
+    # Additive identity fields are appended to preserve existing positional construction.
+    intent_id: str | None = None
+    client_order_id: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -184,7 +187,7 @@ def _validate_event(event: dict[str, Any]) -> None:
         raise ValueError("invalid MCP-01 schema")
     if event["source_system"] != "ArundaTrader" or event["environment_id"] != "arundatrader":
         raise ValueError("invalid evidence source identity")
-    for name in ("decision_id", "case_id", "asset", "status", "reason_code", "provider", "trade_event_id", "correlation_id"):
+    for name in ("decision_id", "case_id", "asset", "status", "reason_code", "provider", "trade_event_id", "intent_id", "client_order_id", "correlation_id"):
         if event.get(name) is not None:
             _require_text(event[name], name)
     if event.get("direction") is not None and event["direction"] not in DIRECTIONS:
