@@ -204,3 +204,59 @@ class ToobitSubmitAdapterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_read_only_client_id_reconciliation_finds_exact_spot_order_without_post():
+    calls = []
+    def transport(*, method, path, params, **kwargs):
+        calls.append((method, path, dict(params)))
+        assert method == "GET"
+        assert path == "/api/v1/spot/order"
+        return {
+            "symbol": "BTCUSDT",
+            "orderId": "reconcile-order-7",
+            "clientOrderId": params["origClientOrderId"],
+            "status": "FILLED",
+            "executedQty": "0.001",
+            "avgPrice": "65000",
+            "time": "1792000000000",
+        }
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    result = adapter.query_order_by_client_order_id(
+        venue="SPOT",
+        symbol="BTCUSDT",
+        client_order_id="A0123456789abcdefghijklmnopqrstuv",
+    )
+    assert result.allowed is True
+    assert result.reason == "ORDER_FOUND"
+    assert result.data["state_known"] is True
+    assert result.data["exchange_order_id"] == "reconcile-order-7"
+    assert result.data["provider_status"] == "FILLED"
+    assert len(calls) == 1
+    assert all(method == "GET" for method, _, _ in calls)
+
+
+def test_read_only_client_id_reconciliation_keeps_missing_order_unresolved():
+    calls = []
+    def transport(*, method, path, params, **kwargs):
+        calls.append((method, path, dict(params)))
+        raise RuntimeError("TOOBIT_PROVIDER_ERROR:-2013:Order does not exist")
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    )
+    result = adapter.query_order_by_client_order_id(
+        venue="SPOT",
+        symbol="BTCUSDT",
+        client_order_id="A0123456789abcdefghijklmnopqrstuv",
+    )
+    assert result.allowed is False
+    assert result.reason == "ORDER_LOOKUP_UNRESOLVED"
+    assert result.data["state_known"] is False
+    assert result.data["reconciliation_state"] == "UNRESOLVED_KEEP_QUARANTINED"
+    assert result.data["resubmit_allowed"] is False
+    assert len(calls) == 1
+    assert calls[0][0] == "GET"
