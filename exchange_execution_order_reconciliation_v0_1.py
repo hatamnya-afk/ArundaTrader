@@ -69,6 +69,11 @@ def reconcile_ambiguous_order(
         and str(data.get("symbol", "")).strip().upper() == symbol.strip().upper()
         and bool(str(data.get("exchange_order_id", "")).strip())
         and bool(str(data.get("provider_status", "")).strip())
+        and (
+            not getattr(claim, "exchange_order_id", None)
+            or str(getattr(claim, "exchange_order_id")).strip()
+            == str(data.get("exchange_order_id", "")).strip()
+        )
     )
 
     if found:
