@@ -1,5 +1,7 @@
 """Offline contract tests for opt-in Toobit submission; no real transport is used."""
 
+import unittest
+
 from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
 from exchange_execution_contract import CanonicalOrderRequest
 from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
@@ -151,3 +153,54 @@ def test_response_identity_mismatch_is_not_reported_as_acceptance():
     assert result.accepted is False
     assert result.status == "SUBMISSION_OUTCOME_UNKNOWN"
     assert result.error_code == "SUBMISSION_OUTCOME_UNKNOWN"
+
+
+def test_explicit_provider_rejection_is_not_reported_as_acceptance():
+    def transport(*, method, path, params, **kwargs):
+        if method == "GET" and path == "/api/v1/exchangeInfo":
+            return {"symbols": [{
+                "symbol": "BTCUSDT", "status": "TRADING",
+                "baseAsset": "BTC", "quoteAsset": "USDT",
+                "filters": [{"filterType": "LOT_SIZE", "minQty": "0.00001",
+                             "maxQty": "100000", "stepSize": "0.00001"}],
+            }], "contracts": []}
+        return {
+            "symbol": "BTCUSDT", "orderId": "order-rejected-1",
+            "clientOrderId": params["newClientOrderId"], "status": "REJECTED",
+            "executedQty": "0", "avgPrice": "0",
+        }
+
+    adapter = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret",
+        enable_order_submission=True,
+    )
+    request = _request()
+    prep = _preparation(adapter, request)
+    result = adapter.submit_prepared_order(prep, canonical_request=request)
+    assert result.accepted is False
+    assert result.status == "PROVIDER_REJECTED"
+    assert result.error_code == "TOOBIT_PROVIDER_REJECTED"
+
+
+class ToobitSubmitAdapterTests(unittest.TestCase):
+    def test_submission_is_disabled_by_default(self):
+        test_submission_is_disabled_by_default()
+
+    def test_opt_in_spot_submit_sends_once_and_validates_provider_response(self):
+        test_opt_in_spot_submit_sends_once_and_validates_provider_response()
+
+    def test_client_order_id_is_stable_for_same_canonical_intent(self):
+        test_client_order_id_is_stable_for_same_canonical_intent()
+
+    def test_transport_exception_is_ambiguous_and_never_retried(self):
+        test_transport_exception_is_ambiguous_and_never_retried()
+
+    def test_response_identity_mismatch_is_not_reported_as_acceptance(self):
+        test_response_identity_mismatch_is_not_reported_as_acceptance()
+
+    def test_explicit_provider_rejection_is_not_reported_as_acceptance(self):
+        test_explicit_provider_rejection_is_not_reported_as_acceptance()
+
+
+if __name__ == "__main__":
+    unittest.main()
