@@ -39,8 +39,9 @@ class AdapterOrderPreparation:
     """Provider-neutral envelope around an adapter-owned order request.
 
     The request field is intentionally opaque to Core. Only the selected
-    adapter may interpret or submit it. This keeps provider symbols,
-    transport fields and authentication details outside the Core contract.
+    adapter may interpret or submit it. client_order_id is a stable provider-facing
+    correlation key derived from canonical intent and provider constraints. Core
+    never parses it; provider symbols, transport and authentication stay adapter-owned.
     """
 
     ready: bool
@@ -48,6 +49,8 @@ class AdapterOrderPreparation:
     adapter_name: str
     venue: str
     request: Any = None
+    # Stable adapter-generated ID for this canonical intent; never changes across restarts.
+    client_order_id: str | None = None
 
 
 @runtime_checkable
