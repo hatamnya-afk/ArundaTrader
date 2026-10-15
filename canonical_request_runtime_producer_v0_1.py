@@ -1,14 +1,14 @@
-"""Build canonical requests only from already-produced Decision/Risk/Trade-Gate records.
+"""Build canonical requests only from real Decision/Risk/Gate plus produced OrderIntent records.
 
-No sizing, identity invention, timestamp creation, price inference, or state
-recomputation occurs here. Missing upstream fields cause a per-asset block.
+No sizing, price inference, timestamp creation, or execution authorization is
+performed here. Missing or misaligned upstream records fail closed.
 """
 from __future__ import annotations
 
 from collections.abc import Mapping
 from typing import Any
 
-from exchange_execution_contract import CanonicalOrderRequest, build_order_request, validate_order_request
+from exchange_execution_contract import build_order_request, validate_order_request
 from execution_ready_package_v0_1 import build_execution_ready_package
 
 
@@ -24,16 +24,18 @@ def produce_canonical_requests_from_runtime_outputs(
     decision_snapshot: Mapping[str, Mapping[str, Any]],
     risk_snapshot: Mapping[str, Mapping[str, Any]],
     trade_gate_snapshot: Mapping[str, Mapping[str, Any]],
+    order_intents: Mapping[str, Mapping[str, Any]],
+    management_observation: Mapping[str, Any] | None,
 ) -> dict[str, dict[str, Any]]:
-    """Return requests/context only where the existing outputs are complete and aligned.
-
-    Records are read-only inputs. A request is emitted only when an upstream
-    OrderIntent identity (intent_id) and Decision-Birth identity already exist.
-    """
-    if not all(isinstance(x, Mapping) for x in (decision_snapshot, risk_snapshot, trade_gate_snapshot)):
+    """Consume current-run producer outputs without inventing upstream fields."""
+    if not all(isinstance(x, Mapping) for x in (
+        decision_snapshot, risk_snapshot, trade_gate_snapshot, order_intents
+    )):
         raise ValueError("RUNTIME_OUTPUT_SNAPSHOTS_INVALID")
     if not (set(decision_snapshot) == set(risk_snapshot) == set(trade_gate_snapshot)):
         raise ValueError("RUNTIME_OUTPUT_ASSET_COVERAGE_MISMATCH")
+    if not isinstance(management_observation, Mapping):
+        raise ValueError("AUTHORITATIVE_MANAGEMENT_MANDATE_SOURCE_MISSING")
 
     result: dict[str, dict[str, Any]] = {}
     for raw_asset, decision in decision_snapshot.items():
@@ -41,28 +43,35 @@ def produce_canonical_requests_from_runtime_outputs(
         risk = risk_snapshot[raw_asset]
         gate = trade_gate_snapshot[raw_asset]
         if not all(isinstance(x, Mapping) for x in (decision, risk, gate)):
-            continue
+            raise ValueError(f"RUNTIME_OUTPUT_RECORD_INVALID:{asset}")
         if gate.get("trade_gate_state") != "TRADE_READY":
+            if asset in order_intents:
+                raise ValueError(f"ORDER_INTENT_WITHOUT_TRADE_READY:{asset}")
             continue
 
-        # Do not manufacture an OrderIntent. This stage only consumes an
-        # upstream-issued intent identity if that producer has actually emitted one.
-        intent_id = _required(decision, "intent_id", "ORDER_INTENT_IDENTITY_MISSING")
+        intent = order_intents.get(asset)
+        if not isinstance(intent, Mapping):
+            raise ValueError(f"AUTHORITATIVE_ORDER_INTENT_MISSING:{asset}")
+        intent_id = _required(intent, "intent_id", "ORDER_INTENT_IDENTITY_MISSING")
         decision_id = _required(decision, "decision_id", "DECISION_BIRTH_IDENTITY_MISSING")
-        snapshot_id = _required(decision, "snapshot_id", "DECISION_SNAPSHOT_ID_MISSING")
-        timestamp = _required(decision, "timestamp", "DECISION_TIMESTAMP_MISSING")
-        direction = _required(decision, "direction", "DECISION_DIRECTION_MISSING")
-        entry_price = _required(decision, "entry_price", "DECISION_ENTRY_PRICE_MISSING")
+        if _required(intent, "decision_id", f"ORDER_INTENT_DECISION_BIRTH_ID_MISSING:{asset}") != decision_id:
+            raise ValueError(f"ORDER_INTENT_DECISION_BIRTH_MISMATCH:{asset}")
+        snapshot_id = _required(intent, "snapshot_id", "ORDER_INTENT_SNAPSHOT_ID_MISSING")
+        timestamp = _required(intent, "timestamp", "ORDER_INTENT_TIMESTAMP_MISSING")
+        direction = _required(intent, "direction", "ORDER_INTENT_DIRECTION_MISSING")
+        entry_price = _required(intent, "entry_price", "ORDER_INTENT_ENTRY_PRICE_MISSING")
 
         if risk.get("risk_status") != "APPROVED":
             raise ValueError(f"RISK_NOT_APPROVED:{asset}")
         quantity = _required(risk, "position_quantity", "RISK_POSITION_QUANTITY_MISSING")
-        for field in ("quantity_unit", "quantity_source"):
-            _required(risk, field, f"RISK_{field.upper()}_MISSING")
-        if risk["quantity_unit"] != "BASE_ASSET":
+        if quantity != _required(intent, "quantity", f"ORDER_INTENT_QUANTITY_MISSING:{asset}"):
+            raise ValueError(f"ORDER_INTENT_RISK_QUANTITY_MISMATCH:{asset}")
+        if risk.get("quantity_unit") != "BASE_ASSET":
             raise ValueError(f"RISK_QUANTITY_UNIT_INVALID:{asset}")
-        if risk["quantity_source"] != "RISK.position_quantity":
+        if risk.get("quantity_source") != "RISK.position_quantity":
             raise ValueError(f"RISK_QUANTITY_SOURCE_INVALID:{asset}")
+        if intent.get("quantity_unit") != risk.get("quantity_unit") or intent.get("quantity_source") != risk.get("quantity_source"):
+            raise ValueError(f"ORDER_INTENT_QUANTITY_PROVENANCE_MISMATCH:{asset}")
 
         request = build_order_request(
             asset=asset,
@@ -70,7 +79,7 @@ def produce_canonical_requests_from_runtime_outputs(
             order_type="MARKET",
             risk=risk,
             entry_price=entry_price,
-            reference_price=decision.get("reference_price"),
+            reference_price=intent.get("reference_price"),
             intent_id=intent_id,
             snapshot_id=snapshot_id,
             timestamp=timestamp,
@@ -80,8 +89,6 @@ def produce_canonical_requests_from_runtime_outputs(
         if not valid:
             raise ValueError(f"CANONICAL_REQUEST_INVALID:{asset}:{reason}")
 
-        # The package is made only from fields already present in the upstream
-        # records. No stop, exposure, policy, provenance or timestamp is inferred.
         readiness = {
             "readiness_state": "PRE_EXECUTION_READY",
             "readiness_validation": "VALID",
@@ -103,6 +110,7 @@ def produce_canonical_requests_from_runtime_outputs(
         result[asset] = {
             "request": request,
             "readiness": readiness,
+            "management_observation": dict(management_observation),
             "execution_ready_package": package,
             "decision_id": decision_id,
             "intent_id": intent_id,
