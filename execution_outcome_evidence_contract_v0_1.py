@@ -98,7 +98,7 @@ def build_execution_outcome_record(
     executed_price: Any = None,
     attempt_error_code: str | None = None,
 ) -> dict[str, Any]:
-    """Normalize one observed provider fact without inventing missing outcomes."""
+    """Normalize provider facts or a separately typed local attempt event."""
     provider = _required_text(provider, "provider").upper()
     decision_id = _required_text(decision_id, "decision_id")
     intent_id = _required_text(intent_id, "intent_id")
@@ -109,6 +109,14 @@ def build_execution_outcome_record(
     if source_kind not in SOURCE_KINDS:
         raise ValueError("SOURCE_KIND_INVALID")
     status = _required_text(provider_status, "provider_status").upper()
+    if status == "SUBMISSION_UNKNOWN" and source_kind != "ATTEMPT_EVENT":
+        raise ValueError("AMBIGUOUS_SUBMISSION_MUST_BE_ATTEMPT_EVENT")
+    if source_kind == "ATTEMPT_EVENT" and status != "SUBMISSION_UNKNOWN":
+        raise ValueError("ATTEMPT_EVENT_STATUS_INVALID")
+    if source_kind == "ATTEMPT_EVENT" and any(
+        value is not None for value in (exchange_order_id, executed_quantity, executed_price)
+    ):
+        raise ValueError("ATTEMPT_EVENT_CANNOT_CLAIM_PROVIDER_EXECUTION_FACTS")
     timestamp = _timestamp_utc(observed_at)
     quantity = _optional_decimal(executed_quantity, "executed_quantity", allow_zero=True)
     price = _optional_decimal(executed_price, "executed_price")
