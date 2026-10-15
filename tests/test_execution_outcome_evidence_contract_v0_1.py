@@ -171,3 +171,10 @@ def test_canonical_result_asset_mismatch_rejected():
             request=request, result=result, client_order_id="CID-1",
             source_observation_id="OBS-RESULT-2",
         )
+
+
+def test_explicit_zero_executed_quantity_is_valid_provider_evidence():
+    record = make_record(provider_status="NEW", executed_quantity="0")
+    assert record["outcome_state"] == "OPEN"
+    assert record["executed_quantity"] == "0"
+    assert record["fill_inferred"] is False
