@@ -1,0 +1,38 @@
+name: Phase-entry focused verification
+
+on:
+  pull_request:
+    branches:
+      - operational-main-20261007
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile focused execution-boundary modules
+        run: |
+          python -m py_compile \
+            canonical_request_runtime_producer_v0_1.py \
+            execution_attempt_runtime_producers_v0_1.py \
+            management_execution_authorization_v0_1.py \
+            execution_authorization_boundary_v0_1.py \
+            final_execution_attempt_contract_v0_1.py \
+            exchange_execution_contract.py \
+            arunda_pipeline.py
+      - name: Run focused contract tests
+        run: |
+          python -m unittest -v \
+            test_canonical_request_runtime_producer_v0_1.py \
+            test_execution_attempt_runtime_producers_v0_1.py \
+            test_pipeline_final_execution_attempt_wiring_v0_1.py
