@@ -1,3 +1,12 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — SIGNED POST TRANSPORT FIX
+>
+> - Static review found the HTTPS transport was placing signed Toobit POST parameters in the URL query. Official Toobit signing examples send signed POST parameters in an `application/x-www-form-urlencoded` request body. The transport now keeps GET parameters in the URL and sends POST parameters in the form body; no retry or redirect behavior was added.
+> - Added an offline mocked-HTTP test asserting the POST URL contains no query parameters, the form body carries the client ID/signature, and the form content type is present.
+> - **Focused Execution Contract CI: PASS** ([run 38805062214](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38805062214)): 99 passed, 2 subtests passed. **Phase-entry verification: PASS** ([run 38805061865](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38805061865)): 60 tests passed.
+> - No live API call, order, cancellation, production runtime, production DB write, or execution switch change occurred. The normal pipeline remains fail-closed; live order readiness is still BLOCKED / NOT VERIFIED.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — RECONCILIATION TRANSPORT TESTS
 >
 > - The Toobit HTTPS transport allowlist now includes the read-only Spot order query route `/api/v1/spot/order` and Futures order query route `/api/v2/futures/order`. The existing POST allowlist is unchanged.
