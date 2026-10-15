@@ -5,7 +5,7 @@ import unittest
 from exchange_execution_adapter_contract_v0_1 import AdapterOrderPreparation
 from exchange_execution_contract import CanonicalOrderRequest
 from execution_instrument_contract_v0_1 import ExecutionInstrumentSpecification
-from toobit_exchange_adapter_v0_1 import ToobitExchangeAdapter
+from toobit_exchange_adapter_v0_1 import ToobitAdapterResult, ToobitExchangeAdapter
 
 
 def _request():
