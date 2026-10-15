@@ -19,6 +19,8 @@ from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
 
+from standing_mandate_lifecycle_v0_1 import reduce_mandate_lifecycle
+
 READY = "READY"
 AUTHORIZED = "AUTHORIZED"
 VALID = "VALID"
@@ -93,6 +95,10 @@ def _evaluate_standing_mandate(
         mandate.get("mandate_id") or mandate.get("authorization_id"),
         "AUTHORIZATION_MANDATE_ID_INVALID",
     )
+    lifecycle = reduce_mandate_lifecycle(
+        mandate.get("mandate_lifecycle_events"),
+        expected_mandate_id=mandate_id,
+    )
     expires_at = _parse_future_expiry(mandate.get("expires_at"))
 
     environment = _require_nonempty_string(
@@ -128,6 +134,8 @@ def _evaluate_standing_mandate(
         ),
         "venue": venue,
         "mandate_id": mandate_id,
+        "mandate_state": lifecycle["mandate_state"],
+        "lifecycle_event_count": lifecycle["lifecycle_event_count"],
     }
 
 
