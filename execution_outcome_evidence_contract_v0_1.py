@@ -90,8 +90,9 @@ def build_execution_outcome_record(
     source_observation_id: str,
     source_kind: str,
     provider_status: str,
-    observed_at: str,
+    observed_at: str | None,
     exchange_order_id: str | None = None,
+    captured_at: str | None = None,
     executed_quantity: Any = None,
     executed_price: Any = None,
 ) -> dict[str, Any]:
@@ -106,7 +107,13 @@ def build_execution_outcome_record(
     if source_kind not in SOURCE_KINDS:
         raise ValueError("SOURCE_KIND_INVALID")
     status = _required_text(provider_status, "provider_status").upper()
-    timestamp = _timestamp_utc(observed_at)
+    if observed_at is None or (isinstance(observed_at, str) and not observed_at.strip()):
+        if source_kind != "PROVIDER_RESPONSE":
+            raise ValueError("OBSERVED_AT_REQUIRED_FOR_LOOKUP")
+        timestamp = None
+    else:
+        timestamp = _timestamp_utc(observed_at)
+    captured_timestamp = _timestamp_utc(captured_at or datetime.now(timezone.utc).isoformat())
     quantity = _optional_decimal(executed_quantity, "executed_quantity", allow_zero=True)
     price = _optional_decimal(executed_price, "executed_price")
     order_id = None if exchange_order_id is None else _required_text(exchange_order_id, "exchange_order_id")
@@ -128,6 +135,8 @@ def build_execution_outcome_record(
         "source_observation_id": source_observation_id,
         "source_kind": source_kind,
         "observed_at": timestamp,
+        "captured_at": captured_timestamp,
+        "provider_timestamp_known": timestamp is not None,
         "provider_status": status,
         "outcome_state": outcome_state,
         "outcome_reason": reason,
@@ -158,9 +167,7 @@ def build_outcome_record_from_canonical_result(
         raise ValueError("PROVIDER_RESULT_ASSET_MISMATCH")
     if result.direction is not None and result.direction.strip().upper() != request.direction.strip().upper():
         raise ValueError("PROVIDER_RESULT_DIRECTION_MISMATCH")
-    timestamp = observed_at or result.timestamp
-    if not timestamp:
-        raise ValueError("PROVIDER_OBSERVATION_TIMESTAMP_REQUIRED")
+    timestamp = observed_at if observed_at is not None else result.timestamp
     return build_execution_outcome_record(
         provider=result.adapter or "PROVIDER_UNKNOWN",
         decision_id=request.decision_id,
