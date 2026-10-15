@@ -688,7 +688,7 @@ class ToobitExchangeAdapter:
             settlement = execution_instrument.settlement_asset.strip().upper()
             if settlement not in {"USDT", "USDC"}:
                 return ToobitAdapterResult(False, "ORDER_LOOKUP_FUTURES_CATEGORY_UNKNOWN")
-            path = "/api/v2/futures/order"
+            path = "/api/v1/futures/order"
             params["category"] = settlement
 
         try:
