@@ -41,8 +41,21 @@ def toobit_https_transport(
         raise ValueError("TOOBIT_TRANSPORT_TIMEOUT_INVALID")
 
     query = urlencode(params)
-    url = base_url + path + (("?" + query) if query else "")
-    request = Request(url, method=method, headers=dict(headers))
+    request_headers = dict(headers)
+    if method == "GET":
+        url = base_url + path + (("?" + query) if query else "")
+        request = Request(url, method=method, headers=request_headers)
+    else:
+        # Toobit's signed REST examples send POST parameters as an
+        # application/x-www-form-urlencoded body, not a URL query string.
+        url = base_url + path
+        request_headers["Content-Type"] = "application/x-www-form-urlencoded"
+        request = Request(
+            url,
+            data=query.encode("utf-8"),
+            method=method,
+            headers=request_headers,
+        )
     try:
         with urlopen(request, timeout=float(timeout_seconds)) as response:
             raw = response.read()
