@@ -15,6 +15,8 @@ on:
       - "exchange_execution_order_preparation_v0_1.py"
       - "toobit_exchange_adapter_v0_1.py"
       - "test_toobit_submit_adapter_contract_v0_1.py"
+      - "test_runtime_order_intent_and_mandate_sources_v0_1.py"
+      - "test_execution_attempt_runtime_producers_v0_1.py"
       - "test_management_execution_authorization_v0_1.py"
       - "test_final_execution_attempt_contract_v0_1.py"
       - ".github/workflows/focused-execution-contract.yml"
@@ -44,3 +46,5 @@ jobs:
           test_management_execution_authorization_v0_1.py
           test_final_execution_attempt_contract_v0_1.py
           test_toobit_submit_adapter_contract_v0_1.py
+          test_runtime_order_intent_and_mandate_sources_v0_1.py
+          test_execution_attempt_runtime_producers_v0_1.py
