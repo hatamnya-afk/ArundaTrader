@@ -37,6 +37,7 @@ jobs:
             exchange_execution_adapter_contract_v0_1.py \
             exchange_execution_atomic_intent_claim_store_v0_1.py \
             exchange_execution_order_attempt_boundary_v0_1.py \
+            exchange_execution_order_reconciliation_v0_1.py \
             final_execution_attempt_contract_v0_1.py \
             toobit_exchange_adapter_v0_1.py \
             toobit_https_transport_v0_1.py \
@@ -56,4 +57,5 @@ jobs:
             test_execution_dependency_runtime_factory_v0_1.py \
             test_final_execution_attempt_offline_e2e_v0_1.py \
             test_toobit_exchange_adapter_v0_1.py \
-            test_exchange_execution_atomic_intent_claim_store_v0_1.py
+            test_exchange_execution_atomic_intent_claim_store_v0_1.py \
+            test_exchange_execution_order_reconciliation_v0_1.py
