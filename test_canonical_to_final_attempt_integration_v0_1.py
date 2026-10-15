@@ -50,6 +50,7 @@ def test_canonical_runtime_output_reaches_final_attempt_boundary_offline():
             execution_ready_package=record["execution_ready_package"],
             request=record["request"],
             authorization_observation=_standing_mandate(),
+            mandate_status_observation=_active_mandate_status(),
             adapter=_FakeAdapter(),
             venue=record["venue"],
             execution_instrument=record["execution_instrument"],
