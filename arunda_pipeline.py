@@ -4322,8 +4322,8 @@ def assert_execution_disabled() -> None:
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
         *,
-        adapter: Any = None,
-        claim_store: Any = None,
+        adapter: object | None = None,
+        claim_store: object | None = None,
     ) -> str:
         """Compose authentic runtime records with injected execution dependencies.
 
