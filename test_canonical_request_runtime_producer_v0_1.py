@@ -1,5 +1,7 @@
 """Focused tests for runtime OrderIntent + management-mandate canonical request production."""
+import json
 import unittest
+from unittest.mock import patch
 from canonical_request_runtime_producer_v0_1 import produce_canonical_requests_from_runtime_outputs
 
 
@@ -27,6 +29,19 @@ def snapshots():
 
 
 class CanonicalRequestRuntimeProducerTests(unittest.TestCase):
+    def setUp(self):
+        self._policy_patch = patch.dict("os.environ", {
+            "ARUNDA_EXECUTION_POLICY_JSON": json.dumps({
+                "policy_id": "TEST-ONLY-POLICY",
+                "policy_version": "TEST-ONLY-V1",
+                "venue": "SPOT",
+            }),
+        })
+        self._policy_patch.start()
+
+    def tearDown(self):
+        self._policy_patch.stop()
+
     def test_uses_authoritative_order_intent_and_risk_quantity_unchanged(self):
         decision, risk, gate, intents, mandate = snapshots()
         result = produce_canonical_requests_from_runtime_outputs(
