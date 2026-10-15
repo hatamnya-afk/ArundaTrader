@@ -136,7 +136,7 @@ def build_execution_outcome_record(
         "source_kind": source_kind,
         "observed_at": timestamp,
         "captured_at": captured_timestamp,
-        "provider_timestamp_known": timestamp is not None,
+        "provider_timestamp_known": source_kind == "PROVIDER_RESPONSE" and timestamp is not None,
         "provider_status": status,
         "outcome_state": outcome_state,
         "outcome_reason": reason,
