@@ -199,4 +199,4 @@ def test_default_observation_timestamp_is_local_timezone_aware_time(tmp_path):
     observed_at = result["record"]["observed_at"]
     parsed = datetime.datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
     assert parsed.tzinfo is not None and parsed.utcoffset() is not None
-    assert result["record"]["provider_timestamp_known"] is True
+    assert result["record"]["provider_timestamp_known"] is False
