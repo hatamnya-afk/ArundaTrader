@@ -5,6 +5,8 @@ provider lookup is not proof of non-execution and leaves the intent quarantined.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 from typing import Any
 from uuid import uuid4
 
@@ -65,7 +67,8 @@ def reconcile_order_attempt(
             "provider_timestamp": data.get("timestamp"),
             "reconciliation_state": "ORDER_FOUND",
         }
-        evidence_id = f"{claim.trade_event_id or intent_id}:reconciliation:{normalized['exchange_order_id']}"
+        fingerprint = hashlib.sha256(json.dumps(normalized, sort_keys=True, default=str, separators=(",", ":")).encode("utf-8")).hexdigest()[:16]
+        evidence_id = f"{claim.trade_event_id or intent_id}:reconciliation:{normalized['exchange_order_id']}:{fingerprint}"
         claim_store.record_reconciliation_evidence(
             provider_namespace=provider_namespace, intent_id=intent_id,
             evidence_event_id=evidence_id, client_order_id=claim.client_order_id,
