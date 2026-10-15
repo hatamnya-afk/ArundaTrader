@@ -20,7 +20,7 @@ Represent a provider response or read-only lookup as append-only outcome evidenc
 
 ## Bridge to the existing execution contract
 
-`execution_attempt_outcome_capture_v0_1.py` accepts the `CanonicalOrderRequest` and `CanonicalExecutionResult` returned by the existing execution boundary and persists a provider observation only when the result includes a timestamp, trade-event identity, and authoritative Decision ID. It returns the original execution result separately from capture state, so evidence-write failure is not silently represented as an exchange rejection. A `FAIL_CLOSED` contract result is explicitly not misrepresented as a provider response. This is an integration seam, not yet a production-pipeline hook; the caller must explicitly choose the evidence path.
+`exchange_execution_order_attempt_boundary_v0_1.py` now issues a unique `TE-...` identity immediately before invoking the prepared adapter attempt and overwrites any adapter-supplied trade-event identity. Adapter exceptions retain that attempt identity. `execution_attempt_outcome_capture_v0_1.py` accepts the `CanonicalOrderRequest` and `CanonicalExecutionResult` returned by the existing execution boundary and persists a provider observation only when the result includes a provider timestamp, boundary-issued trade-event identity, and authoritative Decision ID. It returns the original execution result separately from capture state, so evidence-write failure is not silently represented as an exchange rejection. A `FAIL_CLOSED` contract result is explicitly not misrepresented as a provider response. This is an integration seam, not yet a production-pipeline hook; the caller must explicitly choose the evidence path.
 
 ## Toobit read-only reconciliation seam
 
