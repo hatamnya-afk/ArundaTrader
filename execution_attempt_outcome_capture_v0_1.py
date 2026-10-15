@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
+from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
 from execution_outcome_evidence_contract_v0_1 import (
     append_execution_outcome_record,
     build_outcome_record_from_canonical_result,
@@ -104,4 +105,34 @@ def capture_execution_attempt_outcome(
     )
 
 
-__all__ = ["OutcomeCaptureResult", "capture_execution_attempt_outcome"]
+def run_final_execution_attempt_with_outcome_capture(
+    *,
+    execution_ready_package: dict[str, Any],
+    request: CanonicalOrderRequest,
+    authorization_observation: dict[str, Any],
+    adapter: Any,
+    venue: str,
+    execution_instrument: Any,
+    stream_path: Path,
+) -> OutcomeCaptureResult:
+    """Run the existing final attempt contract, then capture its observed result."""
+    result = run_final_execution_attempt_contract(
+        execution_ready_package=execution_ready_package,
+        request=request,
+        authorization_observation=authorization_observation,
+        adapter=adapter,
+        venue=venue,
+        execution_instrument=execution_instrument,
+    )
+    return capture_execution_attempt_outcome(
+        request=request,
+        result=result,
+        stream_path=Path(stream_path),
+    )
+
+
+__all__ = [
+    "OutcomeCaptureResult",
+    "capture_execution_attempt_outcome",
+    "run_final_execution_attempt_with_outcome_capture",
+]
