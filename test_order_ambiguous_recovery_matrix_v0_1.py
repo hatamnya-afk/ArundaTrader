@@ -216,3 +216,90 @@ def test_reconciliation_contract_is_policy_only_and_never_grants_submit_permissi
     assert decision.reason_code == "SEPARATE_ATOMIC_CLAIM_AND_AUTHORIZATION_REQUIRED"
     assert decision.may_submit is False
     assert decision.retry_allowed is False
+
+
+def test_toobit_ambiguous_timeout_and_not_found_quarantines_without_retry():
+    from toobit_ambiguous_submission_recovery_policy_v0_1 import (
+        LookupObservation,
+        plan_ambiguous_submission_recovery,
+    )
+
+    plan = plan_ambiguous_submission_recovery(
+        prior_post_may_have_reached_provider=True,
+        expected_client_order_id=CLIENT_ID,
+        lookup=LookupObservation(state="NOT_FOUND", detail_code="NO_SUCH_ORDER"),
+    )
+    assert plan.state == "QUARANTINED_OUTCOME_UNKNOWN"
+    assert plan.may_submit is False
+    assert plan.retry_allowed is False
+    assert plan.claim_release_allowed is False
+    assert plan.requires_human_reconciliation is True
+    assert "REPEAT_READ_ONLY_ORDER_LOOKUP" in plan.safe_read_only_actions
+    assert "MANUAL_HISTORY_INVESTIGATION" in plan.safe_read_only_actions
+
+
+def test_toobit_duplicate_error_is_not_original_order_replay():
+    from toobit_ambiguous_submission_recovery_policy_v0_1 import (
+        LookupObservation,
+        plan_ambiguous_submission_recovery,
+    )
+
+    plan = plan_ambiguous_submission_recovery(
+        prior_post_may_have_reached_provider=True,
+        expected_client_order_id=CLIENT_ID,
+        lookup=LookupObservation(state="ERROR", detail_code="-1141"),
+    )
+    assert plan.state == "OUTCOME_UNRESOLVED"
+    assert plan.reason_code == "DUPLICATE_ERROR_DOES_NOT_REPLAY_ORIGINAL_ORDER"
+    assert plan.may_submit is False
+    assert plan.retry_allowed is False
+    assert plan.claim_release_allowed is False
+    assert plan.requires_human_reconciliation is True
+
+
+def test_toobit_found_order_requires_exact_client_id_and_exchange_id():
+    from toobit_ambiguous_submission_recovery_policy_v0_1 import (
+        LookupObservation,
+        plan_ambiguous_submission_recovery,
+    )
+
+    matched = plan_ambiguous_submission_recovery(
+        prior_post_may_have_reached_provider=True,
+        expected_client_order_id=CLIENT_ID,
+        lookup=LookupObservation(
+            state="FOUND", client_order_id=CLIENT_ID,
+            exchange_order_id="EXCHANGE-123", provider_status="NEW",
+        ),
+    )
+    assert matched.state == "ORDER_MATCHED"
+    assert matched.may_submit is False
+    assert matched.retry_allowed is False
+    assert matched.claim_release_allowed is False
+
+    mismatch = plan_ambiguous_submission_recovery(
+        prior_post_may_have_reached_provider=True,
+        expected_client_order_id=CLIENT_ID,
+        lookup=LookupObservation(
+            state="FOUND", client_order_id="OTHER-ID",
+            exchange_order_id="EXCHANGE-123",
+        ),
+    )
+    assert mismatch.state == "IDENTITY_UNVERIFIED"
+    assert mismatch.requires_human_reconciliation is True
+    assert mismatch.may_submit is False
+
+
+def test_toobit_no_prior_post_does_not_authorize_submission_by_itself():
+    from toobit_ambiguous_submission_recovery_policy_v0_1 import (
+        plan_ambiguous_submission_recovery,
+    )
+
+    plan = plan_ambiguous_submission_recovery(
+        prior_post_may_have_reached_provider=False,
+        expected_client_order_id=CLIENT_ID,
+        lookup=None,
+    )
+    assert plan.state == "PRE_SUBMISSION_ONLY"
+    assert plan.may_submit is False
+    assert plan.retry_allowed is False
+    assert plan.claim_release_allowed is False
