@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - operational-main-20261007
+      - fix/phase-entry-safety-boundaries-20261016
     paths:
       - "management_execution_authorization_v0_1.py"
       - "execution_authorization_boundary_v0_1.py"
@@ -47,7 +48,7 @@ jobs:
       - name: Checkout operational branch
         uses: actions/checkout@v4
         with:
-          ref: operational-main-20261007
+          ref: ${{ github.ref }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
