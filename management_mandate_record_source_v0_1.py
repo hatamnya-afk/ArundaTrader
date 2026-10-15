@@ -1,7 +1,7 @@
-"""Load the authoritative one-time management mandate from deployment configuration.
+"""Load and validate the authoritative one-time management mandate.
 
-The record is intentionally external to source control. No default approval,
-issue time, expiry, provider, or market scope is manufactured.
+The source record is deployment-provided and never committed to source control.
+No approval, identifier, issuance time, expiry, provider, or scope is synthesized.
 """
 from __future__ import annotations
 
@@ -25,9 +25,14 @@ def load_authoritative_management_mandate(
         raise ValueError("AUTHORITATIVE_MANAGEMENT_MANDATE_JSON_INVALID") from exc
     if not isinstance(record, Mapping):
         raise ValueError("AUTHORITATIVE_MANAGEMENT_MANDATE_RECORD_INVALID")
-    # Validate source record here, including explicit timezone-aware issued_at
-    # and expires_at. Return the original values, not a synthesized replacement.
-    evaluate_management_phase_entry(record)
+
+    validated = evaluate_management_phase_entry(record)
+    # A validly formed DENIED/DEFERRED record is not permission to proceed.
+    # Keep the original management record for downstream contract evaluation.
+    if validated.get("management_state") != "AUTHORIZED":
+        raise ValueError("AUTHORITATIVE_MANAGEMENT_MANDATE_NOT_AUTHORIZED")
+    if not isinstance(validated.get("authorization_observation"), Mapping):
+        raise ValueError("AUTHORITATIVE_MANAGEMENT_AUTHORIZATION_OBSERVATION_MISSING")
     return dict(record)
 
 
