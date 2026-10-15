@@ -116,6 +116,52 @@ def test_futures_account_state_preserves_provider_position_state_without_inferen
     assert "position_conflict" not in result.data
 
 
+def test_futures_account_state_uses_selected_usdc_category():
+    specification = ExecutionInstrumentSpecification(
+        asset="BTC",
+        venue="FUTURES",
+        settlement_asset="USDC",
+        instrument_type="PERPETUAL",
+        selection_source="TEST_FIXTURE",
+        policy_version="test-only",
+    )
+
+    def transport(*, method, path, params, headers, base_url):
+        if path == "/api/v1/exchangeInfo":
+            return {
+                "symbols": [],
+                "contracts": [
+                    {
+                        "symbol": "BTC-SWAP-USDC",
+                        "status": "TRADING",
+                        "underlying": "BTC",
+                        "marginToken": "USDC",
+                        "quoteAsset": "USDC",
+                        "contractMultiplier": "0.001",
+                        "filters": [],
+                    }
+                ],
+            }
+        if path == "/api/v1/futures/balance":
+            return [{"asset": "USDC", "available": "100"}]
+        if path == "/api/v1/futures/accountLeverage":
+            assert params["category"] == "USDC"
+            assert params["symbol"] == "BTC-SWAP-USDC"
+            return [{"symbolId": "BTC-SWAP-USDC", "leverage": "3", "marginType": "ISOLATED"}]
+        if path == "/api/v1/futures/positions":
+            assert params["category"] == "USDC"
+            assert params["symbol"] == "BTC-SWAP-USDC"
+            return [{"symbol": "BTC-SWAP-USDC", "side": "LONG", "positionAmt": "0"}]
+        raise AssertionError("unexpected path: " + path)
+
+    result = ToobitExchangeAdapter(
+        transport=transport, api_key="test-key", secret_key="test-secret"
+    ).futures_account_state("BTC", execution_instrument=specification)
+
+    assert result.allowed is True
+    assert result.data["margin_type"] == "ISOLATED"
+
+
 def test_futures_account_state_blocks_without_provider_native_margin_type():
     def transport(*, method, path, params, headers, base_url):
         if path == "/api/v1/exchangeInfo":

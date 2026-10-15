@@ -420,6 +420,13 @@ class ToobitExchangeAdapter:
         execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
     ) -> ToobitAdapterResult:
         try:
+            category = (
+                str(execution_instrument.settlement_asset).strip().upper()
+                if execution_instrument is not None
+                else "USDT"
+            )
+            if category not in {"USDT", "USDC"}:
+                raise RuntimeError("TOOBIT_FUTURES_CATEGORY_UNKNOWN")
             if execution_instrument is not None:
                 resolved = self.resolve_futures_instrument(
                     execution_instrument
@@ -462,7 +469,7 @@ class ToobitExchangeAdapter:
                     "/api/v1/futures/accountLeverage",
                     params={
                         "symbol": symbol,
-                        "category": "USDT",
+                        "category": category,
                     },
                     signed=True,
                 )
@@ -504,7 +511,7 @@ class ToobitExchangeAdapter:
                     "/api/v1/futures/positions",
                     params={
                         "symbol": symbol,
-                        "category": "USDT",
+                        "category": category,
                     },
                     signed=True,
                 )
@@ -563,6 +570,13 @@ class ToobitExchangeAdapter:
         execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
     ) -> ToobitAdapterResult:
         try:
+            category = (
+                str(execution_instrument.settlement_asset).strip().upper()
+                if execution_instrument is not None
+                else "USDT"
+            )
+            if category not in {"USDT", "USDC"}:
+                raise RuntimeError("TOOBIT_FUTURES_CATEGORY_UNKNOWN")
             if execution_instrument is not None:
                 resolved = self.resolve_futures_instrument(
                     execution_instrument
@@ -598,7 +612,7 @@ class ToobitExchangeAdapter:
                     "/api/v2/futures/open-orders",
                     params={
                         "symbol": symbol,
-                        "category": "USDT",
+                        "category": category,
                         "limit": 1000,
                     },
                     signed=True,
@@ -610,7 +624,7 @@ class ToobitExchangeAdapter:
                     "/api/v1/futures/historyOrders",
                     params={
                         "symbol": symbol,
-                        "category": "USDT",
+                        "category": category,
                         "limit": 1000,
                     },
                     signed=True,
