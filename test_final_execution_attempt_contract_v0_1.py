@@ -51,6 +51,19 @@ def _revocation_controlled_mandate():
     return value
 
 
+def _active_mandate_status():
+    from datetime import datetime, timezone
+    return {
+        "mandate_id": "REAL-PROD-MANDATE-001",
+        "status": "ACTIVE",
+        "source": "MANAGEMENT_MANDATE_REGISTRY",
+        "record_id": "mandate-status-record-001",
+        "observed_at": datetime.now(timezone.utc).isoformat(),
+        "max_age_seconds": 60,
+        "freshness_policy_id": "management-status-freshness-v1",
+    }
+
+
 class _FakeClaim:
     outcome = "CLAIMED"
 
@@ -119,7 +132,7 @@ def _run(authorization, safety=None):
     with patch.object(execution_contract, "safety_contract", return_value=safety):
         return run_final_execution_attempt_contract(
             execution_ready_package=_package(), request=_request(),
-            authorization_observation=authorization, adapter=_FakeAdapter(),
+            authorization_observation=authorization, mandate_status_observation=_active_mandate_status(), adapter=_FakeAdapter(),
             venue="SPOT", execution_instrument="BTC-USDT",
             claim_store=_FakeClaimStore(),
         )
@@ -193,9 +206,31 @@ def test_final_attempt_rejects_exposure_not_reconciled_to_quantity_times_entry()
     with patch.object(execution_contract, "safety_contract", return_value=safety):
         result = run_final_execution_attempt_contract(
             execution_ready_package=package, request=_request(),
-            authorization_observation=_standing_mandate(), adapter=_FakeAdapter(),
+            authorization_observation=_standing_mandate(), mandate_status_observation=_active_mandate_status(), adapter=_FakeAdapter(),
             venue="SPOT", execution_instrument="BTC-USDT",
             claim_store=_FakeClaimStore(),
         )
     assert result.status == "FAIL_CLOSED"
     assert result.error_code == "READINESS_EXPOSURE_ARITHMETIC_MISMATCH"
+
+
+def test_final_attempt_fails_closed_when_mandate_status_missing_or_revoked():
+    with patch.object(execution_contract, "safety_contract", return_value={
+        "EXECUTION_ENABLED": True, "ORDER_SUBMISSION_ENABLED": True, "EXCHANGE_WRITE_ENABLED": True,
+    }):
+        missing = run_final_execution_attempt_contract(
+            execution_ready_package=_package(), request=_request(),
+            authorization_observation=_standing_mandate(), adapter=_FakeAdapter(),
+            venue="SPOT", execution_instrument="BTC-USDT", claim_store=_FakeClaimStore(),
+        )
+        revoked = run_final_execution_attempt_contract(
+            execution_ready_package=_package(), request=_request(),
+            authorization_observation=_standing_mandate(),
+            mandate_status_observation={**_active_mandate_status(), "status": "REVOKED"},
+            adapter=_FakeAdapter(), venue="SPOT", execution_instrument="BTC-USDT",
+            claim_store=_FakeClaimStore(),
+        )
+    assert missing.status == "FAIL_CLOSED"
+    assert missing.error_code == "MANDATE_REVOCATION_OBSERVATION_MISSING"
+    assert revoked.status == "FAIL_CLOSED"
+    assert revoked.error_code == "MANDATE_REVOKED"
