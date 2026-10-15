@@ -1,3 +1,18 @@
+## Runtime connection added — 2026-10-15
+
+The final order-attempt boundary rereads the durable journal on every attempt via `ARUNDA_MANDATE_LIFECYCLE_PATH`. It replaces any in-memory lifecycle snapshot with journal contents before technical authorization. Missing configuration, absent/corrupt journal, or a revoked/replaced mandate fails closed before the adapter is called. It never auto-creates or repairs activation history.
+
+The explicit helper `record_management_phase_entry(path, validated_management_result)` persists activation only from a validated `AUTHORIZED` REAL_PRODUCTION standing phase-entry result.
+
+Deployment requirements:
+1. Configure `ARUNDA_MANDATE_LIFECYCLE_PATH` to a protected, persistent absolute path.
+2. Validate the actual management decision, then explicitly persist it with `record_management_phase_entry` to that path.
+3. Verify the active mandate with `require_active_mandate(path, expected_mandate_id=...)`.
+4. Append revocation/replacement as `REVOKE` / `REPLACE` events using `append_lifecycle_event`; never delete or edit the journal.
+5. Protect the journal and sibling lock file with OS permissions and backups. Missing, unreadable, or corrupt history must block authorization; there is no in-memory fallback.
+
+This is connected to the isolated candidate execution-attempt boundary, but is not deployed or wired into `operational-main-20261007`. It does not authorize live order submission. The PR remains subject to all outstanding provider-semantics and production-phase gates.
+
 ## STANDING-MANDATE LIFECYCLE — DURABLE JOURNAL CONTRACT PASS (2026-10-15)
 
 - Standing phase-entry mandate is non-expiring by default; explicit expiry remains optional and is enforced when provided. Per-trade management approval remains forbidden.
