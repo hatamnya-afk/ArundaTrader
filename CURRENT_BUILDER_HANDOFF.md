@@ -1,3 +1,14 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — READ-ONLY AMBIGUOUS-ORDER RECONCILIATION
+>
+> - Added `ToobitExchangeAdapter.query_order_by_client_order_id(...)` for read-only lookup by exact provider client ID: Spot `GET /api/v1/spot/order` and Futures v2 `GET /api/v2/futures/order`. The method validates returned client ID, symbol, order ID, and status; it never sends a write request.
+> - A positive identity-matched order lookup returns `ORDER_FOUND` evidence. Any provider error, timeout, missing order, or malformed/mismatched response returns `ORDER_LOOKUP_UNRESOLVED`, `state_known=False`, `resubmit_allowed=False`. Negative lookup is deliberately not interpreted as proof that the original order never executed; no automatic retry or claim release is implemented.
+> - Official API references: [Toobit Spot order query](https://api-docs.toobit.com/api/spot-account-and-trading.html) documents `GET /api/v1/spot/order` with `origClientOrderId`; [Toobit Futures v2 order query](https://api-docs.toobit.com/api/usdt-m-api-v2) documents `GET /api/v2/futures/order` with `origClientOrderId`.
+> - Focused Execution Contract CI passed on `9dc6a6f2bd250ded3bcac2b280bd5f0a960170e0`: 47 tests passed. Phase-entry focused verification passed on the same commit: 54 tests passed. These are scoped offline tests, not live provider verification.
+> - Standing-mandate tests now reflect the authorized revocation-controlled policy: missing calendar timestamps are accepted as a no-calendar-expiry standing mandate; explicit expiry, when supplied, is still validated. This does not fabricate timestamps or require per-trade approval.
+> - **Remaining live gate:** negative lookup completeness/retention and provider client-ID uniqueness/reuse semantics remain unverified by authoritative documentation. A missing lookup result must remain quarantined indefinitely until positive evidence or an explicit operator-reviewed reconciliation outcome. No order, provider write, cancellation, production runtime, or production DB write was performed; all submission switches remain OFF.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — STANDING-MANDATE EXPIRY POLICY
 >
 > - The active phase-entry mandate is revocation-controlled with **no calendar expiry**; do not require or fabricate `issued_at`/`expires_at` merely to create a standing mandate. If an explicit expiry is supplied, it must be timezone-aware, future-dated, and consistent with issuance.
