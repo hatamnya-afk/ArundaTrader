@@ -85,7 +85,6 @@ class RuntimeProducerTests(unittest.TestCase):
         mandate = valid_mandate()
         mandate.pop("expires_at")
         mandate.pop("issued_at")
-        mandate["mandate_expiry_policy"] = "REVOCATION_CONTROLLED_NO_CALENDAR_EXPIRY"
         result = produce_final_execution_attempt_context(
             readiness=valid_readiness(),
             management_observation=mandate,
