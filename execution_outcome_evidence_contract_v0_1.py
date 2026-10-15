@@ -46,7 +46,7 @@ def _timestamp_utc(value: Any) -> str:
     return parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def _optional_positive_decimal(value: Any, field: str) -> str | None:
+def _optional_decimal(value: Any, field: str, *, allow_zero: bool = False) -> str | None:
     if value is None:
         return None
     if isinstance(value, bool):
@@ -55,7 +55,7 @@ def _optional_positive_decimal(value: Any, field: str) -> str | None:
         number = Decimal(str(value))
     except (InvalidOperation, ValueError) as exc:
         raise ValueError(f"{field.upper()}_INVALID") from exc
-    if not number.is_finite() or number <= 0:
+    if not number.is_finite() or (number < 0 if allow_zero else number <= 0):
         raise ValueError(f"{field.upper()}_INVALID")
     return format(number, "f")
 
@@ -107,8 +107,8 @@ def build_execution_outcome_record(
         raise ValueError("SOURCE_KIND_INVALID")
     status = _required_text(provider_status, "provider_status").upper()
     timestamp = _timestamp_utc(observed_at)
-    quantity = _optional_positive_decimal(executed_quantity, "executed_quantity")
-    price = _optional_positive_decimal(executed_price, "executed_price")
+    quantity = _optional_decimal(executed_quantity, "executed_quantity", allow_zero=True)
+    price = _optional_decimal(executed_price, "executed_price")
     order_id = None if exchange_order_id is None else _required_text(exchange_order_id, "exchange_order_id")
     outcome_state, reason = _classify(status, quantity, price)
 
