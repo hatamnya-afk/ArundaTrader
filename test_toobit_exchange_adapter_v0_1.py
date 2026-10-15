@@ -66,7 +66,7 @@ def test_missing_transport_fails_closed():
 def test_order_submission_is_explicitly_disabled():
     result = ToobitExchangeAdapter().order_submission()
     assert result.allowed is False
-    assert result.reason == "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED"
+    assert result.reason == "ORDER_SUBMISSION_NOT_ENABLED"
 
 
 def test_cancel_is_explicitly_disabled():
@@ -274,3 +274,47 @@ def test_toobit_conforms_to_replaceable_exchange_adapter_contract():
     assert validate_adapter_contract(adapter) == (True, "VALID")
     assert adapter.capabilities().order_submission is False
     assert adapter.capabilities().order_cancellation is False
+
+
+import unittest
+
+
+class ToobitExchangeAdapterTests(unittest.TestCase):
+    def test_spot_constraints_use_authoritative_symbol(self):
+        test_spot_constraints_use_authoritative_symbol()
+
+    def test_futures_constraints_preserve_provider_contract_metadata(self):
+        test_futures_constraints_preserve_provider_contract_metadata()
+
+    def test_missing_transport_fails_closed(self):
+        test_missing_transport_fails_closed()
+
+    def test_order_submission_is_explicitly_disabled(self):
+        test_order_submission_is_explicitly_disabled()
+
+    def test_cancel_is_explicitly_disabled(self):
+        test_cancel_is_explicitly_disabled()
+
+    def test_futures_account_state_preserves_provider_position_state_without_inference(self):
+        test_futures_account_state_preserves_provider_position_state_without_inference()
+
+    def test_futures_account_state_blocks_without_provider_native_margin_type(self):
+        test_futures_account_state_blocks_without_provider_native_margin_type()
+
+    def test_futures_instrument_resolution_uses_authoritative_settlement_metadata(self):
+        test_futures_instrument_resolution_uses_authoritative_settlement_metadata()
+
+    def test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contracts(self):
+        test_futures_instrument_resolution_blocks_ambiguous_same_settlement_contracts()
+
+    def test_discover_tradable_assets_is_dynamic_for_spot_and_futures(self):
+        test_discover_tradable_assets_is_dynamic_for_spot_and_futures()
+
+    def test_discover_tradable_assets_rejects_invalid_venue(self):
+        test_discover_tradable_assets_rejects_invalid_venue()
+
+    def test_toobit_conforms_to_replaceable_exchange_adapter_contract(self):
+        test_toobit_conforms_to_replaceable_exchange_adapter_contract()
+
+if __name__ == "__main__":
+    unittest.main()
