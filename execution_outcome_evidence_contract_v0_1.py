@@ -209,7 +209,12 @@ def append_execution_outcome_record(
                     raise ValueError(f"OUTCOME_STREAM_INVALID_JSON_LINE:{line_number}") from exc
                 if existing.get("event_id") != row["event_id"]:
                     continue
-                if existing != row:
+                # Capture time describes this local persistence attempt, not
+                # provider identity. Ignore it when checking an idempotent replay;
+                # all provider facts and authoritative identities must still match.
+                existing_facts = {key: value for key, value in existing.items() if key != "captured_at"}
+                incoming_facts = {key: value for key, value in row.items() if key != "captured_at"}
+                if existing_facts != incoming_facts:
                     raise ValueError("OUTCOME_EVENT_ID_CONFLICT")
                 return {"state": "ALREADY_PERSISTED", "event_id": row["event_id"], "path": str(path)}
     path.parent.mkdir(parents=True, exist_ok=True)
