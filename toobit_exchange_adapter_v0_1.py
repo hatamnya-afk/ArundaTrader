@@ -605,7 +605,7 @@ class ToobitExchangeAdapter:
             recent_orders = self._unwrap(
                 self._call(
                     "GET",
-                    "/api/v1/futures/historyOrders",
+                    "/api/v2/futures/history-orders",
                     params={
                         "symbol": symbol,
                         "category": "USDT",
@@ -798,92 +798,3 @@ class ToobitExchangeAdapter:
                 provider_quantity = base_quantity * reference_price
 
             lot = filters.get("LOT_SIZE") or filters.get("MARKET_LOT_SIZE")
-            if isinstance(lot, dict):
-                minimum = Decimal(str(lot.get("minQty", "0")))
-                maximum = Decimal(str(lot.get("maxQty", "0")))
-                step = Decimal(str(lot.get("stepSize", "0")))
-                if minimum > 0 and provider_quantity < minimum:
-                    raise RuntimeError("SPOT_QUANTITY_BELOW_MIN")
-                if maximum > 0 and provider_quantity > maximum:
-                    raise RuntimeError("SPOT_QUANTITY_ABOVE_MAX")
-                if step > 0 and (
-                    provider_quantity / step
-                ) != (
-                    provider_quantity / step
-                ).to_integral_value():
-                    raise RuntimeError("SPOT_QUANTITY_STEP_INVALID")
-
-            payload = {
-                "symbol": symbol,
-                "side": "BUY" if request.direction == "LONG" else "SELL",
-                "type": request.order_type,
-                "newClientOrderId": request.intent_id,
-                "quantity": _format_provider_quantity(provider_quantity),
-            }
-
-            return AdapterOrderPreparation(
-                ready=True,
-                reason="READY",
-                adapter_name=adapter_name,
-                venue=normalized_venue,
-                request=payload,
-            )
-        except (InvalidOperation, ValueError, TypeError) as exc:
-            return AdapterOrderPreparation(
-                ready=False,
-                reason=f"ORDER_PREPARATION_INVALID:{exc}",
-                adapter_name=adapter_name,
-                venue=normalized_venue,
-            )
-        except Exception as exc:
-            return AdapterOrderPreparation(
-                ready=False,
-                reason=str(exc),
-                adapter_name=adapter_name,
-                venue=normalized_venue,
-            )
-
-    def submit_prepared_order(
-        self,
-        preparation: AdapterOrderPreparation,
-        *,
-        canonical_request: CanonicalOrderRequest,
-    ) -> CanonicalExecutionResult:
-        del preparation
-        return CanonicalExecutionResult(
-            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
-            asset=canonical_request.asset, direction=canonical_request.direction,
-            executed_quantity=None, executed_price=None, timestamp=None,
-            adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
-        )
-
-    def submit_order(self, request: Any) -> CanonicalExecutionResult:
-        del request
-        return CanonicalExecutionResult(
-            accepted=False, exchange_order_id=None, status="FAIL_CLOSED",
-            asset=None, direction=None, executed_quantity=None,
-            executed_price=None, timestamp=None, adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-            error_message="Order submission is disabled by the current execution contract.",
-        )
-
-    def order_submission(self, *args: Any, **kwargs: Any) -> ToobitAdapterResult:
-        del args, kwargs
-        return ToobitAdapterResult(
-            False,
-            "EXECUTION_DISABLED_ORDER_SUBMISSION_NOT_IMPLEMENTED",
-        )
-
-    def cancel_order(self, *, asset: str, exchange_order_id: str) -> CanonicalExecutionResult:
-        return CanonicalExecutionResult(
-            accepted=False, exchange_order_id=exchange_order_id, status="FAIL_CLOSED",
-            asset=asset, direction=None, executed_quantity=None,
-            executed_price=None, timestamp=None, adapter=self.name,
-            error_code="EXECUTION_DISABLED_ORDER_CANCELLATION_NOT_IMPLEMENTED",
-            error_message="Order cancellation is disabled by the current execution contract.",
-        )
-
-
-__all__ = ["BASE_URL", "ToobitAdapterResult", "ToobitExchangeAdapter"]
