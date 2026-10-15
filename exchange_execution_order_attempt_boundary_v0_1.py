@@ -83,22 +83,6 @@ def attempt_prepared_order(
             error_message="Global execution/write safety contract could not be verified.",
         )
 
-    # A standing mandate without a fresh authoritative status observation
-    # cannot be treated as active. The source and freshness policy are supplied
-    # by management runtime wiring; this boundary never fabricates them.
-    try:
-        evaluate_mandate_revocation_observation(
-            mandate=authorization_observation,
-            observation=mandate_status_observation,
-        )
-    except ValueError as exc:
-        return blocked_execution_result(
-            asset=request.asset,
-            direction=request.direction,
-            error_code=str(exc),
-            error_message=f"Standing-mandate status verification failed closed: {exc}.",
-        )
-
     contract_valid, contract_reason = validate_adapter_contract(adapter)
     if not contract_valid:
         return blocked_execution_result(
@@ -127,6 +111,22 @@ def attempt_prepared_order(
             adapter=getattr(adapter, "adapter_name", None),
             error_code="ADAPTER_ORDER_SUBMISSION_UNSUPPORTED",
             error_message="Selected adapter does not advertise order-submission capability; no claim or provider call was made.",
+        )
+
+    # A standing mandate without a fresh authoritative status observation
+    # cannot be treated as active. The source and freshness policy are supplied
+    # by management runtime wiring; this boundary never fabricates them.
+    try:
+        evaluate_mandate_revocation_observation(
+            mandate=authorization_observation,
+            observation=mandate_status_observation,
+        )
+    except ValueError as exc:
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            error_code=str(exc),
+            error_message=f"Standing-mandate status verification failed closed: {exc}.",
         )
 
     if execution_ready_package is not None:
