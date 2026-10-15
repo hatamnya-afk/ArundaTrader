@@ -4322,20 +4322,23 @@ def assert_execution_disabled() -> None:
 def verify_execution_boundary_integration(
         canonical_order_requests: dict,
     ) -> str:
-        """Compose the final attempt contract while preserving fail-closed safety.
+        """Run the final contract only from authentic upstream producer records.
 
-        The production orchestrator currently creates no canonical order requests.
-        If a future caller supplies one, authentic readiness and standing-mandate
-        observations are mandatory. The adapter is deliberately None here, so
-        this integration cannot submit an order.
+        Raw producer inputs are preferred: readiness + the one-time standing
+        mandate are converted by the dedicated producers. Prebuilt package and
+        authorization observations remain accepted only for compatibility tests.
+        The adapter is deliberately None; this boundary cannot submit.
         """
         assert_execution_disabled()
 
         if not isinstance(canonical_order_requests, dict):
             fail("Execution Boundary canonical requests must be dict")
-
         if not canonical_order_requests:
             return "DEFERRED_NO_CANONICAL_REQUESTS"
+
+        from execution_attempt_runtime_producers_v0_1 import (
+            produce_final_execution_attempt_context,
+        )
 
         for asset, record in canonical_order_requests.items():
             if asset not in EXPECTED_ASSET_SET:
@@ -4347,22 +4350,37 @@ def verify_execution_boundary_integration(
             if not isinstance(request, exchange_execution_contract.CanonicalOrderRequest):
                 fail(f"Canonical request missing: {asset}")
 
-            required_context = (
-                "execution_ready_package",
-                "authorization_observation",
-                "venue",
-                "execution_instrument",
-            )
-            if any(record.get(key) is None for key in required_context):
+            if record.get("readiness") is not None or record.get("management_observation") is not None:
+                try:
+                    produced = produce_final_execution_attempt_context(
+                        readiness=record.get("readiness"),
+                        management_observation=record.get("management_observation"),
+                        request=request,
+                        venue=record.get("venue"),
+                        execution_instrument=record.get("execution_instrument"),
+                    )
+                except (TypeError, ValueError) as exc:
+                    return f"BLOCKED_FINAL_ATTEMPT_PRODUCER:{exc}"
+                package = produced["execution_ready_package"]
+                authorization_observation = produced["authorization_observation"]
+                venue = produced["venue"]
+                execution_instrument = produced["execution_instrument"]
+            else:
+                package = record.get("execution_ready_package")
+                authorization_observation = record.get("authorization_observation")
+                venue = record.get("venue")
+                execution_instrument = record.get("execution_instrument")
+
+            if any(value is None for value in (package, authorization_observation, venue, execution_instrument)):
                 return "BLOCKED_FINAL_ATTEMPT_CONTEXT_MISSING"
 
             result = run_final_execution_attempt_contract(
-                execution_ready_package=record["execution_ready_package"],
+                execution_ready_package=package,
                 request=request,
-                authorization_observation=record["authorization_observation"],
+                authorization_observation=authorization_observation,
                 adapter=None,
-                venue=record["venue"],
-                execution_instrument=record["execution_instrument"],
+                venue=venue,
+                execution_instrument=execution_instrument,
             )
 
             if not isinstance(result, exchange_execution_contract.CanonicalExecutionResult):
@@ -4375,7 +4393,6 @@ def verify_execution_boundary_integration(
                 fail(f"Final execution attempt was not explicitly blocked: {asset}")
 
         return "VERIFIED_BLOCKED_FINAL_ATTEMPT"
-
 
 def assert_no_execution_boundary(
         order_intents: list[dict],
