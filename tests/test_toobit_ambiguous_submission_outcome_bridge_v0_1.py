@@ -89,3 +89,23 @@ def test_found_state_without_fail_closed_retry_policy_is_rejected(tmp_path):
     assert result["capture_state"] == "NOT_CAPTURED"
     assert result["safe_to_retry"] is False
     assert not path.exists()
+
+
+def test_evidence_persistence_failure_is_explicit_and_never_retryable(tmp_path):
+    row = {
+        "symbol": "BTCUSDT", "clientOrderId": "INT-1", "orderId": "EX-1",
+        "status": "NEW",
+    }
+    reconciliation = reconcile_ambiguous_submission(
+        client_order_id="INT-1", open_orders=[row], recent_orders=[]
+    )
+    path = tmp_path / "directory-instead-of-file"
+    path.mkdir()
+    result = capture_reconciled_toobit_outcome(
+        request=request(), reconciliation=reconciliation, trade_event_id="TE-1",
+        observed_at="2026-10-15T08:01:00Z", stream_path=path,
+    )
+    assert result["reconciliation_state"] == "FOUND"
+    assert result["capture_state"] == "PERSISTENCE_FAILED"
+    assert result["reason"].startswith("IsADirectoryError:")
+    assert result["safe_to_retry"] is False
