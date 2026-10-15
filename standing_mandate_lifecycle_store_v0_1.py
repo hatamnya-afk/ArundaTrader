@@ -134,6 +134,42 @@ def _validate_history(events: tuple[dict[str, Any], ...]) -> None:
             raise ValueError("MANDATE_LIFECYCLE_EVENT_TYPE_INVALID")
 
 
+def record_management_phase_entry(
+    path: str | os.PathLike[str],
+    management_result: Mapping[str, Any],
+) -> tuple[dict[str, Any], ...]:
+    """Persist the activation event from a validated management phase-entry result.
+
+    This is an explicit management action; runtime authorization never creates
+    or repairs a missing journal automatically.
+    """
+    if not isinstance(management_result, Mapping):
+        raise ValueError("MANAGEMENT_PHASE_ENTRY_RESULT_INVALID")
+    if management_result.get("management_state") != "AUTHORIZED":
+        raise ValueError("MANAGEMENT_PHASE_ENTRY_NOT_AUTHORIZED")
+    if management_result.get("execution_authorization") != "AUTHORIZED_STANDING_MANDATE":
+        raise ValueError("MANAGEMENT_STANDING_MANDATE_REQUIRED")
+    observation = management_result.get("authorization_observation")
+    if not isinstance(observation, Mapping):
+        raise ValueError("MANAGEMENT_AUTHORIZATION_OBSERVATION_INVALID")
+    if observation.get("authorization_mode") != "STANDING_MANDATE":
+        raise ValueError("MANAGEMENT_STANDING_MANDATE_REQUIRED")
+    if observation.get("environment") != "REAL_PRODUCTION":
+        raise ValueError("MANAGEMENT_ENVIRONMENT_INVALID")
+    mandate_id = observation.get("mandate_id")
+    if not isinstance(mandate_id, str) or not mandate_id.strip():
+        raise ValueError("MANAGEMENT_MANDATE_ID_INVALID")
+    return append_lifecycle_event(
+        path,
+        {
+            "event_id": f"PHASE_ENTRY_ACTIVATE:{mandate_id.strip()}",
+            "event_type": "ACTIVATE",
+            "mandate_id": mandate_id.strip(),
+            "authority": "MANAGEMENT",
+        },
+    )
+
+
 def require_active_mandate(
     path: str | os.PathLike[str],
     *,
@@ -145,4 +181,4 @@ def require_active_mandate(
     return events
 
 
-__all__ = ["append_lifecycle_event", "read_lifecycle_events", "require_active_mandate"]
+__all__ = ["append_lifecycle_event", "read_lifecycle_events", "record_management_phase_entry", "require_active_mandate"]
