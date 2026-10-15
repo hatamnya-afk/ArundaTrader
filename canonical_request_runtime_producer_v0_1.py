@@ -10,6 +10,8 @@ from typing import Any
 
 from exchange_execution_contract import build_order_request, validate_order_request
 from execution_ready_package_v0_1 import build_execution_ready_package
+from execution_instrument_policy_v0_1 import build_execution_instrument_specification
+from execution_runtime_policy_source_v0_1 import load_authoritative_execution_runtime_policy
 
 
 def _required(record: Mapping[str, Any], key: str, code: str) -> Any:
@@ -38,6 +40,7 @@ def produce_canonical_requests_from_runtime_outputs(
         raise ValueError("AUTHORITATIVE_MANAGEMENT_MANDATE_SOURCE_MISSING")
 
     result: dict[str, dict[str, Any]] = {}
+    execution_policy = load_authoritative_execution_runtime_policy()
     for raw_asset, decision in decision_snapshot.items():
         asset = str(raw_asset).strip().upper()
         risk = risk_snapshot[raw_asset]
@@ -89,6 +92,23 @@ def produce_canonical_requests_from_runtime_outputs(
         if not valid:
             raise ValueError(f"CANONICAL_REQUEST_INVALID:{asset}:{reason}")
 
+        venue = execution_policy["venue"]
+        decision_venue = decision.get("venue")
+        if decision_venue is not None and str(decision_venue).strip().upper() != venue:
+            raise ValueError(f"DECISION_EXECUTION_VENUE_POLICY_MISMATCH:{asset}")
+        if venue == "FUTURES" and execution_policy.get("futures_exposure_allowed") is not True:
+            raise ValueError(f"FUTURES_EXPOSURE_NOT_EXPLICITLY_ALLOWED:{asset}")
+        instrument = build_execution_instrument_specification(asset=asset, venue=venue)
+        if venue == "FUTURES":
+            from dataclasses import replace
+            instrument = replace(
+                instrument,
+                settlement_asset=execution_policy["settlement_asset"],
+                instrument_type=execution_policy["instrument_type"],
+                policy_version=execution_policy["policy_version"],
+                selection_source="AUTHORITATIVE_DEPLOYMENT_EXECUTION_POLICY",
+            )
+
         readiness = {
             "readiness_state": "PRE_EXECUTION_READY",
             "readiness_validation": "VALID",
@@ -116,8 +136,11 @@ def produce_canonical_requests_from_runtime_outputs(
             "intent_id": intent_id,
             "snapshot_id": snapshot_id,
             "timestamp": timestamp,
-            "venue": decision.get("venue"),
-            "execution_instrument": decision.get("execution_instrument"),
+            "venue": venue,
+            "execution_instrument": instrument,
+            "execution_policy_id": execution_policy["policy_id"],
+            "execution_policy_version": execution_policy["policy_version"],
+            "futures_exposure_allowed": execution_policy.get("futures_exposure_allowed"),
         }
     return result
 
