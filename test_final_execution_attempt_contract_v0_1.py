@@ -1,3 +1,5 @@
+from unittest.mock import patch
+import exchange_execution_contract as execution_contract
 from exchange_execution_adapter_contract_v0_1 import (
     AdapterOrderPreparation,
     ExchangeAdapterCapabilities,
@@ -107,13 +109,20 @@ class _FakeAdapter:
         )
 
 
-def _run(authorization):
-    return run_final_execution_attempt_contract(
-        execution_ready_package=_package(), request=_request(),
-        authorization_observation=authorization, adapter=_FakeAdapter(),
-        venue="SPOT", execution_instrument="BTC-USDT",
-        claim_store=_FakeClaimStore(),
-    )
+def _run(authorization, safety=None):
+    if safety is None:
+        safety = {
+            "EXECUTION_ENABLED": True,
+            "ORDER_SUBMISSION_ENABLED": True,
+            "EXCHANGE_WRITE_ENABLED": True,
+        }
+    with patch.object(execution_contract, "safety_contract", return_value=safety):
+        return run_final_execution_attempt_contract(
+            execution_ready_package=_package(), request=_request(),
+            authorization_observation=authorization, adapter=_FakeAdapter(),
+            venue="SPOT", execution_instrument="BTC-USDT",
+            claim_store=_FakeClaimStore(),
+        )
 
 
 def test_final_attempt_accepts_standing_mandate_as_technical_authorization():
@@ -158,3 +167,35 @@ def test_final_attempt_keeps_attempt_identity_outside_management_authorization()
     assert "attempt_id" not in authorization
     assert hasattr(request, "intent_id")
     assert hasattr(request, "snapshot_id")
+
+
+def test_final_attempt_blocks_when_any_global_execution_gate_is_closed():
+    for flag in ("EXECUTION_ENABLED", "ORDER_SUBMISSION_ENABLED", "EXCHANGE_WRITE_ENABLED"):
+        safety = {
+            "EXECUTION_ENABLED": True,
+            "ORDER_SUBMISSION_ENABLED": True,
+            "EXCHANGE_WRITE_ENABLED": True,
+        }
+        safety[flag] = False
+        result = _run(_standing_mandate(), safety=safety)
+        assert result.status == "FAIL_CLOSED"
+        assert result.error_code == "GLOBAL_EXECUTION_SAFETY_GATE_CLOSED"
+
+
+def test_final_attempt_rejects_exposure_not_reconciled_to_quantity_times_entry():
+    package = _package()
+    package["exposure"] = 99
+    safety = {
+        "EXECUTION_ENABLED": True,
+        "ORDER_SUBMISSION_ENABLED": True,
+        "EXCHANGE_WRITE_ENABLED": True,
+    }
+    with patch.object(execution_contract, "safety_contract", return_value=safety):
+        result = run_final_execution_attempt_contract(
+            execution_ready_package=package, request=_request(),
+            authorization_observation=_standing_mandate(), adapter=_FakeAdapter(),
+            venue="SPOT", execution_instrument="BTC-USDT",
+            claim_store=_FakeClaimStore(),
+        )
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "READINESS_EXPOSURE_ARITHMETIC_MISMATCH"
