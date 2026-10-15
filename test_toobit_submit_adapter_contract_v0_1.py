@@ -269,7 +269,7 @@ def test_read_only_client_id_reconciliation_uses_documented_futures_query_endpoi
     def transport(*, method, path, params, **kwargs):
         calls.append((method, path, dict(params)))
         assert method == "GET"
-        assert path == "/api/v1/futures/order"
+        assert path == "/api/v2/futures/order"
         assert params["category"] == "USDT"
         return {
             "symbol": "BTC-SWAP-USDT",
