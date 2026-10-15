@@ -6,6 +6,7 @@ from execution_authorization_boundary_v0_1 import evaluate_execution_authorizati
 def ready():
     return {
         "readiness_state": "READY",
+        "attempt_id": "test-attempt-001",
         "asset": "BTC",
         "quantity": 0.01,
         "entry_price": 100000.0,
