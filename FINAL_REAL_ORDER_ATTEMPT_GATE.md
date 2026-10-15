@@ -165,4 +165,22 @@ The standing mandate itself is not recreated for each attempt.
 
 The standing phase-entry mandate means no per-trade management approval is required; it does **not** waive any of the above technical gates.
 
+## CURRENT IMPLEMENTATION VERIFICATION — 2026-10-15
+
+Status: **EXECUTION PATH CODE VERIFIED / LIVE ATTEMPT BLOCKED**.
+
+- Operational branch has an opt-in Toobit adapter and allowlisted HTTPS transport for Spot `POST /api/v1/spot/order` and Futures v2 `POST /api/v2/futures/order`, based on the official API endpoint/response documentation.
+- Adapter remains submission-OFF by default; runtime injection requires both `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1`, credentials, and an absolute separate `ARUNDA_EXECUTION_CLAIM_DB`.
+- The claim factory refuses to use the production trading database. Stable intent-derived client ID, atomic durable claim, pre-submit outcome-unknown fence, one POST maximum, response identity checks, and accepted/rejected outcome persistence are implemented.
+- Offline end-to-end test verifies exactly one mocked POST and durable provider-accepted state.
+- Focused CI #42 PASS: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522 (commit `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`).
+
+### Remaining live gate
+
+**BLOCKED / NOT VERIFIED:** `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md` still lacks authoritative timezone-aware `issued_at` and `expires_at`. The code must not invent them. No live provider request, order, cancellation, production runtime, or production DB write has been performed.
+
+Transport exceptions and malformed/mismatched responses remain `SUBMISSION_OUTCOME_UNKNOWN`; the claim cannot be replayed. Reconciliation must be read-only. Acceptance is not fill, and the offline mock test is not evidence of a live Toobit response.
+
+The standing mandate remains one-time phase-entry authorization; no per-trade management approval is introduced. Historical lines above that say submission is unimplemented or the pipeline is unwired are superseded by this current implementation status; the default-off safety state remains intact.
+
 # END
