@@ -507,3 +507,12 @@ After explicit phase-entry authorization:
 - 24-hour operation/analysis is a later maturity stage, not a prerequisite for starting the real feedback loop.
 
 Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this section as active governance constraints. Historical text that conflicts with this invariant is historical residue and MUST NOT reopen the per-trade authorization model.
+
+
+## CURRENT ROADMAP OVERRIDE — PROVIDER ATTEMPT PATH — 2026-10-15
+
+**VERIFIED:** Operational dependency wiring, opt-in Toobit Spot/Futures adapter, allowlisted no-retry HTTPS transport, isolated durable SQLite intent claim, and persisted provider acceptance/rejection evidence. Offline E2E and focused CI #42 passed: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522 (`351d3321d0f17828fe2f0e54dc56ca7d7aec9362`).
+
+**BLOCKED:** No live attempt until the authoritative standing-mandate record has valid timezone-aware `issued_at` and `expires_at`, and the current technical gates pass. No timestamps may be invented. The default execution path remains OFF; no production runtime, provider write, live order, cancellation, or production DB write was performed.
+
+Historical roadmap statements that the pipeline remains unwired or provider submission is unimplemented are superseded. No per-trade management approval layer is introduced.
