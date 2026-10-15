@@ -309,3 +309,23 @@ After explicit phase-entry authorization:
 - 24-hour operation/analysis is a later maturity stage, not a prerequisite for starting the real feedback loop.
 
 Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this section as active governance constraints. Historical text that conflicts with this invariant is historical residue and MUST NOT reopen the per-trade authorization model.
+
+
+## CURRENT FRONTIER OVERRIDE — 2026-10-15
+
+**Frontier:** Operational final-attempt dependency wiring and provider-outcome evidence.
+
+**VERIFIED**
+- Operational verifier accepts explicit adapter and durable claim-store dependencies; default path instantiates neither.
+- Toobit submit adapter + allowlisted HTTPS transport are opt-in, no-retry, and validate order identity in provider response.
+- SQLite claim store is isolated from the production trading DB and prevents replay across restarts.
+- Pre-submit durable fence and post-response accepted/rejected evidence persistence are connected.
+- Offline end-to-end lifecycle test passed with a mock provider response and exactly one mock POST.
+- Focused CI #42 PASS on `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`: https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522
+
+**BLOCKED / NOT VERIFIED**
+- Live attempt remains blocked because the authoritative standing-mandate artifact lacks timezone-aware `issued_at` and `expires_at`.
+- No live exchange request, real order, production runtime, or production DB write was performed.
+- Live provider semantics and end-to-end outcome evidence are not claimed from offline mocks.
+
+Execution remains OFF by default. The two explicit runtime switches must not be enabled while the mandate or any technical gate is invalid. Earlier frontier text claiming the pipeline is unwired or the adapter cannot submit is historical and superseded; Core remains exchange-agnostic and the standing mandate remains one-time, not per-trade.
