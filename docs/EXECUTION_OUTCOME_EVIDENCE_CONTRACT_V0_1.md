@@ -40,6 +40,12 @@ Static review found that `ToobitExchangeAdapter.futures_duplicate_check` combine
 
 The code/test correction is **implemented but not yet VERIFIED** until the latest branch CI result is available and successful. No live exchange request was made. Do not infer that a missing row proves non-acceptance; `safe_to_retry=false` remains mandatory.
 
+## Exact client-ID recovery path — offline-tested, live semantics still unverified
+
+`toobit_ambiguous_submission_recovery_v0_1.py` now performs one signed, read-only exact-order lookup by `origClientOrderId`: Spot `GET /api/v1/spot/order` or Futures `GET /api/v2/futures/order` (including the explicit futures category). It validates the returned `clientOrderId` and symbol before handing a single exact row to the existing fail-closed reconciliation/evidence bridge. Lookup errors, provider "not found" responses, malformed rows, and mismatches are not treated as proof of non-acceptance; they are not persisted as provider outcome facts and always return `safe_to_retry=false`. No fallback POST or automatic retry exists.
+
+Official references: https://api-docs.toobit.com/api/spot-account-and-trading and https://api-docs.toobit.com/api/usdt-m-api-v2. Fake-transport tests verify GET-only Spot/Futures routing, exact identity checks, evidence capture without inferred fills, and fail-closed lookup errors. These tests do not establish live endpoint behavior, client-ID constraints, lookup consistency/retention, or safe POST replay semantics.
+
 ## Explicitly not completed
 
 - No live provider response has been captured by this contract.
