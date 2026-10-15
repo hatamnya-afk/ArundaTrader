@@ -14,6 +14,7 @@ from __future__ import annotations
 from dataclasses import replace
 from uuid import uuid4
 import os
+from pathlib import Path
 from typing import Any, Mapping
 
 from exchange_execution_adapter_contract_v0_1 import (
@@ -91,11 +92,16 @@ def attempt_prepared_order(
         lifecycle_path = os.environ.get("ARUNDA_MANDATE_LIFECYCLE_PATH")
         if not lifecycle_path or not lifecycle_path.strip():
             raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_REQUIRED")
+        lifecycle_target = Path(lifecycle_path).expanduser()
+        if not lifecycle_target.is_absolute():
+            raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_MUST_BE_ABSOLUTE")
+        if lifecycle_target.is_symlink():
+            raise ValueError("MANDATE_LIFECYCLE_STORE_PATH_SYMLINK_FORBIDDEN")
         mandate_id = authorization_observation.get("mandate_id") or authorization_observation.get("authorization_id")
         if not isinstance(mandate_id, str) or not mandate_id.strip():
             raise ValueError("AUTHORIZATION_MANDATE_ID_INVALID")
         authoritative_events = require_active_mandate(
-            lifecycle_path,
+            lifecycle_target,
             expected_mandate_id=mandate_id.strip(),
         )
         durable_authorization = dict(authorization_observation)
