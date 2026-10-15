@@ -103,17 +103,17 @@ class ManagementMandateSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "NOT_AUTHORIZED"):
                 load_authoritative_management_mandate()
 
-    def test_record_requires_explicit_time_bounded_authorization(self):
+    def test_authorized_standing_mandate_can_be_revocation_controlled_without_calendar_expiry(self):
         record = {
             "decision": "AUTHORIZED", "mandate_id": "UNIT-ONLY",
             "authorized_by": "unit-test", "authorization_source": "UNIT_TEST",
             "environment": "REAL_PRODUCTION", "allowed_markets": ["SPOT", "FUTURES"],
             "provider": "TOOBIT", "capital_policy": "UNIT_TEST",
+            "mandate_expiry_policy": "REVOCATION_CONTROLLED_NO_CALENDAR_EXPIRY",
             "evidence_required_before": ["unit-test"], "evidence_required_after": ["unit-test"],
         }
         with patch.dict(os.environ, {"ARUNDA_MANAGEMENT_MANDATE_JSON": json.dumps(record)}):
-            with self.assertRaisesRegex(ValueError, "MANAGEMENT_ISSUED_AT_INVALID"):
-                load_authoritative_management_mandate()
+            self.assertEqual(load_authoritative_management_mandate(), record)
 
 
 if __name__ == "__main__":
