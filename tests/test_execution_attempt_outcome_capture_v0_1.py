@@ -8,7 +8,7 @@ from exchange_execution_contract import (
     QUANTITY_SOURCE_RISK_POSITION,
     QUANTITY_UNIT_BASE_ASSET,
 )
-from execution_attempt_outcome_capture_v0_1 import capture_execution_attempt_outcome
+from execution_attempt_outcome_capture_v0_1 import (\n    capture_execution_attempt_outcome,\n    run_final_execution_attempt_with_outcome_capture,\n)
 
 
 def request():
@@ -89,4 +89,22 @@ def test_missing_authoritative_decision_id_is_not_persisted(tmp_path):
     )
     assert outcome.capture_state == "NOT_CAPTURED"
     assert outcome.reason == "AUTHORITATIVE_DECISION_ID_MISSING"
+    assert not path.exists()
+
+
+
+def test_final_attempt_composition_preserves_fail_closed_and_does_not_fake_provider_evidence(tmp_path):
+    path = tmp_path / "outcomes.jsonl"
+    outcome = run_final_execution_attempt_with_outcome_capture(
+        execution_ready_package={},
+        request=request(),
+        authorization_observation={},
+        adapter=object(),
+        venue="SPOT",
+        execution_instrument=None,
+        stream_path=path,
+    )
+    assert outcome.execution_result.status == "FAIL_CLOSED"
+    assert outcome.capture_state == "NOT_CAPTURED"
+    assert outcome.reason == "NO_PROVIDER_RESPONSE_FAIL_CLOSED_BOUNDARY_RESULT"
     assert not path.exists()
