@@ -9,6 +9,21 @@ from exchange_execution_contract import (
     QUANTITY_SOURCE_RISK_POSITION, QUANTITY_UNIT_BASE_ASSET,
 )
 import exchange_execution_order_attempt_boundary_v0_1 as boundary
+import pytest
+from standing_mandate_lifecycle_store_v0_1 import append_lifecycle_event
+
+
+@pytest.fixture(autouse=True)
+def durable_test_mandate_journal(tmp_path, monkeypatch):
+    journal = tmp_path / "mandate.jsonl"
+    append_lifecycle_event(journal, {
+        "event_id": "activate-test",
+        "event_type": "ACTIVATE",
+        "mandate_id": "test",
+        "authority": "MANAGEMENT",
+    })
+    monkeypatch.setenv("ARUNDA_MANDATE_LIFECYCLE_PATH", str(journal))
+    return journal
 
 
 def request():
