@@ -238,6 +238,7 @@ def attempt_prepared_order(
                 status="PROVIDER_REJECTED",
                 trade_event_id=trade_event_id,
                 decision_id=request.decision_id,
+                exchange_order_id=(str(result.exchange_order_id) if result.exchange_order_id else None),
                 provider_status=str(result.status),
                 evidence_event_id=evidence_event_id,
                 detail_code=str(result.error_code),
