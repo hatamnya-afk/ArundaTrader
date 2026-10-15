@@ -53,7 +53,15 @@ def _standing_mandate():
         "authorization_mode": "STANDING_MANDATE",
         "authorization_id": "REAL-PROD-MANDATE-001",
         "mandate_id": "REAL-PROD-MANDATE-001",
-        "expires_at": "2099-01-01T00:00:00+00:00",
+        "mandate_lifecycle_events": (
+            {
+                "event_id": "PHASE_ENTRY_ACTIVATE:REAL-PROD-MANDATE-001",
+                "event_type": "ACTIVATE",
+                "mandate_id": "REAL-PROD-MANDATE-001",
+                "authority": "MANAGEMENT",
+            },
+        ),
+        "expires_at": None,
         "environment": "REAL_PRODUCTION",
         "allowed_markets": ("SPOT", "FUTURES"),
     }
