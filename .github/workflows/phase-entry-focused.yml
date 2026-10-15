@@ -43,4 +43,5 @@ jobs:
             test_runtime_order_intent_and_mandate_sources_v0_1.py \
             test_execution_attempt_runtime_producers_v0_1.py \
             test_pipeline_final_execution_attempt_wiring_v0_1.py \
+            test_execution_adapter_submission_capability_gate_v0_1.py \
             test_exchange_execution_atomic_intent_claim_store_v0_1.py
