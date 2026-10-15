@@ -132,3 +132,18 @@ def test_client_id_or_symbol_mismatch_fails_closed_without_persisting(tmp_path):
     assert result["reason"] == "PROVIDER_LOOKUP_SYMBOL_MISMATCH"
     assert result["safe_to_retry"] is False
     assert not path.exists()
+
+
+def test_invalid_futures_category_is_blocked_before_transport(tmp_path):
+    calls = []
+    path = tmp_path / "outcomes.jsonl"
+    result = recover_ambiguous_toobit_submission(
+        adapter=adapter_for(lambda **kwargs: calls.append(kwargs) or {}),
+        request=request(), venue="FUTURES", symbol="BTC-SWAP-USDT",
+        category="UNKNOWN", trade_event_id="TE-1", stream_path=path,
+    )
+    assert result["reconciliation_state"] == "INVALID_OBSERVATION"
+    assert result["reason"] == "FUTURES_CATEGORY_INVALID"
+    assert result["safe_to_retry"] is False
+    assert calls == []
+    assert not path.exists()
