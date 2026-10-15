@@ -18,6 +18,10 @@ Represent a provider response or read-only lookup as append-only outcome evidenc
 - Event identity is bound to provider + trade event + source kind + provider observation ID. Reusing that source identity with a different payload fails closed.
 - Persistence is append-only and idempotent for one process. It is **not** a cross-process lock, durable order claim, or exactly-once guarantee.
 
+## Bridge to the existing execution contract
+
+`execution_attempt_outcome_capture_v0_1.py` accepts the `CanonicalOrderRequest` and `CanonicalExecutionResult` returned by the existing execution boundary and persists a provider observation only when the result includes a timestamp, trade-event identity, and authoritative Decision ID. It returns the original execution result separately from capture state, so evidence-write failure is not silently represented as an exchange rejection. A `FAIL_CLOSED` contract result is explicitly not misrepresented as a provider response. This is an integration seam, not yet a production-pipeline hook; the caller must explicitly choose the evidence path.
+
 ## Explicitly not completed
 
 - No live provider response has been captured by this contract.
