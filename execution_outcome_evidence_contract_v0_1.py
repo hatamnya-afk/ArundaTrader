@@ -15,6 +15,8 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Mapping
 
+from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
+
 SCHEMA = "arunda.execution_outcome_evidence"
 SCHEMA_VERSION = "1.0"
 SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP"})
@@ -135,6 +137,46 @@ def build_execution_outcome_record(
     }
 
 
+def build_outcome_record_from_canonical_result(
+    *,
+    request: CanonicalOrderRequest,
+    result: CanonicalExecutionResult,
+    client_order_id: str,
+    source_observation_id: str,
+    observed_at: str | None = None,
+) -> dict[str, Any]:
+    """Bind a canonical adapter result to its authoritative request identities."""
+    if not isinstance(request, CanonicalOrderRequest):
+        raise ValueError("CANONICAL_ORDER_REQUEST_INVALID")
+    if not isinstance(result, CanonicalExecutionResult):
+        raise ValueError("CANONICAL_EXECUTION_RESULT_INVALID")
+    if not request.decision_id or not request.decision_id.strip():
+        raise ValueError("AUTHORITATIVE_DECISION_ID_REQUIRED")
+    if not result.trade_event_id or not result.trade_event_id.strip():
+        raise ValueError("AUTHORITATIVE_TRADE_EVENT_ID_REQUIRED")
+    if result.asset is not None and result.asset.strip().upper() != request.asset.strip().upper():
+        raise ValueError("PROVIDER_RESULT_ASSET_MISMATCH")
+    if result.direction is not None and result.direction.strip().upper() != request.direction.strip().upper():
+        raise ValueError("PROVIDER_RESULT_DIRECTION_MISMATCH")
+    timestamp = observed_at or result.timestamp
+    if not timestamp:
+        raise ValueError("PROVIDER_OBSERVATION_TIMESTAMP_REQUIRED")
+    return build_execution_outcome_record(
+        provider=result.adapter or "PROVIDER_UNKNOWN",
+        decision_id=request.decision_id,
+        intent_id=request.intent_id,
+        trade_event_id=result.trade_event_id,
+        client_order_id=client_order_id,
+        source_observation_id=source_observation_id,
+        source_kind="PROVIDER_RESPONSE",
+        provider_status=result.status,
+        observed_at=timestamp,
+        exchange_order_id=result.exchange_order_id,
+        executed_quantity=result.executed_quantity,
+        executed_price=result.executed_price,
+    )
+
+
 def append_execution_outcome_record(
     record: Mapping[str, Any],
     *,
@@ -172,5 +214,5 @@ def append_execution_outcome_record(
 
 __all__ = [
     "SCHEMA", "SCHEMA_VERSION", "build_execution_outcome_record",
-    "append_execution_outcome_record",
+    "append_execution_outcome_record", "build_outcome_record_from_canonical_result",
 ]
