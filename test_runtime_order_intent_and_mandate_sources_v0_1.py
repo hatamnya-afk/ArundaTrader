@@ -71,6 +71,38 @@ class ManagementMandateSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "AUTHORITATIVE_MANAGEMENT_MANDATE_JSON_INVALID"):
                 load_authoritative_management_mandate()
 
+    def test_deferred_management_record_is_not_treated_as_permission(self):
+        from datetime import datetime, timedelta, timezone
+        record = {
+            "decision": "DEFERRED", "mandate_id": "UNIT-ONLY",
+            "authorized_by": "unit-test", "authorization_source": "UNIT_TEST",
+            "environment": "REAL_PRODUCTION",
+            "issued_at": (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat(),
+            "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+            "allowed_markets": ["SPOT", "FUTURES"], "provider": "TOOBIT",
+            "capital_policy": "UNIT_TEST", "evidence_required_before": ["unit-test"],
+            "evidence_required_after": ["unit-test"],
+        }
+        with patch.dict(os.environ, {"ARUNDA_MANAGEMENT_MANDATE_JSON": json.dumps(record)}):
+            with self.assertRaisesRegex(ValueError, "NOT_AUTHORIZED"):
+                load_authoritative_management_mandate()
+
+    def test_denied_management_record_is_not_treated_as_permission(self):
+        from datetime import datetime, timedelta, timezone
+        record = {
+            "decision": "DENIED", "mandate_id": "UNIT-ONLY",
+            "authorized_by": "unit-test", "authorization_source": "UNIT_TEST",
+            "environment": "REAL_PRODUCTION",
+            "issued_at": (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat(),
+            "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+            "allowed_markets": ["SPOT", "FUTURES"], "provider": "TOOBIT",
+            "capital_policy": "UNIT_TEST", "evidence_required_before": ["unit-test"],
+            "evidence_required_after": ["unit-test"],
+        }
+        with patch.dict(os.environ, {"ARUNDA_MANAGEMENT_MANDATE_JSON": json.dumps(record)}):
+            with self.assertRaisesRegex(ValueError, "NOT_AUTHORIZED"):
+                load_authoritative_management_mandate()
+
     def test_record_requires_explicit_time_bounded_authorization(self):
         record = {
             "decision": "AUTHORIZED", "mandate_id": "UNIT-ONLY",
