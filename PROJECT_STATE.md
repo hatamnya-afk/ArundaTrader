@@ -459,3 +459,12 @@ Current operational implementation: opt-in Toobit Spot/Futures submit adapter + 
 Verification: offline end-to-end lifecycle test uses a mock provider response and confirms exactly one mock POST plus persisted `PROVIDER_ACCEPTED`; focused CI #52 PASS at https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780574776, commit `a2c2c0cae8742d36eb1f3f1b005426abe39541ac`.
 
 Current disposition: **CODE VERIFIED; LIVE ATTEMPT BLOCKED / NOT VERIFIED**. The authoritative standing mandate lacks timezone-aware `issued_at` and `expires_at`; do not fabricate timestamps. No production runtime, live provider request/order, cancellation, or production DB write occurred. Historical statements above that the pipeline is unwired or submission is unimplemented are superseded by this section; global execution constants and adapter default remain OFF.
+
+
+## Addendum — 2026-10-15 — Read-only order reconciliation
+
+- Added the fail-closed reconciliation coordinator and offline tests. Positive identity-matched provider lookup persists immutable evidence and can resolve an existing claim; negative, failed, malformed, or mismatched lookup persists `UNRESOLVED_KEEP_QUARANTINED` and keeps the claim in `RECONCILIATION_REQUIRED`. It never retries or authorizes resubmission.
+- CI at commit `2d37c36726b5542b8e79c8f4e4eefdb4c3bc2cad`: phase-entry focused verification PASS (57 tests); focused execution contract PASS (56 tests). Offline scope only.
+- Toobit Spot client-order IDs are documented as unique among open orders; lifetime uniqueness is not established. The durable claim store enforces no reuse for intents represented in its provider namespace, but cannot prove the absence of external/unrecorded orders.
+- Official references: https://api-docs.toobit.com/api/spot-account-and-trading.html and https://api-docs.toobit.com/api/usdt-m-api-v2
+- Production order gate remains BLOCKED / NOT VERIFIED: submission disabled, no pipeline wiring, no provider writes, no live order, no cancellation, no production runtime or production DB write. No Futures exposure permission is inferred.
