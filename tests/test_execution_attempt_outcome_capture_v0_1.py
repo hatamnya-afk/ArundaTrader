@@ -111,3 +111,54 @@ def test_final_attempt_composition_preserves_fail_closed_and_does_not_fake_provi
     assert outcome.capture_state == "NOT_CAPTURED"
     assert outcome.reason == "NO_PROVIDER_RESPONSE_FAIL_CLOSED_BOUNDARY_RESULT"
     assert not path.exists()
+
+
+def test_final_attempt_boundary_identity_flows_into_outcome_capture(tmp_path, monkeypatch):
+    from exchange_execution_adapter_contract_v0_1 import (
+        AdapterOrderPreparation, ExchangeAdapterCapabilities,
+    )
+    import exchange_execution_order_attempt_boundary_v0_1 as boundary
+
+    class ProviderAdapter:
+        adapter_name = "FAKE"
+        def capabilities(self):
+            return ExchangeAdapterCapabilities(True, True, True, True, True, True, False)
+        def prepare_order(self, request, *, venue, execution_instrument):
+            return AdapterOrderPreparation(True, "READY", "FAKE", venue, {"symbol": "BTCUSDT"})
+        def submit_prepared_order(self, preparation, *, canonical_request):
+            return result(adapter="FAKE", trade_event_id="PROVIDER-CANNOT-OWN-ID")
+        def submit_order(self, request):
+            raise AssertionError("direct submission bypass")
+        def cancel_order(self, *, asset, exchange_order_id):
+            raise AssertionError("cancel must not be called")
+
+    monkeypatch.setattr(boundary, "evaluate_execution_attempt_readiness", lambda **kwargs: {
+        "readiness_state": "READY", "readiness_validation": "VALID",
+        "asset": "BTC", "direction": "LONG", "quantity": "0.01",
+        "entry_price": None, "notional": 600, "provider_binding": "DEFERRED",
+        "execution_authorized": False,
+    })
+    monkeypatch.setattr(boundary, "evaluate_execution_authorization", lambda *args: {
+        "authorization_state": "AUTHORIZED",
+    })
+    monkeypatch.setattr(boundary, "prepare_order_for_adapter", lambda **kwargs:
+        AdapterOrderPreparation(True, "READY", "FAKE", "SPOT", {"symbol": "BTCUSDT"}))
+
+    path = tmp_path / "outcomes.jsonl"
+    outcome = run_final_execution_attempt_with_outcome_capture(
+        execution_ready_package={"package_state": "EXECUTION_READY_PACKAGE"},
+        request=request(),
+        authorization_observation={"mandate_id": "TEST-ONLY"},
+        adapter=ProviderAdapter(),
+        venue="SPOT",
+        execution_instrument=None,
+        stream_path=path,
+    )
+    assert outcome.execution_result.status == "FILLED"
+    assert outcome.execution_result.trade_event_id.startswith("TE-")
+    assert outcome.execution_result.trade_event_id != "PROVIDER-CANNOT-OWN-ID"
+    assert outcome.capture_state == "PERSISTED"
+    row = json.loads(path.read_text(encoding="utf-8").strip())
+    assert row["trade_event_id"] == outcome.execution_result.trade_event_id
+    assert row["decision_id"] == "DEC-1"
+    assert row["fill_inferred"] is False
