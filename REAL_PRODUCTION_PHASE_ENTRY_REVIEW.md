@@ -114,4 +114,25 @@ Scope: source inspection only. No production runtime, live order, provider write
 
 Next work is to resolve the active-mandate expiry policy and provider execution/recovery contract, then add/run focused tests and re-evaluate the final gate. This is not a request for per-trade approval.
 
+
+## CURRENT UPDATE — PR #38 OUTCOME CAPTURE / AMBIGUOUS RECOVERY — 2026-10-15
+
+Candidate branch: \`feature/execution-outcome-evidence-contract-20261015\`; reviewed commit \`ed34ec0f5c31a82809ec7e1237bb239a6bd33196\`; PR #38 remains open and unmerged against \`operational-main-20261007\`.
+
+### Candidate work now built and offline-verified
+- Corrected the Futures history read endpoint to \`GET /api/v2/futures/history-orders\`.
+- Added exact-client-ID read-only recovery for Spot \`GET /api/v1/spot/order\` and Futures \`GET /api/v2/futures/order\`.
+- Validates both returned \`clientOrderId\` and provider symbol before outcome capture.
+- Provider lookup errors, missing rows, malformed observations, and identity conflicts remain non-retryable; no POST retry or inferred fill is introduced.
+- Focused CI passed **51 tests** on the candidate commit: [run 38721082194](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721082194) and [run 38721075314](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721075314). These are fake-transport/offline tests only.
+
+### Remaining blockers — final gate still open
+1. The operational Toobit adapter remains submission-disabled; candidate code has not been promoted or wired to production.
+2. The authorized management decision lacks the timezone-aware \`issued_at\` and \`expires_at\` required by the mandate validator. No timestamp or expiry duration has been invented.
+3. Official Toobit docs do not establish client-ID maximum length/allowed charset, reuse/uniqueness after terminal orders, duplicate-POST replay semantics, or lookup consistency/retention/exhaustive recovery.
+4. No live provider observation or end-to-end production outcome has been captured; no live Toobit API request was made during this work.
+
+**Current verdict:** MANAGEMENT PHASE ENTRY = AUTHORIZED; CANDIDATE OUTCOME/RECOVERY CONTRACT = OFFLINE CI PASS; TECHNICAL REAL-ORDER READINESS = BLOCKED / NOT VERIFIED; EXECUTION AUTHORIZATION = FALSE. PR #38 remains unmerged. No production runtime, order, cancellation, withdrawal, provider write, or database mutation was performed. Keep \`safe_to_retry=false\` for every ambiguous submission.
+
+
 # END
