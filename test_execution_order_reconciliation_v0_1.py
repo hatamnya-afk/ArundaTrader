@@ -94,3 +94,22 @@ class ReconciliationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_explicit_provider_rejection_is_not_misclassified_as_acceptance():
+    with tempfile.TemporaryDirectory() as directory:
+        store = _claim(Path(directory) / "claims.sqlite3")
+        adapter = _FakeAdapter(ToobitAdapterResult(True, "ORDER_FOUND", {
+            "state_known": True, "reconciliation_state": "ORDER_FOUND",
+            "client_order_id": "A123", "symbol": "BTCUSDT",
+            "exchange_order_id": "exchange-rejected-1", "provider_status": "REJECTED",
+            "executed_quantity": "0", "executed_price": "0",
+            "timestamp": "1792000000000",
+        }))
+        result = reconcile_order_attempt(claim_store=store, adapter=adapter,
+            intent_id="intent-1", venue="SPOT", symbol="BTCUSDT")
+        assert result["reason"] == "ORDER_FOUND_PROVIDER_REJECTED"
+        assert result["claim_status"] == "PROVIDER_REJECTED"
+        assert result["resubmit_allowed"] is False
+        claim = store.get(provider_namespace="ARUNDA-EXECUTION", intent_id="intent-1")
+        assert claim.status == "PROVIDER_REJECTED"
