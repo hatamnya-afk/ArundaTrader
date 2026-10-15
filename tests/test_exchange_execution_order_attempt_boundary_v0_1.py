@@ -110,3 +110,33 @@ def test_ambiguous_adapter_exception_retains_boundary_attempt_identity(monkeypat
     assert observed.status == "FAIL_CLOSED"
     assert observed.error_code == "ADAPTER_SUBMIT_PREPARED_FAILED"
     assert observed.trade_event_id.startswith("TE-")
+
+
+def test_attempt_boundary_rejects_relative_mandate_journal_path_before_adapter_call(monkeypatch):
+    prepare_gates(monkeypatch)
+    monkeypatch.setenv("ARUNDA_MANDATE_LIFECYCLE_PATH", "relative/mandate.jsonl")
+    observed = call(FakeAdapter(result=result()))
+    assert observed.status == "FAIL_CLOSED"
+    assert observed.error_code == "MANDATE_LIFECYCLE_STORE_PATH_MUST_BE_ABSOLUTE"
+
+
+def test_attempt_boundary_rejects_symlinked_mandate_journal_before_adapter_call(
+    monkeypatch, tmp_path,
+):
+    prepare_gates(monkeypatch)
+    real_journal = tmp_path / "real.jsonl"
+    append_lifecycle_event(real_journal, {
+        "event_id": "activate-test",
+        "event_type": "ACTIVATE",
+        "mandate_id": "test",
+        "authority": "MANAGEMENT",
+    })
+    alias = tmp_path / "alias.jsonl"
+    try:
+        alias.symlink_to(real_journal)
+    except (OSError, NotImplementedError):
+        pytest.skip("Symlink creation is unavailable in this environment")
+    monkeypatch.setenv("ARUNDA_MANDATE_LIFECYCLE_PATH", str(alias))
+    observed = call(FakeAdapter(result=result()))
+    assert observed.status == "FAIL_CLOSED"
+    assert observed.error_code == "MANDATE_LIFECYCLE_STORE_PATH_SYMLINK_FORBIDDEN"
