@@ -7,7 +7,7 @@ if (-not (Test-Path -LiteralPath $supervisor)) { throw "Supervisor missing: $sup
 $taskName = "ArundaTrader-Selection-Quality-Dashboard"
 $powershell = (Get-Command powershell.exe -ErrorAction SilentlyContinue)
 if (-not $powershell) { throw "Windows PowerShell was not found." }
-$arguments = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$supervisor`""
+$arguments = "-NoProfile -WindowStyle Hidden -File `"$supervisor`""
 $action = New-ScheduledTaskAction -Execute $powershell.Source -Argument $arguments -WorkingDirectory $repoRoot
 $trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -RestartCount 999 -RestartInterval (New-TimeSpan -Minutes 1) -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
