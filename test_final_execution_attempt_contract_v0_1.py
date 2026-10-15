@@ -247,5 +247,4 @@ def test_final_attempt_fails_closed_if_durable_journal_path_is_unconfigured(monk
         execution_instrument="BTC-USDT",
     )
     assert result.status == "FAIL_CLOSED"
-    assert result.error_code == "FINAL_EXECUTION_ATTEMPT_CONTRACT_FAILED"
-    assert "MANDATE_LIFECYCLE_STORE_PATH_REQUIRED" in (result.error_message or "")
+    assert result.error_code == "MANDATE_LIFECYCLE_STORE_PATH_REQUIRED"
