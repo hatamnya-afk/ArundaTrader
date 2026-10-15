@@ -120,3 +120,69 @@ def test_revoked_or_replaced_mandate_is_rejected_without_expiry():
         assert str(exc) == "MANDATE_NOT_ACTIVE"
     else:
         raise AssertionError("superseded standing mandate must fail closed")
+
+def test_replacement_mandate_is_active_only_when_identity_matches_replacement_event():
+    history = (
+        {
+            "event_id": "ACTIVATE:old",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+        {
+            "event_id": "REPLACE:old:new",
+            "event_type": "REPLACE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "replacement_mandate_id": "REAL-PROD-MANDATE-002",
+            "authority": "MANAGEMENT",
+        },
+    )
+    result = evaluate_execution_authorization(
+        {"readiness_state": "READY", "venue": "FUTURES"},
+        _mandate(
+            authorization_id="REAL-PROD-MANDATE-002",
+            mandate_id="REAL-PROD-MANDATE-002",
+            mandate_lifecycle_events=history,
+        ),
+    )
+    assert result["authorization_state"] == AUTHORIZED
+    assert result["mandate_id"] == "REAL-PROD-MANDATE-002"
+
+
+def test_lifecycle_history_must_be_authoritative_and_unique():
+    bad_authority = _mandate(mandate_lifecycle_events=(
+        {
+            "event_id": "ACTIVATE:fake",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "UNTRUSTED",
+        },
+    ))
+    try:
+        evaluate_execution_authorization({"readiness_state": "READY", "venue": "SPOT"}, bad_authority)
+    except ValueError as exc:
+        assert str(exc) == "MANDATE_LIFECYCLE_AUTHORITY_INVALID"
+    else:
+        raise AssertionError("untrusted lifecycle event must fail closed")
+
+    duplicate = _mandate(mandate_lifecycle_events=(
+        {
+            "event_id": "ACTIVATE:dup",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+        {
+            "event_id": "ACTIVATE:dup",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+    ))
+    try:
+        evaluate_execution_authorization({"readiness_state": "READY", "venue": "SPOT"}, duplicate)
+    except ValueError as exc:
+        assert str(exc) == "MANDATE_LIFECYCLE_DUPLICATE_EVENT"
+    else:
+        raise AssertionError("duplicate lifecycle events must fail closed")
+
