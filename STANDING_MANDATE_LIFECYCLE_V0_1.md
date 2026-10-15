@@ -1,3 +1,10 @@
+## DURABLE MANDATE JOURNAL — CANDIDATE INTEGRATION PASS (2026-10-15)
+
+- Connected the durable lifecycle journal to the isolated provider-neutral order-attempt boundary. Every attempt now requires `ARUNDA_MANDATE_LIFECYCLE_PATH`, rereads authoritative journal history, and overwrites any in-memory lifecycle snapshot before authorization. Missing path/history, corrupt journal, revoked or replaced mandate fail closed before adapter submission.
+- Added explicit `record_management_phase_entry(...)` to persist activation from a validated authorized REAL_PRODUCTION phase-entry result. Runtime never silently seeds or repairs the journal.
+- Focused standing-mandate CI: **42 passed in 0.17s** ([run 38727000052](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38727000052)); execution-outcome CI passed ([run 38727000334](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38727000334)).
+- Scope: feature branch / PR #38 only. Not wired into `operational-main-20261007`; no production path or runtime configuration has been deployed. The journal location, OS permissions, backup/recovery policy, and actual operational wiring still require verification. Keep real submission disabled and PR unmerged; all provider semantics and real-production gates remain unresolved.
+
 ## Runtime connection added — 2026-10-15
 
 The final order-attempt boundary rereads the durable journal on every attempt via `ARUNDA_MANDATE_LIFECYCLE_PATH`. It replaces any in-memory lifecycle snapshot with journal contents before technical authorization. Missing configuration, absent/corrupt journal, or a revoked/replaced mandate fails closed before the adapter is called. It never auto-creates or repairs activation history.
