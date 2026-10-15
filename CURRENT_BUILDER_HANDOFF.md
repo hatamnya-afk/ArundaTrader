@@ -1,3 +1,12 @@
+## SERVICE CONFIGURATION + OPERATIONAL PATH AUDIT — 2026-10-15
+
+- Candidate branch now contains a Windows persistent-journal configuration script (`ops/Configure-ArundaMandateJournal.ps1`), a validated/dry-run-first management activation CLI (`ops/Activate-ArundaStandingMandate.py`), the structured phase-entry observation, and a read-only startup preflight (`standing_mandate_service_preflight_v0_1.py`).
+- Configuration defaults to `C:\\ProgramData\\ArundaTrader\\security\\standing_mandate_lifecycle.jsonl`, requires the actual runtime identity as an explicit parameter, applies restrictive ACLs to the directory and existing journal/lock files, and sets machine-level `ARUNDA_MANDATE_LIFECYCLE_PATH`. It does not write or seed the journal. The activation CLI defaults to dry-run and writes ACTIVATE only with explicit `--confirm-activate`.
+- Focused CI: standing-mandate + startup/activation preflight **52 passed** ([run 38728508694](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38728508694)); execution-outcome evidence **56 passed** ([run 38728509064](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38728509064)).
+- Operational path audit on `operational-main-20261007`: `arunda_pipeline.py` still calls `exchange_execution_boundary.execute_order`; `EXECUTION_ENABLED=False`; the operational Toobit adapter advertises `order_submission=False` and fail-closes submission. The candidate lifecycle-aware attempt boundary is not wired into the operational pipeline.
+- **Not deployed / NOT VERIFIED:** this repository-only session cannot inspect the Windows host, identify the actual service/task identity, apply the host ACL/environment, persist the management activation event, restart the process, or run host preflight. Do not represent the journal as configured or the operational path as connected until those host checks pass.
+- Safety remains unchanged: no operational branch edits, no merge, no production runtime, no provider/database writes, no order/cancel/withdrawal, and no execution flag activation. PR #38 remains open/unmerged. Provider client-order-ID and ambiguous POST recovery semantics remain unresolved.
+
 # ARUNDATRADER — CURRENT BUILDER HANDOFF
 
 ## CANONICAL WORKSPACE
