@@ -109,7 +109,6 @@ class ManagementMandateSourceTests(unittest.TestCase):
             "authorized_by": "unit-test", "authorization_source": "UNIT_TEST",
             "environment": "REAL_PRODUCTION", "allowed_markets": ["SPOT", "FUTURES"],
             "provider": "TOOBIT", "capital_policy": "UNIT_TEST",
-            "mandate_expiry_policy": "REVOCATION_CONTROLLED_NO_CALENDAR_EXPIRY",
             "evidence_required_before": ["unit-test"], "evidence_required_after": ["unit-test"],
         }
         with patch.dict(os.environ, {"ARUNDA_MANAGEMENT_MANDATE_JSON": json.dumps(record)}):
