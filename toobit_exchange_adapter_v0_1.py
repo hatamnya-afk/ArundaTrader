@@ -644,6 +644,103 @@ class ToobitExchangeAdapter:
             return ToobitAdapterResult(False, str(exc))
 
 
+    def query_order_by_client_order_id(
+        self,
+        *,
+        venue: str,
+        symbol: str,
+        client_order_id: str,
+        execution_instrument: Optional[ExecutionInstrumentSpecification] = None,
+    ) -> ToobitAdapterResult:
+        """Read-only reconciliation lookup by the exact provider client ID.
+
+        A successful, identity-matched order response is positive evidence.
+        A lookup error or missing order is deliberately NOT proof that the
+        original POST did not execute: callers must keep the durable intent
+        quarantined and must never resubmit based on a negative lookup.
+        """
+        normalized_venue = str(venue).strip().upper()
+        normalized_symbol = str(symbol).strip().upper()
+        normalized_client_id = str(client_order_id).strip()
+        if normalized_venue not in {"SPOT", "FUTURES"}:
+            return ToobitAdapterResult(False, "ORDER_LOOKUP_VENUE_INVALID")
+        if not normalized_symbol or not normalized_client_id:
+            return ToobitAdapterResult(False, "ORDER_LOOKUP_IDENTITY_INVALID")
+
+        params: dict[str, Any] = {"origClientOrderId": normalized_client_id}
+        if normalized_venue == "SPOT":
+            path = "/api/v1/spot/order"
+            params["symbol"] = normalized_symbol
+        else:
+            if not isinstance(execution_instrument, ExecutionInstrumentSpecification):
+                return ToobitAdapterResult(False, "ORDER_LOOKUP_FUTURES_INSTRUMENT_REQUIRED")
+            if (
+                execution_instrument.venue.strip().upper() != "FUTURES"
+                or execution_instrument.asset.strip().upper() == ""
+            ):
+                return ToobitAdapterResult(False, "ORDER_LOOKUP_FUTURES_INSTRUMENT_INVALID")
+            resolved = self.resolve_futures_instrument(execution_instrument)
+            if not resolved.allowed or not isinstance(resolved.data, dict):
+                return ToobitAdapterResult(False, "ORDER_LOOKUP_FUTURES_INSTRUMENT_UNRESOLVED")
+            resolved_symbol = str(resolved.data.get("symbol", "")).strip().upper()
+            if resolved_symbol != normalized_symbol:
+                return ToobitAdapterResult(False, "ORDER_LOOKUP_SYMBOL_MISMATCH")
+            settlement = execution_instrument.settlement_asset.strip().upper()
+            if settlement not in {"USDT", "USDC"}:
+                return ToobitAdapterResult(False, "ORDER_LOOKUP_FUTURES_CATEGORY_UNKNOWN")
+            path = "/api/v2/futures/order"
+            params["category"] = settlement
+
+        try:
+            raw = self._call("GET", path, params=params, signed=True)
+            data = self._unwrap(raw)
+            if not isinstance(data, dict):
+                raise RuntimeError("ORDER_LOOKUP_RESPONSE_INVALID")
+            returned_client_id = str(data.get("clientOrderId", "")).strip()
+            returned_symbol = str(data.get("symbol", "")).strip().upper()
+            order_id = str(data.get("orderId", "")).strip()
+            status = str(data.get("status", "")).strip().upper()
+            if (
+                returned_client_id != normalized_client_id
+                or returned_symbol != normalized_symbol
+                or not order_id
+                or not status
+            ):
+                raise RuntimeError("ORDER_LOOKUP_RESPONSE_IDENTITY_INVALID")
+            return ToobitAdapterResult(
+                True,
+                "ORDER_FOUND",
+                {
+                    "state_known": True,
+                    "reconciliation_state": "ORDER_FOUND",
+                    "venue": normalized_venue,
+                    "symbol": returned_symbol,
+                    "client_order_id": returned_client_id,
+                    "exchange_order_id": order_id,
+                    "provider_status": status,
+                    "executed_quantity": data.get("executedQty"),
+                    "executed_price": data.get("avgPrice"),
+                    "timestamp": data.get("time") or data.get("transactTime") or data.get("updateTime"),
+                    "raw_order": dict(data),
+                },
+            )
+        except Exception as exc:
+            # Includes provider "not found", transport failures, and malformed
+            # responses. None of these proves absence across all order history.
+            return ToobitAdapterResult(
+                False,
+                "ORDER_LOOKUP_UNRESOLVED",
+                {
+                    "state_known": False,
+                    "reconciliation_state": "UNRESOLVED_KEEP_QUARANTINED",
+                    "venue": normalized_venue,
+                    "symbol": normalized_symbol,
+                    "client_order_id": normalized_client_id,
+                    "detail": str(exc),
+                    "resubmit_allowed": False,
+                },
+            )
+
     def prepare_order(
         self,
         request: Any,
