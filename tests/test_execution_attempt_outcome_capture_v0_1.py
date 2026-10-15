@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+from standing_mandate_lifecycle_store_v0_1 import append_lifecycle_event
+
 from exchange_execution_contract import (
     CanonicalExecutionResult,
     CanonicalOrderRequest,
@@ -114,6 +116,14 @@ def test_final_attempt_composition_preserves_fail_closed_and_does_not_fake_provi
 
 
 def test_final_attempt_boundary_identity_flows_into_outcome_capture(tmp_path, monkeypatch):
+    lifecycle_path = tmp_path / "mandate-lifecycle.jsonl"
+    append_lifecycle_event(lifecycle_path, {
+        "event_id": "activate-test-only",
+        "event_type": "ACTIVATE",
+        "mandate_id": "TEST-ONLY",
+        "authority": "MANAGEMENT",
+    })
+    monkeypatch.setenv("ARUNDA_MANDATE_LIFECYCLE_PATH", str(lifecycle_path))
     from exchange_execution_adapter_contract_v0_1 import (
         AdapterOrderPreparation, ExchangeAdapterCapabilities,
     )
