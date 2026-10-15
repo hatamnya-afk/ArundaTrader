@@ -19,7 +19,7 @@ from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrder
 
 SCHEMA = "arunda.execution_outcome_evidence"
 SCHEMA_VERSION = "1.0"
-SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP"})
+SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP", "ATTEMPT_EVENT"})
 
 _OPEN_STATUSES = frozenset({"NEW", "OPEN", "ACCEPTED", "PENDING"})
 _PARTIAL_STATUSES = frozenset({"PARTIALLY_FILLED", "PARTIAL_FILL"})
@@ -61,6 +61,8 @@ def _optional_decimal(value: Any, field: str, *, allow_zero: bool = False) -> st
 
 
 def _classify(status: str, quantity: str | None, price: str | None) -> tuple[str, str]:
+    if status == "SUBMISSION_UNKNOWN":
+        return "SUBMISSION_UNKNOWN", "POST_OUTCOME_AMBIGUOUS_RECONCILIATION_REQUIRED_NO_RETRY"
     if status in _OPEN_STATUSES:
         return "OPEN", "PROVIDER_STATUS_ONLY_NO_FILL_INFERRED"
     if status in _FILLED_STATUSES:
@@ -114,10 +116,15 @@ def build_execution_outcome_record(
 
     identity = f"{provider}|{trade_event_id}|{source_kind}|{source_observation_id}"
     event_id = "OUT-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()
-    return {
+    event_type = (
+        "EXECUTION_ATTEMPT_OUTCOME_OBSERVED"
+        if source_kind == "ATTEMPT_EVENT"
+        else "PROVIDER_OUTCOME_OBSERVED"
+    )
+    record = {
         "schema": SCHEMA,
         "schema_version": SCHEMA_VERSION,
-        "event_type": "PROVIDER_OUTCOME_OBSERVED",
+        "event_type": event_type,
         "event_id": event_id,
         "provider": provider,
         "decision_id": decision_id,
@@ -128,6 +135,7 @@ def build_execution_outcome_record(
         "source_observation_id": source_observation_id,
         "source_kind": source_kind,
         "observed_at": timestamp,
+        "observed_at_source": "LOCAL_CAPTURE_CLOCK" if source_kind == "ATTEMPT_EVENT" else "PROVIDER_OR_LOOKUP_OBSERVATION",
         "provider_status": status,
         "outcome_state": outcome_state,
         "outcome_reason": reason,
@@ -135,6 +143,10 @@ def build_execution_outcome_record(
         "executed_price": price,
         "fill_inferred": False,
     }
+    if source_kind == "ATTEMPT_EVENT":
+        record["provider_status"] = status
+        record["provider_timestamp"] = None
+    return record
 
 
 def build_outcome_record_from_canonical_result(
