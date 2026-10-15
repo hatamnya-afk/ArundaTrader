@@ -33,4 +33,4 @@ jobs:
       - name: Install pytest
         run: python -m pip install --disable-pip-version-check pytest
       - name: Test management and execution authorization boundaries
-        run: python -m pytest -q test_management_execution_authorization_v0_1.py test_execution_authorization_boundary_standing_mandate_v0_1.py
+        run: python -m pytest -q test_management_execution_authorization_v0_1.py test_execution_authorization_boundary_standing_mandate_v0_1.py test_final_execution_attempt_contract_v0_1.py
