@@ -1,3 +1,11 @@
+## STANDING-MANDATE POLICY UPDATE — 2026-10-15 (CANDIDATE BRANCH ONLY)
+
+- Management authorization dated 2026-10-12 is a one-time standing phase-entry decision; it does not require per-trade management approval.
+- A precise `issued_at` timestamp is optional audit metadata. The validator must not fabricate one when the decision record contains only a date/source.
+- `expires_at` is optional. No expiry duration was set by management, so the default is a non-expiring standing mandate. If an expiry is explicitly supplied, it must be timezone-aware, in the future, and later than `issued_at` when that timestamp is present.
+- The management validator and technical authorization boundary were updated on the isolated PR #38 feature branch, with focused tests added. This does NOT activate production execution, clear the final real-order gate, wire the candidate into the operational branch, or establish a persistent revocation registry.
+- **Still BLOCKED / NOT VERIFIED:** operational Toobit submission remains disabled; client-order-ID constraints, duplicate-POST semantics, lookup consistency/retention/exhaustiveness remain unresolved; candidate recovery is not production-wired and no live outcome evidence exists. Keep `safe_to_retry=false`; do not merge PR #38 or send an order based on this change alone.
+
 # FINAL REAL-ORDER ATTEMPT GATE — MANAGEMENT REVIEW PACKAGE
 ## ArundaTrader — 2026-10-12
 
