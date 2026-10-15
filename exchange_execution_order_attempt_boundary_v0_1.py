@@ -11,6 +11,8 @@ The selected adapter owns provider submission behavior.
 
 from __future__ import annotations
 
+from dataclasses import replace
+from uuid import uuid4
 from typing import Any, Mapping
 
 from exchange_execution_adapter_contract_v0_1 import (
@@ -116,6 +118,9 @@ def attempt_prepared_order(
             error_message="Provider order preparation did not reach READY.",
         )
 
+    # Identity is minted by the authoritative boundary immediately before
+    # the one adapter attempt. It is not derived from provider order IDs.
+    trade_event_id = "TE-" + uuid4().hex
     try:
         result = adapter.submit_prepared_order(
             prepared,
@@ -127,6 +132,7 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code="ADAPTER_SUBMIT_PREPARED_FAILED",
             error_message=str(exc),
+            trade_event_id=trade_event_id,
         )
 
     if not isinstance(result, CanonicalExecutionResult):
@@ -135,9 +141,11 @@ def attempt_prepared_order(
             direction=request.direction,
             error_code="ADAPTER_EXECUTION_RESULT_INVALID",
             error_message="Adapter returned an invalid canonical execution result.",
+            trade_event_id=trade_event_id,
         )
 
-    return result
+    # Provider adapters cannot replace the boundary-issued attempt identity.
+    return replace(result, trade_event_id=trade_event_id)
 
 
 __all__ = ["attempt_prepared_order"]
