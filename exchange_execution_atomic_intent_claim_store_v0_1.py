@@ -9,6 +9,7 @@ an intent for a second submission.
 from __future__ import annotations
 
 import sqlite3
+import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -107,6 +108,29 @@ class SQLiteIntentClaimStore:
                         'RECONCILIATION_REQUIRED', 'PROVIDER_ACCEPTED',
                         'PROVIDER_REJECTED'
                     ))
+                )
+                """
+            )
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS execution_reconciliation_evidence (
+                    evidence_event_id TEXT PRIMARY KEY,
+                    provider_namespace TEXT NOT NULL,
+                    intent_id TEXT NOT NULL,
+                    client_order_id TEXT NOT NULL,
+                    venue TEXT NOT NULL,
+                    symbol TEXT NOT NULL,
+                    reconciliation_state TEXT NOT NULL,
+                    exchange_order_id TEXT,
+                    provider_status TEXT,
+                    executed_quantity TEXT,
+                    executed_price TEXT,
+                    provider_timestamp TEXT,
+                    detail_code TEXT NOT NULL,
+                    observed_at_utc TEXT NOT NULL,
+                    normalized_payload_json TEXT NOT NULL,
+                    FOREIGN KEY (provider_namespace, intent_id)
+                        REFERENCES execution_intent_claim(provider_namespace, intent_id)
                 )
                 """
             )
@@ -272,6 +296,99 @@ class SQLiteIntentClaimStore:
         if result is None:
             raise RuntimeError("CLAIM_DISAPPEARED_AFTER_COMMIT")
         return result
+
+
+    def record_reconciliation_evidence(
+        self, *, provider_namespace: str, intent_id: str,
+        evidence_event_id: str, client_order_id: str, venue: str, symbol: str,
+        reconciliation_state: str, detail_code: str,
+        exchange_order_id: Optional[str] = None,
+        provider_status: Optional[str] = None,
+        executed_quantity: Optional[str] = None,
+        executed_price: Optional[str] = None,
+        provider_timestamp: Optional[str] = None,
+        normalized_payload: Optional[dict] = None,
+    ) -> dict:
+        """Persist immutable, normalized read-only reconciliation evidence.
+
+        This method only writes to the explicitly configured claim-store DB;
+        callers must never point that store at the production trading DB.
+        Replaying an identical evidence ID is idempotent; changing its content
+        is rejected as an evidence identity conflict.
+        """
+        provider = self._required(provider_namespace, "PROVIDER_NAMESPACE_REQUIRED").upper()
+        intent = self._required(intent_id, "CANONICAL_INTENT_ID_REQUIRED")
+        event_id = self._required(evidence_event_id, "EVIDENCE_EVENT_ID_REQUIRED")
+        client_id = self._required(client_order_id, "CLIENT_ORDER_ID_REQUIRED")
+        venue_value = self._required(venue, "EVIDENCE_VENUE_REQUIRED").upper()
+        symbol_value = self._required(symbol, "EVIDENCE_SYMBOL_REQUIRED").upper()
+        state_value = self._required(reconciliation_state, "RECONCILIATION_STATE_REQUIRED")
+        detail_value = self._required(detail_code, "EVIDENCE_DETAIL_CODE_REQUIRED")
+        payload_json = json.dumps(normalized_payload or {}, sort_keys=True, separators=(",", ":"), default=str)
+        observed_at = datetime.now(timezone.utc).isoformat()
+        values = (
+            provider, intent, client_id, venue_value, symbol_value, state_value,
+            exchange_order_id, provider_status, executed_quantity, executed_price,
+            provider_timestamp, detail_value, payload_json,
+        )
+        connection = self._connect()
+        try:
+            connection.execute("BEGIN IMMEDIATE")
+            claim = connection.execute(
+                "SELECT client_order_id FROM execution_intent_claim WHERE provider_namespace=? AND intent_id=?",
+                (provider, intent),
+            ).fetchone()
+            if claim is None:
+                connection.execute("ROLLBACK")
+                raise KeyError("INTENT_CLAIM_NOT_FOUND")
+            if claim["client_order_id"] != client_id:
+                connection.execute("ROLLBACK")
+                raise ValueError("RECONCILIATION_CLIENT_ID_MISMATCH")
+            existing = connection.execute(
+                "SELECT provider_namespace,intent_id,client_order_id,venue,symbol,reconciliation_state,exchange_order_id,provider_status,executed_quantity,executed_price,provider_timestamp,detail_code,normalized_payload_json FROM execution_reconciliation_evidence WHERE evidence_event_id=?",
+                (event_id,),
+            ).fetchone()
+            if existing is not None:
+                if tuple(existing) != values:
+                    connection.execute("ROLLBACK")
+                    raise ValueError("RECONCILIATION_EVIDENCE_IDENTITY_CONFLICT")
+                connection.execute("COMMIT")
+                return {"evidence_event_id": event_id, "idempotent_replay": True}
+            connection.execute(
+                """
+                INSERT INTO execution_reconciliation_evidence
+                (evidence_event_id,provider_namespace,intent_id,client_order_id,venue,symbol,
+                 reconciliation_state,exchange_order_id,provider_status,executed_quantity,
+                 executed_price,provider_timestamp,detail_code,observed_at_utc,normalized_payload_json)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                """,
+                (event_id, provider, intent, client_id, venue_value, symbol_value,
+                 state_value, exchange_order_id, provider_status, executed_quantity,
+                 executed_price, provider_timestamp, detail_value, observed_at, payload_json),
+            )
+            connection.execute("COMMIT")
+            return {"evidence_event_id": event_id, "idempotent_replay": False}
+        except (sqlite3.Error, KeyError, ValueError):
+            if connection.in_transaction:
+                connection.execute("ROLLBACK")
+            raise
+        finally:
+            connection.close()
+
+    def list_reconciliation_evidence(
+        self, *, provider_namespace: str, intent_id: str
+    ) -> list[dict]:
+        provider = self._required(provider_namespace, "PROVIDER_NAMESPACE_REQUIRED").upper()
+        intent = self._required(intent_id, "CANONICAL_INTENT_ID_REQUIRED")
+        connection = self._connect()
+        try:
+            rows = connection.execute(
+                "SELECT * FROM execution_reconciliation_evidence WHERE provider_namespace=? AND intent_id=? ORDER BY observed_at_utc,evidence_event_id",
+                (provider, intent),
+            ).fetchall()
+            return [dict(row) for row in rows]
+        finally:
+            connection.close()
 
     def get(self, *, provider_namespace: str, intent_id: str) -> Optional[IntentClaim]:
         provider = self._required(provider_namespace, "PROVIDER_NAMESPACE_REQUIRED").upper()
