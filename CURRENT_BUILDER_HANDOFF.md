@@ -190,3 +190,8 @@ Not cleared for live execution:
 Older statements in this handoff that the pipeline is unwired or Toobit has no submission implementation are historical and are superseded by this status. Execution remains OFF by default.
 
 END OF HANDOFF
+
+
+### Verification refresh — 2026-10-15
+
+This refresh supersedes earlier test counts in prior addenda: the current reconciliation contract, including terminal exchange-order-ID conflict protection, passed **58/58** in Phase-entry focused verification at commit `736a32101b4edb5c06481e55bc4149d42bf4e5d2` ([CI](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38802986919)) and **58/58** in Focused Execution Contract Tests at commit `6f5bf87268ad657365061bad82b9baccaba29b9f` ([CI](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38803055157)). Offline contract verification only; live production order gate remains BLOCKED.
