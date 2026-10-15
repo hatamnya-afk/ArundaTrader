@@ -1,3 +1,13 @@
+> ## CURRENT ADDENDUM — 2026-10-15 — FUTURES RECONCILIATION ROUTE + EXPANDED OFFLINE VERIFICATION
+>
+> - Static review found the read-only Futures reconciliation query was still using the legacy `/api/v1/futures/order` route while the adapter's current Futures order submission contract uses v2. Updated the query route to documented `GET /api/v2/futures/order`, preserving the exact `origClientOrderId` and settlement category inputs. Official Toobit v2 docs list the GET route and client-order-ID query parameter: https://api-docs.toobit.com/api/usdt-m-api-v2.
+> - Updated the adapter contract test to assert the v2 route and expanded `.github/workflows/focused-execution-contract.yml` so the canonical reconciliation coordinator, compatibility wrapper, isolated dependency factory, offline final-attempt E2E, fail-closed pipeline integration test, Toobit adapter and HTTPS transport suites run in the same focused workflow.
+> - **CI VERIFIED / PASS:** [Focused Execution Contract Tests](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38804251519), commit `73ba2582f892208a1742338f0fa220ecdda2e33a`, result **97 passed in 1.19s**.
+> - Scope is offline contract testing only. No live Toobit order/query, provider write, cancellation, production runtime, production DB write, execution switch change, or pipeline submission wiring was performed.
+> - Current state remains **TECHNICAL REAL-ORDER READINESS: BLOCKED / NOT VERIFIED**. The normal pipeline's execution boundary remains fail-closed and `EXECUTION_ENABLED = False`; the isolated claim/evidence store and reconciliation contract are not activated as an authorized production order path. Live provider acceptance/fill/outcome capture and authoritative Futures exposure permission remain unverified. Do not mark the live gate PASS based on offline CI.
+>
+> ---
+>
 > ## CURRENT ADDENDUM — 2026-10-15 — RECONCILIATION + OUTCOME EVIDENCE CONTRACT
 >
 > - Canonical coordinator `exchange_execution_order_reconciliation_v0_1.py` handles ambiguous outcomes; `execution_order_reconciliation_v0_1.py` is only a compatibility wrapper. Only already-fenced claims may be queried. Positive evidence requires exact client-ID and symbol identity; negative, malformed, or failed lookup remains `RECONCILIATION_REQUIRED` and never permits resubmission.
