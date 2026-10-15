@@ -4377,10 +4377,16 @@ def verify_execution_boundary_integration(
             if any(value is None for value in (package, authorization_observation, venue, execution_instrument)):
                 return "BLOCKED_FINAL_ATTEMPT_CONTEXT_MISSING"
 
+            # Status evidence is supplied only by an upstream authoritative
+            # management source. Never infer ACTIVE from the standing mandate.
+            # Missing evidence is intentionally rejected by the final boundary.
+            mandate_status_observation = record.get("mandate_status_observation")
+
             result = run_final_execution_attempt_contract(
                 execution_ready_package=package,
                 request=request,
                 authorization_observation=authorization_observation,
+                mandate_status_observation=mandate_status_observation,
                 adapter=adapter,
                 venue=venue,
                 execution_instrument=execution_instrument,

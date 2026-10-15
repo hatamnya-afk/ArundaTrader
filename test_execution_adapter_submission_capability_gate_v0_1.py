@@ -1,6 +1,9 @@
 """Read-only adapters must be rejected before any durable intent claim."""
 
 import unittest
+from unittest.mock import patch
+
+import exchange_execution_contract as execution_contract
 
 from exchange_execution_adapter_contract_v0_1 import ExchangeAdapterCapabilities
 from exchange_execution_contract import CanonicalOrderRequest
@@ -73,15 +76,20 @@ def test_read_only_adapter_is_blocked_before_claim_and_provider_call():
     adapter = ReadOnlyAdapter()
     claim_store = ClaimStoreMustRemainUntouched()
 
-    result = attempt_prepared_order(
-        request=request,
-        readiness_observation={},
-        authorization_observation={},
-        adapter=adapter,
-        venue="SPOT",
-        execution_instrument="BTC-USDT",
-        claim_store=claim_store,
-    )
+    with patch.object(execution_contract, "safety_contract", return_value={
+        "EXECUTION_ENABLED": True,
+        "ORDER_SUBMISSION_ENABLED": True,
+        "EXCHANGE_WRITE_ENABLED": True,
+    }):
+        result = attempt_prepared_order(
+            request=request,
+            readiness_observation={},
+            authorization_observation={},
+            adapter=adapter,
+            venue="SPOT",
+            execution_instrument="BTC-USDT",
+            claim_store=claim_store,
+        )
 
     assert result.accepted is False
     assert result.error_code == "ADAPTER_ORDER_SUBMISSION_UNSUPPORTED"
