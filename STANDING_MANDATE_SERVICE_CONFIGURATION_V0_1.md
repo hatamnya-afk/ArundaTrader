@@ -35,6 +35,23 @@ The script uses `SupportsShouldProcess`; use `-WhatIf` first to inspect intended
 
 The configuration script intentionally does not seed an activation event. The journal must be initialized from the already-authorized management phase-entry record through the validated management boundary and `record_management_phase_entry`. Do not hand-edit JSONL, copy a test mandate ID, or fabricate issue/expiry timestamps. No expiry is required by default; an expiry is included only if management explicitly set one.
 
+The candidate includes `ops/management_phase_entry_observation_20261012.json`, a structured observation based on the canonical `MANAGEMENT_PHASE_ENTRY_DECISION_20261012.md`. Its stable lifecycle identity is the decision record identifier `MANAGEMENT_PHASE_ENTRY_DECISION_20261012`; it is not a per-trade ID and does not introduce an expiry. Copy this observation into the protected directory, review it against the canonical decision, then use the explicit bootstrap CLI:
+
+```powershell
+$journal = 'C:\ProgramData\ArundaTrader\security\standing_mandate_lifecycle.jsonl'
+$decision = 'C:\ProgramData\ArundaTrader\security\management_phase_entry_observation_20261012.json'
+Copy-Item .\ops\management_phase_entry_observation_20261012.json $decision
+$env:ARUNDA_MANDATE_LIFECYCLE_PATH = $journal
+
+# Read-only validation first; this must not mutate the journal.
+python .\ops\Activate-ArundaStandingMandate.py --decision-json $decision
+
+# Only after reviewing the validated management record, explicitly append ACTIVATE.
+python .\ops\Activate-ArundaStandingMandate.py --decision-json $decision --confirm-activate
+```
+
+The second command writes only the management lifecycle journal. It does not call Toobit, enable order submission, or write the trading database. The CLI validates the management observation before activation and verifies the resulting active mandate after append.
+
 The canonical decision record currently identifies authorization on 2026-10-12, REAL_PRODUCTION, TOOBIT, SPOT + FUTURES, and ZERO_INITIAL_CAPITAL. It does not itself define a durable runtime journal path or an OS service identity. Those deployment facts must be verified on the host.
 
 ## Read-only startup preflight
