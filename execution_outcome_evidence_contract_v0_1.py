@@ -1,0 +1,176 @@
+"""Provider-neutral execution outcome evidence contract v0.1.
+
+Accepts already-observed adapter/provider facts only. This module makes no
+network calls, submits no orders, does not infer fills from acceptance, and
+requires the caller to choose an explicit evidence path. Persistence is
+append-only and idempotent within a single process; it is not a cross-process
+claim/locking mechanism.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
+from pathlib import Path
+from typing import Any, Mapping
+
+SCHEMA = "arunda.execution_outcome_evidence"
+SCHEMA_VERSION = "1.0"
+SOURCE_KINDS = frozenset({"PROVIDER_RESPONSE", "READ_ONLY_LOOKUP"})
+
+_OPEN_STATUSES = frozenset({"NEW", "OPEN", "ACCEPTED", "PENDING"})
+_PARTIAL_STATUSES = frozenset({"PARTIALLY_FILLED", "PARTIAL_FILL"})
+_FILLED_STATUSES = frozenset({"FILLED"})
+_REJECTED_STATUSES = frozenset({"REJECTED"})
+_TERMINAL_STATUSES = frozenset({"CANCELED", "CANCELLED", "EXPIRED"})
+
+
+def _required_text(value: Any, field: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{field.upper()}_REQUIRED")
+    return value.strip()
+
+
+def _timestamp_utc(value: Any) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError("OBSERVED_AT_REQUIRED")
+    try:
+        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError("OBSERVED_AT_INVALID") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise ValueError("OBSERVED_AT_TIMEZONE_REQUIRED")
+    return parsed.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _optional_positive_decimal(value: Any, field: str) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        raise ValueError(f"{field.upper()}_INVALID")
+    try:
+        number = Decimal(str(value))
+    except (InvalidOperation, ValueError) as exc:
+        raise ValueError(f"{field.upper()}_INVALID") from exc
+    if not number.is_finite() or number <= 0:
+        raise ValueError(f"{field.upper()}_INVALID")
+    return format(number, "f")
+
+
+def _classify(status: str, quantity: str | None, price: str | None) -> tuple[str, str]:
+    if status in _OPEN_STATUSES:
+        return "OPEN", "PROVIDER_STATUS_ONLY_NO_FILL_INFERRED"
+    if status in _FILLED_STATUSES:
+        if quantity is None or price is None:
+            return "OUTCOME_INCOMPLETE", "FILLED_STATUS_MISSING_EXECUTION_DETAILS"
+        return "FILLED", "EXPLICIT_FILLED_STATUS_WITH_EXECUTION_DETAILS"
+    if status in _PARTIAL_STATUSES:
+        if quantity is None or price is None:
+            return "PARTIAL_FILL_INCOMPLETE", "PARTIAL_FILL_MISSING_EXECUTION_DETAILS"
+        return "PARTIALLY_FILLED", "EXPLICIT_PARTIAL_STATUS_WITH_EXECUTION_DETAILS"
+    if status in _REJECTED_STATUSES:
+        return "REJECTED", "EXPLICIT_PROVIDER_REJECTION"
+    if status in _TERMINAL_STATUSES:
+        if quantity is None:
+            return "TERMINAL_UNRECONCILED", "TERMINAL_STATUS_DOES_NOT_PROVE_ZERO_FILL"
+        return "TERMINAL_WITH_EXECUTION_EVIDENCE", "TERMINAL_STATUS_REQUIRES_RECONCILIATION"
+    return "UNKNOWN", "UNRECOGNIZED_PROVIDER_STATUS"
+
+
+def build_execution_outcome_record(
+    *,
+    provider: str,
+    decision_id: str,
+    intent_id: str,
+    trade_event_id: str,
+    client_order_id: str,
+    source_observation_id: str,
+    source_kind: str,
+    provider_status: str,
+    observed_at: str,
+    exchange_order_id: str | None = None,
+    executed_quantity: Any = None,
+    executed_price: Any = None,
+) -> dict[str, Any]:
+    """Normalize one observed provider fact without inventing missing outcomes."""
+    provider = _required_text(provider, "provider").upper()
+    decision_id = _required_text(decision_id, "decision_id")
+    intent_id = _required_text(intent_id, "intent_id")
+    trade_event_id = _required_text(trade_event_id, "trade_event_id")
+    client_order_id = _required_text(client_order_id, "client_order_id")
+    source_observation_id = _required_text(source_observation_id, "source_observation_id")
+    source_kind = _required_text(source_kind, "source_kind").upper()
+    if source_kind not in SOURCE_KINDS:
+        raise ValueError("SOURCE_KIND_INVALID")
+    status = _required_text(provider_status, "provider_status").upper()
+    timestamp = _timestamp_utc(observed_at)
+    quantity = _optional_positive_decimal(executed_quantity, "executed_quantity")
+    price = _optional_positive_decimal(executed_price, "executed_price")
+    order_id = None if exchange_order_id is None else _required_text(exchange_order_id, "exchange_order_id")
+    outcome_state, reason = _classify(status, quantity, price)
+
+    identity = f"{provider}|{trade_event_id}|{source_kind}|{source_observation_id}"
+    event_id = "OUT-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()
+    return {
+        "schema": SCHEMA,
+        "schema_version": SCHEMA_VERSION,
+        "event_type": "PROVIDER_OUTCOME_OBSERVED",
+        "event_id": event_id,
+        "provider": provider,
+        "decision_id": decision_id,
+        "intent_id": intent_id,
+        "trade_event_id": trade_event_id,
+        "client_order_id": client_order_id,
+        "exchange_order_id": order_id,
+        "source_observation_id": source_observation_id,
+        "source_kind": source_kind,
+        "observed_at": timestamp,
+        "provider_status": status,
+        "outcome_state": outcome_state,
+        "outcome_reason": reason,
+        "executed_quantity": quantity,
+        "executed_price": price,
+        "fill_inferred": False,
+    }
+
+
+def append_execution_outcome_record(
+    record: Mapping[str, Any],
+    *,
+    stream_path: Path,
+) -> dict[str, Any]:
+    """Append one record idempotently; caller explicitly supplies the target path."""
+    if not isinstance(record, Mapping):
+        raise ValueError("OUTCOME_RECORD_INVALID")
+    row = dict(record)
+    if row.get("schema") != SCHEMA or row.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError("OUTCOME_SCHEMA_INVALID")
+    if not isinstance(row.get("event_id"), str) or not row["event_id"].strip():
+        raise ValueError("OUTCOME_EVENT_ID_REQUIRED")
+    path = Path(stream_path)
+    if path.exists():
+        with path.open("r", encoding="utf-8") as handle:
+            for line_number, line in enumerate(handle, 1):
+                if not line.strip():
+                    continue
+                try:
+                    existing = json.loads(line)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"OUTCOME_STREAM_INVALID_JSON_LINE:{line_number}") from exc
+                if existing.get("event_id") != row["event_id"]:
+                    continue
+                if existing != row:
+                    raise ValueError("OUTCOME_EVENT_ID_CONFLICT")
+                return {"state": "ALREADY_PERSISTED", "event_id": row["event_id"], "path": str(path)}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    encoded = json.dumps(row, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(encoded + "\n")
+    return {"state": "PERSISTED", "event_id": row["event_id"], "path": str(path)}
+
+
+__all__ = [
+    "SCHEMA", "SCHEMA_VERSION", "build_execution_outcome_record",
+    "append_execution_outcome_record",
+]
