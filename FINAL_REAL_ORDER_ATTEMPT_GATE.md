@@ -177,4 +177,14 @@ PR #38, isolated on \`feature/execution-outcome-evidence-contract-20261015\`, no
 This candidate does **not** clear the gate. It is not merged or wired into production; the operational adapter remains submission-disabled. The active standing mandate still lacks verified timezone-aware \`issued_at\`/\`expires_at\`; Toobit client-ID constraints, duplicate-POST behavior, lookup consistency/retention, and exhaustive recovery semantics remain unverified. No live API request or order was made.
 
 
+
+## CURRENT UPDATE — OUTCOME EVIDENCE FORENSIC PASS — 2026-10-15
+
+- New isolated candidate head: `411395402de8a9aeb78bf8454649c1516a110700`; PR #38 remains open/unmerged against `operational-main-20261007`.
+- Static review found and fixed a provenance defect: a local timestamp for a `READ_ONLY_LOOKUP` was being labeled `provider_timestamp_known=true`. The schema now marks provider time known only for an explicitly timestamped `PROVIDER_RESPONSE`; read-only lookup time remains local observation time.
+- Recovery now validates the timezone-aware local observation timestamp before making its GET request; naive/invalid values fail closed without transport activity.
+- Added tests for timestamp provenance, invalid timestamp rejection before network, malformed lookup rows, and local timestamp generation.
+- GitHub Actions run [38721872191](https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38721872191) passed **56 tests** (offline/fake transport).
+- This closes the current offline contract defect found in this review, but **does not** clear the real-order gate. Management mandate timestamp fields and Toobit live semantics remain unverified; no production wiring, live API request, order, cancellation, withdrawal, or database write occurred. `safe_to_retry=false` remains mandatory.
+
 # END
