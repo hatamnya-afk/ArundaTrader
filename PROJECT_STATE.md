@@ -427,3 +427,12 @@ After explicit phase-entry authorization:
 - 24-hour operation/analysis is a later maturity stage, not a prerequisite for starting the real feedback loop.
 
 Any future Builder must treat REAL_PRODUCTION_PHASE_ENTRY_REVIEW.md and this section as active governance constraints. Historical text that conflicts with this invariant is historical residue and MUST NOT reopen the per-trade authorization model.
+
+
+## CURRENT STATE OVERRIDE — FINAL ATTEMPT DEPENDENCIES — 2026-10-15
+
+Current operational implementation: opt-in Toobit Spot/Futures submit adapter + allowlisted no-retry HTTPS transport, stable intent-derived client ID, isolated SQLite claim store, pre-submit outcome-unknown fence, and post-response durable acceptance/rejection evidence. `arunda_pipeline.py` now injects these dependencies only when both explicit submission switches are set; defaults remain disabled and do not construct the dependencies.
+
+Verification: offline end-to-end lifecycle test uses a mock provider response and confirms exactly one mock POST plus persisted `PROVIDER_ACCEPTED`; focused CI #42 PASS at https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38780176522, commit `351d3321d0f17828fe2f0e54dc56ca7d7aec9362`.
+
+Current disposition: **CODE VERIFIED; LIVE ATTEMPT BLOCKED / NOT VERIFIED**. The authoritative standing mandate lacks timezone-aware `issued_at` and `expires_at`; do not fabricate timestamps. No production runtime, live provider request/order, cancellation, or production DB write occurred. Historical statements above that the pipeline is unwired or submission is unimplemented are superseded by this section; global execution constants and adapter default remain OFF.
