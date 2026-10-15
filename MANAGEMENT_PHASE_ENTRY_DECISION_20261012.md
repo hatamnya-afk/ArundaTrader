@@ -13,6 +13,14 @@
 - Capital policy: ZERO_INITIAL_CAPITAL; record genuine provider responses and real outcomes; progressively add capital only after management review of demonstrated quality.
 - Per-trade management approval: NOT REQUIRED.
 
+## Standing mandate continuity policy
+- The intended operating model is continuous autonomous trading, 24 hours a day, without periodic management renewal.
+- The management phase-entry mandate has no calendar expiry. It remains in force until formally revoked by management or its authorized scope is changed.
+- A fabricated expiry timestamp must not be introduced merely to satisfy an implementation contract.
+- This policy does not override current-request readiness, instrument/provider validation, risk limits, trade gates, idempotency, ambiguous-outcome quarantine, or technical execution authorization.
+- The software implementation must represent this standing mandate without requiring `issued_at` or `expires_at` solely as periodic authorization expiry fields. Any separate timestamp retained for audit must not silently act as an expiry.
+- Per-trade management approval is not required. Each order remains subject to the autonomous Decision → Risk → Trade Gate → Readiness → Technical Execution Authorization → Final Execution Attempt path.
+
 ## Meaning of this authorization
 This decision authorizes phase entry as a standing management mandate. It does not assert that every technical order-attempt precondition has already passed, and it is not evidence that a live order has been sent or filled.
 
@@ -29,11 +37,11 @@ The existing Decision → Risk → Trade Gate → Readiness → Technical Execut
 - No claim of live-provider verification may be based on offline fixtures or mocked transports.
 
 ## Next action
-Continue with the current repository's final real-order gate: verify its preconditions and current execution authorization integration without re-auditing closed checkpoints. If any required evidence is missing, report the exact blocker and continue the independent work; do not silently activate execution or infer provider acceptance.
+Implement and test the standing-mandate continuity policy across the management mandate producer, execution authorization boundary, and focused tests. Do not invent timestamps. Keep live execution blocked until the code contract and its focused verification consistently implement this policy and all independent order-attempt gates pass.
 
 ## Status
-Management phase-entry decision: **AUTHORIZED**.
-Technical real-order gate: **MUST BE VERIFIED BEFORE ANY LIVE ORDER ATTEMPT**.
+Management phase-entry decision: **AUTHORIZED — STANDING, NO CALENDAR EXPIRY**.
+Technical real-order gate: **BLOCKED UNTIL IMPLEMENTATION AND VERIFICATION**.
 Execution/pipeline activation: **NOT PERFORMED BY THIS RECORD**.
 
 # END
