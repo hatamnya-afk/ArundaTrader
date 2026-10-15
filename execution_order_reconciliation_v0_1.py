@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from exchange_execution_atomic_intent_claim_store_v0_1 import (
     PROVIDER_ACCEPTED,
+    PROVIDER_REJECTED,
     RECONCILIATION_REQUIRED,
     SUBMISSION_OUTCOME_UNKNOWN,
 )
@@ -76,16 +77,20 @@ def reconcile_order_attempt(
             executed_price=None if normalized["executed_price"] is None else str(normalized["executed_price"]),
             provider_timestamp=None if normalized["provider_timestamp"] is None else str(normalized["provider_timestamp"]),
             normalized_payload=normalized)
+        explicitly_rejected = normalized["provider_status"] in {"REJECTED", "ORDER_REJECTED"}
+        terminal_claim_status = PROVIDER_REJECTED if explicitly_rejected else PROVIDER_ACCEPTED
         claim_store.transition(
             provider_namespace=provider_namespace, intent_id=intent_id,
-            status=PROVIDER_ACCEPTED, trade_event_id=claim.trade_event_id,
+            status=terminal_claim_status, trade_event_id=claim.trade_event_id,
             decision_id=claim.decision_id,
             exchange_order_id=normalized["exchange_order_id"],
             provider_status=normalized["provider_status"],
             evidence_event_id=evidence_id,
-            detail_code="READ_ONLY_RECONCILIATION_ORDER_FOUND")
-        return {"allowed": True, "reason": "ORDER_FOUND",
-                "claim_status": PROVIDER_ACCEPTED, "evidence_event_id": evidence_id,
+            detail_code=("READ_ONLY_RECONCILIATION_PROVIDER_REJECTION"
+                         if explicitly_rejected else "READ_ONLY_RECONCILIATION_ORDER_FOUND"))
+        return {"allowed": True,
+                "reason": "ORDER_FOUND_PROVIDER_REJECTED" if explicitly_rejected else "ORDER_FOUND",
+                "claim_status": terminal_claim_status, "evidence_event_id": evidence_id,
                 "order_evidence": normalized, "resubmit_allowed": False}
 
     unresolved = data if isinstance(data, dict) else {}
