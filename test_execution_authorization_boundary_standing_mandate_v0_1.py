@@ -14,6 +14,14 @@ def _mandate(**overrides):
         "authorization_mode": STANDING_MANDATE,
         "authorization_id": "REAL-PROD-MANDATE-001",
         "mandate_id": "REAL-PROD-MANDATE-001",
+        "mandate_lifecycle_events": (
+            {
+                "event_id": "PHASE_ENTRY_ACTIVATE:REAL-PROD-MANDATE-001",
+                "event_type": "ACTIVATE",
+                "mandate_id": "REAL-PROD-MANDATE-001",
+                "authority": "MANAGEMENT",
+            },
+        ),
         "issued_at": None,
         "expires_at": None,
         "mandate_expiry_policy": "NON_EXPIRING_STANDING_MANDATE",
@@ -67,3 +75,48 @@ def test_non_expiring_mandate_does_not_bypass_readiness_or_market_scope():
         assert str(exc) == "AUTHORIZATION_MARKET_NOT_ALLOWED"
     else:
         raise AssertionError("standing mandate must not widen market scope")
+
+
+def test_revoked_or_replaced_mandate_is_rejected_without_expiry():
+    revoked = _mandate(mandate_lifecycle_events=(
+        {
+            "event_id": "ACTIVATE:old",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+        {
+            "event_id": "REVOKE:old",
+            "event_type": "REVOKE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+    ))
+    try:
+        evaluate_execution_authorization({"readiness_state": "READY", "venue": "SPOT"}, revoked)
+    except ValueError as exc:
+        assert str(exc) == "MANDATE_NOT_ACTIVE"
+    else:
+        raise AssertionError("revoked standing mandate must fail closed")
+
+    replaced = _mandate(mandate_lifecycle_events=(
+        {
+            "event_id": "ACTIVATE:old",
+            "event_type": "ACTIVATE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "authority": "MANAGEMENT",
+        },
+        {
+            "event_id": "REPLACE:old:new",
+            "event_type": "REPLACE",
+            "mandate_id": "REAL-PROD-MANDATE-001",
+            "replacement_mandate_id": "REAL-PROD-MANDATE-002",
+            "authority": "MANAGEMENT",
+        },
+    ))
+    try:
+        evaluate_execution_authorization({"readiness_state": "READY", "venue": "SPOT"}, replaced)
+    except ValueError as exc:
+        assert str(exc) == "MANDATE_NOT_ACTIVE"
+    else:
+        raise AssertionError("superseded standing mandate must fail closed")
