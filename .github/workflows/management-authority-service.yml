@@ -1,0 +1,32 @@
+name: Management Authority Service Contract
+
+on:
+  push:
+    branches: [operational-main-20261007]
+    paths:
+      - "management_authority_service/**"
+      - ".github/workflows/management-authority-service.yml"
+  pull_request:
+    paths:
+      - "management_authority_service/**"
+      - ".github/workflows/management-authority-service.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: management_authority_service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: management_authority_service/requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pytest -q
