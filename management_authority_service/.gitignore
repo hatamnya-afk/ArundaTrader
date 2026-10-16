@@ -1,0 +1,7 @@
+# Never commit authority secrets, generated keys, tokens, or runtime state.
+secrets/
+*.key
+*.pem
+*.token
+status.json
+audit.jsonl
