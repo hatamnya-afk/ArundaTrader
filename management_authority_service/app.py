@@ -143,19 +143,22 @@ def update_mandate_status(
             if update.status == current["status"]:
                 # Idempotent state setting is allowed; still append audit evidence.
                 pass
-            _atomic_write_state(update.status)
             audit_path = STATE_FILE.with_name("audit.jsonl")
             audit = {
                 "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "event": "transition_request",
                 "mandate_id": MANDATE_ID,
                 "from": current["status"],
-                "to": update.status,
+                "requested_status": update.status,
                 "reason": update.reason,
             }
+            # Audit the request before mutating state. If audit persistence fails,
+            # the requested transition is not applied.
             with audit_path.open("a", encoding="utf-8") as stream:
                 stream.write(json.dumps(audit, sort_keys=True, ensure_ascii=False) + "\n")
                 stream.flush()
                 os.fsync(stream.fileno())
+            _atomic_write_state(update.status)
             return {"mandate_id": MANDATE_ID, "status": update.status, "result": "RECORDED"}
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail="AUTHORITY_UNAVAILABLE") from exc
