@@ -99,13 +99,25 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
         import re
         import sqlite3
         import sys
+        import urllib.request
+        import requests
+        import websocket
+        import ccxt
 
         original_connect = sqlite3.connect
+        original_urlopen = urllib.request.urlopen
+        original_requests_get = requests.get
+        original_websocket_app = websocket.WebSocketApp
+        original_ccxt_kucoin = ccxt.kucoin
 
-        def forbid_database_open(*args, **kwargs):
-            raise AssertionError("database access during module import is forbidden")
+        def forbid_external_or_database_io(*args, **kwargs):
+            raise AssertionError("network/database I/O during module import is forbidden")
 
-        sqlite3.connect = forbid_database_open
+        sqlite3.connect = forbid_external_or_database_io
+        urllib.request.urlopen = forbid_external_or_database_io
+        requests.get = forbid_external_or_database_io
+        websocket.WebSocketApp = forbid_external_or_database_io
+        ccxt.kucoin = forbid_external_or_database_io
         try:
             for filename in RUNTIME_MODULES:
                 path = ROOT / filename
@@ -121,6 +133,10 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
                     importlib.import_module(path.stem)
         finally:
             sqlite3.connect = original_connect
+            urllib.request.urlopen = original_urlopen
+            requests.get = original_requests_get
+            websocket.WebSocketApp = original_websocket_app
+            ccxt.kucoin = original_ccxt_kucoin
 
     def test_cp69_producer_and_native_ui_share_the_same_default_observation_contract(self):
         producer = (ROOT / "cp69_runtime_observation.py").read_text(encoding="utf-8-sig")
