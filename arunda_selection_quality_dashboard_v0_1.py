@@ -48,7 +48,8 @@ footer{color:var(--muted);font-size:12px;margin-top:18px}@media(max-width:600px)
 <footer>منبع: runtime_observations/global_selection_outcomes.jsonl · بدون تماس با صرافی · بدون تغییر پایگاه‌داده یا وضعیت اجرا</footer>
 </main><script>
 let report=null, horizon='1h';
-const esc=(v)=>String(v).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));\nconst fmt=(v,suffix='')=>v===null||v===undefined?'—':Number(v).toLocaleString('en-US',{maximumFractionDigits:2})+suffix;
+const esc=(v)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=(v,suffix='')=>v===null||v===undefined?'—':Number(v).toLocaleString('en-US',{maximumFractionDigits:2})+suffix;
 function metric(label,value){return '<div class="card"><div class="label">'+label+'</div><div class="metric">'+value+'</div></div>'}
 function render(){
  if(!report)return;
