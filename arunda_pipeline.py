@@ -4337,6 +4337,10 @@ def verify_execution_boundary_integration(
 
         assert_execution_disabled()
 
+        from execution_attempt_runtime_producers_v0_1 import (
+            produce_final_execution_attempt_context,
+        )
+
         if not isinstance(canonical_order_requests, dict):
             fail("Execution Boundary canonical requests must be dict")
         if not canonical_order_requests:
