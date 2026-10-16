@@ -61,6 +61,38 @@ def test_provenance() -> None:
     item = make()
     assert item["provenance"]["runtime_snapshot_id"] == "RS-test"
 
+def test_repeated_identical_state_gets_distinct_observation_ids() -> None:
+    first = build_observation(
+        emitted_at="2026-10-16T00:00:00+00:00",
+        universe_assets=["BTC"],
+        market_data_results={"BTC": {"status": "READY"}},
+        opportunity_by_asset={"BTC": {"asset": "BTC"}},
+        dynamic_signals={"BTC": {"direction": "NONE"}},
+        validation_results={"BTC": {"valid": True}},
+        fusion_snapshot={"BTC": {"score": 0}},
+        score_snapshot={"BTC": {"score": 0}},
+        decision_snapshot={"BTC": {"decision": "HOLD"}},
+        risk_snapshot={"BTC": {"status": "PASS"}},
+        trade_gate_snapshot={"BTC": {"trade_gate_state": "REJECTED"}},
+        trade_ready_assets=[],
+    )
+    second = build_observation(
+        emitted_at="2026-10-16T00:00:01+00:00",
+        universe_assets=["BTC"],
+        market_data_results={"BTC": {"status": "READY"}},
+        opportunity_by_asset={"BTC": {"asset": "BTC"}},
+        dynamic_signals={"BTC": {"direction": "NONE"}},
+        validation_results={"BTC": {"valid": True}},
+        fusion_snapshot={"BTC": {"score": 0}},
+        score_snapshot={"BTC": {"score": 0}},
+        decision_snapshot={"BTC": {"decision": "HOLD"}},
+        risk_snapshot={"BTC": {"status": "PASS"}},
+        trade_gate_snapshot={"BTC": {"trade_gate_state": "REJECTED"}},
+        trade_ready_assets=[],
+    )
+    assert first["provenance"]["runtime_snapshot_id"] == second["provenance"]["runtime_snapshot_id"]
+    assert first["observation_id"] != second["observation_id"]
+
 def test_authoritative_birth_write_provenance_is_preserved() -> None:
     item = build_observation(
         emitted_at="2026-10-16T00:00:00+00:00",
