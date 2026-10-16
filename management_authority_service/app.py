@@ -178,7 +178,8 @@ def update_mandate_status(
                 os.fsync(stream.fileno())
             _atomic_write_state(update.status)
             return {"mandate_id": MANDATE_ID, "status": update.status, "result": "RECORDED"}
-    except RuntimeError as exc:
+    except (RuntimeError, OSError) as exc:
+        # Storage failures are generic to clients; never expose filesystem details.
         raise HTTPException(status_code=503, detail="AUTHORITY_UNAVAILABLE") from exc
 
 
