@@ -54,15 +54,47 @@ CP72 Controlled Self-Improvement Loop
 
 These are Aroonda checkpoints, not ArundaTrader checkpoints.
 
-### C. Broader management/product vision
-This is intentionally separate until formally promoted into a canonical roadmap:
+### C. Management-approved product roadmap — 2026-10-16
 
-REAL FEEDBACK → ANALYSIS → IMPROVEMENT → UI / EVIDENCE →
-AROONDA INTELLIGENCE → PREDICTION → SIGNAL / RECOMMENDATION /
-SOFTWARE PRODUCT → IF PROVEN: BLOCKCHAIN.
+Management has explicitly promoted the signal-software product path into the
+cross-repository direction. This is a roadmap decision, not a claim that the
+UI, subscription system, or product is already implemented.
 
-Important: the prediction/customer-product/blockchain stages are currently
-management vision, not claims of existing GitHub checkpoint implementation.
+The product sequence is:
+
+1. Complete and stabilize the existing ArundaTrader and AroondaAI foundations;
+   do not reconstruct closed checkpoints.
+2. Audit and complete the existing UI / Control Center so it presents real,
+   attributable ArundaTrader state, selected assets, signals, evidence,
+   quality history, outcomes, risk/gate status, and Aroonda analysis.
+3. Connect the UI to AroondaAI through the existing environment/observation
+   boundaries. Aroonda analysis is advisory and must not silently mutate Trader
+   behavior or grant execution authority.
+4. Establish reproducible, evidence-based signal-quality evaluation using
+   valid real post-launch data and recorded outcomes. Do not synthesize,
+   interpolate, forward-fill, backfill, pad, fabricate, or silently blend data.
+5. Select signals/assets for customer-facing presentation only after their
+   quality criteria and evidence are explicitly defined and evaluated.
+6. Deliver the signal-software product: customer access, subscription tiers or
+   plan, monthly billing, entitlement/expiry handling, and auditable access
+   control. Payment processing/provider and deployment choices require their
+   own implementation and security review; none are presumed to exist.
+7. Only after signal quality has been approved and reviewed, consider a
+   separate staged-capital trading phase under its own explicit management
+   authorization and existing technical safety gates.
+
+The immediate product objective is a paid, monthly subscription signal service.
+It is not an instruction to activate live trading. Signal publication, customer
+subscription, and real-order execution are separate capabilities and permission
+boundaries. The signal product must remain usable without enabling order
+submission.
+
+Implementation truth remains the repository's verified code, tests, and
+checkpoint state. This promotion does not close CP65 or any UI integration
+checkpoint, does not authorize a runtime or provider write, and does not
+change EXECUTION AUTHORIZATION = FALSE. The next work is a focused audit of
+existing UI files and the CP65 / CP69 integration points, followed by a
+minimal implementation plan grounded in the actual code.
 
 ## 3. ARUNDATRADER — HISTORICAL WORK THAT MUST NOT BE REDONE
 
