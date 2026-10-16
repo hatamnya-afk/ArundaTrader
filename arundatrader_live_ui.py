@@ -89,6 +89,17 @@ def asset_rows(observation: CanonicalRuntimeObservation) -> list[tuple[str, ...]
                 if asset:
                     normalized[asset] = value
                     keys.add(asset)
+        elif isinstance(mapping, (list, tuple)):
+            # Some real runtime producers expose dataclass collections as lists.
+            # Index them only by an explicit source-provided asset/symbol field.
+            for value in mapping:
+                if not isinstance(value, dict):
+                    continue
+                raw_key = value.get("asset", value.get("symbol", value.get("base_asset")))
+                if isinstance(raw_key, str) and raw_key.strip():
+                    asset = raw_key.strip().upper().split("/", 1)[0]
+                    normalized[asset] = value
+                    keys.add(asset)
         normalized_maps.append(normalized)
     universe = state.get("universe_assets", [])
     if isinstance(universe, (list, tuple)):
