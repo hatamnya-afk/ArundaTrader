@@ -82,3 +82,11 @@ def test_non_loopback_host_is_rejected(monkeypatch):
     with pytest.raises(SystemExit) as exc:
         dashboard.main()
     assert exc.value.code == 2
+
+
+def test_inline_javascript_escaping_is_well_formed():
+    # The HTML is a raw Python string: JavaScript statements must be separated
+    # by actual newlines, not literal backslash-n text.
+    assert "\\nconst fmt" not in dashboard.HTML
+    expected = """const esc=(v)=>String(v).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));"""
+    assert expected in dashboard.HTML
