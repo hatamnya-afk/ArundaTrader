@@ -15,9 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
-from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 SCHEMA_VERSION = "1"
@@ -28,6 +27,15 @@ PRIVATE_KEY_FILE = Path(os.environ.get("ARUNDA_AUTHORITY_PRIVATE_KEY_FILE", "/ru
 ADMIN_TOKEN_FILE = Path(os.environ.get("ARUNDA_AUTHORITY_ADMIN_TOKEN_FILE", "/run/secrets/authority_admin_token"))
 _LOCK = threading.RLock()
 app = FastAPI(title="Arunda Management Mandate Authority", docs_url=None, redoc_url=None, openapi_url=None)
+
+
+@app.middleware("http")
+async def prevent_response_caching(request: Request, call_next):
+    """Mandate status is time-sensitive; never let clients or intermediaries cache it."""
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 
 class StatusUpdate(BaseModel):
@@ -49,6 +57,7 @@ def _read_secret(path: Path) -> bytes:
 def _private_key() -> Ed25519PrivateKey:
     import base64
     import binascii
+
     raw_text = _read_secret(PRIVATE_KEY_FILE)
     try:
         raw = base64.b64decode(raw_text, validate=True)
@@ -84,6 +93,7 @@ def _signed_response() -> dict[str, str]:
     }
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     import base64
+
     payload["signature"] = base64.b64encode(_private_key().sign(canonical)).decode("ascii")
     return payload
 
@@ -100,6 +110,16 @@ def _require_operator(authorization: str | None) -> None:
         raise HTTPException(status_code=403, detail="AUTHENTICATION_FAILED")
 
 
+def _fsync_directory(path: Path) -> None:
+    """Persist directory-entry changes where supported by the deployment OS."""
+    flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+    directory_fd = os.open(str(path), flags)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
+
+
 def _atomic_write_state(status: str) -> None:
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     content = json.dumps({"mandate_id": MANDATE_ID, "status": status}, sort_keys=True) + "\n"
@@ -110,6 +130,7 @@ def _atomic_write_state(status: str) -> None:
             stream.flush()
             os.fsync(stream.fileno())
         os.replace(temporary, STATE_FILE)
+        _fsync_directory(STATE_FILE.parent)
     finally:
         try:
             os.unlink(temporary)
@@ -140,9 +161,6 @@ def update_mandate_status(
     try:
         with _LOCK:
             current = _state()
-            if update.status == current["status"]:
-                # Idempotent state setting is allowed; still append audit evidence.
-                pass
             audit_path = STATE_FILE.with_name("audit.jsonl")
             audit = {
                 "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
