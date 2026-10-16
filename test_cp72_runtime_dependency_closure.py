@@ -70,6 +70,20 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
                 failures.append(f"{name}: {type(exc).__name__}: {exc}")
         self.assertEqual(failures, [], "runtime dependency compile failures:\n" + "\n".join(failures))
 
+    def test_cp69_producer_and_native_ui_share_the_same_default_observation_contract(self):
+        producer = (ROOT / "cp69_runtime_observation.py").read_text(encoding="utf-8-sig")
+        consumer = (ROOT / "arundatrader_observation_consumer.py").read_text(encoding="utf-8-sig")
+        ui = (ROOT / "arundatrader_live_ui.py").read_text(encoding="utf-8-sig")
+
+        self.assertIn('CP69_SCHEMA = "arunda.runtime_observation"', producer)
+        self.assertIn('CP69_SCHEMA_VERSION = "1.0"', producer)
+        self.assertIn('CP69_SCHEMA = "arunda.runtime_observation"', consumer)
+        self.assertIn('CP69_SCHEMA_VERSION = "1.0"', consumer)
+        self.assertIn("arundatrader_current_runtime_observation.jsonl", producer)
+        self.assertIn("arundatrader_current_runtime_observation.jsonl", ui)
+        self.assertIn("ARUNDATRADER_CURRENT_OBSERVATION_PATH", producer)
+        self.assertIn("ARUNDATRADER_CURRENT_OBSERVATION_PATH", ui)
+
     def test_recovered_runtime_paths_are_not_bound_to_original_windows_checkout(self):
         hardcoded = r"C:\Users\ASUS\ArundaTrader"
         offenders = []
