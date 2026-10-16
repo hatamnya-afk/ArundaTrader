@@ -14,6 +14,7 @@ from cp69_runtime_observation import (
     CP69_SCHEMA_VERSION,
     append_observation,
     build_observation,
+    write_current_observation,
 )
 
 
@@ -344,3 +345,31 @@ if __name__ == "__main__":
     for test in tests:
         test()
     print(f"CP69 TRADER PRODUCER TESTS PASS: {len(tests)}/{len(tests)}")
+
+
+
+def test_current_handoff_contains_exactly_one_latest_observation() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "current.jsonl"
+        first = make()
+        write_current_observation(first, path)
+        assert len(path.read_text(encoding="utf-8").splitlines()) == 1
+        second = dict(make())
+        second["observation_id"] = "obs:latest"
+        write_current_observation(second, path)
+        lines = path.read_text(encoding="utf-8").splitlines()
+        assert len(lines) == 1
+        assert json.loads(lines[0])["observation_id"] == "obs:latest"
+
+
+def test_current_handoff_rejects_unsafe_observation() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "current.jsonl"
+        unsafe = make()
+        unsafe["execution_state"]["REAL_ORDER"] = True
+        try:
+            write_current_observation(unsafe, path)
+        except ValueError:
+            assert not path.exists()
+            return
+        raise AssertionError("unsafe current observation accepted")
