@@ -5371,6 +5371,41 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY SIDE CAR
+        # ------------------------------------------------------------------
+        # Observation failure must not alter the Decision/Risk/Trade Gate result.
+        # The producer only appends a JSONL artifact; it does not write the DB,
+        # call an exchange, submit/cancel orders, or change execution flags.
+        try:
+            from cp69_runtime_observation import (
+                append_observation,
+                build_observation,
+            )
+
+            cp69_observation = build_observation(
+                emitted_at=datetime.now(timezone.utc).isoformat(),
+                universe_assets=universe_assets,
+                market_data_results=market_data_results,
+                opportunity_by_asset=opportunity_by_asset,
+                dynamic_signals=dynamic_signals,
+                validation_results=validation_results,
+                fusion_snapshot=fusion_snapshot,
+                score_snapshot=score_snapshot,
+                decision_snapshot=decision_snapshot,
+                risk_snapshot=risk_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+                trade_ready_assets=trade_ready_assets,
+            )
+            cp69_stream_path = append_observation(cp69_observation)
+        except (OSError, TypeError, ValueError) as cp69_exc:
+            print(f"CP69_OBSERVATION_STATUS=BLOCKED:{cp69_exc}")
+        else:
+            print("CP69_OBSERVATION_STATUS=APPENDED")
+            print(f"CP69_OBSERVATION_ID={cp69_observation['observation_id']}")
+            print(f"CP69_RUNTIME_SNAPSHOT_ID={cp69_observation['provenance']['runtime_snapshot_id']}")
+            print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
+
+        # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
         from mcp01_main_integration_boundary_v0_1 import (
