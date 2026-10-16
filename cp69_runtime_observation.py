@@ -179,13 +179,23 @@ def _validate_observation(observation: dict[str, Any]) -> None:
     if observation["adapter_id"] != CP69_ADAPTER_ID:
         raise ValueError("invalid CP69 adapter identity")
     execution = observation["execution_state"]
-    if execution != {
-        "EXECUTION": "OFF",
-        "REAL_ORDER": False,
-        "REAL_TRADE": False,
-        "DB_WRITES": 0,
-    }:
-        raise ValueError("unsafe execution state")
+    if not isinstance(execution, dict):
+        raise ValueError("invalid execution state")
+    if execution.get("EXECUTION") != "OFF":
+        raise ValueError("unsafe execution state: EXECUTION")
+    if execution.get("REAL_ORDER") is not False:
+        raise ValueError("unsafe execution state: REAL_ORDER")
+    if execution.get("REAL_TRADE") is not False:
+        raise ValueError("unsafe execution state: REAL_TRADE")
+    db_writes = execution.get("DB_WRITES")
+    if not isinstance(db_writes, int) or isinstance(db_writes, bool) or db_writes < 0:
+        raise ValueError("invalid execution state: DB_WRITES")
+    provenance = observation["provenance"]
+    boundary = provenance.get("db_write_boundary") if isinstance(provenance, dict) else None
+    if db_writes > 0 and boundary != "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE":
+        raise ValueError("unauthorized production DB write boundary")
+    if db_writes == 0 and boundary is not None:
+        raise ValueError("DB write boundary present with zero writes")
 
 
 def _project_observation_state(value: Any) -> Any:
