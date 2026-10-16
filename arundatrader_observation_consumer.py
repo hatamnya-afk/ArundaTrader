@@ -116,3 +116,24 @@ def _require_text(name: str, value: Any) -> None:
 def _require_dict(name: str, value: Any) -> None:
     if not isinstance(value, dict):
         raise TypeError(f"{name} must be a dict")
+
+
+class CanonicalRuntimeObservationConsumer:
+    """Read and validate CP69 records from the append-only JSONL stream."""
+
+    def read_events(self, stream_path: Path) -> tuple[CanonicalRuntimeObservation, ...]:
+        path = Path(stream_path)
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        observations: list[CanonicalRuntimeObservation] = []
+        with path.open("r", encoding="utf-8") as handle:
+            for line_number, line in enumerate(handle, start=1):
+                raw = line.strip()
+                if not raw:
+                    continue
+                try:
+                    payload = json.loads(raw)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"invalid JSON at line {line_number}") from exc
+                observations.append(CanonicalRuntimeObservation.from_dict(payload))
+        return tuple(observations)
