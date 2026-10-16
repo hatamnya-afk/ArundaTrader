@@ -285,6 +285,24 @@ def test_failure_attribution_does_not_infer_predicates() -> None:
     assert attribution["predicate_failures"] == {}
 
 
+
+def test_pipeline_emits_cp69_after_trade_gate_before_downstream_evidence() -> None:
+    pipeline_path = Path(__file__).with_name("arunda_pipeline.py")
+    source = pipeline_path.read_text(encoding="utf-8-sig")
+    cp69_marker = "# CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY ARTIFACT"
+    downstream_marker = "# MCP-01 DOWNSTREAM EVIDENCE EMISSION"
+    assert source.count(cp69_marker) == 1
+    assert source.count(downstream_marker) == 1
+    cp69_index = source.index(cp69_marker)
+    downstream_index = source.index(downstream_marker)
+    assert cp69_index < downstream_index
+    assert source.rfind("trade_gate_snapshot =", 0, cp69_index) != -1
+    assert source.rfind("trade_ready_assets =", 0, cp69_index) != -1
+    assert source.index("cp69_observation = build_observation(", cp69_index) < downstream_index
+    assert source.index("cp69_stream_path = append_observation(cp69_observation)", cp69_index) < downstream_index
+    assert "EXECUTION_ENABLED = False" in source
+
+
 if __name__ == "__main__":
     tests = [
         value
