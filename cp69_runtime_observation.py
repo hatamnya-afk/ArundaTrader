@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import uuid
 import math
 from dataclasses import fields, is_dataclass
 from pathlib import Path
@@ -147,10 +148,12 @@ def build_observation(
             ).hexdigest()
         )
 
+    # Snapshot identity describes content; observation identity describes this
+    # emission event. Repeated identical states must not reuse an event ID.
     observation_id = (
         observation_id
         if isinstance(observation_id, str) and observation_id.strip()
-        else f"obs:{runtime_snapshot_id}"
+        else f"obs:{uuid.uuid4()}"
     )
 
     return {
