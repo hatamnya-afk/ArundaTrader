@@ -5371,6 +5371,42 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY ARTIFACT
+        # ------------------------------------------------------------------
+        from cp69_runtime_observation import append_observation, build_observation
+
+        cp69_db_writes = int(cp49_birth_persisted)
+        cp69_db_boundary = (
+            "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
+            if cp69_db_writes > 0
+            else None
+        )
+        cp69_observation = build_observation(
+            emitted_at=utc_now_iso(),
+            universe_assets=universe_assets,
+            market_data_results=market_data_results,
+            opportunity_by_asset=opportunity_by_asset,
+            dynamic_signals=dynamic_signals,
+            validation_results=validation_results,
+            fusion_snapshot=fusion_snapshot,
+            score_snapshot=score_snapshot,
+            decision_snapshot=decision_snapshot,
+            risk_snapshot=risk_snapshot,
+            trade_gate_snapshot=trade_gate_snapshot,
+            trade_ready_assets=trade_ready_assets,
+            news_items=news_items,
+            social_items=social_items,
+            launch_timestamp=LAUNCH_TIMESTAMP,
+            db_writes=cp69_db_writes,
+            db_write_boundary=cp69_db_boundary,
+        )
+        cp69_stream_path = append_observation(cp69_observation)
+        print("CP69_OBSERVATION_WRITTEN=1")
+        print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
+        print(f"CP69_OBSERVATION_ID={cp69_observation['observation_id']}")
+        print(f"CP69_RUNTIME_SNAPSHOT_ID={cp69_observation['provenance']['runtime_snapshot_id']}")
+
+        # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
         from mcp01_main_integration_boundary_v0_1 import (
