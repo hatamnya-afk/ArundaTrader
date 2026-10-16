@@ -30,7 +30,7 @@ class RuntimeAnalysisResult:
     decision_count: int
     risk_count: int
     trade_gate_candidate_count: int
-    trade_ready_count: int
+    trade_ready_count: int | None
     trade_gate_status_counts: dict[str, int]
     predicate_failures: dict[str, int]
     reason_counts: dict[str, int]
@@ -118,7 +118,7 @@ def analyze_runtime_observation(
         decision_count=_count(state.get("decision_snapshot")),
         risk_count=_count(state.get("risk_snapshot")),
         trade_gate_candidate_count=len(rows),
-        trade_ready_count=_int_or_zero(attribution.get("trade_ready_count")),
+        trade_ready_count=_int_or_none(attribution.get("trade_ready_count")),
         trade_gate_status_counts=dict(sorted(status_counts.items())),
         predicate_failures=_mapping_ints(attribution.get("predicate_failures")),
         reason_counts=_mapping_ints(attribution.get("reason_counts")),
@@ -144,8 +144,8 @@ def _rows(value: Any) -> list[dict[str, Any]]:
     return []
 
 
-def _int_or_zero(value: Any) -> int:
-    return value if isinstance(value, int) and not isinstance(value, bool) else 0
+def _int_or_none(value: Any) -> int | None:
+    return value if isinstance(value, int) and not isinstance(value, bool) else None
 
 
 def _mapping_ints(value: Any) -> dict[str, int]:
