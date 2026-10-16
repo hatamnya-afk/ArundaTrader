@@ -5472,7 +5472,7 @@ def main() -> int:
         execution_claim_store = None
         if (
             os.getenv("ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT") == "1"
-            or os.getenv("ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION") == "1"
+            and os.getenv("ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION") == "1"
         ):
             try:
                 from execution_dependency_runtime_factory_v0_1 import (
