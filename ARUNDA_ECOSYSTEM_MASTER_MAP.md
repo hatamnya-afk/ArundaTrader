@@ -83,6 +83,8 @@ The product sequence is:
    separate staged-capital trading phase under its own explicit management
    authorization and existing technical safety gates.
 
+Implementation note (verified repository review, 2026-10-16): an open ArundaTrader proposal already exists at PR #37, “Add local read-only selection quality dashboard” (head branch `feature/local-selection-quality-dashboard-20261015`). Its dashboard reads the append-only real-observation JSONL stream and presents 1h/4h/24h descriptive selection outcomes; these are historical selection-quality outcomes, not customer-ready live signals. Reuse/review this existing work before building another dashboard. PR #37 is not merged into `operational-main-20261007`, so do not represent it as present in the operational branch or deployed.
+
 The immediate product objective is a paid, monthly subscription signal service.
 It is not an instruction to activate live trading. Signal publication, customer
 subscription, and real-order execution are separate capabilities and permission
