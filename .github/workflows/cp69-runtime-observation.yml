@@ -1,0 +1,52 @@
+name: CP69 Runtime Observation Contract
+
+on:
+  pull_request:
+    branches:
+      - operational-main-20261007
+    paths:
+      - "cp69_runtime_observation.py"
+      - "test_cp69_runtime_observation.py"
+      - "arunda_pipeline.py"
+      - ".github/workflows/cp69-runtime-observation.yml"
+  push:
+    branches:
+      - "fix/cp69-runtime-observation-regression-20261016"
+    paths:
+      - "cp69_runtime_observation.py"
+      - "test_cp69_runtime_observation.py"
+      - "arunda_pipeline.py"
+      - ".github/workflows/cp69-runtime-observation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  cp69-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pytest
+        run: python -m pip install --upgrade pytest
+      - name: Run CP69 producer regression tests
+        run: python -m pytest -q test_cp69_runtime_observation.py
+      - name: Compile producer and pipeline integration
+        run: python -m py_compile cp69_runtime_observation.py arunda_pipeline.py
+      - name: Verify pipeline integration placement and fail-closed execution markers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source = Path("arunda_pipeline.py").read_text(encoding="utf-8")
+          assert source.count("CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY SIDE CAR") == 1
+          assert source.index("CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY SIDE CAR") < source.index("MCP-01 DOWNSTREAM EVIDENCE EMISSION")
+          assert 'print("REAL_ORDER=FALSE")' in source
+          assert 'print("REAL_TRADE=FALSE")' in source
+          assert 'print("EXECUTION=OFF")' in source
+          print("CP69 pipeline wiring contract PASS")
+          PY
