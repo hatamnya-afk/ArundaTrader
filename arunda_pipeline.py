@@ -169,20 +169,26 @@ CANONICAL_QUANTITY_UNIT = "BASE_ASSET"
 
 # ============================================================================
 
-import signal_validator
-import signal_scorer
-import decision_engine
-import risk_engine
-import risk_budget_engine
-import position_sizing_engine
-import trade_gate_engine
-import market_regime_engine
-import market_data_engine
-import exchange_execution_contract
-import fusion_engine
-import production_fused_score_binding_v0_1
+# Legacy/fixed-snapshot helpers are retained for the normal compatibility
+# path. CP72 observation-only runs the dynamic boundary below and must not
+# import legacy modules before its fail-closed mode switch is evaluated.
+if os.environ.get("ARUNDATRADER_OBSERVATION_ONLY", "").strip() != "1":
+    import signal_validator
+    import signal_scorer
+    import decision_engine
+    import risk_engine
+    import risk_budget_engine
+    import position_sizing_engine
+    import trade_gate_engine
+    import market_regime_engine
+    import market_data_engine
+    import exchange_execution_contract
+    import fusion_engine
+    import production_fused_score_binding_v0_1
 
-from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
+    from final_execution_attempt_contract_v0_1 import (
+        run_final_execution_attempt_contract,
+    )
 
 # ============================================================================
 
