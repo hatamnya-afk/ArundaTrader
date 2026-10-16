@@ -5380,6 +5380,7 @@ def main() -> int:
             from cp69_runtime_observation import (
                 append_observation,
                 build_observation,
+                write_current_observation,
             )
 
             cp69_observation = build_observation(
@@ -5397,6 +5398,7 @@ def main() -> int:
                 trade_ready_assets=trade_ready_assets,
             )
             cp69_stream_path = append_observation(cp69_observation)
+            cp69_current_path = write_current_observation(cp69_observation)
         except Exception as cp69_exc:
             # Keep this sidecar strictly observational: serialization/storage
             # failures must not change the trading pipeline outcome.
@@ -5405,7 +5407,8 @@ def main() -> int:
             print("CP69_OBSERVATION_STATUS=APPENDED")
             print(f"CP69_OBSERVATION_ID={cp69_observation['observation_id']}")
             print(f"CP69_RUNTIME_SNAPSHOT_ID={cp69_observation['provenance']['runtime_snapshot_id']}")
-            print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
+            print(f"CP69_OBSERVATION_ARCHIVE_PATH={cp69_stream_path}")
+            print(f"CP69_CURRENT_OBSERVATION_PATH={cp69_current_path}")
 
         # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
