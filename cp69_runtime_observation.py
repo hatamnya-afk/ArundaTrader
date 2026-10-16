@@ -165,12 +165,12 @@ def write_current_observation(
     encoded = json.dumps(
         observation, sort_keys=True, separators=(",", ":"),
         ensure_ascii=False, allow_nan=False,
-    ) + "\\n"
+    ) + "\n"
     path = Path(observation_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary_path = path.with_name(path.name + ".tmp")
     try:
-        temporary_path.write_text(encoded, encoding="utf-8", newline="\\n")
+        temporary_path.write_text(encoded, encoding="utf-8")
         temporary_path.replace(path)
     finally:
         if temporary_path.exists():
