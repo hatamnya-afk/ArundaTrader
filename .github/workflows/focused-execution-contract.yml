@@ -30,6 +30,8 @@ on:
       - "test_final_execution_attempt_offline_e2e_v0_1.py"
       - "test_execution_dependency_runtime_factory_v0_1.py"
       - "execution_dependency_runtime_factory_v0_1.py"
+      - "execution_deployment_preflight_v0_1.py"
+      - "test_execution_deployment_preflight_v0_1.py"
       - "test_exchange_execution_order_reconciliation_v0_1.py"
       - "exchange_execution_order_reconciliation_v0_1.py"
       - "exchange_execution_atomic_intent_claim_store_v0_1.py"
@@ -70,6 +72,7 @@ jobs:
           test_exchange_execution_order_reconciliation_v0_1.py
           test_execution_order_reconciliation_v0_1.py
           test_execution_dependency_runtime_factory_v0_1.py
+          test_execution_deployment_preflight_v0_1.py
           test_final_execution_attempt_offline_e2e_v0_1.py
           test_pipeline_final_execution_attempt_wiring_v0_1.py
           test_toobit_exchange_adapter_v0_1.py
