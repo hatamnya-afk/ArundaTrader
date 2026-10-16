@@ -19,11 +19,9 @@ CP69_SCHEMA_VERSION = "1.0"
 CP69_SOURCE_SYSTEM = "ArundaTrader"
 CP69_ENVIRONMENT_ID = "arundatrader"
 CP69_ADAPTER_ID = "arundatrader_adapter"
-DEFAULT_STREAM_PATH = (
-    Path(__file__).resolve().parent
-    / "runtime_observations"
-    / "arundatrader_runtime_observations.jsonl"
-)
+OBSERVATION_DIR = Path(__file__).resolve().parent / "runtime_observations"
+DEFAULT_STREAM_PATH = OBSERVATION_DIR / "arundatrader_runtime_observations.jsonl"
+DEFAULT_CURRENT_OBSERVATION_PATH = OBSERVATION_DIR / "arundatrader_current_runtime_observation.jsonl"
 EXECUTION_STATE = {
     "EXECUTION": "OFF",
     "REAL_ORDER": False,
@@ -156,6 +154,30 @@ def append_observation(
     return path
 
 
+def write_current_observation(
+    observation: dict[str, Any],
+    observation_path: Path = DEFAULT_CURRENT_OBSERVATION_PATH,
+) -> Path:
+    """Atomically publish exactly one current event for the existing Aroonda consumer."""
+    if not isinstance(observation, dict):
+        raise TypeError("observation must be a dict")
+    _validate_observation(observation)
+    encoded = json.dumps(
+        observation, sort_keys=True, separators=(",", ":"),
+        ensure_ascii=False, allow_nan=False,
+    ) + "\\n"
+    path = Path(observation_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = path.with_name(path.name + ".tmp")
+    try:
+        temporary_path.write_text(encoded, encoding="utf-8", newline="\\n")
+        temporary_path.replace(path)
+    finally:
+        if temporary_path.exists():
+            temporary_path.unlink()
+    return path
+
+
 def _validate_observation(observation: dict[str, Any]) -> None:
     required = {
         "schema", "schema_version", "source_system", "environment_id",
@@ -188,5 +210,6 @@ def _validate_observation(observation: dict[str, Any]) -> None:
 __all__ = [
     "CP69_ADAPTER_ID", "CP69_ENVIRONMENT_ID", "CP69_SCHEMA",
     "CP69_SCHEMA_VERSION", "CP69_SOURCE_SYSTEM", "DEFAULT_STREAM_PATH",
-    "append_observation", "build_observation", "build_runtime_snapshot_id",
+    "DEFAULT_CURRENT_OBSERVATION_PATH", "append_observation",
+    "write_current_observation", "build_observation", "build_runtime_snapshot_id",
 ]
