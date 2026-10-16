@@ -44,6 +44,31 @@ def verify_response(payload, public_b64):
     )
 
 
+def test_liveness_and_readiness_are_distinct(tmp_path, monkeypatch):
+    setup_authority(tmp_path, monkeypatch)
+    client = TestClient(authority.app)
+    assert client.get("/healthz").status_code == 200
+    response = client.get("/readyz")
+    assert response.status_code == 200
+    assert response.json() == {"service": "arunda-management-authority", "ready": "true"}
+    assert response.headers["cache-control"] == "no-store, max-age=0"
+
+
+def test_readiness_fails_closed_when_state_or_key_is_invalid(tmp_path, monkeypatch):
+    setup_authority(tmp_path, monkeypatch)
+    client = TestClient(authority.app)
+    authority.STATE_FILE.write_text("{}", encoding="utf-8")
+    response = client.get("/readyz")
+    assert response.status_code == 503
+    assert response.json() == {"detail": "AUTHORITY_NOT_READY"}
+
+    setup_authority(tmp_path, monkeypatch)
+    authority.PRIVATE_KEY_FILE.write_text("not-base64!", encoding="ascii")
+    response = client.get("/readyz")
+    assert response.status_code == 503
+    assert response.json() == {"detail": "AUTHORITY_NOT_READY"}
+
+
 def test_status_payload_signature_matches_trader_canonicalization_and_is_not_cached(tmp_path, monkeypatch):
     public_b64 = setup_authority(tmp_path, monkeypatch)
     response = TestClient(authority.app).get("/v1/mandate-status")
