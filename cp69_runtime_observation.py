@@ -10,6 +10,7 @@ import hashlib
 import json
 import uuid
 import math
+import os
 from dataclasses import fields, is_dataclass
 from pathlib import Path
 from typing import Any
@@ -20,11 +21,11 @@ CP69_SOURCE_SYSTEM = "ArundaTrader"
 CP69_ENVIRONMENT_ID = "arundatrader"
 CP69_ADAPTER_ID = "arundatrader_adapter"
 
-DEFAULT_STREAM_PATH = (
-    Path(__file__).resolve().parent
-    / "runtime_observations"
-    / "arundatrader_runtime_observations.jsonl"
-)
+OBSERVATION_DIR = Path(__file__).resolve().parent / "runtime_observations"
+DEFAULT_STREAM_PATH = OBSERVATION_DIR / "arundatrader_runtime_observations.jsonl"
+DEFAULT_CURRENT_OBSERVATION_PATH = OBSERVATION_DIR / "arundatrader_current_runtime_observation.jsonl"
+STREAM_PATH_ENV = "ARUNDATRADER_OBSERVATION_STREAM_PATH"
+CURRENT_OBSERVATION_PATH_ENV = "ARUNDATRADER_CURRENT_OBSERVATION_PATH"
 
 
 def _derive_failure_attribution(trade_gate_snapshot: Any, trade_ready_assets: Any) -> dict[str, Any]:
@@ -181,26 +182,53 @@ def build_observation(
     }
 
 
-def append_observation(
-    observation: dict[str, Any],
-    stream_path: Path = DEFAULT_STREAM_PATH,
-) -> Path:
+def _encode_observation(observation: dict[str, Any]) -> str:
     if not isinstance(observation, dict):
         raise TypeError("observation must be a dict")
     _validate_observation(observation)
-
-    path = Path(stream_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    encoded = json.dumps(
+    return json.dumps(
         observation,
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
         allow_nan=False,
     )
+
+
+def append_observation(
+    observation: dict[str, Any],
+    stream_path: Path | None = None,
+) -> Path:
+    encoded = _encode_observation(observation)
+    configured_path = stream_path or os.environ.get(STREAM_PATH_ENV)
+    path = Path(configured_path) if configured_path else DEFAULT_STREAM_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(encoded)
         handle.write("\n")
+    return path
+
+
+def write_current_observation(
+    observation: dict[str, Any],
+    current_path: Path | None = None,
+) -> Path:
+    """Atomically replace the one-event handoff consumed by the live Aroonda UI."""
+    encoded = _encode_observation(observation)
+    configured_path = current_path or os.environ.get(CURRENT_OBSERVATION_PATH_ENV)
+    path = Path(configured_path) if configured_path else DEFAULT_CURRENT_OBSERVATION_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{uuid.uuid4().hex}.tmp")
+    try:
+        with temporary.open("x", encoding="utf-8", newline="\n") as handle:
+            handle.write(encoded)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
     return path
 
 
@@ -283,6 +311,8 @@ __all__ = [
     "CP69_SCHEMA_VERSION",
     "CP69_SOURCE_SYSTEM",
     "DEFAULT_STREAM_PATH",
+    "DEFAULT_CURRENT_OBSERVATION_PATH",
     "append_observation",
     "build_observation",
+    "write_current_observation",
 ]
