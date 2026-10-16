@@ -93,6 +93,35 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
                     unresolved.append(f"{name} imports local module {module} outside the audited closure")
         self.assertEqual(unresolved, [], "\\n".join(unresolved))
 
+    def test_runtime_dependency_modules_import_without_network_or_database_execution(self):
+        import importlib
+        import importlib.util
+        import re
+        import sqlite3
+        import sys
+
+        original_connect = sqlite3.connect
+
+        def forbid_database_open(*args, **kwargs):
+            raise AssertionError("database access during module import is forbidden")
+
+        sqlite3.connect = forbid_database_open
+        try:
+            for filename in RUNTIME_MODULES:
+                path = ROOT / filename
+                if ".v0." in filename:
+                    module_name = "cp72_smoke_" + re.sub(r"[^A-Za-z0-9_]", "_", filename)
+                    spec = importlib.util.spec_from_file_location(module_name, path)
+                    self.assertIsNotNone(spec, f"could not create import spec for {filename}")
+                    self.assertIsNotNone(spec.loader, f"could not create loader for {filename}")
+                    module = importlib.util.module_from_spec(spec)
+                    sys.modules[module_name] = module
+                    spec.loader.exec_module(module)
+                else:
+                    importlib.import_module(path.stem)
+        finally:
+            sqlite3.connect = original_connect
+
     def test_cp69_producer_and_native_ui_share_the_same_default_observation_contract(self):
         producer = (ROOT / "cp69_runtime_observation.py").read_text(encoding="utf-8-sig")
         consumer = (ROOT / "arundatrader_observation_consumer.py").read_text(encoding="utf-8-sig")
