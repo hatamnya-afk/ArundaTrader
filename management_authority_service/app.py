@@ -31,7 +31,7 @@ app = FastAPI(title="Arunda Management Mandate Authority", docs_url=None, redoc_
 
 @app.middleware("http")
 async def prevent_response_caching(request: Request, call_next):
-    """Mandate status is time-sensitive; never let clients or intermediaries cache it."""
+    """Never let clients or intermediaries cache time-sensitive authority responses."""
     response = await call_next(request)
     response.headers["Cache-Control"] = "no-store, max-age=0"
     response.headers["Pragma"] = "no-cache"
@@ -144,9 +144,23 @@ def get_mandate_status() -> dict[str, str]:
     try:
         with _LOCK:
             return _signed_response()
-    except RuntimeError as exc:
+    except (RuntimeError, OSError) as exc:
         # Do not leak file paths, secret material, or cryptographic details.
         raise HTTPException(status_code=503, detail="AUTHORITY_UNAVAILABLE") from exc
+
+
+@app.get("/readyz")
+def readiness() -> dict[str, str]:
+    """Deployment readiness, distinct from process liveness and mandate activation."""
+    try:
+        with _LOCK:
+            if not SOURCE_ID or not MANDATE_ID:
+                raise RuntimeError("AUTHORITY_IDENTITY_NOT_CONFIGURED")
+            _state()
+            _private_key()
+        return {"service": "arunda-management-authority", "ready": "true"}
+    except (RuntimeError, OSError) as exc:
+        raise HTTPException(status_code=503, detail="AUTHORITY_NOT_READY") from exc
 
 
 @app.put("/v1/mandate-status")
@@ -179,7 +193,6 @@ def update_mandate_status(
             _atomic_write_state(update.status)
             return {"mandate_id": MANDATE_ID, "status": update.status, "result": "RECORDED"}
     except (RuntimeError, OSError) as exc:
-        # Storage failures are generic to clients; never expose filesystem details.
         raise HTTPException(status_code=503, detail="AUTHORITY_UNAVAILABLE") from exc
 
 
