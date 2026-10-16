@@ -154,5 +154,32 @@ class FinalAttemptPipelineWiringTests(unittest.TestCase):
         self.assertNotIn("execute_order", verifier_calls)
 
 
+    def test_main_constructs_dependencies_only_after_both_opt_in_switches(self):
+        tree = ast.parse(PIPELINE_PATH.read_text(encoding="utf-8-sig"))
+        main = next(
+            node for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == "main"
+        )
+        guarded_factory_calls = []
+        for node in ast.walk(main):
+            if not isinstance(node, ast.If):
+                continue
+            calls_factory = any(
+                isinstance(call, ast.Call)
+                and isinstance(call.func, ast.Name)
+                and call.func.id == "load_execution_dependencies"
+                for child in node.body
+                for call in ast.walk(child)
+            )
+            if calls_factory:
+                guarded_factory_calls.append(ast.unparse(node.test))
+        self.assertEqual(len(guarded_factory_calls), 1)
+        guard = guarded_factory_calls[0]
+        self.assertIn('ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT', guard)
+        self.assertIn('ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION', guard)
+        self.assertIn('and', guard)
+        self.assertNotIn(' or ', guard)
+
+
 if __name__ == "__main__":
     unittest.main()
