@@ -2,8 +2,8 @@
 
 The UI never invents data, imports AroondaAI, or mutates Trader state. A missing,
 malformed, identity-invalid, or stale stream is shown as BLOCKED/STALE and its
-asset rows are cleared. Configure ARUNDA_CP69_OBSERVATION_PATH to the real
-runtime artifact path before launch.
+asset rows are cleared. The reader uses the same current-observation path
+setting as the CP69 producer, ARUNDATRADER_CURRENT_OBSERVATION_PATH.
 """
 from __future__ import annotations
 
@@ -227,13 +227,14 @@ class LiveArundaTraderUI:
 
 
 def main() -> int:
-    configured = os.environ.get("ARUNDA_CP69_OBSERVATION_PATH", "").strip()
-    if not configured:
-        raise SystemExit(
-            "ARUNDA_CP69_OBSERVATION_PATH is required. Set it to the actual ArundaTrader "
-            "CP69 canonical JSONL observation artifact; the launcher will not create demo data."
-        )
-    LiveArundaTraderUI(Path(configured)).run()
+    # Share the producer's exact environment variable and default artifact path.
+    configured = os.environ.get("ARUNDATRADER_CURRENT_OBSERVATION_PATH", "").strip()
+    path = Path(configured) if configured else (
+        Path(__file__).resolve().parent
+        / "runtime_observations"
+        / "arundatrader_current_runtime_observation.jsonl"
+    )
+    LiveArundaTraderUI(path).run()
     return 0
 
 
