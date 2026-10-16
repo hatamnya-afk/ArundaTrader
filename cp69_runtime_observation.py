@@ -26,6 +26,54 @@ DEFAULT_STREAM_PATH = (
 )
 
 
+def _derive_failure_attribution(trade_gate_snapshot: Any, trade_ready_assets: Any) -> dict[str, Any]:
+    """Count only attribution explicitly present in the same runtime snapshot."""
+    if isinstance(trade_gate_snapshot, dict):
+        rows = [row for row in trade_gate_snapshot.values() if isinstance(row, dict)]
+    elif isinstance(trade_gate_snapshot, (list, tuple)):
+        rows = [row for row in trade_gate_snapshot if isinstance(row, dict)]
+    else:
+        rows = []
+
+    reason_counts: dict[str, int] = {}
+    predicate_failures: dict[str, int] = {}
+    for row in rows:
+        reasons = row.get("reasons")
+        if isinstance(reasons, str):
+            reasons = [reasons]
+        if isinstance(reasons, (list, tuple, set)):
+            for reason in reasons:
+                if isinstance(reason, str) and reason.strip():
+                    key = reason.strip()
+                    reason_counts[key] = reason_counts.get(key, 0) + 1
+
+        # Predicate attribution is reported only when the source row explicitly
+        # supplies named failed predicates; it is never inferred from a reason.
+        predicates = row.get("predicate_failures", row.get("failed_predicates"))
+        if isinstance(predicates, dict):
+            for name, count in predicates.items():
+                if isinstance(name, str) and name.strip() and isinstance(count, int) and not isinstance(count, bool) and count > 0:
+                    key = name.strip()
+                    predicate_failures[key] = predicate_failures.get(key, 0) + count
+        elif isinstance(predicates, (list, tuple, set)):
+            for name in predicates:
+                if isinstance(name, str) and name.strip():
+                    key = name.strip()
+                    predicate_failures[key] = predicate_failures.get(key, 0) + 1
+
+    if isinstance(trade_ready_assets, (list, tuple, set)):
+        trade_ready_count = len(trade_ready_assets)
+    else:
+        # Unknown shape is explicitly unavailable, not a guessed zero.
+        trade_ready_count = None
+
+    return {
+        "trade_ready_count": trade_ready_count,
+        "predicate_failures": dict(sorted(predicate_failures.items())),
+        "reason_counts": dict(sorted(reason_counts.items())),
+    }
+
+
 def build_observation(
     *,
     emitted_at: str,
@@ -76,6 +124,7 @@ def build_observation(
         "risk_snapshot": risk_snapshot,
         "trade_gate_snapshot": trade_gate_snapshot,
         "trade_ready_assets": trade_ready_assets,
+        "failure_attribution": _derive_failure_attribution(trade_gate_snapshot, trade_ready_assets),
         "news_items": news_items,
         "social_items": social_items,
         "launch_timestamp": launch_timestamp,
