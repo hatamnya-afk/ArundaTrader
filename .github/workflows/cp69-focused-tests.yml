@@ -8,6 +8,8 @@ on:
       - "cp69_observation_only_mode.py"
       - "test_cp72_observation_only_mode.py"
       - "test_cp72_runtime_dependency_closure.py"
+      - "arundatrader_observation_consumer.py"
+      - "arundatrader_live_ui.py"
       - "arunda_pipeline.py"
       - "production_*_v0_1.py"
       - "production_universe_binding.py"
