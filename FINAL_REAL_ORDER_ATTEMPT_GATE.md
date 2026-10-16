@@ -1,3 +1,13 @@
+## READ-ONLY DEPLOYMENT PREFLIGHT — ADDED 2026-10-16
+
+Run from the repository root in the intended deployment environment:
+
+```powershell
+python .\execution_deployment_preflight_v0_1.py
+```
+
+Set `ARUNDA_PRODUCTION_DB_PATH` to the exact production DB path for collision checking. The report deliberately omits secret values. Exit code 0 means only that required configuration fields have plausible static shapes; it does NOT validate signatures, contact the mandate authority, authenticate with Toobit, validate a standing mandate/policy, prove current-run trade readiness, or authorize/attempt an order. Exit code 1 means configuration fields are missing or malformed. Never populate the environment with fixture/test credentials for a production run.
+
 ## CURRENT ADDENDUM — 2026-10-16 — DEPLOYMENT CONFIGURATION GATE CLARIFIED
 
 - The final-attempt code uses the existing signed mandate-status verifier. Before an authorized runtime, the deployment must supply genuine values for:
