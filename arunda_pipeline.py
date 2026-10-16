@@ -5494,10 +5494,20 @@ def main() -> int:
         print(f"FINAL_EXECUTION_ATTEMPT_BOUNDARY={final_attempt_boundary_status}")
 
         if trade_ready_assets:
-            print(
-                "TRADE_READY assets detected; "
-                "OrderIntent creation/submission remains disabled."
-            )
+            if (
+                os.getenv("ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT") == "1"
+                and os.getenv("ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION") == "1"
+            ):
+                print(
+                    "TRADE_READY assets detected; final execution boundary invoked. "
+                    "Use FINAL_EXECUTION_ATTEMPT_BOUNDARY and durable claim evidence "
+                    "as the authoritative outcome."
+                )
+            else:
+                print(
+                    "TRADE_READY assets detected; no provider attempt made because "
+                    "both explicit execution opt-in switches are not enabled."
+                )
 
         # Runtime order attempts remain disabled unless both explicit opt-in
         # switches, valid standing-mandate evidence, and every technical gate pass.
