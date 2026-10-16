@@ -4325,13 +4325,16 @@ def verify_execution_boundary_integration(
         adapter: object | None = None,
         claim_store: object | None = None,
     ) -> str:
-        """Compose authentic runtime records with injected execution dependencies.
+        """Verify blocked-by-default wiring or run explicitly opted-in attempts.
 
-        This function never constructs an adapter, creates a claim database,
-        enables execution, or performs provider I/O. Deployment wiring must
-        inject a submit-capable adapter and durable isolated claim store only
-        behind the separately authorized execution gate. Defaults stay fail-closed.
+        Provider attempts are possible only when both independent opt-in
+        switches are exactly "1", and the caller injected the adapter plus an
+        isolated durable claim store. The global contract constants remain OFF.
+        This function never creates dependencies, changes switches, retries,
+        or submits anything when the opt-in switches are absent.
         """
+        import os
+
         assert_execution_disabled()
 
         if not isinstance(canonical_order_requests, dict):
@@ -4339,10 +4342,16 @@ def verify_execution_boundary_integration(
         if not canonical_order_requests:
             return "DEFERRED_NO_CANONICAL_REQUESTS"
 
-        from execution_attempt_runtime_producers_v0_1 import (
-            produce_final_execution_attempt_context,
-        )
+        provider_opt_in = os.getenv("ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT") == "1"
+        toobit_opt_in = os.getenv("ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION") == "1"
+        execution_opt_in = provider_opt_in and toobit_opt_in
 
+        if provider_opt_in != toobit_opt_in:
+            return "BLOCKED_EXECUTION_OPT_IN_SWITCHES_INCOMPLETE"
+        if execution_opt_in and (adapter is None or claim_store is None):
+            return "BLOCKED_EXECUTION_DEPENDENCIES_MISSING"
+
+        attempt_results = []
         for asset, record in canonical_order_requests.items():
             if asset not in EXPECTED_ASSET_SET:
                 fail(f"Execution Boundary unexpected asset: {asset}")
@@ -4381,21 +4390,33 @@ def verify_execution_boundary_integration(
                 execution_ready_package=package,
                 request=request,
                 authorization_observation=authorization_observation,
-                adapter=adapter,
+                adapter=adapter if execution_opt_in else None,
                 venue=venue,
                 execution_instrument=execution_instrument,
-                claim_store=claim_store,
+                claim_store=claim_store if execution_opt_in else None,
             )
 
             if not isinstance(result, exchange_execution_contract.CanonicalExecutionResult):
                 fail(f"Final execution attempt result invalid: {asset}")
-            if result.accepted is not False:
-                fail(f"EXECUTION SAFETY FAILURE: {asset} unexpectedly accepted")
-            if result.exchange_order_id is not None or result.trade_event_id is not None:
-                fail(f"EXECUTION SAFETY FAILURE: {asset} produced order/attempt identity")
-            if not result.error_code:
-                fail(f"Final execution attempt was not explicitly blocked: {asset}")
 
+            if not execution_opt_in:
+                if result.accepted is not False:
+                    fail(f"SAFETY FAILURE: default-off path unexpectedly accepted {asset}")
+                if result.exchange_order_id is not None or result.trade_event_id is not None:
+                    fail(f"SAFETY FAILURE: default-off path produced attempt identity for {asset}")
+                if not result.error_code:
+                    fail(f"Default-off final attempt was not explicitly blocked: {asset}")
+                continue
+
+            # The final-attempt boundary owns provider submission, idempotency,
+            # quarantine, and durable outcome evidence. Do not retry or infer
+            # acceptance/fill here; expose only its returned classification.
+            status = result.status if isinstance(result.status, str) and result.status else "STATUS_MISSING"
+            error_code = result.error_code if isinstance(result.error_code, str) and result.error_code else "NONE"
+            attempt_results.append(f"{asset}:{status}:{error_code}")
+
+        if execution_opt_in:
+            return "EXECUTION_ATTEMPT_RESULTS:" + ";".join(attempt_results)
         return "VERIFIED_BLOCKED_FINAL_ATTEMPT"
 
 def assert_no_execution_boundary(
