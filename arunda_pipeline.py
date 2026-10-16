@@ -5397,8 +5397,10 @@ def main() -> int:
                 trade_ready_assets=trade_ready_assets,
             )
             cp69_stream_path = append_observation(cp69_observation)
-        except (OSError, TypeError, ValueError) as cp69_exc:
-            print(f"CP69_OBSERVATION_STATUS=BLOCKED:{cp69_exc}")
+        except Exception as cp69_exc:
+            # Keep this sidecar strictly observational: serialization/storage
+            # failures must not change the trading pipeline outcome.
+            print(f"CP69_OBSERVATION_STATUS=BLOCKED:{type(cp69_exc).__name__}:{cp69_exc}")
         else:
             print("CP69_OBSERVATION_STATUS=APPENDED")
             print(f"CP69_OBSERVATION_ID={cp69_observation['observation_id']}")
