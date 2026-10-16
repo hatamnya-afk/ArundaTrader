@@ -5,7 +5,11 @@ All provider responses are deterministic fixtures; no network call or real order
 
 import tempfile
 import unittest
+import base64
+import json
 from datetime import datetime, timedelta, timezone
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives import serialization
 from pathlib import Path
 
 from exchange_execution_atomic_intent_claim_store_v0_1 import (
@@ -81,6 +85,20 @@ class FinalExecutionAttemptOfflineE2ETests(unittest.TestCase):
                 }
             raise AssertionError("Unexpected mock transport route")
 
+        status_private_key = Ed25519PrivateKey.generate()
+        status_public_key = status_private_key.public_key().public_bytes(
+            encoding=serialization.Encoding.Raw,
+            format=serialization.PublicFormat.Raw,
+        )
+        signed_status = {
+            "schema_version": "1", "mandate_id": "UNIT-E2E-MANDATE",
+            "status": "ACTIVE", "observed_at": now.isoformat(),
+            "source_id": "unit-management-authority",
+        }
+        signed_status["signature"] = base64.b64encode(status_private_key.sign(
+            json.dumps(signed_status, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+        )).decode("ascii")
+
         adapter = ToobitExchangeAdapter(
             transport=mock_transport, api_key="fixture-key",
             secret_key="fixture-secret", enable_order_submission=True,
@@ -93,6 +111,9 @@ class FinalExecutionAttemptOfflineE2ETests(unittest.TestCase):
                 authorization_observation=context["authorization_observation"],
                 adapter=adapter, venue="SPOT",
                 execution_instrument=instrument, claim_store=store,
+                mandate_status_provider=lambda: dict(signed_status),
+                mandate_status_public_key_b64=base64.b64encode(status_public_key).decode("ascii"),
+                mandate_status_source_id="unit-management-authority",
             )
             claim = store.get(
                 provider_namespace="ARUNDA-EXECUTION",

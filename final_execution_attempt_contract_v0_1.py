@@ -15,7 +15,7 @@ The selected adapter remains responsible for provider behavior.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import Any
 
 from exchange_execution_contract import (
@@ -35,6 +35,9 @@ def run_final_execution_attempt_contract(
     venue: str,
     execution_instrument: Any,
     claim_store: Any = None,
+    mandate_status_provider: Callable[[], Mapping[str, Any]] | None = None,
+    mandate_status_public_key_b64: str | None = None,
+    mandate_status_source_id: str | None = None,
 ) -> CanonicalExecutionResult:
     """Compose the final contract path and fail closed on invalid inputs.
 
@@ -60,6 +63,9 @@ def run_final_execution_attempt_contract(
             execution_instrument=execution_instrument,
             execution_ready_package=execution_ready_package,
             claim_store=claim_store,
+            mandate_status_provider=mandate_status_provider,
+            mandate_status_public_key_b64=mandate_status_public_key_b64,
+            mandate_status_source_id=mandate_status_source_id,
         )
     except Exception as exc:
         return blocked_execution_result(

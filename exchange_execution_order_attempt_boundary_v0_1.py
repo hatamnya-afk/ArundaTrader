@@ -11,7 +11,7 @@ The selected adapter owns provider submission behavior.
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 from uuid import uuid4
 
 from exchange_execution_adapter_contract_v0_1 import (
@@ -27,6 +27,7 @@ from exchange_execution_contract import (
 from execution_authorization_boundary_v0_1 import evaluate_execution_authorization
 from execution_attempt_readiness_contract_v0_1 import evaluate_execution_attempt_readiness
 from exchange_execution_order_preparation_v0_1 import prepare_order_for_adapter
+from management_mandate_revocation_runtime_v0_1 import evaluate_signed_mandate_status
 
 
 def attempt_prepared_order(
@@ -39,6 +40,9 @@ def attempt_prepared_order(
     execution_instrument: Any,
     execution_ready_package: Mapping[str, Any] | None = None,
     claim_store: Any = None,
+    mandate_status_provider: Callable[[], Mapping[str, Any]] | None = None,
+    mandate_status_public_key_b64: str | None = None,
+    mandate_status_source_id: str | None = None,
 ) -> CanonicalExecutionResult:
     """Fail closed unless explicit valid authorization is present.
 
@@ -103,6 +107,25 @@ def attempt_prepared_order(
                 error_code=str(exc),
                 error_message=f"Execution-attempt readiness rejected: {exc}.",
             )
+
+    # Check the live management authority on every attempt immediately before
+    # technical authorization. Missing configuration/source fails closed.
+    try:
+        evaluate_signed_mandate_status(
+            mandate=authorization_observation,
+            provider=mandate_status_provider,
+            trusted_public_key_b64=mandate_status_public_key_b64,
+            expected_source_id=mandate_status_source_id,
+        )
+    except Exception as exc:
+        reason = str(exc) if isinstance(exc, ValueError) else "MANDATE_STATUS_VALIDATION_FAILED"
+        return blocked_execution_result(
+            asset=request.asset,
+            direction=request.direction,
+            adapter=getattr(adapter, "adapter_name", None),
+            error_code=reason,
+            error_message=f"Independent signed management status rejected: {reason}. No provider submission was attempted.",
+        )
 
     try:
         authorization = evaluate_execution_authorization(

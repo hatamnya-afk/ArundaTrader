@@ -4,6 +4,27 @@ from exchange_execution_adapter_contract_v0_1 import (
 )
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
 from final_execution_attempt_contract_v0_1 import run_final_execution_attempt_contract
+import base64
+import json
+from datetime import datetime, timezone
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives import serialization
+
+
+def _signed_status(mandate_id, status="ACTIVE"):
+    private_key = Ed25519PrivateKey.generate()
+    public_key = private_key.public_key().public_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw,
+    )
+    payload = {
+        "schema_version": "1", "mandate_id": mandate_id, "status": status,
+        "observed_at": datetime.now(timezone.utc).isoformat(),
+        "source_id": "unit-management-authority",
+    }
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    payload["signature"] = base64.b64encode(private_key.sign(canonical)).decode("ascii")
+    return lambda: dict(payload), base64.b64encode(public_key).decode("ascii")
 
 
 def _request():
@@ -66,6 +87,9 @@ class _FakeClaimStore:
 class _FakeAdapter:
     adapter_name = "FAKE_PROVIDER_NEUTRAL"
 
+    def __init__(self):
+        self.submit_calls = 0
+
     def capabilities(self):
         return ExchangeAdapterCapabilities(
             venue_discovery=False, instrument_resolution=True, constraint_read=True,
@@ -81,6 +105,7 @@ class _FakeAdapter:
         )
 
     def submit_prepared_order(self, preparation, *, canonical_request):
+        self.submit_calls += 1
         return CanonicalExecutionResult(
             accepted=False, exchange_order_id=None, status="PROVIDER_REJECTED",
             asset=canonical_request.asset, direction=canonical_request.direction,
@@ -107,12 +132,16 @@ class _FakeAdapter:
         )
 
 
-def _run(authorization):
+def _run(authorization, *, status="ACTIVE", adapter=None, signature_provider=None, public_key=None):
+    provider, generated_key = _signed_status(authorization.get("mandate_id", authorization.get("authorization_id")), status)
     return run_final_execution_attempt_contract(
         execution_ready_package=_package(), request=_request(),
-        authorization_observation=authorization, adapter=_FakeAdapter(),
+        authorization_observation=authorization, adapter=adapter or _FakeAdapter(),
         venue="SPOT", execution_instrument="BTC-USDT",
         claim_store=_FakeClaimStore(),
+        mandate_status_provider=signature_provider or provider,
+        mandate_status_public_key_b64=public_key or generated_key,
+        mandate_status_source_id="unit-management-authority",
     )
 
 
@@ -158,3 +187,11 @@ def test_final_attempt_keeps_attempt_identity_outside_management_authorization()
     assert "attempt_id" not in authorization
     assert hasattr(request, "intent_id")
     assert hasattr(request, "snapshot_id")
+
+
+def test_final_attempt_blocks_revoked_status_before_adapter_submission():
+    adapter = _FakeAdapter()
+    result = _run(_standing_mandate(), status="REVOKED", adapter=adapter)
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "MANDATE_REVOKED"
+    assert adapter.submit_calls == 0
