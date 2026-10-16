@@ -59,6 +59,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -4694,6 +4695,9 @@ def main() -> int:
     """
 
     assert_execution_disabled()
+    from cp69_observation_only_mode import is_observation_only_enabled
+
+    observation_only = is_observation_only_enabled()
 
     cp49_birth_persisted = 0
     mcp01_evidence_persisted = 0
@@ -5241,81 +5245,86 @@ def main() -> int:
             )
         from datetime import datetime, timezone
 
-        from mcp01_main_integration_boundary_v0_1 import (
-            bind_authoritative_decision_birth,
-        )
-
-        (
-            decision_snapshot,
-            cp49_birth_persisted,
-        ) = bind_authoritative_decision_birth(
-            db_path=str(DB_PATH),
-            decision_snapshot=decision_snapshot,
-            market_data_by_symbol=market_data_by_symbol,
-        )
-
+        if observation_only:
+            print("OBSERVATION_ONLY_CP49_BIRTH=SKIPPED")
+        else:
+            from mcp01_main_integration_boundary_v0_1 import (
+                bind_authoritative_decision_birth,
+            )
+    
+            (
+                decision_snapshot,
+                cp49_birth_persisted,
+            ) = bind_authoritative_decision_birth(
+                db_path=str(DB_PATH),
+                decision_snapshot=decision_snapshot,
+                market_data_by_symbol=market_data_by_symbol,
+            )
         mcp01_cycle_id = (
             f"MCP01-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')}"
         )
 
-        # GLOBAL SELECTION QUALITY LOOP — independent of venue listing/order state.
-        # This observes prior decisions against later real market data and records
-        # this cycle's decision anchors. It does not alter strategy or execution.
-        from global_selection_outcome_tracker_v0_1 import track_cycle
-
-        global_selection_tracking = track_cycle(
-            decisions=decision_snapshot,
-            market_data_by_symbol=market_data_by_symbol,
-            cycle_timestamp_ms=int(datetime.now(timezone.utc).timestamp() * 1000),
-        )
-        print(
-            "GLOBAL_SELECTION_TRACKING="
-            f"selections:{global_selection_tracking['selections_seen']}|"
-            f"observations:{global_selection_tracking['observations_seen']}|"
-            f"persisted:{global_selection_tracking['events_persisted']}|"
-            f"skipped:{len(global_selection_tracking['skipped'])}"
-        )
-        quality_horizons = global_selection_tracking["quality_summary"]["overall"]["horizons"]
-        print(
-            "GLOBAL_SELECTION_QUALITY="
-            + "|".join(
-                f"{horizon}:scored={quality_horizons[horizon]['direction_scored_count']},"
-                f"wins={quality_horizons[horizon]['wins']},"
-                f"losses={quality_horizons[horizon]['losses']},"
-                f"win_rate_pct={quality_horizons[horizon]['win_rate_pct']},"
-                f"pending={quality_horizons[horizon]['pending_count']}"
-                for horizon in ("1h", "4h", "24h")
+        if observation_only:
+            print("OBSERVATION_ONLY_SELECTION_TRACKER=SKIPPED")
+        else:
+            # GLOBAL SELECTION QUALITY LOOP — independent of venue listing/order state.
+            # This observes prior decisions against later real market data and records
+            # this cycle's decision anchors. It does not alter strategy or execution.
+            from global_selection_outcome_tracker_v0_1 import track_cycle
+    
+            global_selection_tracking = track_cycle(
+                decisions=decision_snapshot,
+                market_data_by_symbol=market_data_by_symbol,
+                cycle_timestamp_ms=int(datetime.now(timezone.utc).timestamp() * 1000),
             )
-        )
-        quality_summary = global_selection_tracking["quality_summary"]
-        for asset, asset_summary in sorted(quality_summary["by_asset"].items()):
-            asset_horizons = asset_summary["horizons"]
             print(
-                "GLOBAL_SELECTION_QUALITY_BY_ASSET="
-                f"asset:{asset}|"
+                "GLOBAL_SELECTION_TRACKING="
+                f"selections:{global_selection_tracking['selections_seen']}|"
+                f"observations:{global_selection_tracking['observations_seen']}|"
+                f"persisted:{global_selection_tracking['events_persisted']}|"
+                f"skipped:{len(global_selection_tracking['skipped'])}"
+            )
+            quality_horizons = global_selection_tracking["quality_summary"]["overall"]["horizons"]
+            print(
+                "GLOBAL_SELECTION_QUALITY="
                 + "|".join(
-                    f"{horizon}:scored={asset_horizons[horizon]['direction_scored_count']},"
-                    f"wins={asset_horizons[horizon]['wins']},"
-                    f"losses={asset_horizons[horizon]['losses']},"
-                    f"win_rate_pct={asset_horizons[horizon]['win_rate_pct']},"
-                    f"pending={asset_horizons[horizon]['pending_count']}"
+                    f"{horizon}:scored={quality_horizons[horizon]['direction_scored_count']},"
+                    f"wins={quality_horizons[horizon]['wins']},"
+                    f"losses={quality_horizons[horizon]['losses']},"
+                    f"win_rate_pct={quality_horizons[horizon]['win_rate_pct']},"
+                    f"pending={quality_horizons[horizon]['pending_count']}"
                     for horizon in ("1h", "4h", "24h")
                 )
             )
-        for direction, direction_summary in sorted(quality_summary["by_direction"].items()):
-            direction_horizons = direction_summary["horizons"]
-            print(
-                "GLOBAL_SELECTION_QUALITY_BY_DIRECTION="
-                f"direction:{direction}|"
-                + "|".join(
-                    f"{horizon}:scored={direction_horizons[horizon]['direction_scored_count']},"
-                    f"wins={direction_horizons[horizon]['wins']},"
-                    f"losses={direction_horizons[horizon]['losses']},"
-                    f"win_rate_pct={direction_horizons[horizon]['win_rate_pct']},"
-                    f"pending={direction_horizons[horizon]['pending_count']}"
-                    for horizon in ("1h", "4h", "24h")
+            quality_summary = global_selection_tracking["quality_summary"]
+            for asset, asset_summary in sorted(quality_summary["by_asset"].items()):
+                asset_horizons = asset_summary["horizons"]
+                print(
+                    "GLOBAL_SELECTION_QUALITY_BY_ASSET="
+                    f"asset:{asset}|"
+                    + "|".join(
+                        f"{horizon}:scored={asset_horizons[horizon]['direction_scored_count']},"
+                        f"wins={asset_horizons[horizon]['wins']},"
+                        f"losses={asset_horizons[horizon]['losses']},"
+                        f"win_rate_pct={asset_horizons[horizon]['win_rate_pct']},"
+                        f"pending={asset_horizons[horizon]['pending_count']}"
+                        for horizon in ("1h", "4h", "24h")
+                    )
                 )
-            )
+            for direction, direction_summary in sorted(quality_summary["by_direction"].items()):
+                direction_horizons = direction_summary["horizons"]
+                print(
+                    "GLOBAL_SELECTION_QUALITY_BY_DIRECTION="
+                    f"direction:{direction}|"
+                    + "|".join(
+                        f"{horizon}:scored={direction_horizons[horizon]['direction_scored_count']},"
+                        f"wins={direction_horizons[horizon]['wins']},"
+                        f"losses={direction_horizons[horizon]['losses']},"
+                        f"win_rate_pct={direction_horizons[horizon]['win_rate_pct']},"
+                        f"pending={direction_horizons[horizon]['pending_count']}"
+                        for horizon in ("1h", "4h", "24h")
+                    )
+                )
 
         # 10. DYNAMIC RISK
         # ------------------------------------------------------------------
@@ -5373,6 +5382,7 @@ def main() -> int:
         # ------------------------------------------------------------------
         # CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY ARTIFACT
         # ------------------------------------------------------------------
+        cp69_observation_written = False
         try:
             from cp69_runtime_observation import (
                 append_observation,
@@ -5380,7 +5390,7 @@ def main() -> int:
                 write_current_observation,
             )
 
-            cp69_db_writes = int(cp49_birth_persisted)
+            cp69_db_writes = 0 if observation_only else int(cp49_birth_persisted)
             cp69_db_boundary = (
                 "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
                 if cp69_db_writes > 0
@@ -5407,6 +5417,7 @@ def main() -> int:
             )
             cp69_stream_path = append_observation(cp69_observation)
             cp69_current_path = write_current_observation(cp69_observation)
+            cp69_observation_written = True
             print("CP69_OBSERVATION_WRITTEN=1")
             print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
             print(f"CP69_CURRENT_OBSERVATION_PATH={cp69_current_path}")
@@ -5418,6 +5429,17 @@ def main() -> int:
             # alter the already-computed Decision, Risk, or Trade Gate result.
             print("CP69_OBSERVATION_STATUS=BLOCKED")
             print(f"CP69_OBSERVATION_ERROR={type(cp69_error).__name__}: {cp69_error}")
+
+        if observation_only:
+            if not cp69_observation_written:
+                print("OBSERVATION_ONLY_STATUS=BLOCKED_CP69_WRITE_FAILED")
+                return 1
+            print("OBSERVATION_ONLY_MCP01_EVIDENCE=SKIPPED")
+            print("OBSERVATION_ONLY_ORDER_INTENTS=SKIPPED")
+            print("OBSERVATION_ONLY_EXECUTION_REQUESTS=SKIPPED")
+            print("OBSERVATION_ONLY_DB_WRITES=0")
+            print("OBSERVATION_ONLY_STATUS=PASS")
+            return 0
 
         # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
