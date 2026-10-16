@@ -100,7 +100,7 @@ class CanonicalObservationTests(unittest.TestCase):
         rows = asset_rows(observation)
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0][0], "BTC")
-        self.assertIn("READY", rows[0])
+        self.assertIn("READY", rows[0][1])
         self.assertIn("HOLD", rows[0])
 
 
