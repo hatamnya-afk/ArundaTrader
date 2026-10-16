@@ -1,3 +1,14 @@
+## CURRENT ADDENDUM — 2026-10-16 — EXPLICIT DUAL-OPT-IN PIPELINE WIRING
+
+- PR #45: https://github.com/hatamnya-afk/ArundaTrader/pull/45 — open, not merged; targets `operational-main-20261007`.
+- The final-attempt contract is now reachable in the proposed branch only when both `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1` are explicitly present and the adapter plus isolated durable claim store are injected.
+- If only one switch is present, dependencies are missing, or either switch is off, the path fails closed; in the default-off path, caller-supplied adapter/store objects are not passed to the final-attempt contract.
+- The existing global execution constants remain OFF. This change does not set environment switches, load production credentials, invoke a production runtime, call Toobit, place/cancel an order, or write the production database.
+- Focused Execution Contract CI: PASS — https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38906355297. Scope is offline tests only.
+- **Live order readiness remains BLOCKED / NOT VERIFIED.** Before any authorized runtime, the deployment still needs genuine configuration for the active execution policy, standing mandate, signed mandate-status authority/public key/source ID, and an absolute isolated claim-store path; current-run execution instrument/context and authoritative Futures exposure permission must pass the existing technical gates. Provider acceptance, fill, and outcome evidence remain unverified until genuine provider evidence exists.
+
+---
+
 > ## CURRENT ADDENDUM — 2026-10-15 — SIGNED POST + FUTURES SETTLEMENT ALIGNMENT
 >
 > - Signed Toobit POST parameters now travel in the documented `application/x-www-form-urlencoded` body, while GET query parameters remain in the URL. A mocked transport test verifies body, signature field, content type, and no query-string submission.
