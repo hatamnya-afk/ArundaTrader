@@ -113,7 +113,7 @@ def test_audit_write_failure_does_not_change_state(tmp_path, monkeypatch):
         json={"status": "ACTIVE", "reason": "Explicit authorized activation"},
         headers={"Authorization": "Bearer test-operator-token"},
     )
-    assert response.status_code == 500 or response.status_code == 503
+    assert response.status_code == 503
     state = json.loads(authority.STATE_FILE.read_text(encoding="utf-8"))
     assert state["status"] == "REVOKED"
 
