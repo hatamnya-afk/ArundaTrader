@@ -61,6 +61,73 @@ def test_provenance() -> None:
     item = make()
     assert item["provenance"]["runtime_snapshot_id"] == "RS-test"
 
+def test_authoritative_birth_write_provenance_is_preserved() -> None:
+    item = build_observation(
+        emitted_at="2026-10-16T00:00:00+00:00",
+        universe_assets=["BTC"],
+        market_data_results={},
+        opportunity_by_asset={},
+        dynamic_signals={},
+        validation_results={},
+        fusion_snapshot={},
+        score_snapshot={},
+        decision_snapshot={},
+        risk_snapshot={},
+        trade_gate_snapshot={},
+        trade_ready_assets=[],
+        db_writes=1,
+        db_write_boundary="CP49_AUTHORITATIVE_BIRTH_PERSISTENCE",
+    )
+    assert item["execution_state"]["DB_WRITES"] == 1
+    assert item["provenance"]["db_write_boundary"] == "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
+
+
+def test_nonzero_write_count_requires_authoritative_boundary() -> None:
+    try:
+        build_observation(
+            emitted_at="2026-10-16T00:00:00+00:00",
+            universe_assets=[],
+            market_data_results={},
+            opportunity_by_asset={},
+            dynamic_signals={},
+            validation_results={},
+            fusion_snapshot={},
+            score_snapshot={},
+            decision_snapshot={},
+            risk_snapshot={},
+            trade_gate_snapshot={},
+            trade_ready_assets=[],
+            db_writes=1,
+        )
+    except ValueError as exc:
+        assert "authoritative CP49 Birth boundary" in str(exc)
+        return
+    raise AssertionError("unattributed DB write count accepted")
+
+
+def test_zero_write_count_rejects_boundary() -> None:
+    try:
+        build_observation(
+            emitted_at="2026-10-16T00:00:00+00:00",
+            universe_assets=[],
+            market_data_results={},
+            opportunity_by_asset={},
+            dynamic_signals={},
+            validation_results={},
+            fusion_snapshot={},
+            score_snapshot={},
+            decision_snapshot={},
+            risk_snapshot={},
+            trade_gate_snapshot={},
+            trade_ready_assets=[],
+            db_writes=0,
+            db_write_boundary="CP49_AUTHORITATIVE_BIRTH_PERSISTENCE",
+        )
+    except ValueError as exc:
+        assert "must be absent" in str(exc)
+        return
+    raise AssertionError("boundary accepted with zero writes")
+
 
 def test_timestamp_preserved() -> None:
     assert make()["emitted_at"] == "2026-09-24T00:00:00+00:00"
