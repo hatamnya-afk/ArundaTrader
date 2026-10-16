@@ -9,7 +9,7 @@ from pathlib import Path
 from cp69_runtime_observation import (
     CP69_ADAPTER_ID, CP69_ENVIRONMENT_ID, CP69_SCHEMA,
     CP69_SCHEMA_VERSION, append_observation, build_observation,
-    build_runtime_snapshot_id,
+    build_runtime_snapshot_id, write_current_observation,
 )
 
 
@@ -101,6 +101,19 @@ def test_append_is_additive():
         append_observation(first, path)
         append_observation(second, path)
         assert len(path.read_text(encoding="utf-8").splitlines()) == 2
+
+
+def test_current_observation_is_single_event_and_replaced_atomically():
+    first = make()
+    second = make(decision_snapshot={"BTC": {"decision": "LONG"}})
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "current.jsonl"
+        write_current_observation(first, path)
+        assert len(path.read_text(encoding="utf-8").splitlines()) == 1
+        write_current_observation(second, path)
+        lines = path.read_text(encoding="utf-8").splitlines()
+        assert len(lines) == 1
+        assert json.loads(lines[0])["observation_id"] == second["observation_id"]
 
 
 def test_unsafe_execution_state_rejected():
