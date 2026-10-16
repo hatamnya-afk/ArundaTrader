@@ -5,6 +5,8 @@ on:
     paths:
       - "cp69_runtime_observation.py"
       - "test_cp69_runtime_observation.py"
+      - "cp69_observation_only_mode.py"
+      - "test_cp72_observation_only_mode.py"
       - "arunda_pipeline.py"
       - ".github/workflows/cp69-focused-tests.yml"
   workflow_dispatch:
@@ -21,6 +23,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile producer and tests
-        run: python -m py_compile arunda_pipeline.py cp69_runtime_observation.py test_cp69_runtime_observation.py
+        run: python -m py_compile arunda_pipeline.py cp69_runtime_observation.py cp69_observation_only_mode.py test_cp69_runtime_observation.py test_cp72_observation_only_mode.py
       - name: Run focused CP69 producer tests
         run: python test_cp69_runtime_observation.py
+      - name: Run CP72 observation-only mode tests
+        run: python -m unittest -v test_cp72_observation_only_mode
