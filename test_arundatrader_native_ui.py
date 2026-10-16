@@ -94,10 +94,13 @@ class CanonicalObservationTests(unittest.TestCase):
         self.assertLess(age, 5)
 
     def test_asset_rows_only_project_source_maps(self):
-        observation = CanonicalRuntimeObservation.from_dict(payload())
+        item = payload()
+        item["state"]["market_data_results"] = [{"symbol": "BTC/USDT", "status": "READY"}]
+        observation = CanonicalRuntimeObservation.from_dict(item)
         rows = asset_rows(observation)
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0][0], "BTC")
+        self.assertIn("READY", rows[0])
         self.assertIn("HOLD", rows[0])
 
 
