@@ -5251,7 +5251,7 @@ def main() -> int:
             from mcp01_main_integration_boundary_v0_1 import (
                 bind_authoritative_decision_birth,
             )
-    
+
             (
                 decision_snapshot,
                 cp49_birth_persisted,
@@ -5271,7 +5271,7 @@ def main() -> int:
             # This observes prior decisions against later real market data and records
             # this cycle's decision anchors. It does not alter strategy or execution.
             from global_selection_outcome_tracker_v0_1 import track_cycle
-    
+
             global_selection_tracking = track_cycle(
                 decisions=decision_snapshot,
                 market_data_by_symbol=market_data_by_symbol,
