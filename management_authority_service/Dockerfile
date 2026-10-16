@@ -8,4 +8,4 @@ COPY app.py .
 RUN mkdir -p /var/lib/arunda-authority && chown -R authority:authority /app /var/lib/arunda-authority
 USER 10001:10001
 EXPOSE 8080
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1", "--proxy-headers", "--forwarded-allow-ips", ""]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]
