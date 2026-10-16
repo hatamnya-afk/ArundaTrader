@@ -43,7 +43,7 @@ class MandateRevocationRuntimeTests(unittest.TestCase):
         return evaluate_signed_mandate_status(
             mandate=mandate or self.mandate,
             provider=lambda: self.observation if observation is None else observation,
-            trusted_public_key_b64=public_key or self.public_key,
+            trusted_public_key_b64=self.public_key if public_key is None else public_key,
             expected_source_id=SOURCE_ID,
             now=now or self.now,
         )
@@ -55,9 +55,9 @@ class MandateRevocationRuntimeTests(unittest.TestCase):
         self.assertEqual(result["freshness_validation"], "FRESH")
 
     def test_revoked_status_blocks(self):
-        observation, _, _ = _fixture(status="REVOKED")
+        observation, public_key, _ = _fixture(status="REVOKED")
         with self.assertRaisesRegex(ValueError, "MANDATE_REVOKED"):
-            self._evaluate(observation=observation)
+            self._evaluate(observation=observation, public_key=public_key)
 
     def test_invalid_signature_blocks(self):
         observation, _, _ = _fixture(invalid_signature=True)
