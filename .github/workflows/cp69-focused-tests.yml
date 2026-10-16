@@ -7,7 +7,39 @@ on:
       - "test_cp69_runtime_observation.py"
       - "cp69_observation_only_mode.py"
       - "test_cp72_observation_only_mode.py"
+      - "test_cp72_runtime_dependency_closure.py"
       - "arunda_pipeline.py"
+      - "production_*_v0_1.py"
+      - "production_universe_binding.py"
+      - "dynamic_*_boundary_v0_1.py"
+      - "dynamic_signal_semantic_layer.py"
+      - "opportunity_engine.py"
+      - "public_market_data_*.py"
+      - "local_canonical_store_v0.1.py"
+      - "indicator_engine.py"
+      - "market_structure_engine.py"
+      - "feature_engine.py"
+      - "feature_contract.py"
+      - "signal_validator.py"
+      - "signal_engine.py"
+      - "signal_contract.py"
+      - "market_regime.py"
+      - "market_regime_engine.py"
+      - "signal_logic.py"
+      - "news_arm_v0_1.py"
+      - "information_contract_v0_1.py"
+      - "social_arm_v0_1.py"
+      - "fusion_engine.py"
+      - "score_producer.py"
+      - "runtime_feature_producer.py"
+      - "market_state_engine.py"
+      - "market_regime_contract.py"
+      - "decision_engine.py"
+      - "decision_contract.py"
+      - "risk_engine.py"
+      - "risk_contract.py"
+      - "trade_gate_engine.py"
+      - "market_analysis_engine.py"
       - ".github/workflows/cp69-focused-tests.yml"
   workflow_dispatch:
 
@@ -28,3 +60,5 @@ jobs:
         run: python test_cp69_runtime_observation.py
       - name: Run CP72 observation-only mode tests
         run: python -m unittest -v test_cp72_observation_only_mode
+      - name: Verify CP72 dynamic runtime dependency closure
+        run: python -m unittest -v test_cp72_runtime_dependency_closure
