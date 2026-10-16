@@ -6,6 +6,7 @@ network, open the production database, or enable execution.
 from __future__ import annotations
 
 from pathlib import Path
+import ast
 import unittest
 
 ROOT = Path(__file__).resolve().parent
@@ -69,6 +70,28 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
             except Exception as exc:
                 failures.append(f"{name}: {type(exc).__name__}: {exc}")
         self.assertEqual(failures, [], "runtime dependency compile failures:\n" + "\n".join(failures))
+
+    def test_local_python_imports_in_dependency_closure_resolve(self):
+        module_names = {
+            Path(name).stem
+            for name in RUNTIME_MODULES
+            if ".v0." not in name
+        }
+        unresolved = []
+        for name in RUNTIME_MODULES:
+            path = ROOT / name
+            tree = ast.parse(path.read_text(encoding="utf-8-sig"), filename=str(path))
+            imported = set()
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    imported.update(alias.name.split(".", 1)[0] for alias in node.names)
+                elif isinstance(node, ast.ImportFrom) and node.module:
+                    imported.add(node.module.split(".", 1)[0])
+            for module in sorted(imported):
+                sibling = ROOT / f"{module}.py"
+                if sibling.is_file() and module not in module_names:
+                    unresolved.append(f"{name} imports local module {module} outside the audited closure")
+        self.assertEqual(unresolved, [], "\\n".join(unresolved))
 
     def test_cp69_producer_and_native_ui_share_the_same_default_observation_contract(self):
         producer = (ROOT / "cp69_runtime_observation.py").read_text(encoding="utf-8-sig")
