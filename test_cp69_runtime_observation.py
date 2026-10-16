@@ -336,15 +336,7 @@ def test_pipeline_emits_cp69_after_trade_gate_before_downstream_evidence() -> No
     assert "EXECUTION_ENABLED = False" in source
 
 
-if __name__ == "__main__":
-    tests = [
-        value
-        for name, value in sorted(globals().items())
-        if name.startswith("test_") and callable(value)
-    ]
-    for test in tests:
-        test()
-    print(f"CP69 TRADER PRODUCER TESTS PASS: {len(tests)}/{len(tests)}")
+
 
 
 
@@ -373,3 +365,14 @@ def test_current_handoff_rejects_unsafe_observation() -> None:
             assert not path.exists()
             return
         raise AssertionError("unsafe current observation accepted")
+
+
+if __name__ == "__main__":
+    tests = [
+        value
+        for name, value in sorted(globals().items())
+        if name.startswith("test_") and callable(value)
+    ]
+    for test in tests:
+        test()
+    print(f"CP69 TRADER PRODUCER TESTS PASS: {len(tests)}/{len(tests)}")
