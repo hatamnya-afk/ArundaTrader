@@ -109,7 +109,7 @@ class CP72RuntimeDependencyClosureTests(unittest.TestCase):
         try:
             for filename in RUNTIME_MODULES:
                 path = ROOT / filename
-                if ".v0." in filename:
+                if ".v0." in filename or "_v0." in filename:
                     module_name = "cp72_smoke_" + re.sub(r"[^A-Za-z0-9_]", "_", filename)
                     spec = importlib.util.spec_from_file_location(module_name, path)
                     self.assertIsNotNone(spec, f"could not create import spec for {filename}")
