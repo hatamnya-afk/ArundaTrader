@@ -5371,6 +5371,55 @@ def main() -> int:
         ]
 
         # ------------------------------------------------------------------
+        # CP69 CANONICAL RUNTIME OBSERVATION — READ-ONLY ARTIFACT
+        # ------------------------------------------------------------------
+        try:
+            from cp69_runtime_observation import (
+                append_observation,
+                build_observation,
+                write_current_observation,
+            )
+
+            cp69_db_writes = int(cp49_birth_persisted)
+            cp69_db_boundary = (
+                "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE"
+                if cp69_db_writes > 0
+                else None
+            )
+            cp69_observation = build_observation(
+                emitted_at=utc_now_iso(),
+                universe_assets=universe_assets,
+                market_data_results=market_data_results,
+                opportunity_by_asset=opportunity_by_asset,
+                dynamic_signals=dynamic_signals,
+                validation_results=validation_results,
+                fusion_snapshot=fusion_snapshot,
+                score_snapshot=score_snapshot,
+                decision_snapshot=decision_snapshot,
+                risk_snapshot=risk_snapshot,
+                trade_gate_snapshot=trade_gate_snapshot,
+                trade_ready_assets=trade_ready_assets,
+                news_items=news_items,
+                social_items=social_items,
+                launch_timestamp=LAUNCH_TIMESTAMP,
+                db_writes=cp69_db_writes,
+                db_write_boundary=cp69_db_boundary,
+            )
+            cp69_stream_path = append_observation(cp69_observation)
+            cp69_current_path = write_current_observation(cp69_observation)
+            print("CP69_OBSERVATION_WRITTEN=1")
+            print(f"CP69_OBSERVATION_PATH={cp69_stream_path}")
+            print(f"CP69_CURRENT_OBSERVATION_PATH={cp69_current_path}")
+            print(f"CP69_OBSERVATION_ID={cp69_observation['observation_id']}")
+            print(f"CP69_RUNTIME_SNAPSHOT_ID={cp69_observation['provenance']['runtime_snapshot_id']}")
+            print(f"CP69_DB_WRITES={cp69_db_writes}")
+        except Exception as cp69_error:
+            # Observation is a sidecar: a serialization/storage failure must not
+            # alter the already-computed Decision, Risk, or Trade Gate result.
+            print("CP69_OBSERVATION_STATUS=BLOCKED")
+            print(f"CP69_OBSERVATION_ERROR={type(cp69_error).__name__}: {cp69_error}")
+
+        # ------------------------------------------------------------------
         # MCP-01 DOWNSTREAM EVIDENCE EMISSION
         # ------------------------------------------------------------------
         from mcp01_main_integration_boundary_v0_1 import (
