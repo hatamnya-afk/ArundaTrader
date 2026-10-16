@@ -32,11 +32,16 @@ Example key generation is intentionally not automated by the web service. Use a 
 - Mount the private-key and admin-token secrets read-only; mount the state directory as a persistent writable volume. Never bake secrets into the image.
 - Put a TLS-terminating reverse proxy or managed HTTPS ingress in front. Enforce TLS 1.2+; do not trust arbitrary forwarded headers. Restrict `PUT /v1/mandate-status` at the ingress/network layer to the operator network.
 - Run as the unprivileged container user; apply resource limits, image scanning, log redaction, patching, monitoring and backups.
-- Configure readiness to check that identity, state, and signing key are available; the current `/healthz` is liveness-only and must not be used as proof of readiness.
+- Use `GET /healthz` for liveness only. Use `GET /readyz` for readiness: it checks configured source/mandate identity, parseable state matching the configured mandate, and a loadable Ed25519 private key. It returns only a generic ready/not-ready result, never the mandate status or secret details. Readiness does not mean the mandate is ACTIVE and does not authorize trading.
 - Do not run multiple service replicas against this file-backed state without replacing the in-process lock with a transactional shared store and concurrency control.
 - Validate ownership and write/fsync permissions on the mounted state volume as the container's unprivileged UID; Dockerfile ownership of the image directory does not guarantee ownership of a runtime-mounted volume.
 
 ## API
+
+### Liveness and readiness
+
+- `GET /healthz`: process liveness only; it does not inspect state or secrets.
+- `GET /readyz`: readiness check for identity configuration, valid matching state, and loadable signing key. A 200 response means the service can serve a signed status; it does **not** mean the mandate is ACTIVE or that trading is authorized. A 503 response must keep the service out of rotation.
 
 ### Read current signed state
 
