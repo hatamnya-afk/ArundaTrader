@@ -32,10 +32,16 @@ Example key generation is intentionally not automated by the web service. Use a 
 - Mount the private-key and admin-token secrets read-only; mount the state directory as a persistent writable volume. Never bake secrets into the image.
 - Put a TLS-terminating reverse proxy or managed HTTPS ingress in front. Enforce TLS 1.2+; do not trust arbitrary forwarded headers. Restrict `PUT /v1/mandate-status` at the ingress/network layer to the operator network.
 - Run as the unprivileged container user; apply resource limits, image scanning, log redaction, patching, monitoring and backups.
-- Configure readiness to check that identity, state, and signing key are available; the current `/healthz` is liveness-only and must not be used as proof of readiness.
+- Use `GET /healthz` for liveness only. Use `GET /readyz` for readiness: it checks configured source/mandate identity, parseable state matching the configured mandate, and a loadable Ed25519 private key. It returns only a generic ready/not-ready result, never the mandate status or secret details. Readiness does not mean the mandate is ACTIVE and does not authorize trading.
 - Do not run multiple service replicas against this file-backed state without replacing the in-process lock with a transactional shared store and concurrency control.
+- Validate ownership and write/fsync permissions on the mounted state volume as the container's unprivileged UID; Dockerfile ownership of the image directory does not guarantee ownership of a runtime-mounted volume.
 
 ## API
+
+### Liveness and readiness
+
+- `GET /healthz`: process liveness only; it does not inspect state or secrets.
+- `GET /readyz`: readiness check for identity configuration, valid matching state, and loadable signing key. A 200 response means the service can serve a signed status; it does **not** mean the mandate is ACTIVE or that trading is authorized. A 503 response must keep the service out of rotation.
 
 ### Read current signed state
 
@@ -53,7 +59,7 @@ Returns exactly the fields expected by ArundaTrader:
 }
 ```
 
-The signature covers the first five fields serialized as UTF-8 JSON with sorted keys, separators `,` and `:` and no spaces, matching `management_mandate_revocation_runtime_v0_1.py`. `observed_at` is freshly generated on each GET. Do not cache responses at the proxy/CDN; send `Cache-Control: no-store` at the ingress.
+The signature covers the first five fields serialized as UTF-8 JSON with sorted keys, separators `,` and `:` and no spaces, matching `management_mandate_revocation_runtime_v0_1.py`. `observed_at` is freshly generated on each GET. The application sends `Cache-Control: no-store, max-age=0` and `Pragma: no-cache`; ingress/CDN configuration must preserve these headers and must not cache this endpoint.
 
 ### Set state (operator-only)
 
@@ -67,6 +73,8 @@ Body:
 ```
 
 Allowed statuses are exactly `ACTIVE` and `REVOKED`. A reason of 8–500 characters is required and written to the authority audit log. Return payload never includes the reason or token. Invalid/missing credentials are rejected. Treat the operator token as a secret; rotate it after suspected exposure.
+
+The audit request is durably appended before state mutation. A failed audit append prevents the state change. State is written to a same-directory temporary file, flushed/fsynced, atomically replaced, then the parent directory is fsynced. If the process fails after the audit append but before the state transition completes, the audit can contain a request that did not become current state; reconcile audit entries against the signed current state rather than treating a request record as proof of a completed transition. If directory fsync fails after replacement, the caller can receive a generic 503 even though the replacement may already be visible; read the current signed status before retrying to avoid assuming the transition did not occur.
 
 ## Trader-side configuration and acceptance gate
 

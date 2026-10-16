@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - operational-main-20261007
+      - fix/explicit-order-attempt-runtime-wiring-20261016
     paths:
+      - "arunda_pipeline.py"
       - "management_execution_authorization_v0_1.py"
       - "management_mandate_revocation_runtime_v0_1.py"
       - "test_mandate_revocation_runtime_v0_1.py"
@@ -28,6 +30,8 @@ on:
       - "test_final_execution_attempt_offline_e2e_v0_1.py"
       - "test_execution_dependency_runtime_factory_v0_1.py"
       - "execution_dependency_runtime_factory_v0_1.py"
+      - "execution_deployment_preflight_v0_1.py"
+      - "test_execution_deployment_preflight_v0_1.py"
       - "test_exchange_execution_order_reconciliation_v0_1.py"
       - "exchange_execution_order_reconciliation_v0_1.py"
       - "exchange_execution_atomic_intent_claim_store_v0_1.py"
@@ -47,7 +51,7 @@ jobs:
       - name: Checkout operational branch
         uses: actions/checkout@v4
         with:
-          ref: operational-main-20261007
+          ref: ${{ github.ref }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -68,6 +72,7 @@ jobs:
           test_exchange_execution_order_reconciliation_v0_1.py
           test_execution_order_reconciliation_v0_1.py
           test_execution_dependency_runtime_factory_v0_1.py
+          test_execution_deployment_preflight_v0_1.py
           test_final_execution_attempt_offline_e2e_v0_1.py
           test_pipeline_final_execution_attempt_wiring_v0_1.py
           test_toobit_exchange_adapter_v0_1.py

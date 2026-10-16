@@ -1,3 +1,37 @@
+## READ-ONLY DEPLOYMENT PREFLIGHT — ADDED 2026-10-16
+
+Run from the repository root in the intended deployment environment:
+
+```powershell
+python .\execution_deployment_preflight_v0_1.py
+```
+
+Set `ARUNDA_PRODUCTION_DB_PATH` to the exact production DB path for collision checking. The report deliberately omits secret values. Exit code 0 means only that required configuration fields have plausible static shapes; it does NOT validate signatures, contact the mandate authority, authenticate with Toobit, validate a standing mandate/policy, prove current-run trade readiness, or authorize/attempt an order. Exit code 1 means configuration fields are missing or malformed. Never populate the environment with fixture/test credentials for a production run.
+
+## CURRENT ADDENDUM — 2026-10-16 — DEPLOYMENT CONFIGURATION GATE CLARIFIED
+
+- The final-attempt code uses the existing signed mandate-status verifier. Before an authorized runtime, the deployment must supply genuine values for:
+  - `ARUNDA_MANDATE_STATUS_URL` — HTTPS endpoint owned by the management authority (no redirects accepted).
+  - `ARUNDA_MANDATE_STATUS_SOURCE_ID` — expected signed source identity.
+  - `ARUNDA_MANDATE_STATUS_PUBLIC_KEY_B64` — trusted 32-byte Ed25519 public key in Base64.
+  - `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1` — both must be explicitly set for a provider attempt; neither is enabled by this change.
+- These values must come from the actual management/deployment authority. Do not fabricate a URL, key, source ID, standing mandate, current-run request, or Futures exposure permission.
+- The explicit dual-opt-in path is only code wiring, not proof of a successful provider attempt. If required environment, current-run evidence, policy, instrument context, mandate status, or durable claim-store configuration is missing, the path must remain blocked.
+- Verification is offline CI only. No runtime, exchange call, order, cancellation, production DB write, or switch activation was performed.
+
+---
+
+## CURRENT ADDENDUM — 2026-10-16 — EXPLICIT DUAL-OPT-IN PIPELINE WIRING
+
+- PR #45: https://github.com/hatamnya-afk/ArundaTrader/pull/45 — open, not merged; targets `operational-main-20261007`.
+- The final-attempt contract is now reachable in the proposed branch only when both `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1` are explicitly present and the adapter plus isolated durable claim store are injected.
+- If only one switch is present, dependencies are missing, or either switch is off, the path fails closed; in the default-off path, caller-supplied adapter/store objects are not passed to the final-attempt contract.
+- The existing global execution constants remain OFF. This change does not set environment switches, load production credentials, invoke a production runtime, call Toobit, place/cancel an order, or write the production database.
+- Focused Execution Contract CI: PASS — https://github.com/hatamnya-afk/ArundaTrader/actions/runs/38906355297. Scope is offline tests only.
+- **Live order readiness remains BLOCKED / NOT VERIFIED.** Before any authorized runtime, the deployment still needs genuine configuration for the active execution policy, standing mandate, signed mandate-status authority/public key/source ID, and an absolute isolated claim-store path; current-run execution instrument/context and authoritative Futures exposure permission must pass the existing technical gates. Provider acceptance, fill, and outcome evidence remain unverified until genuine provider evidence exists.
+
+---
+
 > ## CURRENT ADDENDUM — 2026-10-15 — SIGNED POST + FUTURES SETTLEMENT ALIGNMENT
 >
 > - Signed Toobit POST parameters now travel in the documented `application/x-www-form-urlencoded` body, while GET query parameters remain in the URL. A mocked transport test verifies body, signature field, content type, and no query-string submission.
