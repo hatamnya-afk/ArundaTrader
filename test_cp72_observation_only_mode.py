@@ -26,6 +26,26 @@ class ObservationOnlyModeTests(unittest.TestCase):
         with patch.dict(os.environ, {OBSERVATION_ONLY_ENV: " 1 "}):
             self.assertTrue(is_observation_only_enabled())
 
+    def test_pipeline_imports_without_legacy_dependencies_in_observation_mode(self):
+        import subprocess
+        import sys
+
+        env = os.environ.copy()
+        env[OBSERVATION_ONLY_ENV] = "1"
+        result = subprocess.run(
+            [sys.executable, "-c", "import arunda_pipeline"],
+            cwd=Path(__file__).resolve().parent,
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(
+            result.returncode,
+            0,
+            msg=f"observation-only pipeline import failed: {result.stderr}",
+        )
+
     def test_pipeline_declares_all_three_side_effect_guards(self):
         source = Path(__file__).with_name("arunda_pipeline.py").read_text(encoding="utf-8-sig")
         self.assertIn("if observation_only:", source)
