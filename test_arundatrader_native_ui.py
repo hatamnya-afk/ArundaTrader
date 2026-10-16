@@ -77,13 +77,13 @@ class CanonicalObservationTests(unittest.TestCase):
             first = payload()
             second = payload()
             second["observation_id"] = "obs:latest"
-            path.write_text(json.dumps(first) + "\\n" + json.dumps(second) + "\\n", encoding="utf-8")
+            path.write_text(json.dumps(first) + "\n" + json.dumps(second) + "\n", encoding="utf-8")
             self.assertEqual(read_latest_observation(path).observation_id, "obs:latest")
 
     def test_malformed_latest_record_fails_closed(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "current.jsonl"
-            path.write_text(json.dumps(payload()) + "\\n{broken-json}\\n", encoding="utf-8")
+            path.write_text(json.dumps(payload()) + "\n{broken-json}\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "latest CP69 record is invalid JSON"):
                 read_latest_observation(path)
 
