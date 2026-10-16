@@ -101,7 +101,7 @@ class CanonicalObservationTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0][0], "BTC")
         self.assertIn("READY", rows[0][1])
-        self.assertIn("HOLD", rows[0])
+        self.assertIn("HOLD", rows[0][7])
 
 
 if __name__ == "__main__":
