@@ -21,6 +21,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Compile producer and tests
-        run: python -m py_compile cp69_runtime_observation.py test_cp69_runtime_observation.py
+        run: python -m py_compile arunda_pipeline.py cp69_runtime_observation.py test_cp69_runtime_observation.py
       - name: Run focused CP69 producer tests
         run: python test_cp69_runtime_observation.py
