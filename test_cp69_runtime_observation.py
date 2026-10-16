@@ -225,6 +225,66 @@ def test_no_execution_methods() -> None:
     assert not hasattr(append_observation, "submit_order")
 
 
+def test_failure_attribution_is_source_derived() -> None:
+    item = build_observation(
+        emitted_at="2026-10-16T00:00:00+00:00",
+        universe_assets=["BTC", "ETH"],
+        market_data_results={},
+        opportunity_by_asset={},
+        dynamic_signals={},
+        validation_results={},
+        fusion_snapshot={},
+        score_snapshot={},
+        decision_snapshot={},
+        risk_snapshot={},
+        trade_gate_snapshot={
+            "BTC": {
+                "trade_gate_state": "REJECTED",
+                "reasons": ["opportunity unavailable", "confidence too low"],
+                "failed_predicates": ["OPPORTUNITY_CONFIDENCE"],
+            },
+            "ETH": {
+                "trade_gate_state": "TRADE_READY",
+                "reasons": ["risk cap"],
+                "predicate_failures": {"RISK_LIMIT": 2},
+            },
+        },
+        trade_ready_assets=["ETH"],
+    )
+    attribution = item["state"]["failure_attribution"]
+    assert attribution["trade_ready_count"] == 1
+    assert attribution["reason_counts"] == {
+        "confidence too low": 1,
+        "opportunity unavailable": 1,
+        "risk cap": 1,
+    }
+    assert attribution["predicate_failures"] == {
+        "OPPORTUNITY_CONFIDENCE": 1,
+        "RISK_LIMIT": 2,
+    }
+
+
+def test_failure_attribution_does_not_infer_predicates() -> None:
+    item = build_observation(
+        emitted_at="2026-10-16T00:00:00+00:00",
+        universe_assets=["BTC"],
+        market_data_results={},
+        opportunity_by_asset={},
+        dynamic_signals={},
+        validation_results={},
+        fusion_snapshot={},
+        score_snapshot={},
+        decision_snapshot={},
+        risk_snapshot={},
+        trade_gate_snapshot={"BTC": {"trade_gate_state": "REJECTED", "reasons": ["risk blocked"]}},
+        trade_ready_assets=[],
+    )
+    attribution = item["state"]["failure_attribution"]
+    assert attribution["trade_ready_count"] == 0
+    assert attribution["reason_counts"] == {"risk blocked": 1}
+    assert attribution["predicate_failures"] == {}
+
+
 if __name__ == "__main__":
     tests = [
         value
