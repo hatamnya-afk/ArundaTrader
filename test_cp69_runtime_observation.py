@@ -116,6 +116,27 @@ def test_current_observation_is_single_event_and_replaced_atomically():
         assert json.loads(lines[0])["observation_id"] == second["observation_id"]
 
 
+def test_environment_path_override_for_current_observation(monkeypatch):
+    observation = make()
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "handoff" / "current.jsonl"
+        monkeypatch.setenv("ARUNDATRADER_CURRENT_OBSERVATION_PATH", str(path))
+        written = write_current_observation(observation)
+        assert written == path
+        lines = path.read_text(encoding="utf-8").splitlines()
+        assert len(lines) == 1
+        assert json.loads(lines[0])["observation_id"] == observation["observation_id"]
+
+
+def test_environment_path_override_for_archive(monkeypatch):
+    observation = make()
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "handoff" / "archive.jsonl"
+        monkeypatch.setenv("ARUNDATRADER_OBSERVATION_STREAM_PATH", str(path))
+        written = append_observation(observation)
+        assert written == path
+        assert len(path.read_text(encoding="utf-8").splitlines()) == 1
+
 def test_unsafe_execution_state_rejected():
     row = make()
     row["execution_state"]["EXECUTION"] = "ON"
