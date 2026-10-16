@@ -1,3 +1,16 @@
+## CURRENT ADDENDUM — 2026-10-16 — DEPLOYMENT CONFIGURATION GATE CLARIFIED
+
+- The final-attempt code uses the existing signed mandate-status verifier. Before an authorized runtime, the deployment must supply genuine values for:
+  - `ARUNDA_MANDATE_STATUS_URL` — HTTPS endpoint owned by the management authority (no redirects accepted).
+  - `ARUNDA_MANDATE_STATUS_SOURCE_ID` — expected signed source identity.
+  - `ARUNDA_MANDATE_STATUS_PUBLIC_KEY_B64` — trusted 32-byte Ed25519 public key in Base64.
+  - `ARUNDA_ENABLE_PROVIDER_ORDER_ATTEMPT=1` and `ARUNDA_ENABLE_TOOBIT_ORDER_SUBMISSION=1` — both must be explicitly set for a provider attempt; neither is enabled by this change.
+- These values must come from the actual management/deployment authority. Do not fabricate a URL, key, source ID, standing mandate, current-run request, or Futures exposure permission.
+- The explicit dual-opt-in path is only code wiring, not proof of a successful provider attempt. If required environment, current-run evidence, policy, instrument context, mandate status, or durable claim-store configuration is missing, the path must remain blocked.
+- Verification is offline CI only. No runtime, exchange call, order, cancellation, production DB write, or switch activation was performed.
+
+---
+
 ## CURRENT ADDENDUM — 2026-10-16 — EXPLICIT DUAL-OPT-IN PIPELINE WIRING
 
 - PR #45: https://github.com/hatamnya-afk/ArundaTrader/pull/45 — open, not merged; targets `operational-main-20261007`.
