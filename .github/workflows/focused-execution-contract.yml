@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - operational-main-20261007
+      - fix/explicit-order-attempt-runtime-wiring-20261016
     paths:
+      - "arunda_pipeline.py"
       - "management_execution_authorization_v0_1.py"
       - "management_mandate_revocation_runtime_v0_1.py"
       - "test_mandate_revocation_runtime_v0_1.py"
@@ -47,7 +49,7 @@ jobs:
       - name: Checkout operational branch
         uses: actions/checkout@v4
         with:
-          ref: operational-main-20261007
+          ref: ${{ github.ref }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
