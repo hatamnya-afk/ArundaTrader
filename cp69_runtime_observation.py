@@ -10,6 +10,7 @@ import enum
 import hashlib
 import json
 import math
+import os
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -22,6 +23,8 @@ CP69_ADAPTER_ID = "arundatrader_adapter"
 OBSERVATION_DIR = Path(__file__).resolve().parent / "runtime_observations"
 DEFAULT_STREAM_PATH = OBSERVATION_DIR / "arundatrader_runtime_observations.jsonl"
 DEFAULT_CURRENT_OBSERVATION_PATH = OBSERVATION_DIR / "arundatrader_current_runtime_observation.jsonl"
+STREAM_PATH_ENV = "ARUNDATRADER_OBSERVATION_STREAM_PATH"
+CURRENT_OBSERVATION_PATH_ENV = "ARUNDATRADER_CURRENT_OBSERVATION_PATH"
 EXECUTION_STATE = {
     "EXECUTION": "OFF",
     "REAL_ORDER": False,
@@ -138,7 +141,7 @@ def build_observation(
 
 def append_observation(
     observation: dict[str, Any],
-    stream_path: Path = DEFAULT_STREAM_PATH,
+    stream_path: Path | None = None,
 ) -> Path:
     if not isinstance(observation, dict):
         raise TypeError("observation must be a dict")
@@ -147,7 +150,8 @@ def append_observation(
         observation, sort_keys=True, separators=(",", ":"),
         ensure_ascii=False, allow_nan=False,
     )
-    path = Path(stream_path)
+    configured_path = stream_path or os.environ.get(STREAM_PATH_ENV)
+    path = Path(configured_path) if configured_path else DEFAULT_STREAM_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8", newline="\n") as handle:
         handle.write(encoded + "\n")
@@ -156,7 +160,7 @@ def append_observation(
 
 def write_current_observation(
     observation: dict[str, Any],
-    observation_path: Path = DEFAULT_CURRENT_OBSERVATION_PATH,
+    observation_path: Path | None = None,
 ) -> Path:
     """Atomically publish exactly one current event for the existing Aroonda consumer."""
     if not isinstance(observation, dict):
@@ -166,7 +170,8 @@ def write_current_observation(
         observation, sort_keys=True, separators=(",", ":"),
         ensure_ascii=False, allow_nan=False,
     ) + "\n"
-    path = Path(observation_path)
+    configured_path = observation_path or os.environ.get(CURRENT_OBSERVATION_PATH_ENV)
+    path = Path(configured_path) if configured_path else DEFAULT_CURRENT_OBSERVATION_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary_path = path.with_name(path.name + ".tmp")
     try:
