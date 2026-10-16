@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from arundatrader_observation_consumer import CanonicalRuntimeObservation
+from cp69_runtime_observation import build_observation
 from arundatrader_live_ui import asset_rows, observation_age_seconds, read_latest_observation
 
 
@@ -92,6 +93,30 @@ class CanonicalObservationTests(unittest.TestCase):
         age = observation_age_seconds(observation, now=datetime.now(timezone.utc))
         self.assertGreaterEqual(age, 0)
         self.assertLess(age, 5)
+
+
+    def test_consumer_accepts_actual_cp69_producer_payload(self):
+        emitted_at = datetime.now(timezone.utc).isoformat()
+        produced = build_observation(
+            emitted_at=emitted_at,
+            universe_assets=["BTC/USDT"],
+            market_data_results={"BTC/USDT": {"status": "READY"}},
+            opportunity_by_asset={"BTC": {"status": "FOUND"}},
+            dynamic_signals={"BTC": {"direction": "NONE"}},
+            validation_results={"BTC": {"valid": True}},
+            fusion_snapshot={"BTC": {"status": "READY"}},
+            score_snapshot={"BTC": {"source_score": 0}},
+            decision_snapshot={"BTC": {"decision": "HOLD"}},
+            risk_snapshot={"BTC": {"status": "PASS"}},
+            trade_gate_snapshot={"BTC": {"trade_gate_state": "HOLD"}},
+            trade_ready_assets=[],
+            launch_timestamp="2026-08-31T00:00:00+00:00",
+            db_writes=0,
+        )
+        observation = CanonicalRuntimeObservation.from_dict(produced)
+        self.assertEqual(observation.source_system, "ArundaTrader")
+        self.assertEqual(observation.execution_state["EXECUTION"], "OFF")
+        self.assertIsNone(observation.provenance["db_write_boundary"])
 
     def test_asset_rows_only_project_source_maps(self):
         item = payload()
