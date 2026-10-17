@@ -1,0 +1,27 @@
+name: Native UI read-only contract tests
+
+on:
+  pull_request:
+    branches:
+      - operational-main-20261007
+    paths:
+      - "arundatrader_live_ui.py"
+      - "arundatrader_observation_consumer.py"
+      - "cp69_runtime_observation.py"
+      - "test_arundatrader_native_ui.py"
+      - ".github/workflows/native-ui-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  native-ui-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run native UI boundary tests
+        run: python -m unittest -v test_arundatrader_native_ui
