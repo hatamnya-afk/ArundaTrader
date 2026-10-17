@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import sys
 import tkinter as tk
 from datetime import datetime, timezone
 from pathlib import Path
@@ -61,6 +63,79 @@ def _json_cell(value: Any) -> str:
     if isinstance(value, (dict, list, tuple)):
         return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return str(value)
+
+
+def read_aroonda_projection(
+    cli_path: Path, stream_path: Path, expected_snapshot_id: str
+) -> dict[str, Any]:
+    """Request one read-only CP72 projection and bind it to the current source snapshot."""
+    cli_path = Path(cli_path)
+    if not cli_path.is_file():
+        raise FileNotFoundError(f"Aroonda CP72 CLI not found: {cli_path}")
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(cli_path),
+            "--input",
+            str(Path(stream_path)),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=8,
+        shell=False,
+    )
+    try:
+        projection = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        raise ValueError("Aroonda CP72 returned invalid JSON") from exc
+    if not isinstance(projection, dict):
+        raise ValueError("Aroonda CP72 projection must be a JSON object")
+    for field in ("observation_id", "runtime_snapshot_id", "emitted_at"):
+        if not isinstance(projection.get(field), str) or not projection[field].strip():
+            raise ValueError(f"Aroonda CP72 projection missing {field}")
+    if projection["runtime_snapshot_id"] != expected_snapshot_id:
+        raise ValueError("Aroonda CP72 projection snapshot does not match current CP69 source")
+    coverage = projection.get("coverage")
+    if not isinstance(coverage, dict):
+        raise ValueError("Aroonda CP72 projection missing coverage")
+    execution = projection.get("execution_state")
+    if not isinstance(execution, dict):
+        raise ValueError("Aroonda CP72 projection missing execution state")
+    if execution.get("EXECUTION") != "OFF":
+        raise ValueError("Aroonda CP72 projection reports execution enabled")
+    if execution.get("REAL_ORDER") is not False:
+        raise ValueError("Aroonda CP72 projection reports REAL_ORDER enabled")
+    if execution.get("REAL_TRADE") is not False:
+        raise ValueError("Aroonda CP72 projection reports REAL_TRADE enabled")
+    db_writes = execution.get("DB_WRITES")
+    if not isinstance(db_writes, int) or isinstance(db_writes, bool) or db_writes < 0:
+        raise ValueError("Aroonda CP72 projection has invalid DB_WRITES")
+    boundary = execution.get("DB_WRITE_BOUNDARY")
+    if db_writes > 0 and boundary != "CP49_AUTHORITATIVE_BIRTH_PERSISTENCE":
+        raise ValueError("Aroonda CP72 projection has unattributed DB writes")
+    if db_writes == 0 and boundary is not None:
+        raise ValueError("Aroonda CP72 projection has an unexpected DB write boundary")
+    return projection
+
+
+def format_aroonda_projection(projection: dict[str, Any]) -> str:
+    coverage = projection["coverage"]
+    gate_status = projection.get("trade_gate_status_counts") or {}
+    failures = projection.get("failure_attribution") or {}
+    reasons = failures.get("reason_counts") or {}
+    predicates = failures.get("predicate_failures") or {}
+    return (
+        "AROONDA CP72 • READ-ONLY ANALYSIS • same CP69 snapshot\\n"
+        f"Observation: {projection['observation_id']} | Snapshot: {projection['runtime_snapshot_id']}\\n"
+        f"Assets {coverage.get('assets', '—')} | Opportunities {coverage.get('opportunities', '—')} | "
+        f"Signals {coverage.get('signals', '—')} | Decisions {coverage.get('decision', '—')} | "
+        f"Risk {coverage.get('risk', '—')} | Trade-gate {coverage.get('trade_gate', '—')} | "
+        f"Trade-ready {coverage.get('trade_ready', '—')}\\n"
+        f"Gate statuses: {json.dumps(gate_status, ensure_ascii=False, sort_keys=True)} | "
+        f"Predicate failures: {json.dumps(predicates, ensure_ascii=False, sort_keys=True)} | "
+        f"Reasons: {json.dumps(reasons, ensure_ascii=False, sort_keys=True)}"
+    )
 
 
 def asset_rows(observation: CanonicalRuntimeObservation) -> list[tuple[str, ...]]:
@@ -127,6 +202,10 @@ def asset_rows(observation: CanonicalRuntimeObservation) -> list[tuple[str, ...]
 class LiveArundaTraderUI:
     def __init__(self, stream_path: Path):
         self.stream_path = Path(stream_path)
+        configured_aroonda_cli = os.environ.get("AROONDA_RUNTIME_ANALYSIS_CLI", "").strip()
+        self.aroonda_cli_path = Path(configured_aroonda_cli) if configured_aroonda_cli else None
+        self._aroonda_attempted_snapshot_id: str | None = None
+        self._aroonda_projection: dict[str, Any] | None = None
         self.root = tk.Tk()
         self.root.title("ArundaTrader — Live Runtime Evidence")
         self.root.geometry("1500x850")
@@ -158,6 +237,18 @@ class LiveArundaTraderUI:
                                 fg="#eef3ff", bg="#11182b", font=("Segoe UI", 11),
                                 justify="left", anchor="w", padx=12, pady=10)
         self.metrics.pack(fill="x", padx=20, pady=6)
+        self.aroonda_metrics = tk.Label(
+            self.root,
+            text=(
+                "AROONDA CP72 analysis unavailable: set AROONDA_RUNTIME_ANALYSIS_CLI "
+                "to the read-only Aroonda analysis CLI path."
+                if self.aroonda_cli_path is None
+                else "AROONDA CP72 analysis waiting for a validated CP69 snapshot."
+            ),
+            fg="#91a0bd", bg="#11182b", font=("Segoe UI", 10),
+            justify="left", anchor="w", padx=12, pady=10, wraplength=1400,
+        )
+        self.aroonda_metrics.pack(fill="x", padx=20, pady=(0, 6))
         frame = tk.Frame(self.root, bg="#0b1020")
         frame.pack(fill="both", expand=True, padx=20, pady=(8, 12))
         columns = ("asset", "market_data", "opportunity", "signal", "validation", "fusion",
@@ -198,6 +289,25 @@ class LiveArundaTraderUI:
             if age > MAX_AGE_SECONDS:
                 raise TimeoutError(f"latest observation is stale ({age:.1f}s old; limit {MAX_AGE_SECONDS}s)")
             result = analyze_runtime_observation(observation)
+            snapshot_id = str(observation.provenance["runtime_snapshot_id"])
+            if self.aroonda_cli_path is not None and snapshot_id != self._aroonda_attempted_snapshot_id:
+                # Cache by content-derived snapshot identity so repeated identical
+                # observations do not spawn a child process every 2-second poll.
+                self._aroonda_attempted_snapshot_id = snapshot_id
+                try:
+                    self._aroonda_projection = read_aroonda_projection(
+                        self.aroonda_cli_path, self.stream_path, snapshot_id
+                    )
+                    self.aroonda_metrics.configure(
+                        text=format_aroonda_projection(self._aroonda_projection),
+                        fg="#7ee787",
+                    )
+                except Exception as aroonda_exc:
+                    self._aroonda_projection = None
+                    self.aroonda_metrics.configure(
+                        text=f"AROONDA CP72 BLOCKED / UNAVAILABLE • {type(aroonda_exc).__name__}: {aroonda_exc}",
+                        fg="#ffd166",
+                    )
             rows = asset_rows(observation)
             self._clear_rows()
             for row in rows:
@@ -227,6 +337,12 @@ class LiveArundaTraderUI:
         except Exception as exc:
             # Fail closed: stale/invalid data must never remain displayed as live.
             self._clear_rows()
+            self._aroonda_projection = None
+            self._aroonda_attempted_snapshot_id = None
+            self.aroonda_metrics.configure(
+                text="AROONDA CP72 BLOCKED: no current validated CP69 source observation.",
+                fg="#ff7b72",
+            )
             self.status.configure(text=f"BLOCKED / NOT LIVE • {type(exc).__name__}: {exc}", fg="#ff7b72")
             self.metrics.configure(text="No current schema-valid observation. Asset rows intentionally cleared.")
             self.footer.configure(text="Fix the source/path/schema or restore fresh canonical observations. No fallback or synthetic data is used.")
