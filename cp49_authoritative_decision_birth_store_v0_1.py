@@ -111,8 +111,11 @@ def persist_authoritative_birth(
                 timestamp,
             ),
         )
-        conn.commit()
+        # The caller owns the transaction boundary. Do not commit here:
+        # producers may persist multiple Birth Events as one atomic batch.
     except sqlite3.IntegrityError as exc:
+        # Fail closed for the whole caller-owned transaction, including any
+        # earlier Birth rows inserted in the same batch.
         conn.rollback()
         raise RuntimeError(
             "AUTHORITATIVE_DECISION_BIRTH_ID_COLLISION"
