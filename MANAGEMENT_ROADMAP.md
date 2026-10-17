@@ -1,3 +1,13 @@
+## CURRENT PRODUCT PATH AUDIT — 2026-10-18
+
+The existing CP69 producer is wired into the canonical pipeline; the native UI now optionally displays Aroonda CP72 analysis through the separate read-only CLI. PR #54 selectively reused the compatible part of PR #37's quality dashboard without merging the divergent branch. CP65 remains VERIFIED / CLOSED; the product Control Center requirement remains open independently.
+
+Current blocker: the genuine `runtime_observations/global_selection_outcomes.jsonl` stream is not present in the repository snapshot, so no real-data quality verdict or customer-eligible signal selection is claimed. Access/subscription/payment work stays behind that gate.
+
+Evidence: `PRODUCT_PATH_AUDIT_2026-10-18.md`.
+
+---
+
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.
