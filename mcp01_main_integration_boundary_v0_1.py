@@ -66,6 +66,8 @@ def bind_authoritative_decision_birth(
         asset = str(raw_asset).strip().upper()
         if not asset or not isinstance(decision, Mapping):
             raise RuntimeError(f"MCP01_DECISION_BIRTH_INPUT_INVALID:{asset}")
+        if "decision_id" in decision:
+            raise RuntimeError(f"MCP01_DECISION_BIRTH_ID_PREEXISTS:{asset}")
 
         ctx = _market_birth_context(
             asset,
@@ -106,6 +108,8 @@ def bind_authoritative_decision_birth(
         record["snapshot_id"] = birth["snapshot_id"]
         record["decision_timestamp_ms"] = birth["decision_timestamp_ms"]
         record["source"] = birth["source"]
+        if record.get("status") == "SEMANTIC_READY":
+            record["status"] = "READY"
         bound_decisions[asset] = record
 
     return bound_decisions, len(committed)
