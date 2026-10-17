@@ -1,3 +1,13 @@
+# PRODUCT PATH AUDIT RESULT — 2026-10-18
+
+- CP65 in Aroonda remains VERIFIED / CLOSED / CANONICAL; product Control Center completeness is a separate OPEN / NOT VERIFIED requirement.
+- Static source evidence confirms the ArundaTrader pipeline calls CP69 `append_observation` and `write_current_observation` (`arunda_pipeline.py` blob `962475a1185fb8471956d025c9791a8c58fd47b1`, lines 5377–5412).
+- Aroonda CP72 CLI is merged and contract CI passed; the ArundaTrader native UI now has an optional fail-closed connection through `AROONDA_RUNTIME_ANALYSIS_CLI`. Local fresh-observation E2E is still NOT VERIFIED.
+- PR #37 was not merged; compatible dashboard files were selectively ported by PR #54. The actual real outcome JSONL is not present in the repository snapshot, so quality evaluation remains BLOCKED / NOT VERIFIED until the local genuine stream is inspected.
+- See [PRODUCT_PATH_AUDIT_2026-10-18.md](PRODUCT_PATH_AUDIT_2026-10-18.md) for exact blob SHAs, CI run IDs, current gates, and next evidence-producing actions.
+
+---
+
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.

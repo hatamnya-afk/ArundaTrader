@@ -1,3 +1,14 @@
+## PRODUCT PATH AUDIT — 2026-10-18
+
+- CP65 is VERIFIED / CLOSED / CANONICAL in Aroonda `PROJECT_STATE.md`; no reopening is implied.
+- CP69 source wiring is present in canonical `arunda_pipeline.py`; current observation is written through the CP69 producer. Static wiring is not fresh-runtime verification.
+- Aroonda CP72 read-only CLI is merged with passing contract CI. ArundaTrader PR #54 (quality dashboard) and PR #55 (optional Aroonda projection in native UI) are merged with focused CI evidence.
+- Real signal-quality evaluation remains BLOCKED / NOT VERIFIED: the canonical repository snapshot contains no `runtime_observations/global_selection_outcomes.jsonl` artifact. Inspect the genuine local stream before judging quality.
+- Subscription/access/payment remains downstream of complete quality evidence and explicit eligible-signal selection.
+- Detailed evidence ledger: `PRODUCT_PATH_AUDIT_2026-10-18.md`.
+
+---
+
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.

@@ -1,3 +1,10 @@
+## BUILDER CONTINUATION — PRODUCT PATH AUDIT 2026-10-18
+
+Do not re-audit closed checkpoints. CP65 remains VERIFIED / CLOSED. CP69 producer wiring and Aroonda CP72 CLI are present; the native UI connection is merged and fail-closed. The quality dashboard was selectively ported from PR #37 by PR #54; do not merge the old divergent branch.
+
+Next: verify local CP69 current artifact + Aroonda CLI against the same runtime snapshot; then inspect the real selection-outcome JSONL and document complete/pending 1h/4h/24h counts. Do not infer quality from code or fixture tests. No subscription implementation until quality criteria and eligible signals are approved. Keep `EXECUTION AUTHORIZATION = FALSE` and do not modify `arunda_pipeline.py`.
+
+See `PRODUCT_PATH_AUDIT_2026-10-18.md` for exact evidence.
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.
