@@ -126,12 +126,12 @@ def format_aroonda_projection(projection: dict[str, Any]) -> str:
     reasons = failures.get("reason_counts") or {}
     predicates = failures.get("predicate_failures") or {}
     return (
-        "AROONDA CP72 • READ-ONLY ANALYSIS • same CP69 snapshot\\n"
-        f"Observation: {projection['observation_id']} | Snapshot: {projection['runtime_snapshot_id']}\\n"
+        "AROONDA CP72 • READ-ONLY ANALYSIS • same CP69 snapshot\n"
+        f"Observation: {projection['observation_id']} | Snapshot: {projection['runtime_snapshot_id']}\n"
         f"Assets {coverage.get('assets', '—')} | Opportunities {coverage.get('opportunities', '—')} | "
         f"Signals {coverage.get('signals', '—')} | Decisions {coverage.get('decision', '—')} | "
         f"Risk {coverage.get('risk', '—')} | Trade-gate {coverage.get('trade_gate', '—')} | "
-        f"Trade-ready {coverage.get('trade_ready', '—')}\\n"
+        f"Trade-ready {coverage.get('trade_ready', '—')}\n"
         f"Gate statuses: {json.dumps(gate_status, ensure_ascii=False, sort_keys=True)} | "
         f"Predicate failures: {json.dumps(predicates, ensure_ascii=False, sort_keys=True)} | "
         f"Reasons: {json.dumps(reasons, ensure_ascii=False, sort_keys=True)}"
