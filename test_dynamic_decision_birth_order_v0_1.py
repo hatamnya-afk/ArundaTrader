@@ -185,16 +185,20 @@ class DynamicDecisionBirthOrderTests(unittest.TestCase):
             original_id = "CP49-EXISTING-BTC"
             first_batch_id = "CP49-NEW-ETH"
 
-            with sqlite3.connect(db_path) as conn:
+            conn = sqlite3.connect(db_path)
+            try:
                 ensure_birth_schema(conn)
                 result = produce_canonical_decision_ids(
                     {"BTC": birth(original_id, "BTC", "HOLD")},
                     conn=conn,
                 )
                 self.assertEqual(result, {"BTC": original_id})
+            finally:
+                conn.close()
 
             # Reopen the file to prove the original row was durably committed.
-            with sqlite3.connect(db_path) as conn:
+            conn = sqlite3.connect(db_path)
+            try:
                 self.assertEqual(
                     read_authoritative_birth(conn, decision_id=original_id)["decision"]["state"],
                     "HOLD",
@@ -210,15 +214,20 @@ class DynamicDecisionBirthOrderTests(unittest.TestCase):
                             },
                             conn=conn,
                         )
+            finally:
+                conn.close()
 
             # A failure on the second item must roll back the first item too.
-            with sqlite3.connect(db_path) as conn:
+            conn = sqlite3.connect(db_path)
+            try:
                 self.assertIsNone(
                     read_authoritative_birth(conn, decision_id=first_batch_id)
                 )
                 original = read_authoritative_birth(conn, decision_id=original_id)
                 self.assertIsNotNone(original)
                 self.assertEqual(original["decision"]["state"], "HOLD")
+            finally:
+                conn.close()
 
 
 if __name__ == "__main__":
