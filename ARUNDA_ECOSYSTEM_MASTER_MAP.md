@@ -1,3 +1,13 @@
+## PRODUCT PATH AUDIT — 2026-10-18
+
+The CP69 producer is statically wired to emit both the append-only and current-observation artifacts; Aroonda CP72 now has a merged read-only JSON CLI; the existing ArundaTrader native UI optionally invokes it via `AROONDA_RUNTIME_ANALYSIS_CLI`. This remains a contract-tested integration, not a fresh-runtime E2E verification.
+
+PR #37's branch is still divergent and unmerged. Its compatible local quality-dashboard capability was selectively ported in PR #54 using the canonical tracker/report. The repository snapshot has no real outcome JSONL artifact, so quality evaluation and eligible-signal selection remain blocked until genuine local evidence is examined. CP65 stays VERIFIED / CLOSED; customer Control Center completeness is a separate open product requirement.
+
+Evidence ledger: `PRODUCT_PATH_AUDIT_2026-10-18.md`.
+
+---
+
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.
