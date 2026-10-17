@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - integration/pr13-pr14-attempt-contract-20261010
+      - fix/execution-boundary-hard-stop-20261013
     paths:
       - "**.py"
       - "requirements.txt"
