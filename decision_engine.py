@@ -523,22 +523,20 @@ def determine_decision(
 
 
 # =============================================================================
-# BUILD ONE DECISION
+# BUILD SEMANTIC DECISION (NO IDENTITY ISSUANCE)
 # =============================================================================
 
-def build_decision(
+def build_decision_semantics(
     asset: str,
     signal_record: Mapping[str, Any],
     score_record: Mapping[str, Any],
-    *,
-    decision_id: str,
 ) -> dict:
+    """Validate inputs and evaluate Decision semantics exactly once.
 
-    if not isinstance(decision_id, str) or not decision_id.strip():
-        raise RuntimeError(
-            f"Canonical decision_id is required at decision birth: {asset}"
-        )
-
+    This stage deliberately does not issue or bind canonical identity.
+    CP49 owns identity issuance and persistence at the authoritative Birth
+    boundary. The returned object is a semantic candidate, not a born Decision.
+    """
     signal = validate_signal_record(
         asset,
         signal_record,
@@ -561,7 +559,6 @@ def build_decision(
     )
 
     decision = {
-        "decision_id": decision_id.strip(),
         "asset": asset,
         "state": result["state"],
         "direction": result["direction"],
@@ -569,33 +566,47 @@ def build_decision(
         "reason": result["reason"],
     }
 
-    # -------------------------------------------------------------------------
-    # Local Decision Contract
-    # -------------------------------------------------------------------------
-
     if not hasattr(
         decision_contract,
         "validate_decision",
     ):
-
         raise RuntimeError(
             "decision_contract.py must expose "
             "validate_decision()"
         )
 
-    contract_result = (
-        decision_contract.validate_decision(
-            decision
-        )
-    )
-
+    contract_result = decision_contract.validate_decision(decision)
     if contract_result is False:
-
-        raise RuntimeError(
-            f"Decision contract rejected: {asset}"
-        )
+        raise RuntimeError(f"Decision contract rejected: {asset}")
 
     return decision
+
+
+# =============================================================================
+# BUILD ONE AUTHORITATIVE DECISION
+# =============================================================================
+
+def build_decision(
+    asset: str,
+    signal_record: Mapping[str, Any],
+    score_record: Mapping[str, Any],
+    *,
+    decision_id: str,
+) -> dict:
+    if not isinstance(decision_id, str) or not decision_id.strip():
+        raise RuntimeError(
+            f"Canonical decision_id is required at decision birth: {asset}"
+        )
+
+    semantic = build_decision_semantics(
+        asset,
+        signal_record,
+        score_record,
+    )
+    return {
+        "decision_id": decision_id.strip(),
+        **semantic,
+    }
 
 
 # =============================================================================
