@@ -1,3 +1,9 @@
+## PRODUCT PATH AUDIT NOTE — 2026-10-18
+
+This product-path audit does not reopen CP65 or any other CLOSED / VERIFIED checkpoint. Aroonda `PROJECT_STATE.md` lists CP65 as VERIFIED / CLOSED / CANONICAL. Product Control Center completeness is a separate requirement and remains OPEN / NOT VERIFIED. CP69/CP72 code and contract CI do not prove fresh runtime E2E or signal quality. Detailed evidence and next gates: `PRODUCT_PATH_AUDIT_2026-10-18.md`.
+
+---
+
 # CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
 
 > **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.
