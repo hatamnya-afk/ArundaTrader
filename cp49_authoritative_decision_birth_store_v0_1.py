@@ -3,10 +3,16 @@
 Persistence is deliberately explicit and caller-owned. This module never opens
 the production database implicitly. The caller supplies a sqlite3 connection.
 
+Transaction contract:
+- Call ensure_birth_schema(conn) before beginning a Birth batch; schema setup commits its DDL separately.
+- The caller MUST own the data transaction, e.g. with conn: around the complete producer/batch operation. persist_authoritative_birth() does not commit.
+- A successful return means the INSERT was accepted in the caller's current transaction, not that it is durable until the caller commits.
+- On a decision_id collision, this function rolls back the caller's entire active transaction; callers must not catch the error and continue that batch.
+
 Canonical Birth persistence guarantees:
 - decision_id is UNIQUE
 - the Birth Event is inserted as one logical record
-- committed decision_id is immutable because there is no update API
+- persisted decision_id is immutable because there is no update API
 - IntegrityError is fail-closed
 - no downstream replacement is permitted
 """
@@ -45,10 +51,13 @@ def persist_authoritative_birth(
     conn: sqlite3.Connection,
     birth_event: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Persist one canonical Birth Event and return the committed identity.
+    """Insert one canonical Birth Event into the caller-owned transaction.
 
-    A duplicate decision_id is never replaced. The transaction is rolled back
-    and the Birth fails closed.
+    The caller must commit the transaction (preferably around the complete
+    batch, using ``with conn:``) before treating this identity as durable.
+    This function deliberately does not commit. A duplicate decision_id is
+    never replaced: the entire active connection transaction is rolled back
+    and the Birth batch fails closed.
     """
     required = (
         "decision_id",
