@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
@@ -157,6 +158,67 @@ class DynamicDecisionBirthOrderTests(unittest.TestCase):
                         decision_snapshot={"BTC": candidate},
                         market_data_by_symbol={"BTC/USDT": market},
                     )
+
+
+    def test_real_sqlite_batch_rolls_back_all_rows_on_duplicate(self) -> None:
+        from cp49_authoritative_decision_birth_store_v0_1 import (
+            ensure_birth_schema,
+            read_authoritative_birth,
+        )
+        from cp49_production_decision_birth_producer_v0_1 import (
+            produce_canonical_decision_ids,
+        )
+
+        def birth(decision_id: str, asset: str, state: str) -> dict:
+            return {
+                "decision_id": decision_id,
+                "asset": asset,
+                "decision_timestamp_ms": 1792000000000,
+                "snapshot_id": f"SQLITE-VERIFY-{asset}",
+                "source": "INDEPENDENT_SQLITE_TEST",
+                "decision": {"state": state},
+                "issuer_contract": "CP49-AUTHORITATIVE-DECISION-BIRTH-UUID4-v0.1",
+            }
+
+        with tempfile.TemporaryDirectory() as directory:
+            db_path = str(Path(directory) / "atomic-birth.sqlite3")
+            original_id = "CP49-EXISTING-BTC"
+            first_batch_id = "CP49-NEW-ETH"
+
+            with sqlite3.connect(db_path) as conn:
+                ensure_birth_schema(conn)
+                result = produce_canonical_decision_ids(
+                    {"BTC": birth(original_id, "BTC", "HOLD")},
+                    conn=conn,
+                )
+                self.assertEqual(result, {"BTC": original_id})
+
+            # Reopen the file to prove the original row was durably committed.
+            with sqlite3.connect(db_path) as conn:
+                self.assertEqual(
+                    read_authoritative_birth(conn, decision_id=original_id)["decision"]["state"],
+                    "HOLD",
+                )
+                with self.assertRaisesRegex(
+                    RuntimeError, "CANONICAL_DECISION_BIRTH_PERSISTENCE_BLOCKED:BTC"
+                ):
+                    with conn:
+                        produce_canonical_decision_ids(
+                            {
+                                "ETH": birth(first_batch_id, "ETH", "BUY"),
+                                "BTC": birth(original_id, "BTC", "REPLACEMENT"),
+                            },
+                            conn=conn,
+                        )
+
+            # A failure on the second item must roll back the first item too.
+            with sqlite3.connect(db_path) as conn:
+                self.assertIsNone(
+                    read_authoritative_birth(conn, decision_id=first_batch_id)
+                )
+                original = read_authoritative_birth(conn, decision_id=original_id)
+                self.assertIsNotNone(original)
+                self.assertEqual(original["decision"]["state"], "HOLD")
 
 
 if __name__ == "__main__":
