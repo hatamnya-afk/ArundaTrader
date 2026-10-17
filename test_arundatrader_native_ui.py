@@ -4,12 +4,14 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 from datetime import datetime, timezone
 from pathlib import Path
 
 from arundatrader_observation_consumer import CanonicalRuntimeObservation
 from cp69_runtime_observation import build_observation
-from arundatrader_live_ui import asset_rows, observation_age_seconds, read_latest_observation
+from arundatrader_live_ui import (asset_rows, observation_age_seconds, read_latest_observation, read_aroonda_projection, format_aroonda_projection)
 
 
 def payload(**overrides):
@@ -46,6 +48,51 @@ def payload(**overrides):
     }
     item.update(overrides)
     return item
+
+
+class AroondaProjectionTests(unittest.TestCase):
+    def projection(self, **overrides):
+        item = {
+            "observation_id": "obs:test",
+            "runtime_snapshot_id": "RS-test",
+            "emitted_at": datetime.now(timezone.utc).isoformat(),
+            "coverage": {"assets": 1, "opportunities": 1, "signals": 1, "decision": 1, "risk": 1, "trade_gate": 1, "trade_ready": 0},
+            "trade_gate_status_counts": {"HOLD": 1},
+            "failure_attribution": {"predicate_failures": {}, "reason_counts": {}},
+            "execution_state": {"EXECUTION": "OFF", "REAL_ORDER": False, "REAL_TRADE": False, "DB_WRITES": 0, "DB_WRITE_BOUNDARY": None},
+        }
+        item.update(overrides)
+        return item
+
+    def test_accepts_read_only_projection_bound_to_current_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cli = Path(directory) / "analysis_cli.py"
+            cli.write_text("# configured test placeholder\\n", encoding="utf-8")
+            payload = self.projection()
+            with patch("arundatrader_live_ui.subprocess.run", return_value=SimpleNamespace(stdout=json.dumps(payload))) as run:
+                projection = read_aroonda_projection(cli, Path(directory) / "current.jsonl", "RS-test")
+            self.assertEqual(projection["observation_id"], "obs:test")
+            self.assertFalse(run.call_args.kwargs["shell"])
+            self.assertEqual(run.call_args.kwargs["timeout"], 8)
+            self.assertIn("--input", run.call_args.args[0])
+            self.assertIn("READ-ONLY ANALYSIS", format_aroonda_projection(projection))
+
+    def test_rejects_projection_for_different_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cli = Path(directory) / "analysis_cli.py"
+            cli.write_text("# configured test placeholder\\n", encoding="utf-8")
+            with patch("arundatrader_live_ui.subprocess.run", return_value=SimpleNamespace(stdout=json.dumps(self.projection()))) :
+                with self.assertRaisesRegex(ValueError, "does not match current CP69 source"):
+                    read_aroonda_projection(cli, Path(directory) / "current.jsonl", "RS-other")
+
+    def test_rejects_execution_enabled_projection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cli = Path(directory) / "analysis_cli.py"
+            cli.write_text("# configured test placeholder\\n", encoding="utf-8")
+            payload = self.projection(execution_state={"EXECUTION": "OFF", "REAL_ORDER": True, "REAL_TRADE": False, "DB_WRITES": 0, "DB_WRITE_BOUNDARY": None})
+            with patch("arundatrader_live_ui.subprocess.run", return_value=SimpleNamespace(stdout=json.dumps(payload))):
+                with self.assertRaisesRegex(ValueError, "REAL_ORDER enabled"):
+                    read_aroonda_projection(cli, Path(directory) / "current.jsonl", "RS-test")
 
 
 class CanonicalObservationTests(unittest.TestCase):
