@@ -187,12 +187,13 @@ class DynamicDecisionBirthOrderTests(unittest.TestCase):
 
             conn = sqlite3.connect(db_path)
             try:
-                ensure_birth_schema(conn)
-                result = produce_canonical_decision_ids(
-                    {"BTC": birth(original_id, "BTC", "HOLD")},
-                    conn=conn,
-                )
-                self.assertEqual(result, {"BTC": original_id})
+                with conn:
+                    ensure_birth_schema(conn)
+                    result = produce_canonical_decision_ids(
+                        {"BTC": birth(original_id, "BTC", "HOLD")},
+                        conn=conn,
+                    )
+                    self.assertEqual(result, {"BTC": original_id})
             finally:
                 conn.close()
 
