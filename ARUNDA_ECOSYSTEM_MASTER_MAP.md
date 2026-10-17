@@ -1,3 +1,38 @@
+# CURRENT PRODUCT GOVERNANCE OVERRIDE — 2026-10-17
+
+> **Active management direction.** This override records the product mission approved on 2026-10-16. It supersedes older statements below only where they conflict about the *current project priority/frontier*. It does not rewrite historical evidence, reopen closed checkpoints, change technical execution contracts, or grant execution authority.
+
+## Product mission and boundary
+
+ArundaTrader remains the existing market/signal engine; Aroonda AI remains a separate local intelligence system. The immediate commercial objective is a customer-facing signal-software product with selected eligible signals and monthly subscriptions. This product must remain usable while order execution is disabled.
+
+The intended customer experience includes, where evidence exists: asset, signal time, status, quality, supporting evidence, history/outcomes, and Aroonda analysis within the existing permitted observation/environment boundary. Customer access control and the monthly plan lifecycle (validity, expiry, renewal/cancellation, entitlements, payment integration, and audit events) are product requirements, **not claims of already-built functionality**.
+
+## Status discipline
+
+- **Existing foundations:** preserve the established market/signal chain, existing UI assets, and read-only observation/analysis boundaries. Reuse existing code and proposals; do not create a parallel dashboard or duplicate integration.
+- **OPEN / NOT VERIFIED:** UI/Control Center completeness and its actual data connections; CP65/CP69 integration status for the intended product path; Aroonda observations/analysis surfaced safely in UI; reproducible signal-quality evaluation; criteria for selecting customer-publishable signals; customer access, payment, subscription, entitlement, expiry, and audit lifecycle.
+- An existing proposal, PR #37 (“Add local read-only selection quality dashboard”, branch `feature/local-selection-quality-dashboard-20261015`), is not merged into `operational-main-20261007`. Review/reuse it before proposing equivalent work. Its historical selection outcomes are not, by themselves, proof that signals are ready to sell.
+- Do not describe the product as launched, subscriptions as connected, signals as validated for customers, or runtime behavior as verified without direct evidence on the relevant branch.
+
+## Current project frontier — product path
+
+1. Audit the existing UI / Control Center and actual CP65, CP69, bridge, observation-consumer, and read-only runtime-analysis code on the canonical branch.
+2. Record what is BUILT, VERIFIED, OPEN, BLOCKED, and missing, with file/commit/test evidence; do not infer missing implementation from inconclusive search alone.
+3. Produce a minimal, evidence-backed implementation plan that reuses existing components and avoids duplicate paths.
+4. Then proceed in order: safe UI/observation integration → real-data signal-quality evaluation → explicit eligible-signal selection → customer access and monthly subscription product.
+5. Consider capital entry/live trading only later, after signal quality is reviewed and approved, under a separate explicit decision and the existing technical safety gates.
+
+## Unchanged safety and governance
+
+- `EXECUTION AUTHORIZATION = FALSE`; product work does not activate trading.
+- No real/test order, provider/exchange write, cancellation, withdrawal, production runtime, production DB mutation, or execution-switch activation is part of this documentation/product-frontier change.
+- Do not wire or modify protected `arunda_pipeline.py` as part of this task.
+- Use genuine valid post-launch observations only. No synthetic data, interpolation, forward-fill, backfill, padding, fabrication, or silent source blending.
+- Do not reopen CLOSED / VERIFIED checkpoints without direct regression evidence. BUILT is not VERIFIED.
+- The technical real-order readiness gate may remain BLOCKED / NOT VERIFIED independently; it is not the immediate product frontier and must not displace the approved signal-product sequence.
+
+---
 # ARUNDA ECOSYSTEM — MASTER PROJECT MAP
 ## Canonical cross-repository orientation — 2026-10-08
 
