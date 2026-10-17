@@ -231,5 +231,55 @@ class DynamicDecisionBirthOrderTests(unittest.TestCase):
                 conn.close()
 
 
+    def test_store_insert_remains_uncommitted_until_caller_commits(self) -> None:
+        from cp49_authoritative_decision_birth_store_v0_1 import (
+            ensure_birth_schema,
+            persist_authoritative_birth,
+            read_authoritative_birth,
+        )
+
+        decision_id = "CP49-CALLER-OWNS-COMMIT"
+        birth_event = {
+            "decision_id": decision_id,
+            "asset": "BTC",
+            "decision_timestamp_ms": 1792000000000,
+            "snapshot_id": "SQLITE-CALLER-TRANSACTION",
+            "source": "INDEPENDENT_SQLITE_TEST",
+            "decision": {"state": "HOLD"},
+            "issuer_contract": "CP49-AUTHORITATIVE-DECISION-BIRTH-UUID4-v0.1",
+        }
+
+        with tempfile.TemporaryDirectory() as directory:
+            db_path = str(Path(directory) / "caller-transaction.sqlite3")
+            writer = sqlite3.connect(db_path)
+            observer = None
+            try:
+                ensure_birth_schema(writer)
+                result = persist_authoritative_birth(writer, birth_event)
+                self.assertEqual(result["decision_id"], decision_id)
+                self.assertIsNotNone(
+                    read_authoritative_birth(writer, decision_id=decision_id)
+                )
+
+                # A separate connection must not see the uncommitted INSERT.
+                observer = sqlite3.connect(db_path)
+                self.assertIsNone(
+                    read_authoritative_birth(observer, decision_id=decision_id)
+                )
+                observer.close()
+                observer = None
+
+                # Caller, not the store function, decides to roll this back.
+                writer.rollback()
+                self.assertIsNone(
+                    read_authoritative_birth(writer, decision_id=decision_id)
+                )
+            finally:
+                if observer is not None:
+                    observer.close()
+                writer.close()
+
+
+
 if __name__ == "__main__":
     unittest.main()
