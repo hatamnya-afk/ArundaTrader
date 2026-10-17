@@ -3,7 +3,25 @@ from exchange_execution_adapter_contract_v0_1 import (
     ExchangeAdapterCapabilities,
 )
 from exchange_execution_contract import CanonicalExecutionResult, CanonicalOrderRequest
+import exchange_execution_order_attempt_boundary_v0_1 as attempt_boundary
 from exchange_execution_order_attempt_boundary_v0_1 import attempt_prepared_order
+
+
+def _enable_boundary_for_isolated_contract_test(monkeypatch):
+    """Bypass only the independent hard stop to test downstream contracts.
+
+    The production safety contract remains disabled. A separate test below
+    verifies that the unpatched boundary blocks immediately by default.
+    """
+    monkeypatch.setattr(
+        attempt_boundary,
+        "safety_contract",
+        lambda: {
+            "EXECUTION_ENABLED": True,
+            "ORDER_SUBMISSION_ENABLED": True,
+            "EXCHANGE_WRITE_ENABLED": True,
+        },
+    )
 
 
 def _request():
@@ -113,7 +131,21 @@ def _attempt(adapter, authorization):
     )
 
 
-def test_provider_mismatch_blocks_before_adapter_preparation_or_submission():
+def test_default_safety_contract_blocks_before_adapter_preparation_or_submission():
+    adapter = _TrackingAdapter()
+
+    result = _attempt(adapter, _authorized())
+
+    assert result.status == "FAIL_CLOSED"
+    assert result.error_code == "EXECUTION_DISABLED"
+    assert result.trade_event_id is None
+    assert adapter.prepare_calls == 0
+    assert adapter.submit_prepared_calls == 0
+    assert adapter.submit_calls == 0
+
+
+def test_provider_mismatch_blocks_before_adapter_preparation_or_submission(monkeypatch):
+    _enable_boundary_for_isolated_contract_test(monkeypatch)
     adapter = _TrackingAdapter()
 
     result = _attempt(adapter, _authorized(provider="OTHER_PROVIDER"))
@@ -125,7 +157,8 @@ def test_provider_mismatch_blocks_before_adapter_preparation_or_submission():
     assert adapter.submit_calls == 0
 
 
-def test_missing_provider_blocks_before_adapter_preparation_or_submission():
+def test_missing_provider_blocks_before_adapter_preparation_or_submission(monkeypatch):
+    _enable_boundary_for_isolated_contract_test(monkeypatch)
     adapter = _TrackingAdapter()
     authorization = _authorized()
     authorization.pop("provider")
@@ -138,7 +171,8 @@ def test_missing_provider_blocks_before_adapter_preparation_or_submission():
     assert adapter.submit_prepared_calls == 0
     assert adapter.submit_calls == 0
 
-def test_missing_decision_id_blocks_before_adapter_preparation_or_submission():
+def test_missing_decision_id_blocks_before_adapter_preparation_or_submission(monkeypatch):
+    _enable_boundary_for_isolated_contract_test(monkeypatch)
     from dataclasses import replace
 
     adapter = _TrackingAdapter()
@@ -161,7 +195,8 @@ def test_missing_decision_id_blocks_before_adapter_preparation_or_submission():
     assert adapter.submit_calls == 0
 
 
-def test_successful_attempt_carries_boundary_owned_attempt_and_decision_ids():
+def test_successful_attempt_carries_boundary_owned_attempt_and_decision_ids(monkeypatch):
+    _enable_boundary_for_isolated_contract_test(monkeypatch)
     adapter = _TrackingAdapter()
 
     result = _attempt(adapter, _authorized())
@@ -174,7 +209,9 @@ def test_successful_attempt_carries_boundary_owned_attempt_and_decision_ids():
     assert adapter.submit_calls == 0
 
 
-def test_submit_exception_preserves_decision_and_attempt_identity():
+def test_submit_exception_preserves_decision_and_attempt_identity(monkeypatch):
+    _enable_boundary_for_isolated_contract_test(monkeypatch)
+
     class _RaisingAdapter(_TrackingAdapter):
         def submit_prepared_order(self, preparation, *, canonical_request):
             self.submit_prepared_calls += 1
