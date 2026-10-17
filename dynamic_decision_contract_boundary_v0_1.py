@@ -113,9 +113,16 @@ def build_dynamic_decision(
     *,
     decision_id: str | None = None,
 ) -> dict[str, Any]:
+    """Build semantic Decision once; CP49 binds identity when no ID is supplied.
 
-    if not isinstance(decision_id, str) or not decision_id.strip():
-        raise ValueError("canonical decision_id is required")
+    With decision_id, preserve the existing complete-Decision API.
+    Without it, return a SEMANTIC_READY candidate for the authoritative
+    CP49 Birth boundary. A candidate is not READY until Birth is persisted.
+    """
+    if decision_id is not None and (
+        not isinstance(decision_id, str) or not decision_id.strip()
+    ):
+        raise ValueError("canonical decision_id must be non-empty when supplied")
 
     dynamic_asset = normalize_symbol(asset)
     base_asset = dynamic_asset.split("/", 1)[0]
@@ -148,37 +155,42 @@ def build_dynamic_decision(
         "arunda_decision_engine_dynamic_boundary",
     )
 
-    build_decision = getattr(
-        decision_engine,
-        "build_decision",
-        None,
-    )
+    build_decision = getattr(decision_engine, "build_decision", None)
+    build_semantics = getattr(decision_engine, "build_decision_semantics", None)
 
     if not callable(build_decision):
-        raise AttributeError(
-            "decision_engine.build_decision unavailable"
-        )
+        raise AttributeError("decision_engine.build_decision unavailable")
+    if not callable(build_semantics):
+        raise AttributeError("decision_engine.build_decision_semantics unavailable")
 
     legacy_signal = dict(signal_record)
     legacy_score = dict(score_record)
-
     legacy_signal["asset"] = base_asset
     legacy_score["asset"] = base_asset
 
-    decision = build_decision(
-        base_asset,
-        legacy_signal,
-        legacy_score,
-        decision_id=decision_id.strip(),
-    )
+    if decision_id is None:
+        decision = build_semantics(
+            base_asset,
+            legacy_signal,
+            legacy_score,
+        )
+        result_status = "SEMANTIC_READY"
+        canonical_id = None
+    else:
+        canonical_id = decision_id.strip()
+        decision = build_decision(
+            base_asset,
+            legacy_signal,
+            legacy_score,
+            decision_id=canonical_id,
+        )
+        result_status = "READY"
 
     if not isinstance(decision, dict):
         raise ValueError("invalid decision result")
 
     if decision.get("asset") != base_asset:
-        raise ValueError(
-            "legacy decision asset mismatch"
-        )
+        raise ValueError("legacy decision asset mismatch")
 
     if decision.get("state") not in (
         "ACTIONABLE",
@@ -194,14 +206,15 @@ def build_dynamic_decision(
     ):
         raise ValueError("invalid decision direction")
 
-    score = float(decision.get("score"))
-
+    score = decision.get("score")
+    if isinstance(score, bool) or not isinstance(score, (int, float)):
+        raise ValueError("invalid decision score")
+    score = float(score)
     if not math.isfinite(score):
         raise ValueError("non-finite decision score")
 
-    return {
-        "status": "READY",
-        "decision_id": decision_id.strip(),
+    result = {
+        "status": result_status,
         "asset": dynamic_asset,
         "state": decision["state"],
         "direction": decision["direction"],
@@ -220,6 +233,10 @@ def build_dynamic_decision(
         "db_writes": DB_WRITES,
         "execution": EXECUTION,
     }
+    if canonical_id is not None:
+        result["decision_id"] = canonical_id
+    return result
+
 
 def static_contract_check() -> None:
 
@@ -237,6 +254,17 @@ def static_contract_check() -> None:
     ):
         raise AttributeError(
             "build_decision unavailable"
+        )
+
+    if not callable(
+        getattr(
+            decision_engine,
+            "build_decision_semantics",
+            None,
+        )
+    ):
+        raise AttributeError(
+            "build_decision_semantics unavailable"
         )
 
     if not callable(
@@ -267,6 +295,7 @@ def main():
     print("STATIC CHECK ONLY")
     print("DECISION_ENGINE=PASS")
     print("BUILD_DECISION=PASS")
+    print("BUILD_DECISION_SEMANTICS=PASS")
     print("DETERMINE_DECISION=PASS")
     print("VARIABLE_CARDINALITY=PASS")
     print("FIXED_15_USED=FALSE")
