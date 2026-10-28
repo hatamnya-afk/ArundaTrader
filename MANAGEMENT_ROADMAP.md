@@ -1,3 +1,43 @@
+# MANAGEMENT OVERRIDE — CP-05 CLOSED / CP-06 ACTIVE — 2026-10-29
+
+**Decision:** CP-05 APPROVED / CLOSED based on the latest fresh local Runtime evidence supplied by management. This is a management sign-off; it does not claim profitability or that every outcome horizon has matured.
+
+Evidence:
+- Runtime observation: `obs:e6017739-e6d8-443f-b404-982b481d78ba`
+- Runtime snapshot: `RS-3ee9dbd841ae31954c94f9a9a7fa6df159fcb0edfa5d8bba19ed291b8f091017`
+- Universe 814; Signal Ready / Validated / Decision Ready 737; Trade Ready 108.
+- MCP01 evidence persisted 845; persistence failures 0; Order Intents created 0.
+- Execution remains OFF; REAL_ORDER=FALSE; REAL_TRADE=FALSE.
+
+## MANDATORY PATH PRESERVATION
+
+- Active local worktree reported by management: `operational-main-20261007-reconcile`. The branch was not found on GitHub during this update; do not create a replacement branch or assume another branch is equivalent.
+- No new branch, branch switch, merge, rebase, reset, clean, force-push, destructive restore, overwrite, or deletion without explicit written management authorization.
+- Preserve all existing tracked modifications and untracked files. One active work path; reuse existing code; no parallel implementation.
+- Do not reopen CP-05 or any CLOSED / VERIFIED checkpoint absent direct, reproducible regression evidence.
+- Do not modify protected `arunda_pipeline.py`, Decision, Risk, or Trade Gate without a specific evidence-backed CP-06 need.
+- No real/test orders, exchange writes, cancellation, withdrawal, production DB mutation, or execution enablement. Execution authorization remains FALSE.
+- Use genuine eligible post-launch data only. No synthetic outcomes, fabricated data, backfill, interpolation, forward-fill, padding, or silent blending.
+
+## CURRENT FRONTIER — CP-06
+
+**Status: AUTHORIZED TO ENTER.**
+
+**Objective:** deterministic, auditable outcome scoring for genuine eligible signals, reusing the existing CP-05 evidence stream and code.
+
+Acceptance contract:
+1. Make outcome-scoring rules and horizons explicit and deterministic.
+2. Keep outcomes PENDING until their applicable horizon matures.
+3. On maturity, classify CORRECT, INCORRECT, or UNSCORABLE with explicit reasons.
+4. Prevent duplicate evaluations and duplicate outcome records.
+5. Maintain traceable links from original prediction/decision to market evidence, horizon, and result.
+6. Missing/invalid evidence stays explicitly missing; never fabricate or silently repair it.
+7. Add focused reproducible tests and a quality report; do not claim profitability or customer eligibility without sufficient evidence.
+
+**Next action:** inspect existing CP-06 implementation/tests read-only on the existing active worktree; identify the smallest verified gap; implement only that gap and run focused tests. Do not rebuild CP-05 or create a parallel subsystem.
+
+---
+
 ## CURRENT PRODUCT PATH AUDIT — 2026-10-18
 
 The existing CP69 producer is wired into the canonical pipeline; the native UI now optionally displays Aroonda CP72 analysis through the separate read-only CLI. PR #54 selectively reused the compatible part of PR #37's quality dashboard without merging the divergent branch. CP65 remains VERIFIED / CLOSED; the product Control Center requirement remains open independently.
