@@ -1,3 +1,17 @@
+# MANAGEMENT ADDENDUM — INITIAL PROJECT APPROVAL / CP-07 FRONTIER LOCK — 2026-10-29
+
+## Management decision
+- **Initial project approval: APPROVED** for continued operation and gradual quality improvement using genuine observations.
+- CP-05 remains CLOSED; CP-06 initial implementation/test gate remains approved. Neither is reopened absent direct, reproducible regression evidence.
+- **CP-07 is the only CURRENT FRONTIER**, IN PROGRESS / NOT CLOSED.
+- Evidence from the current local stream review: 6,445 selections; 4,956 with observations; 1,489 without. Observation-gap median 60 minutes; p90 22 hours. Runtime timestamp missing from 14,253 observations; zero inspected elapsed_ms mismatches.
+- These figures are coverage/timing evidence only. No signal profitability or customer eligibility is verified.
+- Next action: continue the existing observation process, let genuine evidence accumulate, and perform only a targeted review when a meaningful new window exists or a reproducible defect is found. No repetitive audit or speculative code change.
+- Missing timestamps remain missing; immature horizons remain pending. No synthetic/backfilled/interpolated data.
+- Execution remains OFF; no order, exchange write, production DB mutation, or live trading.
+
+---
+
 ## PRODUCT PATH AUDIT NOTE — 2026-10-18
 
 This product-path audit does not reopen CP65 or any other CLOSED / VERIFIED checkpoint. Aroonda `PROJECT_STATE.md` lists CP65 as VERIFIED / CLOSED / CANONICAL. Product Control Center completeness is a separate requirement and remains OPEN / NOT VERIFIED. CP69/CP72 code and contract CI do not prove fresh runtime E2E or signal quality. Detailed evidence and next gates: `PRODUCT_PATH_AUDIT_2026-10-18.md`.
