@@ -1,3 +1,20 @@
+# MANAGEMENT DECISION — INITIAL PROJECT APPROVAL / CP-07 CONTINUES — 2026-10-29
+
+**Initial project approval: APPROVED.** Continue the existing real-data observation and incremental signal-quality improvement process. This is approval to proceed with the project, not a final quality/profitability/customer-eligibility sign-off.
+
+## Governance lock — prevent repeated audits and accidental regressions
+
+- CP-05 remains CLOSED. CP-06 initial implementation/test gate remains APPROVED for progression based on the previously recorded 38 focused tests passing; do not reopen either checkpoint without direct, reproducible regression evidence.
+- CP-07 remains the **single CURRENT FRONTIER**: 24-hour real-data quality review. It is IN PROGRESS, not closed.
+- The local stream review supplied on 2026-10-29 found 6,445 selections; 4,956 with observations; 1,489 without observations. Observation-gap median was 60 minutes and p90 was 22 hours. Runtime capture timestamps were missing from 14,253 market observations; inspected `elapsed_ms` values had zero mismatches. These are descriptive coverage/timing evidence only, not proof of predictive quality or realized trading performance.
+- Keep immature or inadequately observed horizons pending. Do not backfill missing timestamps or infer outcomes. Do not claim profitability or customer-facing signal eligibility from these statistics.
+- No further repeated audit is needed now. Continue the existing observation process and revisit only when a meaningful new real-data window accumulates or a concrete, reproducible defect appears. If a defect appears, fix only the smallest evidence-backed gap.
+- Do not change `arunda_pipeline.py`, tracker, Decision, Risk, or Trade Gate without a specific, reproducible defect and explicit scope. Do not create parallel tracking, scheduling, or reporting paths.
+- **Next action:** proceed with the already-authorized CP-07 operating mode: keep the existing runtime/observation process running and allow genuine evidence to accumulate; then perform one concise, targeted review of the new evidence. Do not mark CP-07 complete or move its frontier to a later checkpoint until its acceptance criteria are met and governance is synchronized.
+- **Execution safety unchanged:** `EXECUTION=OFF`, `REAL_ORDER=FALSE`, `REAL_TRADE=FALSE`; no order, exchange write, production DB mutation, or execution enablement.
+
+---
+
 # MANAGEMENT ADDENDUM — CP-06 INITIAL GATE PASSED / CP-07 ENTERED — 2026-10-29
 
 **Decision:** CP-06's initial implementation/test gate is APPROVED for progression. The 24-hour real-data quality review remains explicitly pending; this is not a claim that every outcome horizon has matured, that signal quality is proven, or that profitability/customer eligibility has been established.
