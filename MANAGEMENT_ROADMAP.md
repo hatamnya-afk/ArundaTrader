@@ -1,3 +1,23 @@
+# MANAGEMENT DECISION — CP-07 STAGED OBSERVATION / 24-HOUR START GATE — 2026-10-29
+
+## CP-07 staged observation decision — 2026-10-29
+
+**Selected operating mode: option 3.** Continue the controlled single-cycle observations already used while preparing the 24-hour window. The 24-hour period has **not** started, and this decision does not wait for the whole customer product to be completed.
+
+Preparation evidence already reviewed: the genuine outcome stream and existing quality report; observation coverage and gaps; 1h/4h/24h status counts; timestamp limitations; and the `elapsed_ms` contract. No specific reproducible calculation defect was identified, so no speculative code change is approved.
+
+The exact runtime path is not yet verified as a persistent observation process: `track_cycle` is called inside the `arunda_pipeline.py` main cycle; the inspected PowerShell launchers launch UI scripts only; the point-in-time process/task check found no active Arunda runtime and no observation/pipeline scheduled task. This does not mean the prior single-cycle runs failed; they were not intended to be a continuous 24-hour session.
+
+**Pre-start gate (must be satisfied before the 24-hour clock begins):**
+1. Identify the exact known-good invocation used for the recent controlled single-cycle run.
+2. Confirm the invocation's execution-off, exchange-write, and database-write boundaries before using it for observation.
+3. Record the explicit observation start time, expected observation source, interruption/recovery handling, and end-of-window review point.
+4. Preserve one existing observation path; do not add a parallel collector/scheduler or modify protected `arunda_pipeline.py` merely to force continuous operation.
+
+CP-07 remains CURRENT / IN PROGRESS / NOT CLOSED until a real 24-hour window has been completed and its targeted review meets the acceptance criteria. CP-05 remains CLOSED, CP-06's initial gate remains approved, and CP-08 is not activated. Missing timestamps remain missing; immature horizons remain pending; no profitability or customer-eligibility claim is established. `EXECUTION=OFF`, `REAL_ORDER=FALSE`, `REAL_TRADE=FALSE`; no orders, exchange writes, or production DB mutations.
+
+---
+
 # MANAGEMENT DECISION — INITIAL PROJECT APPROVAL / CP-07 CONTINUES — 2026-10-29
 
 **Initial project approval: APPROVED.** Continue the existing real-data observation and incremental signal-quality improvement process. This is approval to proceed with the project, not a final quality/profitability/customer-eligibility sign-off.
