@@ -1,3 +1,35 @@
+# MANAGEMENT ADDENDUM — CP-06 INITIAL GATE PASSED / CP-07 ENTERED — 2026-10-29
+
+**Decision:** CP-06's initial implementation/test gate is APPROVED for progression. The 24-hour real-data quality review remains explicitly pending; this is not a claim that every outcome horizon has matured, that signal quality is proven, or that profitability/customer eligibility has been established.
+
+## CP-06 — INITIAL GATE RESULT
+
+- Focused tests supplied by management: **38 passed in 0.30s**.
+- Covered suites include outcome timestamp contracts, outcome persistence, pipeline wiring, and global-selection quality report (as represented by the supplied test command/output).
+- Timestamp contract retained: `elapsed_ms = observed_at_ms - selected_at_ms`; `runtime_recorded_at_ms` is the Runtime capture timestamp and must not be substituted into that elapsed-time calculation.
+- CP-06's deterministic scoring/test gate is accepted for transition. The planned 24-hour evidence review is a follow-up quality gate; it does not automatically reopen CP-06. Reopen only for direct, reproducible regression or a concrete failed acceptance criterion.
+- Existing historical observations missing Runtime timestamps must remain explicitly missing; no backfill, fabrication, interpolation, forward-fill, or silent repair.
+
+## CP-07 — CURRENT FRONTIER: 24-HOUR REAL-DATA QUALITY REVIEW
+
+**Objective:** evaluate the existing outcome stream after sufficient real elapsed time, without rebuilding the CP-06 subsystem.
+
+Next action:
+1. Read the existing quality report and outcome JSONL stream read-only.
+2. Measure timestamp coverage, decision/evidence traceability, and counts by horizon/status.
+3. Keep immature horizons as `PENDING`; only mature outcomes with valid evidence may become `CORRECT`, `INCORRECT`, or `UNSCORABLE`, with reasons.
+4. Report sample size, missing/invalid evidence, and limitations explicitly; make no profitability or customer-eligibility claim without sufficient evidence.
+5. If a specific defect appears, change only the smallest evidence-backed gap and run the focused tests. Do not repeat the full audit absent a concrete reason.
+
+## SAFETY / SCOPE UNCHANGED
+
+- Preserve active local worktree `operational-main-20261007-reconcile`; the remote roadmap is updated on the existing branch `operational-main-20261007` because the reported local branch was not found remotely. Do not create a replacement branch or assume the refs are identical.
+- No branch switching, merging, rebasing, reset, clean, destructive restore, overwrite, or deletion of local work.
+- `EXECUTION=OFF`, `REAL_ORDER=FALSE`, `REAL_TRADE=FALSE`; no orders, exchange writes, execution enablement, or production DB mutation.
+- CP-05 remains CLOSED. Protected `arunda_pipeline.py`, Decision, Risk, and Trade Gate remain untouched absent a concrete, authorized need.
+
+---
+
 # MANAGEMENT OVERRIDE — CP-05 CLOSED / CP-06 ACTIVE — 2026-10-29
 
 **Decision:** CP-05 APPROVED / CLOSED based on the latest fresh local Runtime evidence supplied by management. This is a management sign-off; it does not claim profitability or that every outcome horizon has matured.
