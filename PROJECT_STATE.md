@@ -1,3 +1,16 @@
+# MANAGEMENT ADDENDUM — CP-07 READINESS PREPARATION / START HOLD — 2026-10-29
+
+## CP-07 readiness preparation — 2026-10-29
+
+- Chosen operating mode: option 3 — continue controlled single-cycle observations while preparing a genuine 24-hour observation window. The 24-hour window has NOT started; do not wait for completion of the entire product.
+- Preparation review is accepted: existing genuine stream/report and coverage/timestamp/horizon limitations have been examined; no specific reproducible `elapsed_ms` computation defect was identified.
+- Runtime path is not yet verified for continuous observation. `track_cycle` is wired into the main pipeline cycle; inspected launchers start UI scripts only; a point-in-time process/task check found no active Arunda runtime or observation/pipeline task (backup tasks only). This is consistent with prior single-cycle runs and is not, by itself, a regression.
+- 24-hour start is ON HOLD until the exact known-good single-cycle invocation is identified, its execution/write safety boundaries are confirmed, and the start timestamp plus interruption/recovery/end-review procedure are recorded.
+- No parallel collector/scheduler; no speculative code changes; do not modify protected `arunda_pipeline.py`, Decision, Risk, or Trade Gate without a specific reproducible defect and explicit scope.
+- CP-07 remains CURRENT / IN PROGRESS / NOT CLOSED. CP-05 remains CLOSED; CP-06 initial gate remains APPROVED; CP-08 is not activated. No backfill or synthetic data; immature horizons remain pending; no profitability/customer eligibility claim. Execution remains OFF.
+
+---
+
 # MANAGEMENT ADDENDUM — INITIAL PROJECT APPROVAL / CP-07 CONTINUES — 2026-10-29
 
 **Management status:** INITIAL PROJECT APPROVAL = APPROVED for continuing the existing project and incremental real-data signal-quality evaluation.
