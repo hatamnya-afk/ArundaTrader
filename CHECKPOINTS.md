@@ -1,3 +1,21 @@
+# MANAGEMENT ADDENDUM — CP-07 PRE-START GATE / OPTION 3 — 2026-10-29
+
+## CP-07 pre-start gate — 2026-10-29
+
+**Decision:** option 3 is selected. Continue controlled single-cycle observations while preparing the 24-hour window. This is approval of the preparation and operating plan, not approval to close CP-07; the 24-hour window has not started.
+
+Preparation evidence: the existing real outcome stream and report were reviewed; coverage, horizon status, timing gaps, and timestamp semantics were documented; no inspected `elapsed_ms` mismatch or specific reproducible calculation defect was found.
+
+Outstanding before starting the 24-hour clock:
+1. Identify the exact known-good invocation used for recent single-cycle Runtime runs.
+2. Verify its execution-off and write boundaries.
+3. Record the window's start timestamp, source/health checks, interruption/recovery handling, and end-of-window targeted review.
+4. Reuse the existing path; do not create a parallel tracker/scheduler or modify protected pipeline code to force continuous operation.
+
+The observed absence of an active process/task was a point-in-time check and does not mean prior single-cycle runs failed. The inspected UI launchers are not observation-runtime launchers. CP-07 remains CURRENT / IN PROGRESS / NOT CLOSED pending the actual 24-hour evidence window and acceptance review. CP-05 stays CLOSED; CP-06 initial gate stays approved; CP-08 remains inactive. No backfill, synthetic observations, profitability claim, customer eligibility claim, orders, exchange writes, or production DB mutations. Execution remains OFF.
+
+---
+
 # MANAGEMENT ADDENDUM — INITIAL PROJECT APPROVAL / CP-07 FRONTIER LOCK — 2026-10-29
 
 ## Management decision
