@@ -1,3 +1,16 @@
+# MANAGEMENT ADDENDUM — INITIAL APPROVAL / CURRENT FRONTIER LOCK — 2026-10-29
+
+- **Initial project approval: APPROVED** for continuing the existing real-data observation process and gradual quality improvement.
+- **Single CURRENT FRONTIER: CP-07 — 24-hour real-data quality review (IN PROGRESS / NOT CLOSED).**
+- CP-05 remains CLOSED; CP-06's initial implementation/test gate remains approved. No reopening without direct, reproducible regression evidence.
+- Latest supplied local stream evidence: 6,445 selections; 4,956 with observations; 1,489 without. Observation-gap median 60 minutes; p90 22 hours. Runtime capture timestamp missing on 14,253 observations; 0 inspected elapsed_ms mismatches. These figures establish coverage/timing limitations, not signal profitability or customer eligibility.
+- **Next action:** continue the existing observation process and let genuine data accumulate. Reassess only after a meaningful new evidence window or a concrete reproducible defect. No additional broad/repeated audit now.
+- No code changes or parallel tracker/scheduler/reporting path. Protected pipeline and decision/risk/trade-gate surfaces remain untouched absent an evidenced need.
+- Execution remains OFF; no orders, exchange writes, production DB mutations, or live trading.
+- Later checkpoint entry is deferred until CP-07 acceptance criteria are met and the governance documents are synchronized.
+
+---
+
 # PRODUCT PATH AUDIT RESULT — 2026-10-18
 
 - CP65 in Aroonda remains VERIFIED / CLOSED / CANONICAL; product Control Center completeness is a separate OPEN / NOT VERIFIED requirement.
