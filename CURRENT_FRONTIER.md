@@ -1,3 +1,18 @@
+# MANAGEMENT DIRECTIVE — CP-07 PROVISIONAL ACCEPTANCE / CP-08 ENTRY — 2026-10-29
+
+## Decision and sequencing override
+
+- **CP-07: PROVISIONALLY ACCEPTED for its completed initial review/preparation scope; NOT CLOSED / NOT FULLY VERIFIED.** The real-data stream/report, coverage and timestamp limitations, horizon status, and elapsed-time contract were reviewed. No specific reproducible calculation defect was identified in the inspected evidence.
+- The separate 24-hour observation window is **DEFERRED until the currently planned product work is completed**. It has not started. Do not launch it now, and do not describe CP-07's full real-data quality acceptance as complete. This directive supersedes earlier wording that prohibited entering CP-08 before the 24-hour window; all uncompleted CP-07 quality claims remain gated on that later review.
+- **CP-08 is now the single CURRENT FRONTIER.** CP-07 is a provisionally accepted prior checkpoint with its 24-hour follow-up explicitly deferred; no parallel current frontier is created.
+- **CP-08 scope:** complete/reuse the existing UI / Control Center quality presentation. Surface the existing evidence with overall, per-asset, per-direction, and per-horizon views; show sample counts and distinguish observed/scored, pending, and unscorable/missing-evidence outcomes. Preserve traceability and limitations. Use the existing UI/dashboard components and existing evidence source; exactly two existing UIs, no third UI or parallel dashboard.
+- CP-08 is a presentation/integration checkpoint, **not** approval to claim signal profitability, customer-publishable eligibility, or subscription readiness. Missing evidence stays missing; immature horizons stay pending. No backfill, synthetic data, interpolation, forward-fill, or fabricated metrics.
+- First action: read-only inventory of existing UI/Control Center and already available quality-report/dashboard components; compare them against the CP-08 display contract; identify the smallest evidence-backed gap. Do not re-audit closed CP-05/CP-06 or rebuild existing components.
+- Preserve the active local worktree and branch constraints. This documentation update is only on remote branch `operational-main-20261007`; it does not alter the local worktree or imply the remote branch is identical to local `operational-main-20261007-reconcile`.
+- **Safety unchanged:** `EXECUTION=OFF`, `REAL_ORDER=FALSE`, `REAL_TRADE=FALSE`. No orders, exchange/provider writes, production DB mutations, or execution enablement. Do not modify protected `arunda_pipeline.py`, Decision, Risk, or Trade Gate without a concrete reproducible defect and explicit scope.
+
+---
+
 # MANAGEMENT ADDENDUM — CP-07 PRE-OBSERVATION READINESS GATE — 2026-10-29
 
 ## CP-07 pre-observation readiness — decision and evidence (2026-10-29)
