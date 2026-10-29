@@ -1,3 +1,17 @@
+# MANAGEMENT ADDENDUM — CP-07 PRE-OBSERVATION READINESS GATE — 2026-10-29
+
+## CP-07 pre-observation readiness — decision and evidence (2026-10-29)
+
+- **Operating decision:** use the staged approach (option 3): continue the already-used controlled single-cycle observations while preparing a clean 24-hour observation window. Do not wait for completion of the whole customer product; do not claim the 24-hour window has started.
+- **CP-07 remains the sole CURRENT FRONTIER, IN PROGRESS / NOT CLOSED.** CP-05 stays CLOSED; CP-06's initial test gate stays APPROVED. CP-08 is not entered.
+- **Completed preparation:** the genuine local outcome stream and existing quality report were reviewed read-only; coverage, horizon status, timestamp gaps, and limitations were documented. No inspected `elapsed_ms` mismatch or other specific reproducible computation defect was found, so no code fix is justified by current evidence.
+- **Runtime-path finding:** the tracker is called from the `arunda_pipeline.py` main cycle, not established as a standalone collector. The inspected management-console and market-signals launchers start UI scripts, not the pipeline. A process/task snapshot showed no active Arunda runtime and no Arunda pipeline/observation scheduled task (only backup tasks); this is a point-in-time observation, not proof of a failure.
+- **24-hour start gate remains ON HOLD:** before the window starts, identify and approve the exact known-good invocation for the controlled observation cycle, confirm its execution-off/write boundaries, and define the observation start timestamp plus how completion/interruption will be recorded. Do not create a parallel collector/scheduler or modify protected `arunda_pipeline.py` to bypass this gate.
+- Preserve genuine data only: no backfill, synthetic data, interpolation, or timestamp repair. Keep immature horizons pending. No profitability or customer-eligibility claim is authorized by the current evidence.
+- **Approval scope:** CP-07 preparation/readiness review is accepted as documented above; CP-07 itself is NOT approved for closure until a genuine 24-hour evidence window and its targeted quality review satisfy the acceptance criteria. Execution remains OFF; no orders, exchange writes, or production DB mutations.
+
+---
+
 # MANAGEMENT ADDENDUM — INITIAL APPROVAL / CURRENT FRONTIER LOCK — 2026-10-29
 
 - **Initial project approval: APPROVED** for continuing the existing real-data observation process and gradual quality improvement.
