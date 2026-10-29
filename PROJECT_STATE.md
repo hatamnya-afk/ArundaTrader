@@ -1,3 +1,17 @@
+# MANAGEMENT ADDENDUM — INITIAL PROJECT APPROVAL / CP-07 CONTINUES — 2026-10-29
+
+**Management status:** INITIAL PROJECT APPROVAL = APPROVED for continuing the existing project and incremental real-data signal-quality evaluation.
+
+- CP-05 = CLOSED; do not reopen without direct reproducible regression.
+- CP-06 initial implementation/test gate = APPROVED for progression; the separate real-data quality review does not automatically reopen CP-06.
+- CP-07 = CURRENT / IN PROGRESS / NOT CLOSED. The existing local stream review found 6,445 selection anchors; 4,956 with market observations; 1,489 without observations. Observation gaps: median 60 minutes, p90 22 hours. Runtime capture timestamp missing from 14,253 observations; no inspected elapsed_ms mismatches.
+- Interpretation: descriptive observation coverage/timing only. No profitability, predictive-quality, or customer-eligibility claim is established by these counts.
+- Next action: keep the existing observation process running and allow genuine data to accumulate; perform a concise targeted review only when a meaningful new evidence window exists or a concrete reproducible defect is found.
+- No repeated broad audit, speculative edits, backfill, synthetic data, parallel implementation, or modifications to protected pipeline/Decision/Risk/Trade Gate absent an evidence-backed authorized need.
+- Execution remains OFF; no orders, exchange writes, production DB mutations, or live trading.
+
+---
+
 ## PRODUCT PATH AUDIT — 2026-10-18
 
 - CP65 is VERIFIED / CLOSED / CANONICAL in Aroonda `PROJECT_STATE.md`; no reopening is implied.
