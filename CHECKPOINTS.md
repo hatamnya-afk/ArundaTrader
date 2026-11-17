@@ -413,3 +413,41 @@ Safety:
 
 Decision:
 This checkpoint is CLOSED/VERIFIED for its defined contract scope. It does not authorize a real order.
+
+
+# DATED CHECKPOINT RECORD
+
+## 2026-11-17 — MCP01 SHARED PAPER DEMO RUNTIME END-TO-END VERIFICATION
+
+**Status: RUNTIME PATH VERIFIED / PAPER-ONLY / POST-RUN RECONCILIATION OPEN**
+
+Cycle: `MCP01-20261117T172930517635Z`
+
+### Verified runtime result
+- Full Pipeline completed and the Paper Demo Runtime coordinator returned `READY`.
+- Spot Runtime stage: `READY`; 2 accepted; 117 blocked; `db_writes=2`.
+- Spot rejection breakdown: 104 `MAX_CONCURRENT_POSITIONS_REACHED`; 10 `SPOT_DEMO_LONG_ONLY`; 1 `USABLE_CAPITAL_EXCEEDED`; 1 `NO_ATR_KNOWN_AT_BIRTH`; 1 `INVALID_STOP_PRICE`.
+- Futures Runtime stage: `VALID`, reason `FUTURES_POSITIONS_OPENED`; 118 rejected. Major blockers: 45 `FUTURES_MARK_EVIDENCE_REQUIRED`; multiple missing Toobit contract matches; 6 `DEPTH_POSSIBLY_STALE`; one ATR-at-birth rejection; one invalid stop.
+- Management stage reported `NO_OPEN_POSITIONS / NO_SHARED_FUTURES_POSITIONS` at its point in the cycle (management ran before the Spot and Futures entry stages).
+
+### Shared Demo Ledger / account projection
+- Read-only `read_demo_account` projection returned `VALID / SHARED_DEMO_ACCOUNT_REPLAY_VALID`.
+- Account: `ARUNDA_DEMO_001`; initial capital: 1,000 USDT.
+- Ledger: 6 events; last sequence: 6.
+- Open positions in the verified projection: 4 Spot and 1 Futures.
+- The cycle's new Spot opens were API3 and BASED; the new Futures open was BASED. Spot BASED and Futures BASED coexist in the shared account.
+- The account projection read itself reported `db_writes=0`; this is expected for a read-only projection.
+
+### Explicit reconciliation item — NOT CLOSED
+- Futures stage summary reports `db_writes=0`, while the shared account ledger contains the Futures BASED open event at sequence 6 and the Futures stage reason is `FUTURES_POSITIONS_OPENED`.
+- Treat this as an unresolved stage-counter/reporting discrepancy. The Futures position's existence is confirmed by the account ledger; the accuracy/semantics of the Futures stage `db_writes` counter are not yet verified.
+- Shared Spot/Futures exposure interaction (including simultaneous BASED Spot and Futures positions) remains for a separate risk/accounting review.
+
+### Safety and boundaries
+- `EXECUTION=OFF`; `REAL_ORDER=FALSE`; `REAL_TRADE=FALSE`.
+- This checkpoint verifies simulated Paper Demo execution only. It does not authorize real trading or change the separate one-time real-production phase-entry mandate.
+- Do not rerun `arunda_pipeline.py` merely to reproduce this evidence: each Runtime run may append additional Paper Demo events/positions.
+- No changes to protected Spot completion, CP69, Depth/Tick, Toobit contract identity, clock calibration, stop-risk geometry, or aggregate risk controls are authorized by this record.
+
+### Next frontier
+Read-only reconciliation of the Futures stage `db_writes` counter against the actual ledger event, then review shared Spot/Futures exposure and the observed capacity/data blockers. Resume only on explicit instruction; preserve the current paper-only and execution-off boundaries.
